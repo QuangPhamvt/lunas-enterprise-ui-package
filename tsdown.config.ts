@@ -91,6 +91,7 @@ export default defineConfig([
     ],
     dts: true,
     exports: true,
+    sourcemap: true,
     format: ["esm", "cjs"],
     minify: true,
   },
