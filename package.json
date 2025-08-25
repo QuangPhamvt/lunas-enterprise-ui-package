@@ -1,18 +1,29 @@
 {
   "name": "@customafk/lunas-ui",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "UI library for Lunas Enterprise",
   "type": "module",
-  "author": "CustomAFK",
+  "author": {
+    "name": "CustomAFK",
+    "email": "quangpm220503vt@gmail.com"
+  },
   "license": "ISC",
-  "homepage": "https://github.com/author/library#readme",
+  "homepage": "https://github.com/QuangPhamvt/lunas-enterprise-ui-package#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/QuangPhamvt/lunas-enterprise-ui-package.git"
   },
   "files": [
-    "dist"
+    "dist",
+    "packages",
+    "README.md"
   ],
+  "workspaces": [
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">= 22.0.0"
+  },
   "exports": {
     "./cards/simple-card": {
       "import": "./dist/cards/simple-card.js",
