@@ -8,6 +8,7 @@ export default defineConfig([
       "./packages/components/data-display/country.tsx",
       "./packages/components/data-display/data-list.tsx",
       "./packages/components/data-display/date.tsx",
+      "./packages/components/data-display/date-tooltip.tsx",
       "./packages/components/data-display/empty.tsx",
       "./packages/components/data-display/name.tsx",
       "./packages/components/data-display/phone-number.tsx",
@@ -15,6 +16,7 @@ export default defineConfig([
       "./packages/components/data-display/statistic.tsx",
 
       "./packages/components/dialogs/detail-dialog/index.tsx",
+      "./packages/components/dialogs/detail-dialog/component/sidebar.tsx",
       "./packages/components/dialogs/confirm-dialog.tsx",
       "./packages/components/dialogs/error-dialog.tsx",
       "./packages/components/dialogs/form-dialog.tsx",
@@ -40,7 +42,10 @@ export default defineConfig([
       "./packages/components/typography/title.tsx",
 
       "./packages/components/ui/buttons/add-new.tsx",
+      "./packages/components/ui/buttons/edit.tsx",
       "./packages/components/ui/buttons/refresh.tsx",
+      "./packages/components/ui/buttons/trash.tsx",
+      "./packages/components/ui/buttons/upload-image.tsx",
 
       "./packages/components/ui/inputs/search-input.tsx",
 

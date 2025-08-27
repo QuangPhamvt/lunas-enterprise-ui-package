@@ -1,6 +1,6 @@
 {
   "name": "@customafk/lunas-ui",
-  "version": "0.0.10",
+  "version": "0.0.19",
   "description": "UI library for Lunas Enterprise",
   "type": "module",
   "author": {
@@ -41,6 +41,10 @@
       "import": "./dist/data-display/date.js",
       "require": "./dist/data-display/date.cjs"
     },
+    "./data-display/date-tooltip": {
+      "import": "./dist/data-display/date-tooltip.js",
+      "require": "./dist/data-display/date-tooltip.cjs"
+    },
     "./data-display/empty": {
       "import": "./dist/data-display/empty.js",
       "require": "./dist/data-display/empty.cjs"
@@ -68,6 +72,10 @@
     "./dialogs/detail-dialog": {
       "import": "./dist/dialogs/detail-dialog/index.js",
       "require": "./dist/dialogs/detail-dialog/index.cjs"
+    },
+    "./dialogs/detail-dialog/component/sidebar": {
+      "import": "./dist/dialogs/detail-dialog/component/sidebar.js",
+      "require": "./dist/dialogs/detail-dialog/component/sidebar.cjs"
     },
     "./dialogs/error-dialog": {
       "import": "./dist/dialogs/error-dialog.js",
@@ -173,9 +181,21 @@
       "import": "./dist/ui/buttons/add-new.js",
       "require": "./dist/ui/buttons/add-new.cjs"
     },
+    "./ui/buttons/edit": {
+      "import": "./dist/ui/buttons/edit.js",
+      "require": "./dist/ui/buttons/edit.cjs"
+    },
     "./ui/buttons/refresh": {
       "import": "./dist/ui/buttons/refresh.js",
       "require": "./dist/ui/buttons/refresh.cjs"
+    },
+    "./ui/buttons/trash": {
+      "import": "./dist/ui/buttons/trash.js",
+      "require": "./dist/ui/buttons/trash.cjs"
+    },
+    "./ui/buttons/upload-image": {
+      "import": "./dist/ui/buttons/upload-image.js",
+      "require": "./dist/ui/buttons/upload-image.cjs"
     },
     "./ui/calendar": {
       "import": "./dist/ui/calendar.js",
