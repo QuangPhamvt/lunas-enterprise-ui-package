@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import React from 'react'
 
 import { cn } from '@/lib/utils'
@@ -161,10 +161,7 @@ export const NumberInput: React.FC<IProps> = ({
       if (!decimal || value === '-') return true
       const [integerPart, decimalPart = ''] = value.split('.')
 
-      return (
-        decimalPart.length <= decimal[1] &&
-        (integerPart.startsWith('-') ? integerPart.length - 1 : integerPart.length) <= maxIntegerLength!
-      )
+      return decimalPart.length <= decimal[1] && (integerPart.startsWith('-') ? integerPart.length - 1 : integerPart.length) <= maxIntegerLength!
     },
     [decimal, maxIntegerLength],
   )
@@ -192,8 +189,7 @@ export const NumberInput: React.FC<IProps> = ({
     [roundingRule],
   )
   const isDecimalPointGreaterThanLimit = React.useCallback(
-    (value: string) =>
-      (!numberAfterDecimalPoint && value.includes('.')) || value.split('.')[1]?.length > numberAfterDecimalPoint,
+    (value: string) => (!numberAfterDecimalPoint && value.includes('.')) || value.split('.')[1]?.length > numberAfterDecimalPoint,
     [numberAfterDecimalPoint],
   )
   const formattedValue = React.useCallback(
@@ -248,8 +244,7 @@ export const NumberInput: React.FC<IProps> = ({
       }
 
       // Validate input format
-      const isValid =
-        validationRegex.test(inputValue) && isValidFormat(inputValue) && (decimal || isValidDecimalLength(inputValue))
+      const isValid = validationRegex.test(inputValue) && isValidFormat(inputValue) && (decimal || isValidDecimalLength(inputValue))
       if (!isValid) return
 
       const numericValue = parseFloat(inputValue) || 0
@@ -313,10 +308,7 @@ export const NumberInput: React.FC<IProps> = ({
         onBlur={handleBlur}
       />
       {unitText && (
-        <span
-          ref={_unitRef}
-          className="text-muted-foreground pointer-events-none absolute top-1/2 right-2 -translate-y-1/2 text-sm"
-        >
+        <span ref={_unitRef} className="text-muted-foreground pointer-events-none absolute top-1/2 right-2 -translate-y-1/2 text-sm">
           {unitText}
         </span>
       )}

@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import React from 'react'
 import { type FieldPath, type FieldValues, useWatch } from 'react-hook-form'
 import { XIcon } from 'lucide-react'
@@ -48,12 +48,7 @@ export const TextField = <TFieldValues extends FieldValues = FieldValues>({
           {isShowLabel && <FormLabel>{label}</FormLabel>}
           <div className="relative">
             <FormControl>
-              <Input
-                {...field}
-                placeholder={placeholder}
-                className={cn('w-full', isShowClearButton && 'pr-9')}
-                onValueChange={onValueChange}
-              />
+              <Input {...field} placeholder={placeholder} className={cn('w-full', isShowClearButton && 'pr-9')} onValueChange={onValueChange} />
             </FormControl>
             {isShowClearButton && valueWatch && (
               <button
@@ -68,9 +63,7 @@ export const TextField = <TFieldValues extends FieldValues = FieldValues>({
           </div>
           <Flex width="full" padding="none" justify="end">
             {isShowErrorMsg && <FormMessage className="grow" />}
-            {isShowCount && (
-              <div className="text-muted-foreground text-end text-xs">{valueWatch?.length ?? 0} characters</div>
-            )}
+            {isShowCount && <div className="text-muted-foreground text-end text-xs">{valueWatch?.length ?? 0} characters</div>}
           </Flex>
           {!!description && <FormDescription>{description}</FormDescription>}
         </FormItem>

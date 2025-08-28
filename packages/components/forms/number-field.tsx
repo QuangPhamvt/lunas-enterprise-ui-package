@@ -44,9 +44,7 @@ export const NumberField = <TFieldValues extends FieldValues = FieldValues>({
               }}
             />
           </FormControl>
-          {isShowCount && (
-            <div className="text-muted-foreground text-end text-xs">{valueWatch?.length ?? 0} characters</div>
-          )}
+          {isShowCount && <div className="text-muted-foreground text-end text-xs">{valueWatch?.length ?? 0} characters</div>}
           {!!description && <FormDescription>{description}</FormDescription>}
           {isShowErrorMsg && <FormMessage />}
         </FormItem>

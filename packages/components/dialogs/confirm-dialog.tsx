@@ -7,25 +7,18 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "../ui/alert-dialog";
+} from '../ui/alert-dialog'
 
 type Props = {
-  open?: boolean;
-  isLoading?: boolean;
-  title: string;
-  description: string;
-  onOpenChange?: (open: boolean) => void;
-  onConfirm?: () => void;
-};
+  open?: boolean
+  isLoading?: boolean
+  title: string
+  description: string
+  onOpenChange?: (open: boolean) => void
+  onConfirm?: () => void
+}
 
-export const ConfirmDialog: React.FC<React.PropsWithChildren<Props>> = ({
-  open,
-  isLoading = false,
-  title,
-  description,
-  onOpenChange,
-  onConfirm,
-}) => {
+export const ConfirmDialog: React.FC<React.PropsWithChildren<Props>> = ({ open, isLoading = false, title, description, onOpenChange, onConfirm }) => {
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent>
@@ -37,7 +30,7 @@ export const ConfirmDialog: React.FC<React.PropsWithChildren<Props>> = ({
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction className="w-24" onClick={onConfirm}>
             {!isLoading ? (
-              "Confirm"
+              'Confirm'
             ) : (
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="loader-spinner text-muted-foreground" />
@@ -47,5 +40,5 @@ export const ConfirmDialog: React.FC<React.PropsWithChildren<Props>> = ({
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
-  );
-};
+  )
+}

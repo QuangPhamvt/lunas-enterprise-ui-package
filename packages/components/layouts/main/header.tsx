@@ -1,24 +1,20 @@
-import {
-  BellIcon,
-  CircleQuestionMarkIcon,
-  ShoppingCartIcon,
-} from "lucide-react";
+import { BellIcon, CircleQuestionMarkIcon, ShoppingCartIcon } from 'lucide-react'
 
-import { Button } from "@/components/ui/button";
-import { SidebarTrigger } from "@/components/ui/sidebar";
-import { cn } from "@/lib/utils";
+import { Button } from '@/components/ui/button'
+import { SidebarTrigger } from '@/components/ui/sidebar'
+import { cn } from '@/lib/utils'
 
 export const MainLayoutHeader = () => {
   return (
     <header
       className={cn(
-        "bg-card",
-        "h-(--header-height)",
-        "absolute inset-x-0 top-0 z-20",
-        "flex items-center gap-2 border-b shadow-sm",
-        "transition-[width,height] ease-linear",
-        "group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)",
-        "px-4",
+        'bg-card',
+        'h-(--header-height)',
+        'absolute inset-x-0 top-0 z-20',
+        'flex items-center gap-2 border-b shadow-sm',
+        'transition-[width,height] ease-linear',
+        'group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)',
+        'px-4',
       )}
     >
       <SidebarTrigger />
@@ -33,21 +29,13 @@ export const MainLayoutHeader = () => {
         </div>
       </div>
       <div className="flex flex-1 items-center justify-end">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="text-muted-foreground rounded-full"
-        >
+        <Button variant="ghost" size="icon" className="text-muted-foreground rounded-full">
           <CircleQuestionMarkIcon />
         </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="text-muted-foreground rounded-full"
-        >
+        <Button variant="ghost" size="icon" className="text-muted-foreground rounded-full">
           <BellIcon />
         </Button>
       </div>
     </header>
-  );
-};
+  )
+}

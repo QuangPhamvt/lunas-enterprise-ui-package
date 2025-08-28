@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import type { FieldPath, FieldValues } from 'react-hook-form'
 
 import { cn } from '@/lib/utils'
@@ -23,9 +23,7 @@ export const SwitchField = <TFieldValues extends FieldValues = FieldValues>({
       name={name}
       render={({ field }) => (
         <div className="spage-y-1">
-          <FormItem
-            className={cn('border-border flex flex-row items-center justify-between rounded-lg border p-3 shadow-xs')}
-          >
+          <FormItem className={cn('border-border flex flex-row items-center justify-between rounded-lg border p-3 shadow-xs')}>
             <div className="space-y-0.5">
               <FormLabel className="cursor-pointer text-sm">{label}</FormLabel>
               {description && <FormDescription className="text-xs">{description}</FormDescription>}

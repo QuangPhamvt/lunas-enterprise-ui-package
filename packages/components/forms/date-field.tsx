@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import type { FieldPath, FieldValues } from 'react-hook-form'
 import { format } from 'date-fns'
 import { CalendarIcon } from 'lucide-react'
@@ -35,10 +35,7 @@ export const DateField = <TFieldValues extends FieldValues = FieldValues>({
           <Popover modal>
             <PopoverTrigger asChild>
               <FormControl>
-                <Button
-                  variant="outline"
-                  className={cn('w-full pl-3 text-left font-normal', !field.value && 'text-muted-foreground')}
-                >
+                <Button variant="outline" className={cn('w-full pl-3 text-left font-normal', !field.value && 'text-muted-foreground')}>
                   {field.value ? format(field.value, 'PPP') : <span> {placeholder || 'Pick a date'}</span>}
                   <CalendarIcon className="ml-auto size-4 opacity-50" />
                 </Button>

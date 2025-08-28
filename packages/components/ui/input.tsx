@@ -1,7 +1,7 @@
-"use client";
-import React from "react";
+'use client'
+import React from 'react'
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils'
 
 function Input({
   className,
@@ -9,51 +9,51 @@ function Input({
   onChange,
   onValueChange,
   ...props
-}: React.ComponentProps<"input"> & {
-  onValueChange?: (value: string) => void;
+}: React.ComponentProps<'input'> & {
+  onValueChange?: (value: string) => void
 }) {
   const handleChange = React.useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      onChange?.(e);
-      onValueChange?.(e.target.value);
+      onChange?.(e)
+      onValueChange?.(e.target.value)
     },
     [onChange, onValueChange],
-  );
+  )
   return (
     <input
       type={type}
       data-slot="input"
       className={cn(
-        "flex h-9 w-full min-w-0",
-        "border-input shadow-input rounded-md border",
-        "px-3 py-1",
-        "bg-transparent",
-        "caret-primary text-sm",
-        "transition-[color,box-shadow] outline-none",
-        "placeholder:text-muted-foreground",
-        "selection:bg-primary",
-        "selection:text-primary-foreground",
-        "file:inline-flex",
-        "file:h-7",
-        "file:border-0",
-        "file:bg-transparent",
-        "file:text-sm",
-        "file:text-foreground",
-        "file:font-medium",
-        "disabled:pointer-events-none",
-        "disabled:cursor-not-allowed",
-        "disabled:opacity-50",
-        "focus-visible:ring-4",
-        "focus-visible:ring-ring",
-        "focus-visible:border-primary/60",
-        "aria-invalid:ring-destructive/40",
-        "aria-invalid:border-destructive",
+        'flex h-9 w-full min-w-0',
+        'border-input shadow-input rounded-md border',
+        'px-3 py-1',
+        'bg-transparent',
+        'caret-primary text-sm',
+        'transition-[color,box-shadow] outline-none',
+        'placeholder:text-muted-foreground',
+        'selection:bg-primary',
+        'selection:text-primary-foreground',
+        'file:inline-flex',
+        'file:h-7',
+        'file:border-0',
+        'file:bg-transparent',
+        'file:text-sm',
+        'file:text-foreground',
+        'file:font-medium',
+        'disabled:pointer-events-none',
+        'disabled:cursor-not-allowed',
+        'disabled:opacity-50',
+        'focus-visible:ring-4',
+        'focus-visible:ring-ring',
+        'focus-visible:border-primary/60',
+        'aria-invalid:ring-destructive/40',
+        'aria-invalid:border-destructive',
         className,
       )}
       {...props}
       onChange={handleChange}
     />
-  );
+  )
 }
 
-export { Input };
+export { Input }

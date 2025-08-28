@@ -1,14 +1,14 @@
-import { ArrowRightIcon, SearchIcon } from "lucide-react";
+import { ArrowRightIcon, SearchIcon } from 'lucide-react'
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils'
 
-import { Input } from "../input";
+import { Input } from '../input'
 
-type Props = React.ComponentPropsWithoutRef<typeof Input>;
+type Props = React.ComponentPropsWithoutRef<typeof Input>
 export const SearchInput = ({ className, ...rest }: Props) => {
   return (
     <div className="relative">
-      <Input {...rest} type="search" className={cn("ps-9 pe-9", className)} />
+      <Input {...rest} type="search" className={cn('ps-9 pe-9', className)} />
       <div className="text-muted-foreground/80 pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 peer-disabled:opacity-50">
         <SearchIcon size={16} />
       </div>
@@ -20,5 +20,5 @@ export const SearchInput = ({ className, ...rest }: Props) => {
         <ArrowRightIcon size={16} aria-hidden="true" />
       </button>
     </div>
-  );
-};
+  )
+}

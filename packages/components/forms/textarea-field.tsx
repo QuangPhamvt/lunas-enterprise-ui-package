@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import { type FieldPath, type FieldValues, useWatch } from 'react-hook-form'
 
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
@@ -33,17 +33,9 @@ export const TextareaField = <TFieldValues extends FieldValues = FieldValues>({
         <FormItem className="w-full">
           <FormLabel>{label}</FormLabel>
           <FormControl>
-            <Textarea
-              {...field}
-              placeholder={placeholder}
-              className="w-full"
-              rows={rows}
-              onValueChange={onValueChange}
-            />
+            <Textarea {...field} placeholder={placeholder} className="w-full" rows={rows} onValueChange={onValueChange} />
           </FormControl>
-          {isShowCount && (
-            <div className="text-muted-foreground text-end text-xs">{valueWatch?.length ?? 0} characters</div>
-          )}
+          {isShowCount && <div className="text-muted-foreground text-end text-xs">{valueWatch?.length ?? 0} characters</div>}
           {!!description && <FormDescription>{description}</FormDescription>}
           {isShowErrorMsg && <FormMessage />}
         </FormItem>
