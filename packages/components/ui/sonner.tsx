@@ -1,5 +1,4 @@
 'use client'
-import React from 'react'
 import { LoaderIcon } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { Toaster as Sonner, type ToasterProps } from 'sonner'
@@ -26,10 +25,10 @@ const Toaster = () => {
           title: '!text-sm !font-bold',
           description: '!text-xs !font-semibold !text-white/80',
           success: '!bg-success',
-          info: '!bg-blue-700 dark:!bg-blue-500',
-          loading: '!bg-slate-500 dark:!bg-slate-400',
+          info: '!bg-blue-700',
+          loading: '!bg-slate-500',
           warning: '!bg-warning',
-          error: '!bg-destructive',
+          error: '!bg-danger',
           closeButton: '!text-gray-400 hover:!text-gray-500 !bg-neutral-50 hover:!bg-gray-100 !border-none !shadow',
         },
       }}

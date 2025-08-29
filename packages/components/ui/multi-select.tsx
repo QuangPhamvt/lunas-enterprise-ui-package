@@ -4,9 +4,8 @@ import { Command as CommandPrimitive, useCommandState } from 'cmdk'
 import { PlusIcon, X } from 'lucide-react'
 
 import { Command, CommandGroup, CommandItem, CommandList, CommandSeparator } from '@/components/ui/command'
+import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-
-import { Button } from './button'
 
 export interface Option {
   value: string
@@ -155,7 +154,7 @@ const CommandEmpty = React.forwardRef<HTMLDivElement, React.ComponentProps<typeo
 
 CommandEmpty.displayName = 'CommandEmpty'
 
-const MultipleSelector = React.forwardRef<MultipleSelectorRef, MultipleSelectorProps>(
+export const MultipleSelector = React.forwardRef<MultipleSelectorRef, MultipleSelectorProps>(
   (
     {
       value,
@@ -419,13 +418,15 @@ const MultipleSelector = React.forwardRef<MultipleSelectorRef, MultipleSelectorP
       >
         <div
           className={cn(
-            'border-input focus-within:border-primary focus-within:ring-ring relative rounded-md border text-sm transition-shadow focus-within:ring-4 focus-within:outline-hidden',
+            'border-border-weak relative rounded-md border text-sm transition-shadow',
+            'focus-within:border-primary',
+            'focus-within:ring-primary-weak',
+            'focus-within:ring-4',
+            'focus-within:outline-hidden',
             'has-disabled:bg-muted',
             'has-disabled:text-muted-foreground',
-            {
-              'p-1': selected.length !== 0,
-              'cursor-text': !disabled && selected.length !== 0,
-            },
+            selected.length !== 0 && 'p-1',
+            !disabled && selected.length !== 0 && 'cursor-text',
             !hideClearAllButton && 'pe-9',
             className,
           )}
@@ -440,7 +441,14 @@ const MultipleSelector = React.forwardRef<MultipleSelectorRef, MultipleSelectorP
                 <div
                   key={option.value}
                   className={cn(
-                    'animate-fadeIn bg-background text-secondary-foreground hover:bg-background relative inline-flex h-7 cursor-default items-center rounded-md border border-solid ps-2 pe-7 pl-2 text-xs font-medium transition-all disabled:cursor-not-allowed disabled:opacity-50 data-fixed:pe-2',
+                    'animate-fadeIn',
+                    'bg-background',
+                    'hover:bg-background',
+                    'border-border-weak border border-solid',
+                    'text-text-positive-weak relative inline-flex h-7 cursor-default items-center rounded-md ps-2 pe-7 pl-2 text-xs font-medium transition-all',
+                    'disabled:cursor-not-allowed',
+                    'disabled:opacity-50',
+                    'data-fixed:pe-2',
                     badgeClassName,
                   )}
                   data-fixed={option.fixed}
@@ -451,17 +459,16 @@ const MultipleSelector = React.forwardRef<MultipleSelectorRef, MultipleSelectorP
                     type="button"
                     disabled={disabled || option.fixed}
                     className={cn(
-                      'text-muted-foreground/80 absolute -inset-y-px -end-px flex size-7 items-center justify-center rounded-e-lg border border-transparent p-0 outline-0 transition-colors',
+                      'text-text-positive-muted absolute -inset-y-px -end-px flex size-7 items-center justify-center rounded-e-lg border border-transparent p-0 outline-0 transition-colors',
                       'hover:text-foreground',
                       'focus-visible:outline',
                       'focus-visible:outline-2',
-                      'focus-visible:outline-ring/70',
+                      'focus-visible:outline-primary-weak',
                       'disabled:hover:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50',
                     )}
                     onKeyDown={(e) => {
-                      if (e.key === 'Enter') {
-                        handleUnselect(option)
-                      }
+                      if (e.key !== 'Enter') return
+                      handleUnselect(option)
                     }}
                     onMouseDown={(e) => {
                       e.preventDefault()
@@ -500,7 +507,7 @@ const MultipleSelector = React.forwardRef<MultipleSelectorRef, MultipleSelectorP
               }}
               placeholder={hidePlaceholderWhenSelected && selected.length !== 0 ? '' : placeholder}
               className={cn(
-                'placeholder:text-muted-foreground flex-1 bg-transparent outline-hidden',
+                'placeholder:text-text-positive-muted flex-1 bg-transparent outline-hidden',
                 'disabled:placeholder:text-transparent',
                 {
                   'w-full': hidePlaceholderWhenSelected,
@@ -520,8 +527,8 @@ const MultipleSelector = React.forwardRef<MultipleSelectorRef, MultipleSelectorP
                 'text-muted-foreground/80',
                 'absolute end-0 top-0 flex size-9 items-center justify-center rounded-lg border border-transparent transition-colors',
                 'focus-visible:outline-2',
-                'hover:text-foreground',
-                'focus-visible:outline-ring/70',
+                'hover:text-text-positive',
+                'focus-visible:outline-primary-weak',
                 (hideClearAllButton || disabled || selected.length < 1 || selected.filter(({ fixed }) => fixed).length === selected.length) && 'hidden',
               )}
               aria-label="Clear all"
@@ -533,15 +540,20 @@ const MultipleSelector = React.forwardRef<MultipleSelectorRef, MultipleSelectorP
         <div className="relative">
           <div
             className={cn(
-              'border-input absolute top-2 z-10 w-full overflow-hidden rounded-lg border shadow-sm',
-              'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',
+              'shadow-dropdown absolute top-2 z-10 w-full overflow-hidden rounded-lg',
+              'data-[state=open]:animate-in',
+              'data-[state=closed]:animate-out',
+              'data-[state=closed]:fade-out-0',
+              'data-[state=open]:fade-in-0',
+              'data-[state=closed]:zoom-out-95',
+              'data-[state=open]:zoom-in-95',
               !open && 'hidden',
             )}
             data-state={open ? 'open' : 'closed'}
           >
             {open && (
               <CommandList
-                className="bg-popover text-popover-foreground shadow-lg outline-hidden"
+                className="shadow-lg outline-hidden"
                 onMouseLeave={() => {
                   setOnScrollbar(false)
                 }}
@@ -557,7 +569,7 @@ const MultipleSelector = React.forwardRef<MultipleSelectorRef, MultipleSelectorP
                     <CommandSeparator />
                     <CommandGroup>
                       <Button type="button" variant="ghost" className="w-full font-normal [&_div]:justify-start" onClick={onAddNewItem}>
-                        <PlusIcon size={14} className="-ms-2 opacity-60" aria-hidden="true" />
+                        <PlusIcon size={14} className="opacity-60" aria-hidden="true" />
                         Thêm mới
                       </Button>
                     </CommandGroup>
@@ -587,8 +599,8 @@ const MultipleSelector = React.forwardRef<MultipleSelectorRef, MultipleSelectorP
                                   onMaxSelected?.(selected.length)
                                   return
                                 }
-                                setInputValue('')
                                 const newOptions = [...selected, option]
+                                setInputValue('')
                                 setSelected(newOptions)
                                 onChange?.(newOptions)
                               }}
@@ -612,4 +624,3 @@ const MultipleSelector = React.forwardRef<MultipleSelectorRef, MultipleSelectorP
 )
 
 MultipleSelector.displayName = 'MultipleSelector'
-export default MultipleSelector

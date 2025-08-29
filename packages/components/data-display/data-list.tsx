@@ -1,6 +1,4 @@
-import React from 'react'
-
-import { Flex } from '../layouts/flex'
+import { Flex } from '@/components/layouts/flex'
 
 type DataListProps = {
   title?: string
@@ -22,10 +20,10 @@ type DataListItemProps = {
 export const DataListItem: React.FC<React.PropsWithChildren<DataListItemProps>> = ({ label, value, minLabelWidth = '120px' }) => {
   return (
     <Flex align="center" justify="start" width="full" padding="none" gap="md">
-      <div style={{ minWidth: minLabelWidth }} className="text-muted-foreground text-sm">
+      <div style={{ minWidth: minLabelWidth }} className="text-text-positive-weak text-sm">
         {label}
       </div>
-      <div className="text-secondary-foreground text-sm">{value}</div>
+      <div className="text-text-positive text-sm">{value}</div>
     </Flex>
   )
 }

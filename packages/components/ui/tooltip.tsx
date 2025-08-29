@@ -27,7 +27,7 @@ function TooltipContent({ className, sideOffset = 0, children, ...props }: React
         data-slot="tooltip-content"
         sideOffset={sideOffset}
         className={cn(
-          'bg-secondary-foreground text-secondary',
+          'bg-foreground text-text-negative-intense shadow-dropdown outline-none',
           'animate-in fade-in-0 zoom-in-95',
           'data-[state=closed]:animate-out',
           'data-[state=closed]:fade-out-0',
@@ -38,13 +38,13 @@ function TooltipContent({ className, sideOffset = 0, children, ...props }: React
           'data-[side=top]:slide-in-from-bottom-2',
           'z-50 w-fit',
           'origin-(--radix-tooltip-content-transform-origin)',
-          'rounded-md px-3 py-1.5 text-xs text-balance',
+          'rounded-lg px-3 py-1.5 text-xs text-balance',
           className,
         )}
         {...props}
       >
         {children}
-        <TooltipPrimitive.Arrow className="bg-secondary-foreground fill-secondary-foreground text-secondary z-50 size-2.5 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-[2px]" />
+        <TooltipPrimitive.Arrow className="bg-foreground fill-foreground text-secondary z-50 size-2.5 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-xs" />
       </TooltipPrimitive.Content>
     </TooltipPrimitive.Portal>
   )

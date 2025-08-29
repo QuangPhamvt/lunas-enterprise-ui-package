@@ -1,27 +1,19 @@
-import "../packages/index.css";
+import '../packages/index.css'
 
-import {
-  Controls,
-  Description,
-  Primary,
-  Stories,
-  Subtitle,
-  Title,
-} from "@storybook/addon-docs/blocks";
-import { withThemeByClassName } from "@storybook/addon-themes";
-import type { Preview } from "@storybook/react-vite";
+import { Controls, Description, Primary, Stories, Subtitle, Title } from '@storybook/addon-docs/blocks'
+import { withThemeByClassName } from '@storybook/addon-themes'
+import type { Preview } from '@storybook/react-vite'
 
 const preview: Preview = {
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   parameters: {
-    layout: "centered",
+    layout: 'padded',
     controls: {
       matchers: {
         color: /(background|color)$/i,
         date: /Date$/i,
       },
     },
-
     docs: {
       page: () => (
         <>
@@ -33,30 +25,18 @@ const preview: Preview = {
           <Stories />
         </>
       ),
-    },
-
-    a11y: {
-      // 'todo' - show a11y violations in the test UI only
-      // 'error' - fail CI on a11y violations
-      // 'off' - skip a11y checks entirely
-      test: "todo",
-    },
-
-    darkMode: {
-      classTarget: "html",
-      darkClass: "dark",
-      lightClass: "light",
+      codePanel: true
     },
   },
   decorators: [
     withThemeByClassName({
       themes: {
-        light: "light",
-        dark: "dark",
+        light: 'light',
+        dark: 'dark',
       },
-      defaultTheme: "light",
+      defaultTheme: 'light',
     }),
   ],
-};
+}
 
-export default preview;
+export default preview

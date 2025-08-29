@@ -60,7 +60,7 @@ export const FormDialog = <TFieldValues extends FieldValues = FieldValues>({
         >
           <main className="flex-1 overflow-y-auto px-6">{children}</main>
           <DialogFooter className="border-t px-6 pt-4 pb-6">
-            <Button tabIndex={-1} type="button" variant="outline" className="w-30 rounded-full" onClick={onReset}>
+            <Button tabIndex={-1} type="button" variant="outline" color="muted" className="w-30 rounded-full" onClick={onReset}>
               Reset
             </Button>
             <Button autoFocus tabIndex={0} type="submit" isLoading={isSubmitting} disabled={disableSubmit} className="w-30 rounded-full">

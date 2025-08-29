@@ -1,5 +1,4 @@
 'use client'
-import React from 'react'
 import { Dialog as DialogPrimitive } from 'radix-ui'
 import { XIcon } from 'lucide-react'
 
@@ -53,9 +52,10 @@ function DialogContent({
         <DialogPrimitive.Content
           data-slot="dialog-content"
           className={cn(
-            'bg-background relative dark:border',
-            'z-50 grid max-h-[85svh] w-full max-w-[calc(100%-2rem)]',
-            'gap-4 rounded-2xl p-6 shadow-lg duration-200 sm:max-w-lg',
+            'bg-background relative z-50 grid',
+            'shadow-dialog gap-4 p-6 outline-none',
+            'max-h-[85svh] w-full max-w-[calc(100%-2rem)] sm:max-w-lg',
+            'rounded-2xl duration-200',
             'data-[state=open]:animate-in',
             'data-[state=open]:fade-in-0',
             'data-[state=open]:zoom-in-80',
@@ -76,15 +76,15 @@ function DialogContent({
                 'absolute top-3 right-3 rounded-full p-2 opacity-70',
                 'cursor-pointer transition-all',
                 'outline-0',
-                'focus:ring-2',
-                'focus:ring-border',
-                'hover:opacity-100',
-                'hover:bg-accent',
-                'data-[state=open]:bg-accent',
-                'data-[state=open]:text-muted-foreground',
                 'disabled:pointer-events-none',
+                'focus:ring-2',
+                'focus:ring-border-weak',
+                'hover:opacity-100',
+                'hover:bg-accent-muted',
+                'data-[state=open]:bg-accent-weak',
+                'data-[state=open]:text-text-positive-muted',
                 '[&_svg]:text-accent-foreground/60',
-                '[&_svg]:hover:text-accent-foreground',
+                '[&_svg]:hover:text-text-positive-strong',
                 '[&_svg]:pointer-events-none',
                 '[&_svg]:shrink-0',
                 "[&_svg:not([class*='size-'])]:size-5",
@@ -109,11 +109,11 @@ function DialogFooter({ className, ...props }: React.ComponentProps<'div'>) {
 }
 
 function DialogTitle({ className, ...props }: React.ComponentProps<typeof DialogPrimitive.Title>) {
-  return <DialogPrimitive.Title data-slot="dialog-title" className={cn('text-lg leading-none font-semibold', className)} {...props} />
+  return <DialogPrimitive.Title data-slot="dialog-title" className={cn('text-text-positive-strong text-lg leading-none font-semibold', className)} {...props} />
 }
 
 function DialogDescription({ className, ...props }: React.ComponentProps<typeof DialogPrimitive.Description>) {
-  return <DialogPrimitive.Description data-slot="dialog-description" className={cn('text-muted-foreground text-sm', className)} {...props} />
+  return <DialogPrimitive.Description data-slot="dialog-description" className={cn('text-text-positive-weak text-sm', className)} {...props} />
 }
 
 export { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogOverlay, DialogPortal, DialogTitle, DialogTrigger }

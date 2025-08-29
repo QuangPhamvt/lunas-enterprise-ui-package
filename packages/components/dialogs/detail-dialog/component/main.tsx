@@ -21,7 +21,7 @@ export const DetailDialogMainHeader: React.FC<
   }>
 > = ({ title, createdAt }) => {
   return (
-    <header className="relative flex items-start gap-x-2.5 border-b px-2 py-2.5">
+    <header className="border-border-weak relative flex items-start gap-x-2.5 border-b px-2 py-2.5">
       <SidebarTrigger />
       <Flex vertical align="start" padding="none" className="flex-1">
         <Title level={5}>{title || 'Detail Dialog'}</Title>

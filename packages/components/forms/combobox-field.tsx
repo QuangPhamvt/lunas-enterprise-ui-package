@@ -42,25 +42,29 @@ export const ComboboxField = <TFieldValues extends FieldValues = FieldValues>({
                     type="button"
                     variant="outline"
                     role="combobox"
+                    color="muted"
                     className={cn(
                       'flex justify-between rounded-md px-3',
-                      'font-normal outline-offset-0',
-                      'focus-visible:outline-[3px]',
+                      'outline-border-weak font-normal',
                       '[&_div]:justify-between',
-                      'data-[state=open]:border-primary',
-                      'data-[state=open]:ring-ring',
+                      'data-[state=open]:border-primary-strong',
+                      'data-[state=open]:outline-1',
+                      'data-[state=open]:outline-primary-strong',
+                      'data-[state=open]:ring-primary-weak',
                       'data-[state=open]:ring-4',
-                      'focus:border-primary',
-                      'focus:ring-ring',
+                      'focus:border-primary-strong',
                       'focus:ring-4',
+                      'focus:ring-primary-weak',
+                      'focus:outline-1',
+                      'focus:outline-primary-strong',
                     )}
                   >
                     {field.value ? (
                       <span className="flex min-w-0 items-center gap-2">{options?.find(({ value }) => value === field.value)?.label}</span>
                     ) : (
-                      <span className="text-muted-foreground">{placeholder}</span>
+                      <span className="text-text-positive-muted">{placeholder}</span>
                     )}
-                    <ChevronDownIcon size={16} className="text-muted-foreground/80 shrink-0" aria-hidden="true" />
+                    <ChevronDownIcon size={16} className="text-text-positive-weak shrink-0" aria-hidden="true" />
                   </Button>
                 </FormControl>
               </PopoverTrigger>

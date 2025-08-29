@@ -20,7 +20,7 @@ import { DetailDialogWrapper } from './component/wrapper'
 
 const DetailDialogSidebar: React.FC<React.PropsWithChildren<{ title?: string; sidebarFooter?: React.ReactNode }>> = ({ title, sidebarFooter, children }) => {
   return (
-    <Sidebar collapsible="icon" className="hidden border-r md:flex">
+    <Sidebar collapsible="icon" className="border-border-weak hidden border-r md:flex">
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
@@ -77,11 +77,11 @@ export const DetailDialog: React.FC<React.PropsWithChildren<Props>> = ({
           <DetailDialogMain>
             <DetailDialogMainHeader title={title} createdAt={createdAt} />
             {isLoading ? (
-              <Flex justify="center" className="bg-muted/50 size-full">
+              <Flex justify="center" className="bg-muted-muted/20 size-full">
                 <div className="loader" />
               </Flex>
             ) : (
-              <section className="bg-muted/50 relative flex-1 overflow-y-auto inset-shadow-sm">{children}</section>
+              <section className="bg-muted-muted/20 relative flex-1 overflow-y-auto inset-shadow-sm">{children}</section>
             )}
           </DetailDialogMain>
         </SidebarProvider>

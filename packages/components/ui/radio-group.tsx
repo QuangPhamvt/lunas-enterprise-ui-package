@@ -14,14 +14,12 @@ function RadioGroupItem({ className, ...props }: React.ComponentProps<typeof Rad
     <RadioGroupPrimitive.Item
       data-slot="radio-group-item"
       className={cn(
-        'border-input text-primary',
-        'focus-visible:border-ring',
-        'focus-visible:ring-ring/50',
-        'aria-invalid:ring-destructive/20',
-        'dark:aria-invalid:ring-destructive/40',
-        'aria-invalid:border-destructive',
-        'dark:bg-input/30',
-        'aspect-square size-4 shrink-0 rounded-full border shadow-xs transition-all outline-none focus-visible:ring-[3px]',
+        'aspect-square size-4 shrink-0 rounded-full border shadow-xs transition-all outline-none',
+        'focus:border-border',
+        'focus:ring-primary/50',
+        'focus:ring-[3px]',
+        'aria-invalid:ring-danger-weak',
+        'aria-invalid:border-danger-strong',
         'disabled:cursor-not-allowed disabled:opacity-50',
         className,
       )}
@@ -29,7 +27,7 @@ function RadioGroupItem({ className, ...props }: React.ComponentProps<typeof Rad
     >
       <RadioGroupPrimitive.Indicator data-slot="radio-group-indicator" className="bg-primary relative flex items-center justify-center">
         <div className="bg-primary absolute size-4 rounded-full" />
-        <CircleIcon className="fill-secondary absolute top-1/2 left-1/2 size-2 -translate-1/2" />
+        <CircleIcon className="fill-text-negative-strong text-text-negative absolute top-1/2 left-1/2 size-2 -translate-1/2" />
       </RadioGroupPrimitive.Indicator>
     </RadioGroupPrimitive.Item>
   )

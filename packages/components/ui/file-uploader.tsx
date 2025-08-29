@@ -190,15 +190,15 @@ export function FileUploader(props: FileUploaderProps) {
             {...getRootProps()}
             className={cn(
               'group',
-              'border-muted-foreground/25',
-              'hover:bg-muted/25',
+              'border-border-weak',
+              'hover:bg-border-weak/20',
               'relative grid h-52 w-full cursor-pointer place-items-center rounded-lg border-2 border-dashed px-5 py-2.5 text-center transition',
               'ring-offset-background',
-              'focus-visible:ring-ring',
+              'focus-visible:ring-primary-weak',
               'focus-visible:ring-2',
               'focus-visible:ring-offset-2',
               'focus-visible:outline-hidden',
-              isDragActive && 'border-muted-foreground/50',
+              isDragActive && 'border-border-primary-strong bg-border-weak/40',
               isDisabled && 'pointer-events-none opacity-60',
               className,
             )}
@@ -208,9 +208,9 @@ export function FileUploader(props: FileUploaderProps) {
             {isDragActive ? (
               <div className="flex flex-col items-center justify-center gap-4 sm:px-5">
                 <div className="rounded-full border border-dashed p-3">
-                  <Upload className="text-muted-foreground size-7" aria-hidden="true" />
+                  <Upload className="text-text-positive-muted size-7" aria-hidden="true" />
                 </div>
-                <p className="text-muted-foreground font-medium">Drop the files here</p>
+                <p className="text-text-positive-muted font-medium">Drop the files here</p>
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center gap-4 sm:px-5">
@@ -219,8 +219,8 @@ export function FileUploader(props: FileUploaderProps) {
                 </div>
                 {showText && (
                   <div className="flex flex-col gap-px">
-                    <p className="text-muted-foreground text-xs font-medium">Drag {`'n'`} drop files here, or click to select files</p>
-                    <p className="text-muted-foreground/70 text-xs">
+                    <p className="text-text-positive-weak text-xs font-medium">Drag {`'n'`} drop files here, or click to select files</p>
+                    <p className="text-text-positive-muted text-xs">
                       You can upload
                       {maxFileCount > 1
                         ? ` ${maxFileCount === Infinity ? 'multiple' : maxFileCount}
@@ -237,12 +237,12 @@ export function FileUploader(props: FileUploaderProps) {
       {files?.length ? (
         <div className="h-fit w-full overflow-y-auto">
           <div className="flex items-center justify-between px-3 py-2.5">
-            <div className="flex items-center gap-1">
-              <Image className="text-muted-foreground size-4" aria-hidden="true" />
+            <div className="text-text-positive-weak flex items-center gap-1">
+              <Image size={16} aria-hidden="true" />
               <p className="text-sm">Ảnh đã tải lên ({files.length})</p>
             </div>
             <button
-              className="hover:text-muted-foreground text-muted-foreground/60 flex cursor-pointer items-center gap-1 transition-colors duration-200"
+              className="hover:text-text-positive text-text-positive-muted flex cursor-pointer items-center gap-1 transition-colors duration-200"
               onClick={() => {
                 if (!files) return
                 files.forEach((file) => {
@@ -276,20 +276,20 @@ interface FileCardProps {
 
 function FileCard({ file, progress, onRemove }: FileCardProps) {
   return (
-    <div className="border-border/40 hover:border-border relative flex items-center gap-4 rounded-md border py-2 pr-3 pl-2 shadow-xs">
+    <div className="border-border-weak hover:border-border relative flex items-center gap-4 rounded-md border py-2 pr-3 pl-2 shadow-xs transition-colors">
       <div className="flex flex-1 gap-2.5">
         {isFileWithPreview(file) ? <FilePreview file={file} /> : null}
         <div className="flex w-full flex-col gap-2">
           <div className="flex flex-col gap-y-0.5">
-            <p className="text-accent-foreground line-clamp-1 text-sm">{file.name}</p>
-            <p className="text-muted-foreground text-xs">{formatBytes(file.size)}</p>
+            <p className="text-text-positive line-clamp-1 text-sm">{file.name}</p>
+            <p className="text-text-positive-muted text-xs">{formatBytes(file.size)}</p>
           </div>
           {progress ? <Progress value={progress} /> : null}
         </div>
       </div>
       <div className="flex items-center gap-2">
-        <Button type="button" variant="ghost" size="icon" className="size-7" onClick={onRemove}>
-          <Trash2 size={16} className="text-muted-foreground/60" aria-hidden="true" />
+        <Button type="button" variant="ghost" color="secondary" size="icon" className="size-7" onClick={onRemove}>
+          <Trash2 size={16} className="text-text-positive-muted" aria-hidden="true" />
           <span className="sr-only">Remove file</span>
         </Button>
       </div>
@@ -310,5 +310,5 @@ function FilePreview({ file }: FilePreviewProps) {
     return <img src={file.preview} className="border-border aspect-square size-10 shrink-0 rounded border object-cover object-top shadow-sm" />
   }
 
-  return <FileText className="text-muted-foreground size-10 border" aria-hidden="true" />
+  return <FileText className="text-text-positive-muted size-10 border" aria-hidden="true" />
 }

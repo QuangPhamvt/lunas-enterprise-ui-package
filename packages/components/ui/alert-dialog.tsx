@@ -42,17 +42,16 @@ function AlertDialogContent({ className, ...props }: React.ComponentProps<typeof
         data-slot="alert-dialog-content"
         className={cn(
           'bg-background',
+          'fixed z-50',
+          'top-1/2 left-1/2 -translate-1/2',
+          'grid w-full max-w-[calc(100%-2rem)] sm:max-w-lg',
+          'gap-4 rounded-lg p-6 shadow-lg duration-200',
           'data-[state=open]:animate-in',
+          'data-[state=open]:fade-in-0',
+          'data-[state=open]:zoom-in-95',
           'data-[state=closed]:animate-out',
           'data-[state=closed]:fade-out-0',
-          'data-[state=open]:fade-in-0',
           'data-[state=closed]:zoom-out-95',
-          'data-[state=open]:zoom-in-95',
-          'fixed z-50',
-          'top-1/2 left-1/2',
-          '-translate-1/2',
-          'grid w-full max-w-[calc(100%-2rem)]',
-          'gap-4 rounded-lg p-6 shadow-lg duration-200 sm:max-w-lg',
           className,
         )}
         {...props}
@@ -70,19 +69,19 @@ function AlertDialogFooter({ className, ...props }: React.ComponentProps<'div'>)
 }
 
 function AlertDialogTitle({ className, ...props }: React.ComponentProps<typeof AlertDialogPrimitive.Title>) {
-  return <AlertDialogPrimitive.Title data-slot="alert-dialog-title" className={cn('text-lg font-semibold', className)} {...props} />
+  return <AlertDialogPrimitive.Title data-slot="alert-dialog-title" className={cn('text-text-positive-strong text-lg font-semibold', className)} {...props} />
 }
 
 function AlertDialogDescription({ className, ...props }: React.ComponentProps<typeof AlertDialogPrimitive.Description>) {
-  return <AlertDialogPrimitive.Description data-slot="alert-dialog-description" className={cn('text-muted-foreground text-sm', className)} {...props} />
+  return <AlertDialogPrimitive.Description data-slot="alert-dialog-description" className={cn('text-text-positive-weak text-sm', className)} {...props} />
 }
 
 function AlertDialogAction({ className, ...props }: React.ComponentProps<typeof AlertDialogPrimitive.Action>) {
-  return <AlertDialogPrimitive.Action className={cn(buttonVariants(), className)} {...props} autoFocus tabIndex={1} />
+  return <AlertDialogPrimitive.Action className={cn(buttonVariants(), 'min-w-24', className)} {...props} autoFocus tabIndex={1} />
 }
 
 function AlertDialogCancel({ className, ...props }: React.ComponentProps<typeof AlertDialogPrimitive.Cancel>) {
-  return <AlertDialogPrimitive.Cancel className={cn(buttonVariants({ variant: 'outline' }), className)} {...props} />
+  return <AlertDialogPrimitive.Cancel className={cn(buttonVariants({ variant: 'outline', color: 'muted' }), 'min-w-24', className)} {...props} />
 }
 
 export {

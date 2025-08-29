@@ -1,5 +1,4 @@
 'use client'
-import React from 'react'
 import { Tabs as TabsPrimitive } from 'radix-ui'
 
 import { cn } from '@/lib/utils'
@@ -12,7 +11,7 @@ function TabsList({ className, ...props }: React.ComponentProps<typeof TabsPrimi
   return (
     <TabsPrimitive.List
       data-slot="tabs-list"
-      className={cn('bg-muted text-muted-foreground inline-flex h-9 w-fit items-center justify-center rounded-full p-1', className)}
+      className={cn('bg-muted-muted inline-flex h-9 w-fit items-center justify-center rounded-full p-1', className)}
       {...props}
     />
   )
@@ -23,24 +22,20 @@ function TabsTrigger({ className, ...props }: React.ComponentProps<typeof TabsPr
     <TabsPrimitive.Trigger
       data-slot="tabs-trigger"
       className={cn(
-        'text-foreground',
+        'text-text-positive-weak',
         'inline-flex h-[calc(100%-1px)] flex-1 cursor-pointer items-center justify-center gap-1.5',
         'rounded-full',
         'border border-transparent px-2 py-1 text-sm font-medium whitespace-nowrap transition',
-        'data-[state=active]:shadow-sm',
+        'hover:bg-muted-weak',
+        'data-[state=active]:shadow-card',
         'data-[state=active]:bg-background',
-        'dark:text-muted-foreground',
-        'dark:data-[state=active]:text-foreground',
-        'dark:data-[state=active]:border-input',
-        'dark:data-[state=active]:bg-input/30',
         'disabled:opacity-50',
         'disabled:pointer-events-none',
-        'hover:bg-accent',
+        'focus-visible:border-primary',
         'focus-visible:ring-4',
+        'focus-visible:ring-primary-weak',
         'focus-visible:outline-1',
-        'focus-visible:border-ring',
-        'focus-visible:ring-ring/50',
-        'focus-visible:outline-ring',
+        'focus-visible:outline-primary',
         '[&_svg]:pointer-events-none',
         '[&_svg]:shrink-0',
         "[&_svg:not([class*='size-'])]:size-4",

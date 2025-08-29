@@ -15,7 +15,9 @@ export const NameDisplay: React.FC<React.PropsWithChildren<NameDisplayProps>> = 
           {name}
         </Paragraph>
       </TooltipTrigger>
-      <TooltipContent className="max-w-80 text-wrap break-keep whitespace-pre-line">{name}</TooltipContent>
+      <TooltipContent align="start" className="max-w-80 text-wrap break-keep whitespace-pre-line">
+        {name}
+      </TooltipContent>
     </Tooltip>
   )
 }

@@ -25,12 +25,12 @@ function Input({
       data-slot="input"
       className={cn(
         'flex h-9 w-full min-w-0',
-        'border-input shadow-input rounded-md border',
+        'border-border-weak shadow-input rounded-md border',
         'px-3 py-1',
         'bg-transparent',
         'caret-primary text-sm',
         'transition-[color,box-shadow] outline-none',
-        'placeholder:text-muted-foreground',
+        'placeholder:text-text-positive-muted',
         'selection:bg-primary',
         'selection:text-primary-foreground',
         'file:inline-flex',
@@ -44,10 +44,10 @@ function Input({
         'disabled:cursor-not-allowed',
         'disabled:opacity-50',
         'focus-visible:ring-4',
-        'focus-visible:ring-ring',
-        'focus-visible:border-primary/60',
-        'aria-invalid:ring-destructive/40',
-        'aria-invalid:border-destructive',
+        'focus-visible:ring-primary-weak',
+        'focus-visible:border-primary-strong',
+        'aria-invalid:ring-danger-muted',
+        'aria-invalid:border-danger',
         className,
       )}
       {...props}
