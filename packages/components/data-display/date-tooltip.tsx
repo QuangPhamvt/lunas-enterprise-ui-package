@@ -15,7 +15,7 @@ export const DateTooltip: React.FC<Props> = ({ date }) => {
           </Badge>
         </TooltipTrigger>
         <TooltipContent>
-          <DateDisplay date={date} format="full" showTime className="text-secondary !font-[Inter] font-medium" />
+          <DateDisplay date={date} format="full" showTime className="!font-[Inter] font-medium" />
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

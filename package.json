@@ -1,6 +1,6 @@
 {
   "name": "@customafk/lunas-ui",
-  "version": "0.0.21",
+  "version": "0.0.42",
   "description": "UI library for Lunas Enterprise",
   "type": "module",
   "author": {
@@ -15,7 +15,7 @@
   },
   "files": [
     "dist",
-    "packages",
+    "styles",
     "README.md"
   ],
   "workspaces": [
@@ -25,6 +25,10 @@
     "node": ">= 22.0.0"
   },
   "exports": {
+    "./styles/base": "./styles/base.css",
+    "./styles/loader": "./styles/loader.css",
+    "./styles/theme": "./styles/theme.css",
+    "./styles/typography": "./styles/typography.css",
     "./cards/simple-card": {
       "import": "./dist/cards/simple-card.js",
       "require": "./dist/cards/simple-card.cjs"
@@ -128,6 +132,10 @@
     "./forms/textarea-field": {
       "import": "./dist/forms/textarea-field.js",
       "require": "./dist/forms/textarea-field.cjs"
+    },
+    "./layouts/app-layout": {
+      "import": "./dist/layouts/app-layout/index.js",
+      "require": "./dist/layouts/app-layout/index.cjs"
     },
     "./layouts/flex": {
       "import": "./dist/layouts/flex.js",
@@ -402,6 +410,7 @@
     "prettier-plugin-tailwindcss": "^0.6.14",
     "tsdown": "^0.14.1",
     "typescript": "^5.8.3",
+    "unplugin-lightningcss": "^0.4.2",
     "vite": "^6.3.5",
     "vitest": "^3.2.4"
   }

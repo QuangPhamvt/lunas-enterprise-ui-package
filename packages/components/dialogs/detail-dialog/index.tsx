@@ -7,24 +7,24 @@ import { DetailDialogHeader } from './component/header'
 import { DetailDialogMain, DetailDialogMainHeader } from './component/main'
 import {
   Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
   SidebarProvider,
+  DetailDialogSidebarContent,
+  DetailDialogSidebarFooter,
+  DetailDialogSidebarGroup,
+  DetailDialogSidebarHeader,
+  DetailDialogSidebarMenu,
+  DetailDialogSidebarMenuButton,
+  DetailDialogSidebarMenuItem,
 } from './component/sidebar'
 import { DetailDialogWrapper } from './component/wrapper'
 
 const DetailDialogSidebar: React.FC<React.PropsWithChildren<{ title?: string; sidebarFooter?: React.ReactNode }>> = ({ title, sidebarFooter, children }) => {
   return (
-    <Sidebar collapsible="icon" className="border-border-weak hidden border-r md:flex">
-      <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton size="lg" tabIndex={-1}>
+    <Sidebar collapsible="icon" className="shadow-nav z-20 hidden md:flex">
+      <DetailDialogSidebarHeader>
+        <DetailDialogSidebarMenu>
+          <DetailDialogSidebarMenuItem>
+            <DetailDialogSidebarMenuButton size="lg" tabIndex={-1}>
               <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
                 <CatIcon size={16} />
               </div>
@@ -32,14 +32,14 @@ const DetailDialogSidebar: React.FC<React.PropsWithChildren<{ title?: string; si
                 <span className="truncate font-medium">{title || 'Detail Dialog'}</span>
                 <span className="truncate text-xs">Lunas Enterprise</span>
               </div>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarHeader>
-      <SidebarContent>
-        <SidebarGroup>{children}</SidebarGroup>
-      </SidebarContent>
-      {sidebarFooter && <SidebarFooter>{sidebarFooter}</SidebarFooter>}
+            </DetailDialogSidebarMenuButton>
+          </DetailDialogSidebarMenuItem>
+        </DetailDialogSidebarMenu>
+      </DetailDialogSidebarHeader>
+      <DetailDialogSidebarContent>
+        <DetailDialogSidebarGroup>{children}</DetailDialogSidebarGroup>
+      </DetailDialogSidebarContent>
+      {sidebarFooter && <DetailDialogSidebarFooter>{sidebarFooter}</DetailDialogSidebarFooter>}
     </Sidebar>
   )
 }
@@ -69,19 +69,16 @@ export const DetailDialog: React.FC<React.PropsWithChildren<Props>> = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DetailDialogWrapper>
         <DetailDialogHeader />
-
         <SidebarProvider className="h-full min-h-[85svh] items-start">
-          <DetailDialogSidebar title={sidebarTitle} sidebarFooter={sidebarFooter}>
-            {sidebar}
-          </DetailDialogSidebar>
+          <DetailDialogSidebar title={sidebarTitle} sidebarFooter={sidebarFooter} children={sidebar} />
           <DetailDialogMain>
             <DetailDialogMainHeader title={title} createdAt={createdAt} />
             {isLoading ? (
-              <Flex justify="center" className="bg-muted-muted/20 size-full">
+              <Flex justify="center" className="bg-muted-muted w-full flex-1 inset-shadow-sm">
                 <div className="loader" />
               </Flex>
             ) : (
-              <section className="bg-muted-muted/20 relative flex-1 overflow-y-auto inset-shadow-sm">{children}</section>
+              <section className="bg-muted-muted relative flex flex-1 snap-y flex-col gap-0 overflow-y-auto inset-shadow-sm">{children}</section>
             )}
           </DetailDialogMain>
         </SidebarProvider>

@@ -27,7 +27,7 @@ function TooltipContent({ className, sideOffset = 0, children, ...props }: React
         data-slot="tooltip-content"
         sideOffset={sideOffset}
         className={cn(
-          'bg-foreground text-text-negative-intense shadow-dropdown outline-none',
+          'bg-secondary-strong text-text-negative-intense shadow-dropdown outline-none',
           'animate-in fade-in-0 zoom-in-95',
           'data-[state=closed]:animate-out',
           'data-[state=closed]:fade-out-0',
@@ -44,7 +44,7 @@ function TooltipContent({ className, sideOffset = 0, children, ...props }: React
         {...props}
       >
         {children}
-        <TooltipPrimitive.Arrow className="bg-foreground fill-foreground text-secondary z-50 size-2.5 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-xs" />
+        <TooltipPrimitive.Arrow className="bg-secondary-strong fill-foreground text-secondary z-50 size-2.5 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-xs" />
       </TooltipPrimitive.Content>
     </TooltipPrimitive.Portal>
   )

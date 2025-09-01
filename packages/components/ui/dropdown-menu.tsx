@@ -27,7 +27,7 @@ function DropdownMenuContent({ className, sideOffset = 4, align = 'start', ...pr
           'z-50',
           'min-w-32',
           'overflow-x-hidden overflow-y-auto',
-          'border-border-weak shadow-dropdown rounded-md border p-1.5',
+          'shadow-dropdown rounded-md p-1.5',
           'max-h-(--radix-dropdown-menu-content-available-height)',
           'origin-(--radix-dropdown-menu-content-transform-origin)',
           'data-[state=open]:animate-in',
@@ -69,7 +69,7 @@ function DropdownMenuItem({
       data-variant={variant}
       className={cn(
         'relative flex cursor-pointer items-center gap-2 rounded-md px-2 py-2.5 text-sm outline-hidden transition-all select-none',
-        'focus:bg-accent-muted',
+        'focus:bg-muted-muted',
         'focus:text-text-positive-strong',
         'data-[inset]:pl-8',
         'data-[disabled]:pointer-events-none',
@@ -95,7 +95,7 @@ function DropdownMenuCheckboxItem({ className, children, checked, ...props }: Re
       data-slot="dropdown-menu-checkbox-item"
       className={cn(
         'relative flex cursor-default items-center gap-2 rounded-sm py-1.5 pr-2 pl-8 text-sm outline-hidden select-none',
-        'focus:bg-accent-muted',
+        'focus:bg-muted-muted',
         'focus:text-text-positive-strong',
         'data-[disabled]:opacity-50',
         'data-[disabled]:pointer-events-none',
@@ -193,7 +193,7 @@ function DropdownMenuSubTrigger({
         'flex cursor-default items-center rounded-sm px-2 py-1.5 text-sm outline-hidden select-none',
         'focus:bg-accent-muted',
         'focus:text-text-positive-strong',
-        'data-[state=open]:bg-accent-muted',
+        'data-[state=open]:bg-muted-muted',
         'data-[state=open]:text-text-positive-strong',
         'data-[inset]:pl-8',
         className,
@@ -212,7 +212,7 @@ function DropdownMenuSubContent({ className, ...props }: React.ComponentProps<ty
       data-slot="dropdown-menu-sub-content"
       className={cn(
         'bg-popover text-text-positive',
-        'border-border-weak shadow-dropdown z-50 min-w-32 origin-(--radix-dropdown-menu-content-transform-origin) overflow-hidden rounded-md border p-1',
+        'shadow-dropdown z-50 min-w-32 origin-(--radix-dropdown-menu-content-transform-origin) overflow-hidden rounded-md p-1',
         'data-[state=open]:animate-in',
         'data-[state=open]:fade-in-0',
         'data-[state=open]:zoom-in-95',

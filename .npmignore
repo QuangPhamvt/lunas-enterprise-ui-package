@@ -1,7 +1,7 @@
-/.storybook
-/node_modules
-/packages
-/components.json
+.storybook
+node_modules
+packages
+components.json
 /tsconfig.json
 /tsdown.config.ts
 /vite.config.ts

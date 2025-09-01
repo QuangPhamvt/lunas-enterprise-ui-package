@@ -1,17 +1,17 @@
-import React, { type CSSProperties } from 'react'
+import React from 'react'
 import { type Column, flexRender, type Header, type Table as ReactTable } from '@tanstack/react-table'
 import { ArrowLeftToLineIcon, ArrowRightToLineIcon, ChevronDown, ChevronUp, EllipsisIcon, PackagePlusIcon, PinOffIcon } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 import type { AnyEntity } from '@/types'
 
-import { Button } from '../ui/button'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu'
-import { ScrollArea, ScrollBar } from '../ui/scroll-area'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table'
+import { Button } from '@/components/ui/button'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 
 // Helper function to compute pinning styles for columns
-const getPinningStyles = (column: Column<AnyEntity>): CSSProperties => {
+const getPinningStyles = (column: Column<AnyEntity>): React.CSSProperties => {
   const isPinned = column.getIsPinned()
   return {
     left: isPinned === 'left' ? `${column.getStart('left')}px` : undefined,
@@ -43,6 +43,7 @@ const PinControls = ({ column }: { column: Column<AnyEntity> }) => {
       <Button
         size="icon"
         variant="ghost"
+        color="secondary"
         className="hover:[&_svg]:text-secondary-foreground -mr-1 size-7 shadow-none"
         aria-label={`Unpin ${columnHeader} column`}
         title={`Unpin ${columnHeader} column`}
@@ -59,6 +60,7 @@ const PinControls = ({ column }: { column: Column<AnyEntity> }) => {
         <Button
           size="icon"
           variant="ghost"
+          color="secondary"
           className="-mr-1 size-7 shadow-none"
           aria-label={`Pin options for ${columnHeader} column`}
           title={`Pin options for ${columnHeader} column`}
@@ -118,25 +120,27 @@ interface DataTableProps {
 export const DataTable = ({ table, isLoading, onClickRow }: DataTableProps) => {
   'use no memo'
   return (
-    <ScrollArea className="border-border bg-background relative w-full overflow-auto rounded-lg border">
+    <ScrollArea className="border-border-weak bg-background relative w-full overflow-auto rounded-lg border">
       <Table
         className={cn(
           '!w-full',
-          '[&_td]:border-border',
-          '[&_th]:border-border',
+          '[&_td]:border-border-weak',
+          '[&_th]:border-border-weak',
           'table-fixed border-separate border-spacing-0',
           '[&_tfoot_td]:border-t',
           '[&_th]:border-b',
+          '[&_th]:border-b-border-weak',
           '[&_tr]:border-none',
           '[&_tr:not(:last-child)_td]:border-b',
+          '[&_tr:not(:last-child)_td]:border-b-border-weak',
         )}
         style={{
           width: table.getTotalSize(),
         }}
       >
-        <TableHeader className="bg-muted/50 sticky top-0 z-10 backdrop-blur-xs">
+        <TableHeader className="sticky top-0 z-10 backdrop-blur-xs">
           {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id} className="bg-muted/50">
+            <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 const { column } = header
                 const isPinned = column.getIsPinned()
@@ -148,11 +152,11 @@ export const DataTable = ({ table, isLoading, onClickRow }: DataTableProps) => {
                     data-pinned={isPinned || undefined}
                     data-last-col={isLastLeftPinned ? 'left' : isFirstRightPinned ? 'right' : undefined}
                     className={cn(
-                      'text-accent-foreground/60 relative h-9 border-r font-semibold select-none',
+                      'relative h-9 font-semibold select-none',
                       'data-pinned:backdrop-blur-xs',
-                      'data-pinned:bg-muted/90',
+                      'data-pinned:bg-muted-weak',
                       '[&>.cursor-col-resize]:last:opacity-0',
-                      '[&[data-pinned][data-last-col]]:border-border',
+                      '[&[data-pinned][data-last-col]]:border-border-weak',
                       '[&:not([data-pinned]):has(+[data-pinned])_div.cursor-col-resize:last-child]:opacity-0',
                       '[&[data-last-col=left]_div.cursor-col-resize:last-child]:opacity-0',
                       '[&[data-pinned=left][data-last-col=left]]:border-r',
@@ -208,7 +212,7 @@ export const DataTable = ({ table, isLoading, onClickRow }: DataTableProps) => {
                           data-last-col={isLastLeftPinned ? 'left' : isFirstRightPinned ? 'right' : undefined}
                           className={cn(
                             'overflow-hidden py-2.5',
-                            '[&[data-pinned][data-last-col]]:border-border',
+                            '[&[data-pinned][data-last-col]]:border-border-weak',
                             '[&[data-pinned=left][data-last-col=left]]:border-r',
                             '[&[data-pinned=right][data-last-col=right]]:border-l',
                             'data-pinned:bg-background/90',

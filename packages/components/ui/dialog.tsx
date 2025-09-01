@@ -80,7 +80,7 @@ function DialogContent({
                 'focus:ring-2',
                 'focus:ring-border-weak',
                 'hover:opacity-100',
-                'hover:bg-accent-muted',
+                'hover:bg-border-muted',
                 'data-[state=open]:bg-accent-weak',
                 'data-[state=open]:text-text-positive-muted',
                 '[&_svg]:text-accent-foreground/60',

@@ -44,10 +44,12 @@ export const ComboboxField = <TFieldValues extends FieldValues = FieldValues>({
                     role="combobox"
                     color="muted"
                     className={cn(
-                      'flex justify-between rounded-md px-3',
+                      'shadow-input flex justify-between rounded-md px-3',
                       'outline-border-weak font-normal',
+                      '[&_div]:w-full',
                       '[&_div]:justify-between',
-                      'data-[state=open]:border-primary-strong',
+                      'hover:outline-border',
+                      'data-[state=open]:text-text-positive-muted',
                       'data-[state=open]:outline-1',
                       'data-[state=open]:outline-primary-strong',
                       'data-[state=open]:ring-primary-weak',
@@ -68,8 +70,8 @@ export const ComboboxField = <TFieldValues extends FieldValues = FieldValues>({
                   </Button>
                 </FormControl>
               </PopoverTrigger>
-              <PopoverContent className="border-input w-full max-w-[var(--radix-popover-trigger-width)] p-0">
-                <Command>
+              <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0">
+                <Command className="border-none">
                   <CommandInput placeholder={placeholder ?? 'Tìm kiếm'} />
                   <CommandList>
                     <CommandGroup className="max-h-40 overflow-y-auto">

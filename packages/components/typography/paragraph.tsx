@@ -15,8 +15,8 @@ const paragraphVariants = cva('', {
       p: 'leading-7 [&:not(:first-child)]:mt-6',
       sm: 'text-sm leading-none font-normal',
       lg: 'text-lg font-semibold',
-      lead: 'text-muted-foreground text-xl',
-      muted: 'text-muted-foreground text-sm',
+      lead: 'text-text-positive-strong text-xl',
+      muted: 'text-text-positive-muted text-sm',
     },
     default: {
       variant: 'sm',
@@ -25,5 +25,5 @@ const paragraphVariants = cva('', {
 })
 
 export const Paragraph = ({ variant = 'p', className, children }: Props) => {
-  return <p className={cn(paragraphVariants({ variant }), className)}>{children}</p>
+  return <p className={cn('text-text-positive', paragraphVariants({ variant }), className)}>{children}</p>
 }

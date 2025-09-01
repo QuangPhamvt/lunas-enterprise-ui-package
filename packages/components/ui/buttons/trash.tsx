@@ -7,7 +7,7 @@ type Props = {
 }
 export const TrashBtn: React.FC<Props> = ({ onClick }) => {
   return (
-    <Button aria-label="Xoá" variant="ghost" size="icon" className="aspect-square max-sm:p-0" onClick={onClick}>
+    <Button aria-label="Xoá" variant="ghost" size="icon" color="secondary" className="max-sm:aspect-square max-sm:p-0" onClick={onClick}>
       <Trash2Icon size={16} className="opacity-60" aria-hidden="true" />
     </Button>
   )

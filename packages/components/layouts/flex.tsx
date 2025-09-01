@@ -17,6 +17,7 @@ const flexVariants = cva(['relative flex', 'text-sm'], {
       screen: 'w-screen',
       min: 'w-min',
       max: 'w-max',
+      null: '',
     },
     wrap: {
       true: 'flex-wrap',

@@ -94,11 +94,11 @@ export function Table<T extends Record<string, unknown>>({
       <Flex justify="between" padding="none" width="full" className="flex-0">
         <SearchInput placeholder="Search..." />
         <Flex className="px-0">
-          {onAdd && <AddNewBtn onClick={onAdd} />}
+          {!!onAdd && <AddNewBtn onClick={onAdd} />}
           <RefreshBtn onClick={onRefresh} />
         </Flex>
       </Flex>
-      <Flex padding="none" vertical wrap={false} width="full" className="flex-1 overflow-auto">
+      <Flex padding="none" vertical wrap={false} width="full" className="flex-1 overflow-auto pb-4">
         <DataTable table={table} isLoading={isLoading} onClickRow={onClickRow} />
         <DataTablePagination<T> table={table} />
       </Flex>

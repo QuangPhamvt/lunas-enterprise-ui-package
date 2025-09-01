@@ -32,9 +32,9 @@ npm install react react-dom
 ## 🚀 Sử dụng nhanh
 
 ```jsx
-import React from 'react';
-import { Button, Card, Input } from 'your-ui-library';
-import 'your-ui-library/dist/styles.css';
+import React from 'react'
+import { Button, Card, Input } from 'your-ui-library'
+import 'your-ui-library/dist/styles.css'
 
 function App() {
   return (
@@ -42,15 +42,16 @@ function App() {
       <Input placeholder="Enter your name" />
       <Button variant="primary">Click me!</Button>
     </Card>
-  );
+  )
 }
 
-export default App;
+export default App
 ```
 
 ## 📋 Danh sách Component
 
 ### Form Components
+
 - `Button` - Các loại button với nhiều variant
 - `Input` - Text input với validation
 - `Select` - Dropdown select
@@ -58,6 +59,7 @@ export default App;
 - `Switch` - Toggle switch
 
 ### Layout Components
+
 - `Container` - Wrapper container
 - `Grid` - Flexible grid system
 - `Card` - Card component
@@ -65,12 +67,14 @@ export default App;
 - `Drawer` - Side drawer
 
 ### Feedback Components
+
 - `Alert` - Alert messages
 - `Toast` - Toast notifications
 - `Loading` - Loading indicators
 - `Progress` - Progress bars
 
 ### Navigation Components
+
 - `Navbar` - Navigation bar
 - `Breadcrumb` - Breadcrumb navigation
 - `Pagination` - Pagination component
@@ -93,29 +97,27 @@ Xem [documentation đầy đủ](https://ui.lunas.vn) để biết thêm chi ti�
 
 ```jsx
 // Import tất cả styles
-import 'your-ui-library/dist/styles.css';
+import 'your-ui-library/dist/styles.css'
 
 // Hoặc import riêng từng component
-import 'your-ui-library/dist/components/Button.css';
+import 'your-ui-library/dist/components/Button.css'
 ```
 
 ### Bundle Size Optimization
 
 ```jsx
 // Tree-shaking - chỉ import những gì cần
-import { Button } from 'your-ui-library';
+import { Button } from 'your-ui-library'
 
 // Thay vì import toàn bộ
-import * as UI from 'your-ui-library'; // ❌ Không nên
+import * as UI from 'your-ui-library' // ❌ Không nên
 ```
 
 ## 🌟 Examples
 
 ### Basic Form
 
-
 ### Dark Mode
-
 
 ## 🛠️ Development
 
@@ -181,3 +183,12 @@ MIT © [Your Name](https://github.com/yourusername)
 <div align="center">
   Được tạo với ❤️ bởi <a href="https://github.com/QuangPhamvt">CustomAFK</a>
 </div>
+
+<!--```json
+{
+  "./styles/base": "./styles/base.css",
+  "./styles/loader": "./styles/loader.css",
+  "./styles/theme": "./styles/theme.css",
+  "./styles/typography": "./styles/typography.css",
+}
+```-->

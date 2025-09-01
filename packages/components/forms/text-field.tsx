@@ -53,7 +53,7 @@ export const TextField = <TFieldValues extends FieldValues = FieldValues>({
             {isShowClearButton && valueWatch && (
               <button
                 type="button"
-                className="text-muted-foreground/80 hover:text-accent-foreground focus-visible:ring-border absolute inset-y-0 end-0 flex h-full w-8 cursor-pointer items-center justify-center rounded-e-md transition-[color,box-shadow] outline-none focus:z-10 focus-visible:ring-2"
+                className="text-text-positive-weak hover:text-text-positive focus-visible:ring-border absolute inset-y-0 end-0 flex h-full w-8 cursor-pointer items-center justify-center rounded-e-md transition-[color,box-shadow] outline-none focus:z-10 focus-visible:ring-2"
                 aria-label="Clear input"
                 onClick={handleClearInput}
               >
@@ -63,7 +63,7 @@ export const TextField = <TFieldValues extends FieldValues = FieldValues>({
           </div>
           <Flex width="full" padding="none" justify="end">
             {isShowErrorMsg && <FormMessage className="grow" />}
-            {isShowCount && <div className="text-muted-foreground text-end text-xs">{valueWatch?.length ?? 0} characters</div>}
+            {isShowCount && <div className="text-text-positive-weak text-end text-xs">{valueWatch?.length ?? 0} characters</div>}
           </Flex>
           {!!description && <FormDescription>{description}</FormDescription>}
         </FormItem>

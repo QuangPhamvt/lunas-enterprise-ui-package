@@ -35,9 +35,27 @@ export const DateField = <TFieldValues extends FieldValues = FieldValues>({
           <Popover modal>
             <PopoverTrigger asChild>
               <FormControl>
-                <Button variant="outline" className={cn('w-full pl-3 text-left font-normal', !field.value && 'text-muted-foreground')}>
+                <Button
+                  variant="outline"
+                  className={cn(
+                    'w-full pl-3 text-left font-normal',
+                    'outline-border-weak font-normal',
+                    'hover:outline-border',
+                    'data-[state=open]:text-text-positive-muted',
+                    'data-[state=open]:outline-1',
+                    'data-[state=open]:outline-primary-strong',
+                    'data-[state=open]:ring-primary-weak',
+                    'data-[state=open]:ring-4',
+                    'focus:border-primary-strong',
+                    'focus:ring-4',
+                    'focus:ring-primary-weak',
+                    'focus:outline-1',
+                    'focus:outline-primary-strong',
+                    !field.value && 'text-muted-foreground',
+                  )}
+                >
                   {field.value ? format(field.value, 'PPP') : <span> {placeholder || 'Pick a date'}</span>}
-                  <CalendarIcon className="ml-auto size-4 opacity-50" />
+                  <CalendarIcon className="text-text-positive-weak ml-auto size-4" />
                 </Button>
               </FormControl>
             </PopoverTrigger>

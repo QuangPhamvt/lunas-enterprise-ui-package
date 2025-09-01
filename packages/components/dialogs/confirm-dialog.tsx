@@ -28,7 +28,7 @@ export const ConfirmDialog: React.FC<React.PropsWithChildren<Props>> = ({ open, 
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction className="w-24" onClick={onConfirm}>
+          <AlertDialogAction className="min-h-9 w-24" onClick={onConfirm}>
             {!isLoading ? (
               'Confirm'
             ) : (

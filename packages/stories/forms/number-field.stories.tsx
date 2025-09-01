@@ -16,6 +16,7 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {
   args: {
     name: 'name',
+    unitText: '',
     onValueChange: (value) => {
       console.log('Value changed:', value)
     },

@@ -1,5 +1,4 @@
 'use client'
-import React from 'react'
 import { ScrollArea as ScrollAreaPrimitive } from 'radix-ui'
 
 import { cn } from '@/lib/utils'
@@ -20,14 +19,14 @@ function ScrollBar({ className, orientation = 'vertical', ...props }: React.Comp
       data-slot="scroll-area-scrollbar"
       orientation={orientation}
       className={cn(
-        'flex touch-none p-px transition-colors select-none',
+        'border-border-weak flex touch-none p-px transition-colors select-none',
         orientation === 'vertical' && 'h-full w-2.5 border-l border-l-transparent',
         orientation === 'horizontal' && 'h-2.5 flex-col border-t border-t-transparent',
         className,
       )}
       {...props}
     >
-      <ScrollAreaPrimitive.ScrollAreaThumb className="bg-border relative flex-1 rounded-full" />
+      <ScrollAreaPrimitive.ScrollAreaThumb className="bg-border-weak relative flex-1 rounded-full" />
     </ScrollAreaPrimitive.ScrollAreaScrollbar>
   )
 }

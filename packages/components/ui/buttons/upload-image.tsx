@@ -17,6 +17,7 @@ export const UploadImageBtn: React.FC<PropsWithChildren<Props>> = ({ size = '5re
         height: size,
       }}
       variant="outline"
+      color="muted"
       onClick={onClick}
     >
       <UploadIcon className="size-6" />

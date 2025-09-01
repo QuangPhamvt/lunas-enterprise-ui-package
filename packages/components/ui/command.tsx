@@ -116,7 +116,7 @@ function CommandItem({ className, ...props }: React.ComponentProps<typeof Comman
         'active:ring-border',
         'active:opacity-60',
         'active:ring-4',
-        'data-[selected=true]:bg-accent-muted',
+        'data-[selected=true]:bg-muted-muted',
         'data-[selected=true]:text-text-positive-strong',
         'data-[disabled=true]:opacity-50',
         'data-[disabled=true]:pointer-events-none',

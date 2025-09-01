@@ -14,6 +14,7 @@ export const Default: Story = {
   args: {
     children: 'Button',
     size: 'default',
+    isLoading: false,
     className: 'w-40',
   },
 }

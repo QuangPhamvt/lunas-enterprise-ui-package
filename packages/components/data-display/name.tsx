@@ -11,7 +11,7 @@ export const NameDisplay: React.FC<React.PropsWithChildren<NameDisplayProps>> = 
   return (
     <Tooltip>
       <TooltipTrigger>
-        <Paragraph variant="sm" className="line-clamp-2 cursor-help">
+        <Paragraph variant="sm" className="line-clamp-2 w-full cursor-help truncate">
           {name}
         </Paragraph>
       </TooltipTrigger>

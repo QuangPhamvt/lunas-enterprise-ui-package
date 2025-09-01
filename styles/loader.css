@@ -1,0 +1,45 @@
+:root {
+  /* Loader styles */
+  /* HTML: <div class="loader"></div> */
+  .loader {
+    width: 50px;
+    aspect-ratio: 1;
+    display: grid;
+    border: var(--border) solid;
+    border-radius: 50%;
+    border-right-color: var(--primary);
+    animation: l15 1s infinite linear;
+  }
+  .loader::before,
+  .loader::after {
+    content: '';
+    grid-area: 1/1;
+    margin: 2px;
+    border: inherit;
+    border-radius: 50%;
+    animation: l15 2s infinite;
+  }
+  .loader::after {
+    margin: 8px;
+    animation-duration: 3s;
+  }
+
+  /* HTML: <div class="loader-dots"></div> */
+  .loader-dots {
+    width: 8px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    animation: l5 1s infinite linear alternate;
+  }
+
+  /* HTML: <div class="loader-spinner"></div> */
+  .loader-spinner {
+    width: 16px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: 2.5px solid var(--color-text-negative-strong);
+    animation:
+      l20-1 0.8s infinite linear alternate,
+      l20-2 1.6s infinite linear;
+  }
+}

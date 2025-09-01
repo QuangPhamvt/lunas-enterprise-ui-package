@@ -12,7 +12,20 @@ function Table({ className, ...props }: React.ComponentProps<'table'>) {
 }
 
 function TableHeader({ className, ...props }: React.ComponentProps<'thead'>) {
-  return <thead data-slot="table-header" className={cn('bg-muted-muted border-border-weak [&_tr]:border-b', className)} {...props} />
+  return (
+    <thead
+      data-slot="table-header"
+      className={cn(
+        'bg-muted-muted border-border-weak',
+        '[&_tr]:border-b',
+        '[&_tr:not(:last-child)_td]:border-b',
+        '[&_tr_th:not(:last-child)]:border-r',
+        '[&_tr_th:not(:last-child)]:border-r-border-weak',
+        className,
+      )}
+      {...props}
+    />
+  )
 }
 
 function TableBody({ className, ...props }: React.ComponentProps<'tbody'>) {

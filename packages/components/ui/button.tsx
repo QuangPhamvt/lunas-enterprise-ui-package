@@ -7,9 +7,8 @@ import { cn } from '@/lib/utils'
 
 const buttonVariants = cva(
   [
-    'relative shrink-0 cursor-pointer rounded-md font-medium whitespace-normal transition-all',
+    'relative shrink-0 cursor-pointer rounded-md font-medium whitespace-normal transition-all h-fit',
     'hover:shadow-md',
-    'active:ring-0',
     '[&_svg]:pointer-events-none',
     '[&_svg]:shrink-0',
     "[&_svg:not([class*='size-'])]:size-4",
@@ -179,6 +178,7 @@ function Button({
   color,
   asChild = false,
   isLoading = false,
+  children,
   ...props
 }: React.ComponentProps<'button'> &
   VariantProps<typeof buttonVariants> & {
@@ -189,12 +189,12 @@ function Button({
 
   return (
     <Comp data-slot="button" className={cn(buttonVariants({ variant, size, color, className }))} {...props}>
-      <div className={cn('flex size-full items-center justify-center gap-2 text-nowrap', isLoading && 'opacity-0')}>
-        <Slot.Slottable>{props.children}</Slot.Slottable>
+      <div className={cn('flex items-center justify-center gap-2 text-nowrap', isLoading && 'opacity-0')}>
+        <Slot.Slottable>{children}</Slot.Slottable>
       </div>
       {isLoading && (
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="loader-spinner text-muted-foreground" />
+          <div className="loader-spinner text-text-positive-strong" />
         </div>
       )}
     </Comp>

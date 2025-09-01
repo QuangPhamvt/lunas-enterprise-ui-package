@@ -3,7 +3,7 @@ import { cva } from 'class-variance-authority'
 
 import { cn } from '@/lib/utils'
 
-const titleVariants = cva('scroll-m-20 text-secondary-foreground tracking-tight', {
+const titleVariants = cva('scroll-m-20 text-text-positive-strong tracking-tight', {
   variants: {
     level: {
       1: 'text-center text-4xl font-extrabold text-balance',

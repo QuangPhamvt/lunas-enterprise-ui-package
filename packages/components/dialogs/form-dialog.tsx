@@ -47,7 +47,7 @@ export const FormDialog = <TFieldValues extends FieldValues = FieldValues>({
           e.stopPropagation()
         }}
       >
-        <DialogHeader className="flex-0 gap-2 border-b px-6 pt-6 pb-4">
+        <DialogHeader className="border-border-weak flex-0 gap-2 border-b p-6 pb-4">
           <DialogTitle>{title || 'Form Dialog'}</DialogTitle>
           <DialogDescription>{description || 'This is a form dialog where you can add your form elements.'}</DialogDescription>
         </DialogHeader>
@@ -59,12 +59,12 @@ export const FormDialog = <TFieldValues extends FieldValues = FieldValues>({
           onError={onError}
         >
           <main className="flex-1 overflow-y-auto px-6">{children}</main>
-          <DialogFooter className="border-t px-6 pt-4 pb-6">
+          <DialogFooter className="border-border-weak border-t p-6 pt-4">
             <Button tabIndex={-1} type="button" variant="outline" color="muted" className="w-30 rounded-full" onClick={onReset}>
               Reset
             </Button>
             <Button autoFocus tabIndex={0} type="submit" isLoading={isSubmitting} disabled={disableSubmit} className="w-30 rounded-full">
-              Xác nhận
+              Submit
             </Button>
           </DialogFooter>
         </FormWrapper>

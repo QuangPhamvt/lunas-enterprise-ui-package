@@ -16,13 +16,6 @@ export const Default: Story = {
   },
 }
 
-export const FileInput: Story = {
-  args: {
-    type: 'file',
-    placeholder: 'Upload a file',
-  },
-}
-
 export const Error: Story = {
   args: {
     placeholder: 'Error input',

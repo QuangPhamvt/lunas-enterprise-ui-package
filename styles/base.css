@@ -1,0 +1,29 @@
+:root {
+  body {
+    margin: 0;
+    min-width: 320px;
+    min-height: 100vh;
+
+    font-synthesis: none;
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+
+    letter-spacing: -0.015625rem;
+    overflow-wrap: break-word;
+    hyphens: auto;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  /* Custom scrollbar styling. Thanks @pranathiperii. */
+  ::-webkit-scrollbar {
+    width: 0.375rem;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-border-weak);
+    border-radius: 0.375rem;
+  }
+}

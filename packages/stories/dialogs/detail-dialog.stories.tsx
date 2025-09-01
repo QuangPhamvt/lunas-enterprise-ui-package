@@ -1,5 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { DetailDialog } from '@/components/dialogs/detail-dialog'
+import { DetailDialogSidebarMenu, DetailDialogSidebarMenuButton, DetailDialogSidebarMenuItem } from '@/components/dialogs/detail-dialog/component/sidebar'
+import { PackageIcon } from 'lucide-react'
+import { DetailDialogMainGroup, DetailDialogMainGroupItem } from '@/components/dialogs/detail-dialog/component/main'
 
 const meta = {
   tags: ['autodocs'],
@@ -15,20 +18,66 @@ export const Default: Story = {
     open: true,
     isLoading: false,
     sidebar: (
-      <div className="p-4">
-        <h2 className="text-lg font-semibold">Sidebar Content</h2>
-        <p>This is some content in the sidebar.</p>
-      </div>
+      <DetailDialogSidebarMenu>
+        <DetailDialogSidebarMenuItem>
+          <DetailDialogSidebarMenuButton isActive>
+            <PackageIcon />
+            Group 1 - Item 1
+          </DetailDialogSidebarMenuButton>
+        </DetailDialogSidebarMenuItem>
+
+        <DetailDialogSidebarMenuItem>
+          <DetailDialogSidebarMenuButton>
+            <PackageIcon />
+            Group 1 - Item 2
+          </DetailDialogSidebarMenuButton>
+        </DetailDialogSidebarMenuItem>
+
+        <DetailDialogSidebarMenuItem>
+          <DetailDialogSidebarMenuButton>
+            <PackageIcon />
+            Group 1 - Item 3
+          </DetailDialogSidebarMenuButton>
+        </DetailDialogSidebarMenuItem>
+      </DetailDialogSidebarMenu>
     ),
     title: 'Detail Dialog Title',
     sidebarTitle: 'Sidebar Title',
     createdAt: new Date(),
     onOpenChange: (open: boolean) => console.log('Dialog open state changed:', open),
     children: (
-      <>
-        <p className="p-4">This is the content of the detail dialog.</p>
-        <p className="p-4">You can add more content here as needed.</p>
-      </>
+      <DetailDialogMainGroup>
+        <DetailDialogMainGroupItem
+          title="Group Item 1 Content"
+          description="This is a description for Group Item 1. It provides additional context about the content."
+        >
+          Content for Group Item 1. This is where you can put detailed information related to this item.
+        </DetailDialogMainGroupItem>
+        <DetailDialogMainGroupItem
+          title="Group Item 2 Content"
+          description="This is a description for Group Item 2. It provides additional context about the content."
+        >
+          Group Item 2 Content
+        </DetailDialogMainGroupItem>
+        <DetailDialogMainGroupItem
+          title="Group Item 3 Content"
+          description="This is a description for Group Item 3. It provides additional context about the content."
+        >
+          Group Item 3 Content
+        </DetailDialogMainGroupItem>
+        <DetailDialogMainGroupItem
+          title="Group Item 4 Content"
+          description="This is a description for Group Item 4. It provides additional context about the content."
+        >
+          Content for Group Item 4. This is where you can put detailed information related to this item.
+        </DetailDialogMainGroupItem>
+        <DetailDialogMainGroupItem
+          title="Group Item 5 Content"
+          description="This is a description for Group Item 5. It provides additional context about the content."
+        >
+          Group Item 5 Content
+        </DetailDialogMainGroupItem>
+      </DetailDialogMainGroup>
     ),
   },
 }

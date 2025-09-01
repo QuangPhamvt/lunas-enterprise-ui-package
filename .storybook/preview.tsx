@@ -2,11 +2,15 @@ import '../packages/index.css'
 
 import { Controls, Description, Primary, Stories, Subtitle, Title } from '@storybook/addon-docs/blocks'
 import { withThemeByClassName } from '@storybook/addon-themes'
+import { INITIAL_VIEWPORTS } from 'storybook/viewport'
 import type { Preview } from '@storybook/react-vite'
 
 const preview: Preview = {
   tags: ['autodocs'],
   parameters: {
+    viewport: {
+      options: INITIAL_VIEWPORTS,
+    },
     layout: 'padded',
     controls: {
       matchers: {
@@ -25,9 +29,10 @@ const preview: Preview = {
           <Stories />
         </>
       ),
-      codePanel: true
+      codePanel: true,
     },
   },
+  initialGlobals: {},
   decorators: [
     withThemeByClassName({
       themes: {

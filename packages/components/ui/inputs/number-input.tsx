@@ -290,7 +290,7 @@ export const NumberInput: React.FC<IProps> = ({
   React.useEffect(() => {
     if (!_unitRef.current || !_inputRef.current || !unitText) return
     const unitWidth = _unitRef.current.offsetWidth
-    _inputRef.current.style.setProperty('padding-right', `${(unitWidth + 8) / 16}rem`)
+    _inputRef.current.style.setProperty('padding-right', `${(unitWidth + 10) / 16}rem`)
   }, [disabled, unitText])
 
   return (

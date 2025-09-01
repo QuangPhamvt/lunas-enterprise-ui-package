@@ -87,7 +87,7 @@ function FormControl({ ...props }: React.ComponentProps<typeof SlotPrimitive.Slo
 function FormDescription({ className, ...props }: React.ComponentProps<'p'>) {
   const { formDescriptionId } = useFormField()
 
-  return <p data-slot="form-description" id={formDescriptionId} className={cn('text-text-positive-muted text-sm', className)} {...props} />
+  return <p data-slot="form-description" id={formDescriptionId} className={cn('text-text-positive-weak text-sm', className)} {...props} />
 }
 
 function FormMessage({ className, children, ...props }: React.ComponentProps<'p'>) {

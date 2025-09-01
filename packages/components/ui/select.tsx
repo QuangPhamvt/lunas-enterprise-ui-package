@@ -29,13 +29,12 @@ function SelectTrigger({
       data-slot="select-trigger"
       data-size={size}
       className={cn(
-        'border-border',
+        'border-border-weak shadow-input',
         'flex w-fit items-center justify-between',
         'gap-2 rounded-md border bg-transparent px-3 py-2 text-sm',
         'whitespace-nowrap transition-all outline-none',
         'cursor-pointer',
-        'hover:shadow-md',
-        'hover:shadow-border-weak',
+        'hover:border-border',
         'focus:border-primary-strong',
         'focus:ring-primary-weak',
         'focus:ring-4',
@@ -43,6 +42,7 @@ function SelectTrigger({
         'aria-invalid:border-danger-strong',
         'disabled:cursor-not-allowed',
         'disabled:opacity-50',
+        'data-[state=open]:text-text-positive-muted',
         'data-[state=open]:border-primary',
         'data-[state=open]:ring-ring',
         'data-[state=open]:ring-4',
@@ -63,7 +63,7 @@ function SelectTrigger({
     >
       {children}
       <SelectPrimitive.Icon asChild>
-        <ChevronDownIcon className="size-4 opacity-50" />
+        <ChevronDownIcon size={16} opacity={50} />
       </SelectPrimitive.Icon>
     </SelectPrimitive.Trigger>
   )
@@ -119,7 +119,7 @@ function SelectContent({ className, children, position = 'popper', ...props }: R
 }
 
 function SelectLabel({ className, ...props }: React.ComponentProps<typeof SelectPrimitive.Label>) {
-  return <SelectPrimitive.Label data-slot="select-label" className={cn('text-text-positive-muted px-2 py-1.5 text-xs', className)} {...props} />
+  return <SelectPrimitive.Label data-slot="select-label" className={cn('text-text-positive-weak px-2 py-1.5 text-xs', className)} {...props} />
 }
 
 function SelectItem({ className, children, ...props }: React.ComponentProps<typeof SelectPrimitive.Item>) {
@@ -131,8 +131,8 @@ function SelectItem({ className, children, ...props }: React.ComponentProps<type
         'gap-2 rounded-md py-2.5 pr-8 pl-2',
         'w-full',
         'cursor-pointer transition-colors',
-        'text-text-positive-weak text-sm outline-hidden',
-        'focus:bg-accent-muted',
+        'text-text-positive text-sm outline-hidden',
+        'focus:bg-muted-muted',
         'focus:text-text-positive-strong',
         'data-[disabled]:opacity-50',
         'data-[disabled]:pointer-events-none',
@@ -149,7 +149,7 @@ function SelectItem({ className, children, ...props }: React.ComponentProps<type
     >
       <span className="absolute right-2 flex size-3.5 items-center justify-center">
         <SelectPrimitive.ItemIndicator>
-          <CheckIcon className="size-4" />
+          <CheckIcon size={16} />
         </SelectPrimitive.ItemIndicator>
       </span>
       <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>

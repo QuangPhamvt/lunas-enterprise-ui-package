@@ -5,7 +5,6 @@ import { cn } from '@/lib/utils'
 
 function Input({
   className,
-  type,
   onChange,
   onValueChange,
   ...props
@@ -21,25 +20,14 @@ function Input({
   )
   return (
     <input
-      type={type}
       data-slot="input"
       className={cn(
-        'flex h-9 w-full min-w-0',
+        'flex h-9 w-full px-3 py-1',
         'border-border-weak shadow-input rounded-md border',
-        'px-3 py-1',
-        'bg-transparent',
-        'caret-primary text-sm',
-        'transition-[color,box-shadow] outline-none',
+        'caret-primary bg-transparent text-sm',
+        'transition-[color,border,box-shadow] outline-none',
         'placeholder:text-text-positive-muted',
-        'selection:bg-primary',
-        'selection:text-primary-foreground',
-        'file:inline-flex',
-        'file:h-7',
-        'file:border-0',
-        'file:bg-transparent',
-        'file:text-sm',
-        'file:text-foreground',
-        'file:font-medium',
+        'hover:border-border',
         'disabled:pointer-events-none',
         'disabled:cursor-not-allowed',
         'disabled:opacity-50',
