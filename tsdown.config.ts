@@ -41,6 +41,7 @@ export default defineConfig([
       './packages/components/layouts/main/index.tsx',
       './packages/components/layouts/app-layout/index.tsx',
       './packages/components/layouts/flex.tsx',
+      './packages/components/layouts/grid.tsx',
 
       './packages/components/table/index.tsx',
 

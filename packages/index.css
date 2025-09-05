@@ -126,6 +126,11 @@
   --shadow-card: var(--shadow-card);
   --shadow-dropdown: var(--shadow-dropdown);
   --shadow-dialog: var(--shadow-dialog);
+
+  /* Container queries */
+  --container-8xl: 96rem; /* 1536px */
+  --container-9xl: 128rem; /* 2048px */
+  --container-10xl: 160rem;
 }
 
 @layer base {

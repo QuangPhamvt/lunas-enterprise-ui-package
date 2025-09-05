@@ -37,6 +37,7 @@ export const DateField = <TFieldValues extends FieldValues = FieldValues>({
               <FormControl>
                 <Button
                   variant="outline"
+                  color="muted"
                   className={cn(
                     'w-full pl-3 text-left font-normal',
                     'outline-border-weak font-normal',
@@ -51,7 +52,7 @@ export const DateField = <TFieldValues extends FieldValues = FieldValues>({
                     'focus:ring-primary-weak',
                     'focus:outline-1',
                     'focus:outline-primary-strong',
-                    !field.value && 'text-muted-foreground',
+                    !field.value && 'text-text-positive-muted',
                   )}
                 >
                   {field.value ? format(field.value, 'PPP') : <span> {placeholder || 'Pick a date'}</span>}

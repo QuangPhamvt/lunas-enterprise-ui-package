@@ -3,7 +3,7 @@ import { ShoppingCartIcon } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 
-import { Sidebar, AppLayoutSidebarInset, SidebarProvider, AppLayoutSidebarTrigger } from './sidebar'
+import { Sidebar, AppLayoutSidebarInset, SidebarProvider, AppLayoutSidebarTrigger, AppLayoutSidebarHeader } from './sidebar'
 
 export * from './sidebar'
 
@@ -66,9 +66,9 @@ export const AppLayoutMainGroup: React.FC<React.PropsWithChildren<{ className?: 
   )
 }
 
-export const AppLayoutMainGroupContent: React.FC<React.PropsWithChildren> = ({ children }) => {
+export const AppLayoutMainGroupContent: React.FC<React.PropsWithChildren & { className?: string }> = ({ className, children }) => {
   return (
-    <div data-slot="main-group-content" className="bg-card shadow-card size-full snap-start snap-always scroll-mt-4 rounded-md p-4">
+    <div data-slot="main-group-content" className={cn('bg-card shadow-card size-full max-w-5xl snap-start snap-always scroll-mt-4 rounded-md p-4', className)}>
       {children}
     </div>
   )

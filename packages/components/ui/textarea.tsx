@@ -35,7 +35,7 @@ function Textarea({
         'focus-visible:ring-4',
         'focus-visible:ring-primary-weak',
         'focus-visible:border-primary-strong',
-        'aria-invalid:ring-danger-weak',
+        'aria-invalid:ring-danger-muted',
         'aria-invalid:border-danger-strong',
         className,
       )}

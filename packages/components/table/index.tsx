@@ -18,9 +18,7 @@ import {
 import { DataTable } from './data-table'
 import { DataTablePagination } from './data-table-pagination'
 import { Flex } from '../layouts/flex'
-import { AddNewBtn } from '../ui/buttons/add-new'
-import { RefreshBtn } from '../ui/buttons/refresh'
-import { SearchInput } from '../ui/inputs/search-input'
+import { DataTableHeader } from './data-table-header'
 
 type Props<T> = {
   data: T[]
@@ -91,16 +89,22 @@ export function Table<T extends Record<string, unknown>>({
 
   return (
     <Flex vertical wrap={false} gap="sm" align="start" className="size-full overflow-y-auto pt-1">
-      <Flex justify="between" padding="none" width="full" className="flex-0">
-        <SearchInput placeholder="Search..." />
-        <Flex className="px-0">
-          {!!onAdd && <AddNewBtn onClick={onAdd} />}
-          <RefreshBtn onClick={onRefresh} />
-        </Flex>
-      </Flex>
+      <DataTableHeader onAdd={onAdd} onRefresh={onRefresh} />
       <Flex padding="none" vertical wrap={false} width="full" className="flex-1 overflow-auto pb-4">
         <DataTable table={table} isLoading={isLoading} onClickRow={onClickRow} />
-        <DataTablePagination<T> table={table} />
+        <DataTablePagination
+          pageSize={table.getState().pagination.pageSize}
+          setPageSize={table.setPageSize}
+          filteredSelectedRowsLength={table.getFilteredSelectedRowModel().rows.length}
+          filteredRowsLength={table.getFilteredRowModel().rows.length}
+          pageIndex={table.getState().pagination.pageIndex}
+          setPageIndex={table.setPageIndex}
+          previousPage={table.previousPage}
+          nextPage={table.nextPage}
+          canPreviousPage={table.getCanPreviousPage()}
+          canNextPage={table.getCanNextPage()}
+          pageCount={table.getPageCount()}
+        />
       </Flex>
     </Flex>
   )

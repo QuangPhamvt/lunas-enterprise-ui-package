@@ -51,19 +51,15 @@ export const FormDialog = <TFieldValues extends FieldValues = FieldValues>({
           <DialogTitle>{title || 'Form Dialog'}</DialogTitle>
           <DialogDescription>{description || 'This is a form dialog where you can add your form elements.'}</DialogDescription>
         </DialogHeader>
-        <FormWrapper
-          form={form}
-          isResetAfterSubmit={isResetAfterSubmit}
-          className="flex flex-1 flex-col overflow-y-auto pt-4"
-          onSubmit={onSubmit}
-          onError={onError}
-        >
-          <main className="flex-1 overflow-y-auto px-6">{children}</main>
+        <FormWrapper form={form} isResetAfterSubmit={isResetAfterSubmit} className="flex flex-1 flex-col overflow-y-auto" onSubmit={onSubmit} onError={onError}>
+          <div className="bg-muted-muted size-full p-2 inset-shadow-sm">
+            <main className="bg-card shadow-card size-full flex-1 overflow-y-auto rounded-md p-4">{children}</main>
+          </div>
           <DialogFooter className="border-border-weak border-t p-6 pt-4">
-            <Button tabIndex={-1} type="button" variant="outline" color="muted" className="w-30 rounded-full" onClick={onReset}>
+            <Button tabIndex={-1} type="button" variant="outline" color="muted" className="w-full rounded-full sm:w-30" onClick={onReset}>
               Reset
             </Button>
-            <Button autoFocus tabIndex={0} type="submit" isLoading={isSubmitting} disabled={disableSubmit} className="w-30 rounded-full">
+            <Button autoFocus tabIndex={0} type="submit" isLoading={isSubmitting} disabled={disableSubmit} className="w-full rounded-full sm:w-30">
               Submit
             </Button>
           </DialogFooter>

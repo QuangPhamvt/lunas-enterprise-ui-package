@@ -24,8 +24,8 @@ export const ErrorDialog: React.FC<React.PropsWithChildren<Props>> = ({ open, ti
         </AlertDialogHeader>
         {children}
         <AlertDialogFooter>
-          <AlertDialogAction className="w-28" onClick={handleClose}>
-            Đóng
+          <AlertDialogAction className="w-full sm:w-28" onClick={handleClose}>
+            Close
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

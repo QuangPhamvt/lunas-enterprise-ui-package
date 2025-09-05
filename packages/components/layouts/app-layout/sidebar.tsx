@@ -1,7 +1,7 @@
 import React from 'react'
 import { Slot as SlotPrimitive } from 'radix-ui'
 import { cva, type VariantProps } from 'class-variance-authority'
-import { MenuIcon } from 'lucide-react'
+import { MenuIcon, ShoppingCartIcon } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
@@ -16,7 +16,7 @@ import { cn } from '@/lib/utils'
 const SIDEBAR_COOKIE_NAME = 'sidebar_state'
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
 const SIDEBAR_WIDTH = '16rem'
-const SIDEBAR_WIDTH_MOBILE = '18rem'
+const SIDEBAR_WIDTH_MOBILE = '16rem'
 const SIDEBAR_WIDTH_ICON = '3rem'
 const SIDEBAR_KEYBOARD_SHORTCUT = 'b'
 
@@ -177,7 +177,19 @@ function Sidebar({
             <SheetTitle>Sidebar</SheetTitle>
             <SheetDescription>Displays the mobile sidebar.</SheetDescription>
           </SheetHeader>
-          <div className="flex h-full w-full flex-col">{children}</div>
+          <div className="flex size-full flex-col">
+            <div className="border-border-weak flex items-center gap-x-2 border-b p-2 pr-4">
+              <AppLayoutSidebarTrigger />
+              <div className="bg-sidebar-primary text-sidebar-primary-foreground ml-2 flex aspect-square size-8 items-center justify-center rounded-lg">
+                <ShoppingCartIcon size={20} />
+              </div>
+              <div className="grid flex-1 text-left text-sm leading-tight">
+                <span className="truncate font-medium">Lunas Store</span>
+                <span className="truncate text-xs">Established 2023</span>
+              </div>
+            </div>
+            {children}
+          </div>
         </SheetContent>
       </Sheet>
     )
