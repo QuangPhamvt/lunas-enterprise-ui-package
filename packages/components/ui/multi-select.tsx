@@ -5,7 +5,7 @@ import { PlusIcon, X } from 'lucide-react'
 
 import { Command, CommandGroup, CommandItem, CommandList, CommandSeparator } from '@/components/ui/command'
 import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
+import { cn } from '@customafk/react-toolkit/utils'
 
 export interface Option {
   value: string

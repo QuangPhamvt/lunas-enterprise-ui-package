@@ -2,7 +2,7 @@
 import React from 'react'
 import { Progress as ProgressPrimitive } from 'radix-ui'
 
-import { cn } from '@/lib/utils'
+import { cn } from '@customafk/react-toolkit/utils'
 
 function Progress({ className, value, ...props }: React.ComponentProps<typeof ProgressPrimitive.Root>) {
   return (

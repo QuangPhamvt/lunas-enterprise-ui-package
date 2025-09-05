@@ -1,8 +1,8 @@
 import React from 'react'
-import { format, isThisMonth, isThisWeek, isThisYear, isToday, isTomorrow, isValid, isYesterday, parseISO } from 'date-fns'
+import { format, isThisMonth, isThisWeek, isThisYear, isToday, isTomorrow, isValid, isYesterday, parseISO } from '@customafk/react-toolkit/date-fns'
 
 import { TIME_IN_SECONDS, vietnameseHolidays, vietnameseLocale } from '@/constants'
-import { cn } from '@/lib/utils'
+import { cn } from '@customafk/react-toolkit/utils'
 
 interface Props {
   date: Date | string | number

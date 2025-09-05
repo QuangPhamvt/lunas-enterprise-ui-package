@@ -2,7 +2,7 @@
 import { Select as SelectPrimitive } from 'radix-ui'
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from 'lucide-react'
 
-import { cn } from '@/lib/utils'
+import { cn } from '@customafk/react-toolkit/utils'
 
 function Select({ ...props }: React.ComponentProps<typeof SelectPrimitive.Root>) {
   return <SelectPrimitive.Root data-slot="select" {...props} />
@@ -90,7 +90,6 @@ function SelectContent({ className, children, position = 'popper', ...props }: R
           'data-[side=left]:slide-in-from-right-2',
           'data-[side=right]:slide-in-from-left-2',
           'data-[side=top]:slide-in-from-bottom-2',
-          'max-h-(--radix-select-content-available-height)',
           'origin-(--radix-select-content-transform-origin)',
           position === 'popper' && 'data-[side=bottom]:translate-y-1',
           position === 'popper' && 'data-[side=left]:-translate-x-1',
@@ -99,6 +98,9 @@ function SelectContent({ className, children, position = 'popper', ...props }: R
           className,
         )}
         position={position}
+        style={{
+          maxHeight: 'var(--radix-select-content-available-height)',
+        }}
         {...props}
       >
         <SelectScrollUpButton />

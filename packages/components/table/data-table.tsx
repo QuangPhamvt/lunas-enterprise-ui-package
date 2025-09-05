@@ -2,7 +2,7 @@ import React from 'react'
 import { type Column, flexRender, type Header, type Table as ReactTable } from '@tanstack/react-table'
 import { ArrowLeftToLineIcon, ArrowRightToLineIcon, ChevronDown, ChevronUp, EllipsisIcon, PackagePlusIcon, PinOffIcon } from 'lucide-react'
 
-import { cn } from '@/lib/utils'
+import { cn } from '@customafk/react-toolkit/utils'
 import type { AnyEntity } from '@/types'
 
 import { Button } from '@/components/ui/button'

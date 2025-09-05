@@ -2,8 +2,11 @@ import type { Meta, StoryObj } from '@storybook/react-vite'
 import {
   AppLayoutHeader,
   AppLayoutMain,
+  AppLayoutMainContent,
+  AppLayoutMainFooter,
   AppLayoutMainGroup,
   AppLayoutMainGroupContent,
+  AppLayoutMainHeader,
   AppLayoutSidebar,
   AppLayoutSidebarContent,
   AppLayoutSidebarGroup,
@@ -73,116 +76,15 @@ export const Default: Story = {
         </AppLayoutSidebar>
 
         <AppLayoutMain>
-          <AppLayoutMainGroup>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-            <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
-          </AppLayoutMainGroup>
+          <AppLayoutMainContent>
+            <AppLayoutMainHeader>App Layout Main Header</AppLayoutMainHeader>
+            <AppLayoutMainGroup>
+              {Array.from({ length: 100 }).map((_, index) => (
+                <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
+              ))}
+            </AppLayoutMainGroup>
+          </AppLayoutMainContent>
+          <AppLayoutMainFooter>App Layout Main Footer</AppLayoutMainFooter>
         </AppLayoutMain>
       </AppLayoutWrapper>
     )

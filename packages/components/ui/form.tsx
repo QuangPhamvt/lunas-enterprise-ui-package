@@ -4,7 +4,7 @@ import { Controller, type ControllerProps, type FieldPath, type FieldValues, For
 import { Label as LabelPrimitive, Slot as SlotPrimitive } from 'radix-ui'
 
 import { Label } from '@/components/ui/label'
-import { cn } from '@/lib/utils'
+import { cn } from '@customafk/react-toolkit/utils'
 
 const Form = FormProvider
 

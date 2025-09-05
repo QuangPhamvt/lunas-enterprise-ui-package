@@ -1,7 +1,7 @@
 import type { JSX } from 'react'
 import { cva } from 'class-variance-authority'
 
-import { cn } from '@/lib/utils'
+import { cn } from '@customafk/react-toolkit/utils'
 
 const titleVariants = cva('scroll-m-20 text-text-positive-strong tracking-tight', {
   variants: {

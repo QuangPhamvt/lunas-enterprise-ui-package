@@ -1,6 +1,6 @@
 'use client'
 
-import { cn } from '@/lib/utils'
+import { cn } from '@customafk/react-toolkit/utils'
 
 export const Grid: React.FC<React.PropsWithChildren> = ({ children }) => {
   return (

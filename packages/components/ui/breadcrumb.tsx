@@ -3,7 +3,7 @@ import React from 'react'
 import { Slot as SlotPrimitive } from 'radix-ui'
 import { ChevronRight, MoreHorizontalIcon } from 'lucide-react'
 
-import { cn } from '@/lib/utils'
+import { cn } from '@customafk/react-toolkit/utils'
 
 function Breadcrumb({ ...props }: React.ComponentProps<'nav'>) {
   return <nav aria-label="breadcrumb" data-slot="breadcrumb" {...props} />

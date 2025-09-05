@@ -10,8 +10,8 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 
-import { useIsMobile } from '@/hooks/use-mobile'
-import { cn } from '@/lib/utils'
+import { useIsMobile } from '@customafk/react-toolkit/hooks/useMobile'
+import { cn } from '@customafk/react-toolkit/utils'
 
 const SIDEBAR_COOKIE_NAME = 'sidebar_state'
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
@@ -211,7 +211,8 @@ function Sidebar({
           'relative',
           'bg-transparent',
           'transition-[width] duration-200 ease-linear',
-          'h-14 w-(--sidebar-width)',
+          'h-(--header-height) w-(--sidebar-width)',
+          'sm:h-[calc(var(--header-height) + 0.5rem)]',
           'group-data-[collapsible=offcanvas]:w-0',
           'group-data-[side=right]:rotate-180',
           variant === 'floating' || variant === 'inset'
@@ -313,7 +314,7 @@ function AppLayoutSidebarRail({ className, ...props }: React.ComponentProps<'but
 function AppLayoutSidebarInset({ className, children, ...props }: React.ComponentProps<'main'>) {
   return (
     <main data-slot="sidebar-inset" className={cn('relative flex w-full flex-1 flex-col', className)} {...props}>
-      <div className="h-14 w-full" />
+      <div className="h-(--header-height) w-full sm:h-[calc(var(--header-height)_+_0.5rem)]" />
       <div className={cn('flex-1 inset-shadow-sm')}>{children}</div>
     </main>
   )

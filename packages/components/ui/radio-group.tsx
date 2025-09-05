@@ -3,7 +3,7 @@ import React from 'react'
 import { RadioGroup as RadioGroupPrimitive } from 'radix-ui'
 import { CircleIcon } from 'lucide-react'
 
-import { cn } from '@/lib/utils'
+import { cn } from '@customafk/react-toolkit/utils'
 
 function RadioGroup({ className, ...props }: React.ComponentProps<typeof RadioGroupPrimitive.Root>) {
   return <RadioGroupPrimitive.Root data-slot="radio-group" className={cn('grid gap-3', className)} {...props} />

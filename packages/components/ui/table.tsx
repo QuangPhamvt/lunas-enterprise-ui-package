@@ -1,7 +1,7 @@
 'use client'
 import React from 'react'
 
-import { cn } from '@/lib/utils'
+import { cn } from '@customafk/react-toolkit/utils'
 import { ScrollArea, ScrollBar } from './scroll-area'
 
 function Table({ className, ...props }: React.ComponentProps<'table'>) {

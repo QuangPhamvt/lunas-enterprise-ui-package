@@ -3,7 +3,7 @@ import React from 'react'
 import { type FieldPath, type FieldValues, useWatch } from 'react-hook-form'
 import { XIcon } from 'lucide-react'
 
-import { cn } from '@/lib/utils'
+import { cn } from '@customafk/react-toolkit/utils'
 
 import { Flex } from '../layouts/flex'
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, useFormField } from '../ui/form'

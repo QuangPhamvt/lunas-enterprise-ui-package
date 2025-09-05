@@ -10,7 +10,7 @@
 @import '../styles/typography.css';
 
 :root {
-  --header-height: 3.5rem;
+  --header-height: 3rem;
   --radius: 0.75rem;
 }
 
