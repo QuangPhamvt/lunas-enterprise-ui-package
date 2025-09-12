@@ -1,9 +1,10 @@
 'use client'
-import { NavigationMenu as NavigationMenuPrimitive } from 'radix-ui'
-import { cva } from 'class-variance-authority'
+import { cn } from '@customafk/react-toolkit/utils'
+
 import { ChevronDownIcon } from 'lucide-react'
 
-import { cn } from '@customafk/react-toolkit/utils'
+import { cva } from 'class-variance-authority'
+import { NavigationMenu as NavigationMenuPrimitive } from 'radix-ui'
 
 function NavigationMenu({
   className,

@@ -1,4 +1,4 @@
-import React from 'react'
+import { useMemo } from 'react'
 
 import { ERole } from '@/types'
 
@@ -8,7 +8,7 @@ type Props = {
   status: ERole
 }
 export const RoleBadge: React.FC<React.PropsWithChildren<Props>> = ({ status }) => {
-  const colors = React.useMemo<Record<ERole, React.ComponentProps<typeof Badge>['color']>>(() => {
+  const colors = useMemo<Record<ERole, React.ComponentProps<typeof Badge>['color']>>(() => {
     return {
       [ERole.ADMIN]: 'red',
       [ERole.SUPER_ADMIN]: 'purple',

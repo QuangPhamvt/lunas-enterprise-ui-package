@@ -1,8 +1,9 @@
+import { cn } from '@customafk/react-toolkit/utils'
+
 import { BellIcon, CircleQuestionMarkIcon, ShoppingCartIcon } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { SidebarTrigger } from '@/components/ui/sidebar'
-import { cn } from '@customafk/react-toolkit/utils'
 
 export const MainLayoutHeader = () => {
   return (

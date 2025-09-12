@@ -1,5 +1,4 @@
-import React from 'react'
-
+import { memo, useCallback, useMemo } from 'react'
 import { cn } from '@customafk/react-toolkit/utils'
 
 import { Flex } from '../layouts/flex'
@@ -15,7 +14,7 @@ type Props = {
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' // Kích thước của component
   value: number | string
 }
-export const Statistic = React.memo(
+export const Statistic = memo(
   ({
     decimalSeparator = '.',
     groupSeparator = ',',
@@ -28,7 +27,7 @@ export const Statistic = React.memo(
     value,
   }: Props) => {
     // Memoize rounding function
-    const applyRounding = React.useCallback(
+    const applyRounding = useCallback(
       (num: number, precisionValue: number): number => {
         const multiplier = Math.pow(10, precisionValue)
 
@@ -46,7 +45,7 @@ export const Statistic = React.memo(
     )
 
     // Memoize number formatting options
-    const formatOptions = React.useMemo((): Intl.NumberFormatOptions => {
+    const formatOptions = useMemo((): Intl.NumberFormatOptions => {
       const options: Intl.NumberFormatOptions = {}
 
       if (typeof precision === 'number' && precision >= 0) {
@@ -61,7 +60,7 @@ export const Statistic = React.memo(
       return options
     }, [precision, showTrailingZeros])
 
-    const formatNumber = React.useCallback(
+    const formatNumber = useCallback(
       (num: number): string => {
         let processedNum = num
 
@@ -76,7 +75,7 @@ export const Statistic = React.memo(
     )
 
     // Memoize value processing
-    const processedValue = React.useMemo((): string => {
+    const processedValue = useMemo((): string => {
       // Xử lý giá trị number
       if (typeof value === 'number') {
         if (isNaN(value) || !isFinite(value)) {
@@ -109,7 +108,7 @@ export const Statistic = React.memo(
     }, [value, formatNumber])
 
     // Memoize separator replacement
-    const finalFormattedValue = React.useMemo((): string => {
+    const finalFormattedValue = useMemo((): string => {
       // Chỉ thay thế separators nếu khác mặc định
       if (decimalSeparator === '.' && groupSeparator === ',') {
         return processedValue

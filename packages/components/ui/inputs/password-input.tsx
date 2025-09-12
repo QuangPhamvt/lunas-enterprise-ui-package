@@ -1,8 +1,8 @@
 'use client'
 import React from 'react'
-import { EyeIcon, EyeOffIcon } from 'lucide-react'
-
 import { cn } from '@customafk/react-toolkit/utils'
+
+import { EyeIcon, EyeOffIcon } from 'lucide-react'
 
 import { Input } from '../input'
 

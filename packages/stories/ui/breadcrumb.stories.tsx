@@ -1,7 +1,8 @@
+import { ChevronDownIcon, SlashIcon } from 'lucide-react'
+
 import { Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { ChevronDownIcon, SlashIcon } from 'lucide-react'
 
 const meta = {
   title: 'Components/Breadcrumb',

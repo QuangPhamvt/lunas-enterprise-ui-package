@@ -1,6 +1,7 @@
 import React from 'react'
-import { Slot as SlotPrimitive } from 'radix-ui'
-import { cva, type VariantProps } from 'class-variance-authority'
+import { useIsMobile } from '@customafk/react-toolkit/hooks/useMobile'
+import { cn } from '@customafk/react-toolkit/utils'
+
 import { MenuIcon, ShoppingCartIcon } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
@@ -10,8 +11,8 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 
-import { useIsMobile } from '@customafk/react-toolkit/hooks/useMobile'
-import { cn } from '@customafk/react-toolkit/utils'
+import { cva, type VariantProps } from 'class-variance-authority'
+import { Slot as SlotPrimitive } from 'radix-ui'
 
 const SIDEBAR_COOKIE_NAME = 'sidebar_state'
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
@@ -649,8 +650,6 @@ function AppLayoutSidebarMenuSubButton({
 }
 
 export {
-  Sidebar,
-  SidebarProvider,
   AppLayoutSidebarContent,
   AppLayoutSidebarFooter,
   AppLayoutSidebarGroup,
@@ -671,6 +670,8 @@ export {
   AppLayoutSidebarRail,
   AppLayoutSidebarSeparator,
   AppLayoutSidebarTrigger,
+  Sidebar,
+  SidebarProvider,
   // eslint-disable-next-line react-refresh/only-export-components
   useSidebar,
 }

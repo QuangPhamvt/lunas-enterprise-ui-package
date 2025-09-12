@@ -1,4 +1,5 @@
 import React from 'react'
+
 import {
   type ColumnDef,
   type ColumnFiltersState,
@@ -16,9 +17,9 @@ import {
 } from '@tanstack/react-table'
 
 import { DataTable } from './data-table'
+import { DataTableHeader } from './data-table-header'
 import { DataTablePagination } from './data-table-pagination'
 import { Flex } from '../layouts/flex'
-import { DataTableHeader } from './data-table-header'
 
 type Props<T> = {
   data: T[]

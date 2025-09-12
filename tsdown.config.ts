@@ -74,6 +74,7 @@ export default defineConfig([
       './packages/components/ui/file-uploader.tsx',
       './packages/components/ui/form.tsx',
       './packages/components/ui/hover-card.tsx',
+      './packages/components/ui/image.tsx',
       './packages/components/ui/input.tsx',
       './packages/components/ui/input-otp.tsx',
       './packages/components/ui/label.tsx',

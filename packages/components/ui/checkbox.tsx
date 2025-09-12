@@ -1,8 +1,9 @@
 'use client'
-import { Checkbox as CheckboxPrimitive } from 'radix-ui'
+import { cn } from '@customafk/react-toolkit/utils'
+
 import { CheckIcon } from 'lucide-react'
 
-import { cn } from '@customafk/react-toolkit/utils'
+import { Checkbox as CheckboxPrimitive } from 'radix-ui'
 
 function Checkbox({ className, ...props }: React.ComponentProps<typeof CheckboxPrimitive.Root>) {
   return (

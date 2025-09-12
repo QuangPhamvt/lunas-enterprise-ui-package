@@ -1,8 +1,8 @@
 import { useForm } from 'react-hook-form'
-import type { Meta, StoryObj } from '@storybook/react-vite'
 
 import { ComboboxField } from '@/components/forms/combobox-field'
 import { Form } from '@/components/ui/form'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 
 const meta = {
   tags: ['autodocs'],

@@ -1,8 +1,9 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
-import { DetailDialog } from '@/components/dialogs/detail-dialog'
-import { DetailDialogSidebarMenu, DetailDialogSidebarMenuButton, DetailDialogSidebarMenuItem } from '@/components/dialogs/detail-dialog/component/sidebar'
 import { PackageIcon } from 'lucide-react'
+
+import { DetailDialog } from '@/components/dialogs/detail-dialog'
 import { DetailDialogMainGroup, DetailDialogMainGroupItem } from '@/components/dialogs/detail-dialog/component/main'
+import { DetailDialogSidebarMenu, DetailDialogSidebarMenuButton, DetailDialogSidebarMenuItem } from '@/components/dialogs/detail-dialog/component/sidebar'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 
 const meta = {
   tags: ['autodocs'],

@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { Paragraph } from '../typography/paragraph'
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
 

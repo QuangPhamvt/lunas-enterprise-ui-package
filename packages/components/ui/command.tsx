@@ -1,9 +1,11 @@
 'use client'
-import { Command as CommandPrimitive } from 'cmdk'
+import { cn } from '@customafk/react-toolkit/utils'
+
 import { SearchIcon } from 'lucide-react'
 
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { cn } from '@customafk/react-toolkit/utils'
+
+import { Command as CommandPrimitive } from 'cmdk'
 
 function Command({ className, ...props }: React.ComponentProps<typeof CommandPrimitive>) {
   return (

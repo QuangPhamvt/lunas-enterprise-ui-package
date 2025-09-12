@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
 import { FormDialog } from '@/components/dialogs/form-dialog'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 
 const meta = {
   tags: ['autodocs'],

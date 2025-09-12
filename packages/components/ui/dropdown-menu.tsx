@@ -1,8 +1,9 @@
 'use client'
-import { DropdownMenu as DropdownMenuPrimitive } from 'radix-ui'
+import { cn } from '@customafk/react-toolkit/utils'
+
 import { CheckIcon, ChevronRightIcon, CircleIcon } from 'lucide-react'
 
-import { cn } from '@customafk/react-toolkit/utils'
+import { DropdownMenu as DropdownMenuPrimitive } from 'radix-ui'
 
 function DropdownMenu({ ...props }: React.ComponentProps<typeof DropdownMenuPrimitive.Root>) {
   return <DropdownMenuPrimitive.Root data-slot="dropdown-menu" {...props} />

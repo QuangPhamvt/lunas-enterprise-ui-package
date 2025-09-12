@@ -47,4 +47,5 @@ export enum EProductInventoryStatus {
   PREORDER = 'preorder',
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type AnyEntity = any

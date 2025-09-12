@@ -1,8 +1,8 @@
 'use client'
 import React from 'react'
-import { cva, type VariantProps } from 'class-variance-authority'
-
 import { cn } from '@customafk/react-toolkit/utils'
+
+import { cva, type VariantProps } from 'class-variance-authority'
 
 const flexVariants = cva(['relative flex', 'text-sm'], {
   variants: {

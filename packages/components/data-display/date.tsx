@@ -1,8 +1,8 @@
-import React from 'react'
+import { useCallback, useMemo } from 'react'
 import { format, isThisMonth, isThisWeek, isThisYear, isToday, isTomorrow, isValid, isYesterday, parseISO } from '@customafk/react-toolkit/date-fns'
+import { cn } from '@customafk/react-toolkit/utils'
 
 import { TIME_IN_SECONDS, vietnameseHolidays, vietnameseLocale } from '@/constants'
-import { cn } from '@customafk/react-toolkit/utils'
 
 interface Props {
   date: Date | string | number
@@ -22,7 +22,7 @@ interface Props {
 }
 
 export const DateDisplay: React.FC<Props> = ({ date, format: formatType = 'medium', showHoliday = false, showTime = false, className = '', title }) => {
-  const parsedDate = React.useMemo(() => {
+  const parsedDate = useMemo(() => {
     try {
       if (date instanceof Date) {
         return isValid(date) ? date : null
@@ -42,7 +42,7 @@ export const DateDisplay: React.FC<Props> = ({ date, format: formatType = 'mediu
   }, [date])
 
   // Format relative time in Vietnamese
-  const formatRelativeTime = React.useCallback((date: Date): string => {
+  const formatRelativeTime = useCallback((date: Date): string => {
     const now = new Date()
     const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000)
 
@@ -56,25 +56,25 @@ export const DateDisplay: React.FC<Props> = ({ date, format: formatType = 'mediu
   }, [])
 
   // Vietnamese weekday
-  const getVietnameseWeekday = React.useCallback((date: Date, short: boolean = false): string => {
+  const getVietnameseWeekday = useCallback((date: Date, short: boolean = false): string => {
     const dayIndex = date.getDay()
     return short ? vietnameseLocale.weekdaysShort[dayIndex] : vietnameseLocale.weekdays[dayIndex]
   }, [])
 
   // Vietnamese month
-  const getVietnameseMonth = React.useCallback((date: Date, short: boolean = false): string => {
+  const getVietnameseMonth = useCallback((date: Date, short: boolean = false): string => {
     const monthIndex = date.getMonth()
     return short ? vietnameseLocale.monthsShort[monthIndex] : vietnameseLocale.months[monthIndex]
   }, [])
 
   // Check holiday
-  const getHoliday = React.useCallback((date: Date): string | null => {
+  const getHoliday = useCallback((date: Date): string | null => {
     const monthDay = format(date, 'MM-dd') as keyof typeof vietnameseHolidays
     return vietnameseHolidays[monthDay] || null
   }, [])
 
   // Smart format - choose appropriate format based on date
-  const getSmartFormat = React.useCallback(
+  const getSmartFormat = useCallback(
     (date: Date): string => {
       if (isToday(date)) {
         return showTime ? `Hôm nay ${format(date, 'HH:mm')}` : 'Hôm nay'
@@ -102,7 +102,7 @@ export const DateDisplay: React.FC<Props> = ({ date, format: formatType = 'mediu
   )
 
   // Main formatting function
-  const formatDate = React.useCallback(
+  const formatDate = useCallback(
     (date: Date, type: string): string => {
       const timeStr = showTime ? format(date, ', HH:mm') : ''
 

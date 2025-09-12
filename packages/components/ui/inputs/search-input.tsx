@@ -1,6 +1,6 @@
-import { ArrowRightIcon, SearchIcon } from 'lucide-react'
-
 import { cn } from '@customafk/react-toolkit/utils'
+
+import { ArrowRightIcon, SearchIcon } from 'lucide-react'
 
 import { Input } from '../input'
 

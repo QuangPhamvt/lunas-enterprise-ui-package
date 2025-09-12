@@ -1,9 +1,10 @@
 'use client'
 import React from 'react'
-import { RadioGroup as RadioGroupPrimitive } from 'radix-ui'
+import { cn } from '@customafk/react-toolkit/utils'
+
 import { CircleIcon } from 'lucide-react'
 
-import { cn } from '@customafk/react-toolkit/utils'
+import { RadioGroup as RadioGroupPrimitive } from 'radix-ui'
 
 function RadioGroup({ className, ...props }: React.ComponentProps<typeof RadioGroupPrimitive.Root>) {
   return <RadioGroupPrimitive.Root data-slot="radio-group" className={cn('grid gap-3', className)} {...props} />

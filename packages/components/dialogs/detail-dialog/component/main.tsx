@@ -3,9 +3,9 @@ import { CalendarIcon } from 'lucide-react'
 import { DateDisplay } from '@/components/data-display/date'
 import { Flex } from '@/components/layouts/flex'
 import { Title } from '@/components/typography/title'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 import { DetailDialogSidebarTrigger } from './sidebar'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 export const DetailDialogMain: React.FC<React.PropsWithChildren> = ({ children }) => (
   <main data-slot="detail-dialog-main" className="relative h-full flex-1">

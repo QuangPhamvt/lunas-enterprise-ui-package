@@ -1,9 +1,9 @@
 'use client'
-import React from 'react'
+import { useCallback } from 'react'
 import { type FieldPath, type FieldValues, useWatch } from 'react-hook-form'
-import { XIcon } from 'lucide-react'
-
 import { cn } from '@customafk/react-toolkit/utils'
+
+import { XIcon } from 'lucide-react'
 
 import { Flex } from '../layouts/flex'
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, useFormField } from '../ui/form'
@@ -36,7 +36,7 @@ export const TextField = <TFieldValues extends FieldValues = FieldValues>({
   const { resetField } = useFormField()
   const valueWatch = useWatch({ name })
 
-  const handleClearInput = React.useCallback(() => {
+  const handleClearInput = useCallback(() => {
     resetField(name)
   }, [resetField, name])
 

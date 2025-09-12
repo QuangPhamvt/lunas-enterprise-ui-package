@@ -1,5 +1,6 @@
-import { DialogContent } from '@/components/ui/dialog'
 import { cn } from '@customafk/react-toolkit/utils'
+
+import { DialogContent } from '@/components/ui/dialog'
 
 export const DetailDialogWrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
   return (

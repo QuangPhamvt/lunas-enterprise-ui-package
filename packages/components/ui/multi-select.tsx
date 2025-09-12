@@ -1,11 +1,13 @@
 'use client'
 import React from 'react'
-import { Command as CommandPrimitive, useCommandState } from 'cmdk'
+import { cn } from '@customafk/react-toolkit/utils'
+
 import { PlusIcon, X } from 'lucide-react'
 
-import { Command, CommandGroup, CommandItem, CommandList, CommandSeparator } from '@/components/ui/command'
 import { Button } from '@/components/ui/button'
-import { cn } from '@customafk/react-toolkit/utils'
+import { Command, CommandGroup, CommandItem, CommandList, CommandSeparator } from '@/components/ui/command'
+
+import { Command as CommandPrimitive, useCommandState } from 'cmdk'
 
 export interface Option {
   value: string

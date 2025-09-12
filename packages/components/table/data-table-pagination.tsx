@@ -22,7 +22,7 @@ interface DataTablePaginationProps {
   pageCount?: number
 }
 
-export function DataTablePagination<TData>({
+export function DataTablePagination({
   filteredSelectedRowsLength,
   filteredRowsLength,
   pageSize,

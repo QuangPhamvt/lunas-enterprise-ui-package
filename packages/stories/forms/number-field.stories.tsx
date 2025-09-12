@@ -1,8 +1,8 @@
 import { useForm } from 'react-hook-form'
-import type { Meta, StoryObj } from '@storybook/react-vite'
 
 import { NumberField } from '@/components/forms/number-field'
 import { Form } from '@/components/ui/form'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 
 const meta = {
   tags: ['autodocs'],

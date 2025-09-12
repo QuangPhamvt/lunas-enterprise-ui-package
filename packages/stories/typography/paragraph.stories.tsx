@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
 import { Paragraph } from '@/components/typography/paragraph'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 
 const meta = {
   tags: ['autodocs'],

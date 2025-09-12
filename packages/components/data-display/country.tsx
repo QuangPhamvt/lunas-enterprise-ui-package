@@ -1,4 +1,4 @@
-import React from 'react'
+import { useMemo } from 'react'
 import ReactCountryFlag from 'react-country-flag'
 
 import { ECountry } from '@/types'
@@ -10,7 +10,7 @@ type Props = {
   country?: ECountry | null
 }
 export const CountryDisplay: React.FC<React.PropsWithChildren<Props>> = ({ country }) => {
-  const code = React.useMemo(() => {
+  const code = useMemo(() => {
     return {
       [ECountry.VIETNAM]: 'VN',
       [ECountry.USA]: 'US',

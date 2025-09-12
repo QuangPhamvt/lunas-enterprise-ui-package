@@ -1,5 +1,6 @@
-import React from 'react'
 import type { PropsWithChildren } from 'react'
+import React from 'react'
+
 import { UploadIcon } from 'lucide-react'
 
 import { Button } from '../button'

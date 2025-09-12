@@ -1,13 +1,14 @@
 'use client'
 import React from 'react'
-import { FileText, Image, Trash2, Upload } from 'lucide-react'
 import Dropzone, { type DropzoneProps, type FileRejection } from 'react-dropzone'
+import { useControllableState } from '@customafk/react-toolkit/hooks/useControllableState'
+import { cn, formatBytes } from '@customafk/react-toolkit/utils'
+
+import { FileText, Image, Trash2, Upload } from 'lucide-react'
 import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
-import { useControllableState } from '@customafk/react-toolkit/hooks/useControllableState'
-import { cn, formatBytes } from '@customafk/react-toolkit/utils'
 
 interface FileUploaderProps extends React.HTMLAttributes<HTMLDivElement> {
   /**

@@ -2,7 +2,7 @@
 import type { FieldPath, FieldValues } from 'react-hook-form'
 
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
-import { type Option, MultipleSelector } from '../ui/multi-select'
+import { MultipleSelector, type Option } from '../ui/multi-select'
 
 type Props<TFieldValues extends FieldValues = FieldValues> = {
   name: FieldPath<TFieldValues>

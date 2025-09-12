@@ -1,6 +1,7 @@
+import { Calculator, Calendar, CreditCard, Settings, Smile, User } from 'lucide-react'
+
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator, CommandShortcut } from '@/components/ui/command'
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { Calculator, Calendar, CreditCard, Settings, Smile, User } from 'lucide-react'
 
 const meta = {
   title: 'Components/Command',

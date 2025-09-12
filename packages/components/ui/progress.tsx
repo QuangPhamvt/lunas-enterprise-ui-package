@@ -1,8 +1,8 @@
 'use client'
 import React from 'react'
-import { Progress as ProgressPrimitive } from 'radix-ui'
-
 import { cn } from '@customafk/react-toolkit/utils'
+
+import { Progress as ProgressPrimitive } from 'radix-ui'
 
 function Progress({ className, value, ...props }: React.ComponentProps<typeof ProgressPrimitive.Root>) {
   return (

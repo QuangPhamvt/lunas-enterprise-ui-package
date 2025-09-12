@@ -6,8 +6,6 @@ import { Dialog } from '@/components/ui/dialog'
 import { DetailDialogHeader } from './component/header'
 import { DetailDialogMain, DetailDialogMainHeader } from './component/main'
 import {
-  Sidebar,
-  SidebarProvider,
   DetailDialogSidebarContent,
   DetailDialogSidebarFooter,
   DetailDialogSidebarGroup,
@@ -15,6 +13,8 @@ import {
   DetailDialogSidebarMenu,
   DetailDialogSidebarMenuButton,
   DetailDialogSidebarMenuItem,
+  Sidebar,
+  SidebarProvider,
 } from './component/sidebar'
 import { DetailDialogWrapper } from './component/wrapper'
 

@@ -1,9 +1,10 @@
 'use client'
 import React from 'react'
-import { Slot as SlotPrimitive } from 'radix-ui'
+import { cn } from '@customafk/react-toolkit/utils'
+
 import { ChevronRight, MoreHorizontalIcon } from 'lucide-react'
 
-import { cn } from '@customafk/react-toolkit/utils'
+import { Slot as SlotPrimitive } from 'radix-ui'
 
 function Breadcrumb({ ...props }: React.ComponentProps<'nav'>) {
   return <nav aria-label="breadcrumb" data-slot="breadcrumb" {...props} />

@@ -1,5 +1,4 @@
 'use client'
-import React from 'react'
 import { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card'
 
 type Props = {

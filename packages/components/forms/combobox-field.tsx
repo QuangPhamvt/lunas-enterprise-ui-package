@@ -1,13 +1,13 @@
 'use client'
-import React from 'react'
 import type { FieldPath, FieldValues } from 'react-hook-form'
+import { cn } from '@customafk/react-toolkit/utils'
+
 import { ChevronDownIcon, PlusIcon } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from '@/components/ui/command'
 import { FormControl, FormDescription, FormField, FormItem, FormLabel } from '@/components/ui/form'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { cn } from '@customafk/react-toolkit/utils'
 
 type Props<TFieldValues extends FieldValues = FieldValues> = {
   name: FieldPath<TFieldValues>
@@ -82,7 +82,7 @@ export const ComboboxField = <TFieldValues extends FieldValues = FieldValues>({
                       ))}
                     </CommandGroup>
                     {onAddNewItem && (
-                      <React.Fragment>
+                      <>
                         <CommandSeparator />
                         <CommandGroup>
                           <Button type="button" variant="ghost" className="w-full justify-start font-normal">
@@ -90,7 +90,7 @@ export const ComboboxField = <TFieldValues extends FieldValues = FieldValues>({
                             Thêm mới
                           </Button>
                         </CommandGroup>
-                      </React.Fragment>
+                      </>
                     )}
                   </CommandList>
                   <CommandEmpty>Không có kết quả</CommandEmpty>

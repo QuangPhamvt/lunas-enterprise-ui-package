@@ -1,7 +1,7 @@
 'use client'
-import { ScrollArea as ScrollAreaPrimitive } from 'radix-ui'
-
 import { cn } from '@customafk/react-toolkit/utils'
+
+import { ScrollArea as ScrollAreaPrimitive } from 'radix-ui'
 
 function ScrollArea({ className, children, ...props }: React.ComponentProps<typeof ScrollAreaPrimitive.Root>) {
   return (

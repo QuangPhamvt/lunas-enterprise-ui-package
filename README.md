@@ -80,129 +80,104 @@ function App() {
 export default App
 ```
 
-## 📋 Component Import Guide
+## 📋 Comprehensive Component Reference
 
-### Base UI Components
+The following table provides a structured reference for all components available in the Lunas UI library:
 
-```jsx
-// Core UI Components
-import { Alert } from '@customafk/lunas-ui/ui/alert'
-import { AlertDialog } from '@customafk/lunas-ui/ui/alert-dialog'
-import { AspectRatio } from '@customafk/lunas-ui/ui/aspect-ratio'
-import { Avatar } from '@customafk/lunas-ui/ui/avatar'
-import { Badge } from '@customafk/lunas-ui/ui/badge'
-import { Breadcrumb } from '@customafk/lunas-ui/ui/breadcrumb'
-import { Button } from '@customafk/lunas-ui/ui/button'
-import { Calendar } from '@customafk/lunas-ui/ui/calendar'
-import { Card } from '@customafk/lunas-ui/ui/card'
-import { Carousel } from '@customafk/lunas-ui/ui/carousel'
-import { Collapsible } from '@customafk/lunas-ui/ui/collapsible'
-import { Command } from '@customafk/lunas-ui/ui/command'
-import { ContextMenu } from '@customafk/lunas-ui/ui/context-menu'
-import { Dialog } from '@customafk/lunas-ui/ui/dialog'
-import { DropdownMenu } from '@customafk/lunas-ui/ui/dropdown-menu'
-import { FileUploader } from '@customafk/lunas-ui/ui/file-uploader'
-import { Form } from '@customafk/lunas-ui/ui/form'
-import { HoverCard } from '@customafk/lunas-ui/ui/hover-card'
-import { Input } from '@customafk/lunas-ui/ui/input'
-import { InputOTP } from '@customafk/lunas-ui/ui/input-otp'
-import { Label } from '@customafk/lunas-ui/ui/label'
-import { Menubar } from '@customafk/lunas-ui/ui/menubar'
-import { MultiSelect } from '@customafk/lunas-ui/ui/multi-select'
-import { NavigationMenu } from '@customafk/lunas-ui/ui/navigation-menu'
-import { Pagination } from '@customafk/lunas-ui/ui/pagination'
-import { Popover } from '@customafk/lunas-ui/ui/popover'
-import { Progress } from '@customafk/lunas-ui/ui/progress'
-import { RadioGroup } from '@customafk/lunas-ui/ui/radio-group'
-import { Resizable } from '@customafk/lunas-ui/ui/resizable'
-import { ScrollArea } from '@customafk/lunas-ui/ui/scroll-area'
-import { Select } from '@customafk/lunas-ui/ui/select'
-import { Separator } from '@customafk/lunas-ui/ui/separator'
-import { Sheet } from '@customafk/lunas-ui/ui/sheet'
-import { Sidebar } from '@customafk/lunas-ui/ui/sidebar'
-import { Skeleton } from '@customafk/lunas-ui/ui/skeleton'
-import { Slider } from '@customafk/lunas-ui/ui/slider'
-import { Sonner } from '@customafk/lunas-ui/ui/sonner'
-import { Switch } from '@customafk/lunas-ui/ui/switch'
-import { Table } from '@customafk/lunas-ui/ui/table'
-import { Tabs } from '@customafk/lunas-ui/ui/tabs'
-import { Textarea } from '@customafk/lunas-ui/ui/textarea'
-import { Toggle } from '@customafk/lunas-ui/ui/toggle'
-import { ToggleGroup } from '@customafk/lunas-ui/ui/toggle-group'
-import { Tooltip } from '@customafk/lunas-ui/ui/tooltip'
+| Category     | Component         | Import Path                                     |
+| ------------ | ----------------- | ----------------------------------------------- |
+| UI           | Alert             | `@customafk/lunas-ui/ui/alert`                  |
+| UI           | AlertDialog       | `@customafk/lunas-ui/ui/alert-dialog`           |
+| UI           | AspectRatio       | `@customafk/lunas-ui/ui/aspect-ratio`           |
+| UI           | Avatar            | `@customafk/lunas-ui/ui/avatar`                 |
+| UI           | Badge             | `@customafk/lunas-ui/ui/badge`                  |
+| UI           | Breadcrumb        | `@customafk/lunas-ui/ui/breadcrumb`             |
+| UI           | Button            | `@customafk/lunas-ui/ui/button`                 |
+| UI           | Calendar          | `@customafk/lunas-ui/ui/calendar`               |
+| UI           | Card              | `@customafk/lunas-ui/ui/card`                   |
+| UI           | Carousel          | `@customafk/lunas-ui/ui/carousel`               |
+| UI           | Collapsible       | `@customafk/lunas-ui/ui/collapsible`            |
+| UI           | Command           | `@customafk/lunas-ui/ui/command`                |
+| UI           | ContextMenu       | `@customafk/lunas-ui/ui/context-menu`           |
+| UI           | Dialog            | `@customafk/lunas-ui/ui/dialog`                 |
+| UI           | DropdownMenu      | `@customafk/lunas-ui/ui/dropdown-menu`          |
+| UI           | FileUploader      | `@customafk/lunas-ui/ui/file-uploader`          |
+| UI           | Form              | `@customafk/lunas-ui/ui/form`                   |
+| UI           | HoverCard         | `@customafk/lunas-ui/ui/hover-card`             |
+| UI           | Input             | `@customafk/lunas-ui/ui/input`                  |
+| UI           | InputOTP          | `@customafk/lunas-ui/ui/input-otp`              |
+| UI           | Label             | `@customafk/lunas-ui/ui/label`                  |
+| UI           | Menubar           | `@customafk/lunas-ui/ui/menubar`                |
+| UI           | MultiSelect       | `@customafk/lunas-ui/ui/multi-select`           |
+| UI           | NavigationMenu    | `@customafk/lunas-ui/ui/navigation-menu`        |
+| UI           | Pagination        | `@customafk/lunas-ui/ui/pagination`             |
+| UI           | Popover           | `@customafk/lunas-ui/ui/popover`                |
+| UI           | Progress          | `@customafk/lunas-ui/ui/progress`               |
+| UI           | RadioGroup        | `@customafk/lunas-ui/ui/radio-group`            |
+| UI           | Resizable         | `@customafk/lunas-ui/ui/resizable`              |
+| UI           | ScrollArea        | `@customafk/lunas-ui/ui/scroll-area`            |
+| UI           | Select            | `@customafk/lunas-ui/ui/select`                 |
+| UI           | Separator         | `@customafk/lunas-ui/ui/separator`              |
+| UI           | Sheet             | `@customafk/lunas-ui/ui/sheet`                  |
+| UI           | Sidebar           | `@customafk/lunas-ui/ui/sidebar`                |
+| UI           | Skeleton          | `@customafk/lunas-ui/ui/skeleton`               |
+| UI           | Slider            | `@customafk/lunas-ui/ui/slider`                 |
+| UI           | Sonner            | `@customafk/lunas-ui/ui/sonner`                 |
+| UI           | Switch            | `@customafk/lunas-ui/ui/switch`                 |
+| UI           | Table             | `@customafk/lunas-ui/ui/table`                  |
+| UI           | Tabs              | `@customafk/lunas-ui/ui/tabs`                   |
+| UI           | Textarea          | `@customafk/lunas-ui/ui/textarea`               |
+| UI           | Toggle            | `@customafk/lunas-ui/ui/toggle`                 |
+| UI           | ToggleGroup       | `@customafk/lunas-ui/ui/toggle-group`           |
+| UI           | Tooltip           | `@customafk/lunas-ui/ui/tooltip`                |
+| UI Buttons   | AddNewButton      | `@customafk/lunas-ui/ui/buttons/add-new`        |
+| UI Buttons   | EditButton        | `@customafk/lunas-ui/ui/buttons/edit`           |
+| UI Buttons   | RefreshButton     | `@customafk/lunas-ui/ui/buttons/refresh`        |
+| UI Buttons   | TrashButton       | `@customafk/lunas-ui/ui/buttons/trash`          |
+| UI Buttons   | UploadImageButton | `@customafk/lunas-ui/ui/buttons/upload-image`   |
+| UI Inputs    | SearchInput       | `@customafk/lunas-ui/ui/inputs/search-input`    |
+| Forms        | FormWrapper       | `@customafk/lunas-ui/forms/form-wrapper`        |
+| Forms        | TextField         | `@customafk/lunas-ui/forms/text-field`          |
+| Forms        | PasswordField     | `@customafk/lunas-ui/forms/password-field`      |
+| Forms        | NumberField       | `@customafk/lunas-ui/forms/number-field`        |
+| Forms        | SelectField       | `@customafk/lunas-ui/forms/select-field`        |
+| Forms        | DateField         | `@customafk/lunas-ui/forms/date-field`          |
+| Forms        | SwitchField       | `@customafk/lunas-ui/forms/switch-field`        |
+| Forms        | TextareaField     | `@customafk/lunas-ui/forms/textarea-field`      |
+| Forms        | MultiSelectField  | `@customafk/lunas-ui/forms/multi-select-field`  |
+| Layout       | Flex              | `@customafk/lunas-ui/layouts/flex`              |
+| Layout       | Grid              | `@customafk/lunas-ui/layouts/grid`              |
+| Layout       | AppLayout         | `@customafk/lunas-ui/layouts/app-layout`        |
+| Layout       | Main              | `@customafk/lunas-ui/layouts/main`              |
+| Data Display | Country           | `@customafk/lunas-ui/data-display/country`      |
+| Data Display | DataList          | `@customafk/lunas-ui/data-display/data-list`    |
+| Data Display | Date              | `@customafk/lunas-ui/data-display/date`         |
+| Data Display | DateTooltip       | `@customafk/lunas-ui/data-display/date-tooltip` |
+| Data Display | Empty             | `@customafk/lunas-ui/data-display/empty`        |
+| Data Display | Name              | `@customafk/lunas-ui/data-display/name`         |
+| Data Display | PhoneNumber       | `@customafk/lunas-ui/data-display/phone-number` |
+| Data Display | RoleBadge         | `@customafk/lunas-ui/data-display/role-badge`   |
+| Data Display | Statistic         | `@customafk/lunas-ui/data-display/statistic`    |
+| Dialogs      | ConfirmDialog     | `@customafk/lunas-ui/dialogs/confirm-dialog`    |
+| Dialogs      | DetailDialog      | `@customafk/lunas-ui/dialogs/detail-dialog`     |
+| Dialogs      | ErrorDialog       | `@customafk/lunas-ui/dialogs/error-dialog`      |
+| Dialogs      | FormDialog        | `@customafk/lunas-ui/dialogs/form-dialog`       |
+| Dialogs      | LoadingDialog     | `@customafk/lunas-ui/dialogs/loading-dialog`    |
+| Table        | DataTable         | `@customafk/lunas-ui/table`                     |
+| Typography   | Title             | `@customafk/lunas-ui/typography/title`          |
+| Typography   | Paragraph         | `@customafk/lunas-ui/typography/paragraph`      |
 
-// Specialized Button Variants
-import { AddNewButton } from '@customafk/lunas-ui/ui/buttons/add-new'
-import { EditButton } from '@customafk/lunas-ui/ui/buttons/edit'
-import { RefreshButton } from '@customafk/lunas-ui/ui/buttons/refresh'
-import { TrashButton } from '@customafk/lunas-ui/ui/buttons/trash'
-import { UploadImageButton } from '@customafk/lunas-ui/ui/buttons/upload-image'
-
-// Specialized Input Variants
-import { SearchInput } from '@customafk/lunas-ui/ui/inputs/search-input'
-```
-
-### Form Components
-
-```jsx
-// Import form wrapper for React Hook Form integration
-import { FormWrapper } from '@customafk/lunas-ui/forms/form-wrapper'
-
-// Field components
-import { TextField } from '@customafk/lunas-ui/forms/text-field'
-import { PasswordField } from '@customafk/lunas-ui/forms/password-field'
-import { NumberField } from '@customafk/lunas-ui/forms/number-field'
-import { SelectField } from '@customafk/lunas-ui/forms/select-field'
-import { DateField } from '@customafk/lunas-ui/forms/date-field'
-import { SwitchField } from '@customafk/lunas-ui/forms/switch-field'
-import { TextareaField } from '@customafk/lunas-ui/forms/textarea-field'
-import { MultiSelectField } from '@customafk/lunas-ui/forms/multi-select-field'
-```
-
-### Layout Components
-
-```jsx
-import { Flex } from '@customafk/lunas-ui/layouts/flex'
-import { Grid } from '@customafk/lunas-ui/layouts/grid'
-import { AppLayout } from '@customafk/lunas-ui/layouts/app-layout'
-import { Main } from '@customafk/lunas-ui/layouts/main'
-```
-
-### Data Display Components
-
-```jsx
-import { Country } from '@customafk/lunas-ui/data-display/country'
-import { DataList } from '@customafk/lunas-ui/data-display/data-list'
-import { Date } from '@customafk/lunas-ui/data-display/date'
-import { DateTooltip } from '@customafk/lunas-ui/data-display/date-tooltip'
-import { Empty } from '@customafk/lunas-ui/data-display/empty'
-import { Name } from '@customafk/lunas-ui/data-display/name'
-import { PhoneNumber } from '@customafk/lunas-ui/data-display/phone-number'
-import { RoleBadge } from '@customafk/lunas-ui/data-display/role-badge'
-import { Statistic } from '@customafk/lunas-ui/data-display/statistic'
-```
-
-### Dialog Components
+### Common Import Requirements
 
 ```jsx
-import { ConfirmDialog } from '@customafk/lunas-ui/dialogs/confirm-dialog'
-import { DetailDialog } from '@customafk/lunas-ui/dialogs/detail-dialog'
-import { ErrorDialog } from '@customafk/lunas-ui/dialogs/error-dialog'
-import { FormDialog } from '@customafk/lunas-ui/dialogs/form-dialog'
-import { LoadingDialog } from '@customafk/lunas-ui/dialogs/loading-dialog'
-```
+// Required for all form components
+import { useForm } from 'react-hook-form'
 
-### Table Components
+// Required for icon components
+import { LucideIcon } from 'lucide-react'
 
-```jsx
-import { DataTable } from '@customafk/lunas-ui/table'
-```
-
-### Typography Components
-
-```jsx
-import { Title } from '@customafk/lunas-ui/typography/title'
-import { Paragraph } from '@customafk/lunas-ui/typography/paragraph'
+// Utility for class name merging
+import { cn } from '@customafk/lunas-ui/lib/utils'
 ```
 
 ## 🎨 Theming
@@ -329,6 +304,19 @@ See [CHANGELOG.md](CHANGELOG.md) for version history and changes.
 
 ISC © [CustomAFK](https://github.com/QuangPhamvt)
 
+## 🤖 Component API Documentation for Developers and AI Assistants
+
+The following provides a simplified component reference for all components in the library. For detailed props documentation and usage examples, visit our documentation site.
+
+### Integration Patterns
+
+- Form components should be used within a `FormWrapper` component
+- Dialog components typically need `open` and `onOpenChange` props to be controlled
+- All components support `className` for custom styling with Tailwind
+- Many components have variants that can be accessed via the `variant` prop
+- Component styles are customizable through CSS variables in `:root`
+- All UI components are responsive and support various screen sizes
+
 ## 🙋‍♀️ Support
 
 - **Documentation**: [https://ui.lunas.vn](https://ui.lunas.vn)
@@ -346,3 +334,10 @@ ISC © [CustomAFK](https://github.com/QuangPhamvt)
 <div align="center">
   Created with ❤️ by <a href="https://github.com/QuangPhamvt">CustomAFK</a>
 </div>
+
+<!--
+"./styles/base": "./styles/base.css",
+"./styles/loader": "./styles/loader.css",
+"./styles/theme": "./styles/theme.css",
+"./styles/typography": "./styles/typography.css",
+-->

@@ -1,8 +1,9 @@
 'use client'
-import { Dialog as DialogPrimitive } from 'radix-ui'
+import { cn } from '@customafk/react-toolkit/utils'
+
 import { XIcon } from 'lucide-react'
 
-import { cn } from '@customafk/react-toolkit/utils'
+import { Dialog as DialogPrimitive } from 'radix-ui'
 
 function Dialog({ ...props }: React.ComponentProps<typeof DialogPrimitive.Root>) {
   return <DialogPrimitive.Root data-slot="dialog" {...props} />

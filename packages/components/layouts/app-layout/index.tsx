@@ -1,10 +1,11 @@
 'use client'
-import { ShoppingCartIcon } from 'lucide-react'
-
 import { cn } from '@customafk/react-toolkit/utils'
 
-import { Sidebar, AppLayoutSidebarInset, SidebarProvider, AppLayoutSidebarTrigger } from './sidebar'
+import { ShoppingCartIcon } from 'lucide-react'
 
+import { AppLayoutSidebarInset, AppLayoutSidebarTrigger, Sidebar, SidebarProvider } from './sidebar'
+
+// eslint-disable-next-line react-refresh/only-export-components
 export * from './sidebar'
 
 export const AppLayoutWrapper: React.FC<React.PropsWithChildren> = ({ children }) => {

@@ -1,7 +1,7 @@
 import { Flex } from '@/components/layouts/flex'
-import { SearchInput } from '@/components/ui/inputs/search-input'
 import { AddNewBtn } from '@/components/ui/buttons/add-new'
 import { RefreshBtn } from '@/components/ui/buttons/refresh'
+import { SearchInput } from '@/components/ui/inputs/search-input'
 
 type Props = {
   onAdd?: () => void

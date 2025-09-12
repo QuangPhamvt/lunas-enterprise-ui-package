@@ -1,4 +1,5 @@
-import React from 'react'
+import { useCallback } from 'react'
+
 import { AlertTriangleIcon } from 'lucide-react'
 
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '../ui/alert-dialog'
@@ -10,7 +11,7 @@ type Props = {
   onOpenChange?: (open: boolean) => void
 }
 export const ErrorDialog: React.FC<React.PropsWithChildren<Props>> = ({ open, title, children, onOpenChange }) => {
-  const handleClose = React.useCallback(() => {
+  const handleClose = useCallback(() => {
     onOpenChange?.(false)
   }, [onOpenChange])
   return (

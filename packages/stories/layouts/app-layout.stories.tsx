@@ -1,4 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import { PackageIcon } from 'lucide-react'
+
 import {
   AppLayoutHeader,
   AppLayoutMain,
@@ -17,7 +18,7 @@ import {
   AppLayoutSidebarMenuItem,
   AppLayoutWrapper,
 } from '@/components/layouts/app-layout'
-import { PackageIcon } from 'lucide-react'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 
 const meta = {
   tags: ['autodocs'],
@@ -80,7 +81,7 @@ export const Default: Story = {
             <AppLayoutMainHeader>App Layout Main Header</AppLayoutMainHeader>
             <AppLayoutMainGroup>
               {Array.from({ length: 100 }).map((_, index) => (
-                <AppLayoutMainGroupContent>Content</AppLayoutMainGroupContent>
+                <AppLayoutMainGroupContent key={index}>Content</AppLayoutMainGroupContent>
               ))}
             </AppLayoutMainGroup>
           </AppLayoutMainContent>

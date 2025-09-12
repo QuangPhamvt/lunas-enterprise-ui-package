@@ -1,14 +1,13 @@
 import React from 'react'
+import { cn } from '@customafk/react-toolkit/utils'
+
 import { type Column, flexRender, type Header, type Table as ReactTable } from '@tanstack/react-table'
 import { ArrowLeftToLineIcon, ArrowRightToLineIcon, ChevronDown, ChevronUp, EllipsisIcon, PackagePlusIcon, PinOffIcon } from 'lucide-react'
 
-import { cn } from '@customafk/react-toolkit/utils'
-import type { AnyEntity } from '@/types'
-
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { AnyEntity } from '@/types'
 
 // Helper function to compute pinning styles for columns
 const getPinningStyles = (column: Column<AnyEntity>): React.CSSProperties => {

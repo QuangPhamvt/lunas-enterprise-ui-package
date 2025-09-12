@@ -1,7 +1,8 @@
 'use client'
 import React from 'react'
-import { Slot as SlotPrimitive } from 'radix-ui'
-import { cva, type VariantProps } from 'class-variance-authority'
+import { useIsMobile } from '@customafk/react-toolkit/hooks/useMobile'
+import { cn } from '@customafk/react-toolkit/utils'
+
 import { MenuIcon } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
@@ -10,8 +11,9 @@ import { Separator } from '@/components/ui/separator'
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
-import { useIsMobile } from '@customafk/react-toolkit/hooks/useMobile'
-import { cn } from '@customafk/react-toolkit/utils'
+
+import { cva, type VariantProps } from 'class-variance-authority'
+import { Slot as SlotPrimitive } from 'radix-ui'
 
 const SIDEBAR_COOKIE_NAME = 'sidebar_state'
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7

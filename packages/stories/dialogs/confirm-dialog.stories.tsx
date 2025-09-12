@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
 import { ConfirmDialog } from '@/components/dialogs/confirm-dialog'
+import type { Meta, StoryObj } from '@storybook/react-vite'
 
 const meta = {
   tags: ['autodocs'],

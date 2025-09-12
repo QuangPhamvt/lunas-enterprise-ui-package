@@ -1,9 +1,9 @@
 'use client'
 
-import { Slot } from 'radix-ui'
-import { cva, type VariantProps } from 'class-variance-authority'
-
 import { cn } from '@customafk/react-toolkit/utils'
+
+import { cva, type VariantProps } from 'class-variance-authority'
+import { Slot } from 'radix-ui'
 
 const buttonVariants = cva(
   [

@@ -1,9 +1,10 @@
 'use client'
 import React from 'react'
+import { cn } from '@customafk/react-toolkit/utils'
+
 import { ArrowLeft, ArrowRight } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
-import { cn } from '@customafk/react-toolkit/utils'
 
 import useEmblaCarousel, { type UseEmblaCarouselType } from 'embla-carousel-react'
 

@@ -1,6 +1,7 @@
+import { AlertCircleIcon, CheckCircle2Icon, PopcornIcon } from 'lucide-react'
+
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { AlertCircleIcon, CheckCircle2Icon, PopcornIcon } from 'lucide-react'
 
 const meta = {
   title: 'Components/Alert',
@@ -13,7 +14,7 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   args: {},
-  render: (args) => {
+  render: () => {
     return (
       <div className="grid w-full max-w-xl items-start gap-4">
         <Alert>

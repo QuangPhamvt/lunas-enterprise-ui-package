@@ -1,7 +1,7 @@
 'use client'
-import { cva } from 'class-variance-authority'
-
 import { cn } from '@customafk/react-toolkit/utils'
+
+import { cva } from 'class-variance-authority'
 
 type Props = {
   variant?: 'p' | 'muted' | 'lead' | 'sm' | 'lg'
