@@ -12,9 +12,10 @@ type Props = {
   height?: number | string
   maxRetries?: number
   retryDelay?: number
+  className?: string
   onClick?: () => void
 }
-export const Image: React.FC<Props> = ({ src, alt, width, height, maxRetries = 3, retryDelay = 500, onClick }) => {
+export const Image: React.FC<Props> = ({ src, alt, width, height, maxRetries = 3, retryDelay = 500, className, onClick }) => {
   const imageRef = useRef<HTMLImageElement>(null)
   const [currentSrc, setCurrentSrc] = useState<string | undefined>(src)
   const [retryCount, setRetryCount] = useState<number>(0)
@@ -47,7 +48,7 @@ export const Image: React.FC<Props> = ({ src, alt, width, height, maxRetries = 3
 
   if (hasError) {
     return (
-      <div style={{ width, height }} className="@container relative inline-block">
+      <div style={{ width, height }} className={cn('@container relative inline-block', className)}>
         <div className="bg-danger-muted shadow-card flex size-full flex-col items-center justify-center gap-y-2 rounded-md">
           <AlertCircleIcon className="text-danger size-8 @max-[52px]:size-6" />
           <span className="text-danger-weak y ml-2 text-sm @max-[96px]:sr-only">Image failed to load</span>
@@ -57,7 +58,7 @@ export const Image: React.FC<Props> = ({ src, alt, width, height, maxRetries = 3
   }
 
   return (
-    <div style={{ width, height }} className="relative inline-block" onClick={onClick}>
+    <div style={{ width, height }} className={cn('relative inline-block', className)} onClick={onClick}>
       {!isLoaded && (
         <Skeleton className="absolute inset-0 flex size-full items-center justify-center">
           <div className="loader" />

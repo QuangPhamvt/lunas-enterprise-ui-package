@@ -1,9 +1,10 @@
+import { NameDisplay } from '@/components/data-display/name'
 import { Table } from '@/components/table'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
 const meta = {
   tags: ['autodocs'],
-  title: 'Table',
+  title: 'Table/Table',
   component: Table,
 } satisfies Meta<typeof Table>
 
@@ -14,7 +15,7 @@ export const Default: Story = {
   args: {
     data: [
       {
-        name: 'Item 1',
+        name: 'Long Item Item Item Item Item Long Long Long Long Long Long Long Long Long Long Long Long',
         description: 'This is item 1',
         quantity: 10,
         createdAt: '2024-01-01',
@@ -115,6 +116,9 @@ export const Default: Story = {
         accessorKey: 'name',
         header: 'Name',
         size: 120,
+        cell: ({ row }) => {
+          return <NameDisplay name={row.original?.name as string} />
+        },
       },
       {
         accessorKey: 'description',

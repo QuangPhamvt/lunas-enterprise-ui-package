@@ -3,12 +3,9 @@ import { defineConfig } from 'tsdown'
 export default defineConfig([
   {
     entry: [
-      // './packages/styles/base.css',
-      // './packages/styles/theme.css',
-      // './packages/styles/loader.css',
-      // './packages/styles/typography.css',
-
       './packages/components/cards/simple-card.tsx',
+      './packages/components/cards/product-card.tsx',
+      './packages/components/cards/grid-product-card.tsx',
 
       './packages/components/data-display/country.tsx',
       './packages/components/data-display/data-list.tsx',
@@ -42,6 +39,9 @@ export default defineConfig([
       './packages/components/layouts/app-layout/index.tsx',
       './packages/components/layouts/flex.tsx',
       './packages/components/layouts/grid.tsx',
+      './packages/components/layouts/service-layout/index.ts',
+
+      './packages/components/systems/google.tsx',
 
       './packages/components/table/index.tsx',
 

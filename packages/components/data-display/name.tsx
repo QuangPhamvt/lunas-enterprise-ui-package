@@ -9,7 +9,7 @@ export const NameDisplay: React.FC<React.PropsWithChildren<NameDisplayProps>> = 
   return (
     <Tooltip>
       <TooltipTrigger>
-        <Paragraph variant="sm" className="line-clamp-2 w-full cursor-help truncate">
+        <Paragraph variant="sm" className="line-clamp-2 w-full truncate pb-px text-start text-wrap">
           {name}
         </Paragraph>
       </TooltipTrigger>

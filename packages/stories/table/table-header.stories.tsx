@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite'
 
 const meta = {
   tags: ['autodocs'],
-  title: 'Table/TableHeader',
+  title: 'Table/Header',
   component: DataTableHeader,
 } satisfies Meta<typeof DataTableHeader>
 

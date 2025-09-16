@@ -2,8 +2,9 @@ import '../packages/index.css'
 
 import { Controls, Description, Primary, Stories, Subtitle, Title } from '@storybook/addon-docs/blocks'
 import { withThemeByClassName } from '@storybook/addon-themes'
-import { INITIAL_VIEWPORTS } from 'storybook/viewport'
 import type { Preview } from '@storybook/react-vite'
+
+import { INITIAL_VIEWPORTS } from 'storybook/viewport'
 
 const preview: Preview = {
   tags: ['autodocs'],

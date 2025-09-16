@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite'
 
 const meta = {
   tags: ['autodocs'],
-  title: 'Table/TablePagination',
+  title: 'Table/Pagination',
   component: DataTablePagination,
 } satisfies Meta<typeof DataTablePagination>
 
