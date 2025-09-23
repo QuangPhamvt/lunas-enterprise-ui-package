@@ -103,7 +103,7 @@ export default defineConfig([
       './packages/components/ui/tooltip.tsx',
     ],
     dts: true,
-    exports: true,
+    exports: false,
     sourcemap: true,
     format: ['esm', 'cjs'],
     minify: true,
