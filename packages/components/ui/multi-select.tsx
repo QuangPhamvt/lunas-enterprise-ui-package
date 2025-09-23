@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
 import { cn } from '@customafk/react-toolkit/utils'
 
 import { PlusIcon, X } from 'lucide-react'
@@ -88,9 +88,9 @@ export interface MultipleSelectorRef {
 
 // eslint-disable-next-line react-refresh/only-export-components
 export function useDebounce<T>(value: T, delay?: number): T {
-  const [debouncedValue, setDebouncedValue] = React.useState<T>(value)
+  const [debouncedValue, setDebouncedValue] = useState<T>(value)
 
-  React.useEffect(() => {
+  useEffect(() => {
     const timer = setTimeout(() => setDebouncedValue(value), delay || 500)
 
     return () => {
@@ -146,7 +146,7 @@ function isOptionsExist(groupOption: GroupOption, targetOption: Option[]) {
  *
  * @reference: https://github.com/hsuanyi-chou/shadcn-ui-expansions/issues/34#issuecomment-1949561607
  **/
-const CommandEmpty = React.forwardRef<HTMLDivElement, React.ComponentProps<typeof CommandPrimitive.Empty>>(({ className, ...props }, forwardedRef) => {
+const CommandEmpty = forwardRef<HTMLDivElement, React.ComponentProps<typeof CommandPrimitive.Empty>>(({ className, ...props }, forwardedRef) => {
   const render = useCommandState((state) => state.filtered.count === 0)
 
   if (!render) return null
@@ -156,7 +156,7 @@ const CommandEmpty = React.forwardRef<HTMLDivElement, React.ComponentProps<typeo
 
 CommandEmpty.displayName = 'CommandEmpty'
 
-export const MultipleSelector = React.forwardRef<MultipleSelectorRef, MultipleSelectorProps>(
+export const MultipleSelector = forwardRef<MultipleSelectorRef, MultipleSelectorProps>(
   (
     {
       value,
@@ -186,20 +186,20 @@ export const MultipleSelector = React.forwardRef<MultipleSelectorRef, MultipleSe
     }: MultipleSelectorProps,
     ref: React.Ref<MultipleSelectorRef>,
   ) => {
-    const inputRef = React.useRef<HTMLInputElement>(null)
-    const dropdownRef = React.useRef<HTMLDivElement>(null) // Added this
+    const inputRef = useRef<HTMLInputElement>(null)
+    const dropdownRef = useRef<HTMLDivElement>(null) // Added this
 
-    const [open, setOpen] = React.useState(false)
-    const [onScrollbar, setOnScrollbar] = React.useState(false)
-    const [isLoading, setIsLoading] = React.useState(false)
+    const [open, setOpen] = useState(false)
+    const [onScrollbar, setOnScrollbar] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
 
-    const [selected, setSelected] = React.useState<Option[]>(value || [])
-    const [options, setOptions] = React.useState<GroupOption>(transToGroupOption(arrayDefaultOptions, groupBy))
-    const [inputValue, setInputValue] = React.useState('')
+    const [selected, setSelected] = useState<Option[]>(value || [])
+    const [options, setOptions] = useState<GroupOption>(transToGroupOption(arrayDefaultOptions, groupBy))
+    const [inputValue, setInputValue] = useState('')
 
     const debouncedSearchTerm = useDebounce(inputValue, delay || 500)
 
-    React.useImperativeHandle(
+    useImperativeHandle(
       ref,
       () => ({
         selectedValue: [...selected],
@@ -210,14 +210,14 @@ export const MultipleSelector = React.forwardRef<MultipleSelectorRef, MultipleSe
       [selected],
     )
 
-    const handleClickOutside = React.useCallback((event: MouseEvent | TouchEvent) => {
+    const handleClickOutside = useCallback((event: MouseEvent | TouchEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node) && inputRef.current && !inputRef.current.contains(event.target as Node)) {
         setOpen(false)
         inputRef.current.blur()
       }
     }, [])
 
-    const handleUnselect = React.useCallback(
+    const handleUnselect = useCallback(
       (option: Option) => {
         const newOptions = selected.filter((s) => s.value !== option.value)
         setSelected(newOptions)
@@ -226,7 +226,7 @@ export const MultipleSelector = React.forwardRef<MultipleSelectorRef, MultipleSe
       [onChange, selected],
     )
 
-    const handleKeyDown = React.useCallback(
+    const handleKeyDown = useCallback(
       (e: React.KeyboardEvent<HTMLDivElement>) => {
         const input = inputRef.current
         if (!input) return
@@ -249,7 +249,7 @@ export const MultipleSelector = React.forwardRef<MultipleSelectorRef, MultipleSe
       [handleUnselect, selected],
     )
 
-    React.useEffect(() => {
+    useEffect(() => {
       if (open) {
         document.addEventListener('mousedown', handleClickOutside)
         document.addEventListener('touchend', handleClickOutside)
@@ -265,13 +265,13 @@ export const MultipleSelector = React.forwardRef<MultipleSelectorRef, MultipleSe
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [open])
 
-    React.useEffect(() => {
+    useEffect(() => {
       if (value) {
         setSelected(value)
       }
     }, [value])
 
-    React.useEffect(() => {
+    useEffect(() => {
       /** If `onSearch` is provided, do not trigger options updated. */
       if (!arrayOptions || onSearch) {
         return
@@ -282,7 +282,7 @@ export const MultipleSelector = React.forwardRef<MultipleSelectorRef, MultipleSe
       }
     }, [arrayDefaultOptions, arrayOptions, groupBy, onSearch, options])
 
-    React.useEffect(() => {
+    useEffect(() => {
       /** sync search */
 
       const doSearchSync = () => {
@@ -306,7 +306,7 @@ export const MultipleSelector = React.forwardRef<MultipleSelectorRef, MultipleSe
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [debouncedSearchTerm, groupBy, open, triggerSearchOnFocus])
 
-    React.useEffect(() => {
+    useEffect(() => {
       /** async search */
 
       const doSearch = async () => {
@@ -374,7 +374,7 @@ export const MultipleSelector = React.forwardRef<MultipleSelectorRef, MultipleSe
       return undefined
     }
 
-    const EmptyItem = React.useCallback(() => {
+    const EmptyItem = useCallback(() => {
       if (!emptyIndicator) return undefined
 
       // For async search that showing emptyIndicator
@@ -389,10 +389,10 @@ export const MultipleSelector = React.forwardRef<MultipleSelectorRef, MultipleSe
       return <CommandEmpty>{emptyIndicator}</CommandEmpty>
     }, [creatable, emptyIndicator, onSearch, options])
 
-    const selectables = React.useMemo<GroupOption>(() => removePickedOption(options, selected), [options, selected])
+    const selectables = useMemo<GroupOption>(() => removePickedOption(options, selected), [options, selected])
 
     /** Avoid Creatable Selector freezing or lagging when paste a long string. */
-    const commandFilter = React.useCallback(() => {
+    const commandFilter = useCallback(() => {
       if (commandProps?.filter) {
         return commandProps.filter
       }
@@ -580,7 +580,7 @@ export const MultipleSelector = React.forwardRef<MultipleSelectorRef, MultipleSe
                 {isLoading ? (
                   LoadingIndicator
                 ) : (
-                  <React.Fragment>
+                  <>
                     {EmptyItem()}
                     {CreatableItem()}
                     {!selectFirstItem && <CommandItem value="-" className="hidden" />}
@@ -614,7 +614,7 @@ export const MultipleSelector = React.forwardRef<MultipleSelectorRef, MultipleSe
                         })}
                       </CommandGroup>
                     ))}
-                  </React.Fragment>
+                  </>
                 )}
               </CommandList>
             )}

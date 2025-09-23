@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { cn } from '@customafk/react-toolkit/utils'
 
 import { Input } from '../input'
@@ -136,18 +136,18 @@ export const NumberInput: React.FC<IProps> = ({
   onBlur,
   ...props
 }) => {
-  const _unitRef = React.useRef<HTMLSpanElement>(null)
-  const _inputRef = React.useRef<HTMLInputElement>(null)
+  const _unitRef = useRef<HTMLSpanElement>(null)
+  const _inputRef = useRef<HTMLInputElement>(null)
 
-  const [value, setValue] = React.useState<string>(initialValue.toString())
+  const [value, setValue] = useState<string>(initialValue.toString())
 
   // Memoized values for validation and formatting
   const maxDecimalPlaces = decimal?.[1] ?? numberAfterDecimalPoint
   const maxIntegerLength = decimal && decimal[0] - decimal[1]
-  const validationRegex = React.useMemo(() => createValidationRegex(allowNegative), [allowNegative])
+  const validationRegex = useMemo(() => createValidationRegex(allowNegative), [allowNegative])
 
   // Validation functions
-  const isValidDecimalLength = React.useCallback(
+  const isValidDecimalLength = useCallback(
     (value: string): boolean => {
       if (!maxDecimalPlaces && value.includes('.')) return false
       const decimalPart = value.split('.')[1]
@@ -155,7 +155,7 @@ export const NumberInput: React.FC<IProps> = ({
     },
     [maxDecimalPlaces],
   )
-  const isValidFormat = React.useCallback(
+  const isValidFormat = useCallback(
     (value: string): boolean => {
       if (!decimal || value === '-') return true
       const [integerPart, decimalPart = ''] = value.split('.')
@@ -164,7 +164,7 @@ export const NumberInput: React.FC<IProps> = ({
     },
     [decimal, maxIntegerLength],
   )
-  const customRoundedValue = React.useCallback(
+  const customRoundedValue = useCallback(
     (value: number, precision: number) => {
       if (roundingRule === 'none') return value
 
@@ -187,11 +187,11 @@ export const NumberInput: React.FC<IProps> = ({
     },
     [roundingRule],
   )
-  const isDecimalPointGreaterThanLimit = React.useCallback(
+  const isDecimalPointGreaterThanLimit = useCallback(
     (value: string) => (!numberAfterDecimalPoint && value.includes('.')) || value.split('.')[1]?.length > numberAfterDecimalPoint,
     [numberAfterDecimalPoint],
   )
-  const formattedValue = React.useCallback(
+  const formattedValue = useCallback(
     (val: string) => {
       if (val === '0') return '0'
       if (!Number(val)) return ''
@@ -206,7 +206,7 @@ export const NumberInput: React.FC<IProps> = ({
     [customRoundedValue, maxDecimalPlaces, precision],
   )
   // Validate decimal point is less than or equal to the limit
-  const validateDecimalPoint = React.useCallback(
+  const validateDecimalPoint = useCallback(
     (value: string) => {
       if (!decimal || value === '-') return true
 
@@ -218,7 +218,7 @@ export const NumberInput: React.FC<IProps> = ({
     },
     [decimal],
   )
-  const handleChange = React.useCallback(
+  const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       // Don't prevent default behavior of input change
       onChange?.(e)
@@ -253,19 +253,19 @@ export const NumberInput: React.FC<IProps> = ({
     [allowNegative, decimal, isValidDecimalLength, isValidFormat, onChange, onValueChange, validationRegex],
   )
 
-  const handleFocus = React.useCallback(() => {
+  const handleFocus = useCallback(() => {
     if (readonly) return
     setValue((prev) => prev.replace(/,/g, '')) // Remove commas for easier editing
   }, [readonly])
 
-  const handleBlur = React.useCallback(() => {
+  const handleBlur = useCallback(() => {
     if (readonly) return
     onBlur?.()
     setValue((prev) => formattedValue(prev))
   }, [readonly, onBlur, formattedValue])
 
   // Set initial value
-  React.useEffect(() => {
+  useEffect(() => {
     const isFocused = document.activeElement === _inputRef.current
 
     if (
@@ -286,7 +286,7 @@ export const NumberInput: React.FC<IProps> = ({
   }, [decimal, formattedValue, initialValue, isDecimalPointGreaterThanLimit, validateDecimalPoint, validationRegex])
 
   // Set padding right for the input field
-  React.useEffect(() => {
+  useEffect(() => {
     if (!_unitRef.current || !_inputRef.current || !unitText) return
     const unitWidth = _unitRef.current.offsetWidth
     _inputRef.current.style.setProperty('padding-right', `${(unitWidth + 10) / 16}rem`)

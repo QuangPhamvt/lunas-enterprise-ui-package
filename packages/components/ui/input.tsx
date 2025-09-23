@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import { useCallback } from 'react'
 import { cn } from '@customafk/react-toolkit/utils'
 
 function Input({
@@ -10,7 +10,7 @@ function Input({
 }: React.ComponentProps<'input'> & {
   onValueChange?: (value: string) => void
 }) {
-  const handleChange = React.useCallback(
+  const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       onChange?.(e)
       onValueChange?.(e.target.value)

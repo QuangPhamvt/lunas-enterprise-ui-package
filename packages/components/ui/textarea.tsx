@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import { useCallback } from 'react'
 import { cn } from '@customafk/react-toolkit/utils'
 
 function Textarea({
@@ -10,7 +10,7 @@ function Textarea({
 }: React.ComponentProps<'textarea'> & {
   onValueChange?: (value: string) => void
 }) {
-  const handleChange = React.useCallback(
+  const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLTextAreaElement>) => {
       onChange?.(e)
       onValueChange?.(e.target.value)

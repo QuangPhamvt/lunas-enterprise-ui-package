@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useIsMobile } from '@customafk/react-toolkit/hooks/useMobile'
 import { cn } from '@customafk/react-toolkit/utils'
 
@@ -11,6 +11,8 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 
+import { SidebarContext, type SidebarContextProps, useServiceLayoutSidebar } from './hooks/use-service-layout-sidebar'
+
 import { cva, type VariantProps } from 'class-variance-authority'
 import { Slot as SlotPrimitive } from 'radix-ui'
 
@@ -20,27 +22,6 @@ const SIDEBAR_WIDTH = '16rem'
 const SIDEBAR_WIDTH_MOBILE = '16rem'
 const SIDEBAR_WIDTH_ICON = '3rem'
 const SIDEBAR_KEYBOARD_SHORTCUT = 'b'
-
-type SidebarContextProps = {
-  state: 'expanded' | 'collapsed'
-  open: boolean
-  setOpen: (open: boolean) => void
-  openMobile: boolean
-  setOpenMobile: (open: boolean) => void
-  isMobile: boolean
-  toggleSidebar: () => void
-}
-
-const SidebarContext = createContext<SidebarContextProps | null>(null)
-
-function useServiceLayoutSidebar() {
-  const context = useContext(SidebarContext)
-  if (!context) {
-    throw new Error('useSidebar must be used within a SidebarProvider.')
-  }
-
-  return context
-}
 
 function ServiceLayoutSidebarProvider({
   defaultOpen = true,

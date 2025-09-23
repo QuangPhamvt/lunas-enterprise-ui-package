@@ -1,4 +1,4 @@
-import React from 'react'
+import { useMemo, useState } from 'react'
 
 import {
   type ColumnDef,
@@ -45,12 +45,12 @@ export function Table<T extends Record<string, unknown>>({
 }: Props<T>) {
   'use no memo'
 
-  const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({})
-  const [sorting, setSorting] = React.useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
-  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
+  const [sorting, setSorting] = useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
 
-  const initialState = React.useMemo(
+  const initialState = useMemo(
     () => ({
       columnPinning: { right: ['actions', 'update', 'delete'] },
       pagination: { pageIndex: 0, pageSize: 20 },

@@ -1,5 +1,4 @@
 'use client'
-import React from 'react'
 import { cn } from '@customafk/react-toolkit/utils'
 
 import { CheckIcon, ChevronRightIcon, CircleIcon } from 'lucide-react'

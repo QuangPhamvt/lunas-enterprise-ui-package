@@ -1,4 +1,3 @@
-import React from 'react'
 import { cn } from '@customafk/react-toolkit/utils'
 
 import { type Column, flexRender, type Header, type Table as ReactTable } from '@tanstack/react-table'
@@ -185,7 +184,7 @@ export const DataTable = ({ table, isLoading, onClickRow }: DataTableProps) => {
             <TableCell>loading...</TableCell>
           </TableRow>
         ) : (
-          <React.Fragment>
+          <>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
@@ -233,7 +232,7 @@ export const DataTable = ({ table, isLoading, onClickRow }: DataTableProps) => {
                 </TableCell>
               </TableRow>
             )}
-          </React.Fragment>
+          </>
         )}
       </TableBody>
     </Table>

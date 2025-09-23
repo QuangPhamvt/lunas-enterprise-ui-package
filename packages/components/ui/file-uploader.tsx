@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import { useCallback, useEffect } from 'react'
 import Dropzone, { type DropzoneProps, type FileRejection } from 'react-dropzone'
 import { useControllableState } from '@customafk/react-toolkit/hooks/useControllableState'
 import { cn, formatBytes } from '@customafk/react-toolkit/utils'
@@ -114,7 +114,7 @@ export function FileUploader(props: FileUploaderProps) {
     onChange: onValueChange,
   })
 
-  const onDrop = React.useCallback(
+  const onDrop = useCallback(
     (acceptedFiles: File[], rejectedFiles: FileRejection[]) => {
       if (!multiple && maxFileCount === 1 && acceptedFiles.length > 1) {
         toast.error('Cannot upload more than 1 file at a time')
@@ -169,7 +169,7 @@ export function FileUploader(props: FileUploaderProps) {
   }
 
   // Revoke preview url when component unmounts
-  React.useEffect(() => {
+  useEffect(() => {
     return () => {
       if (!files) return
       files.forEach((file) => {

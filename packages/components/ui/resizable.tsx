@@ -1,5 +1,4 @@
 'use client'
-import React from 'react'
 import * as ResizablePrimitive from 'react-resizable-panels'
 import { cn } from '@customafk/react-toolkit/utils'
 
