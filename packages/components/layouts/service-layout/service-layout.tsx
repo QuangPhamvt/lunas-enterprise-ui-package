@@ -76,7 +76,7 @@ export const ServiceLayoutUserInfo: React.FC<ServiceLayoutUserInfoProps> = ({ us
       <DropdownMenuTrigger asChild>
         <Button size="icon" variant="ghost" color="secondary" className="size-10 rounded-full">
           <Avatar className="size-10">
-            <AvatarImage src={''} alt={''} />
+            <AvatarImage />
             <AvatarFallback className="bg-muted-muted size-full">
               <UserIcon />
             </AvatarFallback>
@@ -162,8 +162,7 @@ export const ServiceLayoutHeader: React.FC<ServiceLayoutHeaderProps> = () => {
       className={cn(
         'bg-card',
         'h-(--header-height)',
-        'sm:h-[calc(var(--header-height)_+_0.5rem)]',
-        'sm:px-4 sm:pr-6',
+        'sm:h-[calc(var(--header-height)_+_0.5rem)] sm:px-4 sm:pr-6',
         'absolute inset-x-0 top-0 z-20 gap-2 px-2 pr-4.5',
         'shadow-nav flex items-center',
         'transition-[width,height] ease-linear',

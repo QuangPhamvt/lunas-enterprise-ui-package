@@ -3,10 +3,12 @@ import { cn } from '@customafk/react-toolkit/utils'
 
 import { ScrollArea as ScrollAreaPrimitive } from 'radix-ui'
 
-function ScrollArea({ className, children, ...props }: React.ComponentProps<typeof ScrollAreaPrimitive.Root>) {
+function ScrollArea({ className, children, ref, onScroll, ...props }: React.ComponentProps<typeof ScrollAreaPrimitive.Root>) {
   return (
     <ScrollAreaPrimitive.Root data-slot="scroll-area" className={cn('relative overflow-hidden', className)} {...props}>
-      <ScrollAreaPrimitive.Viewport className="size-full rounded-[inherit]">{children}</ScrollAreaPrimitive.Viewport>
+      <ScrollAreaPrimitive.Viewport ref={ref} className="size-full rounded-[inherit]" onScroll={onScroll}>
+        {children}
+      </ScrollAreaPrimitive.Viewport>
       <ScrollBar />
       <ScrollAreaPrimitive.Corner />
     </ScrollAreaPrimitive.Root>

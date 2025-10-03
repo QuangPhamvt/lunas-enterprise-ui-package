@@ -5,7 +5,9 @@ import { cn } from '@customafk/react-toolkit/utils'
 
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
 
-import { Button, buttonVariants } from '@/components/ui/button'
+import { Button } from '@/components/ui/button'
+
+import { buttonVariants } from './button-variants'
 
 function Calendar({
   className,

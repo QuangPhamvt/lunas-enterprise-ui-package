@@ -1,36 +1,94 @@
 'use client'
+
+import { useMemo } from 'react'
 import { cn } from '@customafk/react-toolkit/utils'
 
-import { cva, type VariantProps } from 'class-variance-authority'
+import { AlertCircle, AlertTriangle, CheckCircle, Info, X } from 'lucide-react'
 
-const alertVariants = cva(
-  [
-    'relative grid w-full grid-cols-[0_1fr] items-start gap-y-0.5 rounded-lg border px-4 py-3 text-sm',
-    'has-[>svg]:grid-cols-[calc(var(--spacing)*4)_1fr] has-[>svg]:gap-x-3 [&>svg]:size-4',
-    '[&>svg]:translate-y-0.5 [&>svg]:text-current',
-  ],
-  {
-    variants: {
-      variant: {
-        default: 'bg-card text-text-positive-strong',
-        destructive: 'text-danger-strong bg-card [&>svg]:text-current *:data-[slot=alert-description]:text-danger',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-    },
-  },
-)
+import { type AlertVariantProps, alertVariants } from './alert-variants'
 
-function Alert({ className, variant, ...props }: React.ComponentProps<'div'> & VariantProps<typeof alertVariants>) {
-  return <div data-slot="alert" role="alert" className={cn(alertVariants({ variant }), className)} {...props} />
+export interface AlertProps extends React.HTMLAttributes<HTMLDivElement>, Omit<AlertVariantProps, 'className'> {
+  /**
+   * Optional icon to display in the alert
+   */
+  icon?: React.ReactNode
+  /**
+   * Whether the alert can be dismissed
+   */
+  dismissible?: boolean
+  /**
+   * Callback when the alert is dismissed
+   */
+  onDismiss?: () => void
 }
 
-function AlertTitle({ className, ...props }: React.ComponentProps<'div'>) {
+/**
+ * Alert component for displaying informational messages to users
+ */
+function Alert({ className, variant, children, icon, dismissible, onDismiss, ...props }: AlertProps) {
+  // Default icons based on variant
+  const defaultIcon = useMemo(() => {
+    if (!icon) {
+      switch (variant) {
+        case 'destructive':
+          return <AlertCircle />
+        case 'warning':
+          return <AlertTriangle />
+        case 'success':
+          return <CheckCircle />
+        case 'info':
+          return <Info />
+        default:
+          return null
+      }
+    }
+    return icon
+  }, [icon, variant])
+
+  return (
+    <div data-slot="alert" role="alert" data-variant={variant} className={cn(alertVariants({ variant }), className)} {...props}>
+      {defaultIcon}
+      {children}
+      {dismissible && (
+        <button
+          type="button"
+          onClick={onDismiss}
+          aria-label="Close alert"
+          className="absolute top-2 right-2 size-6 rounded-md p-1 opacity-70 transition-opacity hover:opacity-100"
+          data-slot="alert-close"
+        >
+          <X size={16} />
+        </button>
+      )}
+    </div>
+  )
+}
+
+export interface AlertTitleProps extends React.HTMLAttributes<HTMLDivElement> {
+  /**
+   * Title text or elements
+   */
+  children: React.ReactNode
+}
+
+/**
+ * Title component for the Alert
+ */
+function AlertTitle({ className, ...props }: AlertTitleProps) {
   return <div data-slot="alert-title" className={cn('col-start-2 line-clamp-1 min-h-4 font-medium tracking-tight', className)} {...props} />
 }
 
-function AlertDescription({ className, ...props }: React.ComponentProps<'div'>) {
+export interface AlertDescriptionProps extends React.HTMLAttributes<HTMLDivElement> {
+  /**
+   * Description text or elements
+   */
+  children: React.ReactNode
+}
+
+/**
+ * Description component for the Alert
+ */
+function AlertDescription({ className, ...props }: AlertDescriptionProps) {
   return (
     <div
       data-slot="alert-description"

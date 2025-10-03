@@ -69,7 +69,7 @@ export const DetailDialog: React.FC<React.PropsWithChildren<Props>> = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DetailDialogWrapper>
         <DetailDialogHeader />
-        <SidebarProvider className="h-full min-h-[85svh] items-start">
+        <SidebarProvider className="h-full min-h-[85dvh] items-start">
           <DetailDialogSidebar title={sidebarTitle} sidebarFooter={sidebarFooter} children={sidebar} />
           <DetailDialogMain>
             <DetailDialogMainHeader title={title} createdAt={createdAt} />

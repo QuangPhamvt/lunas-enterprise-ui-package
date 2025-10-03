@@ -1,47 +1,35 @@
 import { useMemo, useState } from 'react'
 
-import {
-  type ColumnDef,
-  type ColumnFiltersState,
-  getCoreRowModel,
-  getFacetedRowModel,
-  getFacetedUniqueValues,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  type PaginationState,
-  type RowSelectionState,
-  type SortingState,
-  useReactTable,
-  type VisibilityState,
-} from '@tanstack/react-table'
+import type { ColumnDef, ColumnFiltersState, RowSelectionState, SortingState, VisibilityState } from '@tanstack/react-table'
+import { getCoreRowModel, getFacetedRowModel, getFacetedUniqueValues, getFilteredRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table'
 
 import { DataTable } from './data-table'
 import { DataTableHeader } from './data-table-header'
-import { DataTablePagination } from './data-table-pagination'
 import { Flex } from '../layouts/flex'
 
 type Props<T> = {
   data: T[]
   totalCount?: number
   isLoading?: boolean
+  isFetching?: boolean
+  allowLoadMore?: boolean
   columns: ColumnDef<T>[]
-  pagination?: PaginationState
   onAdd?: () => void
   onRefresh?: () => void
   onClickRow?: (id: string) => void
-  onPaginationChange?: React.Dispatch<React.SetStateAction<PaginationState>>
+  onFetchNextPage?: () => void
 }
 export function Table<T extends Record<string, unknown>>({
   data,
   totalCount,
   isLoading,
+  isFetching,
+  allowLoadMore,
   columns,
-  pagination,
   onAdd,
   onRefresh,
   onClickRow,
-  onPaginationChange,
+  onFetchNextPage,
 }: Props<T>) {
   'use no memo'
 
@@ -53,7 +41,6 @@ export function Table<T extends Record<string, unknown>>({
   const initialState = useMemo(
     () => ({
       columnPinning: { right: ['actions', 'update', 'delete'] },
-      pagination: { pageIndex: 0, pageSize: 20 },
     }),
     [],
   )
@@ -64,11 +51,9 @@ export function Table<T extends Record<string, unknown>>({
     columns,
     rowCount: totalCount,
     columnResizeMode: 'onChange',
-    manualPagination: true,
     enableColumnResizing: false,
     enableMultiRowSelection: false,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getFacetedRowModel: getFacetedRowModel(),
@@ -79,32 +64,24 @@ export function Table<T extends Record<string, unknown>>({
       sorting,
       columnVisibility,
       columnFilters,
-      ...(pagination ? { pagination } : {}),
     },
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
     onColumnVisibilityChange: setColumnVisibility,
     onColumnFiltersChange: setColumnFilters,
-    ...(onPaginationChange ? { onPaginationChange } : {}),
   })
 
   return (
     <Flex vertical wrap={false} gap="sm" align="start" className="size-full overflow-y-auto pt-1">
       <DataTableHeader onAdd={onAdd} onRefresh={onRefresh} />
       <Flex padding="none" vertical wrap={false} width="full" className="flex-1 overflow-auto pb-4">
-        <DataTable table={table} isLoading={isLoading} onClickRow={onClickRow} />
-        <DataTablePagination
-          pageSize={table.getState().pagination.pageSize}
-          setPageSize={table.setPageSize}
-          filteredSelectedRowsLength={table.getFilteredSelectedRowModel().rows.length}
-          filteredRowsLength={table.getFilteredRowModel().rows.length}
-          pageIndex={table.getState().pagination.pageIndex}
-          setPageIndex={table.setPageIndex}
-          previousPage={table.previousPage}
-          nextPage={table.nextPage}
-          canPreviousPage={table.getCanPreviousPage()}
-          canNextPage={table.getCanNextPage()}
-          pageCount={table.getPageCount()}
+        <DataTable
+          table={table}
+          isLoading={isLoading}
+          isFetching={isFetching}
+          allowFetchMore={allowLoadMore}
+          onClickRow={onClickRow}
+          onFetchNextPage={onFetchNextPage}
         />
       </Flex>
     </Flex>

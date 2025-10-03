@@ -1,7 +1,7 @@
 'use client'
 import { cn } from '@customafk/react-toolkit/utils'
 
-import { buttonVariants } from '@/components/ui/button'
+import { buttonVariants } from './button-variants'
 
 import { AlertDialog as AlertDialogPrimitive } from 'radix-ui'
 

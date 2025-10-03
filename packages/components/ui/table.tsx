@@ -1,15 +1,13 @@
 'use client'
 import { cn } from '@customafk/react-toolkit/utils'
 
-import { ScrollArea, ScrollBar } from './scroll-area'
-
 function Table({ className, ...props }: React.ComponentProps<'table'>) {
   return (
-    <ScrollArea data-slot="table-conatiner" className="border-border-weak bg-background relative w-full overflow-x-auto rounded-lg border">
-      <table data-slot="table" className={cn('w-full caption-bottom text-sm', className)} {...props} />
-      <ScrollBar orientation="vertical" className="z-5 w-2" />
-      <ScrollBar orientation="horizontal" className="absolute right-0 bottom-0 left-0 h-2" />
-    </ScrollArea>
+    // <ScrollArea data-slot="table-conatiner" className="border-border-weak bg-background relative w-full overflow-x-auto rounded-lg border">
+    <table data-slot="table" className={cn('w-full caption-bottom text-sm', className)} {...props} />
+    //   <ScrollBar orientation="vertical" className="z-5 w-2" />
+    //   <ScrollBar orientation="horizontal" className="absolute right-0 bottom-0 left-0 h-2" />
+    // </ScrollArea>
   )
 }
 
@@ -35,7 +33,7 @@ function TableBody({ className, ...props }: React.ComponentProps<'tbody'>) {
 }
 
 function TableFooter({ className, ...props }: React.ComponentProps<'tfoot'>) {
-  return <tfoot data-slot="table-footer" className={cn('bg-accent-muted border-t font-medium [&>tr]:last:border-b-0', className)} {...props} />
+  return <tfoot data-slot="table-footer" className={cn('border-border-weak border-t font-medium [&>tr]:last:border-b-0', className)} {...props} />
 }
 
 function TableRow({ className, ...props }: React.ComponentProps<'tr'>) {

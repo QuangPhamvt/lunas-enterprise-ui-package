@@ -2,15 +2,16 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useIsMobile } from '@customafk/react-toolkit/hooks/useMobile'
 import { cn } from '@customafk/react-toolkit/utils'
 
-import { MenuIcon, ShoppingCartIcon } from 'lucide-react'
+import { LogOutIcon, MenuIcon, ShoppingCartIcon } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
+import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } from '@/components/ui/drawer'
 import { Separator } from '@/components/ui/separator'
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import { Skeleton } from '@/components/ui/skeleton'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 
+import { useServiceLayout } from './hooks/use-service-layout'
 import { SidebarContext, type SidebarContextProps, useServiceLayoutSidebar } from './hooks/use-service-layout-sidebar'
 
 import { cva, type VariantProps } from 'class-variance-authority'
@@ -108,7 +109,7 @@ function ServiceLayoutSidebarProvider({
               ...style,
             } as React.CSSProperties
           }
-          className={cn('group/sidebar-wrapper', 'has-data-[variant=inset]:bg-sidebar', 'flex h-svh w-full', className)}
+          className={cn('group/sidebar-wrapper', 'has-data-[variant=inset]:bg-sidebar', 'flex h-dvh w-full', className)}
           {...props}
         >
           {children}
@@ -142,25 +143,24 @@ function ServiceLayoutSidebar({
 
   if (isMobile) {
     return (
-      <Sheet open={openMobile} onOpenChange={setOpenMobile} {...props}>
-        <SheetContent
+      <Drawer direction="left" open={openMobile} onOpenChange={setOpenMobile}>
+        <DrawerContent
           data-sidebar="sidebar"
           data-slot="sidebar"
           data-mobile="true"
-          className="bg-sidebar text-sidebar-foreground w-(--sidebar-width) p-0 [&>button]:hidden"
+          className="bg-sidebar text-sidebar-foreground w-(--sidebar-width) p-0 data-[vaul-drawer-direction=left]:w-3xs data-[vaul-drawer-direction=left]:sm:max-w-3xs [&>button]:hidden"
           style={
             {
               '--sidebar-width': SIDEBAR_WIDTH_MOBILE,
             } as React.CSSProperties
           }
-          side={side}
         >
-          <SheetHeader className="sr-only">
-            <SheetTitle>Sidebar</SheetTitle>
-            <SheetDescription>Displays the mobile sidebar.</SheetDescription>
-          </SheetHeader>
+          <DrawerHeader className="sr-only">
+            <DrawerTitle>Sidebar</DrawerTitle>
+            <DrawerDescription>Displays the mobile sidebar.</DrawerDescription>
+          </DrawerHeader>
           <div className="flex size-full flex-col">
-            <div className="border-border-weak flex items-center gap-x-2 border-b p-2 pr-4">
+            <div className="border-border-weak flex flex-0 items-center gap-x-2 border-b p-2 pr-4">
               <ServiceLayoutSidebarTrigger />
               <div className="bg-sidebar-primary text-sidebar-primary-foreground ml-2 flex aspect-square size-8 items-center justify-center rounded-lg">
                 <ShoppingCartIcon size={20} />
@@ -170,10 +170,10 @@ function ServiceLayoutSidebar({
                 <span className="truncate text-xs">Established 2023</span>
               </div>
             </div>
-            {children}
+            <div className="flex flex-1 flex-col p-2">{children}</div>
           </div>
-        </SheetContent>
-      </Sheet>
+        </DrawerContent>
+      </Drawer>
     )
   }
 
@@ -207,7 +207,7 @@ function ServiceLayoutSidebar({
         className={cn(
           'hidden md:flex',
           'shadow-nav fixed inset-y-0 top-14 z-10',
-          'h-[calc(100svh-3.5rem)] w-(--sidebar-width)',
+          'h-[calc(100dvh-3.5rem)] w-(--sidebar-width)',
           'transition-[left,right,width] duration-200 ease-linear',
           side === 'left' && 'left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]',
           side === 'right' && 'right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]',
@@ -308,16 +308,23 @@ function ServiceLayoutSidebarHeader({ className, ...props }: React.ComponentProp
 
 function ServiceLayoutSidebarFooter({ className, children, ...props }: React.ComponentProps<'div'>) {
   const { open } = useServiceLayoutSidebar()
+  const { onLogout } = useServiceLayout()
   return (
-    <div data-slot="sidebar-footer" data-sidebar="footer" className={cn('flex flex-col gap-2 p-2', className)} {...props}>
+    <div data-slot="sidebar-footer" data-sidebar="footer" className={cn('flex flex-col gap-2', className)} {...props}>
       {children}
-      {open && (
-        <ServiceLayoutSidebarMenu>
-          <ServiceLayoutSidebarMenuItem>
-            <p className="text-muted-foreground text-center text-xs">Copyright © 2025, Lunas.</p>
+      <ServiceLayoutSidebarMenu>
+        <ServiceLayoutSidebarMenuItem>
+          <ServiceLayoutSidebarMenuButton className="border-border border" onClick={onLogout}>
+            <LogOutIcon className="text-text-positive-weak" />
+            Đăng xuất
+          </ServiceLayoutSidebarMenuButton>
+        </ServiceLayoutSidebarMenuItem>
+        {open && (
+          <ServiceLayoutSidebarMenuItem className="border-t-border mt-2 border-t">
+            <p className="text-muted-foreground pt-2 text-center text-xs">Copyright © 2025, Lunas.</p>
           </ServiceLayoutSidebarMenuItem>
-        </ServiceLayoutSidebarMenu>
-      )}
+        )}
+      </ServiceLayoutSidebarMenu>
     </div>
   )
 }

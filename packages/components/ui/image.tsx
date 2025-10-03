@@ -51,19 +51,16 @@ export const Image: React.FC<Props> = ({ src, alt, width, height, maxRetries = 3
       <div style={{ width, height }} className={cn('@container relative inline-block', className)}>
         <div className="bg-danger-muted shadow-card flex size-full flex-col items-center justify-center gap-y-2 rounded-md">
           <AlertCircleIcon className="text-danger size-8 @max-[52px]:size-6" />
-          <span className="text-danger-weak y ml-2 text-sm @max-[96px]:sr-only">Image failed to load</span>
+          <span className="text-danger-weak text-center text-xs @max-[96px]:sr-only">Image failed to load</span>
         </div>
       </div>
     )
   }
 
   return (
-    <div style={{ width, height }} className={cn('relative inline-block', className)} onClick={onClick}>
-      {!isLoaded && (
-        <Skeleton className="absolute inset-0 flex size-full items-center justify-center">
-          <div className="loader" />
-        </Skeleton>
-      )}
+    <div style={{ width, height }} className={cn('relative flex items-center justify-center overflow-hidden rounded-md', className)} onClick={onClick}>
+      {!isLoaded && <Skeleton className="absolute inset-0 flex size-full animate-pulse items-center justify-center" />}
+      <img src={currentSrc} className="absolute inset-0 z-0 size-full scale-110 object-cover blur-xl brightness-60" />
       <img
         id={currentSrc}
         ref={imageRef}
@@ -71,7 +68,7 @@ export const Image: React.FC<Props> = ({ src, alt, width, height, maxRetries = 3
         alt={alt}
         loading="lazy"
         className={cn(
-          'shadow-card size-full rounded-md object-cover transition-opacity duration-300',
+          'shadow-card relative h-[120%] w-auto object-cover transition-opacity duration-300',
           isLoaded && 'opacity-100',
           !isLoaded && 'pointer-events-none opacity-0',
         )}

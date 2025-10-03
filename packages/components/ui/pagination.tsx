@@ -3,7 +3,9 @@ import { cn } from '@customafk/react-toolkit/utils'
 
 import { ChevronLeftIcon, ChevronRightIcon, MoreHorizontalIcon } from 'lucide-react'
 
-import { Button, buttonVariants } from '@/components/ui/button'
+import { Button } from '@/components/ui/button'
+
+import { buttonVariants } from './button-variants'
 
 function Pagination({ className, ...props }: React.ComponentProps<'nav'>) {
   return <nav role="navigation" aria-label="pagination" data-slot="pagination" className={cn('mx-auto flex w-full justify-center', className)} {...props} />

@@ -55,7 +55,7 @@ function DialogContent({
           className={cn(
             'bg-background relative z-50 grid',
             'shadow-dialog gap-4 p-6 outline-none',
-            'max-h-[85svh] w-full max-w-[calc(100%-2rem)] sm:max-w-lg',
+            'max-h-[85dvh] w-full max-w-[calc(100%-2rem)] sm:max-w-lg',
             'rounded-2xl duration-200',
             'data-[state=open]:animate-in',
             'data-[state=open]:fade-in-0',

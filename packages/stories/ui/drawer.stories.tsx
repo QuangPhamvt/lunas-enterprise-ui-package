@@ -15,7 +15,7 @@ export const Default: Story = {
   args: {},
   render: () => {
     return (
-      <Drawer>
+      <Drawer direction="left">
         <DrawerTrigger>Open</DrawerTrigger>
         <DrawerContent>
           <DrawerHeader>

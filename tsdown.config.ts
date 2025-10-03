@@ -16,6 +16,7 @@ export default defineConfig([
       './packages/components/data-display/phone-number.tsx',
       './packages/components/data-display/role-badge.tsx',
       './packages/components/data-display/statistic.tsx',
+      './packages/components/data-display/user.tsx',
 
       './packages/components/dialogs/detail-dialog/index.tsx',
       './packages/components/dialogs/detail-dialog/component/sidebar.tsx',

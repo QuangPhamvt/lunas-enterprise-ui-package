@@ -8,9 +8,10 @@ import { MenuIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+
+import { Drawer, DrawerContent, DrawerDescription, DrawerHeader } from './drawer'
 
 import { cva, type VariantProps } from 'class-variance-authority'
 import { Slot as SlotPrimitive } from 'radix-ui'
@@ -128,7 +129,7 @@ function SidebarProvider({
               ...style,
             } as React.CSSProperties
           }
-          className={cn('group/sidebar-wrapper', 'has-data-[variant=inset]:bg-sidebar', 'flex min-h-svh w-full', className)}
+          className={cn('group/sidebar-wrapper', 'has-data-[variant=inset]:bg-sidebar', 'flex h-dvh w-full', className)}
           {...props}
         >
           {children}
@@ -166,8 +167,8 @@ function Sidebar({
 
   if (isMobile) {
     return (
-      <Sheet open={openMobile} onOpenChange={setOpenMobile} {...props}>
-        <SheetContent
+      <Drawer open={openMobile} onOpenChange={setOpenMobile} direction="left">
+        <DrawerContent
           data-sidebar="sidebar"
           data-slot="sidebar"
           data-mobile="true"
@@ -177,15 +178,15 @@ function Sidebar({
               '--sidebar-width': SIDEBAR_WIDTH_MOBILE,
             } as React.CSSProperties
           }
-          side={side}
+          // side={side}
         >
-          <SheetHeader className="sr-only">
-            <SheetTitle>Sidebar</SheetTitle>
-            <SheetDescription>Displays the mobile sidebar.</SheetDescription>
-          </SheetHeader>
+          <DrawerHeader className="sr-only">
+            <DrawerContent>Sidebar</DrawerContent>
+            <DrawerDescription>Displays the mobile sidebar.</DrawerDescription>
+          </DrawerHeader>
           <div className="flex h-full w-full flex-col">{children}</div>
-        </SheetContent>
-      </Sheet>
+        </DrawerContent>
+      </Drawer>
     )
   }
 
@@ -218,7 +219,7 @@ function Sidebar({
         className={cn(
           'hidden md:flex',
           'fixed inset-y-0 top-14 z-10',
-          'h-[calc(100svh-3.5rem)] w-(--sidebar-width)',
+          'h-[calc(100dvh-3.5rem)] w-(--sidebar-width)',
           'border-r',
           'transition-[left,right,width] duration-200 ease-linear',
           side === 'left' && 'left-0',

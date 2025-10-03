@@ -21,21 +21,34 @@ function Textarea({
     <textarea
       data-slot="textarea"
       className={cn(
-        'border-border-weak caret-primary',
-        'flex min-h-16 w-full bg-transparent px-3 py-2',
-        'field-sizing-content',
-        'shadow-input rounded-md border',
-        'text-sm transition-[color,border,box-shadow] outline-none',
-        'hover:border-border',
+        // Base styles
+        'flex min-h-24 w-full px-3 py-2',
+        'rounded-md border transition-all duration-200',
+        'text-text-positive-strong bg-transparent text-sm',
+        'field-sizing-content resize-y',
+
+        // Border and shadow styles
+        'border-border-weak shadow-input',
+        'caret-primary outline-none',
+
+        // Placeholder styling
         'placeholder:text-text-positive-muted',
+
+        // State styles
+        'hover:border-border hover:shadow-input',
+        'focus:border-primary-strong focus:shadow-none',
+        'focus-visible:ring-primary-muted focus-visible:ring-4',
+
+        // Invalid state
+        'aria-invalid:border-danger aria-invalid:ring-danger-muted',
+        'aria-invalid:hover:border-danger-strong',
+
+        // Disabled state
+        'disabled:cursor-not-allowed disabled:opacity-50',
         'disabled:pointer-events-none',
-        'disabled:cursor-not-allowed',
-        'disabled:opacity-50',
-        'focus-visible:ring-4',
-        'focus-visible:ring-primary-weak',
-        'focus-visible:border-primary-strong',
-        'aria-invalid:ring-danger-muted',
-        'aria-invalid:border-danger-strong',
+        'disabled:border-border-weak/50 disabled:bg-secondary-muted/10',
+
+        // Additional custom styling
         className,
       )}
       {...props}

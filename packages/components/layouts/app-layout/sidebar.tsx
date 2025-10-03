@@ -127,7 +127,7 @@ function SidebarProvider({
               ...style,
             } as React.CSSProperties
           }
-          className={cn('group/sidebar-wrapper', 'has-data-[variant=inset]:bg-sidebar', 'flex h-svh w-full', className)}
+          className={cn('group/sidebar-wrapper', 'has-data-[variant=inset]:bg-sidebar', 'flex h-dvh w-full', className)}
           {...props}
         >
           {children}
@@ -226,7 +226,7 @@ function Sidebar({
         className={cn(
           'hidden md:flex',
           'shadow-nav fixed inset-y-0 top-14 z-10',
-          'h-[calc(100svh-3.5rem)] w-(--sidebar-width)',
+          'h-[calc(100dvh-3.5rem)] w-(--sidebar-width)',
           'transition-[left,right,width] duration-200 ease-linear',
           side === 'left' && 'left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]',
           side === 'right' && 'right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]',
