@@ -1,7 +1,7 @@
-'use client'
-import { cn } from '@customafk/react-toolkit/utils'
+'use client';
+import { cn } from '@customafk/react-toolkit/utils';
 
-import { Progress as ProgressPrimitive } from 'radix-ui'
+import { Progress as ProgressPrimitive } from 'radix-ui';
 
 function Progress({ className, value, ...props }: React.ComponentProps<typeof ProgressPrimitive.Root>) {
   return (
@@ -12,7 +12,7 @@ function Progress({ className, value, ...props }: React.ComponentProps<typeof Pr
         style={{ transform: `translateX(-${100 - (value || 0)}%)` }}
       />
     </ProgressPrimitive.Root>
-  )
+  );
 }
 
-export { Progress }
+export { Progress };

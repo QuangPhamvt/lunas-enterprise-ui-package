@@ -1,13 +1,13 @@
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select'
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 const meta = {
   tags: ['autodocs'],
   title: 'Components/Select',
   component: Select,
-} satisfies Meta<typeof Select>
+} satisfies Meta<typeof Select>;
 
-export default meta
-type Story = StoryObj<typeof meta>
+export default meta;
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {},
@@ -28,4 +28,4 @@ export const Default: Story = {
       </SelectContent>
     </Select>
   ),
-}
+};

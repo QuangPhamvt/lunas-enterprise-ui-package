@@ -1,4 +1,4 @@
-import { SidebarInset } from '@/components/ui/sidebar'
+import { SidebarInset } from '@/components/ui/sidebar';
 
 export const MainLayoutContent = ({ children }: React.PropsWithChildren) => {
   return (
@@ -7,5 +7,5 @@ export const MainLayoutContent = ({ children }: React.PropsWithChildren) => {
         <div className="absolute inset-0">{children}</div>
       </section>
     </SidebarInset>
-  )
-}
+  );
+};

@@ -1,40 +1,40 @@
-'use client'
+'use client';
 
-import { cn } from '@customafk/react-toolkit/utils'
+import { cn } from '@customafk/react-toolkit/utils';
 
-import { Slot } from '@radix-ui/react-slot'
+import { Slot } from '@radix-ui/react-slot';
 
-import { type ButtonVariantProps, buttonVariants } from './button-variants'
+import { type ButtonVariantProps, buttonVariants } from './button-variants';
 
 export interface ButtonProps extends Omit<React.ComponentProps<'button'>, 'color'> {
   /**
    * When true, the button will render its children without wrapping them
    */
-  asChild?: boolean
+  asChild?: boolean;
   /**
    * Shows a loading spinner when true
    */
-  isLoading?: boolean
+  isLoading?: boolean;
   /**
    * Visual style variant
    */
-  variant?: ButtonVariantProps['variant']
+  variant?: ButtonVariantProps['variant'];
   /**
    * Color theme of the button
    */
-  color?: ButtonVariantProps['color']
+  color?: ButtonVariantProps['color'];
   /**
    * Size of the button
    */
-  size?: ButtonVariantProps['size']
+  size?: ButtonVariantProps['size'];
 }
 
 /**
  * Button component with variants, loading state and composition support
  */
 function Button({ className, variant, size, color, asChild = false, isLoading = false, children, disabled, type = 'button', ...props }: ButtonProps) {
-  const Comp = asChild ? Slot : 'button'
-  const isDisabled = disabled || isLoading
+  const Comp = asChild ? Slot : 'button';
+  const isDisabled = disabled || isLoading;
 
   return (
     <Comp
@@ -47,7 +47,7 @@ function Button({ className, variant, size, color, asChild = false, isLoading = 
           size,
           color: color as ButtonVariantProps['color'],
           className,
-        }),
+        })
       )}
       disabled={isDisabled}
       aria-disabled={isDisabled ? true : undefined}
@@ -60,7 +60,7 @@ function Button({ className, variant, size, color, asChild = false, isLoading = 
         </span>
       )}
     </Comp>
-  )
+  );
 }
 
-export { Button }
+export { Button };

@@ -1,19 +1,19 @@
-'use client'
-import { type FieldPath, type FieldValues, useWatch } from 'react-hook-form'
+'use client';
+import { type FieldPath, type FieldValues, useWatch } from 'react-hook-form';
 
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
-import { Textarea } from '../ui/textarea'
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
+import { Textarea } from '../ui/textarea';
 
 type Props<TFieldValues extends FieldValues = FieldValues> = {
-  name: FieldPath<TFieldValues>
-  label?: string
-  description?: string
-  placeholder?: string
-  isShowErrorMsg?: boolean
-  isShowCount?: boolean
-  rows?: number
-  onValueChange?: (value: string) => void
-}
+  name: FieldPath<TFieldValues>;
+  label?: string;
+  description?: string;
+  placeholder?: string;
+  isShowErrorMsg?: boolean;
+  isShowCount?: boolean;
+  rows?: number;
+  onValueChange?: (value: string) => void;
+};
 export const TextareaField = <TFieldValues extends FieldValues = FieldValues>({
   name,
   label = 'Textarea Field',
@@ -24,7 +24,7 @@ export const TextareaField = <TFieldValues extends FieldValues = FieldValues>({
   rows = 3,
   onValueChange,
 }: Props<TFieldValues>) => {
-  const valueWatch = useWatch({ name })
+  const valueWatch = useWatch({ name });
 
   return (
     <FormField
@@ -41,5 +41,5 @@ export const TextareaField = <TFieldValues extends FieldValues = FieldValues>({
         </FormItem>
       )}
     />
-  )
-}
+  );
+};

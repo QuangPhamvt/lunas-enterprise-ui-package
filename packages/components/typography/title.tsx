@@ -1,7 +1,7 @@
-import type { JSX } from 'react'
-import { cn } from '@customafk/react-toolkit/utils'
+import type { JSX } from 'react';
+import { cn } from '@customafk/react-toolkit/utils';
 
-import { cva } from 'class-variance-authority'
+import { cva } from 'class-variance-authority';
 
 const titleVariants = cva('scroll-m-20 text-text-positive-strong tracking-tight', {
   variants: {
@@ -17,15 +17,15 @@ const titleVariants = cva('scroll-m-20 text-text-positive-strong tracking-tight'
       level: 1,
     },
   },
-})
+});
 
 type Props = {
-  level?: 1 | 2 | 3 | 4 | 5 | 6
-  className?: string
-  children?: React.ReactNode
-}
+  level?: 1 | 2 | 3 | 4 | 5 | 6;
+  className?: string;
+  children?: React.ReactNode;
+};
 
 export const Title = ({ level = 1, className, children }: Props) => {
-  const Comp = `h${level}` as keyof JSX.IntrinsicElements
-  return <Comp className={cn(titleVariants({ level }), className)}>{children}</Comp>
-}
+  const Comp = `h${level}` as keyof JSX.IntrinsicElements;
+  return <Comp className={cn(titleVariants({ level }), className)}>{children}</Comp>;
+};

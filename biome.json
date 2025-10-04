@@ -1,0 +1,101 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.2.5/schema.json",
+  "files": {
+    "includes": [
+      "packages/**/*.js",
+      "packages/**/*.jsx",
+      "packages/**/*.ts",
+      "packages/**/*.tsx",
+      "packages/**/*.json",
+      "packages/**/*.css",
+      "packages/**/*.scss",
+      "packages/**/*.md"
+    ]
+  },
+  "linter": {
+    "enabled": true,
+    "domains": {
+      "react": "all"
+    },
+    "rules": {
+      "recommended": true,
+      "a11y": "on",
+      "security": "on",
+      "performance": {
+        "recommended": true,
+        "noReExportAll": "off"
+      },
+      "complexity": {
+        "recommended": true,
+        "noExcessiveLinesPerFunction": "off"
+      },
+      "suspicious": {
+        "recommended": true,
+        "noUnknownAtRules": "off"
+      }
+    }
+  },
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": {
+          "level": "on",
+          "options": {
+            "groups": [
+              [":BUN:", ":NODE:"],
+              ["react", "react-router", "react-hook-form"],
+              ":BLANK_LINE:",
+              "@hookform/resolvers",
+              "@tanstack/react-table",
+              "@tanstack/react-router",
+              "@tanstack/zod-adapter",
+              "jotai",
+              "lucide-react",
+              "next-themes",
+              "sonner",
+              "zod/**",
+              ":BLANK_LINE:",
+              "@customafk/react-toolkit/**",
+              "@customafk/lunas-sdk/**",
+              "@customafk/lunas-dto/**",
+              "@customafk/lunas-ui/**",
+              ":BLANK_LINE:",
+              ["@/apis/**", "@/constants/**"]
+            ]
+          }
+        }
+      }
+    }
+  },
+  "formatter": {
+    "enabled": true,
+    "formatWithErrors": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 160,
+    "lineEnding": "lf",
+    "attributePosition": "auto",
+    "bracketSameLine": false,
+    "bracketSpacing": true,
+    "expand": "auto"
+  },
+  "javascript": {
+    "formatter": {
+      "enabled": true,
+      "quoteStyle": "single",
+      "quoteProperties": "asNeeded",
+      "trailingCommas": "es5",
+      "semicolons": null,
+      "arrowParentheses": "asNeeded",
+      "indentStyle": "space",
+      "indentWidth": 2,
+      "lineWidth": 160,
+      "lineEnding": "lf",
+      "bracketSameLine": false,
+      "bracketSpacing": true,
+      "attributePosition": "auto",
+      "expand": "auto",
+      "operatorLinebreak": "after"
+    }
+  }
+}

@@ -1,12 +1,12 @@
-import { PlusIcon } from 'lucide-react'
+import { PlusIcon } from 'lucide-react';
 
-import { Paragraph } from '@/components/typography/paragraph'
+import { Paragraph } from '@/components/typography/paragraph';
 
-import { Button } from '../button'
+import { Button } from '../button';
 
 type Props = {
-  onClick?: () => void
-}
+  onClick?: () => void;
+};
 export const AddNewBtn: React.FC<React.PropsWithChildren<Props>> = ({ onClick = () => {} }) => {
   return (
     <Button
@@ -21,5 +21,5 @@ export const AddNewBtn: React.FC<React.PropsWithChildren<Props>> = ({ onClick = 
         Create
       </Paragraph>
     </Button>
-  )
-}
+  );
+};

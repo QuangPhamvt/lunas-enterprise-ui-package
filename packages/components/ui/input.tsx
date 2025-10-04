@@ -1,6 +1,6 @@
-'use client'
-import { useCallback } from 'react'
-import { cn } from '@customafk/react-toolkit/utils'
+'use client';
+import { useCallback } from 'react';
+import { cn } from '@customafk/react-toolkit/utils';
 
 function Input({
   className,
@@ -8,15 +8,15 @@ function Input({
   onValueChange,
   ...props
 }: React.ComponentProps<'input'> & {
-  onValueChange?: (value: string) => void
+  onValueChange?: (value: string) => void;
 }) {
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      onChange?.(e)
-      onValueChange?.(e.target.value)
+      onChange?.(e);
+      onValueChange?.(e.target.value);
     },
-    [onChange, onValueChange],
-  )
+    [onChange, onValueChange]
+  );
   return (
     <input
       data-slot="input"
@@ -48,12 +48,12 @@ function Input({
         'disabled:border-border-weak/50 disabled:bg-secondary-muted/10',
 
         // Additional custom styling
-        className,
+        className
       )}
       {...props}
       onChange={handleChange}
     />
-  )
+  );
 }
 
-export { Input }
+export { Input };

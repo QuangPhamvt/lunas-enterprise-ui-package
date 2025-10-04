@@ -1,13 +1,13 @@
-import { Separator } from '@/components/ui/separator'
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import { Separator } from '@/components/ui/separator';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 const meta = {
   tags: ['autodocs'],
   title: 'Components/Separator',
   component: Separator,
-} satisfies Meta<typeof Separator>
+} satisfies Meta<typeof Separator>;
 
-export default meta
-type Story = StoryObj<typeof meta>
+export default meta;
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   render: () => {
@@ -26,6 +26,6 @@ export const Default: Story = {
           <div>Source</div>
         </div>
       </div>
-    )
+    );
   },
-}
+};

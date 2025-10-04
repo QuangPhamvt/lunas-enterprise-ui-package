@@ -1,9 +1,9 @@
-import { Dialog, DialogContent, DialogTitle } from '../ui/dialog'
+import { Dialog, DialogContent, DialogTitle } from '../ui/dialog';
 
 type Props = {
-  open?: boolean
-  onOpenChange?: (open: boolean) => void
-}
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+};
 export const LoadingDialog: React.FC<Props> = ({ open, onOpenChange }) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -14,5 +14,5 @@ export const LoadingDialog: React.FC<Props> = ({ open, onOpenChange }) => {
         </div>
       </DialogContent>
     </Dialog>
-  )
-}
+  );
+};

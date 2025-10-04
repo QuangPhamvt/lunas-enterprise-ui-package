@@ -1,22 +1,22 @@
-'use client'
-import { cn } from '@customafk/react-toolkit/utils'
+'use client';
+import { cn } from '@customafk/react-toolkit/utils';
 
-import { Drawer as DrawerPrimitive } from 'vaul'
+import { Drawer as DrawerPrimitive } from 'vaul';
 
 function Drawer({ ...props }: React.ComponentProps<typeof DrawerPrimitive.Root>) {
-  return <DrawerPrimitive.Root data-slot="drawer" {...props} />
+  return <DrawerPrimitive.Root data-slot="drawer" {...props} />;
 }
 
 function DrawerTrigger({ ...props }: React.ComponentProps<typeof DrawerPrimitive.Trigger>) {
-  return <DrawerPrimitive.Trigger data-slot="drawer-trigger" {...props} />
+  return <DrawerPrimitive.Trigger data-slot="drawer-trigger" {...props} />;
 }
 
 function DrawerPortal({ ...props }: React.ComponentProps<typeof DrawerPrimitive.Portal>) {
-  return <DrawerPrimitive.Portal data-slot="drawer-portal" {...props} />
+  return <DrawerPrimitive.Portal data-slot="drawer-portal" {...props} />;
 }
 
 function DrawerClose({ ...props }: React.ComponentProps<typeof DrawerPrimitive.Close>) {
-  return <DrawerPrimitive.Close data-slot="drawer-close" {...props} />
+  return <DrawerPrimitive.Close data-slot="drawer-close" {...props} />;
 }
 
 function DrawerOverlay({ className, ...props }: React.ComponentProps<typeof DrawerPrimitive.Overlay>) {
@@ -29,11 +29,11 @@ function DrawerOverlay({ className, ...props }: React.ComponentProps<typeof Draw
         'data-[state=closed]:animate-out',
         'data-[state=open]:fade-in-0',
         'data-[state=closed]:fade-out-0',
-        className,
+        className
       )}
       {...props}
     />
-  )
+  );
 }
 
 function DrawerContent({ className, children, ...props }: React.ComponentProps<typeof DrawerPrimitive.Content>) {
@@ -66,7 +66,7 @@ function DrawerContent({ className, children, ...props }: React.ComponentProps<t
           'data-[vaul-drawer-direction=left]:left-0',
           'data-[vaul-drawer-direction=left]:w-3/4',
           'data-[vaul-drawer-direction=left]:sm:max-w-sm',
-          className,
+          className
         )}
         {...props}
       >
@@ -74,7 +74,7 @@ function DrawerContent({ className, children, ...props }: React.ComponentProps<t
         {children}
       </DrawerPrimitive.Content>
     </DrawerPortal>
-  )
+  );
 }
 
 function DrawerHeader({ className, ...props }: React.ComponentProps<'div'>) {
@@ -86,23 +86,23 @@ function DrawerHeader({ className, ...props }: React.ComponentProps<'div'>) {
         'md:gap-1.5 md:text-left',
         'group-data-[vaul-drawer-direction=bottom]/drawer-content:text-center',
         'group-data-[vaul-drawer-direction=top]/drawer-content:text-center',
-        className,
+        className
       )}
       {...props}
     />
-  )
+  );
 }
 
 function DrawerFooter({ className, ...props }: React.ComponentProps<'div'>) {
-  return <div data-slot="drawer-footer" className={cn('mt-auto flex flex-col gap-2 p-4', className)} {...props} />
+  return <div data-slot="drawer-footer" className={cn('mt-auto flex flex-col gap-2 p-4', className)} {...props} />;
 }
 
 function DrawerTitle({ className, ...props }: React.ComponentProps<typeof DrawerPrimitive.Title>) {
-  return <DrawerPrimitive.Title data-slot="drawer-title" className={cn('text-text-positive font-semibold', className)} {...props} />
+  return <DrawerPrimitive.Title data-slot="drawer-title" className={cn('text-text-positive font-semibold', className)} {...props} />;
 }
 
 function DrawerDescription({ className, ...props }: React.ComponentProps<typeof DrawerPrimitive.Description>) {
-  return <DrawerPrimitive.Description data-slot="drawer-description" className={cn('text-text-positive-weak text-sm', className)} {...props} />
+  return <DrawerPrimitive.Description data-slot="drawer-description" className={cn('text-text-positive-weak text-sm', className)} {...props} />;
 }
 
-export { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerOverlay, DrawerPortal, DrawerTitle, DrawerTrigger }
+export { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerOverlay, DrawerPortal, DrawerTitle, DrawerTrigger };

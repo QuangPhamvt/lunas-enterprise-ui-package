@@ -1,7 +1,7 @@
-'use client'
-import { cn } from '@customafk/react-toolkit/utils'
+'use client';
+import { cn } from '@customafk/react-toolkit/utils';
 
-import { Separator as SeparatorPrimitive } from 'radix-ui'
+import { Separator as SeparatorPrimitive } from 'radix-ui';
 
 function Separator({ className, orientation = 'horizontal', decorative = true, ...props }: React.ComponentProps<typeof SeparatorPrimitive.Root>) {
   return (
@@ -15,11 +15,11 @@ function Separator({ className, orientation = 'horizontal', decorative = true, .
         'data-[orientation=horizontal]:w-full',
         'data-[orientation=vertical]:h-full',
         'data-[orientation=vertical]:w-px',
-        className,
+        className
       )}
       {...props}
     />
-  )
+  );
 }
 
-export { Separator }
+export { Separator };

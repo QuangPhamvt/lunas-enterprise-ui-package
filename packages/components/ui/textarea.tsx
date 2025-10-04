@@ -1,6 +1,6 @@
-'use client'
-import { useCallback } from 'react'
-import { cn } from '@customafk/react-toolkit/utils'
+'use client';
+import { useCallback } from 'react';
+import { cn } from '@customafk/react-toolkit/utils';
 
 function Textarea({
   className,
@@ -8,15 +8,15 @@ function Textarea({
   onValueChange,
   ...props
 }: React.ComponentProps<'textarea'> & {
-  onValueChange?: (value: string) => void
+  onValueChange?: (value: string) => void;
 }) {
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-      onChange?.(e)
-      onValueChange?.(e.target.value)
+      onChange?.(e);
+      onValueChange?.(e.target.value);
     },
-    [onChange, onValueChange],
-  )
+    [onChange, onValueChange]
+  );
   return (
     <textarea
       data-slot="textarea"
@@ -49,12 +49,12 @@ function Textarea({
         'disabled:border-border-weak/50 disabled:bg-secondary-muted/10',
 
         // Additional custom styling
-        className,
+        className
       )}
       {...props}
       onChange={handleChange}
     />
-  )
+  );
 }
 
-export { Textarea }
+export { Textarea };

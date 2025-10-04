@@ -1,9 +1,9 @@
-import { Paragraph } from '../typography/paragraph'
-import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip'
+import { Paragraph } from '../typography/paragraph';
+import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 
 type NameDisplayProps = {
-  name: string
-}
+  name: string;
+};
 
 export const NameDisplay: React.FC<React.PropsWithChildren<NameDisplayProps>> = ({ name }) => {
   return (
@@ -17,5 +17,5 @@ export const NameDisplay: React.FC<React.PropsWithChildren<NameDisplayProps>> = 
         {name}
       </TooltipContent>
     </Tooltip>
-  )
-}
+  );
+};

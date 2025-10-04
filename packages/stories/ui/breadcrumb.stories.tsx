@@ -1,17 +1,25 @@
-import { ChevronDownIcon, SlashIcon } from 'lucide-react'
+import { ChevronDownIcon, SlashIcon } from 'lucide-react';
 
-import { Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import {
+  Breadcrumb,
+  BreadcrumbEllipsis,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '@/components/ui/breadcrumb';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   title: 'Components/Breadcrumb',
   component: Breadcrumb,
   tags: ['autodocs'],
-} satisfies Meta<typeof Breadcrumb>
+} satisfies Meta<typeof Breadcrumb>;
 
-export default meta
-type Story = StoryObj<typeof meta>
+export default meta;
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {},
@@ -50,9 +58,9 @@ export const Default: Story = {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-    )
+    );
   },
-}
+};
 
 export const CustomSeparator: Story = {
   args: {},
@@ -71,9 +79,9 @@ export const CustomSeparator: Story = {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-    )
+    );
   },
-}
+};
 
 export const WithDropdown: Story = {
   args: {},
@@ -110,9 +118,9 @@ export const WithDropdown: Story = {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-    )
+    );
   },
-}
+};
 
 export const Collapsed: Story = {
   args: {},
@@ -141,9 +149,9 @@ export const Collapsed: Story = {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-    )
+    );
   },
-}
+};
 
 export const LinkComponent: Story = {
   args: {},
@@ -168,6 +176,6 @@ export const LinkComponent: Story = {
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-    )
+    );
   },
-}
+};

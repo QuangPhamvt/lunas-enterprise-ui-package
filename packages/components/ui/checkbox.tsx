@@ -1,9 +1,9 @@
-'use client'
-import { cn } from '@customafk/react-toolkit/utils'
+'use client';
+import { cn } from '@customafk/react-toolkit/utils';
 
-import { CheckIcon } from 'lucide-react'
+import { CheckIcon } from 'lucide-react';
 
-import { Checkbox as CheckboxPrimitive } from 'radix-ui'
+import { Checkbox as CheckboxPrimitive } from 'radix-ui';
 
 function Checkbox({ className, ...props }: React.ComponentProps<typeof CheckboxPrimitive.Root>) {
   return (
@@ -21,7 +21,7 @@ function Checkbox({ className, ...props }: React.ComponentProps<typeof CheckboxP
         'aria-invalid:ring-danger-weak',
         'aria-invalid:border-danger',
         'disabled:cursor-not-allowed disabled:opacity-50',
-        className,
+        className
       )}
       {...props}
     >
@@ -29,7 +29,7 @@ function Checkbox({ className, ...props }: React.ComponentProps<typeof CheckboxP
         <CheckIcon className="size-3.5" />
       </CheckboxPrimitive.Indicator>
     </CheckboxPrimitive.Root>
-  )
+  );
 }
 
-export { Checkbox }
+export { Checkbox };

@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,17 +12,17 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import type { Meta, StoryObj } from '@storybook/react-vite'
+} from '@/components/ui/dropdown-menu';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   title: 'Components/DropdownMenu',
   component: DropdownMenu,
   tags: ['autodocs'],
-} satisfies Meta<typeof DropdownMenu>
+} satisfies Meta<typeof DropdownMenu>;
 
-export default meta
-type Story = StoryObj<typeof meta>
+export default meta;
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {},
@@ -84,6 +84,6 @@ export const Default: Story = {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-    )
+    );
   },
-}
+};

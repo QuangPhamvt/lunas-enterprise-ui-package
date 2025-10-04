@@ -1,29 +1,29 @@
-import { Badge } from '@/components/ui/badge'
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import { Badge } from '@/components/ui/badge';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   tags: ['autodocs'],
   title: 'Components/Badge',
   component: Badge,
-} satisfies Meta<typeof Badge>
+} satisfies Meta<typeof Badge>;
 
-export default meta
+export default meta;
 
-type Story = StoryObj<typeof meta>
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
     pill: true,
     children: 'Badge',
   },
-}
+};
 
 export const Pill: Story = {
   args: {
     pill: true,
     children: 'Pill Badge',
   },
-}
+};
 
 export const Red: Story = {
   args: {
@@ -31,7 +31,7 @@ export const Red: Story = {
     color: 'red',
     children: 'Red Badge',
   },
-}
+};
 
 export const Orange: Story = {
   args: {
@@ -39,7 +39,7 @@ export const Orange: Story = {
     color: 'orange',
     children: 'Orange Badge',
   },
-}
+};
 
 export const Amber: Story = {
   args: {
@@ -47,7 +47,7 @@ export const Amber: Story = {
     color: 'amber',
     children: 'Amber Badge',
   },
-}
+};
 
 export const Yellow: Story = {
   args: {
@@ -55,7 +55,7 @@ export const Yellow: Story = {
     color: 'yellow',
     children: 'Yellow Badge',
   },
-}
+};
 
 export const Lime: Story = {
   args: {
@@ -63,7 +63,7 @@ export const Lime: Story = {
     color: 'lime',
     children: 'Lime Badge',
   },
-}
+};
 
 export const Green: Story = {
   args: {
@@ -71,7 +71,7 @@ export const Green: Story = {
     color: 'green',
     children: 'Green Badge',
   },
-}
+};
 
 export const Emerald: Story = {
   args: {
@@ -79,7 +79,7 @@ export const Emerald: Story = {
     color: 'emerald',
     children: 'Emerald Badge',
   },
-}
+};
 
 export const Teal: Story = {
   args: {
@@ -87,7 +87,7 @@ export const Teal: Story = {
     color: 'teal',
     children: 'Teal Badge',
   },
-}
+};
 
 export const Cyan: Story = {
   args: {
@@ -95,7 +95,7 @@ export const Cyan: Story = {
     color: 'cyan',
     children: 'Cyan Badge',
   },
-}
+};
 
 export const Sky: Story = {
   args: {
@@ -103,7 +103,7 @@ export const Sky: Story = {
     color: 'sky',
     children: 'Sky Badge',
   },
-}
+};
 
 export const Blue: Story = {
   args: {
@@ -111,7 +111,7 @@ export const Blue: Story = {
     color: 'blue',
     children: 'Blue Badge',
   },
-}
+};
 
 export const Indigo: Story = {
   args: {
@@ -119,7 +119,7 @@ export const Indigo: Story = {
     color: 'indigo',
     children: 'Indigo Badge',
   },
-}
+};
 
 export const Violet: Story = {
   args: {
@@ -127,7 +127,7 @@ export const Violet: Story = {
     color: 'violet',
     children: 'Violet Badge',
   },
-}
+};
 
 export const Purple: Story = {
   args: {
@@ -135,7 +135,7 @@ export const Purple: Story = {
     color: 'purple',
     children: 'Purple Badge',
   },
-}
+};
 
 export const Fuchsia: Story = {
   args: {
@@ -143,7 +143,7 @@ export const Fuchsia: Story = {
     color: 'fuchsia',
     children: 'Fuchsia Badge',
   },
-}
+};
 
 export const Pink: Story = {
   args: {
@@ -151,7 +151,7 @@ export const Pink: Story = {
     color: 'pink',
     children: 'Pink Badge',
   },
-}
+};
 
 export const Rose: Story = {
   args: {
@@ -159,7 +159,7 @@ export const Rose: Story = {
     color: 'rose',
     children: 'Rose Badge',
   },
-}
+};
 
 export const Zinc: Story = {
   args: {
@@ -167,4 +167,4 @@ export const Zinc: Story = {
     color: 'zinc',
     children: 'Zinc Badge',
   },
-}
+};

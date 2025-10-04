@@ -1,7 +1,7 @@
-'use client'
-import { cn } from '@customafk/react-toolkit/utils'
+'use client';
+import { cn } from '@customafk/react-toolkit/utils';
 
-import { cva, type VariantProps } from 'class-variance-authority'
+import { cva, type VariantProps } from 'class-variance-authority';
 
 const flexVariants = cva(['relative flex', 'text-sm'], {
   variants: {
@@ -71,11 +71,11 @@ const flexVariants = cva(['relative flex', 'text-sm'], {
     justify: 'start',
     align: 'center',
   },
-})
+});
 
 type Props = {
-  className?: string
-} & VariantProps<typeof flexVariants>
+  className?: string;
+} & VariantProps<typeof flexVariants>;
 export const Flex = ({ vertical, wrap, width, margin, padding, gap, justify, align, className, children }: React.PropsWithChildren<Props>) => {
   return (
     <div
@@ -90,10 +90,10 @@ export const Flex = ({ vertical, wrap, width, margin, padding, gap, justify, ali
           justify,
           align,
           className,
-        }),
+        })
       )}
     >
       {children}
     </div>
-  )
-}
+  );
+};

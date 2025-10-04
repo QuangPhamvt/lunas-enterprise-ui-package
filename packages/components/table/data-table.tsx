@@ -1,15 +1,15 @@
-import { memo, useCallback, useEffect, useMemo, useRef } from 'react'
-import { cn } from '@customafk/react-toolkit/utils'
+import { memo, useCallback, useEffect, useMemo, useRef } from 'react';
+import { cn } from '@customafk/react-toolkit/utils';
 
-import { type Column, flexRender, type Header, type Row, type Table as ReactTable } from '@tanstack/react-table'
-import { ArrowLeftToLineIcon, ArrowRightToLineIcon, ChevronDown, ChevronUp, EllipsisIcon, LoaderIcon, PinOffIcon } from 'lucide-react'
+import { type Column, flexRender, type Header, type Row, type Table as ReactTable } from '@tanstack/react-table';
+import { ArrowLeftToLineIcon, ArrowRightToLineIcon, ChevronDown, ChevronUp, EllipsisIcon, LoaderIcon, PinOffIcon } from 'lucide-react';
 
-import { Button } from '@/components/ui/button'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
-import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import type { AnyEntity } from '@/types'
-import { useVirtualizer, type VirtualItem } from '@tanstack/react-virtual'
+import { Button } from '@/components/ui/button';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import type { AnyEntity } from '@/types';
+import { useVirtualizer, type VirtualItem } from '@tanstack/react-virtual';
 
 /**
  * Computes styles for pinned columns
@@ -17,40 +17,40 @@ import { useVirtualizer, type VirtualItem } from '@tanstack/react-virtual'
  * @returns CSS styles for pinned columns
  */
 const getPinningStyles = (column: Column<AnyEntity>): React.CSSProperties => {
-  const isPinned = column.getIsPinned()
+  const isPinned = column.getIsPinned();
   return {
     left: isPinned === 'left' ? `${column.getStart('left')}px` : undefined,
     right: isPinned === 'right' ? `${column.getAfter('right')}px` : undefined,
     position: isPinned ? 'sticky' : 'relative',
     width: column.getSize(),
     zIndex: isPinned ? 1 : 0,
-  }
-}
+  };
+};
 
 const SortingIndicator = memo(({ column }: { column: Column<AnyEntity> }) => {
-  const sortDirection = column.getIsSorted()
+  const sortDirection = column.getIsSorted();
 
   const icons = useMemo(
     () => ({
       asc: <ChevronUp className="shrink-0 opacity-60" size={16} strokeWidth={2} aria-hidden="true" />,
       desc: <ChevronDown className="shrink-0 opacity-60" size={16} strokeWidth={2} aria-hidden="true" />,
     }),
-    [],
-  )
+    []
+  );
 
-  return sortDirection ? icons[sortDirection] : null
-})
+  return sortDirection ? icons[sortDirection] : null;
+});
 
-SortingIndicator.displayName = 'SortingIndicator'
+SortingIndicator.displayName = 'SortingIndicator';
 
 const PinControls = memo(({ column }: { column: Column<AnyEntity> }) => {
-  const columnHeader = typeof column.columnDef.header === 'string' ? column.columnDef.header : 'Column'
+  const columnHeader = typeof column.columnDef.header === 'string' ? column.columnDef.header : 'Column';
 
-  const handleUnpin = useCallback(() => column.pin(false), [column])
-  const handlePinLeft = useCallback(() => column.pin('left'), [column])
-  const handlePinRight = useCallback(() => column.pin('right'), [column])
+  const handleUnpin = useCallback(() => column.pin(false), [column]);
+  const handlePinLeft = useCallback(() => column.pin('left'), [column]);
+  const handlePinRight = useCallback(() => column.pin('right'), [column]);
 
-  if (!column.getCanPin()) return null
+  if (!column.getCanPin()) return null;
 
   if (column.getIsPinned()) {
     return (
@@ -65,7 +65,7 @@ const PinControls = memo(({ column }: { column: Column<AnyEntity> }) => {
       >
         <PinOffIcon className="opacity-60" size={16} aria-hidden="true" />
       </Button>
-    )
+    );
   }
 
   return (
@@ -93,28 +93,28 @@ const PinControls = memo(({ column }: { column: Column<AnyEntity> }) => {
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
-})
+  );
+});
 
-PinControls.displayName = 'PinControls'
+PinControls.displayName = 'PinControls';
 
 const HeaderContent = memo(({ header }: { header: Header<AnyEntity, unknown> }) => {
-  const { column } = header
+  const { column } = header;
 
   const handleSort = useCallback(
     (e: React.KeyboardEvent) => {
       if (column.getCanSort() && (e.key === 'Enter' || e.key === ' ')) {
-        e.preventDefault()
-        column.getToggleSortingHandler()?.(e)
+        e.preventDefault();
+        column.getToggleSortingHandler()?.(e);
       }
     },
-    [column],
-  )
+    [column]
+  );
 
-  const toggleSortHandler = column.getToggleSortingHandler()
+  const toggleSortHandler = column.getToggleSortingHandler();
 
   if (header.isPlaceholder) {
-    return <div className="flex items-center justify-between gap-2 truncate" />
+    return <div className="flex items-center justify-between gap-2 truncate" />;
   }
 
   return (
@@ -131,27 +131,27 @@ const HeaderContent = memo(({ header }: { header: Header<AnyEntity, unknown> }) 
       </div>
       <PinControls column={column} />
     </div>
-  )
-})
+  );
+});
 
-HeaderContent.displayName = 'HeaderContent'
+HeaderContent.displayName = 'HeaderContent';
 
 type DataTableRowProps = {
-  id: string
-  row: Row<AnyEntity>
-  measureElement: (element?: HTMLTableRowElement | null | undefined) => void
-  virtualRow: VirtualItem
-  onClickRow?: (id: string) => void
-}
+  id: string;
+  row: Row<AnyEntity>;
+  measureElement: (element?: HTMLTableRowElement | null | undefined) => void;
+  virtualRow: VirtualItem;
+  onClickRow?: (id: string) => void;
+};
 const DataTableRow = memo(({ row, measureElement, virtualRow, onClickRow }: DataTableRowProps) => {
   const handleClick = useCallback(() => {
-    if (!onClickRow) return
-    onClickRow(row.id)
-  }, [row.id, onClickRow])
+    if (!onClickRow) return;
+    onClickRow(row.id);
+  }, [row.id, onClickRow]);
   return (
     <TableRow
       data-index={virtualRow.index}
-      ref={(node) => measureElement(node)}
+      ref={node => measureElement(node)}
       className="absolute flex w-full cursor-pointer focus:outline-none"
       style={{
         transform: `translateY(${virtualRow.start}px)`,
@@ -160,10 +160,10 @@ const DataTableRow = memo(({ row, measureElement, virtualRow, onClickRow }: Data
       tabIndex={onClickRow ? 0 : undefined}
       role={onClickRow ? 'button' : undefined}
     >
-      {row.getVisibleCells().map((cell) => {
-        const isPinned = cell.column.getIsPinned()
-        const isLastLeftPinned = isPinned === 'left' && cell.column.getIsLastColumn('left')
-        const isFirstRightPinned = isPinned === 'right' && cell.column.getIsFirstColumn('right')
+      {row.getVisibleCells().map(cell => {
+        const isPinned = cell.column.getIsPinned();
+        const isLastLeftPinned = isPinned === 'left' && cell.column.getIsLastColumn('left');
+        const isFirstRightPinned = isPinned === 'right' && cell.column.getIsFirstColumn('right');
 
         return (
           <TableCell
@@ -179,72 +179,72 @@ const DataTableRow = memo(({ row, measureElement, virtualRow, onClickRow }: Data
               'data-pinned:bg-background/90',
               '[&[data-pinned][data-last-col]]:border-border-weak',
               '[&[data-pinned=left][data-last-col=left]]:border-r',
-              '[&[data-pinned=right][data-last-col=right]]:border-l',
+              '[&[data-pinned=right][data-last-col=right]]:border-l'
             )}
           >
             {flexRender(cell.column.columnDef.cell, cell.getContext())}
           </TableCell>
-        )
+        );
       })}
     </TableRow>
-  )
-})
-DataTableRow.displayName = 'DataTableRow'
+  );
+});
+DataTableRow.displayName = 'DataTableRow';
 
 interface DataTableProps {
-  table: ReactTable<AnyEntity>
-  columnsLength?: number
-  isLoading?: boolean
-  isFetching?: boolean
-  allowFetchMore?: boolean
-  onClickRow?: (id: string) => void
-  onFetchNextPage?: () => void
+  table: ReactTable<AnyEntity>;
+  columnsLength?: number;
+  isLoading?: boolean;
+  isFetching?: boolean;
+  allowFetchMore?: boolean;
+  onClickRow?: (id: string) => void;
+  onFetchNextPage?: () => void;
 }
 
 export const DataTable = ({ table, isLoading, isFetching, allowFetchMore = true, onClickRow, onFetchNextPage }: DataTableProps) => {
   // 'use no memo'
 
-  const tableContainerRef = useRef<HTMLDivElement>(null)
+  const tableContainerRef = useRef<HTMLDivElement>(null);
 
-  const { rows } = table.getRowModel()
+  const { rows } = table.getRowModel();
 
   // Configure virtualization for performance with large datasets
   const rowVirtualizer = useVirtualizer<HTMLDivElement, HTMLTableRowElement>({
     count: rows.length,
     getScrollElement: () => tableContainerRef.current,
     estimateSize: () => 37, // estimated row height
-    measureElement: (element) => element?.getBoundingClientRect().height ?? undefined,
+    measureElement: element => element?.getBoundingClientRect().height ?? undefined,
     overscan: 5, // Render additional rows beyond viewport for smoother scrolling
-  })
+  });
 
   // Fetch more data when user approaches bottom of table
   const fetchMoreOnBottomReached = useCallback(
     (refEl: HTMLDivElement | null) => {
-      if (!refEl) return
-      const { scrollHeight, scrollTop, clientHeight } = refEl
+      if (!refEl) return;
+      const { scrollHeight, scrollTop, clientHeight } = refEl;
       // Threshold of 120px from bottom to trigger load more
       if (scrollHeight - scrollTop - clientHeight < 500 && !isFetching && allowFetchMore) {
-        onFetchNextPage?.()
+        onFetchNextPage?.();
       }
     },
-    [allowFetchMore, isFetching, onFetchNextPage],
-  )
+    [allowFetchMore, isFetching, onFetchNextPage]
+  );
 
   // Handle scroll events to check if more data should be loaded
   const handleScroll = useCallback(
     (ev: React.UIEvent<HTMLDivElement>) => {
-      fetchMoreOnBottomReached(ev.currentTarget)
+      fetchMoreOnBottomReached(ev.currentTarget);
     },
-    [fetchMoreOnBottomReached],
-  )
+    [fetchMoreOnBottomReached]
+  );
 
   // Check for more data on mount and when dependencies change
   useEffect(() => {
     const timer = setTimeout(() => {
-      fetchMoreOnBottomReached(tableContainerRef.current)
-    }, 100)
-    return () => clearTimeout(timer)
-  }, [fetchMoreOnBottomReached])
+      fetchMoreOnBottomReached(tableContainerRef.current);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, [fetchMoreOnBottomReached]);
 
   return (
     <ScrollArea ref={tableContainerRef} className="border-border-weak bg-background relative w-full overflow-auto rounded-lg border" onScroll={handleScroll}>
@@ -257,24 +257,24 @@ export const DataTable = ({ table, isLoading, isFetching, allowFetchMore = true,
           '[&_th]:border-border-weak',
           '[&_th]:border-b',
           '[&_th]:border-b-border-weak',
-          '[&_tfoot_td]:border-t',
+          '[&_tfoot_td]:border-t'
         )}
       >
         <TableHeader className="sticky top-0 z-10 backdrop-blur-xs">
-          {table.getHeaderGroups().map((headerGroup) => (
+          {table.getHeaderGroups().map(headerGroup => (
             <TableRow key={headerGroup.id} className="flex w-full border-none">
-              {headerGroup.headers.map((header) => {
-                const { column } = header
-                const isPinned = column.getIsPinned()
-                const isLastLeftPinned = isPinned === 'left' && column.getIsLastColumn('left')
-                const isFirstRightPinned = isPinned === 'right' && column.getIsFirstColumn('right')
-                const pinningState = isPinned || undefined
-                const lastColState = isLastLeftPinned ? 'left' : isFirstRightPinned ? 'right' : undefined
+              {headerGroup.headers.map(header => {
+                const { column } = header;
+                const isPinned = column.getIsPinned();
+                const isLastLeftPinned = isPinned === 'left' && column.getIsLastColumn('left');
+                const isFirstRightPinned = isPinned === 'right' && column.getIsFirstColumn('right');
+                const pinningState = isPinned || undefined;
+                const lastColState = isLastLeftPinned ? 'left' : isFirstRightPinned ? 'right' : undefined;
 
                 const headerStyles = {
                   width: header.getSize(),
                   ...getPinningStyles(header.column),
-                }
+                };
 
                 return (
                   <TableHead
@@ -291,14 +291,14 @@ export const DataTable = ({ table, isLoading, isFetching, allowFetchMore = true,
                       '[&[data-last-col=left]_div.cursor-col-resize:last-child]:opacity-0',
                       '[&[data-pinned=left][data-last-col=left]]:border-r',
                       '[&[data-pinned=right]:last-child_div.cursor-col-resize:last-child]:opacity-0',
-                      '[&[data-pinned=right][data-last-col=right]]:border-l',
+                      '[&[data-pinned=right][data-last-col=right]]:border-l'
                     )}
                     colSpan={header.colSpan}
                     style={headerStyles}
                   >
                     <HeaderContent header={header} />
                   </TableHead>
-                )
+                );
               })}
             </TableRow>
           ))}
@@ -316,12 +316,12 @@ export const DataTable = ({ table, isLoading, isFetching, allowFetchMore = true,
             </TableRow>
           ) : (
             <>
-              {rowVirtualizer.getVirtualItems().map((virtualRow) => {
-                const row = rows[virtualRow.index]
+              {rowVirtualizer.getVirtualItems().map(virtualRow => {
+                const row = rows[virtualRow.index];
                 const rowId =
                   row?.id ||
                   (row.original && 'id' in row.original ? String(row.original.id) : null) ||
-                  (row.original && 'uuid' in row.original ? String(row.original.uuid) : null)
+                  (row.original && 'uuid' in row.original ? String(row.original.uuid) : null);
                 return (
                   <DataTableRow
                     key={rowId ?? virtualRow.index}
@@ -331,7 +331,7 @@ export const DataTable = ({ table, isLoading, isFetching, allowFetchMore = true,
                     virtualRow={virtualRow}
                     onClickRow={onClickRow}
                   />
-                )
+                );
               })}
             </>
           )}
@@ -346,5 +346,5 @@ export const DataTable = ({ table, isLoading, isFetching, allowFetchMore = true,
       </Table>
       <ScrollBar orientation="horizontal" />
     </ScrollArea>
-  )
-}
+  );
+};

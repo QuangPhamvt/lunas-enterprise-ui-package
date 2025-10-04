@@ -1,7 +1,7 @@
-'use client'
-import { PackageOpenIcon } from 'lucide-react'
+'use client';
+import { PackageOpenIcon } from 'lucide-react';
 
-import { Flex } from '../layouts/flex'
+import { Flex } from '../layouts/flex';
 
 export const EmptyDisplay = () => {
   return (
@@ -9,5 +9,5 @@ export const EmptyDisplay = () => {
       <PackageOpenIcon size={52} strokeWidth={1} />
       <p className="text-sm">Không có dữ liệu nào để hiển thị.</p>
     </Flex>
-  )
-}
+  );
+};

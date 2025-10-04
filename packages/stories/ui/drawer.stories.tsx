@@ -1,15 +1,15 @@
-import { Button } from '@/components/ui/button'
-import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from '@/components/ui/drawer'
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import { Button } from '@/components/ui/button';
+import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from '@/components/ui/drawer';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   title: 'Components/Drawer',
   component: Drawer,
   tags: ['autodocs'],
-} satisfies Meta<typeof Drawer>
+} satisfies Meta<typeof Drawer>;
 
-export default meta
-type Story = StoryObj<typeof meta>
+export default meta;
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {},
@@ -32,6 +32,6 @@ export const Default: Story = {
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
-    )
+    );
   },
-}
+};

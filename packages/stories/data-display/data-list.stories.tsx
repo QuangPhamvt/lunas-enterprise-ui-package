@@ -1,14 +1,14 @@
-import { DataList, DataListItem } from '@/components/data-display/data-list'
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import { DataList, DataListItem } from '@/components/data-display/data-list';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   tags: ['autodocs'],
   title: 'Data Display/Data List',
   component: DataList,
-} satisfies Meta<typeof DataList>
+} satisfies Meta<typeof DataList>;
 
-export default meta
-type Story = StoryObj<typeof meta>
+export default meta;
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   render: () => (
@@ -19,4 +19,4 @@ export const Default: Story = {
       <DataListItem label="Stock" value={100} />
     </DataList>
   ),
-}
+};

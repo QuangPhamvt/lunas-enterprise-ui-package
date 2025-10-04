@@ -1,4 +1,4 @@
-import { cva, type VariantProps } from 'class-variance-authority'
+import { cva, type VariantProps } from 'class-variance-authority';
 
 /**
  * Input component styling variants using class-variance-authority
@@ -49,7 +49,7 @@ export const inputVariants = cva(
       variant: 'default',
       size: 'default',
     },
-  },
-)
+  }
+);
 
-export type InputVariantProps = VariantProps<typeof inputVariants>
+export type InputVariantProps = VariantProps<typeof inputVariants>;

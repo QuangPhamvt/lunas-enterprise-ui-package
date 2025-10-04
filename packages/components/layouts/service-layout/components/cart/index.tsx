@@ -1,65 +1,65 @@
-import { useCallback, useEffect, useState } from 'react'
-import { useDebounceCallback } from '@customafk/react-toolkit/hooks/useDebounceCallback'
-import { cn } from '@customafk/react-toolkit/utils'
+import { useCallback, useEffect, useState } from 'react';
+import { useDebounceCallback } from '@customafk/react-toolkit/hooks/useDebounceCallback';
+import { cn } from '@customafk/react-toolkit/utils';
 
-import { Minus, Plus, ShoppingBasketIcon, Trash2 } from 'lucide-react'
+import { Minus, Plus, ShoppingBasketIcon, Trash2 } from 'lucide-react';
 
-import { Button } from '@/components/ui/button'
-import { Card, CardContent } from '@/components/ui/card'
-import { Image } from '@/components/ui/image'
-import { Input } from '@/components/ui/input'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { Separator } from '@/components/ui/separator'
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Image } from '@/components/ui/image';
+import { Input } from '@/components/ui/input';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Separator } from '@/components/ui/separator';
 
-import { useServiceLayout } from '../../hooks/use-service-layout'
+import { useServiceLayout } from '../../hooks/use-service-layout';
 
 type CartItemProps = {
-  productUuid: string
-  productName: string
-  variantUuid: string
-  variantName: string
-  imageUrl: string
-  optionValue: string
-  optionTitle: string
-  quantity: number
-  price: number
-}
+  productUuid: string;
+  productName: string;
+  variantUuid: string;
+  variantName: string;
+  imageUrl: string;
+  optionValue: string;
+  optionTitle: string;
+  quantity: number;
+  price: number;
+};
 
 export const CartItem: React.FC<
   CartItemProps & {
-    type: 'in_stock' | 'pre_order'
+    type: 'in_stock' | 'pre_order';
   }
 > = ({ type, productUuid, variantUuid, productName, variantName, imageUrl, optionValue, optionTitle, quantity, price }) => {
-  const { onDeletingCart, onUpdatingCart } = useServiceLayout()
-  const [itemQuantity, setItemQuantity] = useState(quantity)
-  const [isDeleting, setIsDeleting] = useState<boolean>(false)
+  const { onDeletingCart, onUpdatingCart } = useServiceLayout();
+  const [itemQuantity, setItemQuantity] = useState(quantity);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
   const handleUpdate = useCallback(() => {
-    onUpdatingCart?.(variantUuid, itemQuantity, type)
-  }, [onUpdatingCart, variantUuid, itemQuantity, type])
+    onUpdatingCart?.(variantUuid, itemQuantity, type);
+  }, [onUpdatingCart, variantUuid, itemQuantity, type]);
 
-  const handleUpdateDebounced = useDebounceCallback(handleUpdate, 500)
+  const handleUpdateDebounced = useDebounceCallback(handleUpdate, 500);
 
   const handleQuantityChange = useCallback((value: number) => {
-    if (value < 1) value = 1
-    if (value > 99) value = 99
-    setItemQuantity(value)
-  }, [])
+    if (value < 1) value = 1;
+    if (value > 99) value = 99;
+    setItemQuantity(value);
+  }, []);
 
   const handleRemoveItem = useCallback(async () => {
-    setIsDeleting(true)
-    await onDeletingCart?.(productUuid)
-    setIsDeleting(false)
-  }, [productUuid, onDeletingCart])
+    setIsDeleting(true);
+    await onDeletingCart?.(productUuid);
+    setIsDeleting(false);
+  }, [productUuid, onDeletingCart]);
 
   useEffect(() => {
     if (itemQuantity !== quantity) {
-      handleUpdateDebounced()
+      handleUpdateDebounced();
     }
     return () => {
-      handleUpdateDebounced.cancel()
-    }
-  }, [itemQuantity, quantity, handleUpdateDebounced])
+      handleUpdateDebounced.cancel();
+    };
+  }, [itemQuantity, quantity, handleUpdateDebounced]);
 
   return (
     <Card className="border-border-weak relative mb-3 overflow-x-auto border p-4 shadow-none">
@@ -110,7 +110,7 @@ export const CartItem: React.FC<
                 </button>
                 <Input
                   value={itemQuantity}
-                  onChange={(e) => handleQuantityChange(parseInt(e.target.value || '1'))}
+                  onChange={e => handleQuantityChange(parseInt(e.target.value || '1'))}
                   className="border-border h-6.5 w-14 rounded-md border p-1 text-center text-sm"
                   min={1}
                 />
@@ -129,17 +129,17 @@ export const CartItem: React.FC<
         </div>
       </CardContent>
     </Card>
-  )
-}
+  );
+};
 
 type CartListProps = {
-  items?: CartItemProps[]
-  cartType: 'in_stock' | 'pre_order'
-  className?: string
-}
+  items?: CartItemProps[];
+  cartType: 'in_stock' | 'pre_order';
+  className?: string;
+};
 
 export const CartList: React.FC<CartListProps> = ({ items = [], cartType, className }) => {
-  const totalAmount = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
+  const totalAmount = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   if (items.length === 0) {
     return (
@@ -154,13 +154,13 @@ export const CartList: React.FC<CartListProps> = ({ items = [], cartType, classN
           </p>
         </div>
       </div>
-    )
+    );
   }
 
   return (
     <div className={cn('flex h-full flex-col space-y-4 overflow-y-auto', className)}>
       <ScrollArea className="h-full flex-1">
-        {items.map((item) => (
+        {items.map(item => (
           <CartItem key={`${item.productUuid}-${item.variantUuid}`} {...item} type={cartType} />
         ))}
       </ScrollArea>
@@ -179,5 +179,5 @@ export const CartList: React.FC<CartListProps> = ({ items = [], cartType, classN
         {cartType === 'pre_order' && <p className="text-text-positive-weak text-center text-xs italic">* Sản phẩm đặt trước sẽ được giao sau khi có hàng</p>}
       </div>
     </div>
-  )
-}
+  );
+};

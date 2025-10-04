@@ -1,10 +1,10 @@
-import { DateDisplay } from './date'
-import { Badge } from '../ui/badge'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip'
+import { DateDisplay } from './date';
+import { Badge } from '../ui/badge';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';
 
 type Props = {
-  date: Date | string | number
-}
+  date: Date | string | number;
+};
 export const DateTooltip: React.FC<Props> = ({ date }) => {
   return (
     <TooltipProvider>
@@ -19,5 +19,5 @@ export const DateTooltip: React.FC<Props> = ({ date }) => {
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
-  )
-}
+  );
+};

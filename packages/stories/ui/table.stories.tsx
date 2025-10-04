@@ -1,14 +1,14 @@
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import type { Meta } from '@storybook/react-vite'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import type { Meta } from '@storybook/react-vite';
 
 const meta = {
   tags: ['autodocs'],
   title: 'Components/Table',
   component: Table,
-} satisfies Meta<typeof Table>
+} satisfies Meta<typeof Table>;
 
-export default meta
-type Story = Meta<typeof meta>
+export default meta;
+type Story = Meta<typeof meta>;
 
 export const Default: Story = {
   render: () => (
@@ -23,7 +23,7 @@ export const Default: Story = {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {invoices.map((invoice) => (
+          {invoices.map(invoice => (
             <TableRow key={invoice.invoice}>
               <TableCell className="font-medium">{invoice.invoice}</TableCell>
               <TableCell>{invoice.paymentStatus}</TableCell>
@@ -35,7 +35,7 @@ export const Default: Story = {
       </Table>
     </div>
   ),
-}
+};
 const invoices = [
   {
     invoice: 'INV001',
@@ -79,4 +79,4 @@ const invoices = [
     totalAmount: '$300.00',
     paymentMethod: 'Credit Card',
   },
-]
+];

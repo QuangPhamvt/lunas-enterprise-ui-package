@@ -1,6 +1,6 @@
-import { cn } from '@customafk/react-toolkit/utils'
+import { cn } from '@customafk/react-toolkit/utils';
 
-import { DialogContent } from '@/components/ui/dialog'
+import { DialogContent } from '@/components/ui/dialog';
 
 export const DetailDialogWrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
   return (
@@ -11,14 +11,14 @@ export const DetailDialogWrapper: React.FC<React.PropsWithChildren> = ({ childre
         'max-h-dvh max-w-svw',
         'md:max-h-[90dvh] md:max-w-[90svw]',
         'xl:max-h-[90dvh] xl:max-w-[90svw]',
-        '2xl:max-h-[90dvh] 2xl:max-w-7xl',
+        '2xl:max-h-[90dvh] 2xl:max-w-7xl'
       )}
-      onInteractOutside={(e) => {
-        e.preventDefault()
-        e.stopPropagation()
+      onInteractOutside={e => {
+        e.preventDefault();
+        e.stopPropagation();
       }}
     >
       {children}
     </DialogContent>
-  )
-}
+  );
+};

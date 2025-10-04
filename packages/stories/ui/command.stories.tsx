@@ -1,16 +1,16 @@
-import { Calculator, Calendar, CreditCard, Settings, Smile, User } from 'lucide-react'
+import { Calculator, Calendar, CreditCard, Settings, Smile, User } from 'lucide-react';
 
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator, CommandShortcut } from '@/components/ui/command'
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator, CommandShortcut } from '@/components/ui/command';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   title: 'Components/Command',
   component: Command,
   tags: ['autodocs'],
-} satisfies Meta<typeof Command>
+} satisfies Meta<typeof Command>;
 
-export default meta
-type Story = StoryObj<typeof meta>
+export default meta;
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {},
@@ -54,6 +54,6 @@ export const Default: Story = {
           </CommandGroup>
         </CommandList>
       </Command>
-    )
+    );
   },
-}
+};

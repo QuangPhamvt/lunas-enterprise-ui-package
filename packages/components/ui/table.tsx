@@ -1,5 +1,5 @@
-'use client'
-import { cn } from '@customafk/react-toolkit/utils'
+'use client';
+import { cn } from '@customafk/react-toolkit/utils';
 
 function Table({ className, ...props }: React.ComponentProps<'table'>) {
   return (
@@ -8,7 +8,7 @@ function Table({ className, ...props }: React.ComponentProps<'table'>) {
     //   <ScrollBar orientation="vertical" className="z-5 w-2" />
     //   <ScrollBar orientation="horizontal" className="absolute right-0 bottom-0 left-0 h-2" />
     // </ScrollArea>
-  )
+  );
 }
 
 function TableHeader({ className, ...props }: React.ComponentProps<'thead'>) {
@@ -21,19 +21,19 @@ function TableHeader({ className, ...props }: React.ComponentProps<'thead'>) {
         '[&_tr:not(:last-child)_td]:border-b',
         '[&_tr_th:not(:last-child)]:border-r',
         '[&_tr_th:not(:last-child)]:border-r-border-weak',
-        className,
+        className
       )}
       {...props}
     />
-  )
+  );
 }
 
 function TableBody({ className, ...props }: React.ComponentProps<'tbody'>) {
-  return <tbody data-slot="table-body" className={cn('[&_tr:last-child]:border-0', className)} {...props} />
+  return <tbody data-slot="table-body" className={cn('[&_tr:last-child]:border-0', className)} {...props} />;
 }
 
 function TableFooter({ className, ...props }: React.ComponentProps<'tfoot'>) {
-  return <tfoot data-slot="table-footer" className={cn('border-border-weak border-t font-medium [&>tr]:last:border-b-0', className)} {...props} />
+  return <tfoot data-slot="table-footer" className={cn('border-border-weak border-t font-medium [&>tr]:last:border-b-0', className)} {...props} />;
 }
 
 function TableRow({ className, ...props }: React.ComponentProps<'tr'>) {
@@ -43,7 +43,7 @@ function TableRow({ className, ...props }: React.ComponentProps<'tr'>) {
       className={cn('hover:bg-muted-muted/50 active:bg-muted-muted data-[state=selected]:bg-muted border-border-weak border-b transition-colors', className)}
       {...props}
     />
-  )
+  );
 }
 
 function TableHead({ className, ...props }: React.ComponentProps<'th'>) {
@@ -55,11 +55,11 @@ function TableHead({ className, ...props }: React.ComponentProps<'th'>) {
         'h-10 px-2 text-left align-middle font-medium whitespace-nowrap',
         '[&:has([role=checkbox])]:pr-0',
         '[&>[role=checkbox]]:translate-y-0.5',
-        className,
+        className
       )}
       {...props}
     />
-  )
+  );
 }
 
 function TableCell({ className, ...props }: React.ComponentProps<'td'>) {
@@ -69,11 +69,11 @@ function TableCell({ className, ...props }: React.ComponentProps<'td'>) {
       className={cn('p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-0.5', className)}
       {...props}
     />
-  )
+  );
 }
 
 function TableCaption({ className, ...props }: React.ComponentProps<'caption'>) {
-  return <caption data-slot="table-caption" className={cn('text-text-positive-muted mt-4 text-sm', className)} {...props} />
+  return <caption data-slot="table-caption" className={cn('text-text-positive-muted mt-4 text-sm', className)} {...props} />;
 }
 
-export { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow }
+export { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow };

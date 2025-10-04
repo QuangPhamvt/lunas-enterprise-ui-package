@@ -1,25 +1,25 @@
-import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
 
-import { Button } from '@/components/ui/button'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Button } from '@/components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface DataTablePaginationProps {
-  filteredSelectedRowsLength?: number
-  filteredRowsLength?: number
+  filteredSelectedRowsLength?: number;
+  filteredRowsLength?: number;
 
-  pageSize?: number
-  setPageSize?: (size: number) => void
+  pageSize?: number;
+  setPageSize?: (size: number) => void;
 
-  pageIndex?: number
-  setPageIndex?: (index: number) => void
+  pageIndex?: number;
+  setPageIndex?: (index: number) => void;
 
-  previousPage?: () => void
-  nextPage?: () => void
+  previousPage?: () => void;
+  nextPage?: () => void;
 
-  canPreviousPage?: boolean
-  canNextPage?: boolean
+  canPreviousPage?: boolean;
+  canNextPage?: boolean;
 
-  pageCount?: number
+  pageCount?: number;
 }
 
 export function DataTablePagination({
@@ -35,7 +35,7 @@ export function DataTablePagination({
   canNextPage,
   pageCount = 1,
 }: DataTablePaginationProps) {
-  'use no memo'
+  'use no memo';
   return (
     <div className="mt-4 flex w-full flex-0 flex-col flex-wrap items-start space-y-2 px-2 sm:flex-row">
       <div className="text-text-positive flex-1 text-sm">
@@ -47,15 +47,15 @@ export function DataTablePagination({
           <p className="sr-only text-sm font-medium sm:not-sr-only sm:mr-4">Rows per page</p>
           <Select
             value={`${pageSize}`}
-            onValueChange={(value) => {
-              setPageSize?.(Number(value))
+            onValueChange={value => {
+              setPageSize?.(Number(value));
             }}
           >
             <SelectTrigger className="h-8 w-18">
               <SelectValue placeholder={pageSize} />
             </SelectTrigger>
             <SelectContent side="top">
-              {[10, 20, 30, 40, 50].map((pageSize) => (
+              {[10, 20, 30, 40, 50].map(pageSize => (
                 <SelectItem key={pageSize} value={`${pageSize}`}>
                   {pageSize}
                 </SelectItem>
@@ -84,7 +84,7 @@ export function DataTablePagination({
             variant="outline"
             color="muted"
             onClick={() => {
-              setPageIndex?.(pageCount - 1)
+              setPageIndex?.(pageCount - 1);
             }}
             disabled={!canNextPage}
           >
@@ -94,5 +94,5 @@ export function DataTablePagination({
         </div>
       </div>
     </div>
-  )
+  );
 }

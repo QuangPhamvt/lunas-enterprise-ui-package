@@ -1,13 +1,13 @@
-import type { PropsWithChildren } from 'react'
+import type { PropsWithChildren } from 'react';
 
-import { UploadIcon } from 'lucide-react'
+import { UploadIcon } from 'lucide-react';
 
-import { Button } from '../button'
+import { Button } from '../button';
 
 type Props = {
-  size?: number
-  onClick?: () => void
-}
+  size?: number;
+  onClick?: () => void;
+};
 
 export const UploadImageBtn: React.FC<PropsWithChildren<Props>> = ({ size = '5rem', onClick }) => {
   return (
@@ -22,5 +22,5 @@ export const UploadImageBtn: React.FC<PropsWithChildren<Props>> = ({ size = '5re
     >
       <UploadIcon className="size-6" />
     </Button>
-  )
-}
+  );
+};

@@ -1,18 +1,18 @@
-import { PackageIcon } from 'lucide-react'
+import { PackageIcon } from 'lucide-react';
 
-import { DetailDialog } from '@/components/dialogs/detail-dialog'
-import { DetailDialogMainGroup, DetailDialogMainGroupItem } from '@/components/dialogs/detail-dialog/component/main'
-import { DetailDialogSidebarMenu, DetailDialogSidebarMenuButton, DetailDialogSidebarMenuItem } from '@/components/dialogs/detail-dialog/component/sidebar'
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import { DetailDialog } from '@/components/dialogs/detail-dialog';
+import { DetailDialogMainGroup, DetailDialogMainGroupItem } from '@/components/dialogs/detail-dialog/component/main';
+import { DetailDialogSidebarMenu, DetailDialogSidebarMenuButton, DetailDialogSidebarMenuItem } from '@/components/dialogs/detail-dialog/component/sidebar';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   tags: ['autodocs'],
   title: 'Dialogs/DetailDialog',
   component: DetailDialog,
-} satisfies Meta<typeof DetailDialog>
+} satisfies Meta<typeof DetailDialog>;
 
-export default meta
-type Story = StoryObj<typeof meta>
+export default meta;
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
@@ -81,4 +81,4 @@ export const Default: Story = {
       </DetailDialogMainGroup>
     ),
   },
-}
+};

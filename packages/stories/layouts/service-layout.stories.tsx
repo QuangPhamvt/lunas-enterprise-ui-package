@@ -1,4 +1,4 @@
-import { PackageIcon } from 'lucide-react'
+import { PackageIcon } from 'lucide-react';
 
 import {
   ServiceLayoutHeader,
@@ -17,9 +17,9 @@ import {
   ServiceLayoutSidebarMenuButton,
   ServiceLayoutSidebarMenuItem,
   ServiceLayoutWrapper,
-} from '@/components/layouts/service-layout'
-import ReactOAuth from '@/components/systems/google'
-import type { Meta, StoryObj } from '@storybook/react-vite'
+} from '@/components/layouts/service-layout';
+import ReactOAuth from '@/components/systems/google';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   tags: ['autodocs'],
@@ -28,10 +28,10 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
   },
-} satisfies Meta<typeof ServiceLayoutProvider>
+} satisfies Meta<typeof ServiceLayoutProvider>;
 
-export default meta
-type Story = StoryObj<typeof meta>
+export default meta;
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
@@ -64,18 +64,18 @@ export const Default: Story = {
     ],
     orderedCarts: [],
     onLogout: () => {
-      console.log('Logout')
+      console.log('Logout');
     },
     onUpdatingCart: async (id: string, quantity: number, type: 'in_stock' | 'pre_order') => {
-      console.log(`Updating cart item with id: ${id}, quantity: ${quantity}, type: ${type}`)
+      console.log(`Updating cart item with id: ${id}, quantity: ${quantity}, type: ${type}`);
     },
     onDeletingCart: async (id: string) => {
-      const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
-      await wait(2000)
-      console.log('Deleting cart item with id:', id)
+      const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+      await wait(2000);
+      console.log('Deleting cart item with id:', id);
     },
   },
-  render: (args) => {
+  render: args => {
     return (
       <ReactOAuth clientId="" isDisabled={false} onGoogleLoginSuccess={() => {}}>
         <ServiceLayoutProvider {...args}>
@@ -132,6 +132,6 @@ export const Default: Story = {
           </ServiceLayoutWrapper>
         </ServiceLayoutProvider>
       </ReactOAuth>
-    )
+    );
   },
-}
+};

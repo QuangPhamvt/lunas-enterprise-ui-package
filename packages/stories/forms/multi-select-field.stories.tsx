@@ -1,17 +1,17 @@
-import { useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form';
 
-import { MultiSelectField } from '@/components/forms/multi-select-field'
-import { Form } from '@/components/ui/form'
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import { MultiSelectField } from '@/components/forms/multi-select-field';
+import { Form } from '@/components/ui/form';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   tags: ['autodocs'],
   title: 'Forms/MultiSelectField',
   component: MultiSelectField,
-} satisfies Meta<typeof MultiSelectField>
+} satisfies Meta<typeof MultiSelectField>;
 
-export default meta
-type Story = StoryObj<typeof meta>
+export default meta;
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
@@ -25,18 +25,18 @@ export const Default: Story = {
       { value: 'html', label: 'HTML' },
     ],
   },
-  render: (args) => {
+  render: args => {
     const form = useForm({
       defaultValues: {
         tags: [],
       },
-    })
+    });
     return (
       <Form {...form}>
         <div className="w-80">
           <MultiSelectField {...args} />
         </div>
       </Form>
-    )
+    );
   },
-}
+};

@@ -1,14 +1,14 @@
-import { Image } from '@/components/ui/image'
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import { Image } from '@/components/ui/image';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   tags: ['autodocs'],
   title: 'Components/Image',
   component: Image,
-} satisfies Meta<typeof Image>
+} satisfies Meta<typeof Image>;
 
-export default meta
-type Story = StoryObj<typeof meta>
+export default meta;
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
@@ -16,7 +16,7 @@ export const Default: Story = {
     width: 300,
     height: 300,
   },
-}
+};
 
 export const Error: Story = {
   args: {
@@ -24,4 +24,4 @@ export const Error: Story = {
     width: 300,
     height: 300,
   },
-}
+};

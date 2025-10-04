@@ -1,8 +1,8 @@
-'use client'
-import { cn } from '@customafk/react-toolkit/utils'
+'use client';
+import { cn } from '@customafk/react-toolkit/utils';
 
 function Skeleton({ className, ...props }: React.ComponentProps<'div'>) {
-  return <div data-slot="skeleton" className={cn('bg-muted-muted animate-pulse rounded-md', className)} {...props} />
+  return <div data-slot="skeleton" className={cn('bg-muted-muted animate-pulse rounded-md', className)} {...props} />;
 }
 
-export { Skeleton }
+export { Skeleton };

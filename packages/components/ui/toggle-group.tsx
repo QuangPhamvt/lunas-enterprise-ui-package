@@ -1,16 +1,16 @@
-'use client'
-import { createContext, useContext } from 'react'
-import { cn } from '@customafk/react-toolkit/utils'
+'use client';
+import { createContext, useContext } from 'react';
+import { cn } from '@customafk/react-toolkit/utils';
 
-import { toggleVariants } from '@/components/ui/toggle'
+import { toggleVariants } from '@/components/ui/toggle';
 
-import { type VariantProps } from 'class-variance-authority'
-import { ToggleGroup as ToggleGroupPrimitive } from 'radix-ui'
+import { type VariantProps } from 'class-variance-authority';
+import { ToggleGroup as ToggleGroupPrimitive } from 'radix-ui';
 
 const ToggleGroupContext = createContext<VariantProps<typeof toggleVariants>>({
   size: 'default',
   variant: 'default',
-})
+});
 
 function ToggleGroup({
   className,
@@ -29,7 +29,7 @@ function ToggleGroup({
     >
       <ToggleGroupContext.Provider value={{ variant, size }}>{children}</ToggleGroupContext.Provider>
     </ToggleGroupPrimitive.Root>
-  )
+  );
 }
 
 function ToggleGroupItem({
@@ -39,7 +39,7 @@ function ToggleGroupItem({
   size,
   ...props
 }: React.ComponentProps<typeof ToggleGroupPrimitive.Item> & VariantProps<typeof toggleVariants>) {
-  const context = useContext(ToggleGroupContext)
+  const context = useContext(ToggleGroupContext);
 
   return (
     <ToggleGroupPrimitive.Item
@@ -52,13 +52,13 @@ function ToggleGroupItem({
           size: context.size || size,
         }),
         'min-w-0 flex-1 shrink-0 rounded-none shadow-none first:rounded-l-md last:rounded-r-md focus:z-10 focus-visible:z-10 data-[variant=outline]:border-l-0 data-[variant=outline]:first:border-l',
-        className,
+        className
       )}
       {...props}
     >
       {children}
     </ToggleGroupPrimitive.Item>
-  )
+  );
 }
 
-export { ToggleGroup, ToggleGroupItem }
+export { ToggleGroup, ToggleGroupItem };

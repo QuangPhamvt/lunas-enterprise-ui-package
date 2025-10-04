@@ -1,14 +1,14 @@
-import { ConfirmDialog } from '@/components/dialogs/confirm-dialog'
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import { ConfirmDialog } from '@/components/dialogs/confirm-dialog';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   tags: ['autodocs'],
   title: 'Dialogs/ConfirmDialog',
   component: ConfirmDialog,
-} satisfies Meta<typeof ConfirmDialog>
+} satisfies Meta<typeof ConfirmDialog>;
 
-export default meta
-type Story = StoryObj<typeof meta>
+export default meta;
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
@@ -16,11 +16,11 @@ export const Default: Story = {
     isLoading: false,
     title: 'Confirm Action',
     description: 'Are you sure you want to proceed with this action?',
-    onOpenChange: (open) => console.log('Dialog open state:', open),
+    onOpenChange: open => console.log('Dialog open state:', open),
   },
-  render: (args) => (
+  render: args => (
     <ConfirmDialog {...args}>
       <p>This is a custom content inside the dialog.</p>
     </ConfirmDialog>
   ),
-}
+};

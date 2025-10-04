@@ -1,14 +1,14 @@
-import { Skeleton } from '@/components/ui/skeleton'
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import { Skeleton } from '@/components/ui/skeleton';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   tags: ['autodocs'],
   title: 'Components/Skeleton',
   component: Skeleton,
-} satisfies Meta<typeof Skeleton>
+} satisfies Meta<typeof Skeleton>;
 
-export default meta
-type Story = StoryObj<typeof meta>
+export default meta;
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   render: () => {
@@ -22,6 +22,6 @@ export const Default: Story = {
           </div>
         </div>
       </div>
-    )
+    );
   },
-}
+};

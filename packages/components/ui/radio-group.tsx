@@ -1,12 +1,12 @@
-'use client'
-import { cn } from '@customafk/react-toolkit/utils'
+'use client';
+import { cn } from '@customafk/react-toolkit/utils';
 
-import { CircleIcon } from 'lucide-react'
+import { CircleIcon } from 'lucide-react';
 
-import { RadioGroup as RadioGroupPrimitive } from 'radix-ui'
+import { RadioGroup as RadioGroupPrimitive } from 'radix-ui';
 
 function RadioGroup({ className, ...props }: React.ComponentProps<typeof RadioGroupPrimitive.Root>) {
-  return <RadioGroupPrimitive.Root data-slot="radio-group" className={cn('grid gap-3', className)} {...props} />
+  return <RadioGroupPrimitive.Root data-slot="radio-group" className={cn('grid gap-3', className)} {...props} />;
 }
 
 function RadioGroupItem({ className, ...props }: React.ComponentProps<typeof RadioGroupPrimitive.Item>) {
@@ -21,7 +21,7 @@ function RadioGroupItem({ className, ...props }: React.ComponentProps<typeof Rad
         'aria-invalid:ring-danger-weak',
         'aria-invalid:border-danger-strong',
         'disabled:cursor-not-allowed disabled:opacity-50',
-        className,
+        className
       )}
       {...props}
     >
@@ -30,7 +30,7 @@ function RadioGroupItem({ className, ...props }: React.ComponentProps<typeof Rad
         <CircleIcon className="fill-text-negative-strong text-text-negative absolute top-1/2 left-1/2 size-2 -translate-1/2" />
       </RadioGroupPrimitive.Indicator>
     </RadioGroupPrimitive.Item>
-  )
+  );
 }
 
-export { RadioGroup, RadioGroupItem }
+export { RadioGroup, RadioGroupItem };

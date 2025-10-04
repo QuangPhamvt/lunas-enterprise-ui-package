@@ -1,15 +1,15 @@
-'use client'
-import { cn } from '@customafk/react-toolkit/utils'
-import { EyeIcon, EyeOffIcon } from 'lucide-react'
-import { useCallback, useId, useState } from 'react'
+'use client';
+import { cn } from '@customafk/react-toolkit/utils';
+import { EyeIcon, EyeOffIcon } from 'lucide-react';
+import { useCallback, useId, useState } from 'react';
 
-import { Input } from '../input'
+import { Input } from '../input';
 
-type Props = React.ComponentPropsWithoutRef<typeof Input>
+type Props = React.ComponentPropsWithoutRef<typeof Input>;
 export const PasswordInput: React.FC<Props> = ({ className, ...rest }) => {
-  const id = useId()
-  const [isVisible, setIsVisible] = useState<boolean>(false)
-  const toggleVisibility = useCallback(() => setIsVisible((prevState) => !prevState), [])
+  const id = useId();
+  const [isVisible, setIsVisible] = useState<boolean>(false);
+  const toggleVisibility = useCallback(() => setIsVisible(prevState => !prevState), []);
   return (
     <div className="relative">
       <Input {...rest} id={id} placeholder="Password" type={isVisible ? 'text' : 'password'} className={cn('pe-9', className)} />
@@ -24,5 +24,5 @@ export const PasswordInput: React.FC<Props> = ({ className, ...rest }) => {
         {isVisible ? <EyeOffIcon size={16} aria-hidden="true" /> : <EyeIcon size={16} aria-hidden="true" />}
       </button>
     </div>
-  )
-}
+  );
+};

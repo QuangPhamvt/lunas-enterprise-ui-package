@@ -1,5 +1,5 @@
-import { ProductCard } from '@/components/cards/product-card'
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import { ProductCard } from '@/components/cards/product-card';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   tags: ['autodocs'],
@@ -18,10 +18,10 @@ const meta = {
       },
     },
   },
-} satisfies Meta<typeof ProductCard>
+} satisfies Meta<typeof ProductCard>;
 
-export default meta
-type Story = StoryObj<typeof ProductCard>
+export default meta;
+type Story = StoryObj<typeof ProductCard>;
 
 export const Default: Story = {
   args: {
@@ -30,4 +30,4 @@ export const Default: Story = {
     thumbnail: 'https://via.placeholder.com/150',
     price: 2000000,
   },
-}
+};

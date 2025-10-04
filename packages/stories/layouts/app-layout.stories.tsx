@@ -1,4 +1,4 @@
-import { PackageIcon } from 'lucide-react'
+import { PackageIcon } from 'lucide-react';
 
 import {
   AppLayoutHeader,
@@ -17,8 +17,8 @@ import {
   AppLayoutSidebarMenuButton,
   AppLayoutSidebarMenuItem,
   AppLayoutWrapper,
-} from '@/components/layouts/app-layout'
-import type { Meta, StoryObj } from '@storybook/react-vite'
+} from '@/components/layouts/app-layout';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   tags: ['autodocs'],
@@ -27,14 +27,14 @@ const meta = {
   parameters: {
     layout: 'fullscreen',
   },
-} satisfies Meta<typeof AppLayoutWrapper>
+} satisfies Meta<typeof AppLayoutWrapper>;
 
-export default meta
-type Story = StoryObj<typeof meta>
+export default meta;
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {},
-  render: (args) => {
+  render: args => {
     return (
       <AppLayoutWrapper {...args}>
         <AppLayoutHeader>Header</AppLayoutHeader>
@@ -88,6 +88,6 @@ export const Default: Story = {
           <AppLayoutMainFooter>App Layout Main Footer</AppLayoutMainFooter>
         </AppLayoutMain>
       </AppLayoutWrapper>
-    )
+    );
   },
-}
+};

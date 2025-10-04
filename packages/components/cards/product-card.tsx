@@ -1,18 +1,18 @@
-import { HeartIcon, ShoppingCartIcon } from 'lucide-react'
+import { HeartIcon, ShoppingCartIcon } from 'lucide-react';
 
-import { Button } from '../ui/button'
-import { Card } from '../ui/card'
-import { Image } from '../ui/image'
+import { Button } from '../ui/button';
+import { Card } from '../ui/card';
+import { Image } from '../ui/image';
 
 type Props = {
-  id: string
-  slug: string
-  name: string
-  thumbnail: string
-  price: number
-  salePrice?: number
-  salePercentage?: number
-}
+  id: string;
+  slug: string;
+  name: string;
+  thumbnail: string;
+  price: number;
+  salePrice?: number;
+  salePercentage?: number;
+};
 export const ProductCard: React.FC<Props> = ({ name, thumbnail, price }) => {
   return (
     <Card className="size-full gap-y-2 p-2 pb-4">
@@ -34,5 +34,5 @@ export const ProductCard: React.FC<Props> = ({ name, thumbnail, price }) => {
         </div>
       </div>
     </Card>
-  )
-}
+  );
+};

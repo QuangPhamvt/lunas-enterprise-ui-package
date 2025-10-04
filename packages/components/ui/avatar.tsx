@@ -1,14 +1,14 @@
-'use client'
-import { cn } from '@customafk/react-toolkit/utils'
+'use client';
+import { cn } from '@customafk/react-toolkit/utils';
 
-import { Avatar as AvatarPrimitive } from 'radix-ui'
+import { Avatar as AvatarPrimitive } from 'radix-ui';
 
 function Avatar({ className, ...props }: React.ComponentProps<typeof AvatarPrimitive.Root>) {
-  return <AvatarPrimitive.Root data-slot="avatar" className={cn('relative flex size-8 shrink-0 overflow-hidden rounded-full', className)} {...props} />
+  return <AvatarPrimitive.Root data-slot="avatar" className={cn('relative flex size-8 shrink-0 overflow-hidden rounded-full', className)} {...props} />;
 }
 
 function AvatarImage({ className, ...props }: React.ComponentProps<typeof AvatarPrimitive.Image>) {
-  return <AvatarPrimitive.Image data-slot="avatar-image" className={cn('aspect-square size-full', className)} {...props} />
+  return <AvatarPrimitive.Image data-slot="avatar-image" className={cn('aspect-square size-full', className)} {...props} />;
 }
 
 function AvatarFallback({ className, ...props }: React.ComponentProps<typeof AvatarPrimitive.Fallback>) {
@@ -18,7 +18,7 @@ function AvatarFallback({ className, ...props }: React.ComponentProps<typeof Ava
       className={cn('bg-muted flex size-full items-center justify-center rounded-full', className)}
       {...props}
     />
-  )
+  );
 }
 
-export { Avatar, AvatarFallback, AvatarImage }
+export { Avatar, AvatarFallback, AvatarImage };

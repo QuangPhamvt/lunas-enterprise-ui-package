@@ -1,14 +1,14 @@
-'use client'
-import { useCallback, useEffect } from 'react'
-import Dropzone, { type DropzoneProps, type FileRejection } from 'react-dropzone'
-import { useControllableState } from '@customafk/react-toolkit/hooks/useControllableState'
-import { cn, formatBytes } from '@customafk/react-toolkit/utils'
+'use client';
+import { useCallback, useEffect } from 'react';
+import Dropzone, { type DropzoneProps, type FileRejection } from 'react-dropzone';
+import { useControllableState } from '@customafk/react-toolkit/hooks/useControllableState';
+import { cn, formatBytes } from '@customafk/react-toolkit/utils';
 
-import { FileText, Image, Trash2, Upload } from 'lucide-react'
-import { toast } from 'sonner'
+import { FileText, Image, Trash2, Upload } from 'lucide-react';
+import { toast } from 'sonner';
 
-import { Button } from '@/components/ui/button'
-import { Progress } from '@/components/ui/progress'
+import { Button } from '@/components/ui/button';
+import { Progress } from '@/components/ui/progress';
 
 interface FileUploaderProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
@@ -17,7 +17,7 @@ interface FileUploaderProps extends React.HTMLAttributes<HTMLDivElement> {
    * @default undefined
    * @example value={files}
    */
-  value?: File[]
+  value?: File[];
 
   /**
    * Function to be called when the value changes.
@@ -25,7 +25,7 @@ interface FileUploaderProps extends React.HTMLAttributes<HTMLDivElement> {
    * @default undefined
    * @example onValueChange={(files) => setFiles(files)}
    */
-  onValueChange?: (files: File[]) => void
+  onValueChange?: (files: File[]) => void;
 
   /**
    * Function to be called when files are uploaded.
@@ -33,7 +33,7 @@ interface FileUploaderProps extends React.HTMLAttributes<HTMLDivElement> {
    * @default undefined
    * @example onUpload={(files) => uploadFiles(files)}
    */
-  onUpload?: (files: File[]) => Promise<void>
+  onUpload?: (files: File[]) => Promise<void>;
 
   /**
    * Progress of the uploaded files.
@@ -41,7 +41,7 @@ interface FileUploaderProps extends React.HTMLAttributes<HTMLDivElement> {
    * @default undefined
    * @example progresses={{ "file1.png": 50 }}
    */
-  progresses?: Record<string, number>
+  progresses?: Record<string, number>;
 
   /**
    * Accepted file types for the uploader.
@@ -52,7 +52,7 @@ interface FileUploaderProps extends React.HTMLAttributes<HTMLDivElement> {
    * ```
    * @example accept={["image/png", "image/jpeg"]}
    */
-  accept?: DropzoneProps['accept']
+  accept?: DropzoneProps['accept'];
 
   /**
    * Maximum file size for the uploader.
@@ -60,7 +60,7 @@ interface FileUploaderProps extends React.HTMLAttributes<HTMLDivElement> {
    * @default 1024 * 1024 * 2 // 2MB
    * @example maxSize={1024 * 1024 * 2} // 2MB
    */
-  maxSize?: DropzoneProps['maxSize']
+  maxSize?: DropzoneProps['maxSize'];
 
   /**
    * Maximum number of files for the uploader.
@@ -68,7 +68,7 @@ interface FileUploaderProps extends React.HTMLAttributes<HTMLDivElement> {
    * @default 1
    * @example maxFileCount={4}
    */
-  maxFileCount?: DropzoneProps['maxFiles']
+  maxFileCount?: DropzoneProps['maxFiles'];
 
   /**
    * Whether the uploader should accept multiple files.
@@ -76,7 +76,7 @@ interface FileUploaderProps extends React.HTMLAttributes<HTMLDivElement> {
    * @default false
    * @example multiple
    */
-  multiple?: boolean
+  multiple?: boolean;
 
   /**
    * Whether the uploader is disabled.
@@ -84,10 +84,10 @@ interface FileUploaderProps extends React.HTMLAttributes<HTMLDivElement> {
    * @default false
    * @example disabled
    */
-  disabled?: boolean
+  disabled?: boolean;
 
-  showText?: boolean
-  iconSize?: number
+  showText?: boolean;
+  iconSize?: number;
 }
 
 export function FileUploader(props: FileUploaderProps) {
@@ -107,81 +107,81 @@ export function FileUploader(props: FileUploaderProps) {
     iconSize,
     className,
     ...dropzoneProps
-  } = props
+  } = props;
 
   const [files, setFiles] = useControllableState({
     prop: valueProp,
     onChange: onValueChange,
-  })
+  });
 
   const onDrop = useCallback(
     (acceptedFiles: File[], rejectedFiles: FileRejection[]) => {
       if (!multiple && maxFileCount === 1 && acceptedFiles.length > 1) {
-        toast.error('Cannot upload more than 1 file at a time')
+        toast.error('Cannot upload more than 1 file at a time');
 
-        return
+        return;
       }
 
       if ((files?.length ?? 0) + acceptedFiles.length > maxFileCount) {
-        toast.error(`Cannot upload more than ${maxFileCount} files`)
-        return
+        toast.error(`Cannot upload more than ${maxFileCount} files`);
+        return;
       }
 
-      const newFiles = acceptedFiles.map((file) =>
+      const newFiles = acceptedFiles.map(file =>
         Object.assign(file, {
           preview: URL.createObjectURL(file),
-        }),
-      )
+        })
+      );
 
-      const updatedFiles = files ? [...files, ...newFiles] : newFiles
+      const updatedFiles = files ? [...files, ...newFiles] : newFiles;
 
-      setFiles(updatedFiles)
+      setFiles(updatedFiles);
 
       if (rejectedFiles.length > 0) {
         rejectedFiles.forEach(({ file }) => {
-          toast.error(`File ${file.name} was rejected`)
-        })
+          toast.error(`File ${file.name} was rejected`);
+        });
       }
 
       if (onUpload && updatedFiles.length > 0 && updatedFiles.length <= maxFileCount) {
-        const target = updatedFiles.length > 0 ? `${updatedFiles.length} files` : `file`
+        const target = updatedFiles.length > 0 ? `${updatedFiles.length} files` : `file`;
 
         onUpload(updatedFiles).then(() => {
-          setFiles([])
-          toast(`${target} uploaded`)
-        })
+          setFiles([]);
+          toast(`${target} uploaded`);
+        });
       }
     },
 
-    [files, maxFileCount, multiple, onUpload, setFiles],
-  )
+    [files, maxFileCount, multiple, onUpload, setFiles]
+  );
 
   function onRemove(index: number) {
-    if (!files) return
+    if (!files) return;
 
     if (isFileWithPreview(files[index])) {
-      URL.revokeObjectURL(files[index].preview)
+      URL.revokeObjectURL(files[index].preview);
     }
 
-    const newFiles = files.filter((_, i) => i !== index)
-    setFiles(newFiles)
-    onValueChange?.(newFiles)
+    const newFiles = files.filter((_, i) => i !== index);
+    setFiles(newFiles);
+    onValueChange?.(newFiles);
   }
 
   // Revoke preview url when component unmounts
   useEffect(() => {
     return () => {
-      if (!files) return
-      files.forEach((file) => {
+      if (!files) return;
+      files.forEach(file => {
         if (isFileWithPreview(file)) {
-          URL.revokeObjectURL(file.preview)
+          URL.revokeObjectURL(file.preview);
         }
-      })
-    }
+      });
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, []);
 
-  const isDisabled = disabled || (files?.length ?? 0) >= maxFileCount
+  const isDisabled = disabled || (files?.length ?? 0) >= maxFileCount;
 
   return (
     <div className="relative flex w-full flex-col gap-6">
@@ -201,7 +201,7 @@ export function FileUploader(props: FileUploaderProps) {
               'focus-visible:outline-hidden',
               isDragActive && 'border-border-primary-strong bg-border-weak/40',
               isDisabled && 'pointer-events-none opacity-60',
-              className,
+              className
             )}
             {...dropzoneProps}
           >
@@ -245,13 +245,13 @@ export function FileUploader(props: FileUploaderProps) {
             <button
               className="hover:text-text-positive text-text-positive-muted flex cursor-pointer items-center gap-1 transition-colors duration-200"
               onClick={() => {
-                if (!files) return
-                files.forEach((file) => {
-                  if (!isFileWithPreview(file)) return
-                  URL.revokeObjectURL(file.preview)
-                })
-                setFiles([])
-                onValueChange?.([])
+                if (!files) return;
+                files.forEach(file => {
+                  if (!isFileWithPreview(file)) return;
+                  URL.revokeObjectURL(file.preview);
+                });
+                setFiles([]);
+                onValueChange?.([]);
               }}
             >
               <Trash2 size={16} aria-hidden="true" />
@@ -266,13 +266,13 @@ export function FileUploader(props: FileUploaderProps) {
         </div>
       ) : null}
     </div>
-  )
+  );
 }
 
 interface FileCardProps {
-  file: File
-  onRemove: () => void
-  progress?: number
+  file: File;
+  onRemove: () => void;
+  progress?: number;
 }
 
 function FileCard({ file, progress, onRemove }: FileCardProps) {
@@ -295,21 +295,21 @@ function FileCard({ file, progress, onRemove }: FileCardProps) {
         </Button>
       </div>
     </div>
-  )
+  );
 }
 
 function isFileWithPreview(file: File): file is File & { preview: string } {
-  return 'preview' in file && typeof file.preview === 'string'
+  return 'preview' in file && typeof file.preview === 'string';
 }
 
 interface FilePreviewProps {
-  file: File & { preview: string }
+  file: File & { preview: string };
 }
 
 function FilePreview({ file }: FilePreviewProps) {
   if (file.type.startsWith('image/')) {
-    return <img src={file.preview} className="border-border aspect-square size-10 shrink-0 rounded border object-cover object-top shadow-sm" />
+    return <img src={file.preview} className="border-border aspect-square size-10 shrink-0 rounded border object-cover object-top shadow-sm" />;
   }
 
-  return <FileText className="text-text-positive-muted size-10 border" aria-hidden="true" />
+  return <FileText className="text-text-positive-muted size-10 border" aria-hidden="true" />;
 }

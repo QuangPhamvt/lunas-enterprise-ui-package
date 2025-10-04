@@ -1,23 +1,23 @@
-'use client'
-import type { FieldPath, FieldValues } from 'react-hook-form'
-import { format } from '@customafk/react-toolkit/date-fns'
-import { cn } from '@customafk/react-toolkit/utils'
+'use client';
+import type { FieldPath, FieldValues } from 'react-hook-form';
+import { format } from '@customafk/react-toolkit/date-fns';
+import { cn } from '@customafk/react-toolkit/utils';
 
-import { CalendarIcon } from 'lucide-react'
+import { CalendarIcon } from 'lucide-react';
 
-import { Button } from '../ui/button'
-import { Calendar } from '../ui/calendar'
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
+import { Button } from '../ui/button';
+import { Calendar } from '../ui/calendar';
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 
 type Props<TFieldValues extends FieldValues = FieldValues> = {
-  name: FieldPath<TFieldValues>
-  label?: string
-  placeholder?: string
-  description?: string
-  isShowErrorMsg?: boolean
-  modal?: boolean
-}
+  name: FieldPath<TFieldValues>;
+  label?: string;
+  placeholder?: string;
+  description?: string;
+  isShowErrorMsg?: boolean;
+  modal?: boolean;
+};
 
 export const DateField = <TFieldValues extends FieldValues = FieldValues>({
   name,
@@ -52,7 +52,7 @@ export const DateField = <TFieldValues extends FieldValues = FieldValues>({
                     'focus:ring-primary-weak',
                     'focus:outline-1',
                     'focus:outline-primary-strong',
-                    !field.value && 'text-text-positive-muted',
+                    !field.value && 'text-text-positive-muted'
                   )}
                 >
                   {field.value ? format(field.value, 'PPP') : <span> {placeholder || 'Pick a date'}</span>}
@@ -64,11 +64,11 @@ export const DateField = <TFieldValues extends FieldValues = FieldValues>({
               <Calendar
                 mode="single"
                 selected={field.value}
-                onSelect={(date) => {
-                  field.onChange(date?.toISOString())
+                onSelect={date => {
+                  field.onChange(date?.toISOString());
                 }}
                 captionLayout="dropdown"
-                disabled={(date) => date < new Date('2022-01-01')}
+                disabled={date => date < new Date('2022-01-01')}
               />
             </PopoverContent>
           </Popover>
@@ -77,5 +77,5 @@ export const DateField = <TFieldValues extends FieldValues = FieldValues>({
         </FormItem>
       )}
     />
-  )
-}
+  );
+};

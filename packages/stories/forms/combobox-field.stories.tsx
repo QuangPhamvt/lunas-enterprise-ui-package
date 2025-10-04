@@ -1,16 +1,16 @@
-import { useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form';
 
-import { ComboboxField } from '@/components/forms/combobox-field'
-import { Form } from '@/components/ui/form'
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import { ComboboxField } from '@/components/forms/combobox-field';
+import { Form } from '@/components/ui/form';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   tags: ['autodocs'],
   title: 'Forms/ComboboxField',
   component: ComboboxField,
-} satisfies Meta<typeof ComboboxField>
-export default meta
-type Story = StoryObj<typeof meta>
+} satisfies Meta<typeof ComboboxField>;
+export default meta;
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
@@ -21,18 +21,18 @@ export const Default: Story = {
       { value: 'option3', label: 'Option 3' },
     ],
   },
-  render: (args) => {
+  render: args => {
     const form = useForm({
       defaultValues: {
         combobox: '',
       },
-    })
+    });
     return (
       <div className="w-80">
         <Form {...form}>
           <ComboboxField {...args} />
         </Form>
       </div>
-    )
+    );
   },
-}
+};

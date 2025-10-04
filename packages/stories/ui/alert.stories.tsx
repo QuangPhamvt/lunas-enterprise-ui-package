@@ -1,16 +1,16 @@
-import { AlertCircleIcon, CheckCircle2Icon, PopcornIcon } from 'lucide-react'
+import { AlertCircleIcon, CheckCircle2Icon, PopcornIcon } from 'lucide-react';
 
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   title: 'Components/Alert',
   component: Alert,
   tags: ['autodocs'],
-} satisfies Meta<typeof Alert>
+} satisfies Meta<typeof Alert>;
 
-export default meta
-type Story = StoryObj<typeof meta>
+export default meta;
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {},
@@ -39,15 +39,15 @@ export const Default: Story = {
           </AlertDescription>
         </Alert>
       </div>
-    )
+    );
   },
-}
+};
 
 export const TitleOnly: Story = {
   args: {
     variant: 'default',
   },
-  render: (args) => {
+  render: args => {
     return (
       <div className="grid w-full max-w-xl items-start gap-4">
         <Alert {...args}>
@@ -59,6 +59,6 @@ export const TitleOnly: Story = {
           <AlertTitle>This Alert has a title and an icon. No description.</AlertTitle>
         </Alert>
       </div>
-    )
+    );
   },
-}
+};

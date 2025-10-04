@@ -1,26 +1,26 @@
-'use client'
-import { useCallback } from 'react'
-import { type FieldPath, type FieldValues, useWatch } from 'react-hook-form'
-import { cn } from '@customafk/react-toolkit/utils'
+'use client';
+import { useCallback } from 'react';
+import { type FieldPath, type FieldValues, useWatch } from 'react-hook-form';
+import { cn } from '@customafk/react-toolkit/utils';
 
-import { XIcon } from 'lucide-react'
+import { XIcon } from 'lucide-react';
 
-import { Flex } from '../layouts/flex'
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, useFormField } from '../ui/form'
-import { Input } from '../ui/input'
+import { Flex } from '../layouts/flex';
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, useFormField } from '../ui/form';
+import { Input } from '../ui/input';
 
 type Props<TFieldValues extends FieldValues = FieldValues> = {
-  name: FieldPath<TFieldValues>
-  label?: string
-  description?: string
-  placeholder?: string
-  isShowLabel?: boolean
-  isShowClearButton?: boolean
-  isShowErrorMsg?: boolean
-  isShowCount?: boolean
-  className?: string
-  onValueChange?: (value: string) => void
-}
+  name: FieldPath<TFieldValues>;
+  label?: string;
+  description?: string;
+  placeholder?: string;
+  isShowLabel?: boolean;
+  isShowClearButton?: boolean;
+  isShowErrorMsg?: boolean;
+  isShowCount?: boolean;
+  className?: string;
+  onValueChange?: (value: string) => void;
+};
 export const TextField = <TFieldValues extends FieldValues = FieldValues>({
   name,
   label = 'Text Field',
@@ -33,12 +33,12 @@ export const TextField = <TFieldValues extends FieldValues = FieldValues>({
   className = '',
   onValueChange,
 }: Props<TFieldValues>) => {
-  const { resetField } = useFormField()
-  const valueWatch = useWatch({ name })
+  const { resetField } = useFormField();
+  const valueWatch = useWatch({ name });
 
   const handleClearInput = useCallback(() => {
-    resetField(name)
-  }, [resetField, name])
+    resetField(name);
+  }, [resetField, name]);
 
   return (
     <FormField
@@ -69,5 +69,5 @@ export const TextField = <TFieldValues extends FieldValues = FieldValues>({
         </FormItem>
       )}
     />
-  )
-}
+  );
+};

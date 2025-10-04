@@ -1,22 +1,22 @@
-import { useCallback, useEffect, useState } from 'react'
-import { type FieldValues, type FormState, type SubmitErrorHandler, type SubmitHandler, useForm, type UseFormProps } from 'react-hook-form'
+import { useCallback, useEffect, useState } from 'react';
+import { type FieldValues, type FormState, type SubmitErrorHandler, type SubmitHandler, useForm, type UseFormProps } from 'react-hook-form';
 
-import { AlertCircleIcon } from 'lucide-react'
+import { AlertCircleIcon } from 'lucide-react';
 
-import type { AnyEntity } from '@/types'
-import { ErrorMessage } from '@hookform/error-message'
+import type { AnyEntity } from '@/types';
+import { ErrorMessage } from '@hookform/error-message';
 
-import { ErrorDialog } from '../dialogs/error-dialog'
-import { Form } from '../ui/form'
+import { ErrorDialog } from '../dialogs/error-dialog';
+import { Form } from '../ui/form';
 
 type Props<TFieldValues extends FieldValues = FieldValues> = {
-  form: UseFormProps<TFieldValues>
-  isResetAfterSubmit?: boolean
-  className?: string
-  onSubmit: (data: TFieldValues, formState: FormState<FieldValues>, dirtyFields: FormState<FieldValues>['dirtyFields']) => void | Promise<void>
-  onError?: SubmitErrorHandler<TFieldValues>
-  onSubcribe?: (values: TFieldValues) => void
-}
+  form: UseFormProps<TFieldValues>;
+  isResetAfterSubmit?: boolean;
+  className?: string;
+  onSubmit: (data: TFieldValues, formState: FormState<FieldValues>, dirtyFields: FormState<FieldValues>['dirtyFields']) => void | Promise<void>;
+  onError?: SubmitErrorHandler<TFieldValues>;
+  onSubcribe?: (values: TFieldValues) => void;
+};
 
 export const FormWrapper = <TFieldValues extends FieldValues = FieldValues>({
   form: FormConfig,
@@ -30,43 +30,43 @@ export const FormWrapper = <TFieldValues extends FieldValues = FieldValues>({
   const form = useForm({
     ...FormConfig,
     criteriaMode: 'all',
-  })
+  });
 
-  const { formState, reset, handleSubmit, subscribe } = form
-  const { dirtyFields } = formState
+  const { formState, reset, handleSubmit, subscribe } = form;
+  const { dirtyFields } = formState;
 
-  const [errorOpen, setErrorOpen] = useState<boolean>(false)
+  const [errorOpen, setErrorOpen] = useState<boolean>(false);
 
   const handleFormSubmit = useCallback<SubmitHandler<TFieldValues>>(
-    (data) => {
-      onSubmit(data, formState, dirtyFields)
+    data => {
+      onSubmit(data, formState, dirtyFields);
       if (isResetAfterSubmit) {
-        reset()
+        reset();
       }
     },
-    [dirtyFields, formState, isResetAfterSubmit, onSubmit, reset],
-  )
+    [dirtyFields, formState, isResetAfterSubmit, onSubmit, reset]
+  );
 
   const handleFormError = useCallback<SubmitErrorHandler<TFieldValues>>(
-    (errors) => {
-      const errorKeys = Object.keys(errors)
-      if (errorKeys.length === 0) return
-      onError?.(errors)
-      setErrorOpen(true)
+    errors => {
+      const errorKeys = Object.keys(errors);
+      if (errorKeys.length === 0) return;
+      onError?.(errors);
+      setErrorOpen(true);
     },
-    [onError],
-  )
+    [onError]
+  );
 
   useEffect(() => {
-    if (!onSubcribe) return
+    if (!onSubcribe) return;
     const callback = subscribe({
       formState: { values: true },
       callback: ({ values }) => {
-        onSubcribe(values)
+        onSubcribe(values);
       },
-    })
-    return () => callback()
-  }, [onSubcribe, subscribe])
+    });
+    return () => callback();
+  }, [onSubcribe, subscribe]);
 
   return (
     <Form {...form}>
@@ -100,11 +100,11 @@ export const FormWrapper = <TFieldValues extends FieldValues = FieldValues>({
                                       <AlertCircleIcon size={16} className="text-destructive mt-0.5 min-w-4 flex-0" />
                                       <p className="line-clamp-2 flex-1 text-wrap">{message}</p>
                                     </div>
-                                  )
+                                  );
                                 })
                               : null}
                           </>
-                        )
+                        );
                       }}
                     />
                   ))}
@@ -117,5 +117,5 @@ export const FormWrapper = <TFieldValues extends FieldValues = FieldValues>({
         )}
       </ErrorDialog>
     </Form>
-  )
-}
+  );
+};

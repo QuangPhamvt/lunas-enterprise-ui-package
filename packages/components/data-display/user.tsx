@@ -1,16 +1,16 @@
-import { colorHashLight } from '@customafk/react-toolkit/color-hash'
+import { colorHashLight } from '@customafk/react-toolkit/color-hash';
 
-import { UserRoundIcon } from 'lucide-react'
+import { UserRoundIcon } from 'lucide-react';
 
-import { Flex } from '../layouts/flex'
-import { Paragraph } from '../typography/paragraph'
-import { Avatar, AvatarFallback } from '../ui/avatar'
+import { Flex } from '../layouts/flex';
+import { Paragraph } from '../typography/paragraph';
+import { Avatar, AvatarFallback } from '../ui/avatar';
 
 type UserDataDisplayProps = {
-  uuid: string
-  username: string
-  email: string
-}
+  uuid: string;
+  username: string;
+  email: string;
+};
 
 export const UserDataDisplay: React.FC<React.PropsWithChildren<UserDataDisplayProps>> = ({ uuid, username, email }) => {
   return (
@@ -27,5 +27,5 @@ export const UserDataDisplay: React.FC<React.PropsWithChildren<UserDataDisplayPr
         </Paragraph>
       </Flex>
     </Flex>
-  )
-}
+  );
+};

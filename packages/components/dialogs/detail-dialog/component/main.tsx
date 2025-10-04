@@ -1,11 +1,11 @@
-import { CalendarIcon } from 'lucide-react'
+import { CalendarIcon } from 'lucide-react';
 
-import { DateDisplay } from '@/components/data-display/date'
-import { Flex } from '@/components/layouts/flex'
-import { Title } from '@/components/typography/title'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { DateDisplay } from '@/components/data-display/date';
+import { Flex } from '@/components/layouts/flex';
+import { Title } from '@/components/typography/title';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
-import { DetailDialogSidebarTrigger } from './sidebar'
+import { DetailDialogSidebarTrigger } from './sidebar';
 
 export const DetailDialogMain: React.FC<React.PropsWithChildren> = ({ children }) => (
   <main data-slot="detail-dialog-main" className="relative h-full flex-1">
@@ -13,12 +13,12 @@ export const DetailDialogMain: React.FC<React.PropsWithChildren> = ({ children }
       {children}
     </Flex>
   </main>
-)
+);
 
 type DetailDialogMainHeaderProps = {
-  title: string
-  createdAt?: string | Date | number
-}
+  title: string;
+  createdAt?: string | Date | number;
+};
 export const DetailDialogMainHeader: React.FC<React.PropsWithChildren<DetailDialogMainHeaderProps>> = ({ title, createdAt }) => (
   <header className="bg-card border-border-weak flex w-full flex-0 items-start gap-x-2.5 border-b py-2.5 pr-12 pl-2">
     <DetailDialogSidebarTrigger />
@@ -32,18 +32,18 @@ export const DetailDialogMainHeader: React.FC<React.PropsWithChildren<DetailDial
       </Flex>
     </Flex>
   </header>
-)
+);
 
 export const DetailDialogMainGroup: React.FC<React.PropsWithChildren> = ({ children }) => (
   <Flex vertical gap="md" padding="md" width="full">
     {children}
   </Flex>
-)
+);
 
 type DetailDialogMainGroupItemProps = {
-  title?: string
-  description?: string
-}
+  title?: string;
+  description?: string;
+};
 export const DetailDialogMainGroupItem: React.FC<React.PropsWithChildren<DetailDialogMainGroupItemProps>> = ({ title, description, children }) => (
   <Card className="w-full snap-start scroll-mt-4">
     <CardHeader>
@@ -52,4 +52,4 @@ export const DetailDialogMainGroupItem: React.FC<React.PropsWithChildren<DetailD
     </CardHeader>
     <CardContent>{children}</CardContent>
   </Card>
-)
+);

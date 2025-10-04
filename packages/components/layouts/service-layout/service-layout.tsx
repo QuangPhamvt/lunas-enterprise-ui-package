@@ -1,14 +1,14 @@
-'use client'
-import { useState } from 'react'
-import { useMediaQuery } from '@customafk/react-toolkit/hooks/useMediaQuery'
-import { cn } from '@customafk/react-toolkit/utils'
+'use client';
+import { useState } from 'react';
+import { useMediaQuery } from '@customafk/react-toolkit/hooks/useMediaQuery';
+import { cn } from '@customafk/react-toolkit/utils';
 
-import { LockIcon, LogInIcon, LogOutIcon, ShoppingBag, ShoppingCartIcon, UserIcon } from 'lucide-react'
+import { LockIcon, LogInIcon, LogOutIcon, ShoppingBag, ShoppingCartIcon, UserIcon } from 'lucide-react';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { Drawer, DrawerContent, DrawerFooter, DrawerHeader, DrawerTitle } from '@/components/ui/drawer'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Drawer, DrawerContent, DrawerFooter, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,20 +16,20 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { Separator } from '@/components/ui/separator'
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { GoogleLogin } from '@react-oauth/google'
+} from '@/components/ui/dropdown-menu';
+import { Separator } from '@/components/ui/separator';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { GoogleLogin } from '@react-oauth/google';
 
-import { CartList } from './components/cart'
-import { ServiceLayoutContext, type ServiceLayoutContextProps, useServiceLayout } from './hooks/use-service-layout'
+import { CartList } from './components/cart';
+import { ServiceLayoutContext, type ServiceLayoutContextProps, useServiceLayout } from './hooks/use-service-layout';
 import {
   ServiceLayoutSidebar as LayoutSidebar,
   ServiceLayoutSidebarInset,
   ServiceLayoutSidebarProvider,
   ServiceLayoutSidebarTrigger,
-} from './service-layout-sidebar'
+} from './service-layout-sidebar';
 
 export const ServiceLayoutProvider: React.FC<React.PropsWithChildren<ServiceLayoutContextProps>> = ({
   isLoggedIn = false,
@@ -58,18 +58,18 @@ export const ServiceLayoutProvider: React.FC<React.PropsWithChildren<ServiceLayo
       }}
       children={children}
     />
-  )
-}
+  );
+};
 
 export const ServiceLayoutWrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
-  return <ServiceLayoutSidebarProvider>{children}</ServiceLayoutSidebarProvider>
-}
+  return <ServiceLayoutSidebarProvider>{children}</ServiceLayoutSidebarProvider>;
+};
 
 type ServiceLayoutUserInfoProps = {
-  userName?: string
-  userEmail?: string
-  onLogout?: () => void | Promise<void>
-}
+  userName?: string;
+  userEmail?: string;
+  onLogout?: () => void | Promise<void>;
+};
 export const ServiceLayoutUserInfo: React.FC<ServiceLayoutUserInfoProps> = ({ userName = 'Keith Kennedy', userEmail = 'k.kennedy@originui.com', onLogout }) => {
   return (
     <DropdownMenu>
@@ -95,14 +95,14 @@ export const ServiceLayoutUserInfo: React.FC<ServiceLayoutUserInfoProps> = ({ us
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
-}
+  );
+};
 
 export const ServiceLayoutCartInfo: React.FC = () => {
-  const { inStockCarts = [], orderedCarts = [] } = useServiceLayout()
-  const inStockCount = inStockCarts.length
-  const preOrderCount = orderedCarts.length
-  const totalItems = inStockCount + preOrderCount
+  const { inStockCarts = [], orderedCarts = [] } = useServiceLayout();
+  const inStockCount = inStockCarts.length;
+  const preOrderCount = orderedCarts.length;
+  const totalItems = inStockCount + preOrderCount;
 
   return (
     <Sheet>
@@ -144,18 +144,18 @@ export const ServiceLayoutCartInfo: React.FC = () => {
         </Tabs>
       </SheetContent>
     </Sheet>
-  )
-}
+  );
+};
 
 type ServiceLayoutHeaderProps = {
-  isLoggedIn?: boolean
-}
+  isLoggedIn?: boolean;
+};
 export const ServiceLayoutHeader: React.FC<ServiceLayoutHeaderProps> = () => {
-  const { isLoggedIn, username, email, onGoogleLoginSuccess, onLogout } = useServiceLayout()
+  const { isLoggedIn, username, email, onGoogleLoginSuccess, onLogout } = useServiceLayout();
 
-  const isDesktop = useMediaQuery('(min-width: 640px)')
+  const isDesktop = useMediaQuery('(min-width: 640px)');
 
-  const [loginOpen, setLoginOpen] = useState<boolean>(false)
+  const [loginOpen, setLoginOpen] = useState<boolean>(false);
 
   return (
     <header
@@ -165,7 +165,7 @@ export const ServiceLayoutHeader: React.FC<ServiceLayoutHeaderProps> = () => {
         'sm:h-[calc(var(--header-height)_+_0.5rem)] sm:px-4 sm:pr-6',
         'absolute inset-x-0 top-0 z-20 gap-2 px-2 pr-4.5',
         'shadow-nav flex items-center',
-        'transition-[width,height] ease-linear',
+        'transition-[width,height] ease-linear'
       )}
     >
       {isLoggedIn && <ServiceLayoutSidebarTrigger />}
@@ -210,9 +210,9 @@ export const ServiceLayoutHeader: React.FC<ServiceLayoutHeaderProps> = () => {
                     size="large"
                     theme="outline"
                     width={240}
-                    onSuccess={async (response) => {
-                      if (!response.clientId || !response.credential || !response.select_by) return
-                      await onGoogleLoginSuccess?.(response)
+                    onSuccess={async response => {
+                      if (!response.clientId || !response.credential || !response.select_by) return;
+                      await onGoogleLoginSuccess?.(response);
                     }}
                   />
                 </div>
@@ -236,9 +236,9 @@ export const ServiceLayoutHeader: React.FC<ServiceLayoutHeaderProps> = () => {
                   <GoogleLogin
                     size="large"
                     theme="outline"
-                    onSuccess={async (response) => {
-                      if (!response.clientId || !response.credential || !response.select_by) return
-                      await onGoogleLoginSuccess?.(response)
+                    onSuccess={async response => {
+                      if (!response.clientId || !response.credential || !response.select_by) return;
+                      await onGoogleLoginSuccess?.(response);
                     }}
                   />
                 </div>
@@ -249,23 +249,23 @@ export const ServiceLayoutHeader: React.FC<ServiceLayoutHeaderProps> = () => {
         </Drawer>
       )}
     </header>
-  )
-}
+  );
+};
 
 export const ServiceLayoutSidebar: React.FC<React.PropsWithChildren & React.ComponentProps<typeof LayoutSidebar>> = ({ children, ...props }) => {
-  const { isLoggedIn } = useServiceLayout()
-  if (!isLoggedIn) return null
+  const { isLoggedIn } = useServiceLayout();
+  if (!isLoggedIn) return null;
   return (
     <LayoutSidebar variant="inset" collapsible="icon" {...props}>
       {children}
     </LayoutSidebar>
-  )
-}
+  );
+};
 
 export const ServiceLayoutMain: React.FC<React.PropsWithChildren> = ({ children }) => {
-  const { isLoggedIn, onGoogleLoginSuccess } = useServiceLayout()
-  const isDesktop = useMediaQuery('(min-width: 640px)')
-  const [loginOpen, setLoginOpen] = useState<boolean>(false)
+  const { isLoggedIn, onGoogleLoginSuccess } = useServiceLayout();
+  const isDesktop = useMediaQuery('(min-width: 640px)');
+  const [loginOpen, setLoginOpen] = useState<boolean>(false);
 
   if (!isLoggedIn) {
     return (
@@ -297,10 +297,10 @@ export const ServiceLayoutMain: React.FC<React.PropsWithChildren> = ({ children 
                         size="large"
                         theme="outline"
                         width={240}
-                        onSuccess={async (response) => {
-                          if (!response.clientId || !response.credential || !response.select_by) return
-                          await onGoogleLoginSuccess?.(response)
-                          setLoginOpen(false)
+                        onSuccess={async response => {
+                          if (!response.clientId || !response.credential || !response.select_by) return;
+                          await onGoogleLoginSuccess?.(response);
+                          setLoginOpen(false);
                         }}
                       />
                     </div>
@@ -324,10 +324,10 @@ export const ServiceLayoutMain: React.FC<React.PropsWithChildren> = ({ children 
                       <GoogleLogin
                         size="large"
                         theme="outline"
-                        onSuccess={async (response) => {
-                          if (!response.clientId || !response.credential || !response.select_by) return
-                          await onGoogleLoginSuccess?.(response)
-                          setLoginOpen(false)
+                        onSuccess={async response => {
+                          if (!response.clientId || !response.credential || !response.select_by) return;
+                          await onGoogleLoginSuccess?.(response);
+                          setLoginOpen(false);
                         }}
                       />
                     </div>
@@ -339,7 +339,7 @@ export const ServiceLayoutMain: React.FC<React.PropsWithChildren> = ({ children 
           )}
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -348,44 +348,44 @@ export const ServiceLayoutMain: React.FC<React.PropsWithChildren> = ({ children 
         <div className="absolute inset-0 flex flex-col">{children}</div>
       </section>
     </ServiceLayoutSidebarInset>
-  )
-}
+  );
+};
 export const ServiceLayoutMainHeader: React.FC<React.PropsWithChildren & { className?: string }> = ({ className, children }) => {
   return (
     <div data-slot="main-header" className={cn('flex-0 snap-start', className)}>
       {children}
     </div>
-  )
-}
+  );
+};
 
 export const ServiceLayoutMainContent: React.FC<React.PropsWithChildren & { className?: string }> = ({ className, children }) => {
   return (
     <div data-slot="main-content" className={cn('flex w-full flex-1 flex-col gap-4 overflow-y-auto px-2 sm:px-4', className)}>
       {children}
     </div>
-  )
-}
+  );
+};
 
 export const ServiceLayoutMainFooter: React.FC<React.PropsWithChildren & { className?: string }> = ({ className, children }) => {
   return (
     <div data-slot="main-footer" className={cn('border-border-weak hidden w-full flex-0 border-t pt-2 sm:flex', className)}>
       {children}
     </div>
-  )
-}
+  );
+};
 
 export const ServiceLayoutMainGroup: React.FC<React.PropsWithChildren<{ className?: string }>> = ({ children, className }) => {
   return (
     <div data-slot="main-group" className={cn('flex size-full flex-col gap-4', className)}>
       {children}
     </div>
-  )
-}
+  );
+};
 
 export const ServiceLayoutMainGroupContent: React.FC<React.PropsWithChildren & { className?: string }> = ({ className, children }) => {
   return (
     <div data-slot="main-group-content" className={cn('bg-card shadow-card max-w-8xl size-full flex-1 rounded-md p-4', className)}>
       {children}
     </div>
-  )
-}
+  );
+};

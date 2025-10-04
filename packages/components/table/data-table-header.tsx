@@ -1,12 +1,12 @@
-import { Flex } from '@/components/layouts/flex'
-import { AddNewBtn } from '@/components/ui/buttons/add-new'
-import { RefreshBtn } from '@/components/ui/buttons/refresh'
-import { SearchInput } from '@/components/ui/inputs/search-input'
+import { Flex } from '@/components/layouts/flex';
+import { AddNewBtn } from '@/components/ui/buttons/add-new';
+import { RefreshBtn } from '@/components/ui/buttons/refresh';
+import { SearchInput } from '@/components/ui/inputs/search-input';
 
 type Props = {
-  onAdd?: () => void
-  onRefresh?: () => void
-}
+  onAdd?: () => void;
+  onRefresh?: () => void;
+};
 
 export const DataTableHeader: React.FC<Props> = ({ onAdd, onRefresh }) => {
   return (
@@ -19,5 +19,5 @@ export const DataTableHeader: React.FC<Props> = ({ onAdd, onRefresh }) => {
         <RefreshBtn onClick={onRefresh} />
       </Flex>
     </Flex>
-  )
-}
+  );
+};

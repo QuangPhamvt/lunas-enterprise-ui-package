@@ -1,15 +1,15 @@
-import { Checkbox } from '@/components/ui/checkbox'
-import { Label } from '@/components/ui/label'
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   title: 'Components/Checkbox',
   component: Checkbox,
   tags: ['autodocs'],
-} satisfies Meta<typeof Checkbox>
+} satisfies Meta<typeof Checkbox>;
 
-export default meta
-type Story = StoryObj<typeof meta>
+export default meta;
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {},
@@ -43,6 +43,6 @@ export const Default: Story = {
           </div>
         </Label>
       </div>
-    )
+    );
   },
-}
+};

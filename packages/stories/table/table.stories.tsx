@@ -1,15 +1,15 @@
-import { NameDisplay } from '@/components/data-display/name'
-import { Table } from '@/components/table'
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import { NameDisplay } from '@/components/data-display/name';
+import { Table } from '@/components/table';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   tags: ['autodocs'],
   title: 'Table/Table',
   component: Table,
-} satisfies Meta<typeof Table>
+} satisfies Meta<typeof Table>;
 
-export default meta
-type Story = StoryObj<typeof Table>
+export default meta;
+type Story = StoryObj<typeof Table>;
 
 export const Default: Story = {
   args: {
@@ -237,7 +237,7 @@ export const Default: Story = {
         header: 'Name',
         size: 240,
         cell: ({ row }) => {
-          return <NameDisplay name={row.original?.name as string} />
+          return <NameDisplay name={row.original?.name as string} />;
         },
       },
       {
@@ -257,14 +257,14 @@ export const Default: Story = {
       },
     ],
     onAdd: () => console.log('Add new item'),
-    onClickRow: (row) => console.log('Row clicked:', row),
+    onClickRow: row => console.log('Row clicked:', row),
     onRefresh: () => console.log('Refresh data'),
   },
-  render: (args) => {
+  render: args => {
     return (
       <div className="h-[calc(100vh-4rem)] w-full">
         <Table {...args} />
       </div>
-    )
+    );
   },
-}
+};

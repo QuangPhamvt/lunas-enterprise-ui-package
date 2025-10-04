@@ -1,4 +1,4 @@
-import { cva, type VariantProps } from 'class-variance-authority'
+import { cva, type VariantProps } from 'class-variance-authority';
 
 /**
  * Alert component variants for styling using class-variance-authority
@@ -24,7 +24,7 @@ export const alertVariants = cva(
     defaultVariants: {
       variant: 'default',
     },
-  },
-)
+  }
+);
 
-export type AlertVariantProps = VariantProps<typeof alertVariants>
+export type AlertVariantProps = VariantProps<typeof alertVariants>;

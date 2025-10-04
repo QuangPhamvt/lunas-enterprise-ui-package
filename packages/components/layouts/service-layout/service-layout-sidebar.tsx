@@ -1,28 +1,28 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useIsMobile } from '@customafk/react-toolkit/hooks/useMobile'
-import { cn } from '@customafk/react-toolkit/utils'
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useIsMobile } from '@customafk/react-toolkit/hooks/useMobile';
+import { cn } from '@customafk/react-toolkit/utils';
 
-import { LogOutIcon, MenuIcon, ShoppingCartIcon } from 'lucide-react'
+import { LogOutIcon, MenuIcon, ShoppingCartIcon } from 'lucide-react';
 
-import { Button } from '@/components/ui/button'
-import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } from '@/components/ui/drawer'
-import { Separator } from '@/components/ui/separator'
-import { Skeleton } from '@/components/ui/skeleton'
-import { TooltipProvider } from '@/components/ui/tooltip'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
+import { Button } from '@/components/ui/button';
+import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
+import { Separator } from '@/components/ui/separator';
+import { Skeleton } from '@/components/ui/skeleton';
+import { TooltipProvider } from '@/components/ui/tooltip';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
-import { useServiceLayout } from './hooks/use-service-layout'
-import { SidebarContext, type SidebarContextProps, useServiceLayoutSidebar } from './hooks/use-service-layout-sidebar'
+import { useServiceLayout } from './hooks/use-service-layout';
+import { SidebarContext, type SidebarContextProps, useServiceLayoutSidebar } from './hooks/use-service-layout-sidebar';
 
-import { cva, type VariantProps } from 'class-variance-authority'
-import { Slot as SlotPrimitive } from 'radix-ui'
+import { cva, type VariantProps } from 'class-variance-authority';
+import { Slot as SlotPrimitive } from 'radix-ui';
 
-const SIDEBAR_COOKIE_NAME = 'sidebar_state'
-const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
-const SIDEBAR_WIDTH = '16rem'
-const SIDEBAR_WIDTH_MOBILE = '16rem'
-const SIDEBAR_WIDTH_ICON = '3rem'
-const SIDEBAR_KEYBOARD_SHORTCUT = 'b'
+const SIDEBAR_COOKIE_NAME = 'sidebar_state';
+const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
+const SIDEBAR_WIDTH = '16rem';
+const SIDEBAR_WIDTH_MOBILE = '16rem';
+const SIDEBAR_WIDTH_ICON = '3rem';
+const SIDEBAR_KEYBOARD_SHORTCUT = 'b';
 
 function ServiceLayoutSidebarProvider({
   defaultOpen = true,
@@ -33,53 +33,53 @@ function ServiceLayoutSidebarProvider({
   children,
   ...props
 }: React.ComponentProps<'div'> & {
-  defaultOpen?: boolean
-  open?: boolean
-  onOpenChange?: (open: boolean) => void
+  defaultOpen?: boolean;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }) {
-  const isMobile = useIsMobile()
-  const [openMobile, setOpenMobile] = useState(false)
+  const isMobile = useIsMobile();
+  const [openMobile, setOpenMobile] = useState(false);
 
   // This is the internal state of the sidebar.
   // We use openProp and setOpenProp for control from outside the component.
-  const [_open, _setOpen] = useState(defaultOpen)
-  const open = openProp ?? _open
+  const [_open, _setOpen] = useState(defaultOpen);
+  const open = openProp ?? _open;
   const setOpen = useCallback(
     (value: boolean | ((value: boolean) => boolean)) => {
-      const openState = typeof value === 'function' ? value(open) : value
+      const openState = typeof value === 'function' ? value(open) : value;
       if (setOpenProp) {
-        setOpenProp(openState)
+        setOpenProp(openState);
       } else {
-        _setOpen(openState)
+        _setOpen(openState);
       }
 
       // This sets the cookie to keep the sidebar state.
-      document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`
+      document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`;
     },
-    [setOpenProp, open],
-  )
+    [setOpenProp, open]
+  );
 
   // Helper to toggle the sidebar.
   const toggleSidebar = useCallback(() => {
-    return isMobile ? setOpenMobile((open) => !open) : setOpen((open) => !open)
-  }, [isMobile, setOpen, setOpenMobile])
+    return isMobile ? setOpenMobile(open => !open) : setOpen(open => !open);
+  }, [isMobile, setOpen, setOpenMobile]);
 
   // Adds a keyboard shortcut to toggle the sidebar.
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === SIDEBAR_KEYBOARD_SHORTCUT && (event.metaKey || event.ctrlKey)) {
-        event.preventDefault()
-        toggleSidebar()
+        event.preventDefault();
+        toggleSidebar();
       }
-    }
+    };
 
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [toggleSidebar])
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [toggleSidebar]);
 
   // We add a state so that we can do data-state="expanded" or "collapsed".
   // This makes it easier to style the sidebar with Tailwind classes.
-  const state = open ? 'expanded' : 'collapsed'
+  const state = open ? 'expanded' : 'collapsed';
 
   const contextValue = useMemo<SidebarContextProps>(
     () => ({
@@ -94,8 +94,8 @@ function ServiceLayoutSidebarProvider({
       openMobile,
       setOpenMobile,
     }),
-    [state, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar],
-  )
+    [state, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar]
+  );
 
   return (
     <SidebarContext.Provider value={contextValue}>
@@ -116,7 +116,7 @@ function ServiceLayoutSidebarProvider({
         </div>
       </TooltipProvider>
     </SidebarContext.Provider>
-  )
+  );
 }
 
 function ServiceLayoutSidebar({
@@ -127,18 +127,18 @@ function ServiceLayoutSidebar({
   children,
   ...props
 }: React.ComponentProps<'div'> & {
-  side?: 'left' | 'right'
-  variant?: 'sidebar' | 'floating' | 'inset'
-  collapsible?: 'offcanvas' | 'icon' | 'none'
+  side?: 'left' | 'right';
+  variant?: 'sidebar' | 'floating' | 'inset';
+  collapsible?: 'offcanvas' | 'icon' | 'none';
 }) {
-  const { isMobile, state, openMobile, setOpenMobile } = useServiceLayoutSidebar()
+  const { isMobile, state, openMobile, setOpenMobile } = useServiceLayoutSidebar();
 
   if (collapsible === 'none') {
     return (
       <aside data-slot="sidebar" className={cn('bg-sidebar', 'text-sidebar-foreground', 'flex h-full w-(--sidebar-width) flex-col', className)} {...props}>
         {children}
       </aside>
-    )
+    );
   }
 
   if (isMobile) {
@@ -174,7 +174,7 @@ function ServiceLayoutSidebar({
           </div>
         </DrawerContent>
       </Drawer>
-    )
+    );
   }
 
   return (
@@ -199,7 +199,7 @@ function ServiceLayoutSidebar({
           'group-data-[side=right]:rotate-180',
           variant === 'floating' || variant === 'inset'
             ? 'group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4)))]'
-            : 'group-data-[collapsible=icon]:w-(--sidebar-width-icon)',
+            : 'group-data-[collapsible=icon]:w-(--sidebar-width-icon)'
         )}
       />
       <div
@@ -215,7 +215,7 @@ function ServiceLayoutSidebar({
           variant === 'floating' || variant === 'inset'
             ? 'p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4)))]'
             : 'group-data-[collapsible=icon]:w-(--sidebar-width-icon) group-data-[side=left]:border-r group-data-[side=right]:border-l',
-          className,
+          className
         )}
         {...props}
       >
@@ -227,18 +227,18 @@ function ServiceLayoutSidebar({
             'group-data-[variant=floating]:rounded-lg',
             'group-data-[variant=floating]:border',
             'group-data-[variant=floating]:border-sidebar-border',
-            'group-data-[variant=floating]:shadow-sm',
+            'group-data-[variant=floating]:shadow-sm'
           )}
         >
           {children}
         </div>
       </div>
     </aside>
-  )
+  );
 }
 
 function ServiceLayoutSidebarTrigger({ className, onClick, ...props }: React.ComponentProps<typeof Button>) {
-  const { toggleSidebar } = useServiceLayoutSidebar()
+  const { toggleSidebar } = useServiceLayoutSidebar();
 
   return (
     <Button
@@ -248,20 +248,20 @@ function ServiceLayoutSidebarTrigger({ className, onClick, ...props }: React.Com
       color="muted"
       size="icon"
       className={cn('size-10 rounded-full', className)}
-      onClick={(event) => {
-        onClick?.(event)
-        toggleSidebar()
+      onClick={event => {
+        onClick?.(event);
+        toggleSidebar();
       }}
       {...props}
     >
       <MenuIcon className="!size-6" />
       <span className="sr-only">Toggle Sidebar</span>
     </Button>
-  )
+  );
 }
 
 function ServiceLayoutSidebarRail({ className, ...props }: React.ComponentProps<'button'>) {
-  const { toggleSidebar } = useServiceLayoutSidebar()
+  const { toggleSidebar } = useServiceLayoutSidebar();
 
   return (
     <button
@@ -286,11 +286,11 @@ function ServiceLayoutSidebarRail({ className, ...props }: React.ComponentProps<
         '[[data-side=right][data-state=collapsed]_&]:cursor-w-resize',
         '[[data-side=left][data-collapsible=offcanvas]_&]:-right-2',
         '[[data-side=right][data-collapsible=offcanvas]_&]:-left-2',
-        className,
+        className
       )}
       {...props}
     />
-  )
+  );
 }
 
 function ServiceLayoutSidebarInset({ className, children, ...props }: React.ComponentProps<'main'>) {
@@ -299,16 +299,16 @@ function ServiceLayoutSidebarInset({ className, children, ...props }: React.Comp
       <div className="h-(--header-height) w-full sm:h-[calc(var(--header-height)_+_0.5rem)]" />
       <div className={cn('flex-1 inset-shadow-sm')}>{children}</div>
     </main>
-  )
+  );
 }
 
 function ServiceLayoutSidebarHeader({ className, ...props }: React.ComponentProps<'div'>) {
-  return <div data-slot="sidebar-header" data-sidebar="header" className={cn('flex flex-col gap-2 p-2', className)} {...props} />
+  return <div data-slot="sidebar-header" data-sidebar="header" className={cn('flex flex-col gap-2 p-2', className)} {...props} />;
 }
 
 function ServiceLayoutSidebarFooter({ className, children, ...props }: React.ComponentProps<'div'>) {
-  const { open } = useServiceLayoutSidebar()
-  const { onLogout } = useServiceLayout()
+  const { open } = useServiceLayoutSidebar();
+  const { onLogout } = useServiceLayout();
   return (
     <div data-slot="sidebar-footer" data-sidebar="footer" className={cn('flex flex-col gap-2', className)} {...props}>
       {children}
@@ -326,11 +326,11 @@ function ServiceLayoutSidebarFooter({ className, children, ...props }: React.Com
         )}
       </ServiceLayoutSidebarMenu>
     </div>
-  )
+  );
 }
 
 function ServiceLayoutSidebarSeparator({ className, ...props }: React.ComponentProps<typeof Separator>) {
-  return <Separator data-slot="sidebar-separator" data-sidebar="separator" className={cn('bg-sidebar-border mx-2 w-auto', className)} {...props} />
+  return <Separator data-slot="sidebar-separator" data-sidebar="separator" className={cn('bg-sidebar-border mx-2 w-auto', className)} {...props} />;
 }
 
 function ServiceLayoutSidebarContent({ className, ...props }: React.ComponentProps<'div'>) {
@@ -341,15 +341,15 @@ function ServiceLayoutSidebarContent({ className, ...props }: React.ComponentPro
       className={cn('flex min-h-0 flex-1 flex-col gap-2 overflow-auto group-data-[collapsible=icon]:overflow-hidden', className)}
       {...props}
     />
-  )
+  );
 }
 
 function ServiceLayoutSidebarGroup({ className, ...props }: React.ComponentProps<'div'>) {
-  return <div data-slot="sidebar-group" data-sidebar="group" className={cn('relative flex w-full min-w-0 flex-col', className)} {...props} />
+  return <div data-slot="sidebar-group" data-sidebar="group" className={cn('relative flex w-full min-w-0 flex-col', className)} {...props} />;
 }
 
 function ServiceLayoutSidebarGroupLabel({ className, asChild = false, ...props }: React.ComponentProps<'div'> & { asChild?: boolean }) {
-  const Comp = asChild ? SlotPrimitive.Slot : 'div'
+  const Comp = asChild ? SlotPrimitive.Slot : 'div';
 
   return (
     <Comp
@@ -363,15 +363,15 @@ function ServiceLayoutSidebarGroupLabel({ className, asChild = false, ...props }
         '[&>svg]:shrink-0',
         'group-data-[collapsible=icon]:-mt-8',
         'group-data-[collapsible=icon]:opacity-0',
-        className,
+        className
       )}
       {...props}
     />
-  )
+  );
 }
 
 function ServiceLayoutSidebarGroupAction({ className, asChild = false, ...props }: React.ComponentProps<'button'> & { asChild?: boolean }) {
-  const Comp = asChild ? SlotPrimitive.Slot : 'button'
+  const Comp = asChild ? SlotPrimitive.Slot : 'button';
 
   return (
     <Comp
@@ -385,23 +385,23 @@ function ServiceLayoutSidebarGroupAction({ className, asChild = false, ...props 
         // Increases the hit area of the button on mobile.
         'after:absolute after:-inset-2 md:after:hidden',
         'group-data-[collapsible=icon]:hidden',
-        className,
+        className
       )}
       {...props}
     />
-  )
+  );
 }
 
 function ServiceLayoutSidebarGroupContent({ className, ...props }: React.ComponentProps<'div'>) {
-  return <div data-slot="sidebar-group-content" data-sidebar="group-content" className={cn('w-full text-sm', className)} {...props} />
+  return <div data-slot="sidebar-group-content" data-sidebar="group-content" className={cn('w-full text-sm', className)} {...props} />;
 }
 
 function ServiceLayoutSidebarMenu({ className, ...props }: React.ComponentProps<'ul'>) {
-  return <ul data-slot="sidebar-menu" data-sidebar="menu" className={cn('flex w-full min-w-0 flex-col gap-1', className)} {...props} />
+  return <ul data-slot="sidebar-menu" data-sidebar="menu" className={cn('flex w-full min-w-0 flex-col gap-1', className)} {...props} />;
 }
 
 function ServiceLayoutSidebarMenuItem({ className, ...props }: React.ComponentProps<'li'>) {
-  return <li data-slot="sidebar-menu-item" data-sidebar="menu-item" className={cn('group/menu-item relative', className)} {...props} />
+  return <li data-slot="sidebar-menu-item" data-sidebar="menu-item" className={cn('group/menu-item relative', className)} {...props} />;
 }
 
 const sidebarMenuButtonVariants = cva(
@@ -450,8 +450,8 @@ const sidebarMenuButtonVariants = cva(
       variant: 'default',
       size: 'default',
     },
-  },
-)
+  }
+);
 
 function ServiceLayoutSidebarMenuButton({
   asChild = false,
@@ -462,12 +462,12 @@ function ServiceLayoutSidebarMenuButton({
   className,
   ...props
 }: React.ComponentProps<'button'> & {
-  asChild?: boolean
-  isActive?: boolean
-  tooltip?: string | React.ComponentProps<typeof TooltipContent>
+  asChild?: boolean;
+  isActive?: boolean;
+  tooltip?: string | React.ComponentProps<typeof TooltipContent>;
 } & VariantProps<typeof sidebarMenuButtonVariants>) {
-  const Comp = asChild ? SlotPrimitive.Slot : 'button'
-  const { isMobile, state } = useServiceLayoutSidebar()
+  const Comp = asChild ? SlotPrimitive.Slot : 'button';
+  const { isMobile, state } = useServiceLayoutSidebar();
 
   const button = (
     <Comp
@@ -478,16 +478,16 @@ function ServiceLayoutSidebarMenuButton({
       className={cn(sidebarMenuButtonVariants({ variant, size }), className)}
       {...props}
     />
-  )
+  );
 
   if (!tooltip) {
-    return button
+    return button;
   }
 
   if (typeof tooltip === 'string') {
     tooltip = {
       children: tooltip,
-    }
+    };
   }
 
   return (
@@ -495,7 +495,7 @@ function ServiceLayoutSidebarMenuButton({
       <TooltipTrigger asChild>{button}</TooltipTrigger>
       <TooltipContent side="right" align="center" hidden={state !== 'collapsed' || isMobile} {...tooltip} />
     </Tooltip>
-  )
+  );
 }
 
 function ServiceLayoutSidebarMenuAction({
@@ -504,10 +504,10 @@ function ServiceLayoutSidebarMenuAction({
   showOnHover = false,
   ...props
 }: React.ComponentProps<'button'> & {
-  asChild?: boolean
-  showOnHover?: boolean
+  asChild?: boolean;
+  showOnHover?: boolean;
 }) {
-  const Comp = asChild ? SlotPrimitive.Slot : 'button'
+  const Comp = asChild ? SlotPrimitive.Slot : 'button';
 
   return (
     <Comp
@@ -528,11 +528,11 @@ function ServiceLayoutSidebarMenuAction({
         showOnHover && 'group-focus-within/menu-item:opacity-100',
         showOnHover && 'group-hover/menu-item:opacity-100',
         showOnHover && 'data-[state=open]:opacity-100 md:opacity-0',
-        className,
+        className
       )}
       {...props}
     />
-  )
+  );
 }
 
 function ServiceLayoutSidebarMenuBadge({ className, ...props }: React.ComponentProps<'div'>) {
@@ -548,11 +548,11 @@ function ServiceLayoutSidebarMenuBadge({ className, ...props }: React.ComponentP
         'peer-data-[size=default]/menu-button:top-1.5',
         'peer-data-[size=lg]/menu-button:top-2.5',
         'group-data-[collapsible=icon]:hidden',
-        className,
+        className
       )}
       {...props}
     />
-  )
+  );
 }
 
 function ServiceLayoutSidebarMenuSkeleton({
@@ -560,12 +560,12 @@ function ServiceLayoutSidebarMenuSkeleton({
   showIcon = false,
   ...props
 }: React.ComponentProps<'div'> & {
-  showIcon?: boolean
+  showIcon?: boolean;
 }) {
   // Random width between 50 to 90%.
   const width = useMemo(() => {
-    return `${Math.floor(Math.random() * 40) + 50}%`
-  }, [])
+    return `${Math.floor(Math.random() * 40) + 50}%`;
+  }, []);
 
   return (
     <div data-slot="sidebar-menu-skeleton" data-sidebar="menu-skeleton" className={cn('flex h-8 items-center gap-2 rounded-md px-2', className)} {...props}>
@@ -580,7 +580,7 @@ function ServiceLayoutSidebarMenuSkeleton({
         }
       />
     </div>
-  )
+  );
 }
 
 function ServiceLayoutSidebarMenuSub({ className, ...props }: React.ComponentProps<'ul'>) {
@@ -591,15 +591,15 @@ function ServiceLayoutSidebarMenuSub({ className, ...props }: React.ComponentPro
       className={cn(
         'border-sidebar-border mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-l px-2.5 py-0.5',
         'group-data-[collapsible=icon]:hidden',
-        className,
+        className
       )}
       {...props}
     />
-  )
+  );
 }
 
 function ServiceLayoutSidebarMenuSubItem({ className, ...props }: React.ComponentProps<'li'>) {
-  return <li data-slot="sidebar-menu-sub-item" data-sidebar="menu-sub-item" className={cn('group/menu-sub-item relative', className)} {...props} />
+  return <li data-slot="sidebar-menu-sub-item" data-sidebar="menu-sub-item" className={cn('group/menu-sub-item relative', className)} {...props} />;
 }
 
 function ServiceLayoutSidebarMenuSubButton({
@@ -609,11 +609,11 @@ function ServiceLayoutSidebarMenuSubButton({
   className,
   ...props
 }: React.ComponentProps<'a'> & {
-  asChild?: boolean
-  size?: 'sm' | 'md'
-  isActive?: boolean
+  asChild?: boolean;
+  size?: 'sm' | 'md';
+  isActive?: boolean;
 }) {
-  const Comp = asChild ? SlotPrimitive.Slot : 'a'
+  const Comp = asChild ? SlotPrimitive.Slot : 'a';
 
   return (
     <Comp
@@ -643,11 +643,11 @@ function ServiceLayoutSidebarMenuSubButton({
         size === 'sm' && 'text-xs',
         size === 'md' && 'text-sm',
         'group-data-[collapsible=icon]:hidden',
-        className,
+        className
       )}
       {...props}
     />
-  )
+  );
 }
 
 export {
@@ -675,4 +675,4 @@ export {
   ServiceLayoutSidebarTrigger,
   // eslint-disable-next-line react-refresh/only-export-components
   useServiceLayoutSidebar,
-}
+};

@@ -1,10 +1,10 @@
-'use client'
-import { cn } from '@customafk/react-toolkit/utils'
+'use client';
+import { cn } from '@customafk/react-toolkit/utils';
 
-import { Tabs as TabsPrimitive } from 'radix-ui'
+import { Tabs as TabsPrimitive } from 'radix-ui';
 
 function Tabs({ className, ...props }: React.ComponentProps<typeof TabsPrimitive.Root>) {
-  return <TabsPrimitive.Root data-slot="tabs" className={cn('flex flex-col gap-2', className)} {...props} />
+  return <TabsPrimitive.Root data-slot="tabs" className={cn('flex flex-col gap-2', className)} {...props} />;
 }
 
 function TabsList({ className, ...props }: React.ComponentProps<typeof TabsPrimitive.List>) {
@@ -14,7 +14,7 @@ function TabsList({ className, ...props }: React.ComponentProps<typeof TabsPrimi
       className={cn('bg-muted-muted inline-flex h-9 w-fit items-center justify-center rounded-full p-1', className)}
       {...props}
     />
-  )
+  );
 }
 
 function TabsTrigger({ className, ...props }: React.ComponentProps<typeof TabsPrimitive.Trigger>) {
@@ -39,15 +39,15 @@ function TabsTrigger({ className, ...props }: React.ComponentProps<typeof TabsPr
         '[&_svg]:pointer-events-none',
         '[&_svg]:shrink-0',
         "[&_svg:not([class*='size-'])]:size-4",
-        className,
+        className
       )}
       {...props}
     />
-  )
+  );
 }
 
 function TabsContent({ className, ...props }: React.ComponentProps<typeof TabsPrimitive.Content>) {
-  return <TabsPrimitive.Content data-slot="tabs-content" className={cn('flex-1 outline-none', className)} {...props} />
+  return <TabsPrimitive.Content data-slot="tabs-content" className={cn('flex-1 outline-none', className)} {...props} />;
 }
 
-export { Tabs, TabsContent, TabsList, TabsTrigger }
+export { Tabs, TabsContent, TabsList, TabsTrigger };

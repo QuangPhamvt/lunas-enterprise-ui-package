@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
-import { cn } from '@customafk/react-toolkit/utils'
+import { cn } from '@customafk/react-toolkit/utils';
 
 export const Grid: React.FC<React.PropsWithChildren> = ({ children }) => {
   return (
@@ -23,11 +23,11 @@ export const Grid: React.FC<React.PropsWithChildren> = ({ children }) => {
           '@7xl:grid-cols-5',
           '@8xl:grid-cols-6',
           '@9xl:grid-cols-7',
-          '@10xl:grid-cols-8',
+          '@10xl:grid-cols-8'
         )}
       >
         {children}
       </div>
     </div>
-  )
-}
+  );
+};

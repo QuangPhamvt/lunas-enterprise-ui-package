@@ -1,4 +1,4 @@
-export * from './service-layout'
+export * from './service-layout';
 export {
   ServiceLayoutSidebarContent,
   ServiceLayoutSidebarFooter,
@@ -8,4 +8,4 @@ export {
   ServiceLayoutSidebarMenu,
   ServiceLayoutSidebarMenuButton,
   ServiceLayoutSidebarMenuItem,
-} from './service-layout-sidebar'
+} from './service-layout-sidebar';

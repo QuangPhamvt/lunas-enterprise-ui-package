@@ -8,18 +8,18 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '@/components/ui/alert-dialog'
-import { Button } from '@/components/ui/button'
-import type { Meta, StoryObj } from '@storybook/react-vite'
+} from '@/components/ui/alert-dialog';
+import { Button } from '@/components/ui/button';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   title: 'Components/AlertDialog',
   component: AlertDialog,
   tags: ['autodocs'],
-} satisfies Meta<typeof AlertDialog>
+} satisfies Meta<typeof AlertDialog>;
 
-export default meta
-type Story = StoryObj<typeof meta>
+export default meta;
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {},
@@ -44,6 +44,6 @@ export const Default: Story = {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    )
+    );
   },
-}
+};

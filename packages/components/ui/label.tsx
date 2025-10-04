@@ -1,7 +1,7 @@
-'use client'
-import { cn } from '@customafk/react-toolkit/utils'
+'use client';
+import { cn } from '@customafk/react-toolkit/utils';
 
-import { Label as LabelPrimitive } from 'radix-ui'
+import { Label as LabelPrimitive } from 'radix-ui';
 
 function Label({ className, ...props }: React.ComponentProps<typeof LabelPrimitive.Root>) {
   return (
@@ -15,11 +15,11 @@ function Label({ className, ...props }: React.ComponentProps<typeof LabelPrimiti
         'group-data-[disabled=true]:opacity-50',
         'peer-disabled:cursor-not-allowed',
         'peer-disabled:opacity-50',
-        className,
+        className
       )}
       {...props}
     />
-  )
+  );
 }
 
-export { Label }
+export { Label };

@@ -1,24 +1,24 @@
-'use client'
-import type { FieldPath, FieldValues } from 'react-hook-form'
-import { cn } from '@customafk/react-toolkit/utils'
+'use client';
+import type { FieldPath, FieldValues } from 'react-hook-form';
+import { cn } from '@customafk/react-toolkit/utils';
 
-import { ChevronDownIcon, PlusIcon } from 'lucide-react'
+import { ChevronDownIcon, PlusIcon } from 'lucide-react';
 
-import { Button } from '@/components/ui/button'
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from '@/components/ui/command'
-import { FormControl, FormDescription, FormField, FormItem, FormLabel } from '@/components/ui/form'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { Button } from '@/components/ui/button';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from '@/components/ui/command';
+import { FormControl, FormDescription, FormField, FormItem, FormLabel } from '@/components/ui/form';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 type Props<TFieldValues extends FieldValues = FieldValues> = {
-  name: FieldPath<TFieldValues>
-  label?: string
-  placeholder?: string
-  options?: { value: string | number; label: string }[]
-  isShowErrorMsg?: boolean
-  modal?: boolean
-  description?: string
-  onAddNewItem?: () => void
-}
+  name: FieldPath<TFieldValues>;
+  label?: string;
+  placeholder?: string;
+  options?: { value: string | number; label: string }[];
+  isShowErrorMsg?: boolean;
+  modal?: boolean;
+  description?: string;
+  onAddNewItem?: () => void;
+};
 
 export const ComboboxField = <TFieldValues extends FieldValues = FieldValues>({
   name,
@@ -58,7 +58,7 @@ export const ComboboxField = <TFieldValues extends FieldValues = FieldValues>({
                       'focus:ring-4',
                       'focus:ring-primary-weak',
                       'focus:outline-1',
-                      'focus:outline-primary-strong',
+                      'focus:outline-primary-strong'
                     )}
                   >
                     {field.value ? (
@@ -99,8 +99,8 @@ export const ComboboxField = <TFieldValues extends FieldValues = FieldValues>({
             </Popover>
             {!!description && <FormDescription>{description}</FormDescription>}
           </FormItem>
-        )
+        );
       }}
     />
-  )
-}
+  );
+};

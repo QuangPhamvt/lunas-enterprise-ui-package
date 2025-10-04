@@ -1,10 +1,10 @@
-import { CatIcon } from 'lucide-react'
+import { CatIcon } from 'lucide-react';
 
-import { Flex } from '@/components/layouts/flex'
-import { Dialog } from '@/components/ui/dialog'
+import { Flex } from '@/components/layouts/flex';
+import { Dialog } from '@/components/ui/dialog';
 
-import { DetailDialogHeader } from './component/header'
-import { DetailDialogMain, DetailDialogMainHeader } from './component/main'
+import { DetailDialogHeader } from './component/header';
+import { DetailDialogMain, DetailDialogMainHeader } from './component/main';
 import {
   DetailDialogSidebarContent,
   DetailDialogSidebarFooter,
@@ -15,8 +15,8 @@ import {
   DetailDialogSidebarMenuItem,
   Sidebar,
   SidebarProvider,
-} from './component/sidebar'
-import { DetailDialogWrapper } from './component/wrapper'
+} from './component/sidebar';
+import { DetailDialogWrapper } from './component/wrapper';
 
 const DetailDialogSidebar: React.FC<React.PropsWithChildren<{ title?: string; sidebarFooter?: React.ReactNode }>> = ({ title, sidebarFooter, children }) => {
   return (
@@ -41,19 +41,19 @@ const DetailDialogSidebar: React.FC<React.PropsWithChildren<{ title?: string; si
       </DetailDialogSidebarContent>
       {sidebarFooter && <DetailDialogSidebarFooter>{sidebarFooter}</DetailDialogSidebarFooter>}
     </Sidebar>
-  )
-}
+  );
+};
 
 type Props = {
-  open?: boolean
-  isLoading?: boolean
-  sidebarTitle?: string
-  sidebar?: React.ReactNode
-  sidebarFooter?: React.ReactNode
-  title: string
-  createdAt: string | Date | number
-  onOpenChange?: (open: boolean) => void | Promise<void>
-}
+  open?: boolean;
+  isLoading?: boolean;
+  sidebarTitle?: string;
+  sidebar?: React.ReactNode;
+  sidebarFooter?: React.ReactNode;
+  title: string;
+  createdAt: string | Date | number;
+  onOpenChange?: (open: boolean) => void | Promise<void>;
+};
 export const DetailDialog: React.FC<React.PropsWithChildren<Props>> = ({
   open,
   isLoading = false,
@@ -84,5 +84,5 @@ export const DetailDialog: React.FC<React.PropsWithChildren<Props>> = ({
         </SidebarProvider>
       </DetailDialogWrapper>
     </Dialog>
-  )
-}
+  );
+};

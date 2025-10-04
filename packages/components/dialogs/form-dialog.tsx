@@ -1,28 +1,28 @@
-import type { FieldValues, FormState, SubmitErrorHandler, UseFormProps } from 'react-hook-form'
-import { useMediaQuery } from '@customafk/react-toolkit/hooks/useMediaQuery'
-import { cn } from '@customafk/react-toolkit/utils'
+import type { FieldValues, FormState, SubmitErrorHandler, UseFormProps } from 'react-hook-form';
+import { useMediaQuery } from '@customafk/react-toolkit/hooks/useMediaQuery';
+import { cn } from '@customafk/react-toolkit/utils';
 
-import { FormWrapper } from '@/components/forms/form-wrapper'
-import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
-import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from '@/components/ui/drawer'
+import { FormWrapper } from '@/components/forms/form-wrapper';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
 
 type Props<TFieldValues extends FieldValues = FieldValues> = {
-  form: UseFormProps<TFieldValues>
+  form: UseFormProps<TFieldValues>;
 
-  open: boolean
-  isSubmitting?: boolean
-  isResetAfterSubmit?: boolean
-  disableSubmit?: boolean
-  title?: string
-  description?: string
-  className?: string
+  open: boolean;
+  isSubmitting?: boolean;
+  isResetAfterSubmit?: boolean;
+  disableSubmit?: boolean;
+  title?: string;
+  description?: string;
+  className?: string;
 
-  onOpenChange: (open: boolean) => void
-  onSubmit: (data: TFieldValues, formState: FormState<FieldValues>, dirtyFields: FormState<FieldValues>['dirtyFields']) => void | Promise<void>
-  onError?: SubmitErrorHandler<TFieldValues>
-  onReset?: () => void
-}
+  onOpenChange: (open: boolean) => void;
+  onSubmit: (data: TFieldValues, formState: FormState<FieldValues>, dirtyFields: FormState<FieldValues>['dirtyFields']) => void | Promise<void>;
+  onError?: SubmitErrorHandler<TFieldValues>;
+  onReset?: () => void;
+};
 export const FormDialog = <TFieldValues extends FieldValues = FieldValues>({
   form,
   open,
@@ -39,7 +39,7 @@ export const FormDialog = <TFieldValues extends FieldValues = FieldValues>({
   onReset,
   children,
 }: React.PropsWithChildren<Props<TFieldValues>>) => {
-  const isDesktop = useMediaQuery('(min-width: 768px)')
+  const isDesktop = useMediaQuery('(min-width: 768px)');
 
   if (!isDesktop) {
     return (
@@ -68,16 +68,16 @@ export const FormDialog = <TFieldValues extends FieldValues = FieldValues>({
           </FormWrapper>
         </DrawerContent>
       </Drawer>
-    )
+    );
   }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         className={cn('flex flex-col gap-0 border-none p-0', className)}
-        onInteractOutside={(e) => {
-          e.preventDefault()
-          e.stopPropagation()
+        onInteractOutside={e => {
+          e.preventDefault();
+          e.stopPropagation();
         }}
       >
         <DialogHeader className="border-border-weak flex-0 gap-2 border-b p-6 pb-4">
@@ -99,5 +99,5 @@ export const FormDialog = <TFieldValues extends FieldValues = FieldValues>({
         </FormWrapper>
       </DialogContent>
     </Dialog>
-  )
-}
+  );
+};

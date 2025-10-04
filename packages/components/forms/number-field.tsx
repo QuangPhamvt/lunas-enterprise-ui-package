@@ -1,19 +1,19 @@
-import { type FieldPath, type FieldValues, useWatch } from 'react-hook-form'
+import { type FieldPath, type FieldValues, useWatch } from 'react-hook-form';
 
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
-import { NumberInput } from '../ui/inputs/number-input'
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
+import { NumberInput } from '../ui/inputs/number-input';
 
 type Props<TFieldValues extends FieldValues = FieldValues> = {
-  name: FieldPath<TFieldValues>
-  label?: string
-  description?: string
-  placeholder?: string
-  unitText?: string
-  isShowClearButton?: boolean
-  isShowErrorMsg?: boolean
-  isShowCount?: boolean
-  onValueChange?: (value?: number) => void
-}
+  name: FieldPath<TFieldValues>;
+  label?: string;
+  description?: string;
+  placeholder?: string;
+  unitText?: string;
+  isShowClearButton?: boolean;
+  isShowErrorMsg?: boolean;
+  isShowCount?: boolean;
+  onValueChange?: (value?: number) => void;
+};
 export const NumberField = <TFieldValues extends FieldValues = FieldValues>({
   name,
   label = 'Number Field',
@@ -24,7 +24,7 @@ export const NumberField = <TFieldValues extends FieldValues = FieldValues>({
   description = '',
   onValueChange,
 }: Props<TFieldValues>) => {
-  const valueWatch = useWatch({ name })
+  const valueWatch = useWatch({ name });
 
   return (
     <FormField
@@ -38,9 +38,9 @@ export const NumberField = <TFieldValues extends FieldValues = FieldValues>({
               placeholder={placeholder}
               className="w-full"
               unitText={unitText}
-              onValueChange={(value) => {
-                onChange(value)
-                onValueChange?.(value)
+              onValueChange={value => {
+                onChange(value);
+                onValueChange?.(value);
               }}
             />
           </FormControl>
@@ -50,5 +50,5 @@ export const NumberField = <TFieldValues extends FieldValues = FieldValues>({
         </FormItem>
       )}
     />
-  )
-}
+  );
+};

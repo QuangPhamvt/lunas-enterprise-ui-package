@@ -1,16 +1,16 @@
-'use client'
-import type { FieldPath, FieldValues } from 'react-hook-form'
-import { cn } from '@customafk/react-toolkit/utils'
+'use client';
+import type { FieldPath, FieldValues } from 'react-hook-form';
+import { cn } from '@customafk/react-toolkit/utils';
 
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
-import { Switch } from '../ui/switch'
+import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
+import { Switch } from '../ui/switch';
 
 type Props<TFieldValues extends FieldValues = FieldValues> = {
-  name: FieldPath<TFieldValues>
-  label?: string
-  description?: string
-  isShowErrorMsg?: boolean
-}
+  name: FieldPath<TFieldValues>;
+  label?: string;
+  description?: string;
+  isShowErrorMsg?: boolean;
+};
 export const SwitchField = <TFieldValues extends FieldValues = FieldValues>({
   name,
   label = 'Switch Field',
@@ -35,5 +35,5 @@ export const SwitchField = <TFieldValues extends FieldValues = FieldValues>({
         </div>
       )}
     />
-  )
-}
+  );
+};

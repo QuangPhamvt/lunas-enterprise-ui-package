@@ -1,25 +1,25 @@
-'use client'
+'use client';
 
-import { useMemo } from 'react'
-import { cn } from '@customafk/react-toolkit/utils'
+import { useMemo } from 'react';
+import { cn } from '@customafk/react-toolkit/utils';
 
-import { AlertCircle, AlertTriangle, CheckCircle, Info, X } from 'lucide-react'
+import { AlertCircle, AlertTriangle, CheckCircle, Info, X } from 'lucide-react';
 
-import { type AlertVariantProps, alertVariants } from './alert-variants'
+import { type AlertVariantProps, alertVariants } from './alert-variants';
 
 export interface AlertProps extends React.HTMLAttributes<HTMLDivElement>, Omit<AlertVariantProps, 'className'> {
   /**
    * Optional icon to display in the alert
    */
-  icon?: React.ReactNode
+  icon?: React.ReactNode;
   /**
    * Whether the alert can be dismissed
    */
-  dismissible?: boolean
+  dismissible?: boolean;
   /**
    * Callback when the alert is dismissed
    */
-  onDismiss?: () => void
+  onDismiss?: () => void;
 }
 
 /**
@@ -31,19 +31,19 @@ function Alert({ className, variant, children, icon, dismissible, onDismiss, ...
     if (!icon) {
       switch (variant) {
         case 'destructive':
-          return <AlertCircle />
+          return <AlertCircle />;
         case 'warning':
-          return <AlertTriangle />
+          return <AlertTriangle />;
         case 'success':
-          return <CheckCircle />
+          return <CheckCircle />;
         case 'info':
-          return <Info />
+          return <Info />;
         default:
-          return null
+          return null;
       }
     }
-    return icon
-  }, [icon, variant])
+    return icon;
+  }, [icon, variant]);
 
   return (
     <div data-slot="alert" role="alert" data-variant={variant} className={cn(alertVariants({ variant }), className)} {...props}>
@@ -61,28 +61,28 @@ function Alert({ className, variant, children, icon, dismissible, onDismiss, ...
         </button>
       )}
     </div>
-  )
+  );
 }
 
 export interface AlertTitleProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
    * Title text or elements
    */
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 /**
  * Title component for the Alert
  */
 function AlertTitle({ className, ...props }: AlertTitleProps) {
-  return <div data-slot="alert-title" className={cn('col-start-2 line-clamp-1 min-h-4 font-medium tracking-tight', className)} {...props} />
+  return <div data-slot="alert-title" className={cn('col-start-2 line-clamp-1 min-h-4 font-medium tracking-tight', className)} {...props} />;
 }
 
 export interface AlertDescriptionProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
    * Description text or elements
    */
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 /**
@@ -95,7 +95,7 @@ function AlertDescription({ className, ...props }: AlertDescriptionProps) {
       className={cn('text-text-positive-weak col-start-2 grid justify-items-start gap-1 text-sm [&_p]:leading-relaxed', className)}
       {...props}
     />
-  )
+  );
 }
 
-export { Alert, AlertDescription, AlertTitle }
+export { Alert, AlertDescription, AlertTitle };

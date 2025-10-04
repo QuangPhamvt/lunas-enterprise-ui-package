@@ -1,18 +1,18 @@
-import { HeartIcon, ShoppingCartIcon } from 'lucide-react'
+import { HeartIcon, ShoppingCartIcon } from 'lucide-react';
 
-import { Button } from '../ui/button'
-import { Card } from '../ui/card'
-import { Image } from '../ui/image'
+import { Button } from '../ui/button';
+import { Card } from '../ui/card';
+import { Image } from '../ui/image';
 
 type Props = {
-  id: string
-  slug: string
-  name: string
-  thumbnail: string
-  price: number
-  salePrice?: number
-  salePercentage?: number
-}
+  id: string;
+  slug: string;
+  name: string;
+  thumbnail: string;
+  price: number;
+  salePrice?: number;
+  salePercentage?: number;
+};
 export const GridProductCard: React.FC<Props> = ({ name, thumbnail, price }) => {
   return (
     <Card className="h-36 w-full flex-row gap-4 p-2 pr-4">
@@ -34,5 +34,5 @@ export const GridProductCard: React.FC<Props> = ({ name, thumbnail, price }) => 
         </div>
       </div>
     </Card>
-  )
-}
+  );
+};

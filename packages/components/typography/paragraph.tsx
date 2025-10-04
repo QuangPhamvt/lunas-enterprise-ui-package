@@ -1,13 +1,13 @@
-'use client'
-import { cn } from '@customafk/react-toolkit/utils'
+'use client';
+import { cn } from '@customafk/react-toolkit/utils';
 
-import { cva } from 'class-variance-authority'
+import { cva } from 'class-variance-authority';
 
 type Props = {
-  variant?: 'p' | 'muted' | 'lead' | 'sm' | 'lg'
-  className?: string
-  children?: React.ReactNode
-}
+  variant?: 'p' | 'muted' | 'lead' | 'sm' | 'lg';
+  className?: string;
+  children?: React.ReactNode;
+};
 
 const paragraphVariants = cva('', {
   variants: {
@@ -22,8 +22,8 @@ const paragraphVariants = cva('', {
       variant: 'sm',
     },
   },
-})
+});
 
 export const Paragraph = ({ variant = 'p', className, children }: Props) => {
-  return <p className={cn('text-text-positive', paragraphVariants({ variant }), className)}>{children}</p>
-}
+  return <p className={cn('text-text-positive', paragraphVariants({ variant }), className)}>{children}</p>;
+};

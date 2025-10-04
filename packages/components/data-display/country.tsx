@@ -1,14 +1,14 @@
-import { useMemo } from 'react'
-import ReactCountryFlag from 'react-country-flag'
+import { useMemo } from 'react';
+import ReactCountryFlag from 'react-country-flag';
 
-import { ECountry } from '@/types'
+import { ECountry } from '@/types';
 
-import { Flex } from '../layouts/flex'
-import { Paragraph } from '../typography/paragraph'
+import { Flex } from '../layouts/flex';
+import { Paragraph } from '../typography/paragraph';
 
 type Props = {
-  country?: ECountry | null
-}
+  country?: ECountry | null;
+};
 export const CountryDisplay: React.FC<React.PropsWithChildren<Props>> = ({ country }) => {
   const code = useMemo(() => {
     return {
@@ -22,8 +22,8 @@ export const CountryDisplay: React.FC<React.PropsWithChildren<Props>> = ({ count
       [ECountry.INDONESIA]: 'ID',
       [ECountry.TAIWAN]: 'TW',
       [ECountry.THAILAND]: 'TH',
-    }
-  }, [])
+    };
+  }, []);
   if (!country) {
     return (
       <Flex padding="none" className="h-4 px-1">
@@ -31,7 +31,7 @@ export const CountryDisplay: React.FC<React.PropsWithChildren<Props>> = ({ count
           No country
         </Paragraph>
       </Flex>
-    )
+    );
   }
   return (
     <Flex padding="none" className="h-4 px-1">
@@ -49,5 +49,5 @@ export const CountryDisplay: React.FC<React.PropsWithChildren<Props>> = ({ count
         {country === ECountry.THAILAND && 'Thailand'}
       </Paragraph>
     </Flex>
-  )
-}
+  );
+};

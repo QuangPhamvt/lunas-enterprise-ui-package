@@ -1,14 +1,14 @@
-import { MultipleSelector } from '@/components/ui/multi-select'
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import { MultipleSelector } from '@/components/ui/multi-select';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta: Meta<typeof MultipleSelector> = {
   title: 'Components/MultiSelect',
   component: MultipleSelector,
   tags: ['autodocs'],
-}
+};
 
-export default meta
-type Story = StoryObj<typeof meta>
+export default meta;
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
@@ -19,11 +19,11 @@ export const Default: Story = {
     ],
     placeholder: 'Select options',
     className: 'w-64',
-    onChange: (selectedOptions) => {
-      console.log('Selected options:', selectedOptions)
+    onChange: selectedOptions => {
+      console.log('Selected options:', selectedOptions);
     },
     onAddNewItem: () => {
-      console.log('New item added:')
+      console.log('New item added:');
     },
   },
-}
+};

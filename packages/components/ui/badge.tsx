@@ -1,7 +1,7 @@
-'use client'
-import { cn } from '@customafk/react-toolkit/utils'
+'use client';
+import { cn } from '@customafk/react-toolkit/utils';
 
-import { cva, type VariantProps } from 'class-variance-authority'
+import { cva, type VariantProps } from 'class-variance-authority';
 
 const badgeVariants = cva(
   'focus:ring-ring rounded-sm inline-flex items-center px-2.5 py-0.5 font-semibold text-white shadow-sm transition-colors focus:ring-2 focus:ring-offset-2 focus:outline-hidden forced-colors:outline',
@@ -43,14 +43,14 @@ const badgeVariants = cva(
       size: 'md',
       pill: true,
     },
-  },
-)
+  }
+);
 
-export type BadgeProps = VariantProps<typeof badgeVariants> & React.ComponentPropsWithoutRef<'div'>
+export type BadgeProps = VariantProps<typeof badgeVariants> & React.ComponentPropsWithoutRef<'div'>;
 
 function Badge({ className, color, size, pill, ...props }: BadgeProps) {
-  return <div className={cn(badgeVariants({ color, pill, size }), className)} {...props} />
+  return <div className={cn(badgeVariants({ color, pill, size }), className)} {...props} />;
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
-export { Badge, badgeVariants }
+export { Badge, badgeVariants };

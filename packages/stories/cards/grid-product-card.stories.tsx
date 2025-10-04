@@ -1,5 +1,5 @@
-import { GridProductCard } from '@/components/cards/grid-product-card'
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import { GridProductCard } from '@/components/cards/grid-product-card';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   tags: ['autodocs'],
@@ -18,10 +18,10 @@ const meta = {
       },
     },
   },
-} satisfies Meta<typeof GridProductCard>
+} satisfies Meta<typeof GridProductCard>;
 
-export default meta
-type Story = StoryObj<typeof GridProductCard>
+export default meta;
+type Story = StoryObj<typeof GridProductCard>;
 
 export const Default: Story = {
   args: {
@@ -30,4 +30,4 @@ export const Default: Story = {
     thumbnail: 'https://via.placeholder.com/150',
     price: 2000000,
   },
-}
+};

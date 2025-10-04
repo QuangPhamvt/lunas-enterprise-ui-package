@@ -1,25 +1,25 @@
-import { FormWrapper } from '@/components/forms/form-wrapper'
-import { NumberField } from '@/components/forms/number-field'
-import { TextField } from '@/components/forms/text-field'
-import { Flex } from '@/components/layouts/flex'
-import { Button } from '@/components/ui/button'
-import { Toaster } from '@/components/ui/sonner'
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import { FormWrapper } from '@/components/forms/form-wrapper';
+import { NumberField } from '@/components/forms/number-field';
+import { TextField } from '@/components/forms/text-field';
+import { Flex } from '@/components/layouts/flex';
+import { Button } from '@/components/ui/button';
+import { Toaster } from '@/components/ui/sonner';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 type TSchema = {
-  code: string
-  name: string
-  exchangeRate: number
-}
+  code: string;
+  name: string;
+  exchangeRate: number;
+};
 
 const meta: Meta<typeof FormWrapper<TSchema>> = {
   tags: ['autodocs'],
   title: 'Forms/FormWrapper',
   component: FormWrapper,
-}
+};
 
-export default meta
-type Story = StoryObj<typeof meta>
+export default meta;
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   render: () => {
@@ -34,11 +34,11 @@ export const Default: Story = {
             },
           }}
           isResetAfterSubmit={false}
-          onSubmit={(data) => {
-            console.log('Form submitted with data:', data)
+          onSubmit={data => {
+            console.log('Form submitted with data:', data);
           }}
-          onError={(error) => {
-            console.error('Form submission error:', error)
+          onError={error => {
+            console.error('Form submission error:', error);
           }}
         >
           <Flex vertical gap="md">
@@ -54,6 +54,6 @@ export const Default: Story = {
         </FormWrapper>
         <Toaster />
       </>
-    )
+    );
   },
-}
+};

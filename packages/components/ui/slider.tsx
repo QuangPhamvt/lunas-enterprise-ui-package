@@ -1,11 +1,11 @@
-'use client'
-import { useMemo } from 'react'
-import { cn } from '@customafk/react-toolkit/utils'
+'use client';
+import { useMemo } from 'react';
+import { cn } from '@customafk/react-toolkit/utils';
 
-import { Slider as SliderPrimitive } from 'radix-ui'
+import { Slider as SliderPrimitive } from 'radix-ui';
 
 function Slider({ className, defaultValue, value, min = 0, max = 100, ...props }: React.ComponentProps<typeof SliderPrimitive.Root>) {
-  const _values = useMemo(() => (Array.isArray(value) ? value : Array.isArray(defaultValue) ? defaultValue : [min, max]), [value, defaultValue, min, max])
+  const _values = useMemo(() => (Array.isArray(value) ? value : Array.isArray(defaultValue) ? defaultValue : [min, max]), [value, defaultValue, min, max]);
 
   return (
     <SliderPrimitive.Root
@@ -21,14 +21,14 @@ function Slider({ className, defaultValue, value, min = 0, max = 100, ...props }
         'data-[orientation=vertical]:min-h-44',
         'data-[orientation=vertical]:w-auto',
         'data-[orientation=vertical]:flex-col',
-        className,
+        className
       )}
       {...props}
     >
       <SliderPrimitive.Track
         data-slot="slider-track"
         className={cn(
-          'bg-muted relative grow overflow-hidden rounded-full data-[orientation=horizontal]:h-1.5 data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-1.5',
+          'bg-muted relative grow overflow-hidden rounded-full data-[orientation=horizontal]:h-1.5 data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-1.5'
         )}
       >
         <SliderPrimitive.Range
@@ -44,7 +44,7 @@ function Slider({ className, defaultValue, value, min = 0, max = 100, ...props }
         />
       ))}
     </SliderPrimitive.Root>
-  )
+  );
 }
 
-export { Slider }
+export { Slider };

@@ -1,9 +1,9 @@
-import { cn } from '@customafk/react-toolkit/utils'
+import { cn } from '@customafk/react-toolkit/utils';
 
-import { BellIcon, CircleQuestionMarkIcon, ShoppingCartIcon } from 'lucide-react'
+import { BellIcon, CircleQuestionMarkIcon, ShoppingCartIcon } from 'lucide-react';
 
-import { Button } from '@/components/ui/button'
-import { SidebarTrigger } from '@/components/ui/sidebar'
+import { Button } from '@/components/ui/button';
+import { SidebarTrigger } from '@/components/ui/sidebar';
 
 export const MainLayoutHeader = () => {
   return (
@@ -15,7 +15,7 @@ export const MainLayoutHeader = () => {
         'flex items-center gap-2 border-b shadow-sm',
         'transition-[width,height] ease-linear',
         'group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)',
-        'px-4',
+        'px-4'
       )}
     >
       <SidebarTrigger />
@@ -38,5 +38,5 @@ export const MainLayoutHeader = () => {
         </Button>
       </div>
     </header>
-  )
-}
+  );
+};

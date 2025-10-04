@@ -1,10 +1,10 @@
-import { cn } from '@customafk/react-toolkit/utils'
+import { cn } from '@customafk/react-toolkit/utils';
 
-import { ArrowRightIcon, SearchIcon } from 'lucide-react'
+import { ArrowRightIcon, SearchIcon } from 'lucide-react';
 
-import { Input } from '../input'
+import { Input } from '../input';
 
-type Props = React.ComponentPropsWithoutRef<typeof Input>
+type Props = React.ComponentPropsWithoutRef<typeof Input>;
 export const SearchInput = ({ className, ...rest }: Props) => {
   return (
     <div className="relative">
@@ -20,5 +20,5 @@ export const SearchInput = ({ className, ...rest }: Props) => {
         <ArrowRightIcon size={16} aria-hidden="true" />
       </button>
     </div>
-  )
-}
+  );
+};

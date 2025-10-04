@@ -1,13 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Pacifico&display=swap') layer(base);
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap') layer(base);
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Pacifico&display=swap") layer(base);
+@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap") layer(base);
 
-@import 'tailwindcss';
-@import 'tw-animate-css';
+@import "tailwindcss";
+@import "tw-animate-css";
 
-@import '../styles/base.css';
-@import '../styles/theme.css';
-@import '../styles/loader.css';
-@import '../styles/typography.css';
+@import "../styles/base.css";
+@import "../styles/theme.css";
+@import "../styles/loader.css";
+@import "../styles/typography.css";
 
 :root {
   --header-height: 3rem;
@@ -16,7 +16,7 @@
 
 @theme inline {
   /* Typography */
-  --font-number: 'Lato', sans-serif;
+  --font-number: "Lato", sans-serif;
 
   /* Border radius */
   --radius-sm: calc(var(--radius) - 0.25rem);

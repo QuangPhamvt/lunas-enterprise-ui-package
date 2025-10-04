@@ -1,4 +1,4 @@
-import { cva, type VariantProps } from 'class-variance-authority'
+import { cva, type VariantProps } from 'class-variance-authority';
 
 /**
  * Button variants definition for styling using class-variance-authority
@@ -168,7 +168,7 @@ export const buttonVariants = cva(
         className: 'text-danger-strong hover:bg-danger-muted focus:ring-danger-weak focus:bg-danger/10 active:bg-danger/10',
       },
     ],
-  },
-)
+  }
+);
 
-export type ButtonVariantProps = VariantProps<typeof buttonVariants>
+export type ButtonVariantProps = VariantProps<typeof buttonVariants>;

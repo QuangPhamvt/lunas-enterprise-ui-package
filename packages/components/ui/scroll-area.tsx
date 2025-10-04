@@ -1,7 +1,7 @@
-'use client'
-import { cn } from '@customafk/react-toolkit/utils'
+'use client';
+import { cn } from '@customafk/react-toolkit/utils';
 
-import { ScrollArea as ScrollAreaPrimitive } from 'radix-ui'
+import { ScrollArea as ScrollAreaPrimitive } from 'radix-ui';
 
 function ScrollArea({ className, children, ref, onScroll, ...props }: React.ComponentProps<typeof ScrollAreaPrimitive.Root>) {
   return (
@@ -12,7 +12,7 @@ function ScrollArea({ className, children, ref, onScroll, ...props }: React.Comp
       <ScrollBar />
       <ScrollAreaPrimitive.Corner />
     </ScrollAreaPrimitive.Root>
-  )
+  );
 }
 
 function ScrollBar({ className, orientation = 'vertical', ...props }: React.ComponentProps<typeof ScrollAreaPrimitive.ScrollAreaScrollbar>) {
@@ -24,13 +24,13 @@ function ScrollBar({ className, orientation = 'vertical', ...props }: React.Comp
         'border-border-weak flex touch-none p-px transition-colors select-none',
         orientation === 'vertical' && 'h-full w-2.5 border-l border-l-transparent',
         orientation === 'horizontal' && 'h-2.5 flex-col border-t border-t-transparent',
-        className,
+        className
       )}
       {...props}
     >
       <ScrollAreaPrimitive.ScrollAreaThumb className="bg-border-weak relative flex-1 rounded-full" />
     </ScrollAreaPrimitive.ScrollAreaScrollbar>
-  )
+  );
 }
 
-export { ScrollArea, ScrollBar }
+export { ScrollArea, ScrollBar };

@@ -1,50 +1,50 @@
-import { useCallback, useRef, useState } from 'react'
-import { cn } from '@customafk/react-toolkit/utils'
+import { useCallback, useRef, useState } from 'react';
+import { cn } from '@customafk/react-toolkit/utils';
 
-import { AlertCircleIcon } from 'lucide-react'
+import { AlertCircleIcon } from 'lucide-react';
 
-import { Skeleton } from './skeleton'
+import { Skeleton } from './skeleton';
 
 type Props = {
-  src?: string
-  alt?: string
-  width?: number | string
-  height?: number | string
-  maxRetries?: number
-  retryDelay?: number
-  className?: string
-  onClick?: () => void
-}
+  src?: string;
+  alt?: string;
+  width?: number | string;
+  height?: number | string;
+  maxRetries?: number;
+  retryDelay?: number;
+  className?: string;
+  onClick?: () => void;
+};
 export const Image: React.FC<Props> = ({ src, alt, width, height, maxRetries = 3, retryDelay = 500, className, onClick }) => {
-  const imageRef = useRef<HTMLImageElement>(null)
-  const [currentSrc, setCurrentSrc] = useState<string | undefined>(src)
-  const [retryCount, setRetryCount] = useState<number>(0)
-  const [isLoaded, setIsLoaded] = useState<boolean>(false)
-  const [hasError, setHasError] = useState<boolean>(false)
+  const imageRef = useRef<HTMLImageElement>(null);
+  const [currentSrc, setCurrentSrc] = useState<string | undefined>(src);
+  const [retryCount, setRetryCount] = useState<number>(0);
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const [hasError, setHasError] = useState<boolean>(false);
 
   const handleLoad = useCallback(() => {
-    setIsLoaded(true)
-  }, [])
+    setIsLoaded(true);
+  }, []);
 
   const handleError = useCallback(() => {
     if (retryCount < maxRetries) {
       // imageRef.current?.style.setProperty('display', 'none')
-      setHasError(false)
-      const newRetryCount = retryCount + 1
-      setRetryCount(newRetryCount)
+      setHasError(false);
+      const newRetryCount = retryCount + 1;
+      setRetryCount(newRetryCount);
 
       // Retry with exponential backoff and cache busting
       setTimeout(() => {
-        const cacheBuster = `?retry=${Date.now()}&attempt=${newRetryCount}`
-        setCurrentSrc(src + cacheBuster)
-      }, retryDelay * newRetryCount)
-      return
+        const cacheBuster = `?retry=${Date.now()}&attempt=${newRetryCount}`;
+        setCurrentSrc(src + cacheBuster);
+      }, retryDelay * newRetryCount);
+      return;
     }
 
-    setHasError(true)
-    setIsLoaded(true)
-    setCurrentSrc(src)
-  }, [maxRetries, retryCount, retryDelay, src])
+    setHasError(true);
+    setIsLoaded(true);
+    setCurrentSrc(src);
+  }, [maxRetries, retryCount, retryDelay, src]);
 
   if (hasError) {
     return (
@@ -54,7 +54,7 @@ export const Image: React.FC<Props> = ({ src, alt, width, height, maxRetries = 3
           <span className="text-danger-weak text-center text-xs @max-[96px]:sr-only">Image failed to load</span>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -70,11 +70,11 @@ export const Image: React.FC<Props> = ({ src, alt, width, height, maxRetries = 3
         className={cn(
           'shadow-card relative h-[120%] w-auto object-cover transition-opacity duration-300',
           isLoaded && 'opacity-100',
-          !isLoaded && 'pointer-events-none opacity-0',
+          !isLoaded && 'pointer-events-none opacity-0'
         )}
         onLoad={handleLoad}
         onError={handleError}
       />
     </div>
-  )
-}
+  );
+};

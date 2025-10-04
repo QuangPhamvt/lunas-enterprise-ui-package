@@ -1,10 +1,10 @@
-'use client'
-import { LoaderIcon } from 'lucide-react'
-import { useTheme } from 'next-themes'
-import { Toaster as Sonner, type ToasterProps } from 'sonner'
+'use client';
+import { LoaderIcon } from 'lucide-react';
+import { useTheme } from 'next-themes';
+import { Toaster as Sonner, type ToasterProps } from 'sonner';
 
 const Toaster = () => {
-  const { theme = 'system' } = useTheme()
+  const { theme = 'system' } = useTheme();
 
   return (
     <Sonner
@@ -34,7 +34,8 @@ const Toaster = () => {
       }}
       className="toaster group pointer-events-auto !z-999999"
     />
-  )
-}
+  );
+};
 
-export { Toaster }
+export { Toaster };
+export default Toaster;

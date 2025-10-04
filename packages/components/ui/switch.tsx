@@ -1,7 +1,7 @@
-'use client'
-import { cn } from '@customafk/react-toolkit/utils'
+'use client';
+import { cn } from '@customafk/react-toolkit/utils';
 
-import { Switch as SwitchPrimitive } from 'radix-ui'
+import { Switch as SwitchPrimitive } from 'radix-ui';
 
 function Switch({ className, ...props }: React.ComponentProps<typeof SwitchPrimitive.Root>) {
   return (
@@ -25,7 +25,7 @@ function Switch({ className, ...props }: React.ComponentProps<typeof SwitchPrimi
         'data-[state=unchecked]:[&_span]:translate-x-0.5',
         'data-[state=unchecked]:[&_span]:shadow-none',
         'data-[state=unchecked]:[&_span]:rtl:-translate-x-0.5',
-        className,
+        className
       )}
       {...props}
     >
@@ -35,11 +35,11 @@ function Switch({ className, ...props }: React.ComponentProps<typeof SwitchPrimi
           'bg-background',
           'pointer-events-none block size-4 rounded-full ring-0 transition-transform',
           'data-[state=checked]:translate-x-[calc(100%-3px)]',
-          'data-[state=unchecked]:translate-x-0',
+          'data-[state=unchecked]:translate-x-0'
         )}
       />
     </SwitchPrimitive.Root>
-  )
+  );
 }
 
-export { Switch }
+export { Switch };

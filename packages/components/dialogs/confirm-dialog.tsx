@@ -7,16 +7,16 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '../ui/alert-dialog'
+} from '../ui/alert-dialog';
 
 type Props = {
-  open?: boolean
-  isLoading?: boolean
-  title: string
-  description: string
-  onOpenChange?: (open: boolean) => void
-  onConfirm?: () => void
-}
+  open?: boolean;
+  isLoading?: boolean;
+  title: string;
+  description: string;
+  onOpenChange?: (open: boolean) => void;
+  onConfirm?: () => void;
+};
 
 export const ConfirmDialog: React.FC<React.PropsWithChildren<Props>> = ({ open, isLoading = false, title, description, onOpenChange, onConfirm }) => {
   return (
@@ -40,5 +40,5 @@ export const ConfirmDialog: React.FC<React.PropsWithChildren<Props>> = ({ open, 
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
-  )
-}
+  );
+};

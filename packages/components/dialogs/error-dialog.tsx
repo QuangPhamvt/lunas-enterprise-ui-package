@@ -1,19 +1,19 @@
-import { useCallback } from 'react'
+import { useCallback } from 'react';
 
-import { AlertTriangleIcon } from 'lucide-react'
+import { AlertTriangleIcon } from 'lucide-react';
 
-import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '../ui/alert-dialog'
+import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '../ui/alert-dialog';
 
 type Props = {
-  open?: boolean
-  title?: string
-  description?: string
-  onOpenChange?: (open: boolean) => void
-}
+  open?: boolean;
+  title?: string;
+  description?: string;
+  onOpenChange?: (open: boolean) => void;
+};
 export const ErrorDialog: React.FC<React.PropsWithChildren<Props>> = ({ open, title, children, onOpenChange }) => {
   const handleClose = useCallback(() => {
-    onOpenChange?.(false)
-  }, [onOpenChange])
+    onOpenChange?.(false);
+  }, [onOpenChange]);
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent className="gap-8 p-4 sm:max-w-md">
@@ -31,5 +31,5 @@ export const ErrorDialog: React.FC<React.PropsWithChildren<Props>> = ({ open, ti
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
-  )
-}
+  );
+};

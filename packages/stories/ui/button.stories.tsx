@@ -1,14 +1,14 @@
-import { Button } from '@/components/ui/button'
-import type { Meta, StoryObj } from '@storybook/react-vite'
+import { Button } from '@/components/ui/button';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   title: 'Components/Button',
   component: Button,
   tags: ['autodocs'],
-} satisfies Meta<typeof Button>
+} satisfies Meta<typeof Button>;
 
-export default meta
-type Story = StoryObj<typeof meta>
+export default meta;
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
@@ -17,49 +17,49 @@ export const Default: Story = {
     isLoading: false,
     className: 'w-40',
   },
-}
+};
 
 export const DefaultSecondary: Story = {
   args: {
     ...Default.args,
     color: 'secondary',
   },
-}
+};
 
 export const DefaultSuccess: Story = {
   args: {
     ...Default.args,
     color: 'success',
   },
-}
+};
 
 export const DefaultImportant: Story = {
   args: {
     ...Default.args,
     color: 'important',
   },
-}
+};
 
 export const DefaultInfo: Story = {
   args: {
     ...Default.args,
     color: 'info',
   },
-}
+};
 
 export const DefaultWarning: Story = {
   args: {
     ...Default.args,
     color: 'warning',
   },
-}
+};
 
 export const DefaultDanger: Story = {
   args: {
     ...Default.args,
     color: 'danger',
   },
-}
+};
 
 export const OutlineMuted: Story = {
   args: {
@@ -67,7 +67,7 @@ export const OutlineMuted: Story = {
     variant: 'outline',
     color: 'muted',
   },
-}
+};
 
 export const OutlinePrimary: Story = {
   args: {
@@ -75,7 +75,7 @@ export const OutlinePrimary: Story = {
     variant: 'outline',
     color: 'primary',
   },
-}
+};
 
 export const OutlineSecondary: Story = {
   args: {
@@ -83,7 +83,7 @@ export const OutlineSecondary: Story = {
     variant: 'outline',
     color: 'secondary',
   },
-}
+};
 
 export const OutlineSuccess: Story = {
   args: {
@@ -91,7 +91,7 @@ export const OutlineSuccess: Story = {
     variant: 'outline',
     color: 'success',
   },
-}
+};
 
 export const OutlineImportant: Story = {
   args: {
@@ -99,7 +99,7 @@ export const OutlineImportant: Story = {
     variant: 'outline',
     color: 'important',
   },
-}
+};
 
 export const OutlineInfo: Story = {
   args: {
@@ -107,7 +107,7 @@ export const OutlineInfo: Story = {
     variant: 'outline',
     color: 'info',
   },
-}
+};
 
 export const OutlineWarning: Story = {
   args: {
@@ -115,7 +115,7 @@ export const OutlineWarning: Story = {
     variant: 'outline',
     color: 'warning',
   },
-}
+};
 
 export const OutlineDanger: Story = {
   args: {
@@ -123,7 +123,7 @@ export const OutlineDanger: Story = {
     variant: 'outline',
     color: 'danger',
   },
-}
+};
 
 export const GhostPrimary: Story = {
   args: {
@@ -131,7 +131,7 @@ export const GhostPrimary: Story = {
     variant: 'ghost',
     color: 'primary',
   },
-}
+};
 
 export const GhostSecondary: Story = {
   args: {
@@ -139,7 +139,7 @@ export const GhostSecondary: Story = {
     variant: 'ghost',
     color: 'secondary',
   },
-}
+};
 
 export const GhostSuccess: Story = {
   args: {
@@ -147,7 +147,7 @@ export const GhostSuccess: Story = {
     variant: 'ghost',
     color: 'success',
   },
-}
+};
 
 export const GhostImportant: Story = {
   args: {
@@ -155,7 +155,7 @@ export const GhostImportant: Story = {
     variant: 'ghost',
     color: 'important',
   },
-}
+};
 
 export const GhostInfo: Story = {
   args: {
@@ -163,7 +163,7 @@ export const GhostInfo: Story = {
     variant: 'ghost',
     color: 'info',
   },
-}
+};
 
 export const GhostWarning: Story = {
   args: {
@@ -171,7 +171,7 @@ export const GhostWarning: Story = {
     variant: 'ghost',
     color: 'warning',
   },
-}
+};
 
 export const GhostDanger: Story = {
   args: {
@@ -179,4 +179,4 @@ export const GhostDanger: Story = {
     variant: 'ghost',
     color: 'danger',
   },
-}
+};
