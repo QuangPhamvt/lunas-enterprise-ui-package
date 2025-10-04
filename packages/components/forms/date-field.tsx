@@ -1,12 +1,15 @@
 'use client';
+import { Activity } from 'react';
 import type { FieldPath, FieldValues } from 'react-hook-form';
-import { format } from '@customafk/react-toolkit/date-fns';
-import { cn } from '@customafk/react-toolkit/utils';
 
 import { CalendarIcon } from 'lucide-react';
 
+import { format } from '@customafk/react-toolkit/date-fns';
+import { cn } from '@customafk/react-toolkit/utils';
+
 import { Button } from '../ui/button';
 import { Calendar } from '../ui/calendar';
+import { FieldContent } from '../ui/field';
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 
@@ -30,8 +33,13 @@ export const DateField = <TFieldValues extends FieldValues = FieldValues>({
     <FormField
       name={name}
       render={({ field }) => (
-        <FormItem className="w-full">
-          <FormLabel>{label}</FormLabel>
+        <FormItem>
+          <Activity mode={label || description ? 'visible' : 'hidden'}>
+            <FieldContent>
+              <FormLabel>{label}</FormLabel>
+              {!!description && <FormDescription>{description}</FormDescription>}
+            </FieldContent>
+          </Activity>
           <Popover modal>
             <PopoverTrigger asChild>
               <FormControl>
@@ -72,7 +80,6 @@ export const DateField = <TFieldValues extends FieldValues = FieldValues>({
               />
             </PopoverContent>
           </Popover>
-          {!!description && <FormDescription>{description}</FormDescription>}
           {isShowErrorMsg && <FormMessage />}
         </FormItem>
       )}

@@ -1,15 +1,16 @@
 import { memo, useCallback, useEffect, useMemo, useRef } from 'react';
-import { cn } from '@customafk/react-toolkit/utils';
 
-import { type Column, flexRender, type Header, type Row, type Table as ReactTable } from '@tanstack/react-table';
+import { type Column, flexRender, type Header, type Table as ReactTable, type Row } from '@tanstack/react-table';
 import { ArrowLeftToLineIcon, ArrowRightToLineIcon, ChevronDown, ChevronUp, EllipsisIcon, LoaderIcon, PinOffIcon } from 'lucide-react';
 
+import { cn } from '@customafk/react-toolkit/utils';
+
+import { useVirtualizer, type VirtualItem } from '@tanstack/react-virtual';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import type { AnyEntity } from '@/types';
-import { useVirtualizer, type VirtualItem } from '@tanstack/react-virtual';
 
 /**
  * Computes styles for pinned columns
@@ -120,11 +121,11 @@ const HeaderContent = memo(({ header }: { header: Header<AnyEntity, unknown> }) 
   return (
     <div className="flex items-center justify-between gap-2 truncate">
       <div
-        className={cn(column.getCanSort() && 'flex h-full cursor-pointer items-center justify-between gap-2 select-none')}
         onClick={toggleSortHandler}
         onKeyDown={handleSort}
         tabIndex={column.getCanSort() ? 0 : undefined}
         role={column.getCanSort() ? 'button' : undefined}
+        className={cn(column.getCanSort() && 'flex h-full cursor-pointer items-center justify-between gap-2 select-none')}
       >
         <span className="truncate">{flexRender(column.columnDef.header, header.getContext())}</span>
         <SortingIndicator column={column} />

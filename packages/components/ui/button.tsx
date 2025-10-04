@@ -3,7 +3,6 @@
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { Slot } from '@radix-ui/react-slot';
-
 import { type ButtonVariantProps, buttonVariants } from './button-variants';
 
 export interface ButtonProps extends Omit<React.ComponentProps<'button'>, 'color'> {
@@ -56,7 +55,7 @@ function Button({ className, variant, size, color, asChild = false, isLoading = 
       <span className={cn('flex items-center justify-center gap-2 text-nowrap', isLoading && 'opacity-0')}>{children}</span>
       {isLoading && (
         <span className="absolute inset-0 flex items-center justify-center" aria-hidden="true">
-          <div className="loader-spinner text-current" role="status" />
+          <div className="loader-spinner text-current" />
         </span>
       )}
     </Comp>

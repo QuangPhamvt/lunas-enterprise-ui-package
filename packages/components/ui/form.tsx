@@ -1,11 +1,11 @@
 'use client';
 import { createContext, useContext, useId } from 'react';
 import { Controller, type ControllerProps, type FieldPath, type FieldValues, FormProvider, useFormContext, useFormState } from 'react-hook-form';
+
 import { cn } from '@customafk/react-toolkit/utils';
 
-import { Label } from '@/components/ui/label';
-
-import { Label as LabelPrimitive, Slot as SlotPrimitive } from 'radix-ui';
+import { type Label as LabelPrimitive, Slot as SlotPrimitive } from 'radix-ui';
+import { Field, FieldDescription, FieldLabel } from './field';
 
 const Form = FormProvider;
 
@@ -61,14 +61,14 @@ function FormItem({ className, ...props }: React.ComponentProps<'div'>) {
 
   return (
     <FormItemContext.Provider value={{ id }}>
-      <div data-slot="form-item" className={cn('grid gap-1', className)} {...props} />
+      <Field orientation="responsive" {...props} />
     </FormItemContext.Provider>
   );
 }
 
-function FormLabel({ className, ...props }: React.ComponentProps<typeof LabelPrimitive.Root>) {
+function FormLabel({ ...props }: React.ComponentProps<typeof LabelPrimitive.Root>) {
   const { formItemId } = useFormField();
-  return <Label data-slot="form-label" className={cn('text-xs', className)} htmlFor={formItemId} {...props} />;
+  return <FieldLabel htmlFor={formItemId} {...props} />;
 }
 
 function FormControl({ ...props }: React.ComponentProps<typeof SlotPrimitive.Slot>) {
@@ -88,7 +88,19 @@ function FormControl({ ...props }: React.ComponentProps<typeof SlotPrimitive.Slo
 function FormDescription({ className, ...props }: React.ComponentProps<'p'>) {
   const { formDescriptionId } = useFormField();
 
-  return <p data-slot="form-description" id={formDescriptionId} className={cn('text-text-positive-weak text-sm', className)} {...props} />;
+  return (
+    <FieldDescription
+      id={formDescriptionId}
+      className={cn(
+        'text-text-positive-weak text-sm leading-normal font-normal',
+        'group-has-[[data-orientation=horizontal]]/field:text-balance',
+        'last:mt-0 nth-last-2:-mt-1 [[data-variant=legend]+&]:-mt-1.5',
+        '[&>a:hover]:text-primary [&>a]:underline [&>a]:underline-offset-4',
+        className
+      )}
+      {...props}
+    />
+  );
 }
 
 function FormMessage({ className, children, ...props }: React.ComponentProps<'p'>) {

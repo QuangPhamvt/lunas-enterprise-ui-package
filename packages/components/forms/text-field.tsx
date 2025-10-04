@@ -1,11 +1,13 @@
 'use client';
-import { useCallback } from 'react';
+import { Activity, useCallback } from 'react';
 import { type FieldPath, type FieldValues, useWatch } from 'react-hook-form';
-import { cn } from '@customafk/react-toolkit/utils';
 
 import { XIcon } from 'lucide-react';
 
+import { cn } from '@customafk/react-toolkit/utils';
+
 import { Flex } from '../layouts/flex';
+import { FieldContent } from '../ui/field';
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage, useFormField } from '../ui/form';
 import { Input } from '../ui/input';
 
@@ -44,8 +46,13 @@ export const TextField = <TFieldValues extends FieldValues = FieldValues>({
     <FormField
       name={name}
       render={({ field }) => (
-        <FormItem className={cn('w-full gap-0', isShowCount || (!!description && 'space-y-1'), className)}>
-          {isShowLabel && <FormLabel>{label}</FormLabel>}
+        <FormItem className={className}>
+          <FieldContent>
+            <Activity mode={label || description ? 'visible' : 'hidden'}>
+              {isShowLabel && <FormLabel>{label}</FormLabel>}
+              {!!description && <FormDescription>{description}</FormDescription>}
+            </Activity>
+          </FieldContent>
           <div className="relative">
             <FormControl>
               <Input {...field} placeholder={placeholder} className={cn('w-full', isShowClearButton && 'pr-9')} onValueChange={onValueChange} />
@@ -65,7 +72,6 @@ export const TextField = <TFieldValues extends FieldValues = FieldValues>({
             {isShowErrorMsg && <FormMessage className="grow" />}
             {isShowCount && <div className="text-text-positive-weak text-end text-xs">{valueWatch?.length ?? 0} characters</div>}
           </Flex>
-          {!!description && <FormDescription>{description}</FormDescription>}
         </FormItem>
       )}
     />

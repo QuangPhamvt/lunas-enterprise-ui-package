@@ -1,6 +1,8 @@
 'use client';
+import { Activity } from 'react';
 import type { FieldPath, FieldValues } from 'react-hook-form';
 
+import { FieldContent } from '../ui/field';
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import { PasswordInput } from '../ui/inputs/password-input';
 
@@ -25,11 +27,15 @@ export const PasswordField = <TFieldValues extends FieldValues = FieldValues>({
       name={name}
       render={({ field }) => (
         <FormItem className="w-full">
-          <FormLabel>{label}</FormLabel>
+          <Activity mode={label || description ? 'visible' : 'hidden'}>
+            <FieldContent>
+              <FormLabel>{label}</FormLabel>
+              {!!description && <FormDescription>{description}</FormDescription>}
+            </FieldContent>
+          </Activity>
           <FormControl>
             <PasswordInput placeholder={placeholder} {...field} onValueChange={onValueChange} />
           </FormControl>
-          {!!description && <FormDescription>{description}</FormDescription>}
           {isShowErrorMsg && <FormMessage />}
         </FormItem>
       )}

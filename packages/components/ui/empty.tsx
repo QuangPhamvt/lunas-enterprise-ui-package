@@ -1,6 +1,7 @@
 import { cn } from '@customafk/react-toolkit/utils';
 
-import { cva, type VariantProps } from 'class-variance-authority';
+import type { VariantProps } from 'class-variance-authority';
+import { cva } from 'class-variance-authority';
 
 function Empty({ className, ...props }: React.ComponentProps<'div'>) {
   return (
@@ -40,7 +41,7 @@ function EmptyDescription({ className, ...props }: React.ComponentProps<'p'>) {
   return (
     <div
       data-slot="empty-description"
-      className={cn('text-text-positive-muted [&>a:hover]:text-primary text-sm/relaxed [&>a]:underline [&>a]:underline-offset-4', className)}
+      className={cn('text-text-positive-weak [&>a:hover]:text-primary text-sm/relaxed [&>a]:underline [&>a]:underline-offset-4', className)}
       {...props}
     />
   );

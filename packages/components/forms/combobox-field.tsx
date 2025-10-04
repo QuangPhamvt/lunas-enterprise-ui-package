@@ -1,13 +1,16 @@
 'use client';
+import { Activity } from 'react';
 import type { FieldPath, FieldValues } from 'react-hook-form';
-import { cn } from '@customafk/react-toolkit/utils';
 
 import { ChevronDownIcon, PlusIcon } from 'lucide-react';
+
+import { cn } from '@customafk/react-toolkit/utils';
 
 import { Button } from '@/components/ui/button';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator } from '@/components/ui/command';
 import { FormControl, FormDescription, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { FieldContent } from '../ui/field';
 
 type Props<TFieldValues extends FieldValues = FieldValues> = {
   name: FieldPath<TFieldValues>;
@@ -34,7 +37,12 @@ export const ComboboxField = <TFieldValues extends FieldValues = FieldValues>({
       render={({ field }) => {
         return (
           <FormItem className="w-full">
-            <FormLabel>{label}</FormLabel>
+            <Activity mode={label || description ? 'visible' : 'hidden'}>
+              <FieldContent>
+                <FormLabel>{label}</FormLabel>
+                {!!description && <FormDescription>{description}</FormDescription>}
+              </FieldContent>
+            </Activity>
             <Popover modal={true}>
               <PopoverTrigger asChild>
                 <FormControl>
@@ -97,7 +105,6 @@ export const ComboboxField = <TFieldValues extends FieldValues = FieldValues>({
                 </Command>
               </PopoverContent>
             </Popover>
-            {!!description && <FormDescription>{description}</FormDescription>}
           </FormItem>
         );
       }}

@@ -1,6 +1,8 @@
 'use client';
+import { Activity } from 'react';
 import type { FieldPath, FieldValues } from 'react-hook-form';
 
+import { FieldContent } from '../ui/field';
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import { MultipleSelector, type Option } from '../ui/multi-select';
 
@@ -8,6 +10,7 @@ type Props<TFieldValues extends FieldValues = FieldValues> = {
   name: FieldPath<TFieldValues>;
   isShowLabel?: boolean;
   isShowErrorMsg?: boolean;
+  className?: string;
   label?: string;
   description?: string;
   placeholder?: string;
@@ -21,6 +24,7 @@ export const MultiSelectField = <TFieldValues extends FieldValues = FieldValues>
   isShowErrorMsg,
   placeholder = 'Select options',
   description = '',
+  className = '',
   options = [],
   onAdd,
 }: Props<TFieldValues>) => {
@@ -34,8 +38,13 @@ export const MultiSelectField = <TFieldValues extends FieldValues = FieldValues>
           onChange(selectedValues);
         };
         return (
-          <FormItem className="w-full gap-0">
-            {isShowLabel && <FormLabel>{label}</FormLabel>}
+          <FormItem className={className}>
+            <Activity mode={label || description ? 'visible' : 'hidden'}>
+              <FieldContent>
+                {isShowLabel && <FormLabel>{label}</FormLabel>}
+                {!!description && <FormDescription>{description}</FormDescription>}
+              </FieldContent>
+            </Activity>
             <FormControl>
               <MultipleSelector
                 placeholder={placeholder}
@@ -46,7 +55,6 @@ export const MultiSelectField = <TFieldValues extends FieldValues = FieldValues>
                 onAddNewItem={onAdd}
               />
             </FormControl>
-            {!!description && <FormDescription>{description}</FormDescription>}
             {isShowErrorMsg && <FormMessage />}
           </FormItem>
         );

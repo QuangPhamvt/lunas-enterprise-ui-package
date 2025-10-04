@@ -1,5 +1,7 @@
+import { Activity } from 'react';
 import { type FieldPath, type FieldValues, useWatch } from 'react-hook-form';
 
+import { FieldContent } from '../ui/field';
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import { NumberInput } from '../ui/inputs/number-input';
 
@@ -30,8 +32,13 @@ export const NumberField = <TFieldValues extends FieldValues = FieldValues>({
     <FormField
       name={name}
       render={({ field: { onChange, ...field } }) => (
-        <FormItem className="w-full gap-0">
-          <FormLabel>{label}</FormLabel>
+        <FormItem>
+          <Activity mode={label || description ? 'visible' : 'hidden'}>
+            <FieldContent>
+              <FormLabel>{label}</FormLabel>
+              {!!description && <FormDescription>{description}</FormDescription>}
+            </FieldContent>
+          </Activity>
           <FormControl>
             <NumberInput
               {...field}
@@ -45,7 +52,6 @@ export const NumberField = <TFieldValues extends FieldValues = FieldValues>({
             />
           </FormControl>
           {isShowCount && <div className="text-muted-foreground text-end text-xs">{valueWatch?.length ?? 0} characters</div>}
-          {!!description && <FormDescription>{description}</FormDescription>}
           {isShowErrorMsg && <FormMessage />}
         </FormItem>
       )}

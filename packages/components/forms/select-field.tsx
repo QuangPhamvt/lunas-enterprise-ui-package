@@ -1,7 +1,8 @@
 'use client';
+import { Activity } from 'react';
 import type { FieldPath, FieldValues } from 'react-hook-form';
-import { cn } from '@customafk/react-toolkit/utils';
 
+import { FieldContent } from '../ui/field';
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 
@@ -32,8 +33,13 @@ export const SelectField = <TFieldValues extends FieldValues = FieldValues>({
     <FormField
       name={name}
       render={({ field }) => (
-        <FormItem className={cn('w-full', className)}>
-          {isShowLabel && <FormLabel>{label}</FormLabel>}
+        <FormItem className={className}>
+          <Activity mode={label || description ? 'visible' : 'hidden'}>
+            <FieldContent>
+              {isShowLabel && <FormLabel>{label}</FormLabel>}
+              {!!description && <FormDescription>{description}</FormDescription>}
+            </FieldContent>
+          </Activity>
           <Select defaultValue={field.value} onValueChange={field.onChange}>
             <FormControl>
               <SelectTrigger className="w-full">
@@ -48,7 +54,6 @@ export const SelectField = <TFieldValues extends FieldValues = FieldValues>({
               ))}
             </SelectContent>
           </Select>
-          {!!description && <FormDescription>{description}</FormDescription>}
           {isShowErrorMsg && <FormMessage />}
         </FormItem>
       )}

@@ -1,17 +1,19 @@
-import { useCallback, useEffect, useState } from 'react';
-import { type FieldValues, type FormState, type SubmitErrorHandler, type SubmitHandler, useForm, type UseFormProps } from 'react-hook-form';
+import { Activity, useCallback, useEffect, useState } from 'react';
+import { type FieldValues, type FormState, type SubmitErrorHandler, type SubmitHandler, type UseFormProps, useForm } from 'react-hook-form';
 
 import { AlertCircleIcon } from 'lucide-react';
 
-import type { AnyEntity } from '@/types';
 import { ErrorMessage } from '@hookform/error-message';
-
+import type { AnyEntity } from '@/types';
 import { ErrorDialog } from '../dialogs/error-dialog';
+import { FieldDescription, FieldGroup, FieldLegend, FieldSeparator, FieldSet } from '../ui/field';
 import { Form } from '../ui/form';
 
 type Props<TFieldValues extends FieldValues = FieldValues> = {
   form: UseFormProps<TFieldValues>;
   isResetAfterSubmit?: boolean;
+  title?: string;
+  description?: string;
   className?: string;
   onSubmit: (data: TFieldValues, formState: FormState<FieldValues>, dirtyFields: FormState<FieldValues>['dirtyFields']) => void | Promise<void>;
   onError?: SubmitErrorHandler<TFieldValues>;
@@ -21,6 +23,8 @@ type Props<TFieldValues extends FieldValues = FieldValues> = {
 export const FormWrapper = <TFieldValues extends FieldValues = FieldValues>({
   form: FormConfig,
   isResetAfterSubmit = true,
+  title,
+  description,
   className,
   onSubmit,
   onError,
@@ -71,7 +75,14 @@ export const FormWrapper = <TFieldValues extends FieldValues = FieldValues>({
   return (
     <Form {...form}>
       <form className={className} onSubmit={handleSubmit(handleFormSubmit, handleFormError)}>
-        {children}
+        <FieldSet>
+          <Activity mode={title || description ? 'visible' : 'hidden'}>
+            <FieldLegend>{title}</FieldLegend>
+            <FieldDescription>{description}</FieldDescription>
+            <FieldSeparator />
+          </Activity>
+          <FieldGroup>{children}</FieldGroup>
+        </FieldSet>
       </form>
       <ErrorDialog
         open={errorOpen}
@@ -81,7 +92,7 @@ export const FormWrapper = <TFieldValues extends FieldValues = FieldValues>({
       >
         {errorOpen && (
           <>
-            {Object.keys(formState.errors).length > 0 ? (
+            <Activity mode={Object.keys(formState.errors).length > 0 ? 'visible' : 'hidden'}>
               <div className="flex max-w-100 flex-col gap-2 px-4">
                 <p className="text-muted-foreground text-sm font-semibold">Cảnh báo: Vui lòng kiểm tra các lỗi sau:</p>
                 <div className="flex flex-col space-y-1">
@@ -91,18 +102,17 @@ export const FormWrapper = <TFieldValues extends FieldValues = FieldValues>({
                       errors={formState.errors}
                       name={key as AnyEntity}
                       render={({ messages }) => {
+                        if (!messages) return null;
                         return (
                           <>
-                            {messages
-                              ? Object.entries(messages).map(([type, message]) => {
-                                  return (
-                                    <div key={type} className="text-accent-foreground flex items-start gap-x-1 truncate text-sm font-normal">
-                                      <AlertCircleIcon size={16} className="text-destructive mt-0.5 min-w-4 flex-0" />
-                                      <p className="line-clamp-2 flex-1 text-wrap">{message}</p>
-                                    </div>
-                                  );
-                                })
-                              : null}
+                            {Object.entries(messages).map(([type, message]) => {
+                              return (
+                                <div key={type} className="text-accent-foreground flex items-start gap-x-1 truncate text-sm font-normal">
+                                  <AlertCircleIcon size={16} className="text-destructive mt-0.5 min-w-4 flex-0" />
+                                  <p className="line-clamp-2 flex-1 text-wrap">{message}</p>
+                                </div>
+                              );
+                            })}
                           </>
                         );
                       }}
@@ -110,9 +120,10 @@ export const FormWrapper = <TFieldValues extends FieldValues = FieldValues>({
                   ))}
                 </div>
               </div>
-            ) : (
+            </Activity>
+            <Activity mode={Object.keys(formState.errors).length === 0 ? 'visible' : 'hidden'}>
               <p className="text-muted-foreground text-sm">No errors found.</p>
-            )}
+            </Activity>
           </>
         )}
       </ErrorDialog>

@@ -205,6 +205,10 @@
       "import": "./dist/ui/button.js",
       "require": "./dist/ui/button.cjs"
     },
+    "./ui/button-group": {
+      "import": "./dist/ui/button-group.js",
+      "require": "./dist/ui/button-group.cjs"
+    },
     "./ui/buttons/add-new": {
       "import": "./dist/ui/buttons/add-new.js",
       "require": "./dist/ui/buttons/add-new.cjs"
@@ -257,6 +261,14 @@
       "import": "./dist/ui/dropdown-menu.js",
       "require": "./dist/ui/dropdown-menu.cjs"
     },
+    "./ui/empty": {
+      "import": "./dist/ui/empty.js",
+      "require": "./dist/ui/empty.cjs"
+    },
+    "./ui/field": {
+      "import": "./dist/ui/field.js",
+      "require": "./dist/ui/field.cjs"
+    },
     "./ui/file-uploader": {
       "import": "./dist/ui/file-uploader.js",
       "require": "./dist/ui/file-uploader.cjs"
@@ -284,6 +296,10 @@
     "./ui/inputs/search-input": {
       "import": "./dist/ui/inputs/search-input.js",
       "require": "./dist/ui/inputs/search-input.cjs"
+    },
+    "./ui/item": {
+      "import": "./dist/ui/item.js",
+      "require": "./dist/ui/item.cjs"
     },
     "./ui/label": {
       "import": "./dist/ui/label.js",
@@ -352,6 +368,10 @@
     "./ui/sonner": {
       "import": "./dist/ui/sonner.js",
       "require": "./dist/ui/sonner.cjs"
+    },
+    "./ui/spinner": {
+      "import": "./dist/ui/spinner.js",
+      "require": "./dist/ui/spinner.cjs"
     },
     "./ui/switch": {
       "import": "./dist/ui/switch.js",
