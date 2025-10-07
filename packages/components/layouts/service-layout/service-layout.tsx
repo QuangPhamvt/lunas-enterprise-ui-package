@@ -1,10 +1,12 @@
 'use client';
 import { useState } from 'react';
-import { useMediaQuery } from '@customafk/react-toolkit/hooks/useMediaQuery';
-import { cn } from '@customafk/react-toolkit/utils';
 
 import { LockIcon, LogInIcon, LogOutIcon, ShoppingBag, ShoppingCartIcon, UserIcon } from 'lucide-react';
 
+import { useMediaQuery } from '@customafk/react-toolkit/hooks/useMediaQuery';
+import { cn } from '@customafk/react-toolkit/utils';
+
+import { GoogleLogin } from '@react-oauth/google';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -20,8 +22,6 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { GoogleLogin } from '@react-oauth/google';
-
 import { CartList } from './components/cart';
 import { ServiceLayoutContext, type ServiceLayoutContextProps, useServiceLayout } from './hooks/use-service-layout';
 import {
@@ -56,8 +56,9 @@ export const ServiceLayoutProvider: React.FC<React.PropsWithChildren<ServiceLayo
         onDeletingCart,
         onLogout,
       }}
-      children={children}
-    />
+    >
+      {children}
+    </ServiceLayoutContext.Provider>
   );
 };
 

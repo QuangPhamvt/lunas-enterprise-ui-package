@@ -1,6 +1,6 @@
 {
   "name": "@customafk/lunas-ui",
-  "version": "0.0.81",
+  "version": "0.0.86",
   "description": "UI library for Lunas Enterprise",
   "type": "module",
   "author": {
@@ -25,6 +25,10 @@
     "node": ">= 22.0.0"
   },
   "exports": {
+    "./styles/base": "./styles/base.css",
+    "./styles/loader": "./styles/loader.css",
+    "./styles/theme": "./styles/theme.css",
+    "./styles/typography": "./styles/typography.css",
     "./cards/grid-product-card": {
       "import": "./dist/cards/grid-product-card.js",
       "require": "./dist/cards/grid-product-card.cjs"
@@ -157,6 +161,18 @@
       "import": "./dist/layouts/service-layout/index.js",
       "require": "./dist/layouts/service-layout/index.cjs"
     },
+    "./products/add-cart-button": {
+      "import": "./dist/products/add-cart-button.js",
+      "require": "./dist/products/add-cart-button.cjs"
+    },
+    "./products/product-loading-page": {
+      "import": "./dist/products/product-loading-page.js",
+      "require": "./dist/products/product-loading-page.cjs"
+    },
+    "./products/product-quantity-control": {
+      "import": "./dist/products/product-quantity-control.js",
+      "require": "./dist/products/product-quantity-control.cjs"
+    },
     "./systems/google": {
       "import": "./dist/systems/google.js",
       "require": "./dist/systems/google.cjs"
@@ -252,6 +268,10 @@
     "./ui/dialog": {
       "import": "./dist/ui/dialog.js",
       "require": "./dist/ui/dialog.cjs"
+    },
+    "./ui/drawer": {
+      "import": "./dist/ui/drawer.js",
+      "require": "./dist/ui/drawer.cjs"
     },
     "./ui/dropdown-menu": {
       "import": "./dist/ui/dropdown-menu.js",

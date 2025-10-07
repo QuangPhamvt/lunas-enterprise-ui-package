@@ -1,5 +1,5 @@
-import { DataList, DataListItem } from '@/components/data-display/data-list';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { DataList, DataListItem } from '@/components/data-display/data-list';
 
 const meta = {
   tags: ['autodocs'],

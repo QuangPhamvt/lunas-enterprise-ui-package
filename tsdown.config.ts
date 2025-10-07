@@ -42,6 +42,10 @@ export default defineConfig([
       './packages/components/layouts/grid.tsx',
       './packages/components/layouts/service-layout/index.ts',
 
+      './packages/components/products/add-cart-button.tsx',
+      './packages/components/products/product-quantity-control.tsx',
+      './packages/components/products/product-loading-page.tsx',
+
       './packages/components/systems/google.tsx',
 
       './packages/components/table/index.tsx',
@@ -72,6 +76,7 @@ export default defineConfig([
       './packages/components/ui/command.tsx',
       './packages/components/ui/context-menu.tsx',
       './packages/components/ui/dialog.tsx',
+      './packages/components/ui/drawer.tsx',
       './packages/components/ui/dropdown-menu.tsx',
       './packages/components/ui/empty.tsx',
       './packages/components/ui/field.tsx',
@@ -109,7 +114,7 @@ export default defineConfig([
       './packages/components/ui/tooltip.tsx',
     ],
     dts: true,
-    exports: true,
+    exports: false,
     sourcemap: true,
     format: ['esm', 'cjs'],
     minify: true,

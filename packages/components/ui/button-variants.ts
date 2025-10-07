@@ -39,7 +39,7 @@ export const buttonVariants = cva(
         sm: 'px-2 py-1.5 gap-1 text-xs focus:ring-4 has-[>svg]:px-2.5',
         default: 'px-2.5 py-2 gap-1 text-sm focus:ring-4 has-[>svg]:px-3',
         lg: 'px-3 py-2.5 gap-1 text-base focus:ring-6 has-[>svg]:px-4',
-        icon: 'size-8',
+        icon: 'size-8 focus:ring-2',
       },
     },
     defaultVariants: {
