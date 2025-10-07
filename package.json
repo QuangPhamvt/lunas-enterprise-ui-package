@@ -1,6 +1,6 @@
 {
   "name": "@customafk/lunas-ui",
-  "version": "0.0.86",
+  "version": "0.0.87",
   "description": "UI library for Lunas Enterprise",
   "type": "module",
   "author": {
@@ -160,6 +160,22 @@
     "./layouts/service-layout": {
       "import": "./dist/layouts/service-layout/index.js",
       "require": "./dist/layouts/service-layout/index.cjs"
+    },
+    "./pages/FeatureDeveloping": {
+      "import": "./dist/pages/FeatureDeveloping.js",
+      "require": "./dist/pages/FeatureDeveloping.cjs"
+    },
+    "./pages/FeatureFixing": {
+      "import": "./dist/pages/FeatureFixing.js",
+      "require": "./dist/pages/FeatureFixing.cjs"
+    },
+    "./pages/NotAuthorized": {
+      "import": "./dist/pages/NotAuthorized.js",
+      "require": "./dist/pages/NotAuthorized.cjs"
+    },
+    "./pages/NotFound": {
+      "import": "./dist/pages/NotFound.js",
+      "require": "./dist/pages/NotFound.cjs"
     },
     "./products/add-cart-button": {
       "import": "./dist/products/add-cart-button.js",

@@ -42,6 +42,11 @@ export default defineConfig([
       './packages/components/layouts/grid.tsx',
       './packages/components/layouts/service-layout/index.ts',
 
+      './packages/components/pages/FeatureDeveloping.tsx',
+      './packages/components/pages/FeatureFixing.tsx',
+      './packages/components/pages/NotAuthorized.tsx',
+      './packages/components/pages/NotFound.tsx',
+
       './packages/components/products/add-cart-button.tsx',
       './packages/components/products/product-quantity-control.tsx',
       './packages/components/products/product-loading-page.tsx',
