@@ -3,13 +3,13 @@ import { createContext, useContext } from 'react';
 import type { CredentialResponse } from '@react-oauth/google';
 
 type Cart = {
+  id: string;
   productUuid: string;
   productName: string;
   variantUuid: string;
   variantName: string;
   imageUrl: string;
-  optionValue: string;
-  optionTitle: string;
+  options: Array<{ label: string; value: string }>;
   quantity: number;
   price: number;
 };

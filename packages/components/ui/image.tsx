@@ -1,7 +1,8 @@
 import { useCallback, useRef, useState } from 'react';
-import { cn } from '@customafk/react-toolkit/utils';
 
 import { AlertCircleIcon } from 'lucide-react';
+
+import { cn } from '@customafk/react-toolkit/utils';
 
 import { Skeleton } from './skeleton';
 
@@ -13,9 +14,10 @@ type Props = {
   maxRetries?: number;
   retryDelay?: number;
   className?: string;
+  imageClassName?: string;
   onClick?: () => void;
 };
-export const Image: React.FC<Props> = ({ src, alt, width, height, maxRetries = 3, retryDelay = 500, className, onClick }) => {
+export const Image: React.FC<Props> = ({ src, alt, width, height, maxRetries = 3, retryDelay = 500, className, imageClassName, onClick }) => {
   const imageRef = useRef<HTMLImageElement>(null);
   const [currentSrc, setCurrentSrc] = useState<string | undefined>(src);
   const [retryCount, setRetryCount] = useState<number>(0);
@@ -70,7 +72,8 @@ export const Image: React.FC<Props> = ({ src, alt, width, height, maxRetries = 3
         className={cn(
           'shadow-card relative h-[120%] w-auto object-cover transition-opacity duration-300',
           isLoaded && 'opacity-100',
-          !isLoaded && 'pointer-events-none opacity-0'
+          !isLoaded && 'pointer-events-none opacity-0',
+          imageClassName
         )}
         onLoad={handleLoad}
         onError={handleError}

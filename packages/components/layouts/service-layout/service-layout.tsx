@@ -110,17 +110,12 @@ export const ServiceLayoutCartInfo: React.FC = () => {
       <SheetTrigger asChild>
         <Button size="icon" variant="ghost" color="secondary" className="relative size-10 rounded-full">
           <ShoppingCartIcon />
-          {totalItems > 0 && (
-            <span className="bg-primary text-primary-foreground absolute -top-1 -right-1 flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-xs font-bold">
-              {totalItems}
-            </span>
-          )}
         </Button>
       </SheetTrigger>
       <SheetContent className="w-[95vw] sm:max-w-md">
         <SheetHeader className="border-border-weak flex-0 border-b pb-3">
           <SheetTitle className="flex items-center gap-2">
-            <ShoppingBag className="h-5 w-5" />
+            <ShoppingBag size={20} />
             <span>Giỏ hàng của bạn</span>
             {totalItems > 0 && <span className="text-text-positive-weak text-sm font-normal">({totalItems} sản phẩm)</span>}
           </SheetTitle>

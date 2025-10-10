@@ -1,5 +1,6 @@
 import { PackageIcon } from 'lucide-react';
 
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import {
   ServiceLayoutHeader,
   ServiceLayoutMain,
@@ -19,7 +20,6 @@ import {
   ServiceLayoutWrapper,
 } from '@/components/layouts/service-layout';
 import ReactOAuth from '@/components/systems/google';
-import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   tags: ['autodocs'],
@@ -40,24 +40,42 @@ export const Default: Story = {
     email: 'quangpm220503vt@gmail.com',
     inStockCarts: [
       {
+        id: '1',
         productUuid: '1',
         productName: 'Nike Air Max 97',
         variantUuid: '1-1',
         variantName: 'White/Black',
         imageUrl: 'https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/55f6abe8-760c-427f-8cfa-b2df31e5bf5b/air-max-97-shoes-EzcZ6m.png',
-        optionValue: '42',
-        optionTitle: 'Size',
+        options: [
+          {
+            label: 'Size',
+            value: '42',
+          },
+          {
+            label: 'Color',
+            value: 'Black/White',
+          },
+        ],
         quantity: 1,
         price: 4500000,
       },
       {
+        id: '2',
         productUuid: '2',
         productName: 'Nike Dunk Low',
         variantUuid: '2-1',
         variantName: 'Panda',
         imageUrl: 'https://static.nike.com/a/images/t_PDP_1280_v1/f_auto,q_auto:eco/5e7687f1-c13e-4bac-8467-18c3fb74fdfe/dunk-low-shoes-p6dC9q.png',
-        optionValue: '41',
-        optionTitle: 'Size',
+        options: [
+          {
+            label: 'Size',
+            value: '42',
+          },
+          {
+            label: 'Color',
+            value: 'Black/White',
+          },
+        ],
         quantity: 2,
         price: 3200000,
       },
@@ -124,7 +142,7 @@ export const Default: Story = {
                 <ServiceLayoutMainHeader>App Layout Main Header</ServiceLayoutMainHeader>
                 <ServiceLayoutMainGroup>
                   {Array.from({ length: 100 }).map((_, index) => (
-                    <ServiceLayoutMainGroupContent key={index}>Content</ServiceLayoutMainGroupContent>
+                    <ServiceLayoutMainGroupContent key={index.toString()}>Content</ServiceLayoutMainGroupContent>
                   ))}
                 </ServiceLayoutMainGroup>
               </ServiceLayoutMainContent>

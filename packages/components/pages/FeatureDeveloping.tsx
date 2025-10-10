@@ -1,6 +1,8 @@
-import { Button } from '../ui/button';
-import { cn } from '@customafk/react-toolkit/utils';
 import { Construction } from 'lucide-react';
+
+import { cn } from '@customafk/react-toolkit/utils';
+
+import { Button } from '../ui/button';
 
 export interface FeatureDevelopingProps {
   title?: string;
