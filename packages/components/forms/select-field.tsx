@@ -40,21 +40,23 @@ export const SelectField = <TFieldValues extends FieldValues = FieldValues>({
               {!!description && <FormDescription>{description}</FormDescription>}
             </FieldContent>
           </Activity>
-          <Select defaultValue={field.value} onValueChange={field.onChange}>
-            <FormControl>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder={placeholder} />
-              </SelectTrigger>
-            </FormControl>
-            <SelectContent>
-              {options.map(option => (
-                <SelectItem key={option.value} disabled={disabledValues.includes(option.value)} value={option.value}>
-                  {option.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          {isShowErrorMsg && <FormMessage />}
+          <div className="basis-3/5 flex justify-end">
+            <Select defaultValue={field.value} onValueChange={field.onChange}>
+              <FormControl>
+                <SelectTrigger className="w-full md:max-w-80">
+                  <SelectValue placeholder={placeholder} />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                {options.map(option => (
+                  <SelectItem key={option.value} disabled={disabledValues.includes(option.value)} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {isShowErrorMsg && <FormMessage />}
+          </div>
         </FormItem>
       )}
     />

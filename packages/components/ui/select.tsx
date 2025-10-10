@@ -92,6 +92,7 @@ function SelectContent({ className, children, position = 'popper', ...props }: R
           'data-[side=right]:slide-in-from-left-2',
           'data-[side=top]:slide-in-from-bottom-2',
           'origin-(--radix-select-content-transform-origin)',
+          'w-(--radix-select-trigger-width)',
           position === 'popper' && 'data-[side=bottom]:translate-y-1',
           position === 'popper' && 'data-[side=left]:-translate-x-1',
           position === 'popper' && 'data-[side=right]:translate-x-1',
@@ -150,12 +151,12 @@ function SelectItem({ className, children, ...props }: React.ComponentProps<type
       )}
       {...props}
     >
+      <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
       <span className="absolute right-2 flex size-3.5 items-center justify-center">
         <SelectPrimitive.ItemIndicator>
           <CheckIcon size={16} />
         </SelectPrimitive.ItemIndicator>
       </span>
-      <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
     </SelectPrimitive.Item>
   );
 }

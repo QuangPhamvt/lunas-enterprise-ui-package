@@ -5,11 +5,13 @@ import { TextField } from '@/components/forms/text-field';
 import { Button } from '@/components/ui/button';
 import { FieldGroup, FieldSeparator } from '@/components/ui/field';
 import { Toaster } from '@/components/ui/sonner';
+import { SelectField } from '@/components/forms/select-field';
 
 type TSchema = {
   code: string;
   name: string;
   exchangeRate: number;
+  option: { label: string; value: string };
 };
 
 const meta: Meta<typeof FormWrapper<TSchema>> = {
@@ -31,6 +33,7 @@ export const Default: Story = {
               code: '',
               name: '',
               exchangeRate: 1,
+              option: { label: 'Option 1 long long long long long long', value: 'option1' },
             },
           }}
           isResetAfterSubmit={false}
@@ -44,12 +47,22 @@ export const Default: Story = {
           }}
         >
           <FieldGroup>
-            <TextField<TSchema> name="code" label="Mã tiền tệ" placeholder="VND, USD, EUR..." />
+            <TextField<TSchema> name="code" label="Mã tiền tệ" placeholder="VND, USD, EUR..." isShowCount isShowClearButton />
             <FieldSeparator />
             <TextField<TSchema> name="name" label="Tên tiền tệ" placeholder="VND, USD, EUR..." />
             <FieldSeparator />
             <NumberField<TSchema> name="exchangeRate" label="Tỷ giá" placeholder="0" />
             <FieldSeparator />
+            <SelectField<TSchema>
+              name="option"
+              label="Select Option"
+              options={[
+                { label: 'Option 1 long long long long long long', value: 'option1' },
+                { label: 'Option 2', value: 'option2' },
+                { label: 'Option 3', value: 'option3' },
+              ]}
+              placeholder="Select an option"
+            />
             <FieldGroup>
               <Button type="submit" className="w-40">
                 Submit

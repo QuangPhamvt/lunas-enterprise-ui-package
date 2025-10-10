@@ -45,17 +45,20 @@ export const MultiSelectField = <TFieldValues extends FieldValues = FieldValues>
                 {!!description && <FormDescription>{description}</FormDescription>}
               </FieldContent>
             </Activity>
-            <FormControl>
-              <MultipleSelector
-                placeholder={placeholder}
-                emptyIndicator="No options available"
-                value={val}
-                options={options}
-                onChange={handleOnChange}
-                onAddNewItem={onAdd}
-              />
-            </FormControl>
-            {isShowErrorMsg && <FormMessage />}
+            <div className="basis-3/5 flex justify-end">
+              <FormControl>
+                <MultipleSelector
+                  placeholder={placeholder}
+                  emptyIndicator="No options available"
+                  value={val}
+                  options={options}
+                  className="w-full md:max-w-80"
+                  onChange={handleOnChange}
+                  onAddNewItem={onAdd}
+                />
+              </FormControl>
+              {isShowErrorMsg && <FormMessage />}
+            </div>
           </FormItem>
         );
       }}

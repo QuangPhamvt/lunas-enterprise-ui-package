@@ -1,9 +1,9 @@
 'use client';
+
 import { cn } from '@customafk/react-toolkit/utils';
 
-import { buttonVariants } from './button-variants';
-
 import { AlertDialog as AlertDialogPrimitive } from 'radix-ui';
+import { buttonVariants } from './button-variants';
 
 function AlertDialog({ ...props }: React.ComponentProps<typeof AlertDialogPrimitive.Root>) {
   return <AlertDialogPrimitive.Root data-slot="alert-dialog" {...props} />;
@@ -21,6 +21,7 @@ function AlertDialogOverlay({ className, ...props }: React.ComponentProps<typeof
   return (
     <AlertDialogPrimitive.Overlay
       data-slot="alert-dialog-overlay"
+      style={{ pointerEvents: 'none' }}
       className={cn(
         'fixed inset-0 z-50 bg-black/50',
         'data-[state=open]:animate-in',

@@ -31,10 +31,12 @@ export const SwitchField = <TFieldValues extends FieldValues = FieldValues>({
               {description && <FormDescription className="text-xs">{description}</FormDescription>}
             </Activity>
           </FieldContent>
-          <FormControl>
-            <Switch checked={field.value} className="!w-8" onCheckedChange={field.onChange} />
-          </FormControl>
-          {isShowErrorMsg && <FormMessage />}
+          <div className="basis-3/5">
+            <FormControl>
+              <Switch checked={field.value} className="!w-8" onCheckedChange={field.onChange} />
+            </FormControl>
+            {isShowErrorMsg && <FormMessage />}
+          </div>
         </FormItem>
       )}
     />

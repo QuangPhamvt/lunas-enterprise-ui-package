@@ -1,5 +1,6 @@
 'use client';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { Input } from '../input';
@@ -110,6 +111,7 @@ interface IProps extends React.HTMLAttributes<HTMLInputElement> {
    * Description: Callback function for the value change
    * Usage: Callback function for the value change
    */
+  wrapperClassName?: string;
   onValueChange?: (value?: number) => void;
   onBlur?: () => void;
 }
@@ -131,6 +133,7 @@ export const NumberInput: React.FC<IProps> = ({
   decimal,
   placeholder,
   precision,
+  wrapperClassName,
   onChange,
   onValueChange,
   onBlur,
@@ -168,7 +171,7 @@ export const NumberInput: React.FC<IProps> = ({
     (value: number, precision: number) => {
       if (roundingRule === 'none') return value;
 
-      const factor = Math.pow(10, precision);
+      const factor = 10 ** precision;
       const scaledValue = value * factor;
 
       switch (roundingRule) {
@@ -290,10 +293,10 @@ export const NumberInput: React.FC<IProps> = ({
     if (!_unitRef.current || !_inputRef.current || !unitText) return;
     const unitWidth = _unitRef.current.offsetWidth;
     _inputRef.current.style.setProperty('padding-right', `${(unitWidth + 10) / 16}rem`);
-  }, [disabled, unitText]);
+  }, [unitText]);
 
   return (
-    <div className="relative">
+    <div className={cn('relative', wrapperClassName)}>
       <Input
         {...props}
         ref={_inputRef}

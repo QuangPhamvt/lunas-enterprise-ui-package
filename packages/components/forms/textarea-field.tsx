@@ -2,6 +2,7 @@
 import { Activity } from 'react';
 import { type FieldPath, type FieldValues, useWatch } from 'react-hook-form';
 
+import { Flex } from '../layouts/flex';
 import { FieldContent } from '../ui/field';
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import { Textarea } from '../ui/textarea';
@@ -39,11 +40,15 @@ export const TextareaField = <TFieldValues extends FieldValues = FieldValues>({
               {!!description && <FormDescription>{description}</FormDescription>}
             </FieldContent>
           </Activity>
-          <FormControl>
-            <Textarea {...field} placeholder={placeholder} className="w-full" rows={rows} onValueChange={onValueChange} />
-          </FormControl>
-          {isShowCount && <div className="text-muted-foreground text-end text-xs">{valueWatch?.length ?? 0} characters</div>}
-          {isShowErrorMsg && <FormMessage />}
+          <div className="relative basis-3/5">
+            <FormControl>
+              <Textarea {...field} placeholder={placeholder} className="w-full" rows={rows} onValueChange={onValueChange} />
+            </FormControl>
+            <Flex width="full" padding="none" justify="end">
+              {isShowCount && <div className="text-muted-foreground text-end text-xs">{valueWatch?.length ?? 0} characters</div>}
+              {isShowErrorMsg && <FormMessage />}
+            </Flex>
+          </div>
         </FormItem>
       )}
     />

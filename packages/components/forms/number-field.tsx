@@ -39,20 +39,22 @@ export const NumberField = <TFieldValues extends FieldValues = FieldValues>({
               {!!description && <FormDescription>{description}</FormDescription>}
             </FieldContent>
           </Activity>
-          <FormControl>
-            <NumberInput
-              {...field}
-              placeholder={placeholder}
-              className="w-full"
-              unitText={unitText}
-              onValueChange={value => {
-                onChange(value);
-                onValueChange?.(value);
-              }}
-            />
-          </FormControl>
-          {isShowCount && <div className="text-muted-foreground text-end text-xs">{valueWatch?.length ?? 0} characters</div>}
-          {isShowErrorMsg && <FormMessage />}
+          <div className="relative basis-3/5 flex justify-end">
+            <FormControl>
+              <NumberInput
+                {...field}
+                placeholder={placeholder}
+                unitText={unitText}
+                wrapperClassName="w-full md:max-w-60"
+                onValueChange={value => {
+                  onChange(value);
+                  onValueChange?.(value);
+                }}
+              />
+            </FormControl>
+            {isShowCount && <div className="text-muted-foreground text-end text-xs">{valueWatch?.length ?? 0} characters</div>}
+            {isShowErrorMsg && <FormMessage />}
+          </div>
         </FormItem>
       )}
     />
