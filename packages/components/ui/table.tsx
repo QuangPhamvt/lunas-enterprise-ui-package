@@ -1,5 +1,7 @@
 'use client';
+
 import { cn } from '@customafk/react-toolkit/utils';
+import { memo } from 'react';
 
 function Table({ className, ...props }: React.ComponentProps<'table'>) {
   return (
@@ -36,7 +38,7 @@ function TableFooter({ className, ...props }: React.ComponentProps<'tfoot'>) {
   return <tfoot data-slot="table-footer" className={cn('border-border-weak border-t font-medium [&>tr]:last:border-b-0', className)} {...props} />;
 }
 
-function TableRow({ className, ...props }: React.ComponentProps<'tr'>) {
+const TableRow = memo(({ className, ...props }: React.ComponentProps<'tr'>) => {
   return (
     <tr
       data-slot="table-row"
@@ -44,9 +46,10 @@ function TableRow({ className, ...props }: React.ComponentProps<'tr'>) {
       {...props}
     />
   );
-}
+});
+TableRow.displayName = 'TableRow';
 
-function TableHead({ className, ...props }: React.ComponentProps<'th'>) {
+const TableHead = memo(({ className, ...props }: React.ComponentProps<'th'>) => {
   return (
     <th
       data-slot="table-head"
@@ -60,7 +63,8 @@ function TableHead({ className, ...props }: React.ComponentProps<'th'>) {
       {...props}
     />
   );
-}
+});
+TableHead.displayName = 'TableHead';
 
 function TableCell({ className, ...props }: React.ComponentProps<'td'>) {
   return (

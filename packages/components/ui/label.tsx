@@ -1,4 +1,5 @@
 'use client';
+
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { Label as LabelPrimitive } from 'radix-ui';
@@ -10,7 +11,7 @@ function Label({ className, ...props }: React.ComponentProps<typeof LabelPrimiti
       className={cn(
         'text-text-positive',
         'flex items-center gap-2',
-        'text-sm leading-none font-medium select-none',
+        'text-sm/6 leading-none font-medium select-none',
         'group-data-[disabled=true]:pointer-events-none',
         'group-data-[disabled=true]:opacity-50',
         'peer-disabled:cursor-not-allowed',

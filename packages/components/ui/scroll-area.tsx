@@ -1,9 +1,11 @@
 'use client';
+import { memo } from 'react';
+
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { ScrollArea as ScrollAreaPrimitive } from 'radix-ui';
 
-function ScrollArea({ className, children, ref, onScroll, ...props }: React.ComponentProps<typeof ScrollAreaPrimitive.Root>) {
+const ScrollArea = memo(({ className, children, ref, onScroll, ...props }: React.ComponentProps<typeof ScrollAreaPrimitive.Root>) => {
   return (
     <ScrollAreaPrimitive.Root data-slot="scroll-area" className={cn('relative overflow-hidden', className)} {...props}>
       <ScrollAreaPrimitive.Viewport ref={ref} className="size-full rounded-[inherit]" onScroll={onScroll}>
@@ -13,9 +15,10 @@ function ScrollArea({ className, children, ref, onScroll, ...props }: React.Comp
       <ScrollAreaPrimitive.Corner />
     </ScrollAreaPrimitive.Root>
   );
-}
+});
+ScrollArea.displayName = 'ScrollArea';
 
-function ScrollBar({ className, orientation = 'vertical', ...props }: React.ComponentProps<typeof ScrollAreaPrimitive.ScrollAreaScrollbar>) {
+const ScrollBar = memo(({ className, orientation = 'vertical', ...props }: React.ComponentProps<typeof ScrollAreaPrimitive.ScrollAreaScrollbar>) => {
   return (
     <ScrollAreaPrimitive.ScrollAreaScrollbar
       data-slot="scroll-area-scrollbar"
@@ -31,6 +34,7 @@ function ScrollBar({ className, orientation = 'vertical', ...props }: React.Comp
       <ScrollAreaPrimitive.ScrollAreaThumb className="bg-border-weak relative flex-1 rounded-full" />
     </ScrollAreaPrimitive.ScrollAreaScrollbar>
   );
-}
+});
+ScrollBar.displayName = 'ScrollBar';
 
 export { ScrollArea, ScrollBar };

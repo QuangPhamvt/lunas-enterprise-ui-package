@@ -14,12 +14,16 @@
   --primary-weak: oklch(0.81 0.1 294); /* --color-violet-300 */
   --primary-strong: oklch(0.49 0.24 293); /* --color-violet-700 */
   --primary-intense: oklch(0.38 0.18 294); /* --color-violet-900 */
+  --primary-bg-subtle: oklch(0.94 0.03 295); /* --color-violet-100 */
+  --primary-border-subtle: oklch(0.81 0.10 294); /* --color-zinc-300 */
 
   --secondary: oklch(0.55 0.02 264); /* --color-gray-500 */
   --secondary-muted: oklch(0.97 0 265); /* --color-gray-100 */
   --secondary-weak: oklch(0.87 0.01 258); /* --color-gray-300 */
   --secondary-strong: oklch(0.28 0.03 257); /* --color-gray-800 */
   --secondary-intense: oklch(0.13 0.03 262); /* --color-gray-950 */
+  --secondary-bg-subtle: oklch(0.97 0 265); /* --color-gray-100 */
+  --secondary-border-subtle: oklch(0.87 0.01 258); /* --color-gray-300 */
 
   --muted: oklch(0.55 0.01 286); /* --color-zinc-500 */
   --muted-muted: oklch(0.97 0 286); /* --color-zinc-100 */
@@ -62,6 +66,7 @@
   --text-positive-weak: oklch(0.55 0.01 286); /* --color-zinc-500 */
   --text-positive-strong: oklch(0.21 0.01 286); /* --color-zinc-900 */
   --text-positive-intense: oklch(0 0 0); /* --color-black */
+  --text-positive-subtle: oklch(0.71 0.01 286); /* --color-zinc-400 */
 
   --text-negative: oklch(0.99 0 0); /* --color-zinc-50 */
   --text-negative-muted: oklch(0.55 0.01 286); /* --color-zinc-500 */
@@ -69,11 +74,13 @@
   --text-negative-strong: oklch(0.99 0 0); /* --color-zinc-50 */
   --text-negative-intense: oklch(1 0 0); /* --color-black */
 
-  --border: oklch(0.72 0 0); /* --color-neutral-400 */
-  --border-muted: oklch(0.99 0 0); /* --color-neutral-50 */
+  --border: oklch(0.92 0 0); /* --color-neutral-200 */
+  --border-muted: oklch(0.97 0 0); /* --color-neutral-100 */
   --border-weak: oklch(0.92 0 0); /* --color-neutral-200 */
   --border-strong: oklch(0.37 0 0); /* --color-neutral-700 */
   --border-intense: oklch(0.14 0 0); /* --color-neutral-900 */
+  --border-subtle: oklch(0.99 0 0); /* --color-neutral-50 */
+  --border-emphasis: oklch(0.87 0.00 0); /* --color-slate-300 */
 
   --input: oklch(0.871 0.006 286.286); /* --color-zinc-300 */
   --ring: oklch(0.81 0.1 294); /* --color-violet-300 */

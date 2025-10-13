@@ -1,7 +1,7 @@
-import { memo, useCallback, useEffect, useMemo, useRef } from 'react';
+import { memo, useCallback, useEffect, useRef } from 'react';
 
 import { type Column, flexRender, type Header, type Table as ReactTable, type Row } from '@tanstack/react-table';
-import { ArrowLeftToLineIcon, ArrowRightToLineIcon, ChevronDown, ChevronUp, EllipsisIcon, LoaderIcon, PinOffIcon } from 'lucide-react';
+import { ArrowLeftToLineIcon, ArrowRightToLineIcon, EllipsisIcon, LoaderIcon, PinOffIcon } from 'lucide-react';
 
 import { cn } from '@customafk/react-toolkit/utils';
 
@@ -27,22 +27,6 @@ const getPinningStyles = (column: Column<AnyEntity>): React.CSSProperties => {
     zIndex: isPinned ? 1 : 0,
   };
 };
-
-const SortingIndicator = memo(({ column }: { column: Column<AnyEntity> }) => {
-  const sortDirection = column.getIsSorted();
-
-  const icons = useMemo(
-    () => ({
-      asc: <ChevronUp className="shrink-0 opacity-60" size={16} strokeWidth={2} aria-hidden="true" />,
-      desc: <ChevronDown className="shrink-0 opacity-60" size={16} strokeWidth={2} aria-hidden="true" />,
-    }),
-    []
-  );
-
-  return sortDirection ? icons[sortDirection] : null;
-});
-
-SortingIndicator.displayName = 'SortingIndicator';
 
 const PinControls = memo(({ column }: { column: Column<AnyEntity> }) => {
   const columnHeader = typeof column.columnDef.header === 'string' ? column.columnDef.header : 'Column';
@@ -100,19 +84,15 @@ const PinControls = memo(({ column }: { column: Column<AnyEntity> }) => {
 PinControls.displayName = 'PinControls';
 
 const HeaderContent = memo(({ header }: { header: Header<AnyEntity, unknown> }) => {
-  const { column } = header;
-
   const handleSort = useCallback(
     (e: React.KeyboardEvent) => {
-      if (column.getCanSort() && (e.key === 'Enter' || e.key === ' ')) {
+      if (header.column.getCanSort() && (e.key === 'Enter' || e.key === ' ')) {
         e.preventDefault();
-        column.getToggleSortingHandler()?.(e);
+        header.column.getToggleSortingHandler()?.(e);
       }
     },
-    [column]
+    [header.column]
   );
-
-  const toggleSortHandler = column.getToggleSortingHandler();
 
   if (header.isPlaceholder) {
     return <div className="flex items-center justify-between gap-2 truncate" />;
@@ -121,20 +101,16 @@ const HeaderContent = memo(({ header }: { header: Header<AnyEntity, unknown> }) 
   return (
     <div className="flex items-center justify-between gap-2 truncate">
       <div
-        onClick={toggleSortHandler}
+        tabIndex={header.column.getCanSort() ? 0 : undefined}
+        role={header.column.getCanSort() ? 'button' : undefined}
+        className={cn(header.column.getCanSort() && 'flex h-full cursor-pointer items-center justify-between select-none')}
         onKeyDown={handleSort}
-        tabIndex={column.getCanSort() ? 0 : undefined}
-        role={column.getCanSort() ? 'button' : undefined}
-        className={cn(column.getCanSort() && 'flex h-full cursor-pointer items-center justify-between gap-2 select-none')}
       >
-        <span className="truncate">{flexRender(column.columnDef.header, header.getContext())}</span>
-        <SortingIndicator column={column} />
+        <span className="truncate">{flexRender(header.column.columnDef.header, header.getContext())}</span>
       </div>
-      <PinControls column={column} />
     </div>
   );
 });
-
 HeaderContent.displayName = 'HeaderContent';
 
 type DataTableRowProps = {
@@ -203,8 +179,6 @@ interface DataTableProps {
 }
 
 export const DataTable = ({ table, isLoading, isFetching, allowFetchMore = true, onClickRow, onFetchNextPage }: DataTableProps) => {
-  // 'use no memo'
-
   const tableContainerRef = useRef<HTMLDivElement>(null);
 
   const { rows } = table.getRowModel();
@@ -248,16 +222,16 @@ export const DataTable = ({ table, isLoading, isFetching, allowFetchMore = true,
   }, [fetchMoreOnBottomReached]);
 
   return (
-    <ScrollArea ref={tableContainerRef} className="border-border-weak bg-background relative w-full overflow-auto rounded-lg border" onScroll={handleScroll}>
+    <ScrollArea ref={tableContainerRef} className="border-border bg-background relative w-full overflow-auto rounded-lg border" onScroll={handleScroll}>
       <Table
         className={cn(
           '!w-full',
           'grid',
           'border-separate border-spacing-0',
-          '[&_td]:border-border-weak',
-          '[&_th]:border-border-weak',
+          '[&_td]:border-border',
+          '[&_th]:border-border',
           '[&_th]:border-b',
-          '[&_th]:border-b-border-weak',
+          '[&_th]:border-b-border',
           '[&_tfoot_td]:border-t'
         )}
       >
@@ -265,10 +239,9 @@ export const DataTable = ({ table, isLoading, isFetching, allowFetchMore = true,
           {table.getHeaderGroups().map(headerGroup => (
             <TableRow key={headerGroup.id} className="flex w-full border-none">
               {headerGroup.headers.map(header => {
-                const { column } = header;
-                const isPinned = column.getIsPinned();
-                const isLastLeftPinned = isPinned === 'left' && column.getIsLastColumn('left');
-                const isFirstRightPinned = isPinned === 'right' && column.getIsFirstColumn('right');
+                const isPinned = header.column.getIsPinned();
+                const isLastLeftPinned = isPinned === 'left' && header.column.getIsLastColumn('left');
+                const isFirstRightPinned = isPinned === 'right' && header.column.getIsFirstColumn('right');
                 const pinningState = isPinned || undefined;
                 const lastColState = isLastLeftPinned ? 'left' : isFirstRightPinned ? 'right' : undefined;
 
@@ -282,20 +255,20 @@ export const DataTable = ({ table, isLoading, isFetching, allowFetchMore = true,
                     key={header.id}
                     data-pinned={pinningState}
                     data-last-col={lastColState}
+                    colSpan={header.colSpan}
+                    style={headerStyles}
                     className={cn(
-                      'relative flex h-9 font-semibold select-none',
+                      'relative flex h-9 font-medium select-none',
                       'data-pinned:backdrop-blur-xs',
                       'data-pinned:bg-muted-weak',
                       '[&>.cursor-col-resize]:last:opacity-0',
-                      '[&[data-pinned][data-last-col]]:border-border-weak',
+                      '[&[data-pinned][data-last-col]]:border-border',
                       '[&:not([data-pinned]):has(+[data-pinned])_div.cursor-col-resize:last-child]:opacity-0',
                       '[&[data-last-col=left]_div.cursor-col-resize:last-child]:opacity-0',
                       '[&[data-pinned=left][data-last-col=left]]:border-r',
                       '[&[data-pinned=right]:last-child_div.cursor-col-resize:last-child]:opacity-0',
                       '[&[data-pinned=right][data-last-col=right]]:border-l'
                     )}
-                    colSpan={header.colSpan}
-                    style={headerStyles}
                   >
                     <HeaderContent header={header} />
                   </TableHead>
@@ -316,25 +289,23 @@ export const DataTable = ({ table, isLoading, isFetching, allowFetchMore = true,
               <TableCell>loading...</TableCell>
             </TableRow>
           ) : (
-            <>
-              {rowVirtualizer.getVirtualItems().map(virtualRow => {
-                const row = rows[virtualRow.index];
-                const rowId =
-                  row?.id ||
-                  (row.original && 'id' in row.original ? String(row.original.id) : null) ||
-                  (row.original && 'uuid' in row.original ? String(row.original.uuid) : null);
-                return (
-                  <DataTableRow
-                    key={rowId ?? virtualRow.index}
-                    id={rowId ?? String(virtualRow.index)}
-                    row={row}
-                    measureElement={rowVirtualizer.measureElement}
-                    virtualRow={virtualRow}
-                    onClickRow={onClickRow}
-                  />
-                );
-              })}
-            </>
+            rowVirtualizer.getVirtualItems().map(virtualRow => {
+              const row = rows[virtualRow.index];
+              const rowId =
+                row?.id ||
+                (row.original && 'id' in row.original ? String(row.original.id) : null) ||
+                (row.original && 'uuid' in row.original ? String(row.original.uuid) : null);
+              return (
+                <DataTableRow
+                  key={rowId ?? virtualRow.index}
+                  id={rowId ?? String(virtualRow.index)}
+                  row={row}
+                  measureElement={rowVirtualizer.measureElement}
+                  virtualRow={virtualRow}
+                  onClickRow={onClickRow}
+                />
+              );
+            })
           )}
         </TableBody>
         {isFetching && (

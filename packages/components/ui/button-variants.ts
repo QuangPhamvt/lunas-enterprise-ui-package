@@ -51,13 +51,14 @@ export const buttonVariants = cva(
       {
         variant: 'default',
         color: 'primary',
-        className: 'outline-primary-strong bg-primary focus:ring-primary-weak focus:outline-primary-intense focus:bg-primary-strong active:bg-primary-strong',
+        className:
+          'outline-primary-strong bg-primary focus:ring-primary-border-subtle focus:outline-primary-intense focus:bg-primary-strong active:bg-primary-strong',
       },
       {
         variant: 'default',
         color: 'secondary',
         className:
-          'outline-secondary-strong bg-secondary focus:ring-secondary-weak focus:outline-secondary-intense focus:bg-secondary-strong active:bg-secondary-strong',
+          'outline-secondary-strong bg-secondary focus:ring-secondary-border-subtle focus:outline-secondary-intense focus:bg-secondary-strong active:bg-secondary-strong',
       },
       {
         variant: 'default',

@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FormWrapper } from '@/components/forms/form-wrapper';
 import { NumberField } from '@/components/forms/number-field';
+import { SelectField } from '@/components/forms/select-field';
 import { TextField } from '@/components/forms/text-field';
 import { Button } from '@/components/ui/button';
 import { FieldGroup, FieldSeparator } from '@/components/ui/field';
 import { Toaster } from '@/components/ui/sonner';
-import { SelectField } from '@/components/forms/select-field';
 
 type TSchema = {
   code: string;
@@ -47,7 +47,14 @@ export const Default: Story = {
           }}
         >
           <FieldGroup>
-            <TextField<TSchema> name="code" label="Mã tiền tệ" placeholder="VND, USD, EUR..." isShowCount isShowClearButton />
+            <TextField<TSchema>
+              name="code"
+              label="Mã tiền tệ"
+              placeholder="VND, USD, EUR..."
+              isShowCount
+              isShowClearButton
+              description="Mã tiền tệ theo chuẩn ISO 4217, ví dụ: VND, USD, EUR..."
+            />
             <FieldSeparator />
             <TextField<TSchema> name="name" label="Tên tiền tệ" placeholder="VND, USD, EUR..." />
             <FieldSeparator />

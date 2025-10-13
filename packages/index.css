@@ -34,12 +34,16 @@
   --color-primary-weak: var(--primary-weak);
   --color-primary-strong: var(--primary-strong);
   --color-primary-intense: var(--primary-intense);
+  --color-primary-bg-subtle: var(--primary-bg-subtle);
+  --color-primary-border-subtle: var(--primary-border-subtle);
 
   --color-secondary: var(--secondary);
   --color-secondary-muted: var(--secondary-muted);
   --color-secondary-weak: var(--secondary-weak);
   --color-secondary-strong: var(--secondary-strong);
   --color-secondary-intense: var(--secondary-intense);
+  --color-secondary-bg-subtle: var(--secondary-bg-subtle);
+  --color-secondary-border-subtle: var(--secondary-border-subtle);
 
   --color-muted: var(--muted);
   --color-muted-muted: var(--muted-muted);
@@ -93,6 +97,9 @@
   --color-border-strong: var(--border-strong);
   --color-border-weak: var(--border-weak);
   --color-border-muted: var(--border-muted);
+  --color-border-intense: var(--border-intense);
+  --color-border-subtle: var(--border-subtle);
+  --color-border-subtle-strong: var(--border-subtle-strong);
 
   --color-input: var(--input);
   --color-ring: var(--ring);
