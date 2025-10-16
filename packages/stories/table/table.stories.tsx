@@ -1,9 +1,9 @@
+import { MoreVerticalIcon } from 'lucide-react';
+
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { NameDisplay } from '@/components/data-display/name';
 import { Table } from '@/components/table';
-import { MoreVerticalIcon } from 'lucide-react';
 import { mockData } from './mockdata';
-import { useMemo } from 'react';
 
 const meta = {
   tags: ['autodocs'],
@@ -134,9 +134,9 @@ export const Default: Story = {
         ),
       },
     ],
-    // onAdd: () => console.log('Add new item'),
-    // onClickRow: row => console.log('Row clicked:', row),
-    // onRefresh: () => console.log('Refresh data'),
+    onAdd: () => console.log('Add new item'),
+    onClickRow: row => console.log('Row clicked:', row),
+    onRefresh: () => console.log('Refresh data'),
   },
   render: args => {
     return (

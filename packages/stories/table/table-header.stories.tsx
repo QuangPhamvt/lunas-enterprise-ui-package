@@ -1,14 +1,14 @@
-import { DataTableHeader } from '@/components/table/data-table-header';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { DataTableToolip } from '@/components/table/data-table-tooltip';
 
 const meta = {
   tags: ['autodocs'],
   title: 'Table/Header',
-  component: DataTableHeader,
-} satisfies Meta<typeof DataTableHeader>;
+  component: DataTableToolip,
+} satisfies Meta<typeof DataTableToolip>;
 
 export default meta;
-type Story = StoryObj<typeof DataTableHeader>;
+type Story = StoryObj<typeof DataTableToolip>;
 
 export const Default: Story = {
   args: {

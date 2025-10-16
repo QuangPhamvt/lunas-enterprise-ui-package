@@ -1,3 +1,5 @@
+import { memo } from 'react';
+
 import { Flex } from '@/components/layouts/flex';
 import { AddNewBtn } from '@/components/ui/buttons/add-new';
 import { RefreshBtn } from '@/components/ui/buttons/refresh';
@@ -8,7 +10,7 @@ type Props = {
   onRefresh?: () => void;
 };
 
-export const DataTableHeader: React.FC<Props> = ({ onAdd, onRefresh }) => {
+export const DataTableToolip: React.FC<Props> = memo(({ onAdd, onRefresh }) => {
   return (
     <Flex justify="between" padding="none" width="full" className="flex-0">
       <div className="max-sm:flex-1">
@@ -20,4 +22,5 @@ export const DataTableHeader: React.FC<Props> = ({ onAdd, onRefresh }) => {
       </Flex>
     </Flex>
   );
-};
+});
+DataTableToolip.displayName = 'DataTableToolip';

@@ -1,0 +1,31 @@
+import { defineConfig } from '@rslib/core';
+
+export default defineConfig({
+  lib: [
+    {
+      source: {
+        entry: {
+          'index': ['./packages/components/**', '!./packages/components/**/stories/**', '!**/*.test.*', '!**/*.spec.*'],
+        }
+      },
+      dts: true,
+      format: 'esm',
+      bundle: false
+    }
+  ],
+  output: {
+    sourceMap: true,
+    minify: true,
+  },
+  source: {
+    entry: {
+      'index': ['./packages/components/**', '!./packages/components/**/stories/**', '!**/*.test.*', '!**/*.spec.*'],
+    },
+    exclude: [
+      '**/*.test.*',
+      '**/*.spec.*',
+      '**/*.stories.*',
+      '**/stories/**',
+    ]
+ },
+});

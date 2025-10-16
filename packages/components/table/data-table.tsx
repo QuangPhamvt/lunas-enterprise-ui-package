@@ -1,14 +1,14 @@
-import { Activity, memo, useCallback, useEffect, useRef } from 'react';
+import { Activity, memo, useCallback } from 'react';
 
-import { type Column, flexRender, type Header, type Table as ReactTable, type Row } from '@tanstack/react-table';
+import { type Column, flexRender, type Header, type HeaderGroup, type Row } from '@tanstack/react-table';
 import { LoaderIcon } from 'lucide-react';
 
 import { cn } from '@customafk/react-toolkit/utils';
 
-import { useVirtualizer, type VirtualItem } from '@tanstack/react-virtual';
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import type { VirtualItem } from '@tanstack/react-virtual';
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import type { AnyEntity } from '@/types';
+import { useTableContext } from './context';
 
 /**
  * Computes styles for pinned columns
@@ -62,20 +62,28 @@ HeaderContent.displayName = 'HeaderContent';
 type DataTableRowProps = {
   id: string;
   row: Row<AnyEntity>;
-  measureElement: (element?: HTMLTableRowElement | null | undefined) => void;
   virtualRow: VirtualItem;
-  onClickRow?: (id: string) => void;
 };
-const DataTableRow = memo(({ row, measureElement, virtualRow, onClickRow }: DataTableRowProps) => {
+const DataTableRow = memo(({ row, virtualRow }: DataTableRowProps) => {
+  const { measureElement, onClickRow } = useTableContext();
+
+  const handleRef = useCallback(
+    (node: HTMLTableRowElement | null | undefined) => {
+      measureElement(node);
+    },
+    [measureElement]
+  );
+
   const handleClick = useCallback(() => {
     onClickRow?.(row.id);
   }, [row.id, onClickRow]);
+
   return (
     <TableRow
       tabIndex={onClickRow ? 0 : undefined}
       data-index={virtualRow.index}
       role={onClickRow ? 'button' : undefined}
-      ref={node => measureElement(node)}
+      ref={handleRef}
       style={{
         transform: `translateY(${virtualRow.start}px)`,
       }}
@@ -108,61 +116,90 @@ const DataTableRow = memo(({ row, measureElement, virtualRow, onClickRow }: Data
 });
 DataTableRow.displayName = 'DataTableRow';
 
-interface DataTableProps {
-  table: ReactTable<AnyEntity>;
-  columnsLength?: number;
-  isLoading?: boolean;
-  isFetching?: boolean;
-  allowFetchMore?: boolean;
-  onClickRow?: (id: string) => void;
-  onFetchNextPage?: () => void;
-}
-
-export const DataTable = memo(({ table, isLoading, isFetching, allowFetchMore = true, onClickRow, onFetchNextPage }: DataTableProps) => {
-  const tableContainerRef = useRef<HTMLDivElement>(null);
-
-  const { rows } = table.getRowModel();
-
-  // Configure virtualization for performance with large datasets
-  const rowVirtualizer = useVirtualizer<HTMLDivElement, HTMLTableRowElement>({
-    count: rows.length,
-    getScrollElement: () => tableContainerRef.current,
-    estimateSize: () => 37, // estimated row height
-    measureElement: element => element?.getBoundingClientRect().height ?? undefined,
-    overscan: 5, // Render additional rows beyond viewport for smoother scrolling
-  });
-
-  // Fetch more data when user approaches bottom of table
-  const fetchMoreOnBottomReached = useCallback(
-    (refEl: HTMLDivElement | null) => {
-      if (!refEl) return;
-      const { scrollHeight, scrollTop, clientHeight } = refEl;
-      // Threshold of 120px from bottom to trigger load more
-      if (scrollHeight - scrollTop - clientHeight < 500 && !isFetching && allowFetchMore) {
-        onFetchNextPage?.();
-      }
-    },
-    [allowFetchMore, isFetching, onFetchNextPage]
-  );
-
-  // Handle scroll events to check if more data should be loaded
-  const handleScroll = useCallback(
-    (ev: React.UIEvent<HTMLDivElement>) => {
-      fetchMoreOnBottomReached(ev.currentTarget);
-    },
-    [fetchMoreOnBottomReached]
-  );
-
-  // Check for more data on mount and when dependencies change
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      fetchMoreOnBottomReached(tableContainerRef.current);
-    }, 100);
-    return () => clearTimeout(timer);
-  }, [fetchMoreOnBottomReached]);
-
+export const DataTableHeader = memo(({ headerGroups }: { headerGroups: HeaderGroup<AnyEntity>[] }) => {
   return (
-    <ScrollArea ref={tableContainerRef} className="border-border bg-background relative w-full overflow-auto" onScroll={handleScroll}>
+    <TableHeader className="sticky top-0 z-10 backdrop-blur-xs bg-background/90">
+      {headerGroups.map(headerGroup => (
+        <TableRow key={headerGroup.id} className="flex w-full border-none">
+          {headerGroup.headers.map(header => {
+            const isPinned = header.column.getIsPinned();
+            const isLastLeftPinned = isPinned === 'left' && header.column.getIsLastColumn('left');
+            const isFirstRightPinned = isPinned === 'right' && header.column.getIsFirstColumn('right');
+            const lastColState = isLastLeftPinned ? 'left' : isFirstRightPinned ? 'right' : undefined;
+
+            const headerStyles = {
+              // width: header.getSize() ?? "100%",
+              ...getPinningStyles(header.column),
+              ...(header.id === 'actions' && { width: 60 }),
+            };
+
+            return (
+              <TableHead
+                key={header.id}
+                data-pinned={!!isPinned}
+                data-last-col={lastColState}
+                colSpan={header.colSpan}
+                style={headerStyles}
+                className={cn(
+                  'relative flex h-12 font-medium select-none [&>.cursor-col-resize]:last:opacity-0',
+                  header.id === 'actions' && 'bg-background/90 z-20'
+                )}
+              >
+                <HeaderContent header={header} />
+              </TableHead>
+            );
+          })}
+        </TableRow>
+      ))}
+    </TableHeader>
+  );
+});
+DataTableHeader.displayName = 'DataTableHeader';
+
+type DataTableBodyProps = {
+  isLoading?: boolean;
+  totalBodyHeight?: number;
+  rows: Row<AnyEntity>[];
+  virtualItems: VirtualItem[];
+};
+export const DataTableBody = memo(({ isLoading, totalBodyHeight, rows, virtualItems }: DataTableBodyProps) => {
+  return (
+    <TableBody
+      style={{
+        height: `${totalBodyHeight}px`, //tells scrollbar how big the table is
+      }}
+      className={cn('relative grid w-full', isLoading && 'h-36', rows?.length === 0 && 'h-48')}
+    >
+      <Activity mode={isLoading ? 'visible' : 'hidden'}>
+        <TableRow className="absolute top-9 flex h-36 w-full items-center justify-center">
+          <TableCell>loading...</TableCell>
+        </TableRow>
+      </Activity>
+      <Activity mode={isLoading ? 'hidden' : 'visible'}>
+        {virtualItems.map(virtualRow => {
+          const row = rows[virtualRow.index];
+          const rowId =
+            row?.id ||
+            (row.original && 'id' in row.original ? String(row.original.id) : null) ||
+            (row.original && 'uuid' in row.original ? String(row.original.uuid) : null) ||
+            virtualRow.index.toString();
+          const key = rowId ?? String(virtualRow.index);
+          return <DataTableRow key={key} id={rowId} row={row} virtualRow={virtualRow} />;
+        })}
+      </Activity>
+    </TableBody>
+  );
+});
+DataTableBody.displayName = 'DataTableBody';
+
+export const DataTable = memo(
+  ({
+    isFetching,
+    children,
+  }: React.PropsWithChildren<{
+    isFetching?: boolean;
+  }>) => {
+    return (
       <Table
         className={cn(
           '!w-full',
@@ -175,80 +212,14 @@ export const DataTable = memo(({ table, isLoading, isFetching, allowFetchMore = 
           '[&_tfoot_td]:border-t'
         )}
       >
-        <TableHeader className="sticky top-0 z-10 backdrop-blur-xs bg-background/90">
-          {table.getHeaderGroups().map(headerGroup => (
-            <TableRow key={headerGroup.id} className="flex w-full border-none">
-              {headerGroup.headers.map(header => {
-                const isPinned = header.column.getIsPinned();
-                const isLastLeftPinned = isPinned === 'left' && header.column.getIsLastColumn('left');
-                const isFirstRightPinned = isPinned === 'right' && header.column.getIsFirstColumn('right');
-                const lastColState = isLastLeftPinned ? 'left' : isFirstRightPinned ? 'right' : undefined;
-
-                const headerStyles = {
-                  // width: header.getSize() ?? "100%",
-                  ...getPinningStyles(header.column),
-                  ...(header.id === 'actions' && { width: 60 }),
-                };
-
-                return (
-                  <TableHead
-                    key={header.id}
-                    data-pinned={!!isPinned}
-                    data-last-col={lastColState}
-                    colSpan={header.colSpan}
-                    style={headerStyles}
-                    className={cn(
-                      'relative flex h-12 font-medium select-none [&>.cursor-col-resize]:last:opacity-0',
-                      header.id === 'actions' && 'bg-background/90 z-20'
-                    )}
-                  >
-                    <HeaderContent header={header} />
-                  </TableHead>
-                );
-              })}
-            </TableRow>
-          ))}
-        </TableHeader>
-
-        <TableBody
-          style={{
-            height: `${rowVirtualizer.getTotalSize()}px`, //tells scrollbar how big the table is
-          }}
-          className={cn('relative grid w-full', isLoading && 'h-36', rows?.length === 0 && 'h-48')}
-        >
-          <Activity mode={isLoading ? 'visible' : 'hidden'}>
-            <TableRow className="absolute top-9 flex h-36 w-full items-center justify-center">
-              <TableCell>loading...</TableCell>
-            </TableRow>
-          </Activity>
-          <Activity mode={isLoading ? 'hidden' : 'visible'}>
-            {rowVirtualizer.getVirtualItems().map(virtualRow => {
-              const row = rows[virtualRow.index];
-              const rowId =
-                row?.id ||
-                (row.original && 'id' in row.original ? String(row.original.id) : null) ||
-                (row.original && 'uuid' in row.original ? String(row.original.uuid) : null);
-              return (
-                <DataTableRow
-                  key={rowId ?? virtualRow.index}
-                  id={rowId ?? String(virtualRow.index)}
-                  row={row}
-                  measureElement={rowVirtualizer.measureElement}
-                  virtualRow={virtualRow}
-                  onClickRow={onClickRow}
-                />
-              );
-            })}
-          </Activity>
-        </TableBody>
+        {children}
         <Activity mode={isFetching ? 'visible' : 'hidden'}>
           <TableFooter className="flex w-full justify-center py-2">
             <LoaderIcon size={16} className="animate-spin" aria-label="Loading more data" />
           </TableFooter>
         </Activity>
       </Table>
-      <ScrollBar orientation="horizontal" />
-    </ScrollArea>
-  );
-});
+    );
+  }
+);
 DataTable.displayName = 'DataTable';
