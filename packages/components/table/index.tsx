@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import type { ColumnDef, ColumnFiltersState, RowSelectionState, SortingState, VisibilityState } from '@tanstack/react-table';
 import { getCoreRowModel, getFacetedRowModel, getFacetedUniqueValues, getFilteredRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
@@ -31,7 +31,7 @@ export function Table<T extends Record<string, unknown>>({
   onClickRow,
   onFetchNextPage,
 }: Props<T>) {
-  'use no memo';
+  // 'use no memo';
 
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -44,6 +44,19 @@ export function Table<T extends Record<string, unknown>>({
     }),
     []
   );
+
+  const state = useMemo(() => {
+    return {
+      rowSelection,
+      sorting,
+      columnVisibility,
+      columnFilters,
+    };
+  }, [rowSelection, sorting, columnVisibility, columnFilters]);
+
+  const handleGetRowId = useCallback((row: T) => {
+    return (row.id as string) || (row.uuid as string);
+  }, []);
 
   const table = useReactTable<T>({
     initialState,
@@ -58,13 +71,8 @@ export function Table<T extends Record<string, unknown>>({
     getFilteredRowModel: getFilteredRowModel(),
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
-    getRowId: row => (row.id as string) || (row.uuid as string),
-    state: {
-      rowSelection,
-      sorting,
-      columnVisibility,
-      columnFilters,
-    },
+    getRowId: handleGetRowId,
+    state: state,
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
     onColumnVisibilityChange: setColumnVisibility,

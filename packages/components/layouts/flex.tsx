@@ -1,4 +1,5 @@
 'use client';
+import { memo } from 'react';
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { cva, type VariantProps } from 'class-variance-authority';
@@ -76,7 +77,7 @@ const flexVariants = cva(['relative flex', 'text-sm'], {
 type Props = {
   className?: string;
 } & VariantProps<typeof flexVariants>;
-export const Flex = ({ vertical, wrap, width, margin, padding, gap, justify, align, className, children }: React.PropsWithChildren<Props>) => {
+export const Flex = memo(({ vertical, wrap, width, margin, padding, gap, justify, align, className, children }: React.PropsWithChildren<Props>) => {
   return (
     <div
       className={cn(
@@ -96,4 +97,5 @@ export const Flex = ({ vertical, wrap, width, margin, padding, gap, justify, ali
       {children}
     </div>
   );
-};
+});
+Flex.displayName = 'Flex';

@@ -57,12 +57,18 @@ type FormItemContextValue = {
 
 const FormItemContext = createContext<FormItemContextValue>({} as FormItemContextValue);
 
-function FormItem({ className, ...props }: React.ComponentProps<'div'>) {
+function FormItem({
+  className,
+  orientation = 'responsive',
+  ...props
+}: React.ComponentProps<'div'> & {
+  orientation?: 'vertical' | 'horizontal' | 'responsive';
+}) {
   const id = useId();
 
   return (
     <FormItemContext.Provider value={{ id }}>
-      <Field orientation="responsive" {...props} className={className} />
+      <Field orientation={orientation} {...props} className={className} />
     </FormItemContext.Provider>
   );
 }

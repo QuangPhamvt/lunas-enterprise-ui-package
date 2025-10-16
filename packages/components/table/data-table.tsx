@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useRef } from 'react';
+import { Activity, memo, useCallback, useEffect, useRef } from 'react';
 
 import { type Column, flexRender, type Header, type Table as ReactTable, type Row } from '@tanstack/react-table';
 import { LoaderIcon } from 'lucide-react';
@@ -118,7 +118,7 @@ interface DataTableProps {
   onFetchNextPage?: () => void;
 }
 
-export const DataTable = ({ table, isLoading, isFetching, allowFetchMore = true, onClickRow, onFetchNextPage }: DataTableProps) => {
+export const DataTable = memo(({ table, isLoading, isFetching, allowFetchMore = true, onClickRow, onFetchNextPage }: DataTableProps) => {
   const tableContainerRef = useRef<HTMLDivElement>(null);
 
   const { rows } = table.getRowModel();
@@ -198,9 +198,8 @@ export const DataTable = ({ table, isLoading, isFetching, allowFetchMore = true,
                     colSpan={header.colSpan}
                     style={headerStyles}
                     className={cn(
-                      'relative flex h-12 font-medium select-none',
-                      '[&>.cursor-col-resize]:last:opacity-0',
-                      header.id === 'actions' && 'bg-background z-20'
+                      'relative flex h-12 font-medium select-none [&>.cursor-col-resize]:last:opacity-0',
+                      header.id === 'actions' && 'bg-background/90 z-20'
                     )}
                   >
                     <HeaderContent header={header} />
@@ -217,12 +216,13 @@ export const DataTable = ({ table, isLoading, isFetching, allowFetchMore = true,
           }}
           className={cn('relative grid w-full', isLoading && 'h-36', rows?.length === 0 && 'h-48')}
         >
-          {isLoading ? (
+          <Activity mode={isLoading ? 'visible' : 'hidden'}>
             <TableRow className="absolute top-9 flex h-36 w-full items-center justify-center">
               <TableCell>loading...</TableCell>
             </TableRow>
-          ) : (
-            rowVirtualizer.getVirtualItems().map(virtualRow => {
+          </Activity>
+          <Activity mode={isLoading ? 'hidden' : 'visible'}>
+            {rowVirtualizer.getVirtualItems().map(virtualRow => {
               const row = rows[virtualRow.index];
               const rowId =
                 row?.id ||
@@ -238,18 +238,17 @@ export const DataTable = ({ table, isLoading, isFetching, allowFetchMore = true,
                   onClickRow={onClickRow}
                 />
               );
-            })
-          )}
+            })}
+          </Activity>
         </TableBody>
-        {isFetching && (
-          <TableFooter>
-            <div className="flex w-full justify-center py-2">
-              <LoaderIcon size={16} className="animate-spin" aria-label="Loading more data" />
-            </div>
+        <Activity mode={isFetching ? 'visible' : 'hidden'}>
+          <TableFooter className="flex w-full justify-center py-2">
+            <LoaderIcon size={16} className="animate-spin" aria-label="Loading more data" />
           </TableFooter>
-        )}
+        </Activity>
       </Table>
       <ScrollBar orientation="horizontal" />
     </ScrollArea>
   );
-};
+});
+DataTable.displayName = 'DataTable';
