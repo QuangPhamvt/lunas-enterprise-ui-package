@@ -440,6 +440,7 @@
   },
   "scripts": {
     "build": "tsdown",
+    "build:rslib": "rslib build",
     "dev": "tsdown --watch",
     "typecheck": "tsc --noEmit",
     "lint": "npx @biomejs/biome check",
@@ -478,6 +479,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.2.5",
+    "@rslib/core": "^0.15.1",
     "@storybook/addon-a11y": "^9.1.3",
     "@storybook/addon-docs": "^9.1.3",
     "@storybook/addon-onboarding": "^9.1.3",
