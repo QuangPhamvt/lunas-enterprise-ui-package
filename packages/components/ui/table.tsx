@@ -4,21 +4,25 @@ import { memo } from 'react';
 
 import { cn } from '@customafk/react-toolkit/utils';
 
-function Table({ className, ...props }: React.ComponentProps<'table'>) {
+const Table = memo(({ className, ...props }: React.ComponentProps<'table'>) => {
   return <table data-slot="table" className={cn('w-full caption-bottom text-sm', className)} {...props} />;
-}
+});
+Table.displayName = 'Table';
 
-function TableHeader({ className, ...props }: React.ComponentProps<'thead'>) {
+const TableHeader = memo(({ className, ...props }: React.ComponentProps<'thead'>) => {
   return <thead data-slot="table-header" className={cn('[&_tr:not(:last-child)_td]:border-b', className)} {...props} />;
-}
+});
+TableHeader.displayName = 'TableHeader';
 
-function TableBody({ className, ...props }: React.ComponentProps<'tbody'>) {
+const TableBody = memo(({ className, ...props }: React.ComponentProps<'tbody'>) => {
   return <tbody data-slot="table-body" className={cn('[&_tr:last-child]:border-0', className)} {...props} />;
-}
+});
+TableBody.displayName = 'TableBody';
 
-function TableFooter({ className, ...props }: React.ComponentProps<'tfoot'>) {
+const TableFooter = memo(({ className, ...props }: React.ComponentProps<'tfoot'>) => {
   return <tfoot data-slot="table-footer" className={cn('border-border-weak border-t font-medium [&>tr]:last:border-b-0', className)} {...props} />;
-}
+});
+TableFooter.displayName = 'TableFooter';
 
 const TableRow = memo(({ className, ...props }: React.ComponentProps<'tr'>) => {
   return (
@@ -48,7 +52,7 @@ const TableHead = memo(({ className, ...props }: React.ComponentProps<'th'>) => 
 });
 TableHead.displayName = 'TableHead';
 
-function TableCell({ className, ...props }: React.ComponentProps<'td'>) {
+const TableCell = memo(({ className, ...props }: React.ComponentProps<'td'>) => {
   return (
     <td
       data-slot="table-cell"
@@ -56,10 +60,12 @@ function TableCell({ className, ...props }: React.ComponentProps<'td'>) {
       {...props}
     />
   );
-}
+});
+TableCell.displayName = 'TableCell';
 
-function TableCaption({ className, ...props }: React.ComponentProps<'caption'>) {
+const TableCaption = memo(({ className, ...props }: React.ComponentProps<'caption'>) => {
   return <caption data-slot="table-caption" className={cn('text-text-positive-muted mt-4 text-sm', className)} {...props} />;
-}
+});
+TableCaption.displayName = 'TableCaption';
 
 export { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow };
