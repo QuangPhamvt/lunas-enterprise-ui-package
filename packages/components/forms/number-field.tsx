@@ -1,5 +1,6 @@
 import { Activity } from 'react';
 import { type FieldPath, type FieldValues, useWatch } from 'react-hook-form';
+import { cn } from '@customafk/react-toolkit/utils';
 
 import { FieldContent } from '../ui/field';
 import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
@@ -14,6 +15,7 @@ type Props<TFieldValues extends FieldValues = FieldValues> = {
   isShowClearButton?: boolean;
   isShowErrorMsg?: boolean;
   isShowCount?: boolean;
+  isNested?: boolean;
   onValueChange?: (value?: number) => void;
 };
 export const NumberField = <TFieldValues extends FieldValues = FieldValues>({
@@ -22,6 +24,7 @@ export const NumberField = <TFieldValues extends FieldValues = FieldValues>({
   placeholder = '0',
   isShowErrorMsg = false,
   isShowCount = false,
+  isNested = false,
   unitText = '',
   description = '',
   onValueChange,
@@ -32,20 +35,20 @@ export const NumberField = <TFieldValues extends FieldValues = FieldValues>({
     <FormField
       name={name}
       render={({ field: { onChange, ...field } }) => (
-        <FormItem>
+        <FormItem className={cn(isNested && '@md/field-group:flex-col @md/field-group:items-start gap-0')}>
           <Activity mode={label || description ? 'visible' : 'hidden'}>
             <FieldContent>
-              <FormLabel>{label}</FormLabel>
+              <FormLabel className={cn(isNested && 'text-xs')}>{label}</FormLabel>
               {!!description && <FormDescription>{description}</FormDescription>}
             </FieldContent>
           </Activity>
-          <div className="relative basis-3/5 flex justify-end">
+          <div className={cn('relative basis-3/5 flex justify-end', isNested && 'basis-full w-full justify-start')}>
             <FormControl>
               <NumberInput
                 {...field}
                 placeholder={placeholder}
                 unitText={unitText}
-                wrapperClassName="w-full md:max-w-60"
+                wrapperClassName={cn('w-full', !isNested && 'md:max-w-60')}
                 onValueChange={value => {
                   onChange(value);
                   onValueChange?.(value);

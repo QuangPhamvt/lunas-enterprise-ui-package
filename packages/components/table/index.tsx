@@ -3,9 +3,9 @@ import { useMemo, useState } from 'react';
 import type { ColumnDef, ColumnFiltersState, RowSelectionState, SortingState, VisibilityState } from '@tanstack/react-table';
 import { getCoreRowModel, getFacetedRowModel, getFacetedUniqueValues, getFilteredRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
 
+import { Flex } from '../layouts/flex';
 import { DataTable } from './data-table';
 import { DataTableHeader } from './data-table-header';
-import { Flex } from '../layouts/flex';
 
 type Props<T> = {
   data: T[];

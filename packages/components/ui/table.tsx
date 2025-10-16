@@ -1,33 +1,15 @@
 'use client';
 
-import { cn } from '@customafk/react-toolkit/utils';
 import { memo } from 'react';
 
+import { cn } from '@customafk/react-toolkit/utils';
+
 function Table({ className, ...props }: React.ComponentProps<'table'>) {
-  return (
-    // <ScrollArea data-slot="table-conatiner" className="border-border-weak bg-background relative w-full overflow-x-auto rounded-lg border">
-    <table data-slot="table" className={cn('w-full caption-bottom text-sm', className)} {...props} />
-    //   <ScrollBar orientation="vertical" className="z-5 w-2" />
-    //   <ScrollBar orientation="horizontal" className="absolute right-0 bottom-0 left-0 h-2" />
-    // </ScrollArea>
-  );
+  return <table data-slot="table" className={cn('w-full caption-bottom text-sm', className)} {...props} />;
 }
 
 function TableHeader({ className, ...props }: React.ComponentProps<'thead'>) {
-  return (
-    <thead
-      data-slot="table-header"
-      className={cn(
-        'bg-muted-muted border-border-weak',
-        '[&_tr]:border-b',
-        '[&_tr:not(:last-child)_td]:border-b',
-        '[&_tr_th:not(:last-child)]:border-r',
-        '[&_tr_th:not(:last-child)]:border-r-border-weak',
-        className
-      )}
-      {...props}
-    />
-  );
+  return <thead data-slot="table-header" className={cn('[&_tr:not(:last-child)_td]:border-b', className)} {...props} />;
 }
 
 function TableBody({ className, ...props }: React.ComponentProps<'tbody'>) {

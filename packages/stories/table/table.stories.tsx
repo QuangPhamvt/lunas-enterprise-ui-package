@@ -1,6 +1,7 @@
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { NameDisplay } from '@/components/data-display/name';
 import { Table } from '@/components/table';
-import type { Meta, StoryObj } from '@storybook/react-vite';
+import { MoreVerticalIcon } from 'lucide-react';
 
 const meta = {
   tags: ['autodocs'],
@@ -246,6 +247,26 @@ export const Default: Story = {
         size: 200,
       },
       {
+        accessorKey: 'description',
+        header: 'Description',
+        size: 200,
+      },
+      {
+        accessorKey: 'description',
+        header: 'Description',
+        size: 200,
+      },
+      {
+        accessorKey: 'description',
+        header: 'Description',
+        size: 200,
+      },
+      {
+        accessorKey: 'description',
+        header: 'Description',
+        size: 200,
+      },
+      {
         accessorKey: 'quantity',
         header: 'Quantity',
         size: 240,
@@ -253,7 +274,24 @@ export const Default: Story = {
       {
         accessorKey: 'createdAt',
         header: 'Created',
-        size: 480,
+        size: 240,
+      },
+      {
+        accessorKey: 'actions',
+        header: 'Actions',
+        cell: () => (
+          <div className="w-full flex items-center justify-center z-50">
+            <button
+              className="text-blue-500 size-8 flex items-center justify-center"
+              onClick={e => {
+                e.stopPropagation();
+                console.log('Action clicked');
+              }}
+            >
+              <MoreVerticalIcon size={16} />
+            </button>
+          </div>
+        ),
       },
     ],
     onAdd: () => console.log('Add new item'),

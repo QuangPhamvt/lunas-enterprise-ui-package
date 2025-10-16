@@ -1,13 +1,11 @@
 import { memo, useCallback, useEffect, useRef } from 'react';
 
 import { type Column, flexRender, type Header, type Table as ReactTable, type Row } from '@tanstack/react-table';
-import { ArrowLeftToLineIcon, ArrowRightToLineIcon, EllipsisIcon, LoaderIcon, PinOffIcon } from 'lucide-react';
+import { LoaderIcon } from 'lucide-react';
 
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { useVirtualizer, type VirtualItem } from '@tanstack/react-virtual';
-import { Button } from '@/components/ui/button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import type { AnyEntity } from '@/types';
@@ -24,64 +22,10 @@ const getPinningStyles = (column: Column<AnyEntity>): React.CSSProperties => {
     right: isPinned === 'right' ? `${column.getAfter('right')}px` : undefined,
     position: isPinned ? 'sticky' : 'relative',
     width: column.getSize(),
+    ...(!column.getSize() && { flex: 1 }),
     zIndex: isPinned ? 1 : 0,
   };
 };
-
-const PinControls = memo(({ column }: { column: Column<AnyEntity> }) => {
-  const columnHeader = typeof column.columnDef.header === 'string' ? column.columnDef.header : 'Column';
-
-  const handleUnpin = useCallback(() => column.pin(false), [column]);
-  const handlePinLeft = useCallback(() => column.pin('left'), [column]);
-  const handlePinRight = useCallback(() => column.pin('right'), [column]);
-
-  if (!column.getCanPin()) return null;
-
-  if (column.getIsPinned()) {
-    return (
-      <Button
-        size="icon"
-        variant="ghost"
-        color="secondary"
-        className="hover:[&_svg]:text-secondary-foreground -mr-1 size-7 shadow-none"
-        aria-label={`Unpin ${columnHeader} column`}
-        title={`Unpin ${columnHeader} column`}
-        onClick={handleUnpin}
-      >
-        <PinOffIcon className="opacity-60" size={16} aria-hidden="true" />
-      </Button>
-    );
-  }
-
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          size="icon"
-          variant="ghost"
-          color="secondary"
-          className="size-7 shadow-none"
-          aria-label={`Pin options for ${columnHeader} column`}
-          title={`Pin options for ${columnHeader} column`}
-        >
-          <EllipsisIcon className="opacity-60" size={16} aria-hidden="true" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={handlePinLeft}>
-          <ArrowLeftToLineIcon size={16} className="opacity-60" aria-hidden="true" />
-          Stick to left
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={handlePinRight}>
-          <ArrowRightToLineIcon size={16} className="opacity-60" aria-hidden="true" />
-          Stick to right
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
-});
-
-PinControls.displayName = 'PinControls';
 
 const HeaderContent = memo(({ header }: { header: Header<AnyEntity, unknown> }) => {
   const handleSort = useCallback(
@@ -98,12 +42,14 @@ const HeaderContent = memo(({ header }: { header: Header<AnyEntity, unknown> }) 
     return <div className="flex items-center justify-between gap-2 truncate" />;
   }
 
+  if (header.id === 'actions') return null;
+
   return (
     <div className="flex items-center justify-between gap-2 truncate">
       <div
         tabIndex={header.column.getCanSort() ? 0 : undefined}
         role={header.column.getCanSort() ? 'button' : undefined}
-        className={cn(header.column.getCanSort() && 'flex h-full cursor-pointer items-center justify-between select-none')}
+        className="flex h-full cursor-pointer items-center justify-between select-none"
         onKeyDown={handleSort}
       >
         <span className="truncate">{flexRender(header.column.columnDef.header, header.getContext())}</span>
@@ -122,20 +68,19 @@ type DataTableRowProps = {
 };
 const DataTableRow = memo(({ row, measureElement, virtualRow, onClickRow }: DataTableRowProps) => {
   const handleClick = useCallback(() => {
-    if (!onClickRow) return;
-    onClickRow(row.id);
+    onClickRow?.(row.id);
   }, [row.id, onClickRow]);
   return (
     <TableRow
+      tabIndex={onClickRow ? 0 : undefined}
       data-index={virtualRow.index}
+      role={onClickRow ? 'button' : undefined}
       ref={node => measureElement(node)}
-      className="absolute flex w-full cursor-pointer focus:outline-none"
       style={{
         transform: `translateY(${virtualRow.start}px)`,
       }}
+      className="absolute flex w-full cursor-pointer focus:outline-none"
       onClick={handleClick}
-      tabIndex={onClickRow ? 0 : undefined}
-      role={onClickRow ? 'button' : undefined}
     >
       {row.getVisibleCells().map(cell => {
         const isPinned = cell.column.getIsPinned();
@@ -150,14 +95,9 @@ const DataTableRow = memo(({ row, measureElement, virtualRow, onClickRow }: Data
             style={{
               ...getPinningStyles(cell.column),
               width: cell.column.getSize(),
+              ...(cell.id.includes('actions') && { width: 60 }),
             }}
-            className={cn(
-              'flex overflow-hidden py-2.5',
-              'data-pinned:bg-background/90',
-              '[&[data-pinned][data-last-col]]:border-border-weak',
-              '[&[data-pinned=left][data-last-col=left]]:border-r',
-              '[&[data-pinned=right][data-last-col=right]]:border-l'
-            )}
+            className="flex overflow-hidden py-2.5 z-20 data-pinned:bg-background/90"
           >
             {flexRender(cell.column.columnDef.cell, cell.getContext())}
           </TableCell>
@@ -222,7 +162,7 @@ export const DataTable = ({ table, isLoading, isFetching, allowFetchMore = true,
   }, [fetchMoreOnBottomReached]);
 
   return (
-    <ScrollArea ref={tableContainerRef} className="border-border bg-background relative w-full overflow-auto rounded-lg border" onScroll={handleScroll}>
+    <ScrollArea ref={tableContainerRef} className="border-border bg-background relative w-full overflow-auto" onScroll={handleScroll}>
       <Table
         className={cn(
           '!w-full',
@@ -235,39 +175,32 @@ export const DataTable = ({ table, isLoading, isFetching, allowFetchMore = true,
           '[&_tfoot_td]:border-t'
         )}
       >
-        <TableHeader className="sticky top-0 z-10 backdrop-blur-xs">
+        <TableHeader className="sticky top-0 z-10 backdrop-blur-xs bg-background/90">
           {table.getHeaderGroups().map(headerGroup => (
             <TableRow key={headerGroup.id} className="flex w-full border-none">
               {headerGroup.headers.map(header => {
                 const isPinned = header.column.getIsPinned();
                 const isLastLeftPinned = isPinned === 'left' && header.column.getIsLastColumn('left');
                 const isFirstRightPinned = isPinned === 'right' && header.column.getIsFirstColumn('right');
-                const pinningState = isPinned || undefined;
                 const lastColState = isLastLeftPinned ? 'left' : isFirstRightPinned ? 'right' : undefined;
 
                 const headerStyles = {
-                  width: header.getSize(),
+                  // width: header.getSize() ?? "100%",
                   ...getPinningStyles(header.column),
+                  ...(header.id === 'actions' && { width: 60 }),
                 };
 
                 return (
                   <TableHead
                     key={header.id}
-                    data-pinned={pinningState}
+                    data-pinned={!!isPinned}
                     data-last-col={lastColState}
                     colSpan={header.colSpan}
                     style={headerStyles}
                     className={cn(
-                      'relative flex h-9 font-medium select-none',
-                      'data-pinned:backdrop-blur-xs',
-                      'data-pinned:bg-muted-weak',
+                      'relative flex h-12 font-medium select-none',
                       '[&>.cursor-col-resize]:last:opacity-0',
-                      '[&[data-pinned][data-last-col]]:border-border',
-                      '[&:not([data-pinned]):has(+[data-pinned])_div.cursor-col-resize:last-child]:opacity-0',
-                      '[&[data-last-col=left]_div.cursor-col-resize:last-child]:opacity-0',
-                      '[&[data-pinned=left][data-last-col=left]]:border-r',
-                      '[&[data-pinned=right]:last-child_div.cursor-col-resize:last-child]:opacity-0',
-                      '[&[data-pinned=right][data-last-col=right]]:border-l'
+                      header.id === 'actions' && 'bg-background z-20'
                     )}
                   >
                     <HeaderContent header={header} />

@@ -62,7 +62,7 @@ function FormItem({ className, ...props }: React.ComponentProps<'div'>) {
 
   return (
     <FormItemContext.Provider value={{ id }}>
-      <Field orientation="responsive" {...props} />
+      <Field orientation="responsive" {...props} className={className} />
     </FormItemContext.Provider>
   );
 }
