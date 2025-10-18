@@ -1,13 +1,95 @@
 'use client';
-import { useEffect, useRef } from 'react';
-import { DayButton, DayPicker, getDefaultClassNames } from 'react-day-picker';
 import { cn } from '@customafk/react-toolkit/utils';
-
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
+import { type HTMLAttributes, type ThHTMLAttributes, useEffect, useRef } from 'react';
+import { type CalendarWeek, type DayButton, DayPicker, getDefaultClassNames } from 'react-day-picker';
 
 import { Button } from '@/components/ui/button';
 
 import { buttonVariants } from './button-variants';
+
+const CalendarRoot = ({
+  rootRef,
+  className,
+  ...props
+}: {
+  rootRef?: React.Ref<HTMLDivElement>;
+} & HTMLAttributes<HTMLDivElement>) => {
+  return <div data-slot="calendar" ref={rootRef} className={cn(className)} {...props} />;
+};
+
+const CalendarChevron = (props: { className?: string; size?: number; disabled?: boolean; orientation?: 'up' | 'down' | 'left' | 'right' }) => {
+  if (props.orientation === 'left') {
+    return <ChevronLeftIcon size={16} className={props.className} {...props} />;
+  }
+
+  if (props.orientation === 'right') {
+    return <ChevronRightIcon size={16} className={props.className} {...props} />;
+  }
+
+  return <ChevronDownIcon size={16} className={props.className} {...props} />;
+};
+
+const CalendarDayButton = ({ className, day, modifiers, color: _, ...props }: React.ComponentProps<typeof DayButton>) => {
+  const defaultClassNames = getDefaultClassNames();
+
+  const ref = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    if (modifiers.focused) ref.current?.focus();
+  }, [modifiers.focused]);
+
+  return (
+    <Button
+      ref={ref}
+      variant="ghost"
+      color="muted"
+      size="icon"
+      data-day={day.date.toLocaleDateString()}
+      data-selected-single={modifiers.selected && !modifiers.range_start && !modifiers.range_end && !modifiers.range_middle}
+      data-range-start={modifiers.range_start}
+      data-range-end={modifiers.range_end}
+      data-range-middle={modifiers.range_middle}
+      className={cn(
+        'flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal',
+        'data-[selected-single=true]:bg-primary',
+        'data-[selected-single=true]:text-white',
+        'data-[range-middle=true]:bg-muted-muted',
+        'data-[range-middle=true]:text-text-positive',
+        'data-[range-start=true]:bg-primary-muted',
+        'data-[range-start=true]:text-text-positive-strong',
+        'data-[range-end=true]:bg-primary',
+        'data-[range-end=true]:text-text-positive-strong',
+        'group-data-[focused=true]/day:border-primary-strong',
+        'group-data-[focused=true]/day:ring-primary-weak',
+        'group-data-[focused=true]/day:relative',
+        'group-data-[focused=true]/day:z-10',
+        'group-data-[focused=true]/day:ring-[3px]',
+        'data-[range-end=true]:rounded-md',
+        'data-[range-end=true]:rounded-r-md',
+        'data-[range-middle=true]:rounded-none',
+        'data-[range-start=true]:rounded-md',
+        'data-[range-start=true]:rounded-l-md',
+        '[&>span]:text-xs [&>span]:opacity-70',
+        defaultClassNames.day,
+        className
+      )}
+      {...props}
+    />
+  );
+};
+
+const CalendarWeekNumber = ({
+  children,
+  ...props
+}: {
+  week: CalendarWeek;
+} & ThHTMLAttributes<HTMLTableCellElement>) => {
+  return (
+    <td {...props}>
+      <div className="flex size-(--cell-size) items-center justify-center text-center">{children}</div>
+    </td>
+  );
+};
 
 function Calendar({
   className,
@@ -46,12 +128,12 @@ function Calendar({
         month: cn('flex flex-col w-full gap-4', defaultClassNames.month),
         nav: cn('flex items-center gap-1 w-full absolute top-0 inset-x-0 justify-between', defaultClassNames.nav),
         button_previous: cn(
-          buttonVariants({ variant: buttonVariant }),
+          buttonVariants({ variant: 'outline', color: 'muted' }),
           'size-(--cell-size) aria-disabled:opacity-50 p-0 select-none',
           defaultClassNames.button_previous
         ),
         button_next: cn(
-          buttonVariants({ variant: buttonVariant }),
+          buttonVariants({ variant: 'outline', color: 'muted' }),
           'size-(--cell-size) aria-disabled:opacity-50 p-0 select-none',
           defaultClassNames.button_next
         ),
@@ -64,7 +146,8 @@ function Calendar({
         dropdown: cn('absolute inset-0 opacity-0', defaultClassNames.dropdown),
         caption_label: cn(
           'select-none font-medium',
-          captionLayout === 'label' ? 'text-sm' : 'rounded-md pl-2 pr-1 flex items-center gap-1 text-sm h-8 [&>svg]:text-text-positive [&>svg]:size-3.5',
+          captionLayout === 'label' && 'text-sm',
+          captionLayout !== 'label' && 'rounded-md shadow-xs px-2 flex items-center gap-0.5 text-sm h-8 [&>svg]:text-text-positive [&>svg]:size-3.5',
           defaultClassNames.caption_label
         ),
         table: 'w-full border-collapse',
@@ -81,85 +164,19 @@ function Calendar({
         range_middle: cn('rounded-none', defaultClassNames.range_middle),
         range_end: cn('rounded-r-md bg-muted-muted', defaultClassNames.range_end),
         today: cn('bg-muted-muted text-text-positive rounded-md data-[selected=true]:rounded-none', defaultClassNames.today),
-        outside: cn('text-text-positive aria-selected:text-text-positive', defaultClassNames.outside),
-        disabled: cn('text-text-positive opacity-50', defaultClassNames.disabled),
+        outside: cn('[&>button]:text-text-positive-muted aria-selected:text-text-positive'),
+        disabled: cn('bg-muted-muted text-text-positive opacity-50', defaultClassNames.disabled),
         hidden: cn('invisible', defaultClassNames.hidden),
         ...classNames,
       }}
       components={{
-        Root: ({ className, rootRef, ...props }) => {
-          return <div data-slot="calendar" ref={rootRef} className={cn(className)} {...props} />;
-        },
-        Chevron: ({ className, orientation, ...props }) => {
-          if (orientation === 'left') {
-            return <ChevronLeftIcon className={cn('size-4', className)} {...props} />;
-          }
-
-          if (orientation === 'right') {
-            return <ChevronRightIcon className={cn('size-4', className)} {...props} />;
-          }
-
-          return <ChevronDownIcon className={cn('size-4', className)} {...props} />;
-        },
+        Root: CalendarRoot,
+        Chevron: CalendarChevron,
         DayButton: CalendarDayButton,
-        WeekNumber: ({ children, ...props }) => {
-          return (
-            <td {...props}>
-              <div className="flex size-(--cell-size) items-center justify-center text-center">{children}</div>
-            </td>
-          );
-        },
+        WeekNumber: CalendarWeekNumber,
         ...components,
       }}
       {...props}
-    />
-  );
-}
-
-function CalendarDayButton({ className, day, modifiers, ...props }: React.ComponentProps<typeof DayButton>) {
-  const defaultClassNames = getDefaultClassNames();
-
-  const ref = useRef<HTMLButtonElement>(null);
-  useEffect(() => {
-    if (modifiers.focused) ref.current?.focus();
-  }, [modifiers.focused]);
-
-  return (
-    <Button
-      ref={ref}
-      variant="ghost"
-      size="icon"
-      data-day={day.date.toLocaleDateString()}
-      data-selected-single={modifiers.selected && !modifiers.range_start && !modifiers.range_end && !modifiers.range_middle}
-      data-range-start={modifiers.range_start}
-      data-range-end={modifiers.range_end}
-      data-range-middle={modifiers.range_middle}
-      className={cn(
-        'flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal',
-        'data-[selected-single=true]:bg-primary',
-        'data-[selected-single=true]:text-text-positive',
-        'data-[range-middle=true]:bg-muted-muted',
-        'data-[range-middle=true]:text-text-positive',
-        'data-[range-start=true]:bg-primary-muted',
-        'data-[range-start=true]:text-text-positive-strong',
-        'data-[range-end=true]:bg-primary',
-        'data-[range-end=true]:text-text-positive-strong',
-        'group-data-[focused=true]/day:border-primary-strong',
-        'group-data-[focused=true]/day:ring-primary-weak',
-        'group-data-[focused=true]/day:relative',
-        'group-data-[focused=true]/day:z-10',
-        'group-data-[focused=true]/day:ring-[3px]',
-        'data-[range-end=true]:rounded-md',
-        'data-[range-end=true]:rounded-r-md',
-        'data-[range-middle=true]:rounded-none',
-        'data-[range-start=true]:rounded-md',
-        'data-[range-start=true]:rounded-l-md',
-        '[&>span]:text-xs [&>span]:opacity-70',
-        defaultClassNames.day,
-        className
-      )}
-      {...props}
-      color="secondary"
     />
   );
 }

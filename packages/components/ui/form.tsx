@@ -1,11 +1,10 @@
 'use client';
-import { createContext, useContext, useId } from 'react';
-import type { ControllerProps, FieldPath, FieldValues } from 'react-hook-form';
-import { Controller, FormProvider, useFormContext, useFormState } from 'react-hook-form';
 
 import { cn } from '@customafk/react-toolkit/utils';
-
 import { type Label as LabelPrimitive, Slot as SlotPrimitive } from 'radix-ui';
+import { createContext, memo, useContext, useId } from 'react';
+import type { ControllerProps, FieldPath, FieldValues } from 'react-hook-form';
+import { Controller, FormProvider, useFormContext, useFormState } from 'react-hook-form';
 import { Field, FieldDescription, FieldLabel } from './field';
 
 const Form = FormProvider;
@@ -73,10 +72,11 @@ function FormItem({
   );
 }
 
-function FormLabel({ ...props }: React.ComponentProps<typeof LabelPrimitive.Root>) {
+const FormLabel = memo(({ ...props }: React.ComponentProps<typeof LabelPrimitive.Root>) => {
   const { formItemId } = useFormField();
   return <FieldLabel htmlFor={formItemId} {...props} />;
-}
+});
+FormLabel.displayName = 'FormLabel';
 
 function FormControl({ ...props }: React.ComponentProps<typeof SlotPrimitive.Slot>) {
   const { error, formItemId, formDescriptionId, formMessageId } = useFormField();
