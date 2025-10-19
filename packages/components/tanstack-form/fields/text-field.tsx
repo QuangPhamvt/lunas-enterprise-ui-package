@@ -6,7 +6,7 @@ import { cn } from '@customafk/react-toolkit/utils';
 
 import { cva } from 'class-variance-authority';
 import { Flex } from '../../layouts/flex';
-import { Field, FieldContent, FieldDescription, FieldError, FieldLabel, FieldSeparator } from '../../ui/field';
+import { Field, FieldContent, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldSeparator } from '../../ui/field';
 import { Input } from '../../ui/input';
 import { useFieldContext } from '../config';
 
@@ -115,7 +115,7 @@ export const TextField: React.FC<Props> = ({
     );
   }
   return (
-    <>
+    <FieldGroup>
       <Field orientation="responsive" data-invalid={state.meta.isTouched && !state.meta.isValid}>
         <FieldContent>
           <Activity mode={label || description ? 'visible' : 'hidden'}>
@@ -150,6 +150,6 @@ export const TextField: React.FC<Props> = ({
         </div>
       </Field>
       <FieldSeparator />
-    </>
+    </FieldGroup>
   );
 };

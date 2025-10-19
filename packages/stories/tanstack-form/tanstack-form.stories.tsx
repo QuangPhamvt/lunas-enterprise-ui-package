@@ -20,6 +20,13 @@ const Schema = z.object({
   comboboxField: z.string().nonempty('Combobox Field is required'),
 
   dateField: z.date(),
+
+  arrays: z.array(
+    z.object({
+      itemName: z.string().min(1, 'Item Name is required'),
+      itemQuantity: z.number().min(1, { message: 'Item Quantity must be at least 1' }),
+    })
+  ),
 });
 
 const meta = {
@@ -46,6 +53,13 @@ export const Default: Story = {
         comboboxField: '',
 
         dateField: new Date(),
+
+        arrays: [
+          {
+            itemName: '',
+            itemQuantity: 0,
+          },
+        ],
       },
       validators: {
         onSubmit: Schema,
@@ -120,6 +134,42 @@ export const Default: Story = {
           name="dateField"
           children={({ DateField }) => <DateField label="Date Field" description="This is a date field." placeholder="Select a date" />}
         />
+        <AppField
+          name="arrays"
+          mode="array"
+          children={({ ArraysField, state, pushValue, removeValue }) => (
+            <ArraysField
+              label="Arrays"
+              description="This section allows you to manage a list of items."
+              onAddItem={() => {
+                pushValue({
+                  itemName: '',
+                  itemQuantity: 0,
+                });
+              }}
+            >
+              {state.value.map((_, index) => (
+                <AppField
+                  key={index.toString()}
+                  name={`arrays[${index}]`}
+                  children={({ ArrayItemField }) => (
+                    <ArrayItemField index={index} label={`Item ${index + 1}`} description="This is an array item field." onRemove={removeValue}>
+                      <AppField
+                        name={`arrays[${index}].itemName`}
+                        children={({ TextField }) => <TextField label="Item Name" description="Name of the item." placeholder="Enter item name..." />}
+                      />
+                      <AppField
+                        name={`arrays[${index}].itemQuantity`}
+                        children={({ NumberField }) => <NumberField label="Item Quantity" description="Quantity of the item." placeholder="0" />}
+                      />
+                    </ArrayItemField>
+                  )}
+                />
+              ))}
+            </ArraysField>
+          )}
+        />
+
         <AppForm>
           <TanStackFormFooter>
             <SubscribeButton />

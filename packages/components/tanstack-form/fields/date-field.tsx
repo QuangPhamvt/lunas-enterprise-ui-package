@@ -32,7 +32,7 @@ export const DateField: React.FC<Props> = ({ isShowLabel = true, isShowErrorMsg 
           </Activity>
         </FieldContent>
         <div className="basis-3/5 flex flex-col items-end">
-          <div className="w-full md:max-w-80 flex flex-col space-y-0.5">
+          <div className="w-full md:max-w-62 flex flex-col space-y-0.5">
             <Popover modal>
               <PopoverTrigger asChild>
                 <Button

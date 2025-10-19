@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-import { FieldContent, FieldDescription, FieldGroup, FieldLegend, FieldSeparator, FieldSet } from '../ui/field';
+import { FieldContent, FieldDescription, FieldGroup, FieldLabel, FieldLegend, FieldSeparator, FieldSet } from '../ui/field';
 
 type Props = {
   label?: string;
@@ -23,8 +23,8 @@ export const TanStackForm: React.FC<React.PropsWithChildren<Props>> = ({ label, 
           <FieldLegend>{label}</FieldLegend>
           <FieldDescription>{description}</FieldDescription>
           <FieldSeparator />
-          {children}
         </FieldSet>
+        {children}
       </FieldGroup>
     </form>
   );
@@ -40,7 +40,7 @@ export const TanStackFormGroup: React.FC<
     <>
       <FieldGroup className="@md/field-group:flex-row @md/field-group:items-start">
         <FieldContent>
-          <FieldLegend>{label}</FieldLegend>
+          <FieldLabel>{label}</FieldLabel>
           <FieldDescription>{description}</FieldDescription>
         </FieldContent>
         <div className="basis-3/5 w-full flex flex-col items-end">

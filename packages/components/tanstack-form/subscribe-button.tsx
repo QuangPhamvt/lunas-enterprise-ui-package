@@ -7,8 +7,7 @@ type Props = {
   label?: string;
 };
 export const SubscribeButton: React.FC<Props> = ({ label = 'Submit' }) => {
-  const { Subscribe, handleSubmit, ...form } = useFormContext();
-  console.log('SubscribeButton render - isError:', form);
+  const { Subscribe, handleSubmit } = useFormContext();
   const onSubmit = useCallback(async () => {
     await handleSubmit();
   }, [handleSubmit]);

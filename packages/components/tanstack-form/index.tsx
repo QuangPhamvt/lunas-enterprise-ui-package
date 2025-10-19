@@ -1,5 +1,6 @@
 import { createFormHook } from '@tanstack/react-form';
 
+import { ArrayItemField, ArraysField } from './arrays-field';
 import { fieldContext, formContext } from './config';
 import { ComboboxField } from './fields/combobox-field';
 import { DateField } from './fields/date-field';
@@ -21,6 +22,8 @@ const { useAppForm: useForm } = createFormHook({
     SelectField,
     ComboboxField,
     DateField,
+    ArraysField,
+    ArrayItemField,
   },
   formComponents: {
     TanStackForm,
