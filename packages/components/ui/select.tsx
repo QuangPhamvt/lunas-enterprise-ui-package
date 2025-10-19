@@ -1,7 +1,8 @@
 'use client';
-import { cn } from '@customafk/react-toolkit/utils';
 
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
+
+import { cn } from '@customafk/react-toolkit/utils';
 
 import { Select as SelectPrimitive } from 'radix-ui';
 

@@ -3,11 +3,8 @@
   "workspaces": {
     "": {
       "name": "@customafk/lunas-ui",
-      "dependencies": {
-        "@tanstack/react-form": "^1.23.7",
-      },
       "devDependencies": {
-        "@biomejs/biome": "^2.2.5",
+        "@biomejs/biome": "^2.2.6",
         "@storybook/addon-a11y": "^9.1.3",
         "@storybook/addon-docs": "^9.1.3",
         "@storybook/addon-onboarding": "^9.1.3",
@@ -28,6 +25,7 @@
         "@hookform/error-message": "^2.0.0",
         "@react-oauth/google": "^0.12.0",
         "@tailwindcss/vite": "^4.1.0",
+        "@tanstack/react-form": "^1.23.7",
         "@tanstack/react-table": "^8.21.0",
         "@tanstack/react-virtual": "^3.13.12",
         "class-variance-authority": "^0.7.0",
@@ -49,6 +47,7 @@
         "tailwindcss": "^4.1.0",
         "tw-animate-css": "^1.3.0",
         "vaul": "^1.1.2",
+        "zod": "^3.25.0 || ^4.0.0",
       },
     },
   },
@@ -1142,6 +1141,8 @@
     "yallist": ["yallist@5.0.0", "", {}, "sha512-YgvUTfwqyc7UXVMrB+SImsVYSmTS8X/tSrtdNZMImM+n7+QTriRXyXim0mBrTXNeqzVF0KWGgHPeiyViFFrNDw=="],
 
     "yocto-queue": ["yocto-queue@1.2.1", "", {}, "sha512-AyeEbWOu/TAXdxlV9wmGcR0+yh2j3vYPGOECcIj2S7MkrLyC7ne+oye2BKTItt0ii2PHk4cDy+95+LshzbXnGg=="],
+
+    "zod": ["zod@4.1.12", "", {}, "sha512-JInaHOamG8pt5+Ey8kGmdcAcg3OL9reK8ltczgHTAwNhMys/6ThXHityHxVV2p3fkw/c+MAvBHFVYHFZDmjMCQ=="],
 
     "@babel/core/semver": ["semver@6.3.1", "", { "bin": { "semver": "bin/semver.js" } }, "sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA=="],
 

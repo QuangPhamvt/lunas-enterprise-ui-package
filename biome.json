@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.2.5/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.2.6/schema.json",
   "files": {
     "includes": [
       "packages/**/*.js",
@@ -25,6 +25,9 @@
         "recommended": true,
         "noReExportAll": "off"
       },
+      "correctness": {
+        "noChildrenProp": "off"
+      },
       "complexity": {
         "recommended": true,
         "noExcessiveLinesPerFunction": "off"
@@ -47,6 +50,7 @@
               ":BLANK_LINE:",
               "@hookform/resolvers",
               "@tanstack/react-table",
+              "@tanstack/react-form",
               "@tanstack/react-router",
               "@tanstack/zod-adapter",
               "jotai",

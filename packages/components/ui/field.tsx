@@ -5,6 +5,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { memo, useMemo } from 'react';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
+import { BanIcon } from 'lucide-react';
 
 const FieldSet = memo(({ className, ...props }: React.ComponentProps<'fieldset'>) => {
   return (
@@ -174,10 +175,22 @@ const FieldError = memo(
       }
 
       if (errors?.length === 1 && errors[0]?.message) {
-        return errors[0].message;
+        return (
+          <div className="flex flex-row gap-x-0.5 justify-start items-center">
+            <BanIcon size={14} />
+            <p>{errors[0].message}</p>
+          </div>
+        );
       }
 
-      return <ul className="ml-4 flex list-disc flex-col gap-1">{errors.map(error => error?.message && <li key={error.message}>{error.message}</li>)}</ul>;
+      return (
+        <ul className="ml-4 flex list-disc flex-col gap-1">
+          {errors.map(error => {
+            if (!error?.message) return null;
+            return <li key={error.message}>{error.message}</li>;
+          })}
+        </ul>
+      );
     }, [children, errors]);
 
     if (!content) {
@@ -185,7 +198,7 @@ const FieldError = memo(
     }
 
     return (
-      <div role="alert" data-slot="field-error" className={cn('text-danger text-sm font-normal', className)} {...props}>
+      <div role="alert" data-slot="field-error" className={cn('text-danger w-full text-xs font-normal', className)} {...props}>
         {content}
       </div>
     );

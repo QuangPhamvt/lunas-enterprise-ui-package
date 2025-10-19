@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { FormGroupField } from '@/components/forms/form-group-field';
 import { FormWrapper } from '@/components/forms/form-wrapper';
 import { NumberField } from '@/components/forms/number-field';
 import { SelectField } from '@/components/forms/select-field';
@@ -6,7 +7,6 @@ import { TextField } from '@/components/forms/text-field';
 import { Button } from '@/components/ui/button';
 import { FieldGroup, FieldSeparator } from '@/components/ui/field';
 import { Toaster } from '@/components/ui/sonner';
-import { FormGroupField } from '@/components/forms/form-group-field';
 
 type TSchema = {
   code: string;
@@ -38,7 +38,10 @@ export const Default: Story = {
               code: '',
               name: '',
               exchangeRate: 1,
-              option: { label: 'Option 1 long long long long long long', value: 'option1' },
+              option: {
+                label: 'Option 1 long long long long long long',
+                value: 'option1',
+              },
               numberOne: 0,
               numberTwo: 0,
               numberThree: 0,
@@ -72,7 +75,10 @@ export const Default: Story = {
               name="option"
               label="Select Option"
               options={[
-                { label: 'Option 1 long long long long long long', value: 'option1' },
+                {
+                  label: 'Option 1 long long long long long long',
+                  value: 'option1',
+                },
                 { label: 'Option 2', value: 'option2' },
                 { label: 'Option 3', value: 'option3' },
               ]}
