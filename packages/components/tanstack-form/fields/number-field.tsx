@@ -1,6 +1,6 @@
 import { Activity } from 'react';
 
-import { Field, FieldContent, FieldDescription, FieldError, FieldLabel, FieldSeparator } from '@/components/ui/field';
+import { Field, FieldContent, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldSeparator } from '@/components/ui/field';
 import { NumberInput } from '@/components/ui/inputs/number-input';
 import { useFieldContext } from '../config';
 
@@ -47,7 +47,7 @@ export const NumberField: React.FC<Props> = ({ isShowLabel = true, isNested = fa
     );
   }
   return (
-    <>
+    <FieldGroup>
       <Field orientation="responsive" data-invalid={state.meta.isTouched && !state.meta.isValid}>
         <FieldContent>
           <Activity mode={label || description ? 'visible' : 'hidden'}>
@@ -56,9 +56,7 @@ export const NumberField: React.FC<Props> = ({ isShowLabel = true, isNested = fa
             </Activity>
           </Activity>
           <Activity mode={description ? 'visible' : 'hidden'}>
-            <Activity mode={description ? 'visible' : 'hidden'}>
-              <FieldDescription>{description}</FieldDescription>
-            </Activity>
+            <FieldDescription>{description}</FieldDescription>
           </Activity>
         </FieldContent>
         <div className="relative basis-3/5 space-y-0.5">
@@ -81,6 +79,6 @@ export const NumberField: React.FC<Props> = ({ isShowLabel = true, isNested = fa
         </div>
       </Field>
       <FieldSeparator />
-    </>
+    </FieldGroup>
   );
 };

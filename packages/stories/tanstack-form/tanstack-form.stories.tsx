@@ -3,7 +3,7 @@ import { z } from 'zod/v4';
 import { sleep } from '@customafk/react-toolkit/utils/sleep';
 
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { useForm } from '@/components/tanstack-form';
+import { useTanStackForm } from '@/components/tanstack-form';
 
 const Schema = z.object({
   textField: z.string().min(10, 'Text Field is required'),
@@ -20,6 +20,15 @@ const Schema = z.object({
   comboboxField: z.string().nonempty('Combobox Field is required'),
 
   dateField: z.date(),
+
+  switchGroup: z.object({
+    switchOne: z.boolean(),
+    switchTwo: z.boolean(),
+    switchThree: z.boolean(),
+    switchFour: z.boolean(),
+  }),
+
+  radioGroup: z.string().nonempty('Radio Group selection is required'),
 
   arrays: z.array(
     z.object({
@@ -39,35 +48,50 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   render: () => {
-    const { AppForm, AppField, TanStackForm, TanStackFormGroup, TanStackFormFooter, SubscribeButton } = useForm({
-      defaultValues: {
-        textField: '',
-        textFieldTwo: '',
-        textareaField: '',
-        numberField: 0,
-        nestedGroupOne: {
-          nestedTextField: '',
-          nestedNumberField: 0,
-        },
-        selectField: '',
-        comboboxField: '',
-
-        dateField: new Date(),
-
-        arrays: [
-          {
-            itemName: '',
-            itemQuantity: 0,
+    const { AppForm, AppField, TanStackForm, TanStackFormGroup, TanStackSwitchGroup, TanStackRadioGroup, TanStackFormFooter, SubscribeButton } =
+      useTanStackForm({
+        defaultValues: {
+          textField: '',
+          textFieldTwo: '',
+          textareaField: '',
+          numberField: 0,
+          nestedGroupOne: {
+            nestedTextField: '',
+            nestedNumberField: 0,
           },
-        ],
-      },
-      validators: {
-        onSubmit: Schema,
-      },
-      onSubmit: async () => {
-        await sleep(1000);
-      },
-    });
+          selectField: '',
+          comboboxField: '',
+
+          dateField: new Date(),
+
+          switchGroup: {
+            switchOne: false,
+            switchTwo: false,
+            switchThree: false,
+            switchFour: false,
+          },
+
+          radioGroup: '',
+
+          arrays: [
+            {
+              itemName: '',
+              itemQuantity: 0,
+            },
+          ],
+        },
+        validators: {
+          onSubmit: Schema,
+          onChange: Schema,
+        },
+        onSubmit: async data => {
+          await sleep(1000);
+          console.log('Form Submitted:', data.formApi.getAllErrors());
+        },
+        onSubmitInvalid: async errors => {
+          console.log('Form Submission Failed with errors:', errors.formApi.getAllErrors());
+        },
+      });
     return (
       <TanStackForm label="Sample TanStack Form" description="This is a sample form using TanStack Form.">
         <AppField
@@ -134,11 +158,40 @@ export const Default: Story = {
           name="dateField"
           children={({ DateField }) => <DateField label="Date Field" description="This is a date field." placeholder="Select a date" />}
         />
+        <TanStackSwitchGroup label="Switch Group" description="This section contains multiple switch fields to toggle various options.">
+          <AppField name="switchGroup.switchOne" children={({ SwitchField }) => <SwitchField label="Switch One" description="This is the first switch." />} />
+          <AppField name="switchGroup.switchTwo" children={({ SwitchField }) => <SwitchField label="Switch Two" description="This is the second switch." />} />
+          <AppField
+            name="switchGroup.switchThree"
+            children={({ SwitchField }) => <SwitchField label="Switch Three" description="This is the third switch." />}
+          />
+          <AppField
+            name="switchGroup.switchFour"
+            children={({ SwitchField }) => <SwitchField label="Switch Four" description="This is the fourth switch." />}
+          />
+        </TanStackSwitchGroup>
+        <TanStackRadioGroup label="Radio Group" description="This section contains multiple radio button options to select from.">
+          <AppField
+            name="radioGroup"
+            children={({ RadioGroupField }) => (
+              <RadioGroupField
+                label="Radio Group Field"
+                description="This is a radio group field."
+                options={[
+                  { label: 'Radio Option 1', value: 'radioOption1', description: 'This is the first radio option.' },
+                  { label: 'Radio Option 2', value: 'radioOption2', description: 'This is the second radio option.' },
+                  { label: 'Radio Option 3', value: 'radioOption3', description: 'This is the third radio option.' },
+                ]}
+              />
+            )}
+          />
+        </TanStackRadioGroup>
+
         <AppField
           name="arrays"
           mode="array"
-          children={({ ArraysField, state, pushValue, removeValue }) => (
-            <ArraysField
+          children={({ ArrayField, state, pushValue, removeValue }) => (
+            <ArrayField
               label="Arrays"
               description="This section allows you to manage a list of items."
               onAddItem={() => {
@@ -166,7 +219,7 @@ export const Default: Story = {
                   )}
                 />
               ))}
-            </ArraysField>
+            </ArrayField>
           )}
         />
 

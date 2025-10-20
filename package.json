@@ -197,6 +197,10 @@
       "import": "./dist/table/index.js",
       "require": "./dist/table/index.cjs"
     },
+    "./tanstack-form": {
+      "import": "./dist/tanstack-form/index.js",
+      "require": "./dist/tanstack-form/index.cjs"
+    },
     "./typography/paragraph": {
       "import": "./dist/typography/paragraph.js",
       "require": "./dist/typography/paragraph.cjs"

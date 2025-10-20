@@ -15,7 +15,7 @@ export const SubscribeButton: React.FC<Props> = ({ label = 'Submit' }) => {
     <Subscribe
       selector={state => ({
         isSubmitting: state.isSubmitting,
-        isDisabled: !state.isValid,
+        isDisabled: !state.isFormValid,
       })}
     >
       {({ isDisabled, isSubmitting }) => {

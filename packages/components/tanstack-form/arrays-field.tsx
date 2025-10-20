@@ -13,7 +13,7 @@ const ArrayWrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
     </div>
   );
 };
-export const ArraysField: React.FC<
+export const ArrayField: React.FC<
   React.PropsWithChildren<{
     label: string;
     description?: string;

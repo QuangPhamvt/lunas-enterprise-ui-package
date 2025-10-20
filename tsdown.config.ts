@@ -54,6 +54,7 @@ export default defineConfig([
       './packages/components/systems/google.tsx',
 
       './packages/components/table/index.tsx',
+      './packages/components/tanstack-form/index.tsx',
 
       './packages/components/typography/paragraph.tsx',
       './packages/components/typography/title.tsx',
@@ -119,7 +120,7 @@ export default defineConfig([
       './packages/components/ui/tooltip.tsx',
     ],
     dts: true,
-    exports: false,
+    exports: true,
     sourcemap: true,
     format: ['esm', 'cjs'],
     minify: true,
