@@ -61,9 +61,10 @@ export const AppLayoutMain: React.FC<React.PropsWithChildren> = ({ children }) =
     </AppLayoutSidebarInset>
   );
 };
+
 export const AppLayoutMainHeader: React.FC<React.PropsWithChildren & { className?: string }> = ({ className, children }) => {
   return (
-    <div data-slot="main-header" className={cn('flex-0 snap-start', className)}>
+    <div data-slot="main-header" className={cn('flex-0', className)}>
       {children}
     </div>
   );
@@ -71,7 +72,7 @@ export const AppLayoutMainHeader: React.FC<React.PropsWithChildren & { className
 
 export const AppLayoutMainContent: React.FC<React.PropsWithChildren & { className?: string }> = ({ className, children }) => {
   return (
-    <div data-slot="main-content" className={cn('flex w-full flex-1 snap-y flex-col gap-4 overflow-y-auto px-2 sm:px-4', className)}>
+    <div data-slot="main-content" className={cn('flex w-full flex-1 flex-col gap-4 overflow-y-auto px-2 sm:px-4', className)}>
       {children}
     </div>
   );

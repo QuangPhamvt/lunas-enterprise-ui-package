@@ -25,10 +25,6 @@
     "node": ">= 22.0.0"
   },
   "exports": {
-    "./styles/base": "./styles/base.css",
-    "./styles/loader": "./styles/loader.css",
-    "./styles/theme": "./styles/theme.css",
-    "./styles/typography": "./styles/typography.css",
     "./cards/grid-product-card": {
       "import": "./dist/cards/grid-product-card.js",
       "require": "./dist/cards/grid-product-card.cjs"
@@ -196,6 +192,10 @@
     "./table": {
       "import": "./dist/table/index.js",
       "require": "./dist/table/index.cjs"
+    },
+    "./tanstack-form": {
+      "import": "./dist/tanstack-form/index.js",
+      "require": "./dist/tanstack-form/index.cjs"
     },
     "./typography/paragraph": {
       "import": "./dist/typography/paragraph.js",
@@ -440,8 +440,8 @@
   },
   "scripts": {
     "build": "tsdown",
+    "build:dev": "bunx --bun tsdown --watch",
     "build:rslib": "rslib build",
-    "dev": "tsdown --watch",
     "typecheck": "tsc --noEmit",
     "lint": "npx @biomejs/biome check",
     "lint:fix": "npx @biomejs/biome lint --write ./packages",
@@ -455,6 +455,7 @@
     "@hookform/error-message": "^2.0.0",
     "@react-oauth/google": "^0.12.0",
     "@tailwindcss/vite": "^4.1.0",
+    "@tanstack/react-form": "^1.23.7",
     "@tanstack/react-table": "^8.21.0",
     "@tanstack/react-virtual": "^3.13.12",
     "class-variance-authority": "^0.7.0",
@@ -464,27 +465,27 @@
     "lucide-react": "^0.541.0",
     "next-themes": "^0.4.6",
     "radix-ui": "^1.4.0",
-    "react": "16.8 || ^17.0 || ^18.0 || ^19.0",
+    "react": "^19.2.0",
     "react-country-flag": "^3.1.0",
     "react-day-picker": "^9.9.0",
-    "react-dom": "16.8 || ^17.0 || ^18.0 || ^19.0",
+    "react-dom": "^19.2.0",
     "react-dropzone": "^14.3.0",
     "react-hook-form": "^7.62.0",
     "react-resizable-panels": "^3.0.0",
-    "sonner": "^2.0.0",
+    "sonner": "^2.0.5",
     "tailwind-merge": "^3.3.0",
     "tailwindcss": "^4.1.0",
     "tw-animate-css": "^1.3.0",
+    "zod": "^3.25.0 || ^4.0.0",
     "vaul": "^1.1.2"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.2.5",
+    "@biomejs/biome": "^2.2.6",
     "@storybook/addon-a11y": "^9.1.3",
     "@storybook/addon-docs": "^9.1.3",
     "@storybook/addon-onboarding": "^9.1.3",
     "@storybook/addon-themes": "^9.1.3",
     "@storybook/react-vite": "^9.1.3",
-    "@types/node": "^24.0.3",
     "@types/react": "*",
     "@types/react-dom": "*",
     "@vitejs/plugin-react": "^4.4.1",

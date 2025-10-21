@@ -1,4 +1,5 @@
 'use client';
+
 import { useCallback } from 'react';
 
 import { cn } from '@customafk/react-toolkit/utils';
@@ -40,7 +41,7 @@ function Input({
         'focus-visible:ring-primary-border-subtle focus-visible:ring-4',
 
         // Invalid state
-        'aria-invalid:border-danger aria-invalid:ring-danger-muted',
+        'aria-invalid:border-danger aria-invalid:ring-danger-weak',
         'aria-invalid:hover:border-danger-strong',
 
         // Disabled state

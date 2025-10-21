@@ -1,3 +1,4 @@
+'use client';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import type { ColumnDef, ColumnFiltersState, RowSelectionState, SortingState, VisibilityState } from '@tanstack/react-table';

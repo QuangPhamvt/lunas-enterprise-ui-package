@@ -1,4 +1,4 @@
-import { Activity, memo, useCallback } from 'react';
+import { memo, useCallback } from 'react';
 
 import { type Column, flexRender, type Header, type HeaderGroup, type Row } from '@tanstack/react-table';
 import { LoaderIcon } from 'lucide-react';
@@ -87,25 +87,23 @@ const DataTableRow = memo(({ row, virtualRow }: DataTableRowProps) => {
       style={{
         transform: `translateY(${virtualRow.start}px)`,
       }}
-      className="absolute flex w-full cursor-pointer focus:outline-none"
       onClick={handleClick}
     >
       {row.getVisibleCells().map(cell => {
         const isPinned = cell.column.getIsPinned();
-        const isLastLeftPinned = isPinned === 'left' && cell.column.getIsLastColumn('left');
         const isFirstRightPinned = isPinned === 'right' && cell.column.getIsFirstColumn('right');
 
         return (
           <TableCell
             key={cell.id}
             data-pinned={isPinned || undefined}
-            data-last-col={isLastLeftPinned ? 'left' : isFirstRightPinned ? 'right' : undefined}
+            data-last-col={isFirstRightPinned ? 'right' : undefined}
             style={{
-              ...getPinningStyles(cell.column),
-              width: cell.column.getSize(),
-              ...(cell.id.includes('actions') && { width: 60 }),
+              width: cell.id.includes('actions') ? 60 : cell.column.getSize(),
+              right: isPinned === 'right' ? `${cell.column.getAfter('right')}px` : undefined,
+              position: isPinned ? 'sticky' : 'relative',
+              zIndex: isPinned ? 10 : 0,
             }}
-            className="flex overflow-hidden py-2.5 z-20 data-pinned:bg-background/90"
           >
             {flexRender(cell.column.columnDef.cell, cell.getContext())}
           </TableCell>
@@ -168,25 +166,46 @@ export const DataTableBody = memo(({ isLoading, totalBodyHeight, rows, virtualIt
       style={{
         height: `${totalBodyHeight}px`, //tells scrollbar how big the table is
       }}
-      className={cn('relative grid w-full', isLoading && 'h-36', rows?.length === 0 && 'h-48')}
+      className={cn(
+        isLoading && 'h-36',
+        rows?.length === 0 && 'h-48',
+        'relative',
+        'grid',
+        'w-full',
+        '[&_tr]:absolute',
+        '[&_tr]:flex',
+        '[&_tr]:w-full',
+        '[&_tr]:cursor-pointer',
+        '[&_tr]:focus:outline-none',
+        '[&_td]:p-2',
+        '[&_td]:py-2.5',
+        '[&_td]:align-middle',
+        '[&_td]:whitespace-nowrap',
+        '[&_td]:flex',
+        '[&_td]:overflow-hidden',
+        '[&_td]:z-20',
+        '[&_td]:data-[pinned]:bg-background/90'
+      )}
     >
-      <Activity mode={isLoading ? 'visible' : 'hidden'}>
+      {isLoading && (
         <TableRow className="absolute top-9 flex h-36 w-full items-center justify-center">
           <TableCell>loading...</TableCell>
         </TableRow>
-      </Activity>
-      <Activity mode={isLoading ? 'hidden' : 'visible'}>
-        {virtualItems.map(virtualRow => {
-          const row = rows[virtualRow.index];
-          const rowId =
-            row?.id ||
-            (row.original && 'id' in row.original ? String(row.original.id) : null) ||
-            (row.original && 'uuid' in row.original ? String(row.original.uuid) : null) ||
-            virtualRow.index.toString();
-          const key = rowId ?? String(virtualRow.index);
-          return <DataTableRow key={key} id={rowId} row={row} virtualRow={virtualRow} />;
-        })}
-      </Activity>
+      )}
+      {!isLoading && (
+        <>
+          {virtualItems.map(virtualRow => {
+            const row = rows[virtualRow.index];
+            const rowId =
+              row?.id ||
+              (row.original && 'id' in row.original ? String(row.original.id) : null) ||
+              (row.original && 'uuid' in row.original ? String(row.original.uuid) : null) ||
+              virtualRow.index.toString();
+            const key = rowId ?? String(virtualRow.index);
+            return <DataTableRow key={key} id={rowId} row={row} virtualRow={virtualRow} />;
+          })}
+        </>
+      )}
     </TableBody>
   );
 });
@@ -200,24 +219,13 @@ export const DataTable = memo(
     isFetching?: boolean;
   }>) => {
     return (
-      <Table
-        className={cn(
-          '!w-full',
-          'grid',
-          'border-separate border-spacing-0',
-          '[&_td]:border-border',
-          '[&_th]:border-border',
-          '[&_th]:border-b',
-          '[&_th]:border-b-border',
-          '[&_tfoot_td]:border-t'
-        )}
-      >
+      <Table className="!w-full grid border-separate border-spacing-0 [&_td]:border-border [&_th]:border-border [&_th]:border-b [&_th]:border-b-border [&_tfoot_td]:border-t">
         {children}
-        <Activity mode={isFetching ? 'visible' : 'hidden'}>
+        {isFetching && (
           <TableFooter className="flex w-full justify-center py-2">
             <LoaderIcon size={16} className="animate-spin" aria-label="Loading more data" />
           </TableFooter>
-        </Activity>
+        )}
       </Table>
     );
   }

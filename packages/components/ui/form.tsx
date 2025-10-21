@@ -1,11 +1,10 @@
 'use client';
-import { createContext, useContext, useId } from 'react';
-import type { ControllerProps, FieldPath, FieldValues } from 'react-hook-form';
-import { Controller, FormProvider, useFormContext, useFormState } from 'react-hook-form';
 
 import { cn } from '@customafk/react-toolkit/utils';
-
 import { type Label as LabelPrimitive, Slot as SlotPrimitive } from 'radix-ui';
+import { createContext, memo, use, useId } from 'react';
+import type { ControllerProps, FieldPath, FieldValues } from 'react-hook-form';
+import { Controller, FormProvider, useFormContext, useFormState } from 'react-hook-form';
 import { Field, FieldDescription, FieldLabel } from './field';
 
 const Form = FormProvider;
@@ -27,8 +26,8 @@ const FormField = <TFieldValues extends FieldValues = FieldValues, TName extends
 };
 
 const useFormField = () => {
-  const fieldContext = useContext(FormFieldContext);
-  const itemContext = useContext(FormItemContext);
+  const fieldContext = use(FormFieldContext);
+  const itemContext = use(FormItemContext);
   const { getFieldState, control, resetField } = useFormContext();
   const formState = useFormState({ name: fieldContext.name });
   const fieldState = getFieldState(fieldContext.name, formState);
@@ -57,28 +56,32 @@ type FormItemContextValue = {
 
 const FormItemContext = createContext<FormItemContextValue>({} as FormItemContextValue);
 
-function FormItem({
-  className,
-  orientation = 'responsive',
-  ...props
-}: React.ComponentProps<'div'> & {
-  orientation?: 'vertical' | 'horizontal' | 'responsive';
-}) {
-  const id = useId();
+const FormItem = memo(
+  ({
+    className,
+    orientation = 'responsive',
+    ...props
+  }: React.ComponentProps<'div'> & {
+    orientation?: 'vertical' | 'horizontal' | 'responsive';
+  }) => {
+    const id = useId();
 
-  return (
-    <FormItemContext.Provider value={{ id }}>
-      <Field orientation={orientation} {...props} className={className} />
-    </FormItemContext.Provider>
-  );
-}
+    return (
+      <FormItemContext.Provider value={{ id }}>
+        <Field orientation={orientation} {...props} className={className} />
+      </FormItemContext.Provider>
+    );
+  }
+);
+FormItem.displayName = 'FormItem';
 
-function FormLabel({ ...props }: React.ComponentProps<typeof LabelPrimitive.Root>) {
+const FormLabel = memo(({ ...props }: React.ComponentProps<typeof LabelPrimitive.Root>) => {
   const { formItemId } = useFormField();
   return <FieldLabel htmlFor={formItemId} {...props} />;
-}
+});
+FormLabel.displayName = 'FormLabel';
 
-function FormControl({ ...props }: React.ComponentProps<typeof SlotPrimitive.Slot>) {
+const FormControl = memo(({ ...props }: React.ComponentProps<typeof SlotPrimitive.Slot>) => {
   const { error, formItemId, formDescriptionId, formMessageId } = useFormField();
 
   return (
@@ -90,7 +93,8 @@ function FormControl({ ...props }: React.ComponentProps<typeof SlotPrimitive.Slo
       {...props}
     />
   );
-}
+});
+FormControl.displayName = 'FormControl';
 
 function FormDescription({ className, ...props }: React.ComponentProps<'p'>) {
   const { formDescriptionId } = useFormField();

@@ -15,7 +15,22 @@ const TableHeader = memo(({ className, ...props }: React.ComponentProps<'thead'>
 TableHeader.displayName = 'TableHeader';
 
 const TableBody = memo(({ className, ...props }: React.ComponentProps<'tbody'>) => {
-  return <tbody data-slot="table-body" className={cn('[&_tr:last-child]:border-0', className)} {...props} />;
+  return (
+    <tbody
+      data-slot="table-body"
+      className={cn(
+        '[&_tr:last-child]:border-0',
+        '[&_tr]:hover:bg-muted-muted/50',
+        '[&_tr]:active:bg-muted-muted',
+        '[&_tr]:data-[state=selected]:bg-muted',
+        '[&_tr]:border-border-weak',
+        '[&_tr]:border-b',
+        '[&_tr]:transition-colors',
+        className
+      )}
+      {...props}
+    />
+  );
 });
 TableBody.displayName = 'TableBody';
 
@@ -25,13 +40,7 @@ const TableFooter = memo(({ className, ...props }: React.ComponentProps<'tfoot'>
 TableFooter.displayName = 'TableFooter';
 
 const TableRow = memo(({ className, ...props }: React.ComponentProps<'tr'>) => {
-  return (
-    <tr
-      data-slot="table-row"
-      className={cn('hover:bg-muted-muted/50 active:bg-muted-muted data-[state=selected]:bg-muted border-border-weak border-b transition-colors', className)}
-      {...props}
-    />
-  );
+  return <tr data-slot="table-row" className={className} {...props} />;
 });
 TableRow.displayName = 'TableRow';
 
@@ -53,13 +62,7 @@ const TableHead = memo(({ className, ...props }: React.ComponentProps<'th'>) => 
 TableHead.displayName = 'TableHead';
 
 const TableCell = memo(({ className, ...props }: React.ComponentProps<'td'>) => {
-  return (
-    <td
-      data-slot="table-cell"
-      className={cn('p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-0.5', className)}
-      {...props}
-    />
-  );
+  return <td data-slot="table-cell" className={className} {...props} />;
 });
 TableCell.displayName = 'TableCell';
 

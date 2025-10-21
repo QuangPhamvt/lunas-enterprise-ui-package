@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { FormGroupField } from '@/components/forms/form-group-field';
 import { FormWrapper } from '@/components/forms/form-wrapper';
 import { NumberField } from '@/components/forms/number-field';
 import { SelectField } from '@/components/forms/select-field';
@@ -12,6 +13,10 @@ type TSchema = {
   name: string;
   exchangeRate: number;
   option: { label: string; value: string };
+
+  numberOne: number;
+  numberTwo: number;
+  numberThree: number;
 };
 
 const meta: Meta<typeof FormWrapper<TSchema>> = {
@@ -33,7 +38,13 @@ export const Default: Story = {
               code: '',
               name: '',
               exchangeRate: 1,
-              option: { label: 'Option 1 long long long long long long', value: 'option1' },
+              option: {
+                label: 'Option 1 long long long long long long',
+                value: 'option1',
+              },
+              numberOne: 0,
+              numberTwo: 0,
+              numberThree: 0,
             },
           }}
           isResetAfterSubmit={false}
@@ -64,17 +75,26 @@ export const Default: Story = {
               name="option"
               label="Select Option"
               options={[
-                { label: 'Option 1 long long long long long long', value: 'option1' },
+                {
+                  label: 'Option 1 long long long long long long',
+                  value: 'option1',
+                },
                 { label: 'Option 2', value: 'option2' },
                 { label: 'Option 3', value: 'option3' },
               ]}
               placeholder="Select an option"
             />
-            <FieldGroup>
-              <Button type="submit" className="w-40">
-                Submit
-              </Button>
-            </FieldGroup>
+            <FieldSeparator />
+            <FormGroupField label="Number One" description="This is a number field inside a form group field.">
+              <NumberField<TSchema> isNested name="numberOne" />
+              <NumberField<TSchema> isNested name="numberTwo" />
+              <NumberField<TSchema> isNested name="numberThree" />
+            </FormGroupField>
+          </FieldGroup>
+          <FieldGroup>
+            <Button type="submit" className="w-40">
+              Submit
+            </Button>
           </FieldGroup>
         </FormWrapper>
         <Toaster />

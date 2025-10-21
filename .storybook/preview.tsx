@@ -3,8 +3,17 @@ import '../packages/index.css'
 import { Controls, Description, Primary, Stories, Subtitle, Title } from '@storybook/addon-docs/blocks'
 import { withThemeByClassName } from '@storybook/addon-themes'
 import type { Preview } from '@storybook/react-vite'
+import React from 'react'
 
 import { INITIAL_VIEWPORTS } from 'storybook/viewport'
+
+const withStrictMode = (Story: React.FC) => {
+  return (
+    <React.StrictMode>
+      <Story />
+    </React.StrictMode>
+  )
+}
 
 const preview: Preview = {
   tags: ['autodocs'],
@@ -35,6 +44,7 @@ const preview: Preview = {
   },
   initialGlobals: {},
   decorators: [
+    withStrictMode,
     withThemeByClassName({
       themes: {
         light: 'light',
