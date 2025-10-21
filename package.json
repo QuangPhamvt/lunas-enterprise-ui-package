@@ -25,10 +25,6 @@
     "node": ">= 22.0.0"
   },
   "exports": {
-    "./styles/base": "./styles/base.css",
-    "./styles/loader": "./styles/loader.css",
-    "./styles/theme": "./styles/theme.css",
-    "./styles/typography": "./styles/typography.css",
     "./cards/grid-product-card": {
       "import": "./dist/cards/grid-product-card.js",
       "require": "./dist/cards/grid-product-card.cjs"

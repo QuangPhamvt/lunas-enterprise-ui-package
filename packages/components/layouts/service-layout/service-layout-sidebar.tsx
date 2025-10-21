@@ -8,12 +8,12 @@ import { cn } from '@customafk/react-toolkit/utils';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { Slot as SlotPrimitive } from 'radix-ui';
 import { Button } from '@/components/ui/button';
-import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useServiceLayout } from './hooks/use-service-layout';
 import { SidebarContext, type SidebarContextProps, useServiceLayoutSidebar } from './hooks/use-service-layout-sidebar';
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 
 const SIDEBAR_COOKIE_NAME = 'sidebar_state';
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
@@ -134,7 +134,7 @@ function ServiceLayoutSidebar({
 
   if (collapsible === 'none') {
     return (
-      <aside data-slot="sidebar" className={cn('bg-sidebar', 'text-sidebar-foreground', 'flex h-full w-(--sidebar-width) flex-col', className)} {...props}>
+      <aside data-slot="sidebar" className={cn('bg-sidebar text-sidebar-foreground flex h-full w-(--sidebar-width) flex-col', className)} {...props}>
         {children}
       </aside>
     );
@@ -142,22 +142,23 @@ function ServiceLayoutSidebar({
 
   if (isMobile) {
     return (
-      <Drawer direction="left" open={openMobile} onOpenChange={setOpenMobile}>
-        <DrawerContent
+      <Sheet open={openMobile} onOpenChange={setOpenMobile}>
+        <SheetContent
+          side="left"
           data-sidebar="sidebar"
           data-slot="sidebar"
           data-mobile="true"
-          className="bg-sidebar text-sidebar-foreground w-(--sidebar-width) p-0 data-[vaul-drawer-direction=left]:w-3xs data-[vaul-drawer-direction=left]:sm:max-w-3xs [&>button]:hidden"
+          className="bg-sidebar text-sidebar-foreground w-(--sidebar-width) p-0 sm:max-w-3xs [&>button]:hidden"
           style={
             {
               '--sidebar-width': SIDEBAR_WIDTH_MOBILE,
             } as React.CSSProperties
           }
         >
-          <DrawerHeader className="sr-only">
-            <DrawerTitle>Sidebar</DrawerTitle>
-            <DrawerDescription>Displays the mobile sidebar.</DrawerDescription>
-          </DrawerHeader>
+          <SheetHeader className="sr-only">
+            <SheetTitle>Sidebar</SheetTitle>
+            <SheetDescription>Displays the mobile sidebar.</SheetDescription>
+          </SheetHeader>
           <div className="flex size-full flex-col">
             <div className="border-border-weak flex flex-0 items-center gap-x-2 border-b p-2 pr-4">
               <ServiceLayoutSidebarTrigger />
@@ -171,8 +172,8 @@ function ServiceLayoutSidebar({
             </div>
             <div className="flex flex-1 flex-col p-2">{children}</div>
           </div>
-        </DrawerContent>
-      </Drawer>
+        </SheetContent>
+      </Sheet>
     );
   }
 
