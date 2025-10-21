@@ -82,7 +82,7 @@ export const Default: Story = {
         },
         validators: {
           onSubmit: Schema,
-          onChange: Schema,
+          // onChange: Schema,
         },
         onSubmit: async data => {
           await sleep(1000);
