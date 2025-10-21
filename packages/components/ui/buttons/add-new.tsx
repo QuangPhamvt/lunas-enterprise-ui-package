@@ -18,7 +18,7 @@ export const AddNewBtn: React.FC<React.PropsWithChildren<Props>> = ({ onClick = 
     >
       <PlusIcon className="opacity-60 sm:-ms-1" size={16} aria-hidden="true" />
       <Paragraph variant="sm" className="max-sm:sr-only">
-        Create 123 123
+        Create
       </Paragraph>
     </Button>
   );

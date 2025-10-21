@@ -87,7 +87,6 @@ const DataTableRow = memo(({ row, virtualRow }: DataTableRowProps) => {
       style={{
         transform: `translateY(${virtualRow.start}px)`,
       }}
-      className="absolute flex w-full cursor-pointer focus:outline-none"
       onClick={handleClick}
     >
       {row.getVisibleCells().map(cell => {
@@ -100,13 +99,11 @@ const DataTableRow = memo(({ row, virtualRow }: DataTableRowProps) => {
             data-pinned={isPinned || undefined}
             data-last-col={isFirstRightPinned ? 'right' : undefined}
             style={{
+              width: cell.id.includes('actions') ? 60 : cell.column.getSize(),
               right: isPinned === 'right' ? `${cell.column.getAfter('right')}px` : undefined,
               position: isPinned ? 'sticky' : 'relative',
               zIndex: isPinned ? 10 : 0,
-              width: cell.column.getSize(),
-              ...(cell.id.includes('actions') && { width: 60 }),
             }}
-            className="flex overflow-hidden py-2.5 z-20 data-pinned:bg-background/90"
           >
             {flexRender(cell.column.columnDef.cell, cell.getContext())}
           </TableCell>
@@ -169,7 +166,26 @@ export const DataTableBody = memo(({ isLoading, totalBodyHeight, rows, virtualIt
       style={{
         height: `${totalBodyHeight}px`, //tells scrollbar how big the table is
       }}
-      className={cn('relative grid w-full', isLoading && 'h-36', rows?.length === 0 && 'h-48')}
+      className={cn(
+        isLoading && 'h-36',
+        rows?.length === 0 && 'h-48',
+        'relative',
+        'grid',
+        'w-full',
+        '[&_tr]:absolute',
+        '[&_tr]:flex',
+        '[&_tr]:w-full',
+        '[&_tr]:cursor-pointer',
+        '[&_tr]:focus:outline-none',
+        '[&_td]:p-2',
+        '[&_td]:py-2.5',
+        '[&_td]:align-middle',
+        '[&_td]:whitespace-nowrap',
+        '[&_td]:flex',
+        '[&_td]:overflow-hidden',
+        '[&_td]:z-20',
+        '[&_td]:data-[pinned]:bg-background/90'
+      )}
     >
       {isLoading && (
         <TableRow className="absolute top-9 flex h-36 w-full items-center justify-center">

@@ -141,7 +141,7 @@ export const Default: Story = {
   render: args => {
     return (
       <div className="h-[calc(100vh-4rem)] w-full">
-        <Table data={args.data} columns={args.columns} />
+        <Table {...args} data={args.data} columns={args.columns} />
       </div>
     );
   },
