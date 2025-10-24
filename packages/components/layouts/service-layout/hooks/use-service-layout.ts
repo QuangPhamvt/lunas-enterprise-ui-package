@@ -1,4 +1,4 @@
-import { createContext, useContext } from 'react';
+import { createContext, use } from 'react';
 
 import type { CredentialResponse } from '@react-oauth/google';
 
@@ -29,7 +29,7 @@ export type ServiceLayoutContextProps = {
 export const ServiceLayoutContext = createContext<ServiceLayoutContextProps | null>(null);
 
 export const useServiceLayout = () => {
-  const context = useContext(ServiceLayoutContext);
+  const context = use(ServiceLayoutContext);
   if (!context) {
     throw new Error('useServiceLayoutContext must be used within a ServiceLayoutProvider');
   }

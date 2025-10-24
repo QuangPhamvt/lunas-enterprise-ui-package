@@ -184,7 +184,7 @@ export const DataTableBody = memo(({ isLoading, totalBodyHeight, rows, virtualIt
         '[&_td]:flex',
         '[&_td]:overflow-hidden',
         '[&_td]:z-20',
-        '[&_td]:data-[pinned]:bg-background/90'
+        '[&_td]:data-pinned:bg-background/90'
       )}
     >
       {isLoading && (
@@ -219,7 +219,7 @@ export const DataTable = memo(
     isFetching?: boolean;
   }>) => {
     return (
-      <Table className="!w-full grid border-separate border-spacing-0 [&_td]:border-border [&_th]:border-border [&_th]:border-b [&_th]:border-b-border [&_tfoot_td]:border-t">
+      <Table className="w-full! grid border-separate border-spacing-0 [&_td]:border-border [&_th]:border-border [&_th]:border-b [&_th]:border-b-border [&_tfoot_td]:border-t">
         {children}
         {isFetching && (
           <TableFooter className="flex w-full justify-center py-2">

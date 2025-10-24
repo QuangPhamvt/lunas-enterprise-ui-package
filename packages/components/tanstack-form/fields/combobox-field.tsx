@@ -59,14 +59,14 @@ export const ComboboxField: React.FC<Props> = ({
                   'shadow-input flex justify-between rounded-md px-3',
                   'outline-border-weak font-normal',
                   isError && 'outline-danger',
-                  isError && 'focus:!ring-4',
-                  isError && 'focus:!ring-danger-weak',
-                  isError && 'focus:!outline-danger-strong',
-                  isError && 'focus:!outline-1',
-                  isError && 'data-[state=open]:!ring-4',
-                  isError && 'data-[state=open]:!ring-danger-weak',
-                  isError && 'data-[state=open]:!outline-danger-strong',
-                  isError && 'data-[state=open]:!outline-1'
+                  isError && 'focus:ring-4!',
+                  isError && 'focus:ring-danger-weak!',
+                  isError && 'focus:outline-danger-strong!',
+                  isError && 'focus:outline-1!',
+                  isError && 'data-[state=open]:ring-4!',
+                  isError && 'data-[state=open]:ring-danger-weak!',
+                  isError && 'data-[state=open]:outline-danger-strong!',
+                  isError && 'data-[state=open]:outline-1!'
                 )}
               >
                 <Activity mode={state.value ? 'visible' : 'hidden'}>
@@ -78,7 +78,7 @@ export const ComboboxField: React.FC<Props> = ({
                 <ChevronDownIcon size={16} className="text-text-positive-weak shrink-0" aria-hidden="true" />
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0">
+            <PopoverContent className="w-(--radix-popover-trigger-width) p-0">
               <Command className="border-none">
                 <CommandInput placeholder={placeholder ?? 'Tìm kiếm'} />
                 <CommandList>
@@ -149,20 +149,20 @@ export const ComboboxField: React.FC<Props> = ({
                     'data-[state=open]:outline-primary-strong',
                     'data-[state=open]:ring-primary-weak',
                     'data-[state=open]:ring-4',
-                    'focus:!ring-4',
-                    'focus:!ring-primary-weak',
-                    'focus:!outline-1',
-                    'focus:!outline-primary-strong',
+                    'focus:ring-4!',
+                    'focus:ring-primary-weak!',
+                    'focus:outline-1!',
+                    'focus:outline-primary-strong!',
                     'focus:bg-background',
                     isError && 'outline-danger',
-                    isError && 'focus:!ring-4',
-                    isError && 'focus:!ring-danger-weak',
-                    isError && 'focus:!outline-danger-strong',
-                    isError && 'focus:!outline-1',
-                    isError && 'data-[state=open]:!ring-4',
-                    isError && 'data-[state=open]:!ring-danger-weak',
-                    isError && 'data-[state=open]:!outline-danger-strong',
-                    isError && 'data-[state=open]:!outline-1'
+                    isError && 'focus:ring-4!',
+                    isError && 'focus:ring-danger-weak!',
+                    isError && 'focus:outline-danger-strong!',
+                    isError && 'focus:outline-1!',
+                    isError && 'data-[state=open]:ring-4!',
+                    isError && 'data-[state=open]:ring-danger-weak!',
+                    isError && 'data-[state=open]:outline-danger-strong!',
+                    isError && 'data-[state=open]:outline-1!'
                   )}
                 >
                   <Activity mode={state.value ? 'visible' : 'hidden'}>
@@ -174,7 +174,7 @@ export const ComboboxField: React.FC<Props> = ({
                   <ChevronDownIcon size={16} className="text-text-positive-weak shrink-0" aria-hidden="true" />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0">
+              <PopoverContent className="w-(--radix-popover-trigger-width) p-0">
                 <Command className="border-none">
                   <CommandInput placeholder={placeholder ?? 'Tìm kiếm'} />
                   <CommandList>

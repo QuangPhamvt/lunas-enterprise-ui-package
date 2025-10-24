@@ -1,8 +1,9 @@
 'use client';
-import { useContext } from 'react';
-import { cn } from '@customafk/react-toolkit/utils';
+import { use } from 'react';
 
 import { MinusIcon } from 'lucide-react';
+
+import { cn } from '@customafk/react-toolkit/utils';
 
 import { OTPInput, OTPInputContext } from 'input-otp';
 
@@ -34,7 +35,7 @@ function InputOTPSlot({
 }: React.ComponentProps<'div'> & {
   index: number;
 }) {
-  const inputOTPContext = useContext(OTPInputContext);
+  const inputOTPContext = use(OTPInputContext);
   const { char, hasFakeCaret, isActive } = inputOTPContext?.slots[index] ?? {};
 
   return (

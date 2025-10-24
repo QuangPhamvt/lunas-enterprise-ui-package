@@ -25,6 +25,8 @@ export default defineConfig([
       './packages/components/dialogs/form-dialog.tsx',
       './packages/components/dialogs/loading-dialog.tsx',
 
+      './packages/components/features/search-modal/index.tsx',
+
       './packages/components/forms/form-wrapper.tsx',
       './packages/components/forms/combobox-field.tsx',
       './packages/components/forms/date-field.tsx',
@@ -120,7 +122,7 @@ export default defineConfig([
       './packages/components/ui/tooltip.tsx',
     ],
     dts: true,
-    exports: true,
+    exports: false,
     sourcemap: true,
     format: ['esm', 'cjs'],
     minify: true,

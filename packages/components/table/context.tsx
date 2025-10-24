@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo } from 'react';
+import { createContext, use, useMemo } from 'react';
 
 type TableProviderProps = {
   measureElement: (element?: HTMLTableRowElement | null | undefined) => void;
@@ -13,7 +13,7 @@ export const TableProvider = ({ measureElement, onClickRow, children }: React.Pr
 };
 
 export const useTableContext = (): TableProviderProps => {
-  const context = useContext(TableContext);
+  const context = use(TableContext);
   if (!context) {
     throw new Error('useTableContext must be used within a TableProvider');
   }

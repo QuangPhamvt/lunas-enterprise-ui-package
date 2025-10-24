@@ -1,19 +1,19 @@
 'use client';
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { useIsMobile } from '@customafk/react-toolkit/hooks/useMobile';
-import { cn } from '@customafk/react-toolkit/utils';
+import { createContext, use, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { MenuIcon } from 'lucide-react';
 
+import { useIsMobile } from '@customafk/react-toolkit/hooks/useMobile';
+import { cn } from '@customafk/react-toolkit/utils';
+
+import { cva, type VariantProps } from 'class-variance-authority';
+import { Slot as SlotPrimitive } from 'radix-ui';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-
-import { cva, type VariantProps } from 'class-variance-authority';
-import { Slot as SlotPrimitive } from 'radix-ui';
 
 const SIDEBAR_COOKIE_NAME = 'detai_dialog_sidebar_state';
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
@@ -35,7 +35,7 @@ type SidebarContextProps = {
 const SidebarContext = createContext<SidebarContextProps | null>(null);
 
 function useSidebar() {
-  const context = useContext(SidebarContext);
+  const context = use(SidebarContext);
   if (!context) {
     throw new Error('useSidebar must be used within a SidebarProvider.');
   }

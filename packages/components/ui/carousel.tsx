@@ -1,12 +1,12 @@
 'use client';
-import { createContext, useCallback, useContext, useEffect, useState } from 'react';
-import { cn } from '@customafk/react-toolkit/utils';
+import { createContext, use, useCallback, useEffect, useState } from 'react';
 
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 
-import { Button } from '@/components/ui/button';
+import { cn } from '@customafk/react-toolkit/utils';
 
 import useEmblaCarousel, { type UseEmblaCarouselType } from 'embla-carousel-react';
+import { Button } from '@/components/ui/button';
 
 type CarouselApi = UseEmblaCarouselType[1];
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>;
@@ -32,7 +32,7 @@ type CarouselContextProps = {
 const CarouselContext = createContext<CarouselContextProps | null>(null);
 
 function useCarousel() {
-  const context = useContext(CarouselContext);
+  const context = use(CarouselContext);
 
   if (!context) {
     throw new Error('useCarousel must be used within a <Carousel />');
