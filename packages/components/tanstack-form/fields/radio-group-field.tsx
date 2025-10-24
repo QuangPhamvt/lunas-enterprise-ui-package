@@ -1,8 +1,9 @@
+import { Activity } from 'react';
+
 import { Field, FieldContent, FieldDescription, FieldGroup, FieldLabel, FieldSeparator } from '@/components/ui/field';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Activity } from 'react';
-import type { CommonFieldProps } from '../types';
 import { useFieldContext } from '../config';
+import type { CommonFieldProps } from '../types';
 
 type TanStackRadioGroupProps = {
   label: string;
@@ -35,7 +36,7 @@ type Option = {
 type Props = CommonFieldProps & {
   options: Option[];
 };
-export const RadioGroupField: React.FC<React.PropsWithChildren<Props>> = ({ options, children }) => {
+export const RadioGroupField: React.FC<Props> = ({ options }) => {
   const { handleChange } = useFieldContext();
   return (
     <RadioGroup className="flex flex-col space-y-0.5 justify-end items-end" onValueChange={handleChange}>
@@ -43,8 +44,8 @@ export const RadioGroupField: React.FC<React.PropsWithChildren<Props>> = ({ opti
         return (
           <label key={option.value} className="rounded-lg border border-border flex p-2 cursor-pointer max-w-90 w-full">
             <div className="flex flex-col grow">
-              <p className="text-sm text-text-positive">{option.label}</p>
-              <p className="text-sm text-text-positive-weak">{option.value}</p>
+              <p className="text-sm text-text-positive font-semibold">{option.label}</p>
+              <p className="text-xs text-text-positive-weak">{option.value}</p>
             </div>
             <RadioGroupItem value={option.value} />
           </label>

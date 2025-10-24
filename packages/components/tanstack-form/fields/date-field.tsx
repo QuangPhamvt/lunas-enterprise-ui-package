@@ -27,7 +27,7 @@ export const DateField: React.FC<Props> = ({ isNested = false, isShowLabel = tru
             </FieldLabel>
           </FieldContent>
         </Activity>
-        <div className="flex flex-col w-full md:max-w-62 justify-start">
+        <div className="flex flex-col w-full justify-start">
           <Popover modal>
             <PopoverTrigger asChild>
               <Button
@@ -65,9 +65,7 @@ export const DateField: React.FC<Props> = ({ isNested = false, isShowLabel = tru
                 )}
               >
                 <Activity mode={state.value ? 'visible' : 'hidden'}>{format(state.value, 'PPP')}</Activity>
-                <Activity mode={state.value ? 'hidden' : 'visible'}>
-                  <span> {placeholder || 'Pick a date'}</span>
-                </Activity>
+                <Activity mode={state.value ? 'hidden' : 'visible'}>{placeholder || 'Pick a date'}</Activity>
                 <CalendarIcon className="text-text-positive-weak ml-auto size-4" />
               </Button>
             </PopoverTrigger>
@@ -145,9 +143,7 @@ export const DateField: React.FC<Props> = ({ isNested = false, isShowLabel = tru
                   )}
                 >
                   <Activity mode={state.value ? 'visible' : 'hidden'}>{format(state.value, 'PPP')}</Activity>
-                  <Activity mode={state.value ? 'hidden' : 'visible'}>
-                    <span> {placeholder || 'Pick a date'}</span>
-                  </Activity>
+                  <Activity mode={state.value ? 'hidden' : 'visible'}>{placeholder || 'Pick a date'}</Activity>
                   <CalendarIcon className="text-text-positive-weak ml-auto size-4" />
                 </Button>
               </PopoverTrigger>

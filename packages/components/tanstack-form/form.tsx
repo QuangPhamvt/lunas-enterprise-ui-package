@@ -44,7 +44,7 @@ export const TanStackFormGroup: React.FC<
           <FieldDescription>{description}</FieldDescription>
         </FieldContent>
         <div className="basis-3/5 w-full flex flex-col items-end">
-          <div className="flex flex-col space-y-2 max-w-80 w-full">{children}</div>
+          <div className="flex flex-col space-y-3 max-w-80 w-full">{children}</div>
         </div>
       </FieldGroup>
       <FieldSeparator />

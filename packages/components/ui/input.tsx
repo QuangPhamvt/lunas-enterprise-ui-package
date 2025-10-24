@@ -41,7 +41,9 @@ function Input({
         'focus-visible:ring-primary-border-subtle focus-visible:ring-4',
 
         // Invalid state
-        'aria-invalid:border-danger aria-invalid:ring-danger-weak',
+        'aria-invalid:bg-danger-bg-subtle/40',
+        'aria-invalid:ring-danger-weak',
+        'aria-invalid:border-danger',
         'aria-invalid:hover:border-danger-strong',
 
         // Disabled state

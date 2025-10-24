@@ -80,6 +80,7 @@
   --color-danger-weak: var(--danger-weak);
   --color-danger-strong: var(--danger-strong);
   --color-danger-intense: var(--danger-intense);
+  --color-danger-bg-subtle: var(--danger-bg-subtle);
 
   --color-text-positive: var(--text-positive);
   --color-text-positive-muted: var(--text-positive-muted);

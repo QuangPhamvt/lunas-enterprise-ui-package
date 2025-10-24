@@ -1,6 +1,7 @@
-import { Activity, memo, useCallback } from 'react';
+import { Activity, memo, useCallback, type ChangeEventHandler } from 'react';
 
-import { XIcon } from 'lucide-react';
+import { useStore } from '@tanstack/react-form';
+import { Loader2Icon, XIcon } from 'lucide-react';
 
 import { cn } from '@customafk/react-toolkit/utils';
 
@@ -11,29 +12,41 @@ import { Input } from '../../ui/input';
 import { useFieldContext } from '../config';
 
 const clearBtnVariant = cva([
-  'text-text-positive-weak hover:text-text-positive focus-visible:ring-border absolute inset-y-0 top-3 end-0 flex h-fit w-8 cursor-pointer items-center justify-center rounded-e-md transition-[color,box-shadow] outline-none focus:z-10 focus-visible:ring-2',
+  'text-text-positive-weak',
+  'absolute inset-y-0 top-3 end-0',
+  'flex h-fit w-8 cursor-pointer items-center justify-center rounded-e-md',
+  'transition-[color,box-shadow] outline-none',
+  'focus:z-10 focus-visible:ring-2',
+  'hover:text-text-positive',
+  'focus-visible:ring-border',
 ]);
 
 type CountCharactersProps = {
   isShowClearButton: boolean;
   isShowErrorMsg?: boolean;
   isShowCount?: boolean;
+  isSubmiting?: boolean;
   maxLength?: number;
   counts?: number;
   errors?: Array<{ message: string }>;
   onClear: () => void;
 };
-const CountCharacters = memo(({ isShowClearButton, isShowCount, isShowErrorMsg, maxLength, counts, errors, onClear }: CountCharactersProps) => {
+const CountCharacters = memo(({ isShowClearButton, isShowCount, isShowErrorMsg, isSubmiting, maxLength, counts, errors, onClear }: CountCharactersProps) => {
   const handleClearInput = useCallback(() => {
     onClear();
   }, [onClear]);
   return (
     <>
-      <Activity mode={isShowClearButton ? 'visible' : 'hidden'}>
+      <Activity mode={isShowClearButton && !isSubmiting ? 'visible' : 'hidden'}>
         <button type="button" className={clearBtnVariant()} aria-label="Clear input" onClick={handleClearInput}>
           <XIcon size={14} aria-hidden="true" />
         </button>
       </Activity>
+      {isSubmiting && (
+        <div className="absolute inset-y-0 top-2.5 end-2 text-muted-weak">
+          <Loader2Icon size={16} className="animate-spin" />
+        </div>
+      )}
       <Flex vertical width="full" padding="none" align="end" justify="end">
         <Activity mode={isShowCount ? 'visible' : 'hidden'}>
           <p
@@ -75,7 +88,22 @@ export const TextField: React.FC<Props> = ({
   description,
   placeholder,
 }) => {
-  const { name, state, handleBlur, handleChange } = useFieldContext<string>();
+  const { name, state, form, handleBlur, handleChange } = useFieldContext<string>();
+  const isSubmitting = useStore(form.store, ({ isSubmitting }) => isSubmitting);
+
+  const onChange = useCallback<ChangeEventHandler<HTMLInputElement>>(
+    event => {
+      if (isSubmitting) return;
+      handleChange(event.target.value);
+    },
+    [isSubmitting, handleChange]
+  );
+
+  const onClear = useCallback(() => {
+    if (isSubmitting) return;
+    handleChange('');
+  }, [isSubmitting, handleChange]);
+
   if (isNested) {
     return (
       <Field orientation="vertical" className="gap-1">
@@ -89,7 +117,7 @@ export const TextField: React.FC<Props> = ({
             </Activity>
           </FieldContent>
         </Activity>
-        <div className="flex flex-col w-full justify-start">
+        <div className="relative flex flex-col w-full justify-start">
           <Input
             id={name}
             name={name}
@@ -99,16 +127,16 @@ export const TextField: React.FC<Props> = ({
             placeholder={placeholder}
             className={cn('w-full', isShowClearButton && 'pr-9')}
             onBlur={handleBlur}
-            onChange={e => handleChange(e.target.value)}
+            onChange={onChange}
           />
           <CountCharacters
+            isShowCount
             isShowClearButton={isShowClearButton}
-            isShowCount={true}
             isShowErrorMsg={isShowErrorMsg}
             maxLength={maxLength}
             counts={state.value?.length}
             errors={state.meta.errors}
-            onClear={() => handleChange('')}
+            onClear={onClear}
           />
         </div>
       </Field>
@@ -136,16 +164,17 @@ export const TextField: React.FC<Props> = ({
             autoComplete="off"
             placeholder={placeholder}
             onBlur={handleBlur}
-            onChange={e => handleChange(e.target.value)}
+            onChange={onChange}
           />
           <CountCharacters
+            isShowCount
             isShowClearButton={isShowClearButton}
-            isShowCount={true}
             isShowErrorMsg={isShowErrorMsg}
+            isSubmiting={isSubmitting}
             maxLength={maxLength}
             counts={state.value?.length}
             errors={state.meta.errors}
-            onClear={() => handleChange('')}
+            onClear={onClear}
           />
         </div>
       </Field>

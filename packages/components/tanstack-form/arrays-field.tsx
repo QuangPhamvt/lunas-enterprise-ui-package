@@ -29,7 +29,7 @@ export const ArrayField: React.FC<
         </FieldContent>
         <ArrayWrapper>{children}</ArrayWrapper>
       </Field>
-      <Button size="sm" variant="outline" color="muted" className="w-fit text-text-positive-weak" onClick={onAddItem}>
+      <Button size="sm" variant="outline" color="muted" className="w-fit text-text-positive-weak [&>span]:gap-x-0.5" onClick={onAddItem}>
         <PlusIcon size={12} />
         Add Item
       </Button>
@@ -50,7 +50,7 @@ export const ArrayItemField: React.FC<
     onRemove?.(index);
   }, [index, onRemove]);
   return (
-    <Card className="relative shadow-none border border-border">
+    <Card className="relative shadow-none border border-border rounded-md">
       <Button size="icon" variant="outline" color="muted" className="absolute top-4 right-4 text-text-negative-weak" onClick={handleRemove}>
         <XIcon />
       </Button>
