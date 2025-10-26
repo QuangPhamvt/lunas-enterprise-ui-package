@@ -124,7 +124,7 @@ export function Table<T extends Record<string, unknown>>({
     <Flex vertical wrap={false} gap="sm" align="start" className="size-full pt-1">
       <DataTableToolip onAdd={onAdd} onRefresh={onRefresh} />
       <Flex padding="none" vertical wrap={false} width="full" className="flex-1 overflow-auto pb-4">
-        <ScrollArea ref={tableContainerRef} className="border-border bg-background relative w-full overflow-auto" onScroll={handleScroll}>
+        <ScrollArea ref={tableContainerRef} className="relative w-full overflow-auto border-border bg-background" onScroll={handleScroll}>
           <TableProvider measureElement={rowVirtualizer.measureElement} onClickRow={onClickRow}>
             <DataTable isFetching={isFetching}>
               <DataTableHeader headerGroups={table.getHeaderGroups()} />

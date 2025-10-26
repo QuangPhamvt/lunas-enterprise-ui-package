@@ -5,7 +5,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
  */
 export const buttonVariants = cva(
   [
-    'relative shrink-0 cursor-pointer rounded-md font-medium whitespace-normal transition-all h-fit',
+    'relative h-fit shrink-0 cursor-pointer whitespace-normal rounded-md font-medium transition-all',
     'hover:shadow-md',
     'inline-flex items-center justify-center',
     '[&_svg]:pointer-events-none',
@@ -19,10 +19,10 @@ export const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: '-outline-offset-1 outline-1 text-text-negative-strong',
+        default: '-outline-offset-1 text-text-negative-strong outline-1',
         outline:
-          '-outline-offset-1 outline-1 text-text-positive hover:text-text-positive-strong focus:text-text-positive-strong active:text-text-positive-strong',
-        ghost: 'outline-0 shadow-none hover:shadow-none',
+          '-outline-offset-1 text-text-positive outline-1 hover:text-text-positive-strong focus:text-text-positive-strong active:text-text-positive-strong',
+        ghost: 'shadow-none outline-0 hover:shadow-none',
         link: '',
       },
       color: {
@@ -36,9 +36,9 @@ export const buttonVariants = cva(
         danger: 'hover:shadow-danger-weak',
       },
       size: {
-        sm: 'px-2 py-1.5 gap-1 text-xs focus:ring-4 has-[>svg]:px-2.5',
-        default: 'px-2.5 py-2 gap-1 text-sm focus:ring-4 has-[>svg]:px-3',
-        lg: 'px-3 py-2.5 gap-1 text-base focus:ring-6 has-[>svg]:px-4',
+        sm: 'gap-1 px-2 py-1.5 text-xs focus:ring-4 has-[>svg]:px-2.5',
+        default: 'gap-1 px-2.5 py-2 text-sm focus:ring-4 has-[>svg]:px-3',
+        lg: 'gap-1 px-3 py-2.5 text-base focus:ring-6 has-[>svg]:px-4',
         icon: 'size-8 focus:ring-2',
       },
     },
@@ -52,121 +52,121 @@ export const buttonVariants = cva(
         variant: 'default',
         color: 'primary',
         className:
-          'outline-primary-strong bg-primary focus:ring-primary-border-subtle focus:outline-primary-intense focus:bg-primary-strong active:bg-primary-strong',
+          'bg-primary outline-primary-strong focus:bg-primary-strong focus:outline-primary-intense focus:ring-primary-border-subtle active:bg-primary-strong',
       },
       {
         variant: 'default',
         color: 'secondary',
         className:
-          'outline-secondary-strong bg-secondary focus:ring-secondary-border-subtle focus:outline-secondary-intense focus:bg-secondary-strong active:bg-secondary-strong',
+          'bg-secondary outline-secondary-strong focus:bg-secondary-strong focus:outline-secondary-intense focus:ring-secondary-border-subtle active:bg-secondary-strong',
       },
       {
         variant: 'default',
         color: 'success',
-        className: 'outline-success-strong bg-success focus:ring-success-weak focus:outline-success-intense focus:bg-success-strong active:bg-success-strong',
+        className: 'bg-success outline-success-strong focus:bg-success-strong focus:outline-success-intense focus:ring-success-weak active:bg-success-strong',
       },
       {
         variant: 'default',
         color: 'important',
         className:
-          'outline-important-strong bg-important focus:ring-important-weak focus:outline-important-intense focus:bg-important-strong active:bg-important-strong',
+          'bg-important outline-important-strong focus:bg-important-strong focus:outline-important-intense focus:ring-important-weak active:bg-important-strong',
       },
       {
         variant: 'default',
         color: 'info',
-        className: 'outline-info-strong bg-info focus:ring-info-weak focus:outline-info-intense focus:bg-info-strong active:bg-info-strong',
+        className: 'bg-info outline-info-strong focus:bg-info-strong focus:outline-info-intense focus:ring-info-weak active:bg-info-strong',
       },
       {
         variant: 'default',
         color: 'warning',
-        className: 'outline-warning-strong bg-warning focus:ring-warning-weak focus:outline-warning-intense focus:bg-warning-strong active:bg-warning-strong',
+        className: 'bg-warning outline-warning-strong focus:bg-warning-strong focus:outline-warning-intense focus:ring-warning-weak active:bg-warning-strong',
       },
       {
         variant: 'default',
         color: 'danger',
-        className: 'outline-danger-strong bg-danger focus:ring-danger-weak focus:outline-danger-intense focus:bg-danger-strong active:bg-danger-strong',
+        className: 'bg-danger outline-danger-strong focus:bg-danger-strong focus:outline-danger-intense focus:ring-danger-weak active:bg-danger-strong',
       },
       {
         variant: 'outline',
         color: 'muted',
-        className: 'outline-border bg-background focus:ring-border-weak focus:outline-border-strong focus:bg-border-muted active:bg-border-muted',
+        className: 'bg-background outline-border focus:bg-border-muted focus:outline-border-emphasis focus:ring-border-weak active:bg-border-emphasis',
       },
       {
         variant: 'outline',
         color: 'primary',
-        className: 'outline-primary-strong bg-background focus:ring-primary-weak focus:outline-primary-intense focus:bg-primary-muted active:bg-primary-muted',
+        className: 'bg-background outline-primary-strong focus:bg-primary-muted focus:outline-primary-intense focus:ring-primary-weak active:bg-primary-muted',
       },
       {
         variant: 'outline',
         color: 'secondary',
         className:
-          'outline-secondary-strong bg-background focus:ring-secondary-weak focus:outline-secondary-intense focus:bg-secondary-muted active:bg-secondary-muted',
+          'bg-background outline-secondary-strong focus:bg-secondary-muted focus:outline-secondary-intense focus:ring-secondary-weak active:bg-secondary-muted',
       },
       {
         variant: 'outline',
         color: 'success',
-        className: 'outline-success-strong bg-background focus:ring-success-weak focus:outline-success-intense focus:bg-success-muted active:bg-success-muted',
+        className: 'bg-background outline-success-strong focus:bg-success-muted focus:outline-success-intense focus:ring-success-weak active:bg-success-muted',
       },
       {
         variant: 'outline',
         color: 'important',
         className:
-          'outline-important-strong bg-background focus:ring-important-weak focus:outline-important-intense focus:bg-important-muted active:bg-important-muted',
+          'bg-background outline-important-strong focus:bg-important-muted focus:outline-important-intense focus:ring-important-weak active:bg-important-muted',
       },
       {
         variant: 'outline',
         color: 'info',
-        className: 'outline-info-strong bg-background focus:ring-info-weak focus:outline-info-intense focus:bg-info-muted active:bg-info-muted',
+        className: 'bg-background outline-info-strong focus:bg-info-muted focus:outline-info-intense focus:ring-info-weak active:bg-info-muted',
       },
       {
         variant: 'outline',
         color: 'warning',
-        className: 'outline-warning-strong bg-background focus:ring-warning-weak focus:outline-warning-intense focus:bg-warning-muted active:bg-warning-muted',
+        className: 'bg-background outline-warning-strong focus:bg-warning-muted focus:outline-warning-intense focus:ring-warning-weak active:bg-warning-muted',
       },
       {
         variant: 'outline',
         color: 'danger',
-        className: 'outline-danger-strong bg-background focus:ring-danger-weak focus:outline-danger-intense focus:bg-danger-muted active:bg-danger-muted',
+        className: 'bg-background outline-danger-strong focus:bg-danger-muted focus:outline-danger-intense focus:ring-danger-weak active:bg-danger-muted',
       },
       {
         variant: 'ghost',
         color: 'primary',
-        className: 'text-primary-strong hover:bg-primary-muted focus:ring-primary-weak focus:bg-primary/10 active:bg-primary/10',
+        className: 'text-primary-strong hover:bg-primary-muted focus:bg-primary/10 focus:ring-primary-weak active:bg-primary/10',
       },
       {
         variant: 'ghost',
         color: 'secondary',
-        className: 'text-secondary-strong hover:bg-secondary-muted focus:ring-secondary-weak focus:bg-secondary/10 active:bg-secondary/10',
+        className: 'text-secondary-strong hover:bg-secondary-muted focus:bg-secondary/10 focus:ring-secondary-weak active:bg-secondary/10',
       },
       {
         variant: 'ghost',
         color: 'muted',
-        className: 'text-text-positive hover:bg-border-muted focus:ring-border-weak focus:bg-border/10 active:bg-border/10',
+        className: 'text-text-positive hover:bg-border-muted focus:bg-border/10 focus:ring-border-weak active:bg-border/10',
       },
       {
         variant: 'ghost',
         color: 'success',
-        className: 'text-success-strong hover:bg-success-muted focus:ring-success-weak focus:bg-success/10 active:bg-success/10',
+        className: 'text-success-strong hover:bg-success-muted focus:bg-success/10 focus:ring-success-weak active:bg-success/10',
       },
       {
         variant: 'ghost',
         color: 'important',
-        className: 'text-important-strong hover:bg-important-muted focus:ring-important-weak focus:bg-important/10 active:bg-important/10',
+        className: 'text-important-strong hover:bg-important-muted focus:bg-important/10 focus:ring-important-weak active:bg-important/10',
       },
       {
         variant: 'ghost',
         color: 'info',
-        className: 'text-info-strong hover:bg-info-muted focus:ring-info-weak focus:bg-info/10 active:bg-info/10',
+        className: 'text-info-strong hover:bg-info-muted focus:bg-info/10 focus:ring-info-weak active:bg-info/10',
       },
       {
         variant: 'ghost',
         color: 'warning',
-        className: 'text-warning-strong hover:bg-warning-muted focus:ring-warning-weak focus:bg-warning/10 active:bg-warning/10',
+        className: 'text-warning-strong hover:bg-warning-muted focus:bg-warning/10 focus:ring-warning-weak active:bg-warning/10',
       },
       {
         variant: 'ghost',
         color: 'danger',
-        className: 'text-danger-strong hover:bg-danger-muted focus:ring-danger-weak focus:bg-danger/10 active:bg-danger/10',
+        className: 'text-danger-strong hover:bg-danger-muted focus:bg-danger/10 focus:ring-danger-weak active:bg-danger/10',
       },
     ],
   }

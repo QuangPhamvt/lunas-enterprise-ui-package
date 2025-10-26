@@ -101,6 +101,7 @@
   --color-border-intense: var(--border-intense);
   --color-border-subtle: var(--border-subtle);
   --color-border-subtle-strong: var(--border-subtle-strong);
+  --color-border-emphasis: var(--border-emphasis);
 
   --color-input: var(--input);
   --color-ring: var(--ring);

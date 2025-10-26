@@ -24,14 +24,14 @@ const ScrollBar = memo(({ className, orientation = 'vertical', ...props }: React
       data-slot="scroll-area-scrollbar"
       orientation={orientation}
       className={cn(
-        'border-border-weak flex touch-none p-px transition-colors select-none',
+        'flex touch-none select-none border-border-weak p-px transition-colors',
         orientation === 'vertical' && 'h-full w-2.5 border-l border-l-transparent',
         orientation === 'horizontal' && 'h-2.5 flex-col border-t border-t-transparent',
         className
       )}
       {...props}
     >
-      <ScrollAreaPrimitive.ScrollAreaThumb className="bg-border-weak relative flex-1 rounded-full" />
+      <ScrollAreaPrimitive.ScrollAreaThumb className="relative flex-1 rounded-full bg-border-weak" />
     </ScrollAreaPrimitive.ScrollAreaScrollbar>
   );
 });

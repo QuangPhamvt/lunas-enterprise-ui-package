@@ -49,7 +49,7 @@ const HeaderContent = memo(({ header }: { header: Header<AnyEntity, unknown> }) 
       <div
         tabIndex={header.column.getCanSort() ? 0 : undefined}
         role={header.column.getCanSort() ? 'button' : undefined}
-        className="flex h-full cursor-pointer items-center justify-between select-none"
+        className="flex h-full cursor-pointer select-none items-center justify-between"
         onKeyDown={handleSort}
       >
         <span className="truncate">{flexRender(header.column.columnDef.header, header.getContext())}</span>
@@ -116,7 +116,7 @@ DataTableRow.displayName = 'DataTableRow';
 
 export const DataTableHeader = memo(({ headerGroups }: { headerGroups: HeaderGroup<AnyEntity>[] }) => {
   return (
-    <TableHeader className="sticky top-0 z-10 backdrop-blur-xs bg-background/90">
+    <TableHeader className="sticky top-0 z-10 bg-background/90 backdrop-blur-xs">
       {headerGroups.map(headerGroup => (
         <TableRow key={headerGroup.id} className="flex w-full border-none">
           {headerGroup.headers.map(header => {
@@ -139,8 +139,8 @@ export const DataTableHeader = memo(({ headerGroups }: { headerGroups: HeaderGro
                 colSpan={header.colSpan}
                 style={headerStyles}
                 className={cn(
-                  'relative flex h-12 font-medium select-none [&>.cursor-col-resize]:last:opacity-0',
-                  header.id === 'actions' && 'bg-background/90 z-20'
+                  'relative flex h-12 select-none font-medium [&>.cursor-col-resize]:last:opacity-0',
+                  header.id === 'actions' && 'z-20 bg-background/90'
                 )}
               >
                 <HeaderContent header={header} />
@@ -192,20 +192,17 @@ export const DataTableBody = memo(({ isLoading, totalBodyHeight, rows, virtualIt
           <TableCell>loading...</TableCell>
         </TableRow>
       )}
-      {!isLoading && (
-        <>
-          {virtualItems.map(virtualRow => {
-            const row = rows[virtualRow.index];
-            const rowId =
-              row?.id ||
-              (row.original && 'id' in row.original ? String(row.original.id) : null) ||
-              (row.original && 'uuid' in row.original ? String(row.original.uuid) : null) ||
-              virtualRow.index.toString();
-            const key = rowId ?? String(virtualRow.index);
-            return <DataTableRow key={key} id={rowId} row={row} virtualRow={virtualRow} />;
-          })}
-        </>
-      )}
+      {!isLoading &&
+        virtualItems.map(virtualRow => {
+          const row = rows[virtualRow.index];
+          const rowId =
+            row?.id ||
+            (row.original && 'id' in row.original ? String(row.original.id) : null) ||
+            (row.original && 'uuid' in row.original ? String(row.original.uuid) : null) ||
+            virtualRow.index.toString();
+          const key = rowId ?? String(virtualRow.index);
+          return <DataTableRow key={key} id={rowId} row={row} virtualRow={virtualRow} />;
+        })}
     </TableBody>
   );
 });
@@ -219,7 +216,7 @@ export const DataTable = memo(
     isFetching?: boolean;
   }>) => {
     return (
-      <Table className="w-full! grid border-separate border-spacing-0 [&_td]:border-border [&_th]:border-border [&_th]:border-b [&_th]:border-b-border [&_tfoot_td]:border-t">
+      <Table className="grid w-full! border-separate border-spacing-0 [&_td]:border-border [&_tfoot_td]:border-t [&_th]:border-border [&_th]:border-b [&_th]:border-b-border">
         {children}
         {isFetching && (
           <TableFooter className="flex w-full justify-center py-2">

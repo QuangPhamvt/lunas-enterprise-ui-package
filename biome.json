@@ -35,6 +35,15 @@
       "suspicious": {
         "recommended": true,
         "noUnknownAtRules": "off"
+      },
+      "nursery": {
+        "useSortedClasses": {
+          "level": "warn",
+          "options": {
+            "attributes": ["className", "class", "ngClass"],
+            "functions": ["clsx", "cva", "tw", "tw.*"]
+          }
+        }
       }
     }
   },

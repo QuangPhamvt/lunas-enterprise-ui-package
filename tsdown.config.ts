@@ -56,6 +56,7 @@ export default defineConfig([
       './packages/components/systems/google.tsx',
 
       './packages/components/table/index.tsx',
+
       './packages/components/tanstack-form/index.tsx',
 
       './packages/components/typography/paragraph.tsx',
