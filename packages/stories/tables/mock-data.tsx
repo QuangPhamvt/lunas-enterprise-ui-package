@@ -23,10 +23,18 @@ export const MockDataColumns: ColumnDef<TMockDataTable>[] = [
   {
     id: 'select',
     accessorKey: 'select',
-    header: () => {
+    header: ({ table }) => {
+      console.log('Render select all checkbox header', table.getIsAllRowsSelected());
       return (
         <div>
-          <Checkbox />
+          <Checkbox
+            aria-label="Select all rows"
+            onChange={table.getToggleAllRowsSelectedHandler()}
+            onCheckedChange={value => {
+              if (value === 'indeterminate') return; // Handle indeterminate state if needed
+              table.toggleAllRowsSelected(!!value);
+            }}
+          />
         </div>
       );
     },
@@ -99,7 +107,6 @@ export const MockDataColumns: ColumnDef<TMockDataTable>[] = [
   {
     accessorKey: 'column_13',
     header: 'Column 13',
-    size: undefined,
     cell: ({ row }) => row.original.column_13,
   },
   {

@@ -1,7 +1,8 @@
 'use client';
-import { cn } from '@customafk/react-toolkit/utils';
 
 import { CheckIcon } from 'lucide-react';
+
+import { cn } from '@customafk/react-toolkit/utils';
 
 import { Checkbox as CheckboxPrimitive } from 'radix-ui';
 
@@ -11,7 +12,7 @@ function Checkbox({ className, ...props }: React.ComponentProps<typeof CheckboxP
       data-slot="checkbox"
       className={cn(
         'peer border-border',
-        'size-4 shrink-0 rounded border shadow-xs transition-shadow outline-none',
+        'size-4 shrink-0 cursor-pointer rounded border shadow-xs outline-none transition-shadow',
         'data-[state=checked]:bg-primary',
         'data-[state=checked]:text-text-negative-strong',
         'data-[state=checked]:border-primary',
@@ -26,7 +27,7 @@ function Checkbox({ className, ...props }: React.ComponentProps<typeof CheckboxP
       {...props}
     >
       <CheckboxPrimitive.Indicator data-slot="checkbox-indicator" className="flex items-center justify-center text-current transition-none">
-        <CheckIcon className="size-3.5" />
+        <CheckIcon size={14} />
       </CheckboxPrimitive.Indicator>
     </CheckboxPrimitive.Root>
   );

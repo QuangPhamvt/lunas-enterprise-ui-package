@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 
-import type { InitialTableState, RowData } from '@tanstack/react-table';
+import type { ColumnPinningState, InitialTableState, RowData, RowSelectionState } from '@tanstack/react-table';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 
 import { TableContext } from '../hooks/use-table-context';
@@ -17,7 +17,9 @@ export const TableProvider = <TData extends RowData>({
   isFetching = false,
   children,
 }: React.PropsWithChildren<TableProviderProps<TData>>) => {
-  const [rowSelection, setRowSelection] = useState<{ [key: string]: boolean }>({});
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+  const [columnPinning, setColumnPinning] = useState<ColumnPinningState>({ right: ['actions'] });
+  console.log('TableProvider render', rowSelection);
 
   const table = useReactTable<TData>({
     initialState: INITIAL_STATE,
@@ -25,16 +27,21 @@ export const TableProvider = <TData extends RowData>({
     columns,
     state: {
       rowSelection,
+      columnPinning,
     },
     defaultColumn: {
       minSize: 60,
+      size: 150,
       maxSize: 800,
     },
     columnResizeMode: 'onChange',
     columnResizeDirection: 'ltr',
     enableRowSelection: true,
+    enableColumnResizing: true,
+    enableMultiRowSelection: true,
     getCoreRowModel: getCoreRowModel(),
     onRowSelectionChange: setRowSelection,
+    onColumnPinningChange: setColumnPinning,
   });
 
   /**
@@ -59,15 +66,19 @@ export const TableProvider = <TData extends RowData>({
     return !isFetching && table.getRowModel().rows.length === 0;
   }, [table, isFetching]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: column pinning state
+  const _columnPinning = useMemo(() => table.getState().columnPinning, [table.getState().columnPinning]);
+
   const value = useMemo<TTableContext<TData>>(
     () => ({
-      title,
       table,
-      columnSizeVars,
+      title,
       isEmpty,
       isFetching,
+      columnSizeVars,
+      columnPinning: _columnPinning,
     }),
-    [title, table, columnSizeVars, isEmpty, isFetching]
+    [table, title, _columnPinning, columnSizeVars, isEmpty, isFetching]
   );
 
   return <TableContext.Provider value={value as TTableContext<unknown>}>{children}</TableContext.Provider>;

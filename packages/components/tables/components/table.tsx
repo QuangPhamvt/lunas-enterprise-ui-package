@@ -64,7 +64,7 @@ export const TableContainer: React.FC<React.PropsWithChildren> = () => {
       data-slot="table-container"
       ref={tableContainerRef}
       style={{ direction: table.options.columnResizeDirection }}
-      className="relative flex w-full flex-1 flex-col gap-1 overflow-auto border-t border-t-border p-0 text-sm"
+      className="relative flex w-full max-w-full flex-1 flex-col gap-1 overflow-auto border-t border-t-border bg-slate-50 p-0 text-sm"
     >
       <table
         data-slot="table"
@@ -72,18 +72,20 @@ export const TableContainer: React.FC<React.PropsWithChildren> = () => {
           ...columnSizeVars,
           width: table.getTotalSize(),
         }}
-        className="grid w-full caption-bottom border-separate border-spacing-0 flex-col text-sm [&_tfoot_td]:border-t"
+        className="grid w-full caption-bottom border-separate border-spacing-0 flex-col bg-card text-sm tabular-nums [&_tfoot_td]:border-t"
       >
         <TableHeader>
           {table.getHeaderGroups().map(headerGroup => (
             <TableHeaderRow key={headerGroup.id}>
               {headerGroup.headers.map(header => {
+                const style: React.CSSProperties = getCommonPinningStyles(header.column);
+                console.log(header.column.getPinnedIndex());
                 return (
                   <TableHeaderCell
                     key={header.id}
                     data-pinned={header.column.getIsPinned() ? header.column.getIsPinned() : 'false'}
                     width={`calc(var(--header-${header?.id}-size) * 1px)`}
-                    style={{ ...getCommonPinningStyles(header.column) }}
+                    style={style}
                     colSpan={header.colSpan}
                   >
                     <div className="flex size-full items-center justify-between gap-1 truncate">
@@ -93,23 +95,35 @@ export const TableContainer: React.FC<React.PropsWithChildren> = () => {
                         className="flex h-full flex-1 cursor-pointer select-none items-center justify-between"
                       >
                         <p className="truncate">{flexRender(header.column.columnDef.header, header.getContext())}</p>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <button className="cursor-pointer rounded-full p-0.5 text-text-positive-weak hover:bg-muted-muted hover:text-text-positive [&>svg]:size-4">
-                              <EllipsisVerticalIcon />
-                            </button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end" className="w-42">
-                            <DropdownMenuGroup>
-                              <DropdownMenuItem className="px-2 py-1">
-                                Pin Left
-                                <DropdownMenuShortcut>
-                                  <PinIcon className="size-4" />
-                                </DropdownMenuShortcut>
-                              </DropdownMenuItem>
-                            </DropdownMenuGroup>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
+                        {header.column.id !== 'select' && (
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <button className="cursor-pointer rounded-full p-0.5 text-text-positive-weak hover:bg-muted-muted hover:text-text-positive [&>svg]:size-4">
+                                <EllipsisVerticalIcon />
+                              </button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" className="w-42">
+                              <DropdownMenuGroup>
+                                <DropdownMenuItem
+                                  className="px-2 py-1"
+                                  onClick={() => {
+                                    if (header.column.getIsPinned() === 'right') {
+                                      header.column.pin(false);
+                                      return;
+                                    }
+                                    header.column.pin('right');
+                                  }}
+                                >
+                                  {header.column.getIsPinned() !== false && 'Unpin'}
+                                  {header.column.getIsPinned() === false && 'Pin to Right'}
+                                  <DropdownMenuShortcut>
+                                    <PinIcon className="size-4" />
+                                  </DropdownMenuShortcut>
+                                </DropdownMenuItem>
+                              </DropdownMenuGroup>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        )}
                       </div>
                       <div
                         {...{
@@ -117,7 +131,7 @@ export const TableContainer: React.FC<React.PropsWithChildren> = () => {
                           onMouseDown: header.getResizeHandler(),
                           onTouchStart: header.getResizeHandler(),
                         }}
-                        className={cn('h-full w-0.5 cursor-grab bg-muted-muted hover:bg-muted-weak', header.column.getIsResizing() && 'bg-muted-weak')}
+                        className={cn('h-full w-0.5 cursor-grab bg-transparent hover:bg-border', header.column.getIsResizing() && 'bg-border')}
                       />
                     </div>
                   </TableHeaderCell>
@@ -149,9 +163,9 @@ const TableHeader: React.FC<React.PropsWithChildren> = ({ children }) => {
     <thead
       data-slot="table-header"
       className={cn(
-        'sticky top-0 z-10 grid bg-muted-muted/80 font-medium text-text-positive-weak backdrop-blur-xs',
+        'sticky top-0 z-10 grid bg-card font-medium text-text-positive-weak',
         '[&_tr:not(:last-child)_td]:border-b',
-        '[&_th>.cursor-col-resize]:last:opacity-0',
+        // '[&_th>.cursor-col-resize]:last:opacity-0',
         '[&_th]:flex',
         '[&_th]:h-10',
         '[&_th]:select-none',
@@ -166,7 +180,7 @@ const TableHeader: React.FC<React.PropsWithChildren> = ({ children }) => {
         '[&_th]:last:border-r-0',
         '[&_th]:data-[pinned=right]:border-l',
         '[&_th]:data-[pinned=left]:border-r',
-        '[&_tr_th:not([data-pinned=false])]:bg-muted-muted'
+        '[&_tr_th:not([data-pinned=false])]:bg-card'
       )}
     >
       {children}
@@ -186,7 +200,7 @@ TableHeaderRow.displayName = 'TableHeaderRow';
 const TableHeaderCell: React.FC<React.PropsWithChildren<React.ComponentProps<'th'> & { width: number | string }>> = memo(
   ({ style, width, children, ...props }) => {
     return (
-      <th data-slot="table-header-cell" style={{ ...style, width }} className="pl-4" {...props}>
+      <th data-slot="table-header-cell" style={{ ...style, width, flexBasis: width }} className="relative pl-4" {...props}>
         {children}
       </th>
     );
@@ -229,6 +243,7 @@ type TableRowProps = {
   handleRef: (node: HTMLTableRowElement | null | undefined) => void;
 };
 const TableRow: React.FC<TableRowProps> = memo(({ row, virtualRow, handleRef }) => {
+  const { columnPinning: _ } = useTableContext();
   return (
     <tr
       data-slot="table-row"
@@ -239,12 +254,13 @@ const TableRow: React.FC<TableRowProps> = memo(({ row, virtualRow, handleRef }) 
       }}
     >
       {row.getVisibleCells().map(({ id, column, getContext }) => {
+        const style: React.CSSProperties = getCommonPinningStyles(column);
         return (
           <TableCell
             data-pinned={column.getIsPinned() ? column.getIsPinned() : 'false'}
             key={id}
             width={`calc(var(--col-${column.id}-size) * 1px)`}
-            style={{ ...getCommonPinningStyles(column) }}
+            style={style}
           >
             {flexRender(column.columnDef.cell, getContext())}
           </TableCell>
@@ -266,9 +282,9 @@ const EmptyDisplay: React.FC = () => {
   );
 };
 
-const TableCell: React.FC<React.PropsWithChildren<React.ComponentProps<'td'> & { width: string }>> = memo(({ width, style, children, ...props }) => {
+const TableCell: React.FC<React.PropsWithChildren<React.ComponentProps<'td'> & { width: string }>> = memo(({ width, style, children, className, ...props }) => {
   return (
-    <td data-slot="table-cell" style={{ width, ...style }} {...props}>
+    <td data-slot="table-cell" style={{ ...style, width }} {...props}>
       {children}
     </td>
   );
