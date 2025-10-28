@@ -1,7 +1,5 @@
 import type { ColumnDef } from '@tanstack/react-table';
 
-import { Checkbox } from '@/components/ui/checkbox';
-
 export type TMockDataTable = {
   column_1: string;
   column_2: string;
@@ -21,27 +19,8 @@ export type TMockDataTable = {
 
 export const MockDataColumns: ColumnDef<TMockDataTable>[] = [
   {
-    id: 'select',
     accessorKey: 'select',
-    header: ({ table }) => {
-      console.log('Render select all checkbox header', table.getIsAllRowsSelected());
-      return (
-        <div>
-          <Checkbox
-            aria-label="Select all rows"
-            onChange={table.getToggleAllRowsSelectedHandler()}
-            onCheckedChange={value => {
-              if (value === 'indeterminate') return; // Handle indeterminate state if needed
-              table.toggleAllRowsSelected(!!value);
-            }}
-          />
-        </div>
-      );
-    },
-    size: 60,
-    cell: () => {
-      return null;
-    },
+    size: 40,
   },
   {
     accessorKey: 'column_1',
@@ -112,7 +91,7 @@ export const MockDataColumns: ColumnDef<TMockDataTable>[] = [
   {
     accessorKey: 'actions',
     header: '',
-    size: 40,
+    size: 60,
     cell: () => '•••',
   },
 ];

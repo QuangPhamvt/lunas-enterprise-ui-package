@@ -30,7 +30,7 @@ export const TableProvider = <TData extends RowData>({
       columnPinning,
     },
     defaultColumn: {
-      minSize: 60,
+      minSize: 40,
       size: 150,
       maxSize: 800,
     },

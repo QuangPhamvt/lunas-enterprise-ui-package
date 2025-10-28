@@ -61,6 +61,7 @@
               "@tanstack/react-table",
               "@tanstack/react-form",
               "@tanstack/react-router",
+              "@tanstack/react-virtual",
               "@tanstack/zod-adapter",
               "jotai",
               "lucide-react",
@@ -73,7 +74,8 @@
               "@customafk/lunas-dto/**",
               "@customafk/lunas-ui/**",
               ":BLANK_LINE:",
-              ["@/apis/**", "@/constants/**"]
+              ["@/apis/**", "@/constants/**"],
+              ":BLANK_LINE:"
             ]
           }
         }
