@@ -1,6 +1,7 @@
 import { memo, useMemo } from 'react';
 
 import type { VirtualItem, Virtualizer } from '@tanstack/react-virtual';
+
 import { TableVirtualizer } from '../hooks/use-table-virtualizer';
 
 type Props = {

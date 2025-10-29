@@ -1,5 +1,4 @@
 import type { ColumnDef, ColumnPinningState, RowData, Table } from '@tanstack/react-table';
-
 import type { VirtualItem, Virtualizer } from '@tanstack/react-virtual';
 
 export type TTableContext<TData extends RowData> = {
