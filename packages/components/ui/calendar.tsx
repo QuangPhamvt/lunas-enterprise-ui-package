@@ -6,7 +6,7 @@ import { type CalendarWeek, type DayButton, DayPicker, getDefaultClassNames } fr
 
 import { Button } from '@/components/ui/button';
 
-import { buttonVariants } from './button-variants';
+import { buttonVariants } from './button.variants';
 
 const CalendarRoot = ({
   rootRef,

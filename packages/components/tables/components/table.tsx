@@ -1,5 +1,5 @@
 'use client';
-import { Activity, memo, useCallback, useRef } from 'react';
+import { Activity, memo, useCallback, useMemo, useRef } from 'react';
 
 import { type Cell, type Column, type ColumnPinningPosition, flexRender, type Header, type Row } from '@tanstack/react-table';
 import { useVirtualizer } from '@tanstack/react-virtual';
@@ -58,6 +58,31 @@ export const TableContainer: React.FC<React.PropsWithChildren> = () => {
     overscan: 2, // Render additional rows beyond viewport for smoother scrolling
   });
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: getRowModel is stable
+  const rows = useMemo<Row<AnyEntity>[]>(() => table.getRowModel().rows ?? [], [table.getRowModel()]);
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: virtual items are derived from rowVirtualizer
+  const virtualItems = useMemo(() => {
+    const items = rowVirtualizer.getVirtualItems().map(virtualItem => {
+      const virtualItemIndex = virtualItem.index;
+      const virtualItemStart = virtualItem.start;
+      const row = rows[virtualItemIndex];
+      const rowId = row?.id
+        ? row.id
+        : row?.original?.id
+          ? String(row.original.id)
+          : row?.original?.uuid
+            ? String(row.original.uuid)
+            : virtualItemIndex.toString();
+      const visibleCells = row.getVisibleCells();
+      const style = {
+        transform: `translateY(${virtualItemStart}px)`,
+      };
+      return { rowId, virtualItemIndex, style, visibleCells };
+    });
+    return items;
+  }, [rowVirtualizer.getVirtualItems(), rows]);
+
   const handleRef = useCallback(
     (node: HTMLTableRowElement | null | undefined) => {
       rowVirtualizer.measureElement(node);
@@ -90,28 +115,13 @@ export const TableContainer: React.FC<React.PropsWithChildren> = () => {
           ))}
         </TableHeader>
         <TableBody data-slot="table-body" height={rowVirtualizer.getTotalSize()}>
-          {rowVirtualizer.getVirtualItems().map(virtualRow => {
-            const virtualRowIndex = virtualRow.index;
-            const rows: Row<AnyEntity>[] = table.getRowModel().rows;
-            const row = rows[virtualRowIndex];
-            const id = row?.id
-              ? row.id
-              : row?.original?.id
-                ? String(row.original.id)
-                : row?.original?.uuid
-                  ? String(row.original.uuid)
-                  : virtualRow.index.toString();
-            const style = {
-              transform: `translateY(${virtualRow.start}px)`,
-            };
-            return (
-              <TableRow key={id} id={id} data-index={virtualRowIndex} ref={handleRef} style={style}>
-                {row.getVisibleCells().map(cell => (
-                  <TableCell key={cell.id} cell={cell} />
-                ))}
-              </TableRow>
-            );
-          })}
+          {virtualItems.map(({ rowId, virtualItemIndex, visibleCells, style }) => (
+            <TableRow key={rowId} data-index={virtualItemIndex} ref={handleRef} style={style}>
+              {visibleCells.map(cell => (
+                <TableCell key={cell.id} cell={cell} />
+              ))}
+            </TableRow>
+          ))}
         </TableBody>
       </table>
       {isEmpty && <EmptyDisplay />}

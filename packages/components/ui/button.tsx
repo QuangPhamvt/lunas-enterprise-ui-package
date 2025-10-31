@@ -3,7 +3,9 @@
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { Slot } from '@radix-ui/react-slot';
-import { type ButtonVariantProps, buttonVariants } from './button-variants';
+import { buttonLoadingVariant, type ButtonVariantProps, buttonVariants } from './button.variants';
+import { Loader2Icon } from 'lucide-react';
+import { Activity } from 'react';
 
 export interface ButtonProps extends Omit<React.ComponentProps<'button'>, 'color'> {
   /**
@@ -31,15 +33,27 @@ export interface ButtonProps extends Omit<React.ComponentProps<'button'>, 'color
 /**
  * Button component with variants, loading state and composition support
  */
-function Button({ className, variant, size, color, asChild = false, isLoading = false, children, disabled, type = 'button', ...props }: ButtonProps) {
+function Button({
+  className,
+  variant,
+  size = 'default',
+  color,
+  asChild = false,
+  isLoading = false,
+  children,
+  disabled,
+  type = 'button',
+  ...props
+}: ButtonProps) {
   const Comp = asChild ? Slot : 'button';
-  const isDisabled = disabled || isLoading;
 
   return (
     <Comp
       type={type}
       data-slot="button"
       data-state={isLoading ? 'loading' : undefined}
+      disabled={disabled}
+      aria-disabled={disabled ? true : undefined}
       className={cn(
         buttonVariants({
           variant,
@@ -48,16 +62,14 @@ function Button({ className, variant, size, color, asChild = false, isLoading = 
           className,
         })
       )}
-      disabled={isDisabled}
-      aria-disabled={isDisabled ? true : undefined}
       {...props}
     >
-      <span className={cn('flex items-center justify-center gap-2 text-nowrap', isLoading && 'opacity-0')}>{children}</span>
-      {isLoading && (
-        <span className="absolute inset-0 flex items-center justify-center" aria-hidden="true">
-          <div className="loader-spinner text-current" />
-        </span>
-      )}
+      <Activity mode={isLoading ? 'hidden' : 'visible'}>{children}</Activity>
+      <Activity mode={isLoading ? 'visible' : 'hidden'}>
+        <div className={buttonLoadingVariant({ variant, color })}>
+          <Loader2Icon size={16} className="animate-spin" />
+        </div>
+      </Activity>
     </Comp>
   );
 }

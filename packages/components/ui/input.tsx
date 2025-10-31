@@ -2,14 +2,18 @@
 
 import { useCallback } from 'react';
 
-import { cn } from '@customafk/react-toolkit/utils';
+import { inputVariants, type InputVariantProps } from './input.variants';
 
 function Input({
   className,
+  variant,
+  size,
   onChange,
   onValueChange,
   ...props
-}: React.ComponentProps<'input'> & {
+}: Omit<React.ComponentProps<'input'>, 'size'> & {
+  variant?: InputVariantProps['variant'];
+  size?: InputVariantProps['size'];
   onValueChange?: (value: string) => void;
 }) {
   const handleChange = useCallback(
@@ -19,45 +23,7 @@ function Input({
     },
     [onChange, onValueChange]
   );
-  return (
-    <input
-      data-slot="input"
-      className={cn(
-        // Base styles
-        'flex h-9 w-full px-3 py-2',
-        'rounded-md border transition-all duration-200',
-        'text-text-positive-strong bg-transparent text-sm',
-
-        // Border and shadow styles
-        'border-border-weak shadow-input',
-        'caret-primary outline-none',
-
-        // Placeholder styling
-        'placeholder:text-text-positive-muted',
-
-        // State styles
-        'hover:border-border hover:shadow-input',
-        'focus:border-primary-strong focus:shadow-none',
-        'focus-visible:ring-primary-border-subtle focus-visible:ring-4',
-
-        // Invalid state
-        'aria-invalid:bg-danger-bg-subtle/40',
-        'aria-invalid:ring-danger-weak',
-        'aria-invalid:border-danger',
-        'aria-invalid:hover:border-danger-strong',
-
-        // Disabled state
-        'disabled:cursor-not-allowed disabled:opacity-50',
-        'disabled:pointer-events-none',
-        'disabled:border-border-weak/50 disabled:bg-secondary-muted/10',
-
-        // Additional custom styling
-        className
-      )}
-      {...props}
-      onChange={handleChange}
-    />
-  );
+  return <input data-slot="input" className={inputVariants({ variant, size, className })} {...props} onChange={handleChange} />;
 }
 
 export { Input };

@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import type { ButtonVariantProps } from '@/components/ui/button-variants';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { CircleOffIcon } from 'lucide-react';
+import { CircleIcon } from 'lucide-react';
 
 const meta = {
   title: 'Components/Button',
@@ -34,8 +34,9 @@ const ButtonList: React.FC<
   React.PropsWithChildren<{
     variant?: ButtonVariantProps['variant'];
     color?: ButtonVariantProps['color'];
+    isLoading?: boolean;
   }>
-> = ({ variant, color, children }) => {
+> = ({ variant, color, isLoading }) => {
   return (
     <div className="flex flex-wrap gap-4">
       <ButtonBox variant={variant} color={color} size="xs" />
@@ -44,6 +45,7 @@ const ButtonList: React.FC<
       <ButtonBox variant={variant} color={color} size="lg" />
       <ButtonBox variant={variant} color={color} size="xl" />
       <ButtonBox variant={variant} color={color} size="xl" disabled />
+      <ButtonBox variant={variant} color={color} size="lg" isLoading={isLoading !== undefined ? isLoading : true} />
     </div>
   );
 };
@@ -54,12 +56,13 @@ const ButtonBox: React.FC<
     color?: ButtonVariantProps['color'];
     size?: ButtonVariantProps['size'];
     disabled?: boolean;
+    isLoading?: boolean;
   }>
-> = ({ variant, color, size, disabled }) => {
+> = ({ variant, color, size, disabled, isLoading }) => {
   return (
     <div className="size-40 flex items-center justify-center border border-border rounded-md">
-      <Button variant={variant} color={color} size={size} disabled={disabled}>
-        <CircleOffIcon />
+      <Button variant={variant} color={color} size={size} disabled={disabled} isLoading={isLoading}>
+        <CircleIcon />
         Button
       </Button>
     </div>
@@ -78,6 +81,7 @@ export const Default: Story = {
       <ButtonCard label="Button Default">
         <ButtonList variant="default" color="primary" />
         <ButtonList variant="default" color="secondary" />
+        <ButtonList variant="default" color="muted" />
         <ButtonList variant="default" color="success" />
         <ButtonList variant="default" color="info" />
         <ButtonList variant="default" color="warning" />
@@ -86,10 +90,47 @@ export const Default: Story = {
       <ButtonCard label="Button Outline">
         <ButtonList variant="outline" color="primary" />
         <ButtonList variant="outline" color="secondary" />
+        <ButtonList variant="outline" color="muted" />
         <ButtonList variant="outline" color="success" />
         <ButtonList variant="outline" color="info" />
         <ButtonList variant="outline" color="warning" />
         <ButtonList variant="outline" color="danger" />
+      </ButtonCard>
+      <ButtonCard label="Button Soft">
+        <ButtonList variant="soft" color="primary" />
+        <ButtonList variant="soft" color="secondary" />
+        <ButtonList variant="soft" color="muted" />
+        <ButtonList variant="soft" color="success" />
+        <ButtonList variant="soft" color="info" />
+        <ButtonList variant="soft" color="warning" />
+        <ButtonList variant="soft" color="danger" />
+      </ButtonCard>
+      <ButtonCard label="Button Subtle">
+        <ButtonList variant="subtle" color="primary" />
+        <ButtonList variant="subtle" color="secondary" />
+        <ButtonList variant="subtle" color="muted" />
+        <ButtonList variant="subtle" color="success" />
+        <ButtonList variant="subtle" color="info" />
+        <ButtonList variant="subtle" color="warning" />
+        <ButtonList variant="subtle" color="danger" />
+      </ButtonCard>
+      <ButtonCard label="Button Ghost">
+        <ButtonList variant="ghost" color="primary" />
+        <ButtonList variant="ghost" color="secondary" />
+        <ButtonList variant="ghost" color="muted" />
+        <ButtonList variant="ghost" color="success" />
+        <ButtonList variant="ghost" color="info" />
+        <ButtonList variant="ghost" color="warning" />
+        <ButtonList variant="ghost" color="danger" />
+      </ButtonCard>
+      <ButtonCard label="Button Link">
+        <ButtonList variant="link" color="primary" isLoading={false} />
+        <ButtonList variant="link" color="secondary" isLoading={false} />
+        <ButtonList variant="link" color="muted" isLoading={false} />
+        <ButtonList variant="link" color="success" isLoading={false} />
+        <ButtonList variant="link" color="info" isLoading={false} />
+        <ButtonList variant="link" color="warning" isLoading={false} />
+        <ButtonList variant="link" color="danger" isLoading={false} />
       </ButtonCard>
     </div>
   ),

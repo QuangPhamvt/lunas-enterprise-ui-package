@@ -50,30 +50,40 @@
   --color-muted-weak: var(--muted-weak);
   --color-muted-strong: var(--muted-strong);
   --color-muted-intense: var(--muted-intense);
+  --color-muted-bg-subtle: var(--muted-bg-subtle);
+  --color-muted-border-subtle: var(--muted-border-subtle);
 
   --color-accent: var(--accent);
   --color-accent-muted: var(--accent-muted);
   --color-accent-weak: var(--accent-weak);
   --color-accent-strong: var(--accent-strong);
   --color-accent-intense: var(--accent-intense);
+  --color-accent-bg-subtle: var(--accent-bg-subtle);
+  --color-accent-border-subtle: var(--accent-border-subtle);
 
   --color-info: var(--info);
   --color-info-muted: var(--info-muted);
   --color-info-weak: var(--info-weak);
   --color-info-strong: var(--info-strong);
   --color-info-intense: var(--info-intense);
+  --color-info-bg-subtle: var(--info-bg-subtle);
+  --color-info-border-subtle: var(--info-border-subtle);
 
   --color-success: var(--success);
   --color-success-muted: var(--success-muted);
   --color-success-weak: var(--success-weak);
   --color-success-strong: var(--success-strong);
   --color-success-intense: var(--success-intense);
+  --color-success-bg-subtle: var(--success-bg-subtle);
+  --color-success-border-subtle: var(--success-border-subtle);
 
   --color-warning: var(--warning);
   --color-warning-muted: var(--warning-muted);
   --color-warning-weak: var(--warning-weak);
   --color-warning-strong: var(--warning-strong);
   --color-warning-intense: var(--warning-intense);
+  --color-warning-bg-subtle: var(--warning-bg-subtle);
+  --color-warning-border-subtle: var(--warning-border-subtle);
 
   --color-danger: var(--danger);
   --color-danger-muted: var(--danger-muted);
@@ -81,6 +91,7 @@
   --color-danger-strong: var(--danger-strong);
   --color-danger-intense: var(--danger-intense);
   --color-danger-bg-subtle: var(--danger-bg-subtle);
+  --color-danger-border-subtle: var(--danger-border-subtle);
 
   --color-text-positive: var(--text-positive);
   --color-text-positive-muted: var(--text-positive-muted);
