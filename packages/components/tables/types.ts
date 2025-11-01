@@ -11,7 +11,6 @@ export type TTableContext<TData extends RowData> = {
 
   rowSelection: RowSelectionState;
 
-  columnSizeVars: { [key: string]: number | undefined };
   columnPinning: ColumnPinningState;
 };
 

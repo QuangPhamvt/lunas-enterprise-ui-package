@@ -97,7 +97,7 @@ const TableHeaderCell: React.FC<
       isAllRowsSelected: boolean;
     }
   >
-> = memo(({ header, isPinned, isResizing, isAllRowsSelected, children, ...props }) => {
+> = ({ header, isPinned, isResizing, isAllRowsSelected, children, ...props }) => {
   const style = getCommonPinningStyles(header.column);
   const width = `calc(var(--header-${header.id}-size) * 1px)`;
 
@@ -126,10 +126,12 @@ const TableHeaderCell: React.FC<
       {header.id !== 'select' && (
         <TableHeaderCellOption
           isPinned={isPinned}
+          isVisible={header.column.getIsVisible()}
           className="invisible absolute right-2 z-10 group-hover:visible"
           onLeftPin={header.column.pin}
           onRightPin={header.column.pin}
           onUnpin={header.column.pin}
+          onToggleVisibilityHandler={header.column.toggleVisibility}
         />
       )}
       <Activity mode={isPinned ? 'hidden' : 'visible'}>
@@ -142,16 +144,17 @@ const TableHeaderCell: React.FC<
       </Activity>
     </th>
   );
-});
-TableHeaderCell.displayName = 'TableHeaderCell';
+};
 
 const TableHeaderCellOption: React.FC<{
   isPinned: ColumnPinningPosition;
   className?: string;
+  isVisible?: boolean;
   onLeftPin: (pos: 'left' | 'right' | false) => void;
   onRightPin: (pos: 'left' | 'right' | false) => void;
   onUnpin: (pos: 'left' | 'right' | false) => void;
-}> = ({ isPinned, className, onLeftPin, onRightPin, onUnpin }) => {
+  onToggleVisibilityHandler: (visible: AnyEntity) => void;
+}> = ({ isPinned, className, onLeftPin, onRightPin, onUnpin, onToggleVisibilityHandler }) => {
   const handleLeftPin = useCallback(() => {
     onLeftPin('left');
   }, [onLeftPin]);
@@ -201,7 +204,7 @@ const TableHeaderCellOption: React.FC<{
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup className="*:data-[slot=dropdown-menu-item]:rounded-xs *:data-[slot=dropdown-menu-item]:p-2">
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={() => onToggleVisibilityHandler(false)}>
             Hide Field
             <DropdownMenuShortcut>
               <EyeOffIcon className="size-4" />
@@ -247,7 +250,7 @@ const TableRow: React.FC<
     virtualRow: VirtualItem;
     rowVirtualizer: Virtualizer<HTMLDivElement, HTMLTableRowElement>;
   }
-> = memo(({ children, row, virtualRow, rowVirtualizer, ...props }) => {
+> = memo(({ children, row, virtualRow, rowVirtualizer, className, ...props }) => {
   const { columnPinning: _ } = useTableContext();
   return (
     <tr
@@ -257,10 +260,11 @@ const TableRow: React.FC<
       style={{
         transform: `translateY(${virtualRow.start}px)`,
       }}
+      className={cn('group', className)}
       {...props}
     >
       {row.getVisibleCells().map(cell => {
-        return <TableCell key={cell.id} cell={cell} />;
+        return <TableCell key={cell.id} cell={cell} className="group-hover:bg-muted-bg-subtle!" />;
       })}
     </tr>
   );
@@ -273,7 +277,7 @@ const TableCell: React.FC<
       cell: Cell<unknown, unknown>;
     }
   >
-> = memo(({ cell, children, ...props }) => {
+> = memo(({ cell, children, className, ...props }) => {
   const { rowSelection: _ } = useTableContext();
   const isPinned = cell.column.getIsPinned();
   const style = getCommonPinningStyles(cell.column);
@@ -281,8 +285,8 @@ const TableCell: React.FC<
 
   if (cell.column.id === 'select') {
     return (
-      <td data-slot="table-cell" style={{ ...style, width: SELECT_WIDTH }} className="border-none! shadow-none!" {...props}>
-        <div className="absolute inset-0 flex items-center justify-center">
+      <td data-slot="table-cell" style={{ ...style, width: SELECT_WIDTH }} className={cn('border-none! bg-transparent! shadow-none!', className)} {...props}>
+        <div className="absolute inset-0 flex items-center justify-center bg-transparent">
           <Checkbox
             aria-label="Select Row"
             checked={cell.row.getIsSelected()}
@@ -296,7 +300,7 @@ const TableCell: React.FC<
   }
 
   return (
-    <td data-slot="table-cell" data-pinned={isPinned} style={{ ...style, width }} {...props}>
+    <td data-slot="table-cell" data-pinned={isPinned} style={{ ...style, width }} className={className} {...props}>
       {flexRender(cell.column.columnDef.cell, cell.getContext())}
     </td>
   );
@@ -323,10 +327,29 @@ export const TableFooter: React.FC<React.PropsWithChildren> = ({ children }) => 
 };
 
 export const TableContainer: React.FC<React.PropsWithChildren> = () => {
-  const { table, columnSizeVars, isEmpty } = useTableContext();
+  const { table, isEmpty } = useTableContext();
   const { rows, rowsLength } = useTableRowsContext();
 
   const tableContainerRef = useRef<HTMLDivElement | null>(null);
+  const tableRef = useRef<HTMLTableElement | null>(null);
+
+  /**
+   * Instead of calling `column.getSize()` on every render for every header
+   * and especially every data cell (very expensive),
+   * we will calculate all column sizes at once at the root table level in a useMemo
+   * and pass the column sizes down as CSS variables to the <table> element.
+   */
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <table> element.
+  const columnSizeVars = useMemo(() => {
+    const headers = table.getFlatHeaders();
+    const colSizes: { [key: string]: number | undefined } = {};
+    for (let i = 0; i < headers.length; i++) {
+      const header = headers[i];
+      colSizes[`--header-${header.id}-size`] = header.getSize() || 0;
+      colSizes[`--col-${header.column.id}-size`] = header.column.getSize() || 0;
+    }
+    return colSizes;
+  }, [table.getState().columnSizingInfo, table.getState().columnSizing]);
 
   // Important: Keep the row virtualizer in the lowest component possible to avoid unnecessary re-renders.
   const rowVirtualizer = useVirtualizer<HTMLDivElement, HTMLTableRowElement>({
@@ -336,7 +359,6 @@ export const TableContainer: React.FC<React.PropsWithChildren> = () => {
     measureElement: element => element?.getBoundingClientRect().height,
     overscan: 2, // Render additional rows beyond viewport for smoother scrolling
   });
-
   return (
     <div
       data-slot="table-container"
@@ -345,6 +367,7 @@ export const TableContainer: React.FC<React.PropsWithChildren> = () => {
       className="relative flex w-full max-w-full flex-1 flex-col gap-1 overflow-auto border-t border-t-border bg-slate-50 p-0 text-sm"
     >
       <table
+        ref={tableRef}
         data-slot="table"
         style={{
           ...columnSizeVars,
