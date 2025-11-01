@@ -4,7 +4,7 @@ import type { ColumnPinningState, InitialTableState, RowData, RowSelectionState 
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 
 import { TableContext } from '../hooks/use-table-context';
-import { TableRowsContext } from '../hooks/use-table-rows-context';
+import { TableRowsContext, type TTableRowsContext } from '../hooks/use-table-rows-context';
 import type { TableProviderProps, TTableContext } from '../types';
 
 const INITIAL_STATE: InitialTableState = {
@@ -74,8 +74,6 @@ export const TableProvider = <TData extends RowData>({
     return !isFetching && table.getRowModel().rows.length === 0;
   }, [table, isFetching]);
 
-  table.getState().rowSelection;
-
   // biome-ignore lint/correctness/useExhaustiveDependencies: table get state
   const value = useMemo<TTableContext<TData>>(
     () => ({
@@ -95,7 +93,6 @@ export const TableProvider = <TData extends RowData>({
       table,
       title,
 
-      rows,
       columnSizeVars,
 
       isEmpty,
@@ -106,16 +103,18 @@ export const TableProvider = <TData extends RowData>({
     ]
   );
 
-  const rowsValue = useMemo(
+  // biome-ignore lint/correctness/useExhaustiveDependencies: rows
+  const rowsValue = useMemo<TTableRowsContext<TData>>(
     () => ({
+      rowsLength: rows.length,
       rows,
     }),
-    [rows]
+    [rows, table.getState().rowSelection, table.getState().columnPinning]
   );
 
   return (
     <TableContext.Provider value={value as TTableContext<unknown>}>
-      <TableRowsContext.Provider value={rowsValue}>{children}</TableRowsContext.Provider>
+      <TableRowsContext.Provider value={rowsValue as TTableRowsContext<unknown>}>{children}</TableRowsContext.Provider>
     </TableContext.Provider>
   );
 };

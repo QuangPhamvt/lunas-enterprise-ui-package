@@ -2,7 +2,7 @@
 import { Activity, memo, useCallback, useMemo, useRef } from 'react';
 
 import { type Cell, type Column, type ColumnPinningPosition, flexRender, type Header, type Row } from '@tanstack/react-table';
-import { useVirtualizer } from '@tanstack/react-virtual';
+import { useVirtualizer, type VirtualItem, type Virtualizer } from '@tanstack/react-virtual';
 import { BoxIcon, EllipsisVerticalIcon, EyeOffIcon, MoveLeftIcon, MoveRightIcon, PinOffIcon } from 'lucide-react';
 
 import { cn } from '@customafk/react-toolkit/utils';
@@ -19,6 +19,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import type { AnyEntity } from '@/types';
 import { useTableContext } from '../hooks/use-table-context';
+import { useTableRowsContext } from '../hooks/use-table-rows-context';
 
 const SELECT_WIDTH = 60;
 const TABLE_HEADER_Z_INDEX = 10;
@@ -45,88 +46,7 @@ export const TableWrapper: React.FC<React.PropsWithChildren<React.ComponentProps
   );
 };
 
-export const TableContainer: React.FC<React.PropsWithChildren> = () => {
-  const { table, columnSizeVars, rows, isEmpty, columnPinning } = useTableContext();
-
-  const tableContainerRef = useRef<HTMLDivElement | null>(null);
-
-  const rowVirtualizer = useVirtualizer<HTMLDivElement, HTMLTableRowElement>({
-    count: table.getRowModel().rows.length,
-    getScrollElement: () => tableContainerRef.current,
-    estimateSize: () => 40, // estimated row height
-    measureElement: element => element?.getBoundingClientRect().height,
-    overscan: 2, // Render additional rows beyond viewport for smoother scrolling
-  });
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: virtual items are derived from rowVirtualizer
-  const virtualItems = useMemo(() => {
-    const items = rowVirtualizer.getVirtualItems().map(virtualItem => {
-      const virtualItemIndex = virtualItem.index;
-      const virtualItemStart = virtualItem.start;
-      const row = rows[virtualItemIndex] as Row<AnyEntity>;
-      const rowId = row?.id
-        ? row.id
-        : row?.original?.id
-          ? String(row.original.id)
-          : row?.original?.uuid
-            ? String(row.original.uuid)
-            : virtualItemIndex.toString();
-      const visibleCells = row.getVisibleCells();
-      const style = {
-        transform: `translateY(${virtualItemStart}px)`,
-      };
-      return { rowId, virtualItemIndex, style, visibleCells };
-    });
-    return items;
-  }, [rowVirtualizer.getVirtualItems(), columnPinning]);
-
-  const handleRef = useCallback(
-    (node: HTMLTableRowElement | null | undefined) => {
-      rowVirtualizer.measureElement(node);
-    },
-    [rowVirtualizer]
-  );
-
-  return (
-    <div
-      data-slot="table-container"
-      ref={tableContainerRef}
-      style={{ direction: table.options.columnResizeDirection }}
-      className="relative flex w-full max-w-full flex-1 flex-col gap-1 overflow-auto border-t border-t-border bg-slate-50 p-0 text-sm"
-    >
-      <table
-        data-slot="table"
-        style={{
-          ...columnSizeVars,
-          width: table.getTotalSize(),
-        }}
-        className="grid caption-bottom border-collapse border-spacing-0 flex-col bg-card text-sm tabular-nums [&_tfoot_td]:border-t"
-      >
-        <TableHeader>
-          {table.getHeaderGroups().map(headerGroup => (
-            <TableHeaderRow key={headerGroup.id}>
-              {headerGroup.headers.map(header => (
-                <TableHeaderCell key={header.id} header={header} />
-              ))}
-            </TableHeaderRow>
-          ))}
-        </TableHeader>
-        <TableBody data-slot="table-body" height={rowVirtualizer.getTotalSize()}>
-          {virtualItems.map(({ rowId, virtualItemIndex, visibleCells, style }) => (
-            <TableRow key={rowId} data-index={virtualItemIndex} ref={handleRef} style={style}>
-              {visibleCells.map(cell => (
-                <TableCell key={cell.id} cell={cell} />
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
-      </table>
-      {isEmpty && <EmptyDisplay />}
-    </div>
-  );
-};
-
-const TableHeader: React.FC<React.PropsWithChildren> = ({ children }) => {
+const TableHeader: React.FC<React.PropsWithChildren> = memo(({ children }) => {
   return (
     <thead
       data-slot="table-header"
@@ -156,7 +76,8 @@ const TableHeader: React.FC<React.PropsWithChildren> = ({ children }) => {
       {children}
     </thead>
   );
-};
+});
+TableHeader.displayName = 'TableHeader';
 
 const TableHeaderRow: React.FC<React.PropsWithChildren> = memo(({ children }) => {
   return (
@@ -171,12 +92,12 @@ const TableHeaderCell: React.FC<
   React.PropsWithChildren<
     React.ComponentProps<'th'> & {
       header: Header<unknown, unknown>;
+      isPinned: ColumnPinningPosition;
+      isResizing: boolean;
+      isAllRowsSelected: boolean;
     }
   >
-> = memo(({ header, children, ...props }) => {
-  const isPinned = header.column.getIsPinned();
-  const isResizing = header.column.getIsResizing();
-  const canSort = header.column.getCanSort();
+> = memo(({ header, isPinned, isResizing, isAllRowsSelected, children, ...props }) => {
   const style = getCommonPinningStyles(header.column);
   const width = `calc(var(--header-${header.id}-size) * 1px)`;
 
@@ -184,7 +105,13 @@ const TableHeaderCell: React.FC<
     return (
       <th data-slot="table-header-cell" style={{ ...style, width: SELECT_WIDTH }} className="relative" {...props}>
         <div className="absolute inset-0 flex items-center justify-center">
-          <Checkbox />
+          <Checkbox
+            aria-label="Select All Rows"
+            checked={isAllRowsSelected}
+            onCheckedChange={value => {
+              header.getContext().table.toggleAllRowsSelected(!!value);
+            }}
+          />
         </div>
       </th>
     );
@@ -192,11 +119,7 @@ const TableHeaderCell: React.FC<
   return (
     <th data-slot="table-header-cell" data-pinned={isPinned} style={{ ...style, width }} colSpan={header.colSpan} className="group relative" {...props}>
       <div className="absolute inset-0 gap-1 truncate">
-        <div
-          tabIndex={canSort ? 0 : undefined}
-          role={canSort ? 'button' : undefined}
-          className="flex h-full flex-1 cursor-pointer select-none items-center justify-between"
-        >
+        <div className="flex h-full flex-1 cursor-pointer select-none items-center justify-between">
           <div className="flex size-full flex-1 items-center truncate pl-4">{flexRender(header.column.columnDef.header, header.getContext())}</div>
         </div>
       </div>
@@ -318,11 +241,27 @@ const TableBody: React.FC<React.PropsWithChildren<React.ComponentProps<'tbody'> 
   );
 };
 
-const TableRow: React.FC<React.ComponentProps<'tr'>> = memo(({ children, ...props }) => {
+const TableRow: React.FC<
+  React.ComponentProps<'tr'> & {
+    row: Row<unknown>;
+    virtualRow: VirtualItem;
+    rowVirtualizer: Virtualizer<HTMLDivElement, HTMLTableRowElement>;
+  }
+> = memo(({ children, row, virtualRow, rowVirtualizer, ...props }) => {
   const { columnPinning: _ } = useTableContext();
   return (
-    <tr data-slot="table-row" {...props}>
-      {children}
+    <tr
+      data-slot="table-row"
+      data-index={virtualRow.index}
+      ref={node => rowVirtualizer.measureElement(node)}
+      style={{
+        transform: `translateY(${virtualRow.start}px)`,
+      }}
+      {...props}
+    >
+      {row.getVisibleCells().map(cell => {
+        return <TableCell key={cell.id} cell={cell} />;
+      })}
     </tr>
   );
 });
@@ -380,5 +319,62 @@ export const TableFooter: React.FC<React.PropsWithChildren> = ({ children }) => 
     <tfoot data-slot="table-footer" className="flex w-full justify-center border-border-weak border-t py-2 font-medium [&>tr]:last:border-b-0">
       {children}
     </tfoot>
+  );
+};
+
+export const TableContainer: React.FC<React.PropsWithChildren> = () => {
+  const { table, columnSizeVars, isEmpty } = useTableContext();
+  const { rows, rowsLength } = useTableRowsContext();
+
+  const tableContainerRef = useRef<HTMLDivElement | null>(null);
+
+  // Important: Keep the row virtualizer in the lowest component possible to avoid unnecessary re-renders.
+  const rowVirtualizer = useVirtualizer<HTMLDivElement, HTMLTableRowElement>({
+    count: rowsLength,
+    getScrollElement: () => tableContainerRef.current,
+    estimateSize: () => 40, // estimated row height
+    measureElement: element => element?.getBoundingClientRect().height,
+    overscan: 2, // Render additional rows beyond viewport for smoother scrolling
+  });
+
+  return (
+    <div
+      data-slot="table-container"
+      ref={tableContainerRef}
+      style={{ direction: table.options.columnResizeDirection }}
+      className="relative flex w-full max-w-full flex-1 flex-col gap-1 overflow-auto border-t border-t-border bg-slate-50 p-0 text-sm"
+    >
+      <table
+        data-slot="table"
+        style={{
+          ...columnSizeVars,
+          width: table.getTotalSize(),
+        }}
+        className="grid caption-bottom border-collapse border-spacing-0 flex-col bg-card text-sm tabular-nums [&_tfoot_td]:border-t"
+      >
+        <TableHeader>
+          {table.getHeaderGroups().map(headerGroup => (
+            <TableHeaderRow key={headerGroup.id}>
+              {headerGroup.headers.map(header => (
+                <TableHeaderCell
+                  key={header.id}
+                  header={header}
+                  isPinned={header.column.getIsPinned()}
+                  isResizing={header.column.getIsResizing()}
+                  isAllRowsSelected={table.getIsAllRowsSelected()}
+                />
+              ))}
+            </TableHeaderRow>
+          ))}
+        </TableHeader>
+        <TableBody data-slot="table-body" height={rowVirtualizer.getTotalSize()}>
+          {rowVirtualizer.getVirtualItems().map(virtualRow => {
+            const row = rows[virtualRow.index] as Row<AnyEntity>;
+            return <TableRow key={row.id} data-index={virtualRow.index} row={row} virtualRow={virtualRow} rowVirtualizer={rowVirtualizer} />;
+          })}
+        </TableBody>
+      </table>
+      {isEmpty && <EmptyDisplay />}
+    </div>
   );
 };
