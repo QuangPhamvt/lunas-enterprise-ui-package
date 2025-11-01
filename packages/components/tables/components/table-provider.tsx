@@ -4,6 +4,7 @@ import type { ColumnPinningState, InitialTableState, RowData, RowSelectionState 
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 
 import { TableContext } from '../hooks/use-table-context';
+import { TableRowsContext } from '../hooks/use-table-rows-context';
 import type { TableProviderProps, TTableContext } from '../types';
 
 const INITIAL_STATE: InitialTableState = {
@@ -19,7 +20,6 @@ export const TableProvider = <TData extends RowData>({
 }: React.PropsWithChildren<TableProviderProps<TData>>) => {
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const [columnPinning, setColumnPinning] = useState<ColumnPinningState>({ right: ['actions'] });
-  console.log('TableProvider render', rowSelection);
 
   const table = useReactTable<TData>({
     initialState: INITIAL_STATE,
@@ -36,10 +36,13 @@ export const TableProvider = <TData extends RowData>({
     },
     columnResizeMode: 'onChange',
     columnResizeDirection: 'ltr',
+
     enableRowSelection: true,
     enableColumnResizing: true,
     enableMultiRowSelection: true,
+
     getCoreRowModel: getCoreRowModel(),
+
     onRowSelectionChange: setRowSelection,
     onColumnPinningChange: setColumnPinning,
   });
@@ -62,24 +65,57 @@ export const TableProvider = <TData extends RowData>({
     return colSizes;
   }, [table.getState().columnSizingInfo, table.getState().columnSizing]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: rows
+  const rows = useMemo(() => {
+    return table.getRowModel().rows;
+  }, [table.getState().columnPinning, table.getState().columnSizingInfo, table.getState().columnSizing]);
+
   const isEmpty = useMemo<boolean>(() => {
     return !isFetching && table.getRowModel().rows.length === 0;
   }, [table, isFetching]);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: column pinning state
-  const _columnPinning = useMemo(() => table.getState().columnPinning, [table.getState().columnPinning]);
+  table.getState().rowSelection;
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: table get state
   const value = useMemo<TTableContext<TData>>(
     () => ({
       table,
       title,
       isEmpty,
       isFetching,
+
+      rows,
+
+      rowSelection: table.getState().rowSelection,
+
       columnSizeVars,
-      columnPinning: _columnPinning,
+      columnPinning: table.getState().columnPinning,
     }),
-    [table, title, _columnPinning, columnSizeVars, isEmpty, isFetching]
+    [
+      table,
+      title,
+
+      rows,
+      columnSizeVars,
+
+      isEmpty,
+      isFetching,
+
+      table.getState().rowSelection,
+      table.getState().columnPinning,
+    ]
   );
 
-  return <TableContext.Provider value={value as TTableContext<unknown>}>{children}</TableContext.Provider>;
+  const rowsValue = useMemo(
+    () => ({
+      rows,
+    }),
+    [rows]
+  );
+
+  return (
+    <TableContext.Provider value={value as TTableContext<unknown>}>
+      <TableRowsContext.Provider value={rowsValue}>{children}</TableRowsContext.Provider>
+    </TableContext.Provider>
+  );
 };

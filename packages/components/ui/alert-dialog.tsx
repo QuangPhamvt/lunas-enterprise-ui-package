@@ -3,7 +3,7 @@
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { AlertDialog as AlertDialogPrimitive } from 'radix-ui';
-import { buttonVariants } from './button-variants';
+import { buttonVariants } from './button.variants';
 
 function AlertDialog({ ...props }: React.ComponentProps<typeof AlertDialogPrimitive.Root>) {
   return <AlertDialogPrimitive.Root data-slot="alert-dialog" {...props} />;

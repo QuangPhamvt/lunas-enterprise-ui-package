@@ -1,4 +1,4 @@
-import type { ColumnDef, ColumnPinningState, RowData, Table } from '@tanstack/react-table';
+import type { ColumnDef, ColumnPinningState, Row, RowData, RowSelectionState, Table } from '@tanstack/react-table';
 import type { VirtualItem, Virtualizer } from '@tanstack/react-virtual';
 
 export type TTableContext<TData extends RowData> = {
@@ -6,6 +6,11 @@ export type TTableContext<TData extends RowData> = {
   table: Table<TData>;
   isEmpty: boolean;
   isFetching?: boolean;
+
+  rows: Row<TData>[];
+
+  rowSelection: RowSelectionState;
+
   columnSizeVars: { [key: string]: number | undefined };
   columnPinning: ColumnPinningState;
 };

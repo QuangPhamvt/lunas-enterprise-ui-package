@@ -20,7 +20,7 @@ import {
 import type { AnyEntity } from '@/types';
 import { useTableContext } from '../hooks/use-table-context';
 
-const SELECT_WIDTH = 40;
+const SELECT_WIDTH = 60;
 const TABLE_HEADER_Z_INDEX = 10;
 const PINNED_COLUMN_Z_INDEX = 20;
 
@@ -46,7 +46,7 @@ export const TableWrapper: React.FC<React.PropsWithChildren<React.ComponentProps
 };
 
 export const TableContainer: React.FC<React.PropsWithChildren> = () => {
-  const { table, columnSizeVars, isEmpty } = useTableContext();
+  const { table, columnSizeVars, rows, isEmpty, columnPinning } = useTableContext();
 
   const tableContainerRef = useRef<HTMLDivElement | null>(null);
 
@@ -58,15 +58,12 @@ export const TableContainer: React.FC<React.PropsWithChildren> = () => {
     overscan: 2, // Render additional rows beyond viewport for smoother scrolling
   });
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: getRowModel is stable
-  const rows = useMemo<Row<AnyEntity>[]>(() => table.getRowModel().rows ?? [], [table.getRowModel()]);
-
   // biome-ignore lint/correctness/useExhaustiveDependencies: virtual items are derived from rowVirtualizer
   const virtualItems = useMemo(() => {
     const items = rowVirtualizer.getVirtualItems().map(virtualItem => {
       const virtualItemIndex = virtualItem.index;
       const virtualItemStart = virtualItem.start;
-      const row = rows[virtualItemIndex];
+      const row = rows[virtualItemIndex] as Row<AnyEntity>;
       const rowId = row?.id
         ? row.id
         : row?.original?.id
@@ -81,7 +78,7 @@ export const TableContainer: React.FC<React.PropsWithChildren> = () => {
       return { rowId, virtualItemIndex, style, visibleCells };
     });
     return items;
-  }, [rowVirtualizer.getVirtualItems(), rows]);
+  }, [rowVirtualizer.getVirtualItems(), columnPinning]);
 
   const handleRef = useCallback(
     (node: HTMLTableRowElement | null | undefined) => {
@@ -103,7 +100,7 @@ export const TableContainer: React.FC<React.PropsWithChildren> = () => {
           ...columnSizeVars,
           width: table.getTotalSize(),
         }}
-        className="grid caption-bottom border-separate border-spacing-0 flex-col bg-card text-sm tabular-nums [&_tfoot_td]:border-t"
+        className="grid caption-bottom border-collapse border-spacing-0 flex-col bg-card text-sm tabular-nums [&_tfoot_td]:border-t"
       >
         <TableHeader>
           {table.getHeaderGroups().map(headerGroup => (
@@ -137,7 +134,6 @@ const TableHeader: React.FC<React.PropsWithChildren> = ({ children }) => {
       className={cn(
         'sticky top-0 grid bg-card text-sm text-text-positive',
         '[&_tr:not(:last-child)_td]:border-b',
-        // '[&_th>.cursor-col-resize]:last:opacity-0',
         '[&_th]:flex',
         '[&_th]:h-10',
         '[&_th]:select-none',
@@ -187,34 +183,40 @@ const TableHeaderCell: React.FC<
   if (header.id === 'select') {
     return (
       <th data-slot="table-header-cell" style={{ ...style, width: SELECT_WIDTH }} className="relative" {...props}>
-        <div className="flex size-full items-center justify-center gap-1 truncate">
+        <div className="absolute inset-0 flex items-center justify-center">
           <Checkbox />
         </div>
       </th>
     );
   }
   return (
-    <th data-slot="table-header-cell" style={{ ...style, width }} colSpan={header.colSpan} className="relative" {...props}>
-      <div className="flex size-full items-center justify-center gap-1 truncate">
+    <th data-slot="table-header-cell" data-pinned={isPinned} style={{ ...style, width }} colSpan={header.colSpan} className="group relative" {...props}>
+      <div className="absolute inset-0 gap-1 truncate">
         <div
           tabIndex={canSort ? 0 : undefined}
           role={canSort ? 'button' : undefined}
           className="flex h-full flex-1 cursor-pointer select-none items-center justify-between"
         >
           <div className="flex size-full flex-1 items-center truncate pl-4">{flexRender(header.column.columnDef.header, header.getContext())}</div>
-          {header.id !== 'select' && (
-            <TableHeaderCellOption isPinned={isPinned} onLeftPin={header.column.pin} onRightPin={header.column.pin} onUnpin={header.column.pin} />
-          )}
         </div>
-        <Activity mode={isPinned ? 'hidden' : 'visible'}>
-          <div
-            onDoubleClick={header.column.resetSize}
-            onMouseDown={header.getResizeHandler()}
-            onTouchStart={header.getResizeHandler()}
-            className={cn('h-full w-0.5 cursor-grab bg-transparent hover:bg-border', isResizing && 'bg-border')}
-          />
-        </Activity>
       </div>
+      {header.id !== 'select' && (
+        <TableHeaderCellOption
+          isPinned={isPinned}
+          className="invisible absolute right-2 z-10 group-hover:visible"
+          onLeftPin={header.column.pin}
+          onRightPin={header.column.pin}
+          onUnpin={header.column.pin}
+        />
+      )}
+      <Activity mode={isPinned ? 'hidden' : 'visible'}>
+        <div
+          onDoubleClick={header.column.resetSize}
+          onMouseDown={header.getResizeHandler()}
+          onTouchStart={header.getResizeHandler()}
+          className={cn('-right-0.5 absolute inset-y-0 w-1 cursor-e-resize bg-transparent hover:bg-border', isResizing && 'bg-border')}
+        />
+      </Activity>
     </th>
   );
 });
@@ -222,10 +224,11 @@ TableHeaderCell.displayName = 'TableHeaderCell';
 
 const TableHeaderCellOption: React.FC<{
   isPinned: ColumnPinningPosition;
+  className?: string;
   onLeftPin: (pos: 'left' | 'right' | false) => void;
   onRightPin: (pos: 'left' | 'right' | false) => void;
   onUnpin: (pos: 'left' | 'right' | false) => void;
-}> = ({ isPinned, onLeftPin, onRightPin, onUnpin }) => {
+}> = ({ isPinned, className, onLeftPin, onRightPin, onUnpin }) => {
   const handleLeftPin = useCallback(() => {
     onLeftPin('left');
   }, [onLeftPin]);
@@ -240,7 +243,9 @@ const TableHeaderCellOption: React.FC<{
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="cursor-pointer rounded-full p-0.5 text-text-positive-weak hover:bg-muted-muted hover:text-text-positive [&>svg]:size-4">
+        <button
+          className={cn('cursor-pointer rounded-full p-0.5 text-text-positive-weak hover:bg-muted-muted hover:text-text-positive [&>svg]:size-4', className)}
+        >
           <EllipsisVerticalIcon />
         </button>
       </DropdownMenuTrigger>
@@ -330,17 +335,27 @@ const TableCell: React.FC<
     }
   >
 > = memo(({ cell, children, ...props }) => {
-  const isSelected = cell.row.getIsSelected();
+  const { rowSelection: _ } = useTableContext();
   const isPinned = cell.column.getIsPinned();
   const style = getCommonPinningStyles(cell.column);
   const width = `calc(var(--col-${cell.column.id}-size) * 1px)`;
+
   if (cell.column.id === 'select') {
     return (
       <td data-slot="table-cell" style={{ ...style, width: SELECT_WIDTH }} className="border-none! shadow-none!" {...props}>
-        <Checkbox checked={isSelected} />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <Checkbox
+            aria-label="Select Row"
+            checked={cell.row.getIsSelected()}
+            onCheckedChange={value => {
+              cell.row.toggleSelected(!!value);
+            }}
+          />
+        </div>
       </td>
     );
   }
+
   return (
     <td data-slot="table-cell" data-pinned={isPinned} style={{ ...style, width }} {...props}>
       {flexRender(cell.column.columnDef.cell, cell.getContext())}
