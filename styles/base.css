@@ -16,9 +16,6 @@
     -moz-osx-font-smoothing: grayscale;
   }
   /* Custom scrollbar styling. Thanks @pranathiperii. */
-  ::-webkit-scrollbar {
-    width: 0.375rem;
-  }
   ::-webkit-scrollbar-track {
     background: transparent;
   }

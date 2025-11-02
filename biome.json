@@ -35,6 +35,15 @@
       "suspicious": {
         "recommended": true,
         "noUnknownAtRules": "off"
+      },
+      "nursery": {
+        "useSortedClasses": {
+          "level": "warn",
+          "options": {
+            "attributes": ["className", "class", "ngClass"],
+            "functions": ["clsx", "cva", "tw", "tw.*"]
+          }
+        }
       }
     }
   },
@@ -52,6 +61,7 @@
               "@tanstack/react-table",
               "@tanstack/react-form",
               "@tanstack/react-router",
+              "@tanstack/react-virtual",
               "@tanstack/zod-adapter",
               "jotai",
               "lucide-react",
@@ -64,7 +74,8 @@
               "@customafk/lunas-dto/**",
               "@customafk/lunas-ui/**",
               ":BLANK_LINE:",
-              ["@/apis/**", "@/constants/**"]
+              ["@/apis/**", "@/constants/**"],
+              ":BLANK_LINE:"
             ]
           }
         }
@@ -76,7 +87,7 @@
     "formatWithErrors": true,
     "indentStyle": "space",
     "indentWidth": 2,
-    "lineWidth": 160,
+    "lineWidth": 100,
     "lineEnding": "lf",
     "attributePosition": "auto",
     "bracketSameLine": false,

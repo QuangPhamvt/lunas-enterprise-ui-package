@@ -81,7 +81,7 @@ export const ComboboxField = <TFieldValues extends FieldValues = FieldValues>({
                     </Button>
                   </FormControl>
                 </PopoverTrigger>
-                <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0">
+                <PopoverContent className="w-(--radix-popover-trigger-width) p-0">
                   <Command className="border-none">
                     <CommandInput placeholder={placeholder ?? 'Tìm kiếm'} />
                     <CommandList>

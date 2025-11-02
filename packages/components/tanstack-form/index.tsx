@@ -1,6 +1,7 @@
 import { createFormHook } from '@tanstack/react-form';
 
 import { ArrayField, ArrayItemField } from './arrays-field';
+import { CancelButton } from './cancel-button';
 import { fieldContext, formContext } from './config';
 import { ComboboxField } from './fields/combobox-field';
 import { DateField } from './fields/date-field';
@@ -35,6 +36,7 @@ const { useAppForm: useTanStackForm } = createFormHook({
     TanStackFormFooter,
     TanStackSwitchGroup,
     TanStackRadioGroup,
+    CancelButton,
     SubscribeButton,
   },
 });

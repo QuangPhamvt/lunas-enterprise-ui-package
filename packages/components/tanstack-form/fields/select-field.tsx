@@ -1,10 +1,13 @@
 import { Activity } from 'react';
 
+import { PackagePlusIcon } from 'lucide-react';
+
+import { cn } from '@customafk/react-toolkit/utils';
+
 import { Field, FieldContent, FieldDescription, FieldError, FieldLabel, FieldSeparator } from '@/components/ui/field';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useFieldContext } from '../config';
 import type { CommonFieldProps } from '../types';
-import { cn } from '@customafk/react-toolkit/utils';
 
 type Option = {
   label: string;
@@ -55,11 +58,18 @@ export const SelectField: React.FC<Props> = ({
               <SelectValue placeholder={placeholder} />
             </SelectTrigger>
             <SelectContent>
-              {options.map(({ value, label }) => (
-                <SelectItem key={value} disabled={disabledValues.includes(value)} value={value}>
-                  {label}
-                </SelectItem>
-              ))}
+              {!!options.length &&
+                options.map(({ value, label }) => (
+                  <SelectItem key={value} disabled={disabledValues.includes(value)} value={value}>
+                    {label}
+                  </SelectItem>
+                ))}
+              {!options.length && (
+                <div className="px-4 py-6.5 text-center text-sm text-text-positive-weak flex items-center gap-x-2 justify-center">
+                  <PackagePlusIcon strokeWidth={1} />
+                  No options available
+                </div>
+              )}
             </SelectContent>
           </Select>
           <Activity mode={isShowErrorMsg ? 'visible' : 'hidden'}>
@@ -100,11 +110,18 @@ export const SelectField: React.FC<Props> = ({
                 <SelectValue placeholder={placeholder} />
               </SelectTrigger>
               <SelectContent>
-                {options.map(({ value, label }) => (
-                  <SelectItem key={value} disabled={disabledValues.includes(value)} value={value}>
-                    {label}
-                  </SelectItem>
-                ))}
+                {!!options.length &&
+                  options.map(({ value, label }) => (
+                    <SelectItem key={value} disabled={disabledValues.includes(value)} value={value}>
+                      {label}
+                    </SelectItem>
+                  ))}
+                {!options.length && (
+                  <div className="px-4 py-6.5 text-center text-sm text-text-positive-weak flex items-center gap-x-2 justify-center">
+                    <PackagePlusIcon strokeWidth={1} />
+                    No options available
+                  </div>
+                )}
               </SelectContent>
             </Select>
             <Activity mode={isShowErrorMsg ? 'visible' : 'hidden'}>

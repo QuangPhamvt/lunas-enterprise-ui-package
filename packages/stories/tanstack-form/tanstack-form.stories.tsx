@@ -48,7 +48,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   render: () => {
-    const { AppForm, AppField, TanStackForm, TanStackFormGroup, TanStackSwitchGroup, TanStackRadioGroup, TanStackFormFooter, SubscribeButton } =
+    const { AppForm, AppField, TanStackForm, TanStackFormGroup, TanStackSwitchGroup, TanStackRadioGroup, TanStackFormFooter, CancelButton, SubscribeButton } =
       useTanStackForm({
         defaultValues: {
           textField: '',
@@ -225,6 +225,7 @@ export const Default: Story = {
 
         <AppForm>
           <TanStackFormFooter>
+            <CancelButton />
             <SubscribeButton />
           </TanStackFormFooter>
         </AppForm>
