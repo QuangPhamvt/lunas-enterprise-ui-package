@@ -60,10 +60,10 @@ const ButtonBox: React.FC<
   }>
 > = ({ variant, color, size, disabled, isLoading }) => {
   return (
-    <div className="size-40 flex items-center justify-center border border-border rounded-md">
+    <div className="flex size-40 items-center justify-center rounded-md border border-border">
       <Button variant={variant} color={color} size={size} disabled={disabled} isLoading={isLoading}>
         <CircleIcon />
-        Button
+        <p>Button</p>
       </Button>
     </div>
   );
@@ -77,7 +77,7 @@ export const Default: Story = {
     className: 'w-40',
   },
   render: () => (
-    <div className="size-full flex flex-col gap-y-6">
+    <div className="flex size-full flex-col gap-y-6">
       <ButtonCard label="Button Default">
         <ButtonList variant="default" color="primary" />
         <ButtonList variant="default" color="secondary" />

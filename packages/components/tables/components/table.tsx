@@ -20,6 +20,8 @@ import {
 import type { AnyEntity } from '@/types';
 import { useTableContext } from '../hooks/use-table-context';
 import { useTableRowsContext } from '../hooks/use-table-rows-context';
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
+import type { ImperativePanelGroupHandle } from 'react-resizable-panels';
 
 const SELECT_WIDTH = 60;
 const TABLE_HEADER_Z_INDEX = 10;
@@ -123,7 +125,7 @@ const TableHeaderCell: React.FC<
           <div className="flex size-full flex-1 items-center truncate pl-4">{flexRender(header.column.columnDef.header, header.getContext())}</div>
         </div>
       </div>
-      {header.id !== 'select' && (
+      {!['select', 'actions'].includes(header.id) && (
         <TableHeaderCellOption
           isPinned={isPinned}
           isVisible={header.column.getIsVisible()}
@@ -326,11 +328,11 @@ export const TableFooter: React.FC<React.PropsWithChildren> = ({ children }) => 
   );
 };
 
-export const TableContainer: React.FC<React.PropsWithChildren> = () => {
+export const TableContainer: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { table, isEmpty } = useTableContext();
   const { rows, rowsLength } = useTableRowsContext();
 
-  const tableContainerRef = useRef<HTMLDivElement | null>(null);
+  const tableContainerRef = useRef<ImperativePanelGroupHandle | null>(null);
   const tableRef = useRef<HTMLTableElement | null>(null);
 
   /**
@@ -354,50 +356,54 @@ export const TableContainer: React.FC<React.PropsWithChildren> = () => {
   // Important: Keep the row virtualizer in the lowest component possible to avoid unnecessary re-renders.
   const rowVirtualizer = useVirtualizer<HTMLDivElement, HTMLTableRowElement>({
     count: rowsLength,
-    getScrollElement: () => tableContainerRef.current,
+    getScrollElement: () => tableRef.current,
     estimateSize: () => 40, // estimated row height
     measureElement: element => element?.getBoundingClientRect().height,
     overscan: 2, // Render additional rows beyond viewport for smoother scrolling
   });
   return (
-    <div
-      data-slot="table-container"
+    <ResizablePanelGroup
       ref={tableContainerRef}
+      direction="horizontal"
       style={{ direction: table.options.columnResizeDirection }}
-      className="relative flex w-full max-w-full flex-1 flex-col gap-1 overflow-auto border-t border-t-border bg-slate-50 p-0 text-sm"
+      className="relative flex w-full max-w-full flex-1 gap-1 overflow-auto border-t border-t-border bg-slate-50 p-0 text-sm"
     >
-      <table
-        ref={tableRef}
-        data-slot="table"
-        style={{
-          ...columnSizeVars,
-          width: table.getTotalSize(),
-        }}
-        className="grid caption-bottom border-collapse border-spacing-0 flex-col bg-card text-sm tabular-nums [&_tfoot_td]:border-t"
-      >
-        <TableHeader>
-          {table.getHeaderGroups().map(headerGroup => (
-            <TableHeaderRow key={headerGroup.id}>
-              {headerGroup.headers.map(header => (
-                <TableHeaderCell
-                  key={header.id}
-                  header={header}
-                  isPinned={header.column.getIsPinned()}
-                  isResizing={header.column.getIsResizing()}
-                  isAllRowsSelected={table.getIsAllRowsSelected()}
-                />
-              ))}
-            </TableHeaderRow>
-          ))}
-        </TableHeader>
-        <TableBody data-slot="table-body" height={rowVirtualizer.getTotalSize()}>
-          {rowVirtualizer.getVirtualItems().map(virtualRow => {
-            const row = rows[virtualRow.index] as Row<AnyEntity>;
-            return <TableRow key={row.id} data-index={virtualRow.index} row={row} virtualRow={virtualRow} rowVirtualizer={rowVirtualizer} />;
-          })}
-        </TableBody>
-      </table>
-      {isEmpty && <EmptyDisplay />}
-    </div>
+      <ResizablePanel className="overflow-auto">
+        <table
+          ref={tableRef}
+          data-slot="table"
+          style={{
+            ...columnSizeVars,
+            width: table.getTotalSize(),
+          }}
+          className="grid size-full max-w-full caption-bottom border-collapse border-spacing-0 flex-col content-start overflow-auto bg-card text-sm tabular-nums [&_tfoot_td]:border-t"
+        >
+          <TableHeader>
+            {table.getHeaderGroups().map(headerGroup => (
+              <TableHeaderRow key={headerGroup.id}>
+                {headerGroup.headers.map(header => (
+                  <TableHeaderCell
+                    key={header.id}
+                    header={header}
+                    isPinned={header.column.getIsPinned()}
+                    isResizing={header.column.getIsResizing()}
+                    isAllRowsSelected={table.getIsAllRowsSelected()}
+                  />
+                ))}
+              </TableHeaderRow>
+            ))}
+          </TableHeader>
+          <TableBody data-slot="table-body" height={rowVirtualizer.getTotalSize()}>
+            {rowVirtualizer.getVirtualItems().map(virtualRow => {
+              const row = rows[virtualRow.index] as Row<AnyEntity>;
+              return <TableRow key={row.id} data-index={virtualRow.index} row={row} virtualRow={virtualRow} rowVirtualizer={rowVirtualizer} />;
+            })}
+          </TableBody>
+        </table>
+        {isEmpty && <EmptyDisplay />}
+      </ResizablePanel>
+      <ResizableHandle />
+      {children}
+    </ResizablePanelGroup>
   );
 };

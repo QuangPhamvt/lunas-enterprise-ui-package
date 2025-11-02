@@ -26,7 +26,7 @@
   --secondary-border-subtle: oklch(0.87 0.01 258); /* --color-gray-300 */
 
   --muted: oklch(0.55 0.01 286); /* --color-zinc-500 */
-  --muted-muted: oklch(0.97 0 286); /* --color-zinc-100 */
+  --muted-muted: oklch(0.97 0.00 286); /* --color-zinc-100 */
   --muted-weak: oklch(0.87 0.01 286); /* --color-zinc-300 */
   --muted-strong: oklch(0.37 0.01 286); /* --color-zinc-700 */
   --muted-intense: oklch(0.21 0.01 286); /* --color-zinc-900 */

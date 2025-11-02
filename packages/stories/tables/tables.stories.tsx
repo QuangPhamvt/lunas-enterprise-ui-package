@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { TableContainer, TableProvider, TableTooltip, TableTooltipActions, TableTooltipFilter, TableWrapper } from '@/components/tables';
+import { TableContainer, TableFilter, TableProvider, TableTooltip, TableTooltipActions, TableTooltipFilter, TableWrapper } from '@/components/tables';
 import { MockDataColumns, MockDataTables, type TMockDataTable } from './mock-data';
 
 const meta: Meta<typeof TableProvider<TMockDataTable>> = {
@@ -29,7 +29,9 @@ export const Default: Story = {
               <TableTooltipFilter />
               <TableTooltipActions />
             </TableTooltip>
-            <TableContainer />
+            <TableContainer>
+              <TableFilter />
+            </TableContainer>
           </TableWrapper>
         </TableProvider>
       </div>
