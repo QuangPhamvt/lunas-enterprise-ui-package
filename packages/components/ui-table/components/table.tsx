@@ -1,5 +1,5 @@
 'use client';
-import { Activity, memo, useCallback, useMemo, useRef } from 'react';
+import { Activity, memo, useCallback, useEffect, useMemo, useRef } from 'react';
 
 import { type Cell, type Column, type ColumnPinningPosition, flexRender, type Header, type Row } from '@tanstack/react-table';
 import { useVirtualizer, type VirtualItem, type Virtualizer } from '@tanstack/react-virtual';
@@ -7,6 +7,7 @@ import { BoxIcon, EllipsisVerticalIcon, EyeOffIcon, MoveLeftIcon, MoveRightIcon,
 
 import { cn } from '@customafk/react-toolkit/utils';
 
+import type { ImperativePanelGroupHandle } from 'react-resizable-panels';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
   DropdownMenu,
@@ -17,14 +18,13 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import type { AnyEntity } from '@/types';
-import { useTableContext } from '../hooks/use-table-context';
-import { useTableRowsContext } from '../hooks/use-table-rows-context';
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
-import type { ImperativePanelGroupHandle } from 'react-resizable-panels';
+import type { AnyEntity } from '@/types';
+import { useUITableContext } from '../hooks/use-table-context';
+import { useUITableRowsContext } from '../hooks/use-table-rows-context';
 
 const SELECT_WIDTH = 60;
-const TABLE_HEADER_Z_INDEX = 10;
+const TABLE_HEADER_Z_INDEX = 20;
 const PINNED_COLUMN_Z_INDEX = 20;
 
 //These are the important styles to make sticky column pinning work!
@@ -40,7 +40,7 @@ const getCommonPinningStyles = (column: Column<unknown>): React.CSSProperties =>
   };
 };
 
-export const TableWrapper: React.FC<React.PropsWithChildren<React.ComponentProps<'div'>>> = ({ className, children, ...props }) => {
+export const UITableWrapper: React.FC<React.PropsWithChildren<React.ComponentProps<'div'>>> = ({ className, children, ...props }) => {
   return (
     <div data-slot="table-wrapper" className="relative m-0 flex size-full flex-col flex-nowrap items-start justify-start gap-2 py-2.5 text-sm" {...props}>
       {children}
@@ -48,13 +48,13 @@ export const TableWrapper: React.FC<React.PropsWithChildren<React.ComponentProps
   );
 };
 
-const TableHeader: React.FC<React.PropsWithChildren> = memo(({ children }) => {
+const UITableHeader: React.FC<React.PropsWithChildren> = memo(({ children }) => {
   return (
     <thead
       data-slot="table-header"
       style={{ zIndex: TABLE_HEADER_Z_INDEX }}
       className={cn(
-        'sticky top-0 grid bg-card text-sm text-text-positive',
+        'sticky top-0 grid bg-muted-bg-subtle text-sm text-text-positive',
         '[&_tr:not(:last-child)_td]:border-b',
         '[&_th]:flex',
         '[&_th]:h-10',
@@ -64,33 +64,33 @@ const TableHeader: React.FC<React.PropsWithChildren> = memo(({ children }) => {
         '[&_th]:border-border',
         '[&_th]:font-normal',
         '[&_th]:border-r',
-        '[&_th]:border-b',
         '[&_th]:border-b-border',
         '[&_th]:text-left',
         '[&_th]:align-middle',
         '[&_th]:last:border-r-0',
         '[&_th]:first:border-l-0',
         '[&_th]:data-[pinned=right]:border-l',
+        '[&_th]:data-[pinned=right]:border-r-0',
         '[&_th]:data-[pinned=left]:border-r',
-        '[&_tr_th:not([data-pinned=false])]:bg-card'
+        '[&_tr_th:not([data-pinned=false])]:bg-muted-bg-subtle'
       )}
     >
       {children}
     </thead>
   );
 });
-TableHeader.displayName = 'TableHeader';
+UITableHeader.displayName = 'TableHeader';
 
-const TableHeaderRow: React.FC<React.PropsWithChildren> = memo(({ children }) => {
+const UITableHeaderRow: React.FC<React.PropsWithChildren> = memo(({ children }) => {
   return (
-    <tr data-slot="table-header-row" className="flex w-full border-none">
+    <tr data-slot="table-header-row" className="flex w-full border-border border-b shadow">
       {children}
     </tr>
   );
 });
-TableHeaderRow.displayName = 'TableHeaderRow';
+UITableHeaderRow.displayName = 'TableHeaderRow';
 
-const TableHeaderCell: React.FC<
+const UITableHeaderCell: React.FC<
   React.PropsWithChildren<
     React.ComponentProps<'th'> & {
       header: Header<unknown, unknown>;
@@ -119,14 +119,14 @@ const TableHeaderCell: React.FC<
     );
   }
   return (
-    <th data-slot="table-header-cell" data-pinned={isPinned} style={{ ...style, width }} colSpan={header.colSpan} className="group relative" {...props}>
+    <th data-slot="table-header-cell" data-pinned={isPinned} style={{ ...style, width }} colSpan={header.colSpan} className={cn('group relative')} {...props}>
       <div className="absolute inset-0 gap-1 truncate">
         <div className="flex h-full flex-1 cursor-pointer select-none items-center justify-between">
           <div className="flex size-full flex-1 items-center truncate pl-4">{flexRender(header.column.columnDef.header, header.getContext())}</div>
         </div>
       </div>
       {!['select', 'actions'].includes(header.id) && (
-        <TableHeaderCellOption
+        <UITableHeaderCellOption
           isPinned={isPinned}
           isVisible={header.column.getIsVisible()}
           className="invisible absolute right-2 z-10 group-hover:visible"
@@ -148,7 +148,7 @@ const TableHeaderCell: React.FC<
   );
 };
 
-const TableHeaderCellOption: React.FC<{
+const UITableHeaderCellOption: React.FC<{
   isPinned: ColumnPinningPosition;
   className?: string;
   isVisible?: boolean;
@@ -218,7 +218,7 @@ const TableHeaderCellOption: React.FC<{
   );
 };
 
-const TableBody: React.FC<React.PropsWithChildren<React.ComponentProps<'tbody'> & { height: number }>> = ({ height, children, ...props }) => {
+const UITableBody: React.FC<React.PropsWithChildren<React.ComponentProps<'tbody'> & { height: number }>> = ({ height, children, ...props }) => {
   return (
     <tbody
       data-slot="table-body"
@@ -246,14 +246,14 @@ const TableBody: React.FC<React.PropsWithChildren<React.ComponentProps<'tbody'> 
   );
 };
 
-const TableRow: React.FC<
+const UITableRow: React.FC<
   React.ComponentProps<'tr'> & {
     row: Row<unknown>;
     virtualRow: VirtualItem;
     rowVirtualizer: Virtualizer<HTMLDivElement, HTMLTableRowElement>;
   }
 > = memo(({ children, row, virtualRow, rowVirtualizer, className, ...props }) => {
-  const { columnPinning: _ } = useTableContext();
+  const { columnPinning: _ } = useUITableContext();
   return (
     <tr
       data-slot="table-row"
@@ -266,24 +266,27 @@ const TableRow: React.FC<
       {...props}
     >
       {row.getVisibleCells().map(cell => {
-        return <TableCell key={cell.id} cell={cell} className="group-hover:bg-muted-bg-subtle!" />;
+        return <UITableCell key={cell.id} cell={cell} className="group-hover:bg-muted-bg-subtle!" />;
       })}
     </tr>
   );
 });
-TableRow.displayName = 'TableRow';
+UITableRow.displayName = 'TableRow';
 
-const TableCell: React.FC<
+const UITableCell: React.FC<
   React.PropsWithChildren<
     React.ComponentProps<'td'> & {
       cell: Cell<unknown, unknown>;
     }
   >
 > = memo(({ cell, children, className, ...props }) => {
-  const { rowSelection: _ } = useTableContext();
+  const { rowSelection: _ } = useUITableContext();
   const isPinned = cell.column.getIsPinned();
   const style = getCommonPinningStyles(cell.column);
   const width = `calc(var(--col-${cell.column.id}-size) * 1px)`;
+  if (isPinned) {
+    console.log('Pinned Cell Rendered:', cell.column.getPinnedIndex());
+  }
 
   if (cell.column.id === 'select') {
     return (
@@ -302,12 +305,18 @@ const TableCell: React.FC<
   }
 
   return (
-    <td data-slot="table-cell" data-pinned={isPinned} style={{ ...style, width }} className={className} {...props}>
+    <td
+      data-slot="table-cell"
+      data-pinned={isPinned}
+      style={{ ...style, width }}
+      className={cn(isPinned && cell.column.getPinnedIndex() === 0 && 'shadow!', className)}
+      {...props}
+    >
       {flexRender(cell.column.columnDef.cell, cell.getContext())}
     </td>
   );
 });
-TableCell.displayName = 'TableCell';
+UITableCell.displayName = 'TableCell';
 
 const EmptyDisplay: React.FC = () => {
   return (
@@ -320,7 +329,7 @@ const EmptyDisplay: React.FC = () => {
   );
 };
 
-export const TableFooter: React.FC<React.PropsWithChildren> = ({ children }) => {
+export const UITableFooter: React.FC<React.PropsWithChildren> = ({ children }) => {
   return (
     <tfoot data-slot="table-footer" className="flex w-full justify-center border-border-weak border-t py-2 font-medium [&>tr]:last:border-b-0">
       {children}
@@ -328,9 +337,9 @@ export const TableFooter: React.FC<React.PropsWithChildren> = ({ children }) => 
   );
 };
 
-export const TableContainer: React.FC<React.PropsWithChildren> = ({ children }) => {
-  const { table, isEmpty } = useTableContext();
-  const { rows, rowsLength } = useTableRowsContext();
+export const UITableContainer: React.FC<React.PropsWithChildren> = ({ children }) => {
+  const { table, isEmpty, isFetching, totalRows, fetchMoreData } = useUITableContext();
+  const { rows, rowsLength } = useUITableRowsContext();
 
   const tableContainerRef = useRef<ImperativePanelGroupHandle | null>(null);
   const tableRef = useRef<HTMLTableElement | null>(null);
@@ -361,6 +370,25 @@ export const TableContainer: React.FC<React.PropsWithChildren> = ({ children }) 
     measureElement: element => element?.getBoundingClientRect().height,
     overscan: 2, // Render additional rows beyond viewport for smoother scrolling
   });
+
+  //called on scroll and possibly on mount to fetch more data as the user scrolls and reaches bottom of table
+  const fetchMoreOnButtonReached = useCallback(
+    async (containerRefEl?: HTMLTableElement | null) => {
+      if (!containerRefEl) return null;
+      const { scrollHeight, scrollTop, clientHeight } = containerRefEl;
+      //once the user has scrolled within 500px of the bottom of the table, fetch more data if we can
+      if (scrollHeight - scrollTop - clientHeight < 500 && !isFetching && totalRows && rowsLength < totalRows) {
+        await fetchMoreData?.();
+      }
+    },
+    [isFetching, rowsLength, totalRows, fetchMoreData]
+  );
+
+  //a check on mount and after a fetch to see if the table is already scrolled to the bottom and immediately needs to fetch more data
+  useEffect(() => {
+    fetchMoreOnButtonReached(tableRef.current);
+  }, [fetchMoreOnButtonReached]);
+
   return (
     <ResizablePanelGroup
       ref={tableContainerRef}
@@ -377,12 +405,13 @@ export const TableContainer: React.FC<React.PropsWithChildren> = ({ children }) 
             width: table.getTotalSize(),
           }}
           className="grid size-full max-w-full caption-bottom border-collapse border-spacing-0 flex-col content-start overflow-auto bg-card text-sm tabular-nums [&_tfoot_td]:border-t"
+          onScroll={e => fetchMoreOnButtonReached(e.currentTarget)}
         >
-          <TableHeader>
+          <UITableHeader>
             {table.getHeaderGroups().map(headerGroup => (
-              <TableHeaderRow key={headerGroup.id}>
+              <UITableHeaderRow key={headerGroup.id}>
                 {headerGroup.headers.map(header => (
-                  <TableHeaderCell
+                  <UITableHeaderCell
                     key={header.id}
                     header={header}
                     isPinned={header.column.getIsPinned()}
@@ -390,15 +419,15 @@ export const TableContainer: React.FC<React.PropsWithChildren> = ({ children }) 
                     isAllRowsSelected={table.getIsAllRowsSelected()}
                   />
                 ))}
-              </TableHeaderRow>
+              </UITableHeaderRow>
             ))}
-          </TableHeader>
-          <TableBody data-slot="table-body" height={rowVirtualizer.getTotalSize()}>
+          </UITableHeader>
+          <UITableBody data-slot="table-body" height={rowVirtualizer.getTotalSize()}>
             {rowVirtualizer.getVirtualItems().map(virtualRow => {
               const row = rows[virtualRow.index] as Row<AnyEntity>;
-              return <TableRow key={row.id} data-index={virtualRow.index} row={row} virtualRow={virtualRow} rowVirtualizer={rowVirtualizer} />;
+              return <UITableRow key={row.id} data-index={virtualRow.index} row={row} virtualRow={virtualRow} rowVirtualizer={rowVirtualizer} />;
             })}
-          </TableBody>
+          </UITableBody>
         </table>
         {isEmpty && <EmptyDisplay />}
       </ResizablePanel>

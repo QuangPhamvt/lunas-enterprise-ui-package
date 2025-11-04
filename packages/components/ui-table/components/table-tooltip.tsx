@@ -1,12 +1,12 @@
 import { ArrowRightIcon, CirclePlus, DownloadIcon, RefreshCwIcon, SearchIcon } from 'lucide-react';
 
 import { Input } from '@/components/ui/input';
-import { useTableContext } from '../hooks/use-table-context';
+import { useUITableContext } from '../hooks/use-table-context';
 
-export const TableTooltipFilter: React.FC<React.ComponentProps<typeof Input>> = ({ className: _, ...props }) => {
+export const UITableTooltipFilter: React.FC<React.ComponentProps<typeof Input>> = ({ className: _, ...props }) => {
   return (
     <div className="relative">
-      <Input {...props} type="search" placeholder="Search records..." className="ps-9 pe-9" />
+      <Input {...props} size="lg" type="search" placeholder="Search records..." className="ps-9 pe-9" />
       <div className="pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 text-text-positive-weak peer-disabled:opacity-50">
         <SearchIcon size={16} />
       </div>
@@ -29,7 +29,7 @@ const ActionButton: React.FC<React.PropsWithChildren> = ({ children }) => {
   );
 };
 
-export const TableTooltipActions: React.FC = () => {
+export const UITableTooltipActions: React.FC = () => {
   return (
     <div className="flex [&>*:not(:first-child)]:rounded-l-none [&>*:not(:first-child)]:border-l-0 [&>*:not(:last-child)]:rounded-r-none">
       <ActionButton>
@@ -45,8 +45,8 @@ export const TableTooltipActions: React.FC = () => {
   );
 };
 
-export const TableTooltip: React.FC<React.PropsWithChildren> = ({ children }) => {
-  const { title } = useTableContext();
+export const UITableTooltip: React.FC<React.PropsWithChildren> = ({ children }) => {
+  const { title } = useUITableContext();
   return (
     <div data-slot="table-tooltip" className="relative m-0 flex w-full flex-0 flex-col flex-wrap items-start space-y-2 p-0 px-2 text-sm">
       <h3 className="font-semibold text-base text-text-positive">{title}</h3>
@@ -54,4 +54,4 @@ export const TableTooltip: React.FC<React.PropsWithChildren> = ({ children }) =>
     </div>
   );
 };
-TableTooltip.displayName = 'TableTooltip';
+UITableTooltip.displayName = 'TableTooltip';
