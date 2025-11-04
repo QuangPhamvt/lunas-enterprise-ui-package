@@ -1,7 +1,8 @@
 'use client';
-import { cn } from '@customafk/react-toolkit/utils';
 
 import { XIcon } from 'lucide-react';
+
+import { cn } from '@customafk/react-toolkit/utils';
 
 import { Dialog as SheetPrimitive } from 'radix-ui';
 
@@ -53,7 +54,7 @@ function SheetContent({
         data-slot="sheet-content"
         className={cn(
           'bg-background',
-          'shadow-dropdown border-border-weak fixed z-50 flex flex-col gap-4 transition ease-in-out',
+          'fixed z-50 flex flex-col gap-4 border-border-weak shadow-dropdown transition ease-in-out',
 
           'data-[state=open]:animate-in',
           'data-[state=open]:duration-500',
@@ -82,7 +83,7 @@ function SheetContent({
         {children}
         <SheetPrimitive.Close
           className={cn(
-            'ring-offset-background cursor-pointer p-2',
+            'cursor-pointer p-2 ring-offset-background',
             'absolute top-2 right-2 rounded-full opacity-70 transition-opacity',
             'data-[state=open]:bg-secondary',
             'disabled:pointer-events-none',
@@ -110,11 +111,11 @@ function SheetFooter({ className, ...props }: React.ComponentProps<'div'>) {
 }
 
 function SheetTitle({ className, ...props }: React.ComponentProps<typeof SheetPrimitive.Title>) {
-  return <SheetPrimitive.Title data-slot="sheet-title" className={cn('text-text-positive-strong font-semibold', className)} {...props} />;
+  return <SheetPrimitive.Title data-slot="sheet-title" className={cn('font-semibold text-text-positive-strong', className)} {...props} />;
 }
 
 function SheetDescription({ className, ...props }: React.ComponentProps<typeof SheetPrimitive.Description>) {
-  return <SheetPrimitive.Description data-slot="sheet-description" className={cn('text-text-positive-weak text-sm', className)} {...props} />;
+  return <SheetPrimitive.Description data-slot="sheet-description" className={cn('text-sm text-text-positive-weak', className)} {...props} />;
 }
 
 export { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger };

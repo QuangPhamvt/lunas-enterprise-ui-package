@@ -11,11 +11,14 @@ const INITIAL_STATE: InitialTableState = {
   columnPinning: { right: ['actions'] },
 };
 
-export const TableProvider = <TData extends RowData>({
+export const UITableProvider = <TData extends RowData>({
   title,
+  isFetching = false,
   data,
   columns,
-  isFetching = false,
+  totalRows,
+
+  fetchMoreData,
   children,
 }: React.PropsWithChildren<TableProviderProps<TData>>) => {
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
@@ -67,11 +70,13 @@ export const TableProvider = <TData extends RowData>({
       isEmpty,
       isFetching,
 
-      rows,
+      totalRows,
 
       rowSelection: table.getState().rowSelection,
 
       columnPinning: table.getState().columnPinning,
+
+      fetchMoreData,
     }),
     [
       table,
@@ -79,6 +84,10 @@ export const TableProvider = <TData extends RowData>({
 
       isEmpty,
       isFetching,
+
+      totalRows,
+
+      fetchMoreData,
 
       table.getState().columnVisibility,
 

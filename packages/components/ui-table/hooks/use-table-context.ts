@@ -6,7 +6,7 @@ import type { TTableContext } from '../types';
 
 export const TableContext = createContext<TTableContext<RowData> | null>(null);
 
-export const useTableContext = <TData extends RowData>() => {
+export const useUITableContext = <TData extends RowData>() => {
   const context = use(TableContext) as TTableContext<TData>;
   if (!context) {
     throw new Error('useTableContext must be used within a TableProvider');

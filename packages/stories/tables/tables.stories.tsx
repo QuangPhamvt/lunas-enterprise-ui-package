@@ -1,13 +1,21 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { TableContainer, TableFilter, TableProvider, TableTooltip, TableTooltipActions, TableTooltipFilter, TableWrapper } from '@/components/tables';
+import {
+  UITableContainer,
+  UITableFilter,
+  UITableProvider,
+  UITableTooltip,
+  UITableTooltipActions,
+  UITableTooltipFilter,
+  UITableWrapper,
+} from '@/components/ui-table';
 import { MockDataColumns, MockDataTables, type TMockDataTable } from './mock-data';
 
-const meta: Meta<typeof TableProvider<TMockDataTable>> = {
+const meta: Meta<typeof UITableProvider<TMockDataTable>> = {
   tags: ['autodocs'],
-  title: 'Features/Tables',
-  component: TableProvider,
+  title: 'Features/UI Tables',
+  component: UITableProvider,
   subcomponents: {
-    TableTooltip,
+    UITableTooltip,
   },
 };
 
@@ -19,43 +27,25 @@ export const Default: Story = {
     title: 'Mock Data Table',
     columns: MockDataColumns,
     data: MockDataTables,
+    totalRows: MockDataTables.length + 2,
+    fetchMoreData: async () => {
+      console.log('Fetch more data...');
+    },
   },
   render: ({ children, ...args }) => {
     return (
       <div className="h-[calc(100vh-4rem)] w-full">
-        <TableProvider {...args}>
-          <TableWrapper>
-            <TableTooltip>
-              <TableTooltipFilter />
-              <TableTooltipActions />
-            </TableTooltip>
-            <TableContainer>
-              <TableFilter />
-            </TableContainer>
-          </TableWrapper>
-        </TableProvider>
-      </div>
-    );
-  },
-};
-
-export const EmptyData: Story = {
-  args: {
-    ...Default.args,
-    data: [],
-  },
-  render: ({ children, ...args }) => {
-    return (
-      <div className="h-[calc(100vh-4rem)] w-full">
-        <TableProvider {...args}>
-          <TableWrapper>
-            <TableTooltip>
-              <TableTooltipFilter />
-              <TableTooltipActions />
-            </TableTooltip>
-            <TableContainer />
-          </TableWrapper>
-        </TableProvider>
+        <UITableProvider {...args}>
+          <UITableWrapper>
+            <UITableTooltip>
+              <UITableTooltipFilter />
+              <UITableTooltipActions />
+            </UITableTooltip>
+            <UITableContainer>
+              <UITableFilter />
+            </UITableContainer>
+          </UITableWrapper>
+        </UITableProvider>
       </div>
     );
   },

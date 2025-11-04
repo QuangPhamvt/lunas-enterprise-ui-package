@@ -8,7 +8,7 @@ export type TTableRowsContext<TData extends RowData> = {
 };
 
 export const TableRowsContext = createContext<TTableRowsContext<RowData> | null>(null);
-export const useTableRowsContext = <TData extends RowData>() => {
+export const useUITableRowsContext = <TData extends RowData>() => {
   const ctx = use(TableRowsContext) as TTableRowsContext<TData>;
   if (!ctx) {
     throw new Error('useTableRowContext must be used within a TableRowProvider');
