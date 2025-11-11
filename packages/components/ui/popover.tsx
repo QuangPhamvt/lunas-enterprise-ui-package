@@ -1,4 +1,5 @@
 'use client';
+
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { Popover as PopoverPrimitive } from 'radix-ui';
@@ -23,7 +24,7 @@ function PopoverContent({ className, align = 'start', sideOffset = 4, ...props }
           'text-text-positive',
           'z-50 w-72',
           'origin-(--radix-popover-content-transform-origin)',
-          'shadow-dropdown rounded-md p-4 outline-none',
+          'rounded-md p-4 shadow-dropdown outline-none',
           'data-[state=open]:animate-in',
           'data-[state=open]:fade-in-0',
           'data-[state=open]:zoom-in-95',

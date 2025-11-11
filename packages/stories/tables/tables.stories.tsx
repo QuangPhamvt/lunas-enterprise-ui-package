@@ -7,7 +7,7 @@ import {
   UITableTooltipActions,
   UITableTooltipFilter,
   UITableWrapper,
-} from '@/components/ui-table';
+} from '@/components/features/tables';
 import { MockDataColumns, MockDataTables, type TMockDataTable } from './mock-data';
 
 const meta: Meta<typeof UITableProvider<TMockDataTable>> = {
