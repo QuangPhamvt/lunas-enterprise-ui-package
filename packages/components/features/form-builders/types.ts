@@ -73,7 +73,6 @@ export type FormBuilderField =
   | FormBuilderEmptyField;
 
 export type FormBuilderValue = {
-  id: string;
   name: string;
   form: FormBuilderField[];
 };

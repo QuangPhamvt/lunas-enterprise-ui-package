@@ -1,6 +1,6 @@
-import { type ChangeEventHandler, Fragment, useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
-import { BoltIcon, BoxIcon, CopyIcon, GripVerticalIcon, PlusIcon, TrashIcon, XIcon } from 'lucide-react';
+import { BoltIcon, BoxIcon, CopyIcon, GripVerticalIcon, PlusIcon, TrashIcon } from 'lucide-react';
 
 import { cn } from '@customafk/react-toolkit/utils';
 
@@ -9,7 +9,6 @@ import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-
 import { CSS } from '@dnd-kit/utilities';
 import { createPortal } from 'react-dom';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -17,7 +16,11 @@ import { useFormBuilderValueContext } from './providers';
 import type { FIELD_ID, FormBuilderField } from '../types';
 import { ButtonGroup } from '@/components/ui/button-group';
 
-const FormBuilderTextField: React.FC = () => {
+const FormBuilderTextField: React.FC<{
+  fieldId: string;
+}> = ({ fieldId }) => {
+  const { onFieldDelete } = useFormBuilderValueContext();
+
   const [open, setOpen] = useState<boolean>(false);
   const [settingOpen, setSettingOpen] = useState<boolean>(false);
   return (
@@ -67,7 +70,7 @@ const FormBuilderTextField: React.FC = () => {
               </Tabs>
             </PopoverContent>
           </Popover>
-          <Button size="icon" variant="ghost" color="muted">
+          <Button size="icon" variant="ghost" color="muted" onClick={() => onFieldDelete(fieldId)}>
             <TrashIcon />
           </Button>
         </ButtonGroup>
@@ -104,44 +107,11 @@ const FormBuilderRadioGroupField: React.FC = () => {
   return <div>Radio Group Field</div>;
 };
 
-const FormBuilderCreateFormDialog: React.FC<
-  React.PropsWithChildren<{
-    onCreate?: (formName: string) => void;
-  }>
-> = ({ onCreate }) => {
-  const [open, setOpen] = useState<boolean>(false);
-  const [name, setName] = useState<string>('');
-  const handleCreate = useCallback<ChangeEventHandler<HTMLInputElement>>(e => {
-    setName(e.target.value);
-  }, []);
-  const handleSubmit = useCallback(() => {
-    onCreate?.(name);
-    setName('');
-    setOpen(false);
-  }, [name, onCreate]);
-  return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <button className="ml-2 flex size-6 cursor-pointer items-center justify-center rounded-full hover:bg-muted-bg-subtle focus:bg-card">
-          <PlusIcon size={16} className="text-text-positive" />
-        </button>
-      </PopoverTrigger>
-      <PopoverContent className="flex flex-col items-end space-y-2">
-        <Input placeholder="New Form Name" value={name} onChange={handleCreate} />
-        <Button className="mt-2 w-28" onClick={handleSubmit}>
-          Create
-        </Button>
-      </PopoverContent>
-    </Popover>
-  );
-};
-
 const FormBuilderFormField: React.FC<
   React.PropsWithChildren<{
     id: string;
-    onDelete?: () => void;
   }>
-> = ({ id, onDelete, children }) => {
+> = ({ id, children }) => {
   const { attributes, listeners, transform, transition, isDragging, setNodeRef, setActivatorNodeRef } = useSortable({
     id,
     data: {
@@ -173,10 +143,9 @@ const FormBuilderFormField: React.FC<
 
 const FormBuilderFormFieldDroppable: React.FC<
   React.PropsWithChildren<{
-    formId: string;
     fieldId: string;
   }>
-> = ({ formId, fieldId, children }) => {
+> = ({ fieldId, children }) => {
   const { onFieldUpdate } = useFormBuilderValueContext();
 
   const {
@@ -251,9 +220,9 @@ const FormBuilderFormFieldDroppable: React.FC<
           type: 'empty',
         },
       };
-      onFieldUpdate(formId, fieldId, newData[fieldVariant]);
+      onFieldUpdate(fieldId, newData[fieldVariant]);
     },
-    [_isOver, formId, fieldId, onFieldUpdate]
+    [_isOver, fieldId, onFieldUpdate]
   );
   const handleDragCancel = useCallback(() => {}, []);
 
@@ -271,21 +240,13 @@ const FormBuilderFormFieldDroppable: React.FC<
   );
 };
 
-const FormBuilderFormContent: React.FC<
-  React.PropsWithChildren<{
-    formId: string;
-  }>
-> = ({ formId }) => {
-  const { formBuilders, onFieldCreate, onFieldReorder, onFieldDelete } = useFormBuilderValueContext();
+const FormBuilderFormContent: React.FC<React.PropsWithChildren> = () => {
+  const { formBuilder, onFieldCreate, onFieldReorder } = useFormBuilderValueContext();
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
 
-  const currentForm = useMemo(() => {
-    return formBuilders.find(fb => fb.id === formId);
-  }, [formBuilders, formId]);
-
-  const FieldMapper = useMemo<Record<FIELD_ID, React.ReactNode>>(() => {
+  const FieldMapper = useCallback<(fieldId: string) => Record<FIELD_ID, React.ReactNode>>(fieldId => {
     return {
-      'text-field': <FormBuilderTextField />,
+      'text-field': <FormBuilderTextField fieldId={fieldId} />,
       'textarea-field': <FormBuiderTextAreaField />,
       'number-field': <FormBuilderNumberField />,
       'select-field': <FormBuilderSelectField />,
@@ -311,9 +272,9 @@ const FormBuilderFormContent: React.FC<
       setActiveId(null);
       const { active, over } = event;
       if (!over || !over.data.current?.variant?.includes('FORM_FIELD') || !active.data.current?.variant?.includes('FORM_FIELD')) return;
-      onFieldReorder(formId, active.id as string, over.id as string);
+      onFieldReorder(active.id as string, over.id as string);
     },
-    [formId, onFieldReorder]
+    [onFieldReorder]
   );
   const handleDragCancel = useCallback((event: DragEndEvent) => {
     void event;
@@ -328,19 +289,11 @@ const FormBuilderFormContent: React.FC<
 
   return (
     <div className="flex w-full flex-col space-y-4">
-      <SortableContext items={currentForm?.form.map(field => field.id) ?? []} strategy={verticalListSortingStrategy}>
-        {currentForm?.form.map(field => {
+      <SortableContext items={formBuilder.form.map(field => field.id) ?? []} strategy={verticalListSortingStrategy}>
+        {formBuilder.form.map(field => {
           return (
-            <FormBuilderFormField
-              key={field.id}
-              id={field.id}
-              onDelete={() => {
-                onFieldDelete(formId, field.id);
-              }}
-            >
-              <FormBuilderFormFieldDroppable formId={currentForm.id} fieldId={field.id}>
-                {FieldMapper[field.type]}
-              </FormBuilderFormFieldDroppable>
+            <FormBuilderFormField key={field.id} id={field.id}>
+              <FormBuilderFormFieldDroppable fieldId={field.id}>{FieldMapper(field.id)[field.type]}</FormBuilderFormFieldDroppable>
             </FormBuilderFormField>
           );
         })}
@@ -359,7 +312,7 @@ const FormBuilderFormContent: React.FC<
         )}
 
       <div className="flex w-full items-center justify-center">
-        <Button variant="outline" color="muted" className="size-10 rounded-full" onClick={() => onFieldCreate(formId)}>
+        <Button variant="outline" color="muted" className="size-10 rounded-full" onClick={() => onFieldCreate()}>
           <PlusIcon />
         </Button>
       </div>
@@ -368,54 +321,9 @@ const FormBuilderFormContent: React.FC<
 };
 
 export const FormBuilderPage: React.FC<React.PropsWithChildren> = () => {
-  const { formBuilders, onCreateNewFormBuilder, onDeleteFormBuilder } = useFormBuilderValueContext();
-  const [activeTab, setActiveTab] = useState<string | undefined>(undefined);
-
   return (
     <div className="flex flex-col">
-      <Tabs defaultValue={formBuilders?.[0]?.id ?? undefined} value={activeTab}>
-        <TabsList className="space-x-2">
-          {formBuilders.map(page => (
-            <Fragment key={page.id}>
-              <TabsTrigger
-                value={page.id}
-                className="min-w-32 justify-between"
-                onClick={e => {
-                  setActiveTab(page.id);
-                  e.preventDefault();
-                  e.stopPropagation();
-                }}
-              >
-                <div>{page.name}</div>
-                <button
-                  className="z-10"
-                  onClick={e => {
-                    if (formBuilders.length === 1) {
-                      setActiveTab(undefined);
-                    } else if (activeTab === page.id) {
-                      const currentIndex = formBuilders.findIndex(fb => fb.id === page.id);
-                      const newIndex = currentIndex === 0 ? 1 : currentIndex - 1;
-                      setActiveTab(formBuilders[newIndex].id);
-                    }
-                    onDeleteFormBuilder(page.id);
-                    e.stopPropagation();
-                    e.preventDefault();
-                  }}
-                >
-                  <XIcon />
-                </button>
-              </TabsTrigger>
-              <Separator orientation="vertical" className="max-h-4 min-w-0.5" />
-            </Fragment>
-          ))}
-          <FormBuilderCreateFormDialog onCreate={onCreateNewFormBuilder} />
-        </TabsList>
-        {formBuilders.map(page => (
-          <TabsContent key={page.id} value={page.id} className="mt-4">
-            <FormBuilderFormContent formId={page.id} />
-          </TabsContent>
-        ))}
-      </Tabs>
+      <FormBuilderFormContent />
     </div>
   );
 };
