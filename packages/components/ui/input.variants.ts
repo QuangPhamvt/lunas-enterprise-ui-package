@@ -15,7 +15,7 @@ export const inputVariants = cva(
       size: {
         xs: 'px-2 py-1 text-xs leading-4',
         sm: 'px-2.5 py-1.5 text-xs leading-4',
-        md: 'px-2.5 py-1.5 text-sm leading-5',
+        md: 'px-2.5 py-2 text-sm leading-5',
         lg: 'px-3 py-2 text-sm leading-5',
         xl: 'px-3 py-2 text-base leading-6',
       },

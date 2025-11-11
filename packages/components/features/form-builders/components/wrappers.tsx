@@ -17,6 +17,7 @@ import { createPortal } from 'react-dom';
 import type { FIELD_ID } from '../types';
 import { FormBuilderPage } from './pages';
 import { useFormBuilderFieldContext } from './providers';
+import { Separator } from '@/components/ui/separator';
 
 const FormBuilderFieldDraggable: React.FC<
   React.PropsWithChildren<{
@@ -113,14 +114,18 @@ export const FormBuilderSidebar: React.FC<React.PropsWithChildren> = ({ children
 
   return (
     <div data-slot="form-builder-sidebar" className="min-w-64 border-border border-r p-4">
-      <div className="flex flex-col gap-y-1">
-        <SortableContext items={sortableItems} strategy={verticalListSortingStrategy}>
-          {fields.map(field => (
-            <FormBuilderFieldDraggable key={field.id} id={field.id}>
-              {Field[field.id]}
-            </FormBuilderFieldDraggable>
-          ))}
-        </SortableContext>
+      <div className="flex flex-col gap-y-2 overflow-y-auto">
+        <p className='text-sm text-text-positive px-2'>Fields</p>
+        <Separator />
+        <div className='flex flex-col space-y-1'>
+          <SortableContext items={sortableItems} strategy={verticalListSortingStrategy}>
+            {fields.map(field => (
+              <FormBuilderFieldDraggable key={field.id} id={field.id}>
+                {Field[field.id]}
+              </FormBuilderFieldDraggable>
+            ))}
+          </SortableContext>
+        </div>
       </div>
 
       {activeId &&
