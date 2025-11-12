@@ -4,7 +4,7 @@ import { FormBuilderProvider } from './providers';
 
 export const FormBuilder: React.FC<
   React.PropsWithChildren<{
-    initialData?: FormBuilderValue[];
+    initialData?: FormBuilderValue;
   }>
 > = ({ initialData, children }) => {
   return (
