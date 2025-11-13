@@ -3,15 +3,17 @@ import { useCallback, useReducer } from 'react';
 import { arrayMove } from '@dnd-kit/sortable';
 import { nanoid } from 'nanoid';
 import type { FormBuilderEmptyField, FormBuilderField, FormBuilderValue } from '../types';
+import { toCamelCase } from '../utils';
 
 type Action =
   | {
       type: 'FIELD_CREATE';
+      name: string;
     }
   | {
       type: 'FIELD_UPDATE';
       fieldId: string;
-      field: FormBuilderField;
+      field: Partial<FormBuilderField>;
     }
   | {
       type: 'FIELD_REORDER';
@@ -29,6 +31,8 @@ const reducer = (state: FormBuilderValue, action: Action): FormBuilderValue => {
       // const currentFormId = action.id;
       const newField: FormBuilderEmptyField = {
         id: `field-${nanoid(10)}`,
+        name: action.name,
+        camelCaseName: toCamelCase(action.name),
         type: 'empty',
         label: 'New Field',
         description: '',
@@ -45,7 +49,7 @@ const reducer = (state: FormBuilderValue, action: Action): FormBuilderValue => {
           if (field.id !== action.fieldId) return field;
           return {
             ...field,
-            ...action.field,
+            ...Object.fromEntries(Object.entries(action.field).filter(([_, v]) => v !== undefined)),
           };
         }),
       };
@@ -75,11 +79,11 @@ const reducer = (state: FormBuilderValue, action: Action): FormBuilderValue => {
 export const useFormBuilderReducer = (initialState: FormBuilderValue) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const onFieldCreate = useCallback(() => {
-    dispatch({ type: 'FIELD_CREATE' });
+  const onFieldCreate = useCallback((name: string) => {
+    dispatch({ type: 'FIELD_CREATE', name });
   }, []);
 
-  const onFieldUpdate = useCallback((fieldId: string, field: FormBuilderField) => {
+  const onFieldUpdate = useCallback((fieldId: string, field: Partial<FormBuilderField>) => {
     dispatch({ type: 'FIELD_UPDATE', fieldId, field });
   }, []);
 

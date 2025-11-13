@@ -109,7 +109,7 @@ const FieldTitle = memo(({ className, ...props }: React.ComponentProps<'div'>) =
   return (
     <div
       data-slot="field-label"
-      className={cn('flex w-fit items-center gap-2 text-sm leading-snug font-medium group-data-[disabled=true]/field:opacity-50', className)}
+      className={cn('flex w-fit items-center gap-2 font-medium text-sm leading-snug group-data-[disabled=true]/field:opacity-50', className)}
       {...props}
     />
   );
@@ -149,7 +149,7 @@ const FieldSeparator = memo(
       >
         <Separator className="absolute inset-0 top-1/2" />
         {children && (
-          <span className="bg-background text-text-positive-weak relative mx-auto block w-fit px-2" data-slot="field-separator-content">
+          <span className="relative mx-auto block w-fit bg-background px-2 text-text-positive-weak" data-slot="field-separator-content">
             {children}
           </span>
         )}
@@ -179,7 +179,7 @@ const FieldError = memo(
 
       if (errors?.length === 1 && errors[0]?.message) {
         return (
-          <div className="flex flex-row gap-x-0.5 justify-start items-center">
+          <div className="flex flex-row items-center justify-start gap-x-0.5">
             <BanIcon size={14} />
             <p>{errors[0].message}</p>
           </div>
@@ -202,7 +202,7 @@ const FieldError = memo(
     }
 
     return (
-      <div role="alert" data-slot="field-error" className={cn('text-danger w-full text-xs font-normal', className)} {...props}>
+      <div role="alert" data-slot="field-error" className={cn('w-full font-normal text-danger text-xs', className)} {...props}>
         {content}
       </div>
     );

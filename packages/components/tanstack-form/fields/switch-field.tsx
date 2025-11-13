@@ -1,9 +1,10 @@
+import { Activity } from 'react';
+
+import { Field, FieldContent, FieldDescription, FieldGroup, FieldLabel, FieldSeparator } from '@/components/ui/field';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { useFieldContext } from '../config';
 import type { CommonFieldProps } from '../types';
-import { Field, FieldContent, FieldDescription, FieldGroup, FieldLabel, FieldSeparator } from '@/components/ui/field';
-import { Activity } from 'react';
 
 type SwitchGroupProps = {
   label: string;
@@ -20,7 +21,7 @@ export const TanStackSwitchGroup: React.FC<React.PropsWithChildren<SwitchGroupPr
           </Activity>
         </FieldContent>
         <div className="relative basis-3/5 space-y-0.5">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">{children}</div>
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">{children}</div>
         </div>
       </Field>
       <FieldSeparator />
@@ -32,10 +33,10 @@ type Props = CommonFieldProps;
 export const SwitchField: React.FC<React.PropsWithChildren<Props>> = ({ label, description }) => {
   const { name, state, handleChange } = useFieldContext<boolean>();
   return (
-    <Label htmlFor={name} className="rounded-md p-2 border border-border flex gap-x-2 items-start cursor-pointer">
-      <div className="flex flex-col space-y-2 grow">
+    <Label htmlFor={name} className="flex cursor-pointer items-start gap-x-2 rounded-md border border-border p-2">
+      <div className="flex grow flex-col space-y-2">
         <p>{label}</p>
-        <p className="text-xs text-text-positive-weak">{description}</p>
+        <p className="text-text-positive-weak text-xs">{description}</p>
       </div>
       <Switch id={name} checked={state.value} className="w-8" onCheckedChange={handleChange} />
     </Label>

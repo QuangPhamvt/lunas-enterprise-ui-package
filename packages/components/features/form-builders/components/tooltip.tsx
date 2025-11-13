@@ -16,7 +16,7 @@ export const FormBuilderTooltipFieldCopy: React.FC = () => {
   );
 };
 
-export const FormBuilderTooltipFieldSettings: React.FC = () => {
+export const FormBuilderTooltipFieldSettings: React.FC<React.PropsWithChildren> = ({ children }) => {
   const [settingOpen, setSettingOpen] = useState<boolean>(false);
   return (
     <Popover open={settingOpen} onOpenChange={setSettingOpen}>
@@ -25,7 +25,7 @@ export const FormBuilderTooltipFieldSettings: React.FC = () => {
           <BoltIcon />
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="start" side="right" className="w-80 rounded p-0">
+      <PopoverContent align="start" side="right" className="w-124 rounded px-2.5">
         <Tabs defaultValue="field-type">
           <TabsList className="mt-2 w-full rounded-none bg-transparent px-2.5">
             <TabsTrigger
@@ -41,15 +41,26 @@ export const FormBuilderTooltipFieldSettings: React.FC = () => {
               Rules
             </TabsTrigger>
           </TabsList>
-          <TabsContent value="field-type" className="px-2.5 pb-2">
-            FIeld Type
-          </TabsContent>
-          <TabsContent value="rules" className="px-2.5 pb-2">
-            Rules
-          </TabsContent>
+          {children}
         </Tabs>
       </PopoverContent>
     </Popover>
+  );
+};
+
+export const FormBuilderTooltipFieldSettingsFieldType: React.FC<React.PropsWithChildren> = ({ children }) => {
+  return (
+    <TabsContent value="field-type" className="px-2.5 pb-2">
+      {children}
+    </TabsContent>
+  );
+};
+
+export const FormBuilderTooltipFieldSettingsRules: React.FC<React.PropsWithChildren> = ({ children }) => {
+  return (
+    <TabsContent value="rules" className="px-2.5 pb-2">
+      {children}
+    </TabsContent>
   );
 };
 

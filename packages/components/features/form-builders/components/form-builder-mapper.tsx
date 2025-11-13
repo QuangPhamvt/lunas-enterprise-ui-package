@@ -2,14 +2,29 @@ import { TypeIcon } from 'lucide-react';
 
 import type { FIELD_ID } from '../types';
 import { FormBuilderTextField } from './text-field/field';
-import { FormBuilderTooltipField, FormBuilderTooltipFieldCopy, FormBuilderTooltipFieldSettings, FormBuilderTooltipFieldTrash } from './tooltip';
+import { FormBuilderTextFieldTooltipFieldRules, FormBuilderTextFieldTooltipFieldType } from './text-field/tooltip';
+import {
+  FormBuilderTooltipField,
+  FormBuilderTooltipFieldCopy,
+  FormBuilderTooltipFieldSettings,
+  FormBuilderTooltipFieldSettingsFieldType,
+  FormBuilderTooltipFieldSettingsRules,
+  FormBuilderTooltipFieldTrash,
+} from './tooltip';
 
 export const FormBuilderMapper: (fieldId: string) => Record<FIELD_ID, Record<'FIELD' | 'TOOLTIP' | 'SIDEBAR_FIELD', React.ReactNode>> = fieldId => ({
   'text-field': {
     TOOLTIP: (
       <FormBuilderTooltipField>
         <FormBuilderTooltipFieldCopy />
-        <FormBuilderTooltipFieldSettings />
+        <FormBuilderTooltipFieldSettings>
+          <FormBuilderTooltipFieldSettingsFieldType>
+            <FormBuilderTextFieldTooltipFieldType fieldId={fieldId} />
+          </FormBuilderTooltipFieldSettingsFieldType>
+          <FormBuilderTooltipFieldSettingsRules>
+            <FormBuilderTextFieldTooltipFieldRules />
+          </FormBuilderTooltipFieldSettingsRules>
+        </FormBuilderTooltipFieldSettings>
         <FormBuilderTooltipFieldTrash fieldId={fieldId} />
       </FormBuilderTooltipField>
     ),
@@ -19,7 +34,7 @@ export const FormBuilderMapper: (fieldId: string) => Record<FIELD_ID, Record<'FI
         <p>Text Field</p>
       </div>
     ),
-    FIELD: <FormBuilderTextField />,
+    FIELD: <FormBuilderTextField fieldId={fieldId} />,
   },
   'textarea-field': {
     TOOLTIP: 'Text Area Field',
@@ -59,6 +74,10 @@ export const FormBuilderMapper: (fieldId: string) => Record<FIELD_ID, Record<'FI
   empty: {
     TOOLTIP: 'Empty Field',
     SIDEBAR_FIELD: <div className="px-2.5 py-2">Empty Field</div>,
-    FIELD: <div>Empty Field</div>,
+    FIELD: (
+      <div className="flex h-24 items-center justify-center rounded border border-border border-dashed bg-muted-muted px-2.5 py-2 text-text-positive-weak">
+        <p>Empty Field</p>
+      </div>
+    ),
   },
 });

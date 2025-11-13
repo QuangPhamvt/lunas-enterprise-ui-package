@@ -5,6 +5,7 @@ import type { FIELD, FIELD_ID, FORM_BUILDER, FormBuilderField, FormBuilderValue 
 
 const INITIAL_FORM_BUILDERS: FormBuilderValue = {
   name: 'New Form Builder',
+  description: 'Description for the new form builder',
   form: [],
 };
 
@@ -70,8 +71,8 @@ export const useFormBuilderFieldContext = () => {
 // Form Builder Values Context
 type TFormBuilderValueContext = {
   formBuilder: FormBuilderValue;
-  onFieldCreate: () => void;
-  onFieldUpdate: (fieldId: string, field: FormBuilderField) => void;
+  onFieldCreate: (name: string) => void;
+  onFieldUpdate: (fieldId: string, field: Partial<FormBuilderField>) => void;
   onFieldReorder: (fromFieldId: string, toFieldId: string) => void;
   onFieldDelete: (fieldId: string) => void;
 };
