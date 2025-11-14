@@ -22,7 +22,7 @@ export const FormBuilderTanStackForm: React.FC<{
   });
   const { FormBuilderTanStackForm } = form;
   return (
-    <FormBuilderTanStackForm label={formBuilder.name} description={formBuilder.description ?? ''}>
+    <FormBuilderTanStackForm>
       {formBuilder.form.map(field => {
         return FormBuilderTanStackFieldMapper({ form, field });
       })}

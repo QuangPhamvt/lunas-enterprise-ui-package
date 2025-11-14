@@ -38,6 +38,7 @@ export const useGenerateValidate = (fields: FormBuilderField[]) => {
       ...Object.assign({}, ...shapeArr),
     });
   }, [fields]);
+
   const defaultValues = useMemo(() => {
     const valueArr = fields
       .map(field => {

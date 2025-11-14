@@ -14,10 +14,11 @@ import {
 import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { createPortal } from 'react-dom';
-import { Separator } from '@/components/ui/separator';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import type { FIELD_ID } from '../types';
 import { FormBuilderMapper } from './form-builder-mapper';
 import { useFormBuilderFieldContext } from './providers';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const FormBuilderFieldDraggable: React.FC<
   React.PropsWithChildren<{
@@ -52,7 +53,9 @@ const FormBuilderFieldDraggable: React.FC<
 
 export const FormBuilderSidebar: React.FC<React.PropsWithChildren> = () => {
   const { fields, setFields } = useFormBuilderFieldContext();
+
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
+  const [activeFieldSectionTab, setActiveFieldSectionTab] = useState<'typography' | 'input-field'>('input-field');
 
   const sortableItems = useMemo(() => {
     return fields.map(field => field.id);
@@ -99,32 +102,91 @@ export const FormBuilderSidebar: React.FC<React.PropsWithChildren> = () => {
   });
 
   return (
-    <div data-slot="form-builder-sidebar" className="min-w-64 border-border border-r p-4">
-      <div className="flex flex-col gap-y-2 overflow-y-auto">
-        <p className="px-2 text-sm text-text-positive">Fields</p>
-        <Separator />
-        <div className="flex flex-col space-y-1">
-          <SortableContext items={sortableItems} strategy={verticalListSortingStrategy}>
-            {fields.map(field => (
-              <FormBuilderFieldDraggable key={field.id} id={field.id}>
-                {FormBuilderMapper(field.id)[field.id].SIDEBAR_FIELD}
-              </FormBuilderFieldDraggable>
-            ))}
-          </SortableContext>
-        </div>
-      </div>
+    <div data-slot="form-builder-sidebar" className="w-84 border-border border-r">
+      <Accordion type="multiple" defaultValue={['header', 'field']} className="w-full last:border-b last:border-b-border">
+        <AccordionItem value="header">
+          <AccordionTrigger className="px-2.5">Header</AccordionTrigger>
+          <AccordionContent className="px-2.5">Header content</AccordionContent>
+        </AccordionItem>
 
-      {activeId &&
-        createPortal(
-          <DragOverlay className="cursor-grabbing">
-            {activeId ? (
-              <div className="pointer-events-none flex h-13 items-center rounded border border-border bg-card px-2.5 py-2 shadow-lg">
-                {FormBuilderMapper(activeId as string)[activeId as FIELD_ID].SIDEBAR_FIELD}
-              </div>
-            ) : null}
-          </DragOverlay>,
-          document.body
-        )}
+        <AccordionItem value="field">
+          <AccordionTrigger className="px-2.5">Field</AccordionTrigger>
+          <AccordionContent className="px-2.5">
+            <Tabs
+              defaultValue="input-field"
+              value={activeFieldSectionTab}
+              onValueChange={value => setActiveFieldSectionTab(value as 'typography' | 'input-field')}
+              className="w-full"
+            >
+              <TabsList className="w-full rounded-none bg-transparent px-0">
+                <TabsTrigger
+                  value="typography"
+                  className="rounded-none border-b border-b-border text-text-positive-weak shadow-none! hover:bg-transparent data-[state=active]:border-b-border-strong data-[state=active]:text-text-positive"
+                >
+                  Typography
+                </TabsTrigger>
+
+                <TabsTrigger
+                  value="input-field"
+                  className="rounded-none border-b border-b-border text-text-positive-weak shadow-none! hover:bg-transparent data-[state=active]:border-b-border-strong data-[state=active]:text-text-positive"
+                >
+                  Input Field
+                </TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="typography">
+                <div className="flex flex-col space-y-1">
+                  <SortableContext items={sortableItems} strategy={verticalListSortingStrategy}>
+                    {fields
+                      .filter(field => field.tab === 'TYPOGRAPHY')
+                      .map(field => (
+                        <FormBuilderFieldDraggable key={field.id} id={field.id}>
+                          {FormBuilderMapper(field.id)[field.id].SIDEBAR_FIELD}
+                        </FormBuilderFieldDraggable>
+                      ))}
+                  </SortableContext>
+                </div>
+                {activeId &&
+                  createPortal(
+                    <DragOverlay className="cursor-grabbing">
+                      {activeId ? (
+                        <div className="pointer-events-none flex h-13 items-center rounded border border-border bg-card px-2.5 py-2 shadow-lg">
+                          {FormBuilderMapper(activeId as string)[activeId as FIELD_ID].SIDEBAR_FIELD}
+                        </div>
+                      ) : null}
+                    </DragOverlay>,
+                    document.body
+                  )}
+              </TabsContent>
+
+              <TabsContent value="input-field">
+                <div className="flex flex-col space-y-1">
+                  <SortableContext items={sortableItems} strategy={verticalListSortingStrategy}>
+                    {fields
+                      .filter(field => field.tab === 'FORM_FIELDS')
+                      .map(field => (
+                        <FormBuilderFieldDraggable key={field.id} id={field.id}>
+                          {FormBuilderMapper(field.id)[field.id].SIDEBAR_FIELD}
+                        </FormBuilderFieldDraggable>
+                      ))}
+                  </SortableContext>
+                </div>
+                {activeId &&
+                  createPortal(
+                    <DragOverlay className="cursor-grabbing">
+                      {activeId ? (
+                        <div className="pointer-events-none flex h-13 items-center rounded border border-border bg-card px-2.5 py-2 shadow-lg">
+                          {FormBuilderMapper(activeId as string)[activeId as FIELD_ID].SIDEBAR_FIELD}
+                        </div>
+                      ) : null}
+                    </DragOverlay>,
+                    document.body
+                  )}
+              </TabsContent>
+            </Tabs>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
     </div>
   );
 };

@@ -56,7 +56,7 @@ const FormBuilderFormField: React.FC<
         transition,
         opacity: isDragging ? 0.5 : 1,
       }}
-      className="flex flex-col rounded border border-border text-sm"
+      className="flex flex-col rounded border border-border bg-card text-sm"
     >
       <div className="flex items-center space-x-2 px-2.5 py-1">
         <p className="flex-1">{name}</p>
@@ -95,6 +95,12 @@ export const FormBuilderFormFieldDroppable: React.FC<
 
   const updateFieldMapper: Record<FIELD_ID, Partial<FormBuilderField>> = useMemo(() => {
     return {
+      'title-field': {
+        id: fieldId,
+        label: 'Title Field',
+        description: 'This is a title field',
+        type: 'title-field',
+      },
       'text-field': {
         id: fieldId,
         label: 'Text Field',
@@ -265,7 +271,7 @@ const FormBuilderFormPreview: React.FC<React.PropsWithChildren> = () => {
   const { formBuilder } = useFormBuilderValueContext();
 
   return (
-    <div className="flex flex-col rounded border border-border text-sm">
+    <div className="flex flex-col rounded border border-border bg-card text-sm">
       <div className="flex items-center space-x-2 px-2.5 py-1">
         <p>Formn Preview</p>
       </div>
@@ -284,13 +290,13 @@ export const FormBuilderPage: React.FC<React.PropsWithChildren> = () => {
         <TabsList className="rounded-none bg-transparent px-0">
           <TabsTrigger
             value="form-builder"
-            className="rounded-none border-b border-b-border text-text-positive-weak shadow-none! hover:bg-transparent data-[state=active]:border-b-border-strong data-[state=active]:text-text-positive"
+            className="rounded-none border-b border-b-border text-text-positive-weak shadow-none! hover:bg-transparent data-[state=active]:border-b-border-strong data-[state=active]:bg-transparent data-[state=active]:text-text-positive"
           >
             Form Builder
           </TabsTrigger>
           <TabsTrigger
             value="form-preview"
-            className="rounded-none border-b border-b-border text-text-positive-weak shadow-none! hover:bg-transparent data-[state=active]:border-b-border-strong data-[state=active]:text-text-positive"
+            className="rounded-none border-b border-b-border text-text-positive-weak shadow-none! hover:bg-transparent data-[state=active]:border-b-border-strong data-[state=active]:bg-transparent data-[state=active]:text-text-positive"
           >
             Form Preview
           </TabsTrigger>

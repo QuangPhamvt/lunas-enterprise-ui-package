@@ -1,10 +1,12 @@
-import { LetterTextIcon, TypeIcon } from 'lucide-react';
+import { LetterTextIcon, TypeIcon, TypeOutlineIcon } from 'lucide-react';
 
 import type { FIELD_ID } from '../types';
 import { FormBuilderTextField } from './text-field/field';
 import { FormBuilderTextFieldTooltipFieldRules, FormBuilderTextFieldTooltipFieldType } from './text-field/tooltip';
 import { FormBuilderTextareaField } from './textarea-field/field';
 import { FormBuilderTextareaFieldTooltipFieldRules, FormBuilderTextareaFieldTooltipFieldType } from './textarea-field/tooltip';
+import { FormBuilderTitleField } from './title-field/field';
+import { FormBuilderTitleFieldTooltipFieldRules, FormBuilderTitleFieldTooltipFieldType } from './title-field/tooltip';
 import {
   FormBuilderTooltipField,
   FormBuilderTooltipFieldCopy,
@@ -15,6 +17,29 @@ import {
 } from './tooltip';
 
 export const FormBuilderMapper: (fieldId: string) => Record<FIELD_ID, Record<'FIELD' | 'TOOLTIP' | 'SIDEBAR_FIELD', React.ReactNode>> = fieldId => ({
+  'title-field': {
+    TOOLTIP: (
+      <FormBuilderTooltipField>
+        <FormBuilderTooltipFieldCopy />
+        <FormBuilderTooltipFieldSettings>
+          <FormBuilderTooltipFieldSettingsFieldType>
+            <FormBuilderTitleFieldTooltipFieldType fieldId={fieldId} />
+          </FormBuilderTooltipFieldSettingsFieldType>
+          <FormBuilderTooltipFieldSettingsRules>
+            <FormBuilderTitleFieldTooltipFieldRules />
+          </FormBuilderTooltipFieldSettingsRules>
+        </FormBuilderTooltipFieldSettings>
+        <FormBuilderTooltipFieldTrash fieldId={fieldId} />
+      </FormBuilderTooltipField>
+    ),
+    SIDEBAR_FIELD: (
+      <div className="flex items-center space-x-1 px-2.5 py-2 text-sm">
+        <TypeOutlineIcon size={16} />
+        <p>Title Field</p>
+      </div>
+    ),
+    FIELD: <FormBuilderTitleField fieldId={fieldId} />,
+  },
   'text-field': {
     TOOLTIP: (
       <FormBuilderTooltipField>

@@ -1,6 +1,7 @@
 export type DRAGGABLE_FIELD_ID = 'FIELD' | 'FORM_FIELD';
 
 export type FIELD_ID =
+  | 'title-field'
   | 'text-field'
   | 'textarea-field'
   | 'number-field'
@@ -21,6 +22,10 @@ export type FormBuilderFieldBase = {
   camelCaseName: string;
   label: string;
   description?: string;
+};
+
+export type FormBuilderTitleField = FormBuilderFieldBase & {
+  type: 'title-field';
 };
 
 export type FormBuilderTextField = FormBuilderFieldBase & {
@@ -85,6 +90,7 @@ export type FormBuilderEmptyField = FormBuilderFieldBase & {
 };
 
 export type FormBuilderField =
+  | FormBuilderTitleField
   | FormBuilderTextField
   | FormBuilderTextareaField
   | FormBuilderNumberField
@@ -96,7 +102,5 @@ export type FormBuilderField =
   | FormBuilderEmptyField;
 
 export type FormBuilderValue = {
-  name: string;
-  description?: string;
   form: FormBuilderField[];
 };

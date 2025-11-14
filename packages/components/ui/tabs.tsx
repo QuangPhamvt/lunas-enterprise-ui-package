@@ -1,4 +1,5 @@
 'use client';
+
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { Tabs as TabsPrimitive } from 'radix-ui';
@@ -11,7 +12,7 @@ function TabsList({ className, ...props }: React.ComponentProps<typeof TabsPrimi
   return (
     <TabsPrimitive.List
       data-slot="tabs-list"
-      className={cn('bg-muted-muted inline-flex h-9 w-fit items-center justify-center rounded-full p-1', className)}
+      className={cn('inline-flex h-9 w-fit items-center justify-center rounded-full bg-muted-muted p-1', className)}
       {...props}
     />
   );
@@ -25,7 +26,7 @@ function TabsTrigger({ className, ...props }: React.ComponentProps<typeof TabsPr
         'text-text-positive-weak',
         'inline-flex h-[calc(100%-1px)] flex-1 cursor-pointer items-center justify-center gap-1.5',
         'rounded-full',
-        'border border-transparent px-2 py-1 text-sm font-medium whitespace-nowrap transition',
+        'whitespace-nowrap border border-transparent px-2 py-1 font-medium text-sm transition',
         'hover:bg-muted-weak',
         'data-[state=active]:shadow-card',
         'data-[state=active]:bg-background',

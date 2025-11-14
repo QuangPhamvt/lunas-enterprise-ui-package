@@ -30,13 +30,13 @@ export const FormBuilderTooltipFieldSettings: React.FC<React.PropsWithChildren> 
           <TabsList className="mt-2 w-full rounded-none bg-transparent px-2.5">
             <TabsTrigger
               value="field-type"
-              className="rounded-none border-b border-b-border shadow-none! hover:bg-transparent data-[state=active]:border-2 data-[state=active]:border-b-border-strong"
+              className="rounded-none border-b border-b-border shadow-none! hover:bg-transparent data-[state=active]:border-b-border-strong"
             >
               Field Type
             </TabsTrigger>
             <TabsTrigger
               value="rules"
-              className="rounded-none border-b border-b-border shadow-none! hover:bg-transparent data-[state=active]:border-2 data-[state=active]:border-b-border-strong"
+              className="rounded-none border-b border-b-border shadow-none! hover:bg-transparent data-[state=active]:border-b-border-strong"
             >
               Rules
             </TabsTrigger>

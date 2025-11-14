@@ -1,50 +1,72 @@
 import { createContext, use, useMemo, useState } from 'react';
 
+import { nanoid } from 'nanoid';
 import { useFormBuilderReducer } from '../hooks/use-form-builder-reducer';
 import type { FIELD, FIELD_ID, FORM_BUILDER, FormBuilderField, FormBuilderValue } from '../types';
 
 const INITIAL_FORM_BUILDERS: FormBuilderValue = {
-  name: 'New Form Builder',
-  description: 'Description for the new form builder',
-  form: [],
+  form: [
+    {
+      id: `field-${nanoid(10)}`,
+      type: 'title-field',
+      name: 'Title',
+      camelCaseName: 'title',
+      label: 'Welcome to the Form',
+      description: 'Please fill out the form below.',
+    },
+  ],
 };
 
 export type TFormBuilderField = {
   id: FIELD_ID;
+  tab: 'TYPOGRAPHY' | 'FORM_FIELDS';
   accepts: (FIELD | FORM_BUILDER)[];
 };
 
 const FormBuilderFields: TFormBuilderField[] = [
   {
+    id: 'title-field',
+    tab: 'TYPOGRAPHY',
+    accepts: ['FIELD', 'FORM_BUILDER'],
+  },
+  {
     id: 'text-field',
+    tab: 'FORM_FIELDS',
     accepts: ['FIELD', 'FORM_BUILDER'],
   },
   {
     id: 'textarea-field',
+    tab: 'FORM_FIELDS',
     accepts: ['FIELD', 'FORM_BUILDER'],
   },
   {
     id: 'number-field',
+    tab: 'FORM_FIELDS',
     accepts: ['FIELD', 'FORM_BUILDER'],
   },
   {
     id: 'date-field',
+    tab: 'FORM_FIELDS',
     accepts: ['FIELD', 'FORM_BUILDER'],
   },
   {
     id: 'switch-field',
+    tab: 'FORM_FIELDS',
     accepts: ['FIELD', 'FORM_BUILDER'],
   },
   {
     id: 'radio-group-field',
+    tab: 'FORM_FIELDS',
     accepts: ['FIELD', 'FORM_BUILDER'],
   },
   {
     id: 'select-field',
+    tab: 'FORM_FIELDS',
     accepts: ['FIELD', 'FORM_BUILDER'],
   },
   {
     id: 'combobox-field',
+    tab: 'FORM_FIELDS',
     accepts: ['FIELD', 'FORM_BUILDER'],
   },
 ];

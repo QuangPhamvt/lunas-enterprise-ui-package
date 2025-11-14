@@ -11,6 +11,16 @@ export const FormBuilderTanStackFieldMapper = ({
   form: AppFieldExtendedReactFormApi<any, any, any, any, any, any, any, any, any, any, any, any, any, any>;
   field: FormBuilderField;
 }) => {
+  // Mapper: Title Field
+  if (field.type === 'title-field') {
+    const WithHOC = withFormBuilderTanStackForm({
+      render: ({ form }) => {
+        return <form.FormBuilderTanStackTitleField label={field.label} description={field.description} />;
+      },
+    });
+    return <WithHOC form={form} />;
+  }
+
   // Mapper: Text Field
   if (field.type === 'text-field') {
     const WithHOC = withFormBuilderTanStackForm({
