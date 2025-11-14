@@ -1,11 +1,13 @@
 'use client';
 
+import { Activity } from 'react';
+
+import { Loader2Icon } from 'lucide-react';
+
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { Slot } from '@radix-ui/react-slot';
-import { buttonLoadingVariant, type ButtonVariantProps, buttonVariants } from './button.variants';
-import { Loader2Icon } from 'lucide-react';
-import { Activity } from 'react';
+import { type ButtonVariantProps, buttonLoadingVariant, buttonVariants } from './button.variants';
 
 export interface ButtonProps extends Omit<React.ComponentProps<'button'>, 'color'> {
   /**
@@ -54,6 +56,9 @@ function Button({
       data-state={isLoading ? 'loading' : undefined}
       disabled={disabled}
       aria-disabled={disabled ? true : undefined}
+      style={{
+        cornerShape: 'squircle',
+      } as React.CSSProperties}
       className={cn(
         buttonVariants({
           variant,
