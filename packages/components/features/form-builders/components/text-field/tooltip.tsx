@@ -253,7 +253,6 @@ export const FormBuilderTextFieldTooltipFieldRules: React.FC<{
       onChange: schema,
     },
     onSubmit: ({ value }) => {
-      console.log('Submitting rules:', value);
       onFieldUpdate(fieldId, {
         rules: {
           minLength: value.minLength || undefined,
