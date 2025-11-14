@@ -47,6 +47,10 @@ const reducer = (state: FormBuilderValue, action: Action): FormBuilderValue => {
         ...state,
         form: state.form.map(field => {
           if (field.id !== action.fieldId) return field;
+          console.log('Updating field:', {
+            ...field,
+            ...Object.fromEntries(Object.entries(action.field).filter(([_, v]) => v !== undefined)),
+          });
           return {
             ...field,
             ...Object.fromEntries(Object.entries(action.field).filter(([_, v]) => v !== undefined)),

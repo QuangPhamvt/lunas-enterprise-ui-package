@@ -14,8 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import type { FIELD_ID, FormBuilderField } from '../types';
 import { FormBuilderCreateFieldModal } from './create-field-modal';
 import { FormBuilderMapper } from './form-builder-mapper';
-import { useFormBuilderTanStack } from './forms';
-import { FormBuilderTanStackFieldMapper } from './forms/tanstack-form/mapper';
+import { FormBuilderTanStackForm } from './forms/form';
 import { useFormBuilderValueContext } from './providers';
 
 export const FormBuilderPageField: React.FC<
@@ -106,7 +105,10 @@ export const FormBuilderFormFieldDroppable: React.FC<
         showClearButton: false,
         showCharacterCount: false,
         showErrorMessage: true,
-        rules: {},
+        rules: {
+          minLength: undefined,
+          maxLength: undefined,
+        },
       },
       'textarea-field': {
         id: fieldId,
@@ -253,8 +255,6 @@ const FormBuilderFormContent: React.FC<React.PropsWithChildren> = () => {
 
 const FormBuilderFormPreview: React.FC<React.PropsWithChildren> = () => {
   const { formBuilder } = useFormBuilderValueContext();
-  const form = useFormBuilderTanStack({});
-  const { FormBuilderTanStackForm } = form;
 
   return (
     <div className="flex flex-col rounded border border-border text-sm">
@@ -263,11 +263,7 @@ const FormBuilderFormPreview: React.FC<React.PropsWithChildren> = () => {
       </div>
       <Separator />
       <div className="px-2.5 py-4">
-        <FormBuilderTanStackForm label={formBuilder.name} description={formBuilder.description ?? ''}>
-          {formBuilder.form.map(field => {
-            return FormBuilderTanStackFieldMapper({ form, field });
-          })}
-        </FormBuilderTanStackForm>
+        <FormBuilderTanStackForm formBuilder={formBuilder} />
       </div>
     </div>
   );

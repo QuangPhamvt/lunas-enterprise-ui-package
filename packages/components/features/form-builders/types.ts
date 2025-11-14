@@ -30,7 +30,10 @@ export type FormBuilderTextField = FormBuilderFieldBase & {
   showCharacterCount: boolean;
   showClearButton: boolean;
   showErrorMessage: boolean;
-  rules: {};
+  rules: {
+    maxLength?: number;
+    minLength?: number;
+  };
 };
 
 export type FormBuilderTextareaField = FormBuilderFieldBase & {

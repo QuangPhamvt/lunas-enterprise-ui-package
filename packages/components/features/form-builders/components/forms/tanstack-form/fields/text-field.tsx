@@ -64,7 +64,7 @@ export const TextField: React.FC<
               <Loader2Icon size={14} className="animate-spin" />
             </div>
           )}
-          <div className="flex w-full flex-col items-end justify-end">
+          <div className="mt-1 flex w-full flex-col items-end justify-end">
             {showCharacterCount && <p className="text-end text-text-positive-weak text-xs">{_count} characters</p>}
             {showErrorMessage && <FieldError errors={_errors} />}
           </div>

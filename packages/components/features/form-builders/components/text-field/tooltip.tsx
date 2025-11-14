@@ -5,10 +5,11 @@ import { z } from 'zod/v4';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Field, FieldContent, FieldDescription, FieldGroup, FieldLabel, FieldSeparator, FieldSet } from '../forms';
-import { useFormBuilderValueContext } from '../providers';
-import { toCamelCase } from '../../utils';
+import { NumberInput } from '@/components/ui/inputs/number-input';
 import { Switch } from '@/components/ui/switch';
+import { toCamelCase } from '../../utils';
+import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, FieldLabel, FieldSeparator, FieldSet } from '../forms';
+import { useFormBuilderValueContext } from '../providers';
 
 export const FormBuilderTextFieldTooltipFieldType: React.FC<{
   fieldId: string;
@@ -201,10 +202,10 @@ export const FormBuilderTextFieldTooltipFieldType: React.FC<{
           <FieldSeparator />
           <Field orientation="responsive">
             <form.Subscribe
-              selector={state => [state.isValid, state.isSubmitting]}
-              children={([isValid, isSubmitting]) => {
+              selector={state => [state.canSubmit, state.isSubmitting]}
+              children={([canSubmit, isSubmitting]) => {
                 return (
-                  <Button type="submit" disabled={!isValid || isSubmitting}>
+                  <Button type="submit" disabled={!canSubmit || isSubmitting}>
                     Submit
                   </Button>
                 );
@@ -220,6 +221,137 @@ export const FormBuilderTextFieldTooltipFieldType: React.FC<{
   );
 };
 
-export const FormBuilderTextFieldTooltipFieldRules: React.FC = () => {
-  return <div>Text Field Rules</div>;
+export const FormBuilderTextFieldTooltipFieldRules: React.FC<{
+  fieldId: string;
+}> = ({ fieldId }) => {
+  const { formBuilder, onFieldUpdate } = useFormBuilderValueContext();
+  const currentField = useMemo(() => {
+    const data = formBuilder.form.find(field => field.id === fieldId);
+    if (data && data.type === 'text-field') {
+      return data;
+    }
+    return null;
+  }, [fieldId, formBuilder]);
+  const schema = useMemo(() => {
+    return z
+      .object({
+        maxLength: z.number().gte(0),
+        minLength: z.number().gte(0),
+      })
+      .refine(data => data.minLength <= data.maxLength, {
+        message: 'Min length must be less than or equal to max length',
+      });
+  }, []);
+
+  const form = useForm({
+    defaultValues: {
+      maxLength: currentField?.rules?.maxLength || 0,
+      minLength: currentField?.rules?.minLength || 0,
+    } as z.infer<typeof schema>,
+    validators: {
+      onSubmit: schema,
+      onChange: schema,
+    },
+    onSubmit: ({ value }) => {
+      console.log('Submitting rules:', value);
+      onFieldUpdate(fieldId, {
+        rules: {
+          minLength: value.minLength || undefined,
+          maxLength: value.maxLength || undefined,
+        },
+      });
+    },
+    onSubmitInvalid: state => {
+      state.formApi.reset();
+    },
+  });
+  return (
+    <form
+      onSubmit={e => {
+        e.preventDefault();
+        e.stopPropagation();
+        void form.handleSubmit();
+      }}
+    >
+      <FieldGroup>
+        <FieldSet>
+          <FieldDescription>Set validation rules for the text field.</FieldDescription>
+          <FieldSeparator />
+        </FieldSet>
+        <form.Field
+          name="minLength"
+          children={field => {
+            return (
+              <Field orientation="horizontal" className="*:data-[slot=field-content-main]:basis-3/5 *:data-[slot=field-content]:basis-2/5">
+                <FieldContent>
+                  <FieldLabel className="text-text-positive-weak">Min Length</FieldLabel>
+                </FieldContent>
+                <FieldContentMain className="flex justify-end">
+                  <NumberInput
+                    id={field.name}
+                    value={field.state.value}
+                    aria-invalid={field.state.meta.isTouched && !field.state.meta.isValid}
+                    unitText=""
+                    placeholder="Enter minimum length"
+                    wrapperClassName="w-48"
+                    onBlur={field.handleBlur}
+                    onValueChange={value => {
+                      if (value === undefined) return;
+                      field.handleChange(value);
+                    }}
+                  />
+                </FieldContentMain>
+              </Field>
+            );
+          }}
+        />
+        <FieldSeparator />
+        <form.Field
+          name="maxLength"
+          children={field => {
+            return (
+              <Field orientation="horizontal" className="*:data-[slot=field-content-main]:basis-3/5 *:data-[slot=field-content]:basis-2/5">
+                <FieldContent>
+                  <FieldLabel htmlFor={field.name} className="text-text-positive-weak">
+                    Max Length
+                  </FieldLabel>
+                </FieldContent>
+                <FieldContentMain className="flex justify-end">
+                  <NumberInput
+                    id={field.name}
+                    value={field.state.value}
+                    aria-invalid={field.state.meta.isTouched && !field.state.meta.isValid}
+                    unitText=""
+                    placeholder="Enter maximum length"
+                    wrapperClassName="w-48"
+                    onBlur={field.handleBlur}
+                    onValueChange={value => {
+                      if (value === undefined) return;
+                      field.handleChange(value);
+                    }}
+                  />
+                </FieldContentMain>
+              </Field>
+            );
+          }}
+        />
+        <FieldSeparator />
+        <Field orientation="responsive">
+          <form.Subscribe
+            selector={state => [state.canSubmit, state.isSubmitting]}
+            children={([canSubmit, isSubmitting]) => {
+              return (
+                <Button type="submit" disabled={!canSubmit || isSubmitting}>
+                  Submit
+                </Button>
+              );
+            }}
+          />
+          <Button type="button" color="muted" variant="outline" onClick={() => form.reset()}>
+            Cancel
+          </Button>
+        </Field>
+      </FieldGroup>
+    </form>
+  );
 };

@@ -22,7 +22,7 @@ export const FormBuilderMapper: (fieldId: string) => Record<FIELD_ID, Record<'FI
             <FormBuilderTextFieldTooltipFieldType fieldId={fieldId} />
           </FormBuilderTooltipFieldSettingsFieldType>
           <FormBuilderTooltipFieldSettingsRules>
-            <FormBuilderTextFieldTooltipFieldRules />
+            <FormBuilderTextFieldTooltipFieldRules fieldId={fieldId} />
           </FormBuilderTooltipFieldSettingsRules>
         </FormBuilderTooltipFieldSettings>
         <FormBuilderTooltipFieldTrash fieldId={fieldId} />
