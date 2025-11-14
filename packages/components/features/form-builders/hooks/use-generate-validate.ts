@@ -12,8 +12,24 @@ export const useGenerateValidate = (fields: FormBuilderField[]) => {
           return z.object({
             [field.camelCaseName]: z
               .string()
-              .min(field.rules?.minLength || 0, `Minimum length is ${field.rules?.minLength}`)
-              .max(field.rules?.maxLength || Infinity, `Maximum length is ${field.rules?.maxLength}`)
+              .refine(
+                val => {
+                  if (field.rules?.minLength && val.length < field.rules.minLength) {
+                    return false;
+                  }
+                  return true;
+                },
+                { error: `Minimum length is ${field.rules?.minLength}` }
+              )
+              .refine(
+                val => {
+                  if (field.rules?.maxLength && val.length > field.rules.maxLength) {
+                    return false;
+                  }
+                  return true;
+                },
+                { error: `Maximum length is ${field.rules?.maxLength}` }
+              )
               .trim(),
           }).shape;
         }
@@ -21,8 +37,24 @@ export const useGenerateValidate = (fields: FormBuilderField[]) => {
           return z.object({
             [field.camelCaseName]: z
               .string()
-              .min(field.rules?.minLength || 0, `Minimum length is ${field.rules?.minLength}`)
-              .max(field.rules?.maxLength || Infinity, `Maximum length is ${field.rules?.maxLength}`)
+              .refine(
+                val => {
+                  if (field.rules?.minLength && val.length < field.rules.minLength) {
+                    return false;
+                  }
+                  return true;
+                },
+                { message: `Minimum length is ${field.rules?.minLength}` }
+              )
+              .refine(
+                val => {
+                  if (field.rules?.maxLength && val.length > field.rules.maxLength) {
+                    return false;
+                  }
+                  return true;
+                },
+                { message: `Maximum length is ${field.rules?.maxLength}` }
+              )
               .trim(),
           }).shape;
         }

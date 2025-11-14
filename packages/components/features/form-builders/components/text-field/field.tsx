@@ -8,9 +8,9 @@ export const FormBuilderTextField: React.FC<{ fieldId: string }> = ({ fieldId })
   const { formBuilder } = useFormBuilderValueContext();
 
   const currentField = useMemo(() => {
-    const data = formBuilder.form.find(field => field.id === fieldId);
-    if (data && data.type === 'text-field') {
-      return data;
+    const field = formBuilder.form.find(field => field.id === fieldId);
+    if (field && field.type === 'text-field') {
+      return field;
     }
     return null;
   }, [fieldId, formBuilder.form]);

@@ -77,6 +77,30 @@ export const FormBuilderTanStackFieldMapper = ({
     return <WithHOC form={form} />;
   }
 
+  if (field.type === 'number-field') {
+    const WithHOC = withFormBuilderTanStackForm({
+      render: ({ form }) => {
+        return (
+          <form.AppField
+            name={field.camelCaseName}
+            children={({ NumberField }) => {
+              return (
+                <NumberField
+                  orientation={field.orientation}
+                  label={field.label}
+                  description={field.description}
+                  placeholder={field.placeholder}
+                  unitText={field.unitText}
+                />
+              );
+            }}
+          />
+        );
+      },
+    });
+    return <WithHOC form={form} />;
+  }
+
   // Add more mappers for other field types here...
   return <div>Field Mapper</div>;
 };

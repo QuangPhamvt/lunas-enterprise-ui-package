@@ -58,6 +58,19 @@ export type FormBuilderNumberField = FormBuilderFieldBase & {
   type: 'number-field';
   orientation: 'horizontal' | 'vertical' | 'responsive';
   placeholder?: string;
+
+  rules: {
+    greaterThan?: number;
+    greaterThanOrEqualTo?: number;
+
+    lessThan?: number;
+    lessThanOrEqualTo?: number;
+
+    positive?: boolean;
+    negative?: boolean;
+  };
+
+  unitText?: string;
 };
 
 export type FormBuilderDateField = FormBuilderFieldBase & {

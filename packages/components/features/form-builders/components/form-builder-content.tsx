@@ -136,6 +136,18 @@ export const FormBuilderFormFieldDroppable: React.FC<
         label: 'Number Field',
         orientation: 'responsive',
         type: 'number-field',
+        unitText: '',
+
+        rules: {
+          greaterThan: undefined,
+          greaterThanOrEqualTo: undefined,
+
+          lessThan: undefined,
+          lessThanOrEqualTo: undefined,
+
+          positive: false,
+          negative: false,
+        },
       },
       'date-field': {
         id: fieldId,
