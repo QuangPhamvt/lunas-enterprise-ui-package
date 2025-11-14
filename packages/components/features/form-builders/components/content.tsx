@@ -114,8 +114,16 @@ export const FormBuilderFormFieldDroppable: React.FC<
         id: fieldId,
         label: 'Text Area Field',
         orientation: 'responsive',
+        placeholder: 'Enter text here',
+        description: 'This is a text area field',
         type: 'textarea-field',
         rows: 4,
+        showCharacterCount: false,
+        showErrorMessage: true,
+        rules: {
+          minLength: undefined,
+          maxLength: undefined,
+        },
       },
       'number-field': {
         id: fieldId,

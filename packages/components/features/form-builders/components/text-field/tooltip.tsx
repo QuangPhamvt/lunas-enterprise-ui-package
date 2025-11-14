@@ -238,7 +238,7 @@ export const FormBuilderTextFieldTooltipFieldRules: React.FC<{
         maxLength: z.number().gte(0),
         minLength: z.number().gte(0),
       })
-      .refine(data => data.minLength <= data.maxLength, {
+      .refine(data => data.minLength <= data.maxLength && data.maxLength !== 0, {
         message: 'Min length must be less than or equal to max length',
       });
   }, []);
@@ -291,8 +291,9 @@ export const FormBuilderTextFieldTooltipFieldRules: React.FC<{
                     value={field.state.value}
                     aria-invalid={field.state.meta.isTouched && !field.state.meta.isValid}
                     unitText=""
-                    placeholder="Enter minimum length"
+                    placeholder="0"
                     wrapperClassName="w-48"
+                    className="rounded!"
                     onBlur={field.handleBlur}
                     onValueChange={value => {
                       if (value === undefined) return;
@@ -321,8 +322,9 @@ export const FormBuilderTextFieldTooltipFieldRules: React.FC<{
                     value={field.state.value}
                     aria-invalid={field.state.meta.isTouched && !field.state.meta.isValid}
                     unitText=""
-                    placeholder="Enter maximum length"
+                    placeholder="0"
                     wrapperClassName="w-48"
+                    className="rounded!"
                     onBlur={field.handleBlur}
                     onValueChange={value => {
                       if (value === undefined) return;

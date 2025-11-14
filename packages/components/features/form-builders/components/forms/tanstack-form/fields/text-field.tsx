@@ -9,8 +9,10 @@ import { Field, FieldContent, FieldContentMain, FieldDescription, FieldError, Fi
 import { useFieldContext } from '../tanstack-form';
 
 export const TextField: React.FC<
-  Pick<FormBuilderTextField, 'label' | 'description' | 'orientation' | 'placeholder' | 'showCharacterCount' | 'showClearButton' | 'showErrorMessage'>
-> = ({ label, description, orientation, placeholder, showClearButton, showCharacterCount, showErrorMessage }) => {
+  Pick<FormBuilderTextField, 'label' | 'description' | 'orientation' | 'placeholder' | 'showCharacterCount' | 'showClearButton' | 'showErrorMessage'> & {
+    maxLength?: number;
+  }
+> = ({ label, description, orientation, placeholder, maxLength, showClearButton, showCharacterCount, showErrorMessage }) => {
   const { form, name, state, handleBlur, handleChange } = useFieldContext<string>();
 
   const isSubmitting = useStore(form.store, ({ isSubmitting }) => isSubmitting);
@@ -23,6 +25,13 @@ export const TextField: React.FC<
     return state.value ? state.value.length : 0;
   }, [state.value]);
 
+  const _countText = useMemo(() => {
+    if (maxLength) {
+      return `${_count} / ${maxLength} character${_count === 1 || _count === 0 ? '' : 's'}`;
+    }
+    return `${_count} character${_count === 1 || _count === 0 ? '' : 's'}`;
+  }, [_count, maxLength]);
+
   const _errors = useMemo(() => {
     return state.meta.errors;
   }, [state.meta.errors]);
@@ -30,9 +39,12 @@ export const TextField: React.FC<
   const onChange = useCallback<React.ChangeEventHandler<HTMLInputElement>>(
     event => {
       if (isSubmitting) return;
+      if (maxLength && event.target.value.length > maxLength) {
+        return;
+      }
       handleChange(event.target.value);
     },
-    [isSubmitting, handleChange]
+    [isSubmitting, maxLength, handleChange]
   );
 
   return (
@@ -65,7 +77,7 @@ export const TextField: React.FC<
             </div>
           )}
           <div className="mt-1 flex w-full flex-col items-end justify-end">
-            {showCharacterCount && <p className="text-end text-text-positive-weak text-xs">{_count} characters</p>}
+            {showCharacterCount && <p className="text-end text-text-positive-weak text-xs">{_countText}</p>}
             {showErrorMessage && <FieldError errors={_errors} />}
           </div>
         </FieldContentMain>

@@ -134,6 +134,7 @@ export const NumberInput: React.FC<IProps> = ({
   placeholder,
   precision,
   wrapperClassName,
+  className,
   onChange,
   onValueChange,
   onBlur,
@@ -304,7 +305,7 @@ export const NumberInput: React.FC<IProps> = ({
         placeholder={placeholder}
         disabled={disabled}
         readOnly={readonly}
-        className={cn('text-end font-number', readonly && 'bg-muted text-muted-foreground')}
+        className={cn('text-end font-number slashed-zero lining-nums tabular-nums', readonly && 'bg-muted text-muted-foreground', className)}
         onChange={handleChange}
         onFocus={handleFocus}
         onBlur={handleBlur}

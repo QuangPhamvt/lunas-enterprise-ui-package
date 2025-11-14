@@ -41,6 +41,12 @@ export type FormBuilderTextareaField = FormBuilderFieldBase & {
   orientation: 'horizontal' | 'vertical' | 'responsive';
   placeholder?: string;
   rows?: number;
+  showCharacterCount: boolean;
+  showErrorMessage: boolean;
+  rules: {
+    maxLength?: number;
+    minLength?: number;
+  };
 };
 
 export type FormBuilderNumberField = FormBuilderFieldBase & {
