@@ -237,7 +237,7 @@ export const buttonVariants = cva(
         md: 'gap-1.5 px-2.5 py-1.5 font-medium text-sm leading-5',
         lg: 'gap-1.5 px-3 py-2 font-medium text-sm leading-5',
         xl: 'gap-2 px-3 py-2 font-medium text-base leading-6',
-        icon: 'size-8 focus:ring-2',
+        icon: 'size-8',
       },
     },
     defaultVariants: {

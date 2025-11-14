@@ -25,7 +25,7 @@ export const NumberField: React.FC<Props> = ({ isShowLabel = true, isNested = fa
             </FieldLabel>
           </FieldContent>
         </Activity>
-        <div className="flex flex-col w-full justify-start">
+        <div className="flex w-full flex-col justify-start">
           <NumberInput
             id={name}
             value={state.value}

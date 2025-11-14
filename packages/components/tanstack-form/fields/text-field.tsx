@@ -1,4 +1,4 @@
-import { Activity, memo, useCallback, type ChangeEventHandler } from 'react';
+import { Activity, type ChangeEventHandler, memo, useCallback } from 'react';
 
 import { useStore } from '@tanstack/react-form';
 import { Loader2Icon, XIcon } from 'lucide-react';
@@ -13,9 +13,9 @@ import { useFieldContext } from '../config';
 
 const clearBtnVariant = cva([
   'text-text-positive-weak',
-  'absolute inset-y-0 top-3 end-0',
+  'absolute inset-y-0 end-0 top-3',
   'flex h-fit w-8 cursor-pointer items-center justify-center rounded-e-md',
-  'transition-[color,box-shadow] outline-none',
+  'outline-none transition-[color,box-shadow]',
   'focus:z-10 focus-visible:ring-2',
   'hover:text-text-positive',
   'focus-visible:ring-border',
@@ -43,7 +43,7 @@ const CountCharacters = memo(({ isShowClearButton, isShowCount, isShowErrorMsg, 
         </button>
       </Activity>
       {isSubmiting && (
-        <div className="absolute inset-y-0 top-2.5 end-2 text-muted-weak">
+        <div className="absolute inset-y-0 end-2 top-2.5 text-muted-weak">
           <Loader2Icon size={16} className="animate-spin" />
         </div>
       )}
@@ -51,7 +51,7 @@ const CountCharacters = memo(({ isShowClearButton, isShowCount, isShowErrorMsg, 
         <Activity mode={isShowCount ? 'visible' : 'hidden'}>
           <p
             className={cn(
-              'text-text-positive-weak text-end text-xs',
+              'text-end text-text-positive-weak text-xs',
               maxLength !== undefined && counts !== undefined && maxLength >= 5 && counts >= maxLength - 5 && 'text-warning',
               maxLength !== undefined && counts !== undefined && counts >= maxLength && 'text-danger'
             )}
@@ -117,7 +117,7 @@ export const TextField: React.FC<Props> = ({
             </Activity>
           </FieldContent>
         </Activity>
-        <div className="relative flex flex-col w-full justify-start">
+        <div className="relative flex w-full flex-col justify-start">
           <Input
             id={name}
             name={name}
