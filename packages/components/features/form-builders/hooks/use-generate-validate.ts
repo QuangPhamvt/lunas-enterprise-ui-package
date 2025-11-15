@@ -12,8 +12,24 @@ export const useGenerateValidate = (fields: FormBuilderField[]) => {
           return z.object({
             [field.camelCaseName]: z
               .string()
-              .min(field.rules?.minLength || 0, `Minimum length is ${field.rules?.minLength}`)
-              .max(field.rules?.maxLength || Infinity, `Maximum length is ${field.rules?.maxLength}`)
+              .refine(
+                val => {
+                  if (field.rules?.minLength && val.length < field.rules.minLength) {
+                    return false;
+                  }
+                  return true;
+                },
+                { error: `Minimum length is ${field.rules?.minLength}` }
+              )
+              .refine(
+                val => {
+                  if (field.rules?.maxLength && val.length > field.rules.maxLength) {
+                    return false;
+                  }
+                  return true;
+                },
+                { error: `Maximum length is ${field.rules?.maxLength}` }
+              )
               .trim(),
           }).shape;
         }
@@ -21,14 +37,87 @@ export const useGenerateValidate = (fields: FormBuilderField[]) => {
           return z.object({
             [field.camelCaseName]: z
               .string()
-              .min(field.rules?.minLength || 0, `Minimum length is ${field.rules?.minLength}`)
-              .max(field.rules?.maxLength || Infinity, `Maximum length is ${field.rules?.maxLength}`)
+              .refine(
+                val => {
+                  if (field.rules?.minLength && val.length < field.rules.minLength) {
+                    return false;
+                  }
+                  return true;
+                },
+                { message: `Minimum length is ${field.rules?.minLength}` }
+              )
+              .refine(
+                val => {
+                  if (field.rules?.maxLength && val.length > field.rules.maxLength) {
+                    return false;
+                  }
+                  return true;
+                },
+                { message: `Maximum length is ${field.rules?.maxLength}` }
+              )
               .trim(),
           }).shape;
         }
         if (field.type === 'number-field') {
           return z.object({
-            [field.camelCaseName]: z.number(),
+            [field.camelCaseName]: z
+              .number()
+              .refine(
+                value => {
+                  if (field.rules.negative && value >= 0) {
+                    return false;
+                  }
+                  return true;
+                },
+                {
+                  message: 'Value must be negative',
+                }
+              )
+              .refine(
+                value => {
+                  if (field.rules.positive && value <= 0) {
+                    return false;
+                  }
+                  return true;
+                },
+                {
+                  message: 'Value must be positive',
+                }
+              )
+              .refine(
+                value => {
+                  if (!field.rules.greaterThan && !field.rules.greaterThanOrEqualTo) {
+                    return true;
+                  }
+                  if (field.rules.greaterThan && !field.rules.greaterThanOrEqualTo) {
+                    return value > field.rules.greaterThan;
+                  }
+                  if (!field.rules.greaterThan && field.rules.greaterThanOrEqualTo) {
+                    return value >= field.rules.greaterThanOrEqualTo;
+                  }
+                  return true;
+                },
+                {
+                  message: `Value must be greater than ${field.rules.greaterThan ?? field.rules.greaterThanOrEqualTo}`,
+                }
+              )
+              .refine(
+                value => {
+                  if (!field.rules.lessThan && !field.rules.lessThanOrEqualTo) {
+                    return true;
+                  }
+                  if (field.rules.lessThan && !field.rules.lessThanOrEqualTo) {
+                    return value < field.rules.lessThan;
+                  }
+                  if (!field.rules.lessThan && field.rules.lessThanOrEqualTo) {
+                    return value <= field.rules.lessThanOrEqualTo;
+                  }
+                  return true;
+                },
+                {
+                  message: `Value must be less than ${field.rules.lessThan ?? field.rules.lessThanOrEqualTo}`,
+                }
+              ),
           }).shape;
         }
         return null;

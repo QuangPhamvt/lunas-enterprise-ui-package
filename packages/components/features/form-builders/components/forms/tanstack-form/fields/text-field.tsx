@@ -4,13 +4,13 @@ import { useStore } from '@tanstack/react-form';
 import { Loader2Icon, XIcon } from 'lucide-react';
 
 import type { FormBuilderTextField } from '@/components/features/form-builders/types';
-import { Input } from '@/components/ui/input';
-import { Field, FieldContent, FieldContentMain, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldSeparator } from '../../fields';
+import { Field, FieldContent, FieldContentMain, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldSeparator } from '../../../../components/ui/fields';
+import { Input } from '../../../ui/input';
 import { useFieldContext } from '../tanstack-form';
 
 export const TextField: React.FC<
   Pick<FormBuilderTextField, 'label' | 'description' | 'orientation' | 'placeholder' | 'showCharacterCount' | 'showClearButton' | 'showErrorMessage'> & {
-    maxLength?: number;
+    maxLength: number | null;
   }
 > = ({ label, description, orientation, placeholder, maxLength, showClearButton, showCharacterCount, showErrorMessage }) => {
   const { form, name, state, handleBlur, handleChange } = useFieldContext<string>();

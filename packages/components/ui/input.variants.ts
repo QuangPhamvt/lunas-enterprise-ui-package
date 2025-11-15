@@ -1,12 +1,12 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 
 export const inputVariants = cva(
-  'font-normal w-full rounded-sm caret-primary text-text-positive transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none',
+  'w-full rounded-sm font-normal text-text-positive caret-primary transition-all duration-200 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50',
   {
     variants: {
       variant: {
         outline:
-          '-outline-offset-1 outline-1 outline-border placeholder:text-text-positive-muted focus:outline-primary-strong focus:ring-4 focus:ring-primary-weak aria-invalid:outline-danger aria-invalid:bg-danger-bg-subtle aria-invalid:focus:outline-danger-strong aria-invalid:focus:ring-4 aria-invalid:ring-danger-weak',
+          '-outline-offset-1 outline-1 outline-border placeholder:text-text-positive-muted focus:outline-primary-strong focus:ring-4 focus:ring-primary-weak aria-invalid:bg-danger-bg-subtle aria-invalid:outline-danger aria-invalid:ring-danger-weak aria-invalid:focus:outline-danger-strong aria-invalid:focus:ring-4',
         ghost: '',
         none: '',
         soft: '',

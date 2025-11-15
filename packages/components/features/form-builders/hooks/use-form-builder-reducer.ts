@@ -79,6 +79,8 @@ const reducer = (state: FormBuilderValue, action: Action): FormBuilderValue => {
 export const useFormBuilderReducer = (initialState: FormBuilderValue) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  console.log('useFormBuilderReducer state:', state);
+
   const onFieldCreate = useCallback((name: string) => {
     dispatch({ type: 'FIELD_CREATE', name });
   }, []);

@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
-
-import { FieldGroup } from '../../fields';
+import { FieldGroup } from '../../../ui/fields';
 
 export const FormBuilderTanStackForm: React.FC<
   React.PropsWithChildren<{

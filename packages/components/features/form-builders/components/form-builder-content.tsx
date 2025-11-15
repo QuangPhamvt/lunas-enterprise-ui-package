@@ -103,39 +103,61 @@ export const FormBuilderFormFieldDroppable: React.FC<
       },
       'text-field': {
         id: fieldId,
-        label: 'Text Field',
+        type: 'text-field',
         orientation: 'responsive',
+        label: 'Text Field',
         placeholder: 'Enter text here',
         description: 'This is a text field',
-        type: 'text-field',
+
         showClearButton: false,
         showCharacterCount: false,
         showErrorMessage: true,
+
         rules: {
-          minLength: undefined,
-          maxLength: undefined,
+          minLength: null,
+          maxLength: null,
         },
       },
       'textarea-field': {
         id: fieldId,
-        label: 'Text Area Field',
+        type: 'textarea-field',
         orientation: 'responsive',
+
+        label: 'Text Area Field',
         placeholder: 'Enter text here',
         description: 'This is a text area field',
-        type: 'textarea-field',
         rows: 4,
+
         showCharacterCount: false,
         showErrorMessage: true,
+
         rules: {
-          minLength: undefined,
-          maxLength: undefined,
+          minLength: null,
+          maxLength: null,
         },
       },
       'number-field': {
         id: fieldId,
-        label: 'Number Field',
-        orientation: 'responsive',
         type: 'number-field',
+        orientation: 'responsive',
+
+        label: 'Number Field',
+        description: 'This is a number field',
+        placeholder: '0',
+        unitText: '',
+
+        showErrorMessage: true,
+
+        rules: {
+          greaterThan: null,
+          greaterThanOrEqualTo: null,
+
+          lessThan: null,
+          lessThanOrEqualTo: null,
+
+          positive: false,
+          negative: false,
+        },
       },
       'date-field': {
         id: fieldId,
@@ -157,9 +179,14 @@ export const FormBuilderFormFieldDroppable: React.FC<
       },
       'select-field': {
         id: fieldId,
-        label: 'Select Field',
-        orientation: 'responsive',
         type: 'select-field',
+        orientation: 'responsive',
+
+        label: 'Select Field',
+        description: 'This is a select field',
+        placeholder: 'Select an option',
+
+        options: [],
       },
       'combobox-field': {
         id: fieldId,
@@ -285,7 +312,7 @@ const FormBuilderFormPreview: React.FC<React.PropsWithChildren> = () => {
 
 export const FormBuilderPage: React.FC<React.PropsWithChildren> = () => {
   return (
-    <div data-slot="form-builder-page" className="">
+    <div data-slot="form-builder-page">
       <Tabs defaultValue="form-builder">
         <TabsList className="rounded-none bg-transparent px-0">
           <TabsTrigger

@@ -33,7 +33,7 @@ function SelectTrigger({
       className={cn(
         'border-border-weak shadow-input',
         'flex w-fit items-center justify-between',
-        'gap-2 rounded-md border bg-transparent px-3 py-2 text-sm',
+        'gap-2 rounded border bg-transparent px-3 py-2 text-sm',
         'whitespace-nowrap outline-none transition-all',
         'cursor-pointer',
         'hover:border-border',
@@ -81,7 +81,7 @@ function SelectContent({ className, children, position = 'popper', ...props }: R
           'relative z-50',
           'min-w-32',
           'overflow-y-auto overflow-x-hidden',
-          'rounded-md shadow-dropdown',
+          'rounded shadow-dropdown',
           'data-[state=open]:animate-in',
           'data-[state=open]:fade-in-0',
           'data-[state=open]:zoom-in-95',
@@ -133,7 +133,7 @@ function SelectItem({ className, children, ...props }: React.ComponentProps<type
       data-slot="select-item"
       className={cn(
         'relative flex select-none items-center',
-        'gap-2 rounded-md py-2.5 pr-8 pl-2',
+        'gap-2 rounded py-2.5 pr-8 pl-2',
         'w-full',
         'cursor-pointer transition-colors',
         'text-sm text-text-positive outline-hidden',

@@ -5,12 +5,12 @@ import { Loader2Icon } from 'lucide-react';
 
 import type { FormBuilderTextareaField } from '@/components/features/form-builders/types';
 import { Textarea } from '@/components/ui/textarea';
-import { Field, FieldContent, FieldContentMain, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldSeparator } from '../../fields';
+import { Field, FieldContent, FieldContentMain, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldSeparator } from '../../../../components/ui/fields';
 import { useFieldContext } from '../tanstack-form';
 
 export const TextareaField: React.FC<
   Pick<FormBuilderTextareaField, 'label' | 'description' | 'placeholder' | 'orientation' | 'rows' | 'showCharacterCount' | 'showErrorMessage'> & {
-    maxLength?: number;
+    maxLength: number | null;
   }
 > = ({ label, description, placeholder, orientation, maxLength, rows, showCharacterCount, showErrorMessage }) => {
   const field = useFieldContext<string>();

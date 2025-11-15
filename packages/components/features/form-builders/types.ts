@@ -36,8 +36,8 @@ export type FormBuilderTextField = FormBuilderFieldBase & {
   showClearButton: boolean;
   showErrorMessage: boolean;
   rules: {
-    maxLength?: number;
-    minLength?: number;
+    maxLength: number | null;
+    minLength: number | null;
   };
 };
 
@@ -49,8 +49,8 @@ export type FormBuilderTextareaField = FormBuilderFieldBase & {
   showCharacterCount: boolean;
   showErrorMessage: boolean;
   rules: {
-    maxLength?: number;
-    minLength?: number;
+    maxLength: number | null;
+    minLength: number | null;
   };
 };
 
@@ -58,6 +58,20 @@ export type FormBuilderNumberField = FormBuilderFieldBase & {
   type: 'number-field';
   orientation: 'horizontal' | 'vertical' | 'responsive';
   placeholder?: string;
+  showErrorMessage: boolean;
+
+  rules: {
+    greaterThan: number | null;
+    greaterThanOrEqualTo: number | null;
+
+    lessThan: number | null;
+    lessThanOrEqualTo: number | null;
+
+    positive?: boolean;
+    negative?: boolean;
+  };
+
+  unitText?: string;
 };
 
 export type FormBuilderDateField = FormBuilderFieldBase & {
@@ -78,6 +92,12 @@ export type FormBuilderRadioGroupField = FormBuilderFieldBase & {
 export type FormBuilderSelectField = FormBuilderFieldBase & {
   type: 'select-field';
   orientation: 'horizontal' | 'vertical' | 'responsive';
+  placeholder?: string;
+
+  options: {
+    label: string;
+    value: string;
+  }[];
 };
 
 export type FormBuilderComboboxField = FormBuilderFieldBase & {
