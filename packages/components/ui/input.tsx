@@ -2,7 +2,7 @@
 
 import { useCallback } from 'react';
 
-import { inputVariants, type InputVariantProps } from './input.variants';
+import { type InputVariantProps, inputVariants } from './input.variants';
 
 function Input({
   className,

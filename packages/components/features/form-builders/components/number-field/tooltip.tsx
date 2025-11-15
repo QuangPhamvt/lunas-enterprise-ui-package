@@ -4,11 +4,11 @@ import { useForm } from '@tanstack/react-form';
 import { z } from 'zod/v4';
 
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { NumberInput } from '@/components/ui/inputs/number-input';
 import { toCamelCase } from '../../utils';
-import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, FieldLabel, FieldSeparator, FieldSet } from '../forms';
+import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, FieldLabel, FieldSeparator, FieldSet } from '../../components/ui/fields';
 import { useFormBuilderValueContext } from '../providers';
+import { Input } from '../ui/input';
 
 export const FormBuilderNumberFieldTooltipFieldType: React.FC<{
   fieldId: string;

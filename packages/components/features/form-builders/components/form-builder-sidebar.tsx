@@ -15,10 +15,10 @@ import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } 
 import { CSS } from '@dnd-kit/utilities';
 import { createPortal } from 'react-dom';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import type { FIELD_ID } from '../types';
 import { FormBuilderMapper } from './form-builder-mapper';
 import { useFormBuilderFieldContext } from './providers';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const FormBuilderFieldDraggable: React.FC<
   React.PropsWithChildren<{

@@ -14,7 +14,7 @@ import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessa
 import { Input } from '../ui/input';
 
 const clearBtnVariant = cva([
-  'text-text-positive-weak hover:text-text-positive focus-visible:ring-border absolute inset-y-0 top-3 end-0 flex h-fit w-8 cursor-pointer items-center justify-center rounded-e-md transition-[color,box-shadow] outline-none focus:z-10 focus-visible:ring-2',
+  'absolute inset-y-0 end-0 top-3 flex h-fit w-8 cursor-pointer items-center justify-center rounded-e-md text-text-positive-weak outline-none transition-[color,box-shadow] hover:text-text-positive focus:z-10 focus-visible:ring-2 focus-visible:ring-border',
 ]);
 
 type CountCharactersProps = {
@@ -39,7 +39,7 @@ const CountCharacters = memo(({ name, isShowClearButton, isShowCount, isShowErro
       )}
       <Flex width="full" padding="none" justify="end">
         {isShowErrorMsg && <FormMessage className="grow" />}
-        {isShowCount && <div className="text-text-positive-weak text-end text-xs">{valueWatch?.length ?? 0} characters</div>}
+        {isShowCount && <div className="text-end text-text-positive-weak text-xs">{valueWatch?.length ?? 0} characters</div>}
       </Flex>
     </>
   );
@@ -86,7 +86,7 @@ export const TextField = <TFieldValues extends FieldValues = FieldValues>({
                 {!!description && <FormDescription>{description}</FormDescription>}
               </FieldContent>
             </Activity>
-            <div className="flex flex-col w-full justify-start">
+            <div className="flex w-full flex-col justify-start">
               <FormControl>
                 <Input {...field} placeholder={placeholder} className={cn('w-full', isShowClearButton && 'pr-9')} onValueChange={onValueChange} />
               </FormControl>

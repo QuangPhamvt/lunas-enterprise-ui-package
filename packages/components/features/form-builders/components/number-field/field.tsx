@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 import { NumberInput } from '@/components/ui/inputs/number-input';
-import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, FieldLabel, FieldSet } from '../forms';
+import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, FieldLabel, FieldSet } from '../../components/ui/fields';
 import { useFormBuilderValueContext } from '../providers';
 
 export const FormBuilderNumberField: React.FC<{

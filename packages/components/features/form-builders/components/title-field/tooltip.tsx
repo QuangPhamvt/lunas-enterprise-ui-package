@@ -4,10 +4,10 @@ import { useForm } from '@tanstack/react-form';
 import { z } from 'zod/v4';
 
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Field, FieldContent, FieldDescription, FieldGroup, FieldLabel, FieldSeparator, FieldSet } from '../../components/ui/fields';
 import { toCamelCase } from '../../utils';
-import { Field, FieldContent, FieldDescription, FieldGroup, FieldLabel, FieldSeparator, FieldSet } from '../forms';
 import { useFormBuilderValueContext } from '../providers';
+import { Input } from '../ui/input';
 
 export const FormBuilderTitleFieldTooltipFieldType: React.FC<{
   fieldId: string;

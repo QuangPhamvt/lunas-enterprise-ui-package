@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { FieldDescription, FieldGroup, FieldLegend, FieldSeparator, FieldSet } from '../forms';
+import { FieldDescription, FieldGroup, FieldLegend, FieldSeparator, FieldSet } from '../../components/ui/fields';
 import { useFormBuilderValueContext } from '../providers';
 
 export const FormBuilderTitleField: React.FC<{

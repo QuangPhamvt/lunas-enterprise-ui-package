@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 
-import { Input } from '@/components/ui/input';
-import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, FieldLabel, FieldSeparator, FieldSet } from '../forms';
+import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, FieldLabel, FieldSeparator, FieldSet } from '../../components/ui/fields';
 import { useFormBuilderValueContext } from '../providers';
+import { Input } from '../ui/input';
 
 export const FormBuilderTextField: React.FC<{ fieldId: string }> = ({ fieldId }) => {
   const { formBuilder } = useFormBuilderValueContext();
