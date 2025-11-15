@@ -36,8 +36,8 @@ export type FormBuilderTextField = FormBuilderFieldBase & {
   showClearButton: boolean;
   showErrorMessage: boolean;
   rules: {
-    maxLength?: number;
-    minLength?: number;
+    maxLength: number | null;
+    minLength: number | null;
   };
 };
 
@@ -49,8 +49,8 @@ export type FormBuilderTextareaField = FormBuilderFieldBase & {
   showCharacterCount: boolean;
   showErrorMessage: boolean;
   rules: {
-    maxLength?: number;
-    minLength?: number;
+    maxLength: number | null;
+    minLength: number | null;
   };
 };
 
@@ -62,10 +62,10 @@ export type FormBuilderNumberField = FormBuilderFieldBase & {
 
   rules: {
     greaterThan: number | null;
-    greaterThanOrEqualTo?: number | null;
+    greaterThanOrEqualTo: number | null;
 
-    lessThan?: number | null;
-    lessThanOrEqualTo?: number | null;
+    lessThan: number | null;
+    lessThanOrEqualTo: number | null;
 
     positive?: boolean;
     negative?: boolean;

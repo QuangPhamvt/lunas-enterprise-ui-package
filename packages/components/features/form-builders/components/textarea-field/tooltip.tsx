@@ -214,18 +214,26 @@ export const FormBuilderTextareaFieldTooltipFieldRules: React.FC<{
   const schema = useMemo(() => {
     return z
       .object({
-        maxLength: z.number().gte(0),
-        minLength: z.number().gte(0),
+        maxLength: z.number().gte(0).nullable(),
+        minLength: z.number().gte(0).nullable(),
       })
-      .refine(data => data.minLength <= data.maxLength && data.maxLength !== 0, {
-        message: 'Min length must be less than or equal to max length',
-      });
+      .refine(
+        data => {
+          if (data.minLength !== null && data.maxLength !== null) {
+            return data.minLength <= data.maxLength;
+          }
+          return true;
+        },
+        {
+          message: 'Min Length must be less than or equal to Max Length',
+        }
+      );
   }, []);
 
   const form = useForm({
     defaultValues: {
-      maxLength: currentField?.rules?.maxLength || 0,
-      minLength: currentField?.rules?.minLength || 0,
+      maxLength: currentField?.rules?.maxLength || null,
+      minLength: currentField?.rules?.minLength || null,
     } as z.infer<typeof schema>,
     validators: {
       onSubmit: schema,
@@ -234,8 +242,8 @@ export const FormBuilderTextareaFieldTooltipFieldRules: React.FC<{
     onSubmit: ({ value }) => {
       onFieldUpdate(fieldId, {
         rules: {
-          minLength: value.minLength || undefined,
-          maxLength: value.maxLength || undefined,
+          minLength: value.minLength,
+          maxLength: value.maxLength,
         },
       });
     },
@@ -267,7 +275,7 @@ export const FormBuilderTextareaFieldTooltipFieldRules: React.FC<{
                 <FieldContentMain className="flex justify-end">
                   <NumberInput
                     id={field.name}
-                    value={field.state.value}
+                    value={field.state.value ?? 0}
                     aria-invalid={field.state.meta.isTouched && !field.state.meta.isValid}
                     unitText=""
                     placeholder="0"
@@ -275,7 +283,10 @@ export const FormBuilderTextareaFieldTooltipFieldRules: React.FC<{
                     className="rounded!"
                     onBlur={field.handleBlur}
                     onValueChange={value => {
-                      if (value === undefined) return;
+                      if (value === undefined) {
+                        field.handleChange(null);
+                        return;
+                      }
                       field.handleChange(value);
                     }}
                   />
@@ -298,7 +309,7 @@ export const FormBuilderTextareaFieldTooltipFieldRules: React.FC<{
                 <FieldContentMain className="flex justify-end">
                   <NumberInput
                     id={field.name}
-                    value={field.state.value}
+                    value={field.state.value ?? 0}
                     aria-invalid={field.state.meta.isTouched && !field.state.meta.isValid}
                     unitText=""
                     placeholder="0"
@@ -306,7 +317,10 @@ export const FormBuilderTextareaFieldTooltipFieldRules: React.FC<{
                     className="rounded!"
                     onBlur={field.handleBlur}
                     onValueChange={value => {
-                      if (value === undefined) return;
+                      if (value === undefined) {
+                        field.handleChange(null);
+                        return;
+                      }
                       field.handleChange(value);
                     }}
                   />

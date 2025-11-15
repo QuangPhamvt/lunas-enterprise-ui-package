@@ -114,8 +114,8 @@ export const FormBuilderFormFieldDroppable: React.FC<
         showErrorMessage: true,
 
         rules: {
-          minLength: undefined,
-          maxLength: undefined,
+          minLength: null,
+          maxLength: null,
         },
       },
       'textarea-field': {
@@ -132,8 +132,8 @@ export const FormBuilderFormFieldDroppable: React.FC<
         showErrorMessage: true,
 
         rules: {
-          minLength: undefined,
-          maxLength: undefined,
+          minLength: null,
+          maxLength: null,
         },
       },
       'number-field': {
