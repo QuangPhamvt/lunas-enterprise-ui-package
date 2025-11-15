@@ -3,7 +3,7 @@ import { HashIcon, LetterTextIcon, TypeIcon, TypeOutlineIcon } from 'lucide-reac
 import type { FIELD_ID } from '../types';
 import { FormBuilderNotImplement } from './not-implement';
 import { FormBuilderNumberField } from './number-field/field';
-import { FormBuilderNumberFieldTooltipFieldType } from './number-field/tooltip';
+import { FormBuilderNumberFieldTooltipFieldRules, FormBuilderNumberFieldTooltipFieldType } from './number-field/tooltip';
 import { FormBuilderTextField } from './text-field/field';
 import { FormBuilderTextFieldTooltipFieldRules, FormBuilderTextFieldTooltipFieldType } from './text-field/tooltip';
 import { FormBuilderTextareaField } from './textarea-field/field';
@@ -98,7 +98,8 @@ export const FormBuilderMapper: (fieldId: string) => Record<FIELD_ID, Record<'FI
             <FormBuilderNumberFieldTooltipFieldType fieldId={fieldId} />
           </FormBuilderTooltipFieldSettingsFieldType>
           <FormBuilderTooltipFieldSettingsRules>
-            <FormBuilderNotImplement />
+            {/*<FormBuilderNotImplement />*/}
+            <FormBuilderNumberFieldTooltipFieldRules fieldId={fieldId} />
           </FormBuilderTooltipFieldSettingsRules>
         </FormBuilderTooltipFieldSettings>
         <FormBuilderTooltipFieldTrash fieldId={fieldId} />

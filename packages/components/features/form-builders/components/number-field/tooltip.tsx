@@ -1,14 +1,16 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 import { useForm } from '@tanstack/react-form';
 import { z } from 'zod/v4';
 
 import { Button } from '@/components/ui/button';
-import { NumberInput } from '@/components/ui/inputs/number-input';
-import { toCamelCase } from '../../utils';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
 import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, FieldLabel, FieldSeparator, FieldSet } from '../../components/ui/fields';
+import { toCamelCase } from '../../utils';
 import { useFormBuilderValueContext } from '../providers';
 import { Input } from '../ui/input';
+import { NumberInput } from '../ui/number-input';
 
 export const FormBuilderNumberFieldTooltipFieldType: React.FC<{
   fieldId: string;
@@ -30,6 +32,8 @@ export const FormBuilderNumberFieldTooltipFieldType: React.FC<{
       description: z.string(),
       placeholder: z.string(),
       unitText: z.string(),
+
+      showErrorMessage: z.boolean(),
     });
   }, []);
 
@@ -40,7 +44,8 @@ export const FormBuilderNumberFieldTooltipFieldType: React.FC<{
       description: currentField?.description || '',
       placeholder: currentField?.placeholder || '',
       unitText: currentField?.unitText || '',
-    },
+      showErrorMessage: currentField?.showErrorMessage || true,
+    } as z.input<typeof schema>,
     validators: {
       onSubmit: schema,
       onChange: schema,
@@ -158,6 +163,24 @@ export const FormBuilderNumberFieldTooltipFieldType: React.FC<{
             }}
           />
           <FieldSeparator />
+          <form.Field
+            name="showErrorMessage"
+            children={field => {
+              return (
+                <Field orientation="horizontal" className="*:data-[slot=field-content]:basis-2/5">
+                  <FieldContent>
+                    <FieldLabel htmlFor={field.name} className="text-text-positive-weak">
+                      Show Error Message
+                    </FieldLabel>
+                  </FieldContent>
+                  <div className="flex basis-3/5 justify-end">
+                    <Switch id={field.name} checked={field.state.value} onCheckedChange={field.handleChange} />
+                  </div>
+                </Field>
+              );
+            }}
+          />
+          <FieldSeparator />
           <Field orientation="responsive">
             <form.Subscribe
               selector={state => [state.canSubmit, state.isSubmitting]}
@@ -183,45 +206,96 @@ export const FormBuilderNumberFieldTooltipFieldRules: React.FC<{
   fieldId: string;
 }> = ({ fieldId }) => {
   const { formBuilder, onFieldUpdate } = useFormBuilderValueContext();
+
   const currentField = useMemo(() => {
     const data = formBuilder.form.find(field => field.id === fieldId);
-    if (data && data.type === 'text-field') {
+    if (data && data.type === 'number-field') {
       return data;
     }
     return null;
   }, [fieldId, formBuilder]);
+
+  const [greaterOption, setGreaterOption] = useState<'greaterThan' | 'greaterThanOrEqualTo'>(
+    fieldId && currentField?.rules.greaterThanOrEqualTo !== null
+      ? 'greaterThanOrEqualTo'
+      : currentField?.rules.greaterThan !== null
+        ? 'greaterThan'
+        : 'greaterThan'
+  );
+
+  const [lessOption, setLessOption] = useState<'lessThan' | 'lessThanOrEqualTo'>(
+    fieldId && currentField?.rules.lessThanOrEqualTo !== null ? 'lessThanOrEqualTo' : currentField?.rules.lessThan !== null ? 'lessThan' : 'lessThan'
+  );
+
   const schema = useMemo(() => {
     return z
       .object({
-        maxLength: z.number().gte(0),
-        minLength: z.number().gte(0),
+        greaterThan: z.number().nullable(),
+        greaterThanOrEqualTo: z.number().nullable(),
+        lessThan: z.number().nullable(),
+        lessThanOrEqualTo: z.number().nullable(),
       })
-      .refine(data => data.minLength <= data.maxLength && data.maxLength !== 0, {
-        message: 'Min length must be less than or equal to max length',
-      });
+      .refine(
+        value => {
+          if (value.greaterThan !== null && value.greaterThanOrEqualTo !== null) {
+            return false;
+          }
+          if (value.lessThan !== null && value.lessThanOrEqualTo !== null) {
+            return false;
+          }
+          return true;
+        },
+        {
+          message: 'Cannot set both Greater Than and Greater Than or Equal To or Less Than and Less Than or Equal To',
+        }
+      )
+      .refine(
+        value => {
+          if (value.greaterThan !== null && value.lessThan !== null) {
+            return value.greaterThan < value.lessThan;
+          }
+          if (value.greaterThanOrEqualTo !== null && value.lessThanOrEqualTo !== null) {
+            return value.greaterThanOrEqualTo < value.lessThanOrEqualTo;
+          }
+          if (value.greaterThan !== null && value.lessThanOrEqualTo !== null) {
+            return value.greaterThan < value.lessThanOrEqualTo;
+          }
+          if (value.greaterThanOrEqualTo !== null && value.lessThan !== null) {
+            return value.greaterThanOrEqualTo < value.lessThan;
+          }
+          return true;
+        },
+        {
+          message: 'Greater than value must be less than Less than value',
+        }
+      );
   }, []);
 
   const form = useForm({
     defaultValues: {
-      maxLength: currentField?.rules?.maxLength || 0,
-      minLength: currentField?.rules?.minLength || 0,
+      greaterThan: currentField?.rules.greaterThan || null,
+      greaterThanOrEqualTo: currentField?.rules.greaterThanOrEqualTo || null,
+      lessThan: currentField?.rules.lessThan || null,
+      lessThanOrEqualTo: currentField?.rules.lessThanOrEqualTo || null,
     } as z.infer<typeof schema>,
     validators: {
       onSubmit: schema,
       onChange: schema,
     },
     onSubmit: ({ value }) => {
-      onFieldUpdate(fieldId, {
-        rules: {
-          minLength: value.minLength || undefined,
-          maxLength: value.maxLength || undefined,
-        },
-      });
+      const newRules = {
+        greaterThan: value.greaterThanOrEqualTo !== null ? null : value.greaterThan,
+        greaterThanOrEqualTo: value.greaterThan !== null ? null : value.greaterThanOrEqualTo,
+        lessThan: value.lessThanOrEqualTo !== null ? null : value.lessThan,
+        lessThanOrEqualTo: value.lessThan !== null ? null : value.lessThanOrEqualTo,
+      };
+      onFieldUpdate(fieldId, { rules: newRules });
     },
     onSubmitInvalid: state => {
       state.formApi.reset();
     },
   });
+
   return (
     <form
       onSubmit={e => {
@@ -235,66 +309,179 @@ export const FormBuilderNumberFieldTooltipFieldRules: React.FC<{
           <FieldDescription>Set validation rules for the text field.</FieldDescription>
           <FieldSeparator />
         </FieldSet>
-        <form.Field
-          name="minLength"
-          children={field => {
-            return (
-              <Field orientation="horizontal" className="*:data-[slot=field-content-main]:basis-3/5 *:data-[slot=field-content]:basis-2/5">
-                <FieldContent>
-                  <FieldLabel className="text-text-positive-weak">Min Length</FieldLabel>
-                </FieldContent>
-                <FieldContentMain className="flex justify-end">
+
+        <Field orientation="vertical" className="*:data-[slot=field-content-main]:basis-3/5 *:data-[slot=field-content]:basis-2/5">
+          <FieldContent>
+            <FieldLabel className="text-text-positive-weak">Greater</FieldLabel>
+          </FieldContent>
+          <FieldContentMain className="flex space-x-2">
+            <form.Field
+              name="greaterThan"
+              children={field => {
+                if (greaterOption === 'greaterThanOrEqualTo') return null;
+                return (
                   <NumberInput
                     id={field.name}
-                    value={field.state.value}
+                    value={field.state.value ?? 0}
                     aria-invalid={field.state.meta.isTouched && !field.state.meta.isValid}
                     unitText=""
                     placeholder="0"
-                    wrapperClassName="w-48"
+                    wrapperClassName="flex-1"
                     className="rounded!"
                     onBlur={field.handleBlur}
                     onValueChange={value => {
-                      if (value === undefined) return;
+                      if (value === undefined) {
+                        field.handleChange(null);
+                        return;
+                      }
                       field.handleChange(value);
                     }}
                   />
-                </FieldContentMain>
-              </Field>
-            );
-          }}
-        />
-        <FieldSeparator />
-        <form.Field
-          name="maxLength"
-          children={field => {
-            return (
-              <Field orientation="horizontal" className="*:data-[slot=field-content-main]:basis-3/5 *:data-[slot=field-content]:basis-2/5">
-                <FieldContent>
-                  <FieldLabel htmlFor={field.name} className="text-text-positive-weak">
-                    Max Length
-                  </FieldLabel>
-                </FieldContent>
-                <FieldContentMain className="flex justify-end">
+                );
+              }}
+            />
+            <form.Field
+              name="greaterThanOrEqualTo"
+              children={field => {
+                if (greaterOption === 'greaterThan') return null;
+                return (
                   <NumberInput
                     id={field.name}
-                    value={field.state.value}
+                    value={field.state.value ?? 0}
                     aria-invalid={field.state.meta.isTouched && !field.state.meta.isValid}
                     unitText=""
                     placeholder="0"
-                    wrapperClassName="w-48"
+                    wrapperClassName="flex-1"
                     className="rounded!"
                     onBlur={field.handleBlur}
                     onValueChange={value => {
-                      if (value === undefined) return;
+                      if (value === undefined) {
+                        field.handleChange(null);
+                        return;
+                      }
                       field.handleChange(value);
                     }}
                   />
-                </FieldContentMain>
-              </Field>
-            );
-          }}
-        />
+                );
+              }}
+            />
+            <form.Subscribe
+              children={() => {
+                return (
+                  <Select
+                    defaultValue="greaterThan"
+                    value={greaterOption}
+                    onValueChange={value => {
+                      if (value === 'greaterThan') {
+                        form.setFieldValue('greaterThanOrEqualTo', null);
+                      }
+                      if (value === 'greaterThanOrEqualTo') {
+                        form.setFieldValue('greaterThan', null);
+                      }
+                      setGreaterOption(value as 'greaterThan' | 'greaterThanOrEqualTo');
+                    }}
+                  >
+                    <SelectTrigger className="w-48 rounded [&>span]:line-clamp-1">
+                      <SelectValue placeholder="Select option" />
+                    </SelectTrigger>
+                    <SelectContent className="rounded">
+                      <SelectItem value="greaterThan">Greater Than</SelectItem>
+                      <SelectItem value="greaterThanOrEqualTo">Greater Than or Equal To</SelectItem>
+                    </SelectContent>
+                  </Select>
+                );
+              }}
+            />
+          </FieldContentMain>
+        </Field>
         <FieldSeparator />
+
+        <Field orientation="vertical" className="*:data-[slot=field-content-main]:basis-3/5 *:data-[slot=field-content]:basis-2/5">
+          <FieldContent>
+            <FieldLabel className="text-text-positive-weak">Less</FieldLabel>
+          </FieldContent>
+          <FieldContentMain className="flex space-x-2">
+            <form.Field
+              name="lessThan"
+              children={field => {
+                if (lessOption === 'lessThanOrEqualTo') return null;
+                return (
+                  <NumberInput
+                    id={field.name}
+                    value={field.state.value ?? 0}
+                    aria-invalid={field.state.meta.isTouched && !field.state.meta.isValid}
+                    unitText=""
+                    placeholder="0"
+                    wrapperClassName="flex-1"
+                    className="rounded!"
+                    onBlur={field.handleBlur}
+                    onValueChange={value => {
+                      if (value === undefined) {
+                        field.handleChange(null);
+                        return;
+                      }
+                      field.handleChange(value);
+                    }}
+                  />
+                );
+              }}
+            />
+            <form.Field
+              name="lessThanOrEqualTo"
+              children={field => {
+                if (lessOption === 'lessThan') return null;
+                return (
+                  <NumberInput
+                    id={field.name}
+                    value={field.state.value ?? 0}
+                    aria-invalid={field.state.meta.isTouched && !field.state.meta.isValid}
+                    unitText=""
+                    placeholder="0"
+                    wrapperClassName="flex-1"
+                    className="rounded!"
+                    onBlur={field.handleBlur}
+                    onValueChange={value => {
+                      if (value === undefined) {
+                        field.handleChange(null);
+                        return;
+                      }
+                      field.handleChange(value);
+                    }}
+                  />
+                );
+              }}
+            />
+            <form.Subscribe
+              children={() => {
+                return (
+                  <Select
+                    defaultValue="lessThan"
+                    value={lessOption}
+                    onValueChange={value => {
+                      if (value === 'lessThan') {
+                        form.setFieldValue('lessThanOrEqualTo', null);
+                      }
+                      if (value === 'lessThanOrEqualTo') {
+                        form.setFieldValue('lessThan', null);
+                      }
+                      setLessOption(value as 'lessThan' | 'lessThanOrEqualTo');
+                    }}
+                  >
+                    <SelectTrigger className="w-48 rounded [&>span]:line-clamp-1">
+                      <SelectValue placeholder="Select option" />
+                    </SelectTrigger>
+                    <SelectContent className="rounded">
+                      <SelectItem value="lessThan">Less Than</SelectItem>
+                      <SelectItem value="lessThanOrEqualTo">Less Than or Equal To</SelectItem>
+                    </SelectContent>
+                  </Select>
+                );
+              }}
+            />
+          </FieldContentMain>
+        </Field>
+        <FieldSeparator />
+
         <Field orientation="responsive">
           <form.Subscribe
             selector={state => [state.canSubmit, state.isSubmitting]}

@@ -58,13 +58,14 @@ export type FormBuilderNumberField = FormBuilderFieldBase & {
   type: 'number-field';
   orientation: 'horizontal' | 'vertical' | 'responsive';
   placeholder?: string;
+  showErrorMessage: boolean;
 
   rules: {
-    greaterThan?: number;
-    greaterThanOrEqualTo?: number;
+    greaterThan: number | null;
+    greaterThanOrEqualTo?: number | null;
 
-    lessThan?: number;
-    lessThanOrEqualTo?: number;
+    lessThan?: number | null;
+    lessThanOrEqualTo?: number | null;
 
     positive?: boolean;
     negative?: boolean;

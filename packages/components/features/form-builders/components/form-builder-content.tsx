@@ -103,14 +103,16 @@ export const FormBuilderFormFieldDroppable: React.FC<
       },
       'text-field': {
         id: fieldId,
-        label: 'Text Field',
+        type: 'text-field',
         orientation: 'responsive',
+        label: 'Text Field',
         placeholder: 'Enter text here',
         description: 'This is a text field',
-        type: 'text-field',
+
         showClearButton: false,
         showCharacterCount: false,
         showErrorMessage: true,
+
         rules: {
           minLength: undefined,
           maxLength: undefined,
@@ -118,14 +120,17 @@ export const FormBuilderFormFieldDroppable: React.FC<
       },
       'textarea-field': {
         id: fieldId,
-        label: 'Text Area Field',
+        type: 'textarea-field',
         orientation: 'responsive',
+
+        label: 'Text Area Field',
         placeholder: 'Enter text here',
         description: 'This is a text area field',
-        type: 'textarea-field',
         rows: 4,
+
         showCharacterCount: false,
         showErrorMessage: true,
+
         rules: {
           minLength: undefined,
           maxLength: undefined,
@@ -133,19 +138,22 @@ export const FormBuilderFormFieldDroppable: React.FC<
       },
       'number-field': {
         id: fieldId,
+        type: 'number-field',
+        orientation: 'responsive',
+
         label: 'Number Field',
         description: 'This is a number field',
         placeholder: '0',
-        orientation: 'responsive',
-        type: 'number-field',
         unitText: '',
 
-        rules: {
-          greaterThan: undefined,
-          greaterThanOrEqualTo: undefined,
+        showErrorMessage: true,
 
-          lessThan: undefined,
-          lessThanOrEqualTo: undefined,
+        rules: {
+          greaterThan: null,
+          greaterThanOrEqualTo: null,
+
+          lessThan: null,
+          lessThanOrEqualTo: null,
 
           positive: false,
           negative: false,

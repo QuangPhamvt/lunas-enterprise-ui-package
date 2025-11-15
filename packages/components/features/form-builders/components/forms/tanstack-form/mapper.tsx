@@ -91,6 +91,7 @@ export const FormBuilderTanStackFieldMapper = ({
                   description={field.description}
                   placeholder={field.placeholder}
                   unitText={field.unitText}
+                  showErrorMessage={field.showErrorMessage}
                 />
               );
             }}
