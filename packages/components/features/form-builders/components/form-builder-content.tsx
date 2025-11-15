@@ -134,6 +134,8 @@ export const FormBuilderFormFieldDroppable: React.FC<
       'number-field': {
         id: fieldId,
         label: 'Number Field',
+        description: 'This is a number field',
+        placeholder: '0',
         orientation: 'responsive',
         type: 'number-field',
         unitText: '',

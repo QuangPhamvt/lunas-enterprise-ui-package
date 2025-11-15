@@ -3,8 +3,8 @@ import { useCallback } from 'react';
 import { useStore } from '@tanstack/react-form';
 
 import type { FormBuilderNumberField } from '@/components/features/form-builders/types';
-import { NumberInput } from '@/components/ui/inputs/number-input';
 import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, FieldLabel } from '../../../../components/ui/fields';
+import { NumberInput } from '../../../ui/number-input';
 import { useFieldContext } from '../tanstack-form';
 
 export const NumberField: React.FC<Pick<FormBuilderNumberField, 'label' | 'description' | 'orientation' | 'placeholder' | 'unitText'>> = ({

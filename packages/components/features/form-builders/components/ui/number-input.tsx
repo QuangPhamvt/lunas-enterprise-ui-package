@@ -64,6 +64,17 @@ interface IProps extends React.HTMLAttributes<HTMLInputElement> {
    * Default: `nearest`
    *
    * Usage: Rounding rule for the text field
+   * - 'up': Round up
+   * - 'down': Round down
+   * - 'nearest': Round to nearest
+   * - 'none': No rounding
+   *
+   * E.g.
+   * - Value: 2.135, precision: 2
+   *   - 'up' => 2.14
+   *   - 'down' => 2.13
+   *   - 'nearest' => 2.13
+   *   - 'none' => 2.135
    */
   roundingRule?: 'up' | 'down' | 'nearest' | 'none';
   /**
@@ -128,7 +139,7 @@ export const NumberInput: React.FC<IProps> = ({
   allowNegative = false,
   numberAfterDecimalPoint = 2,
   roundingRule = 'none',
-  value: initialValue = '',
+  value = '',
   unitText,
   decimal,
   placeholder,
@@ -143,11 +154,11 @@ export const NumberInput: React.FC<IProps> = ({
   const _unitRef = useRef<HTMLSpanElement>(null);
   const _inputRef = useRef<HTMLInputElement>(null);
 
-  const [value, setValue] = useState<string>(initialValue.toString());
+  const [_value, _setValue] = useState<string>(value.toString());
 
   // Memoized values for validation and formatting
-  const maxDecimalPlaces = decimal?.[1] ?? numberAfterDecimalPoint;
-  const maxIntegerLength = decimal && decimal[0] - decimal[1];
+  const maxDecimalPlaces = useMemo(() => decimal?.[1] ?? numberAfterDecimalPoint, [decimal, numberAfterDecimalPoint]);
+  const maxIntegerLength = useMemo(() => decimal && decimal[0] - decimal[1], [decimal]);
   const validationRegex = useMemo(() => createValidationRegex(allowNegative), [allowNegative]);
 
   // Validation functions
@@ -233,7 +244,7 @@ export const NumberInput: React.FC<IProps> = ({
       // Handle empty input
       if (!inputValue) {
         onValueChange?.(undefined);
-        setValue('');
+        _setValue('');
         return;
       }
 
@@ -242,30 +253,29 @@ export const NumberInput: React.FC<IProps> = ({
       const isNegativeZero = inputValue === '-' && allowNegative;
       if (isZero || isNegativeZero) {
         onValueChange?.(0);
-        setValue(inputValue);
+        _setValue(inputValue);
         return;
       }
 
       // Validate input format
-      const isValid = validationRegex.test(inputValue) && isValidFormat(inputValue) && (decimal || isValidDecimalLength(inputValue));
-      if (!isValid) return;
+      if (!validationRegex.test(inputValue) || !isValidFormat(inputValue) || (!decimal && !isValidDecimalLength(inputValue))) return;
 
       const numericValue = parseFloat(inputValue) || 0;
       onValueChange?.(numericValue);
-      setValue(inputValue);
+      _setValue(inputValue);
     },
     [allowNegative, decimal, isValidDecimalLength, isValidFormat, onChange, onValueChange, validationRegex]
   );
 
   const handleFocus = useCallback(() => {
     if (readonly) return;
-    setValue(prev => prev.replace(/,/g, '')); // Remove commas for easier editing
+    _setValue(prev => prev.replace(/,/g, '')); // Remove commas for easier editing
   }, [readonly]);
 
   const handleBlur = useCallback(() => {
     if (readonly) return;
     onBlur?.();
-    setValue(prev => formattedValue(prev));
+    _setValue(prev => formattedValue(prev));
   }, [readonly, onBlur, formattedValue]);
 
   // Set initial value
@@ -273,21 +283,21 @@ export const NumberInput: React.FC<IProps> = ({
     const isFocused = document.activeElement === _inputRef.current;
 
     if (
-      !initialValue ||
-      !validationRegex.test(initialValue.toString()) ||
-      !validateDecimalPoint(initialValue.toString()) ||
-      (!decimal && isDecimalPointGreaterThanLimit(initialValue.toString()))
+      !value ||
+      !validationRegex.test(value.toString()) ||
+      !validateDecimalPoint(value.toString()) ||
+      (!decimal && isDecimalPointGreaterThanLimit(value.toString()))
     ) {
-      setValue('');
+      _setValue('');
       return;
     }
 
-    setValue(prev => {
+    _setValue(prev => {
       if (prev === '-') return '-';
       if (!prev) return '';
-      return isFocused ? initialValue.toString() : formattedValue(initialValue.toString());
+      return isFocused ? value.toString() : formattedValue(value.toString());
     });
-  }, [decimal, formattedValue, initialValue, isDecimalPointGreaterThanLimit, validateDecimalPoint, validationRegex]);
+  }, [decimal, formattedValue, value, isDecimalPointGreaterThanLimit, validateDecimalPoint, validationRegex]);
 
   // Set padding right for the input field
   useEffect(() => {
@@ -301,7 +311,7 @@ export const NumberInput: React.FC<IProps> = ({
       <Input
         {...props}
         ref={_inputRef}
-        value={value || (readonly ? '0' : '')}
+        value={_value || (readonly ? '0' : '')}
         placeholder={placeholder}
         disabled={disabled}
         readOnly={readonly}

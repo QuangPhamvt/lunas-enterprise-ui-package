@@ -4,8 +4,8 @@ import { useCallback } from 'react';
 
 import { cva, type VariantProps } from 'class-variance-authority';
 
-const inputVariants = cva(
-  'w-full rounded-sm font-normal text-text-positive caret-primary transition-all duration-200 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50',
+const inputVariant = cva(
+  'w-full rounded font-normal text-text-positive caret-primary transition-all duration-200 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50',
   {
     variants: {
       variant: {
@@ -31,9 +31,9 @@ const inputVariants = cva(
   }
 );
 
-type InputVariantProps = VariantProps<typeof inputVariants>;
+type InputVariantProps = VariantProps<typeof inputVariant>;
 
-function Input({
+export const Input = ({
   className,
   variant,
   size,
@@ -44,7 +44,7 @@ function Input({
   variant?: InputVariantProps['variant'];
   size?: InputVariantProps['size'];
   onValueChange?: (value: string) => void;
-}) {
+}) => {
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       onChange?.(e);
@@ -52,7 +52,5 @@ function Input({
     },
     [onChange, onValueChange]
   );
-  return <input data-slot="input" className={inputVariants({ variant, size, className })} {...props} onChange={handleChange} />;
-}
-
-export { Input };
+  return <input data-slot="input" className={inputVariant({ variant, size, className })} {...props} onChange={handleChange} />;
+};
