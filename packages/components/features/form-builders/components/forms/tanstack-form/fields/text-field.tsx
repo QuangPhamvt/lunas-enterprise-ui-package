@@ -10,7 +10,7 @@ import { useFieldContext } from '../tanstack-form';
 
 export const TextField: React.FC<
   Pick<FormBuilderTextField, 'label' | 'description' | 'orientation' | 'placeholder' | 'showCharacterCount' | 'showClearButton' | 'showErrorMessage'> & {
-    maxLength?: number;
+    maxLength: number | null;
   }
 > = ({ label, description, orientation, placeholder, maxLength, showClearButton, showCharacterCount, showErrorMessage }) => {
   const { form, name, state, handleBlur, handleChange } = useFieldContext<string>();

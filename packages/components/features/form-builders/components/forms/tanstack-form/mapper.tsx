@@ -102,6 +102,30 @@ export const FormBuilderTanStackFieldMapper = ({
     return <WithHOC form={form} />;
   }
 
+  if (field.type === 'select-field') {
+    const WithHOC = withFormBuilderTanStackForm({
+      render: ({ form }) => {
+        return (
+          <form.AppField
+            name={field.camelCaseName}
+            children={({ SelectField }) => {
+              return (
+                <SelectField
+                  orientation={field.orientation}
+                  label={field.label}
+                  description={field.description}
+                  placeholder={field.placeholder}
+                  options={field.options}
+                />
+              );
+            }}
+          />
+        );
+      },
+    });
+    return <WithHOC form={form} />;
+  }
+
   // Add more mappers for other field types here...
   return <div>Field Mapper</div>;
 };

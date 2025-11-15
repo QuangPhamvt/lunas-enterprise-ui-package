@@ -43,7 +43,7 @@ export const SelectField: React.FC<Props> = ({
             </Activity>
           </FieldContent>
         </Activity>
-        <div className="flex flex-col w-full justify-start">
+        <div className="flex w-full flex-col justify-start">
           <Select defaultValue={state.value} onValueChange={handleChange}>
             <SelectTrigger
               className={cn(
@@ -65,7 +65,7 @@ export const SelectField: React.FC<Props> = ({
                   </SelectItem>
                 ))}
               {!options.length && (
-                <div className="px-4 py-6.5 text-center text-sm text-text-positive-weak flex items-center gap-x-2 justify-center">
+                <div className="flex items-center justify-center gap-x-2 px-4 py-6.5 text-center text-sm text-text-positive-weak">
                   <PackagePlusIcon strokeWidth={1} />
                   No options available
                 </div>
@@ -94,8 +94,8 @@ export const SelectField: React.FC<Props> = ({
             </Activity>
           </Activity>
         </FieldContent>
-        <div className="basis-3/5 flex flex-col items-end">
-          <div className="w-full md:max-w-80 flex flex-col space-y-0.5">
+        <div className="flex basis-3/5 flex-col items-end">
+          <div className="flex w-full flex-col space-y-0.5 md:max-w-80">
             <Select defaultValue={state.value} onValueChange={handleChange}>
               <SelectTrigger
                 className={cn(
@@ -117,7 +117,7 @@ export const SelectField: React.FC<Props> = ({
                     </SelectItem>
                   ))}
                 {!options.length && (
-                  <div className="px-4 py-6.5 text-center text-sm text-text-positive-weak flex items-center gap-x-2 justify-center">
+                  <div className="flex items-center justify-center gap-x-2 px-4 py-6.5 text-center text-sm text-text-positive-weak">
                     <PackagePlusIcon strokeWidth={1} />
                     No options available
                   </div>

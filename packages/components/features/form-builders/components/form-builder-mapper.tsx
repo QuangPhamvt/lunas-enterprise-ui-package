@@ -1,9 +1,11 @@
-import { HashIcon, LetterTextIcon, TypeIcon, TypeOutlineIcon } from 'lucide-react';
+import { ChevronDownCircleIcon, HashIcon, LetterTextIcon, TypeIcon, TypeOutlineIcon } from 'lucide-react';
 
 import type { FIELD_ID } from '../types';
 import { FormBuilderNotImplement } from './not-implement';
 import { FormBuilderNumberField } from './number-field/field';
 import { FormBuilderNumberFieldTooltipFieldRules, FormBuilderNumberFieldTooltipFieldType } from './number-field/tooltip';
+import { FormBuilderSelectField } from './select-field/field';
+import { FormBuilderSelectFieldTooltipFieldType } from './select-field/tooltip';
 import { FormBuilderTextField } from './text-field/field';
 import { FormBuilderTextFieldTooltipFieldRules, FormBuilderTextFieldTooltipFieldType } from './text-field/tooltip';
 import { FormBuilderTextareaField } from './textarea-field/field';
@@ -98,7 +100,6 @@ export const FormBuilderMapper: (fieldId: string) => Record<FIELD_ID, Record<'FI
             <FormBuilderNumberFieldTooltipFieldType fieldId={fieldId} />
           </FormBuilderTooltipFieldSettingsFieldType>
           <FormBuilderTooltipFieldSettingsRules>
-            {/*<FormBuilderNotImplement />*/}
             <FormBuilderNumberFieldTooltipFieldRules fieldId={fieldId} />
           </FormBuilderTooltipFieldSettingsRules>
         </FormBuilderTooltipFieldSettings>
@@ -129,9 +130,27 @@ export const FormBuilderMapper: (fieldId: string) => Record<FIELD_ID, Record<'FI
     FIELD: <div>Radio Group Field</div>,
   },
   'select-field': {
-    TOOLTIP: 'Select Field',
-    SIDEBAR_FIELD: <div className="px-2.5 py-2">Select Field</div>,
-    FIELD: <div>Select Field</div>,
+    TOOLTIP: (
+      <FormBuilderTooltipField>
+        <FormBuilderTooltipFieldCopy />
+        <FormBuilderTooltipFieldSettings>
+          <FormBuilderTooltipFieldSettingsFieldType>
+            <FormBuilderSelectFieldTooltipFieldType fieldId={fieldId} />
+          </FormBuilderTooltipFieldSettingsFieldType>
+          <FormBuilderTooltipFieldSettingsRules>
+            <FormBuilderNotImplement />
+          </FormBuilderTooltipFieldSettingsRules>
+        </FormBuilderTooltipFieldSettings>
+        <FormBuilderTooltipFieldTrash fieldId={fieldId} />
+      </FormBuilderTooltipField>
+    ),
+    SIDEBAR_FIELD: (
+      <div className="flex items-center space-x-1 px-2.5 py-2 text-sm">
+        <ChevronDownCircleIcon size={16} />
+        <p>Select Field</p>
+      </div>
+    ),
+    FIELD: <FormBuilderSelectField fieldId={fieldId} />,
   },
   'combobox-field': {
     TOOLTIP: 'Combobox Field',

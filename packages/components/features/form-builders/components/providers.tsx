@@ -45,6 +45,11 @@ const FormBuilderFields: TFormBuilderField[] = [
     accepts: ['FIELD', 'FORM_BUILDER'],
   },
   {
+    id: 'select-field',
+    tab: 'FORM_FIELDS',
+    accepts: ['FIELD', 'FORM_BUILDER'],
+  },
+  {
     id: 'date-field',
     tab: 'FORM_FIELDS',
     accepts: ['FIELD', 'FORM_BUILDER'],
@@ -56,11 +61,6 @@ const FormBuilderFields: TFormBuilderField[] = [
   },
   {
     id: 'radio-group-field',
-    tab: 'FORM_FIELDS',
-    accepts: ['FIELD', 'FORM_BUILDER'],
-  },
-  {
-    id: 'select-field',
     tab: 'FORM_FIELDS',
     accepts: ['FIELD', 'FORM_BUILDER'],
   },

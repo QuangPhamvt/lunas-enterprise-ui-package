@@ -92,6 +92,12 @@ export type FormBuilderRadioGroupField = FormBuilderFieldBase & {
 export type FormBuilderSelectField = FormBuilderFieldBase & {
   type: 'select-field';
   orientation: 'horizontal' | 'vertical' | 'responsive';
+  placeholder?: string;
+
+  options: {
+    label: string;
+    value: string;
+  }[];
 };
 
 export type FormBuilderComboboxField = FormBuilderFieldBase & {

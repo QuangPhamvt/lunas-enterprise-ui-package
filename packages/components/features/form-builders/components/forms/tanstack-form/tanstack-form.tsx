@@ -1,6 +1,7 @@
 import { createFormHook, createFormHookContexts } from '@tanstack/react-form';
 
 import { NumberField } from './fields/number-field';
+import { SelectField } from './fields/select-field';
 import { TextField } from './fields/text-field';
 import { TextareaField } from './fields/textarea-field';
 import { FormBuilderTanStackForm } from './forms/form-builder-tanstack-form';
@@ -16,6 +17,7 @@ const { useAppForm: useFormBuilderTanStack, withForm: withFormBuilderTanStackFor
     TextField,
     TextareaField,
     NumberField,
+    SelectField,
   },
 
   formComponents: {
