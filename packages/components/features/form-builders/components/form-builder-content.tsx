@@ -166,7 +166,7 @@ export const FormBuilderFormFieldDroppable: React.FC<
 
         label: 'Date Field',
         description: 'This is a date field',
-        placeholder: 'DD/MM/YYYY',
+        placeholder: 'Select a date',
       },
       'switch-field': {
         id: fieldId,

@@ -120,6 +120,16 @@ export const useGenerateValidate = (fields: FormBuilderField[]) => {
               ),
           }).shape;
         }
+        if (field.type === 'select-field') {
+          return z.object({
+            [field.camelCaseName]: z.string().nullable(),
+          }).shape;
+        }
+        if (field.type === 'date-field') {
+          return z.object({
+            [field.camelCaseName]: z.date(),
+          });
+        }
         return null;
       })
       .filter(Boolean);
@@ -144,6 +154,16 @@ export const useGenerateValidate = (fields: FormBuilderField[]) => {
         if (field.type === 'number-field') {
           return {
             [field.camelCaseName]: 0,
+          };
+        }
+        if (field.type === 'select-field') {
+          return {
+            [field.camelCaseName]: null,
+          };
+        }
+        if (field.type === 'date-field') {
+          return {
+            [field.camelCaseName]: null,
           };
         }
         return null;

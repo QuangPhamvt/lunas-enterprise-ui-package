@@ -2,6 +2,7 @@ import { CalendarIcon, ChevronDownCircleIcon, HashIcon, LetterTextIcon, TypeIcon
 
 import type { FIELD_ID } from '../types';
 import { FormBuilderDateField } from './date-field/field';
+import { FormBuilderDateFieldTooltipFieldType } from './date-field/tooltip';
 import { FormBuilderNotImplement } from './not-implement';
 import { FormBuilderNumberField } from './number-field/field';
 import { FormBuilderNumberFieldTooltipFieldRules, FormBuilderNumberFieldTooltipFieldType } from './number-field/tooltip';
@@ -21,7 +22,6 @@ import {
   FormBuilderTooltipFieldSettingsRules,
   FormBuilderTooltipFieldTrash,
 } from './tooltip';
-import { FormBuilderDateFieldTooltipFieldType } from './date-field/tooltip';
 
 export const FormBuilderMapper: (fieldId: string) => Record<FIELD_ID, Record<'FIELD' | 'TOOLTIP' | 'SIDEBAR_FIELD', React.ReactNode>> = fieldId => ({
   'title-field': {

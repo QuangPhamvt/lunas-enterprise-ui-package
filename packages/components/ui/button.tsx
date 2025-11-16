@@ -56,11 +56,6 @@ function Button({
       data-state={isLoading ? 'loading' : undefined}
       disabled={disabled}
       aria-disabled={disabled ? true : undefined}
-      style={
-        {
-          cornerShape: 'squircle',
-        } as React.CSSProperties
-      }
       className={cn(
         buttonVariants({
           variant,
