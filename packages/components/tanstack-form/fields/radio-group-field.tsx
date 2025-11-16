@@ -39,13 +39,13 @@ type Props = CommonFieldProps & {
 export const RadioGroupField: React.FC<Props> = ({ options }) => {
   const { handleChange } = useFieldContext();
   return (
-    <RadioGroup className="flex flex-col space-y-0.5 justify-end items-end" onValueChange={handleChange}>
+    <RadioGroup className="flex flex-col items-end justify-end space-y-0.5" onValueChange={handleChange}>
       {options.map(option => {
         return (
-          <label key={option.value} className="rounded-lg border border-border flex p-2 cursor-pointer max-w-90 w-full">
-            <div className="flex flex-col grow">
-              <p className="text-sm text-text-positive font-semibold">{option.label}</p>
-              <p className="text-xs text-text-positive-weak">{option.value}</p>
+          <label key={option.value} className="flex w-full max-w-90 cursor-pointer rounded-lg border border-border p-2">
+            <div className="flex grow flex-col">
+              <p className="font-semibold text-sm text-text-positive">{option.label}</p>
+              <p className="text-text-positive-weak text-xs">{option.value}</p>
             </div>
             <RadioGroupItem value={option.value} />
           </label>

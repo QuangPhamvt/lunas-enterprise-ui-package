@@ -1,11 +1,17 @@
-import { ChevronDownCircleIcon, HashIcon, LetterTextIcon, TypeIcon, TypeOutlineIcon } from 'lucide-react';
+import { CalendarIcon, ChevronDownCircleIcon, CircleDotIcon, HashIcon, LetterTextIcon, ToggleLeftIcon, TypeIcon, TypeOutlineIcon } from 'lucide-react';
 
 import type { FIELD_ID } from '../types';
+import { FormBuilderDateField } from './date-field/field';
+import { FormBuilderDateFieldTooltipFieldType } from './date-field/tooltip';
 import { FormBuilderNotImplement } from './not-implement';
 import { FormBuilderNumberField } from './number-field/field';
 import { FormBuilderNumberFieldTooltipFieldRules, FormBuilderNumberFieldTooltipFieldType } from './number-field/tooltip';
+import { FormBuilderRadioGroupField } from './radio-group-field/field';
+import { FormBuilderRadioGroupFieldTooltipFieldType } from './radio-group-field/tooltip';
 import { FormBuilderSelectField } from './select-field/field';
 import { FormBuilderSelectFieldTooltipFieldType } from './select-field/tooltip';
+import { FormBuilderSwitchField } from './switch-field/field';
+import { FormBuilderSwitchFieldTooltipFieldType } from './switch-field/tooltip';
 import { FormBuilderTextField } from './text-field/field';
 import { FormBuilderTextFieldTooltipFieldRules, FormBuilderTextFieldTooltipFieldType } from './text-field/tooltip';
 import { FormBuilderTextareaField } from './textarea-field/field';
@@ -115,19 +121,73 @@ export const FormBuilderMapper: (fieldId: string) => Record<FIELD_ID, Record<'FI
     FIELD: <FormBuilderNumberField fieldId={fieldId} />,
   },
   'date-field': {
-    TOOLTIP: 'Date Field',
-    SIDEBAR_FIELD: <div className="px-2.5 py-2">Date Field</div>,
-    FIELD: <div>Date Field</div>,
+    TOOLTIP: (
+      <FormBuilderTooltipField>
+        <FormBuilderTooltipFieldCopy />
+        <FormBuilderTooltipFieldSettings>
+          <FormBuilderTooltipFieldSettingsFieldType>
+            <FormBuilderDateFieldTooltipFieldType fieldId={fieldId} />
+          </FormBuilderTooltipFieldSettingsFieldType>
+          <FormBuilderTooltipFieldSettingsRules>
+            <FormBuilderNotImplement />
+          </FormBuilderTooltipFieldSettingsRules>
+        </FormBuilderTooltipFieldSettings>
+        <FormBuilderTooltipFieldTrash fieldId={fieldId} />
+      </FormBuilderTooltipField>
+    ),
+    SIDEBAR_FIELD: (
+      <div className="flex items-center space-x-1 px-2.5 py-2 text-sm">
+        <CalendarIcon size={16} />
+        <p>Date Field</p>
+      </div>
+    ),
+    FIELD: <FormBuilderDateField fieldId={fieldId} />,
   },
   'switch-field': {
-    TOOLTIP: 'Switch Field',
-    SIDEBAR_FIELD: <div className="px-2.5 py-2">Switch Field</div>,
-    FIELD: <div>Switch Field</div>,
+    TOOLTIP: (
+      <FormBuilderTooltipField>
+        <FormBuilderTooltipFieldCopy />
+        <FormBuilderTooltipFieldSettings>
+          <FormBuilderTooltipFieldSettingsFieldType>
+            <FormBuilderSwitchFieldTooltipFieldType fieldId={fieldId} />
+          </FormBuilderTooltipFieldSettingsFieldType>
+          <FormBuilderTooltipFieldSettingsRules>
+            <FormBuilderNotImplement />
+          </FormBuilderTooltipFieldSettingsRules>
+        </FormBuilderTooltipFieldSettings>
+        <FormBuilderTooltipFieldTrash fieldId={fieldId} />
+      </FormBuilderTooltipField>
+    ),
+    SIDEBAR_FIELD: (
+      <div className="flex items-center space-x-1 px-2.5 py-2 text-sm">
+        <ToggleLeftIcon size={16} />
+        <p>Switch Group Field</p>
+      </div>
+    ),
+    FIELD: <FormBuilderSwitchField fieldId={fieldId} />,
   },
   'radio-group-field': {
-    TOOLTIP: 'Radio Group Field',
-    SIDEBAR_FIELD: <div className="px-2.5 py-2">Radio Group Field</div>,
-    FIELD: <div>Radio Group Field</div>,
+    TOOLTIP: (
+      <FormBuilderTooltipField>
+        <FormBuilderTooltipFieldCopy />
+        <FormBuilderTooltipFieldSettings>
+          <FormBuilderTooltipFieldSettingsFieldType>
+            <FormBuilderRadioGroupFieldTooltipFieldType fieldId={fieldId} />
+          </FormBuilderTooltipFieldSettingsFieldType>
+          <FormBuilderTooltipFieldSettingsRules>
+            <FormBuilderNotImplement />
+          </FormBuilderTooltipFieldSettingsRules>
+        </FormBuilderTooltipFieldSettings>
+        <FormBuilderTooltipFieldTrash fieldId={fieldId} />
+      </FormBuilderTooltipField>
+    ),
+    SIDEBAR_FIELD: (
+      <div className="flex items-center space-x-1 px-2.5 py-2 text-sm">
+        <CircleDotIcon size={16} />
+        <p>Radio Field</p>
+      </div>
+    ),
+    FIELD: <FormBuilderRadioGroupField fieldId={fieldId} />,
   },
   'select-field': {
     TOOLTIP: (

@@ -17,7 +17,7 @@ export const SelectField: React.FC<Pick<FormBuilderSelectField, 'label' | 'descr
 
   options,
 }) => {
-  const field = useFieldContext<string>();
+  const field = useFieldContext<string | null>();
 
   const _isInvalid = useMemo(() => {
     return field.state.meta.isTouched && !field.state.meta.isValid;
@@ -36,7 +36,7 @@ export const SelectField: React.FC<Pick<FormBuilderSelectField, 'label' | 'descr
         </FieldContent>
         <FieldContentMain className="flex justify-end">
           <div className="flex w-full max-w-60 flex-col">
-            <Select defaultValue={field.state.value} onValueChange={field.handleChange}>
+            <Select defaultValue={field.state.value ?? undefined} onValueChange={field.handleChange}>
               <SelectTrigger
                 className={cn(
                   'w-full',

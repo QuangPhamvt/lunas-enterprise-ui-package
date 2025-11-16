@@ -100,7 +100,7 @@ const FieldLabel = memo(({ className, ...props }: React.ComponentProps<typeof La
     <Label
       data-slot="field-label"
       className={cn(
-        'group/field-label peer/field-label flex w-fit gap-2 leading-snug has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col has-[>[data-slot=field]]:rounded-md has-[>[data-slot=field]]:border has-data-[state=checked]:border-primary has-data-[state=checked]:bg-primary/5 *:data-[slot=field]:p-4 group-data-[disabled=true]/field:opacity-50',
+        'group/field-label peer/field-label flex w-fit gap-2 leading-snug has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col has-[>[data-slot=field]]:rounded-md has-[>[data-slot=field]]:border has-[>[data-slot=field]]:border-border has-data-[state=checked]:border-primary *:data-[slot=field]:p-4 group-data-[disabled=true]/field:opacity-50',
         className
       )}
       {...props}
@@ -126,7 +126,7 @@ const FieldDescription = memo(({ className, ...props }: React.ComponentProps<'p'
       data-slot="field-description"
       className={cn(
         // biome-ignore lint/security/noSecrets: true
-        'nth-last-2:-mt-1 [[data-variant=legend]+&]:-mt-1.5 font-normal text-sm text-text-positive-weak leading-normal last:mt-0 group-has-data-[orientation=horizontal]/field:text-balance [&>a:hover]:text-primary [&>a]:underline [&>a]:underline-offset-4',
+        'nth-last-2:-mt-1 [[data-variant=legend]+&]:-mt-1.5 font-normal text-sm text-text-positive-weak leading-normal last:mt-0 [&>a:hover]:text-primary [&>a]:underline [&>a]:underline-offset-4',
         className
       )}
       {...props}

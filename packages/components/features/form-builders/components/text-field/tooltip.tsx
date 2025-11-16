@@ -50,7 +50,7 @@ export const FormBuilderTextFieldTooltipFieldType: React.FC<{
       onSubmit: schema,
       onChange: schema,
     },
-    onSubmit: ({ value }) => {
+    onSubmit: ({ value, formApi }) => {
       onFieldUpdate(fieldId, {
         name: value.name,
         camelCaseName: toCamelCase(value.name),
@@ -61,6 +61,7 @@ export const FormBuilderTextFieldTooltipFieldType: React.FC<{
         showClearButton: value.showClearButton,
         showErrorMessage: value.showErrorMessage,
       });
+      formApi.reset(value);
     },
     onSubmitInvalid: state => {
       state.formApi.reset();
@@ -202,10 +203,10 @@ export const FormBuilderTextFieldTooltipFieldType: React.FC<{
           <FieldSeparator />
           <Field orientation="responsive">
             <form.Subscribe
-              selector={state => [state.canSubmit, state.isSubmitting]}
-              children={([canSubmit, isSubmitting]) => {
+              selector={state => [state.canSubmit, state.isSubmitting, state.isDirty]}
+              children={([canSubmit, isSubmitting, isDirty]) => {
                 return (
-                  <Button type="submit" disabled={!canSubmit || isSubmitting}>
+                  <Button type="submit" disabled={!canSubmit || isSubmitting || !isDirty}>
                     Submit
                   </Button>
                 );

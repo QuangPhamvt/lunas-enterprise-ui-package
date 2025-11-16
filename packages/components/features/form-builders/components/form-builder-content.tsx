@@ -161,21 +161,32 @@ export const FormBuilderFormFieldDroppable: React.FC<
       },
       'date-field': {
         id: fieldId,
-        label: 'Date Field',
-        orientation: 'responsive',
         type: 'date-field',
+        orientation: 'responsive',
+
+        label: 'Date Field',
+        description: 'This is a date field',
+        placeholder: 'Select a date',
       },
       'switch-field': {
         id: fieldId,
-        label: 'Switch Field',
-        orientation: 'responsive',
         type: 'switch-field',
+        orientation: 'responsive',
+
+        label: 'Switch Field',
+        description: 'This is a switch field',
+
+        options: [],
       },
       'radio-group-field': {
         id: fieldId,
-        label: 'Radio Group Field',
-        orientation: 'responsive',
         type: 'radio-group-field',
+        orientation: 'responsive',
+
+        label: 'Radio Group Field',
+        description: 'This is a radio group field',
+
+        options: [],
       },
       'select-field': {
         id: fieldId,

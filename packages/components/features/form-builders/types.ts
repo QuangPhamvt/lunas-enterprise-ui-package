@@ -77,16 +77,30 @@ export type FormBuilderNumberField = FormBuilderFieldBase & {
 export type FormBuilderDateField = FormBuilderFieldBase & {
   type: 'date-field';
   orientation: 'horizontal' | 'vertical' | 'responsive';
+  placeholder?: string;
 };
 
 export type FormBuilderSwitchField = FormBuilderFieldBase & {
   type: 'switch-field';
   orientation: 'horizontal' | 'vertical' | 'responsive';
+
+  options: {
+    name: string;
+    camelCaseName: string;
+    label: string;
+    description?: string;
+  }[];
 };
 
 export type FormBuilderRadioGroupField = FormBuilderFieldBase & {
   type: 'radio-group-field';
   orientation: 'horizontal' | 'vertical' | 'responsive';
+
+  options: {
+    label: string;
+    description?: string;
+    value: string;
+  }[];
 };
 
 export type FormBuilderSelectField = FormBuilderFieldBase & {

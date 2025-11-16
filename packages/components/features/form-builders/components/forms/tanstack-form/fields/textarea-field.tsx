@@ -4,8 +4,8 @@ import { useStore } from '@tanstack/react-form';
 import { Loader2Icon } from 'lucide-react';
 
 import type { FormBuilderTextareaField } from '@/components/features/form-builders/types';
-import { Textarea } from '@/components/ui/textarea';
 import { Field, FieldContent, FieldContentMain, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldSeparator } from '../../../../components/ui/fields';
+import { Textarea } from '../../../ui/textarea';
 import { useFieldContext } from '../tanstack-form';
 
 export const TextareaField: React.FC<
