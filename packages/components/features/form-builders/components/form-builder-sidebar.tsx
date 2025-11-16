@@ -1,17 +1,9 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import { GripVerticalIcon } from 'lucide-react';
 
-import {
-  type DragCancelEvent,
-  type DragEndEvent,
-  type DragOverEvent,
-  DragOverlay,
-  type DragStartEvent,
-  type UniqueIdentifier,
-  useDndMonitor,
-} from '@dnd-kit/core';
-import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { type DragCancelEvent, DragOverlay, type DragStartEvent, type UniqueIdentifier, useDndMonitor } from '@dnd-kit/core';
+import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { createPortal } from 'react-dom';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
@@ -52,43 +44,16 @@ const FormBuilderFieldDraggable: React.FC<
 };
 
 export const FormBuilderSidebar: React.FC<React.PropsWithChildren> = () => {
-  const { fields, setFields } = useFormBuilderFieldContext();
+  const { fields } = useFormBuilderFieldContext();
 
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
   const [activeFieldSectionTab, setActiveFieldSectionTab] = useState<'typography' | 'input-field'>('input-field');
-
-  const sortableItems = useMemo(() => {
-    return fields.map(field => field.id);
-  }, [fields]);
 
   const handleDragStart = useCallback((event: DragStartEvent) => {
     const { active } = event;
     if (!active.data.current?.variant?.includes('FIELD')) return;
     setActiveId(active.id);
   }, []);
-
-  const handleDragOver = useCallback((event: DragOverEvent) => {
-    const { over } = event;
-    if (!over) return;
-  }, []);
-
-  const handleDragEnd = useCallback(
-    (event: DragEndEvent) => {
-      setActiveId(null);
-      const { active, over } = event;
-
-      if (!over || over.data.current?.variant.includes('FORM_FIELD')) return;
-      if (active.id === over.id) return;
-
-      setFields(items => {
-        const oldIndex = items.findIndex(item => item.id === active.id);
-        const newIndex = items.findIndex(item => item.id === over.id);
-        return arrayMove(items, oldIndex, newIndex);
-      });
-    },
-    [setFields]
-  );
-
   const handleDragCancel = useCallback((event: DragCancelEvent) => {
     void event;
     setActiveId(null);
@@ -96,8 +61,6 @@ export const FormBuilderSidebar: React.FC<React.PropsWithChildren> = () => {
 
   useDndMonitor({
     onDragStart: handleDragStart,
-    onDragOver: handleDragOver,
-    onDragEnd: handleDragEnd,
     onDragCancel: handleDragCancel,
   });
 
@@ -136,15 +99,13 @@ export const FormBuilderSidebar: React.FC<React.PropsWithChildren> = () => {
 
               <TabsContent value="typography">
                 <div className="flex flex-col space-y-1">
-                  <SortableContext items={sortableItems} strategy={verticalListSortingStrategy}>
-                    {fields
-                      .filter(field => field.tab === 'TYPOGRAPHY')
-                      .map(field => (
-                        <FormBuilderFieldDraggable key={field.id} id={field.id}>
-                          {FormBuilderMapper(field.id)[field.id].SIDEBAR_FIELD}
-                        </FormBuilderFieldDraggable>
-                      ))}
-                  </SortableContext>
+                  {fields
+                    .filter(field => field.tab === 'TYPOGRAPHY')
+                    .map(field => (
+                      <FormBuilderFieldDraggable key={field.id} id={field.id}>
+                        {FormBuilderMapper(field.id)[field.id].SIDEBAR_FIELD}
+                      </FormBuilderFieldDraggable>
+                    ))}
                 </div>
                 {activeId &&
                   createPortal(
@@ -161,15 +122,13 @@ export const FormBuilderSidebar: React.FC<React.PropsWithChildren> = () => {
 
               <TabsContent value="input-field">
                 <div className="flex flex-col space-y-1">
-                  <SortableContext items={sortableItems} strategy={verticalListSortingStrategy}>
-                    {fields
-                      .filter(field => field.tab === 'FORM_FIELDS')
-                      .map(field => (
-                        <FormBuilderFieldDraggable key={field.id} id={field.id}>
-                          {FormBuilderMapper(field.id)[field.id].SIDEBAR_FIELD}
-                        </FormBuilderFieldDraggable>
-                      ))}
-                  </SortableContext>
+                  {fields
+                    .filter(field => field.tab === 'FORM_FIELDS')
+                    .map(field => (
+                      <FormBuilderFieldDraggable key={field.id} id={field.id}>
+                        {FormBuilderMapper(field.id)[field.id].SIDEBAR_FIELD}
+                      </FormBuilderFieldDraggable>
+                    ))}
                 </div>
                 {activeId &&
                   createPortal(

@@ -1,4 +1,5 @@
 'use client';
+
 import { useCallback } from 'react';
 
 import { cn } from '@customafk/react-toolkit/utils';
@@ -24,7 +25,7 @@ function Textarea({
       className={cn(
         // Base styles
         'flex min-h-24 w-full px-3 py-2',
-        'rounded-md border transition-all duration-200',
+        'rounded border transition-all duration-200',
         'bg-transparent text-sm text-text-positive-strong',
         'field-sizing-content resize-y',
 

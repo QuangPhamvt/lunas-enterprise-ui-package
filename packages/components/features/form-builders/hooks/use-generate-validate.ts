@@ -130,6 +130,16 @@ export const useGenerateValidate = (fields: FormBuilderField[]) => {
             [field.camelCaseName]: z.date(),
           });
         }
+        if (field.type === 'switch-field') {
+          const switchShapeArr = field.options.map(option => {
+            return z.object({
+              [option.camelCaseName]: z.boolean(),
+            }).shape;
+          });
+          return z.object({
+            ...Object.assign({}, ...switchShapeArr),
+          }).shape;
+        }
         return null;
       })
       .filter(Boolean);
@@ -165,6 +175,12 @@ export const useGenerateValidate = (fields: FormBuilderField[]) => {
           return {
             [field.camelCaseName]: null,
           };
+        }
+        if (field.type === 'switch-field') {
+          const switchValues = field.options.map(option => ({
+            [option.camelCaseName]: false,
+          }));
+          return Object.assign({}, ...switchValues);
         }
         return null;
       })

@@ -83,6 +83,13 @@ export type FormBuilderDateField = FormBuilderFieldBase & {
 export type FormBuilderSwitchField = FormBuilderFieldBase & {
   type: 'switch-field';
   orientation: 'horizontal' | 'vertical' | 'responsive';
+
+  options: {
+    name: string;
+    camelCaseName: string;
+    label: string;
+    description?: string;
+  }[];
 };
 
 export type FormBuilderRadioGroupField = FormBuilderFieldBase & {

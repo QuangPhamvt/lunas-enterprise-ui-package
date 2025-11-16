@@ -170,9 +170,13 @@ export const FormBuilderFormFieldDroppable: React.FC<
       },
       'switch-field': {
         id: fieldId,
-        label: 'Switch Field',
-        orientation: 'responsive',
         type: 'switch-field',
+        orientation: 'responsive',
+
+        label: 'Switch Field',
+        description: 'This is a switch field',
+
+        options: [],
       },
       'radio-group-field': {
         id: fieldId,
