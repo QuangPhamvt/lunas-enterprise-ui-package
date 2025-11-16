@@ -80,6 +80,7 @@ export const FormBuilderTanStackFieldMapper = ({
     return <WithHOC form={form} />;
   }
 
+  // Mapper: Number Field
   if (field.type === 'number-field') {
     const WithHOC = withFormBuilderTanStackForm({
       render: ({ form }) => {
@@ -147,6 +148,7 @@ export const FormBuilderTanStackFieldMapper = ({
     return <WithHOC form={form} />;
   }
 
+  // Mapper: Switch Field
   if (field.type === 'switch-field') {
     const WithHOC = withFormBuilderTanStackForm({
       render: ({ form }) => {
@@ -185,6 +187,24 @@ export const FormBuilderTanStackFieldMapper = ({
         );
       },
     });
+    return <WithHOC form={form} />;
+  }
+
+  // Mapper: Radio Group Field
+  if (field.type === 'radio-group-field') {
+    const WithHOC = withFormBuilderTanStackForm({
+      render: ({ form }) => {
+        return (
+          <form.AppField
+            name={field.camelCaseName}
+            children={({ RadioGroupField }) => {
+              return <RadioGroupField label={field.label} description={field.description} orientation={field.orientation} options={field.options} />;
+            }}
+          />
+        );
+      },
+    });
+
     return <WithHOC form={form} />;
   }
 

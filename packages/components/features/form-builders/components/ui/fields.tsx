@@ -126,7 +126,7 @@ const FieldDescription = memo(({ className, ...props }: React.ComponentProps<'p'
       data-slot="field-description"
       className={cn(
         // biome-ignore lint/security/noSecrets: true
-        'nth-last-2:-mt-1 [[data-variant=legend]+&]:-mt-1.5 font-normal text-sm text-text-positive-weak leading-normal last:mt-0 group-has-data-[orientation=horizontal]/field:text-balance [&>a:hover]:text-primary [&>a]:underline [&>a]:underline-offset-4',
+        'nth-last-2:-mt-1 [[data-variant=legend]+&]:-mt-1.5 font-normal text-sm text-text-positive-weak leading-normal last:mt-0 [&>a:hover]:text-primary [&>a]:underline [&>a]:underline-offset-4',
         className
       )}
       {...props}

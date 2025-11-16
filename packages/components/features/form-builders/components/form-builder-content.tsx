@@ -180,9 +180,13 @@ export const FormBuilderFormFieldDroppable: React.FC<
       },
       'radio-group-field': {
         id: fieldId,
-        label: 'Radio Group Field',
-        orientation: 'responsive',
         type: 'radio-group-field',
+        orientation: 'responsive',
+
+        label: 'Radio Group Field',
+        description: 'This is a radio group field',
+
+        options: [],
       },
       'select-field': {
         id: fieldId,

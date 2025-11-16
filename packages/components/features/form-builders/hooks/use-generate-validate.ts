@@ -140,6 +140,11 @@ export const useGenerateValidate = (fields: FormBuilderField[]) => {
             ...Object.assign({}, ...switchShapeArr),
           }).shape;
         }
+        if (field.type === 'radio-group-field') {
+          return z.object({
+            [field.camelCaseName]: z.string().nullable(),
+          }).shape;
+        }
         return null;
       })
       .filter(Boolean);
@@ -181,6 +186,11 @@ export const useGenerateValidate = (fields: FormBuilderField[]) => {
             [option.camelCaseName]: false,
           }));
           return Object.assign({}, ...switchValues);
+        }
+        if (field.type === 'radio-group-field') {
+          return {
+            [field.camelCaseName]: null,
+          };
         }
         return null;
       })
