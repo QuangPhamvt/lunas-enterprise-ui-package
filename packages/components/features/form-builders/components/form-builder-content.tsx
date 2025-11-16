@@ -161,9 +161,12 @@ export const FormBuilderFormFieldDroppable: React.FC<
       },
       'date-field': {
         id: fieldId,
-        label: 'Date Field',
-        orientation: 'responsive',
         type: 'date-field',
+        orientation: 'responsive',
+
+        label: 'Date Field',
+        description: 'This is a date field',
+        placeholder: 'DD/MM/YYYY',
       },
       'switch-field': {
         id: fieldId,

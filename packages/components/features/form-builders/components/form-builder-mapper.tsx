@@ -1,6 +1,7 @@
-import { ChevronDownCircleIcon, HashIcon, LetterTextIcon, TypeIcon, TypeOutlineIcon } from 'lucide-react';
+import { CalendarIcon, ChevronDownCircleIcon, HashIcon, LetterTextIcon, TypeIcon, TypeOutlineIcon } from 'lucide-react';
 
 import type { FIELD_ID } from '../types';
+import { FormBuilderDateField } from './date-field/field';
 import { FormBuilderNotImplement } from './not-implement';
 import { FormBuilderNumberField } from './number-field/field';
 import { FormBuilderNumberFieldTooltipFieldRules, FormBuilderNumberFieldTooltipFieldType } from './number-field/tooltip';
@@ -20,6 +21,7 @@ import {
   FormBuilderTooltipFieldSettingsRules,
   FormBuilderTooltipFieldTrash,
 } from './tooltip';
+import { FormBuilderDateFieldTooltipFieldType } from './date-field/tooltip';
 
 export const FormBuilderMapper: (fieldId: string) => Record<FIELD_ID, Record<'FIELD' | 'TOOLTIP' | 'SIDEBAR_FIELD', React.ReactNode>> = fieldId => ({
   'title-field': {
@@ -115,9 +117,27 @@ export const FormBuilderMapper: (fieldId: string) => Record<FIELD_ID, Record<'FI
     FIELD: <FormBuilderNumberField fieldId={fieldId} />,
   },
   'date-field': {
-    TOOLTIP: 'Date Field',
-    SIDEBAR_FIELD: <div className="px-2.5 py-2">Date Field</div>,
-    FIELD: <div>Date Field</div>,
+    TOOLTIP: (
+      <FormBuilderTooltipField>
+        <FormBuilderTooltipFieldCopy />
+        <FormBuilderTooltipFieldSettings>
+          <FormBuilderTooltipFieldSettingsFieldType>
+            <FormBuilderDateFieldTooltipFieldType fieldId={fieldId} />
+          </FormBuilderTooltipFieldSettingsFieldType>
+          <FormBuilderTooltipFieldSettingsRules>
+            <FormBuilderNotImplement />
+          </FormBuilderTooltipFieldSettingsRules>
+        </FormBuilderTooltipFieldSettings>
+        <FormBuilderTooltipFieldTrash fieldId={fieldId} />
+      </FormBuilderTooltipField>
+    ),
+    SIDEBAR_FIELD: (
+      <div className="flex items-center space-x-1 px-2.5 py-2 text-sm">
+        <CalendarIcon size={16} />
+        <p>Date Field</p>
+      </div>
+    ),
+    FIELD: <FormBuilderDateField fieldId={fieldId} />,
   },
   'switch-field': {
     TOOLTIP: 'Switch Field',

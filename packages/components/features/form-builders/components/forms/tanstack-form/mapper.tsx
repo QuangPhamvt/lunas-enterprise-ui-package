@@ -126,6 +126,23 @@ export const FormBuilderTanStackFieldMapper = ({
     return <WithHOC form={form} />;
   }
 
+  // Mapper: Date Field
+  if (field.type === 'date-field') {
+    const WithHOC = withFormBuilderTanStackForm({
+      render: ({ form }) => {
+        return (
+          <form.AppField
+            name={field.camelCaseName}
+            children={({ DateField }) => {
+              return <DateField orientation={field.orientation} label={field.label} description={field.description} placeholder={field.placeholder} />;
+            }}
+          />
+        );
+      },
+    });
+    return <WithHOC form={form} />;
+  }
+
   // Add more mappers for other field types here...
   return <div>Field Mapper</div>;
 };

@@ -1,11 +1,12 @@
 'use client';
-import { cn } from '@customafk/react-toolkit/utils';
-import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import { type HTMLAttributes, type ThHTMLAttributes, useEffect, useRef } from 'react';
+
+import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
+
+import { cn } from '@customafk/react-toolkit/utils';
+
 import { type CalendarWeek, type DayButton, DayPicker, getDefaultClassNames } from 'react-day-picker';
-
 import { Button } from '@/components/ui/button';
-
 import { buttonVariants } from './button.variants';
 
 const CalendarRoot = ({
@@ -50,7 +51,7 @@ const CalendarDayButton = ({ className, day, modifiers, color: _, ...props }: Re
       data-range-end={modifiers.range_end}
       data-range-middle={modifiers.range_middle}
       className={cn(
-        'flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal',
+        'flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 font-normal leading-none',
         'data-[selected-single=true]:bg-primary',
         'data-[selected-single=true]:text-white',
         'data-[range-middle=true]:bg-muted-muted',
@@ -109,10 +110,10 @@ function Calendar({
     <DayPicker
       showOutsideDays={showOutsideDays}
       className={cn(
-        'bg-background group/calendar p-3',
+        'group/calendar bg-background p-3',
         '[--cell-size:--spacing(8)]',
-        '[[data-slot=card-content]_&]:bg-transparent',
-        '[[data-slot=popover-content]_&]:bg-transparent',
+        'in-data-[slot=card-content]:bg-transparent',
+        'in-data-[slot=popover-content]:bg-transparent',
         String.raw`rtl:**:[.rdp-button\_next>svg]:rotate-180`,
         String.raw`rtl:**:[.rdp-button\_previous>svg]:rotate-180`,
         className

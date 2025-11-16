@@ -77,6 +77,7 @@ export type FormBuilderNumberField = FormBuilderFieldBase & {
 export type FormBuilderDateField = FormBuilderFieldBase & {
   type: 'date-field';
   orientation: 'horizontal' | 'vertical' | 'responsive';
+  placeholder?: string;
 };
 
 export type FormBuilderSwitchField = FormBuilderFieldBase & {
