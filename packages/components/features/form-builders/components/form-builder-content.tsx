@@ -201,9 +201,14 @@ export const FormBuilderFormFieldDroppable: React.FC<
       },
       'combobox-field': {
         id: fieldId,
-        label: 'Combo Box Field',
-        orientation: 'responsive',
         type: 'combobox-field',
+        orientation: 'responsive',
+
+        label: 'Combo Box Field',
+        description: 'This is a combo box field',
+        placeholder: 'Select or type an option',
+
+        options: [],
       },
       empty: {
         id: fieldId,

@@ -46,7 +46,7 @@ export const ComboboxField: React.FC<Props> = ({
             </Activity>
           </FieldContent>
         </Activity>
-        <div className="flex flex-col w-full justify-start">
+        <div className="flex w-full flex-col justify-start">
           <Popover modal>
             <PopoverTrigger asChild>
               <Button
@@ -56,8 +56,8 @@ export const ComboboxField: React.FC<Props> = ({
                 color="muted"
                 className={cn(
                   'w-full md:max-w-80',
-                  'shadow-input flex justify-between rounded-md px-3',
-                  'outline-border-weak font-normal',
+                  'flex justify-between rounded-md px-3 shadow-input',
+                  'font-normal outline-border-weak',
                   isError && 'outline-danger',
                   isError && 'focus:ring-4!',
                   isError && 'focus:ring-danger-weak!',
@@ -70,12 +70,12 @@ export const ComboboxField: React.FC<Props> = ({
                 )}
               >
                 <Activity mode={state.value ? 'visible' : 'hidden'}>
-                  <p className="flex flex-1 min-w-0 text-start items-center gap-2">{options?.find(({ value }) => value === state.value)?.label}</p>
+                  <p className="flex min-w-0 flex-1 items-center gap-2 text-start">{options?.find(({ value }) => value === state.value)?.label}</p>
                 </Activity>
                 <Activity mode={state.value ? 'hidden' : 'visible'}>
-                  <p className="text-text-positive-muted text-start flex-1">{placeholder}</p>
+                  <p className="flex-1 text-start text-text-positive-muted">{placeholder}</p>
                 </Activity>
-                <ChevronDownIcon size={16} className="text-text-positive-weak shrink-0" aria-hidden="true" />
+                <ChevronDownIcon size={16} className="shrink-0 text-text-positive-weak" aria-hidden="true" />
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-(--radix-popover-trigger-width) p-0">
@@ -127,8 +127,8 @@ export const ComboboxField: React.FC<Props> = ({
             </Activity>
           </Activity>
         </FieldContent>
-        <div className="basis-3/5 flex flex-col items-end">
-          <div className="w-full md:max-w-80 flex flex-col space-y-0.5">
+        <div className="flex basis-3/5 flex-col items-end">
+          <div className="flex w-full flex-col space-y-0.5 md:max-w-80">
             <Popover modal>
               <PopoverTrigger asChild>
                 <Button
@@ -138,8 +138,8 @@ export const ComboboxField: React.FC<Props> = ({
                   color="muted"
                   className={cn(
                     'w-full md:max-w-80',
-                    'shadow-input flex justify-between rounded-md px-3',
-                    'outline-border-weak font-normal',
+                    'flex justify-between rounded-md px-3 shadow-input',
+                    'font-normal outline-border-weak',
                     '[&_div]:w-full',
                     '[&_span]:w-full',
                     '[&_div]:justify-between',
@@ -166,12 +166,12 @@ export const ComboboxField: React.FC<Props> = ({
                   )}
                 >
                   <Activity mode={state.value ? 'visible' : 'hidden'}>
-                    <p className="flex flex-1 min-w-0 text-start items-center gap-2">{options?.find(({ value }) => value === state.value)?.label}</p>
+                    <p className="flex min-w-0 flex-1 items-center gap-2 text-start">{options?.find(({ value }) => value === state.value)?.label}</p>
                   </Activity>
                   <Activity mode={state.value ? 'hidden' : 'visible'}>
-                    <p className="text-text-positive-muted text-start flex-1">{placeholder}</p>
+                    <p className="flex-1 text-start text-text-positive-muted">{placeholder}</p>
                   </Activity>
-                  <ChevronDownIcon size={16} className="text-text-positive-weak shrink-0" aria-hidden="true" />
+                  <ChevronDownIcon size={16} className="shrink-0 text-text-positive-weak" aria-hidden="true" />
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-(--radix-popover-trigger-width) p-0">

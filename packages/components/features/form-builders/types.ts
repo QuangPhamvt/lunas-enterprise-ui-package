@@ -117,6 +117,12 @@ export type FormBuilderSelectField = FormBuilderFieldBase & {
 export type FormBuilderComboboxField = FormBuilderFieldBase & {
   type: 'combobox-field';
   orientation: 'horizontal' | 'vertical' | 'responsive';
+  placeholder?: string;
+
+  options: {
+    label: string;
+    value: string;
+  }[];
 };
 
 export type FormBuilderEmptyField = FormBuilderFieldBase & {
