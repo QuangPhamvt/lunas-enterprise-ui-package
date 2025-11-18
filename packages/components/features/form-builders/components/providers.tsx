@@ -102,6 +102,12 @@ type TFormBuilderValueContext = {
   onFieldUpdate: (fieldId: string, field: Partial<FormBuilderField>) => void;
   onFieldReorder: (fromFieldId: string, toFieldId: string) => void;
   onFieldDelete: (fieldId: string) => void;
+
+  // Array field handlers
+  onArrayFieldCreate: (fieldId: string, name: string) => void;
+  onArrayFieldUpdate: (fieldId: string, itemId: string, field: Partial<FormBuilderField>) => void;
+  onArrayFieldDelete: (fieldId: string, itemId: string) => void;
+  onArrayFieldReorder: (fieldId: string, fromItemId: string, toItemId: string) => void;
 };
 const FormBuilderValueContext = createContext<TFormBuilderValueContext | null>(null);
 // biome-ignore lint/style/useComponentExportOnlyModules: true
@@ -120,7 +126,18 @@ export const FormBuilderProvider: React.FC<
 > = ({ initialFormBuilders = INITIAL_FORM_BUILDERS, children }) => {
   const [fields, setFields] = useState<TFormBuilderField[]>(FormBuilderFields);
 
-  const { formBuilder, onFieldCreate, onFieldUpdate, onFieldReorder, onFieldDelete } = useFormBuilderReducer(initialFormBuilders);
+  const {
+    formBuilder,
+    onFieldCreate,
+    onFieldUpdate,
+    onFieldReorder,
+    onFieldDelete,
+
+    onArrayFieldCreate,
+    onArrayFieldUpdate,
+    onArrayFieldDelete,
+    onArrayFieldReorder,
+  } = useFormBuilderReducer(initialFormBuilders);
 
   const fieldValueContext = useMemo<TFormBuilderFieldContext>(() => {
     return { fields, setFields };
@@ -133,8 +150,23 @@ export const FormBuilderProvider: React.FC<
       onFieldUpdate,
       onFieldReorder,
       onFieldDelete,
+
+      onArrayFieldCreate,
+      onArrayFieldUpdate,
+      onArrayFieldDelete,
+      onArrayFieldReorder,
     };
-  }, [formBuilder, onFieldCreate, onFieldUpdate, onFieldReorder, onFieldDelete]);
+  }, [
+    formBuilder,
+    onFieldCreate,
+    onFieldUpdate,
+    onFieldReorder,
+    onFieldDelete,
+    onArrayFieldCreate,
+    onArrayFieldUpdate,
+    onArrayFieldDelete,
+    onArrayFieldReorder,
+  ]);
 
   return (
     <FormBuilderFieldContext.Provider value={fieldValueContext}>

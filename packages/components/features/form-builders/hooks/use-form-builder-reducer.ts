@@ -23,12 +23,33 @@ type Action =
   | {
       type: 'FIELD_DELETE';
       fieldId: string;
+    }
+  | {
+      type: 'ARRAY_FIELD_CREATE';
+      fieldId: string;
+      name: string;
+    }
+  | {
+      type: 'ARRAY_FIELD_UPDATE';
+      fieldId: string;
+      itemId: string;
+      field: Partial<FormBuilderField>;
+    }
+  | {
+      type: 'ARRAY_FIELD_DELETE';
+      fieldId: string;
+      itemId: string;
+    }
+  | {
+      type: 'ARRAY_FIELD_REORDER';
+      fieldId: string;
+      fromItemId: string;
+      toItemId: string;
     };
 
 const reducer = (state: FormBuilderValue, action: Action): FormBuilderValue => {
   switch (action.type) {
     case 'FIELD_CREATE': {
-      // const currentFormId = action.id;
       const newField: FormBuilderEmptyField = {
         id: `field-${nanoid(10)}`,
         name: action.name,
@@ -71,6 +92,72 @@ const reducer = (state: FormBuilderValue, action: Action): FormBuilderValue => {
         form: state.form.filter(field => field.id !== action.fieldId),
       };
     }
+    case 'ARRAY_FIELD_CREATE': {
+      const newField: FormBuilderEmptyField = {
+        id: `field-${nanoid(10)}`,
+        name: action.name,
+        camelCaseName: toCamelCase(action.name),
+        type: 'empty',
+        label: 'New Field',
+        description: '',
+      };
+      return {
+        ...state,
+        form: state.form.map(field => {
+          if (field.id !== action.fieldId || field.type !== 'array-field') return field;
+          return {
+            ...field,
+            fields: [...field.fields, newField],
+          };
+        }),
+      };
+    }
+    case 'ARRAY_FIELD_UPDATE': {
+      return {
+        ...state,
+        form: state.form.map(field => {
+          if (field.id !== action.fieldId || field.type !== 'array-field') return field;
+          return {
+            ...field,
+            fields: field.fields.map(item => {
+              if (item.id !== action.itemId) return item;
+              return {
+                ...item,
+                ...Object.fromEntries(Object.entries(action.field).filter(([_, v]) => v !== undefined)),
+              };
+            }),
+          };
+        }),
+      };
+    }
+    case 'ARRAY_FIELD_DELETE': {
+      return {
+        ...state,
+        form: state.form.map(field => {
+          if (field.id !== action.fieldId || field.type !== 'array-field') return field;
+          return {
+            ...field,
+            fields: field.fields.filter(item => item.id !== action.itemId),
+          };
+        }),
+      };
+    }
+    case 'ARRAY_FIELD_REORDER': {
+      return {
+        ...state,
+        form: state.form.map(field => {
+          if (field.id !== action.fieldId || field.type !== 'array-field') return field;
+          return {
+            ...field,
+            fields: arrayMove(
+              field.fields,
+              field.fields.findIndex(item => item.id === action.fromItemId),
+              field.fields.findIndex(item => item.id === action.toItemId)
+            ),
+          };
+        }),
+      };
+    }
     default:
       throw new Error('Unhandled action type');
   }
@@ -78,8 +165,6 @@ const reducer = (state: FormBuilderValue, action: Action): FormBuilderValue => {
 
 export const useFormBuilderReducer = (initialState: FormBuilderValue) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-
-  console.log('useFormBuilderReducer state:', state);
 
   const onFieldCreate = useCallback((name: string) => {
     dispatch({ type: 'FIELD_CREATE', name });
@@ -97,11 +182,31 @@ export const useFormBuilderReducer = (initialState: FormBuilderValue) => {
     dispatch({ type: 'FIELD_DELETE', fieldId });
   }, []);
 
+  const onArrayFieldCreate = useCallback((fieldId: string, name: string) => {
+    dispatch({ type: 'ARRAY_FIELD_CREATE', fieldId, name });
+  }, []);
+
+  const onArrayFieldUpdate = useCallback((fieldId: string, itemId: string, field: Partial<FormBuilderField>) => {
+    dispatch({ type: 'ARRAY_FIELD_UPDATE', fieldId, itemId, field });
+  }, []);
+
+  const onArrayFieldDelete = useCallback((fieldId: string, itemId: string) => {
+    dispatch({ type: 'ARRAY_FIELD_DELETE', fieldId, itemId });
+  }, []);
+
+  const onArrayFieldReorder = useCallback((fieldId: string, fromItemId: string, toItemId: string) => {
+    dispatch({ type: 'ARRAY_FIELD_REORDER', fieldId, fromItemId, toItemId });
+  }, []);
+
   return {
     formBuilder: state,
     onFieldCreate,
     onFieldUpdate,
     onFieldReorder,
     onFieldDelete,
+    onArrayFieldCreate,
+    onArrayFieldUpdate,
+    onArrayFieldDelete,
+    onArrayFieldReorder,
   };
 };

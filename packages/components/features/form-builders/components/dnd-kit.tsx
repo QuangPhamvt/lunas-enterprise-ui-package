@@ -5,14 +5,13 @@ import { GripVerticalIcon } from 'lucide-react';
 import { cn } from '@customafk/react-toolkit/utils';
 
 import {
-  closestCenter,
   DndContext,
-  type DragStartEvent,
   KeyboardSensor,
   MeasuringStrategy,
   type Modifiers,
   MouseSensor,
   PointerSensor,
+  rectIntersection,
   TouchSensor,
   type UniqueIdentifier,
   useDroppable,
@@ -94,7 +93,7 @@ export const FormBuilderDndContext: React.FC<
     useSensor(TouchSensor)
   );
 
-  const onDragStart = useCallback((event: DragStartEvent) => {}, []);
+  const onDragStart = useCallback(() => {}, []);
 
   const onDragOver = useCallback(() => {}, []);
 
@@ -105,7 +104,7 @@ export const FormBuilderDndContext: React.FC<
   return (
     <DndContext
       sensors={sensors}
-      collisionDetection={closestCenter}
+      collisionDetection={rectIntersection}
       measuring={{
         droppable: {
           strategy: MeasuringStrategy.Always,

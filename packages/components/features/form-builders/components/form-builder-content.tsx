@@ -17,7 +17,7 @@ import { FormBuilderMapper } from './form-builder-mapper';
 import { FormBuilderTanStackForm } from './forms/form';
 import { useFormBuilderValueContext } from './providers';
 
-export const FormBuilderPageField: React.FC<
+const FormBuilderPageField: React.FC<
   React.PropsWithChildren<{
     tooltip: React.ReactNode;
   }>
@@ -70,7 +70,7 @@ const FormBuilderFormField: React.FC<
   );
 };
 
-export const FormBuilderFormFieldDroppable: React.FC<
+const FormBuilderFormFieldDroppable: React.FC<
   React.PropsWithChildren<{
     fieldId: string;
   }>
@@ -81,6 +81,7 @@ export const FormBuilderFormFieldDroppable: React.FC<
     setNodeRef,
     isOver: _isOver,
     active,
+    over,
   } = useDroppable({
     id: fieldId,
     data: {
@@ -90,8 +91,9 @@ export const FormBuilderFormFieldDroppable: React.FC<
   });
 
   const isOver = useMemo<boolean>(() => {
+    if (over?.data.current?.variant?.includes('FORM_FIELD_DROPPABLE_ARRAY')) return false;
     return _isOver && !!active?.id && active.data.current?.variant?.includes('FIELD');
-  }, [_isOver, active]);
+  }, [_isOver, active, over]);
 
   const updateFieldMapper: Record<FIELD_ID, Partial<FormBuilderField>> = useMemo(() => {
     return {
@@ -230,9 +232,11 @@ export const FormBuilderFormFieldDroppable: React.FC<
   const handleDragOver = useCallback(() => {}, []);
   const handleDragEnd = useCallback(
     (event: DragEndEvent) => {
-      const { active } = event;
+      const { active, over } = event;
       if (!_isOver) return;
+      if (over?.data.current?.variant?.includes('FORM_FIELD_DROPPABLE_ARRAY')) return;
       if (!active?.data.current?.variant.includes('FIELD')) return;
+
       const [_, fieldVariant] = active.data.current.variant as ['FIELD', FIELD_ID];
       onFieldUpdate(fieldId, updateFieldMapper[fieldVariant]);
     },

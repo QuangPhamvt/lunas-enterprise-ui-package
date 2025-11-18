@@ -250,7 +250,20 @@ export const FormBuilderMapper: (fieldId: string) => Record<FIELD_ID, Record<'FI
     FIELD: <FormBuilderComboboxField fieldId={fieldId} />,
   },
   'array-field': {
-    TOOLTIP: <div>Not Implemented Yet</div>,
+    TOOLTIP: (
+      <FormBuilderTooltipField>
+        <FormBuilderTooltipFieldCopy />
+        <FormBuilderTooltipFieldSettings>
+          <FormBuilderTooltipFieldSettingsFieldType>
+            <FormBuilderNotImplement />
+          </FormBuilderTooltipFieldSettingsFieldType>
+          <FormBuilderTooltipFieldSettingsRules>
+            <FormBuilderNotImplement />
+          </FormBuilderTooltipFieldSettingsRules>
+        </FormBuilderTooltipFieldSettings>
+        <FormBuilderTooltipFieldTrash fieldId={fieldId} />
+      </FormBuilderTooltipField>
+    ),
     SIDEBAR_FIELD: (
       <div className="flex items-center space-x-1 px-2.5 py-2 text-sm">
         <LayoutListIcon size={16} />
