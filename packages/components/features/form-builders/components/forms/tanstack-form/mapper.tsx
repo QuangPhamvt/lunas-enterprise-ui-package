@@ -131,6 +131,31 @@ export const FormBuilderTanStackFieldMapper = ({
     return <WithHOC form={form} />;
   }
 
+  // Mapper: Combobox Field
+  if (field.type === 'combobox-field') {
+    const WithHOC = withFormBuilderTanStackForm({
+      render: ({ form }) => {
+        return (
+          <form.AppField
+            name={field.camelCaseName}
+            children={({ ComboboxField }) => {
+              return (
+                <ComboboxField
+                  orientation={field.orientation}
+                  label={field.label}
+                  description={field.description}
+                  placeholder={field.placeholder}
+                  options={field.options}
+                />
+              );
+            }}
+          />
+        );
+      },
+    });
+    return <WithHOC form={form} />;
+  }
+
   // Mapper: Date Field
   if (field.type === 'date-field') {
     const WithHOC = withFormBuilderTanStackForm({
@@ -153,7 +178,7 @@ export const FormBuilderTanStackFieldMapper = ({
     const WithHOC = withFormBuilderTanStackForm({
       render: ({ form }) => {
         return (
-          <FieldGroup>
+          <FieldGroup className="px-4">
             <Field orientation="vertical">
               <FieldContent>
                 <FieldLabel>{field.label}</FieldLabel>

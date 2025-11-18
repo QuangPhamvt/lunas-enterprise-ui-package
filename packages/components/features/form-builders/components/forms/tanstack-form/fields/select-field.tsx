@@ -28,7 +28,7 @@ export const SelectField: React.FC<Pick<FormBuilderSelectField, 'label' | 'descr
   }, [field.state.meta.errors]);
 
   return (
-    <FieldGroup>
+    <FieldGroup className="px-4">
       <Field orientation={orientation} data-invalid={field.state.meta.isTouched && !field.state.meta.isValid}>
         <FieldContent>
           <FieldLabel htmlFor={field.name}>{label}</FieldLabel>

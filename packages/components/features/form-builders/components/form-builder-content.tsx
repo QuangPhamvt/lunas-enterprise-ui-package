@@ -201,9 +201,22 @@ export const FormBuilderFormFieldDroppable: React.FC<
       },
       'combobox-field': {
         id: fieldId,
-        label: 'Combo Box Field',
-        orientation: 'responsive',
         type: 'combobox-field',
+        orientation: 'responsive',
+
+        label: 'Combo Box Field',
+        description: 'This is a combo box field',
+        placeholder: 'Select or type an option',
+
+        options: [],
+      },
+      'array-field': {
+        id: fieldId,
+        type: 'array-field',
+
+        label: 'Array Field',
+
+        fields: [],
       },
       empty: {
         id: fieldId,
@@ -314,7 +327,7 @@ const FormBuilderFormPreview: React.FC<React.PropsWithChildren> = () => {
         <p>Formn Preview</p>
       </div>
       <Separator />
-      <div className="px-2.5 py-4">
+      <div className="bg-muted-muted px-2.5 py-4">
         <FormBuilderTanStackForm formBuilder={formBuilder} />
       </div>
     </div>

@@ -10,6 +10,7 @@ export type FIELD_ID =
   | 'radio-group-field'
   | 'select-field'
   | 'combobox-field'
+  | 'array-field'
   | 'empty';
 
 export type FIELD = 'FIELD';
@@ -117,6 +118,29 @@ export type FormBuilderSelectField = FormBuilderFieldBase & {
 export type FormBuilderComboboxField = FormBuilderFieldBase & {
   type: 'combobox-field';
   orientation: 'horizontal' | 'vertical' | 'responsive';
+  placeholder?: string;
+
+  options: {
+    label: string;
+    value: string;
+  }[];
+};
+
+export type FormBuilderArrayField = FormBuilderFieldBase & {
+  type: 'array-field';
+  description?: undefined;
+  fields: Array<
+    | FormBuilderTitleField
+    | FormBuilderTextField
+    | FormBuilderTextareaField
+    | FormBuilderNumberField
+    | FormBuilderDateField
+    | FormBuilderSwitchField
+    | FormBuilderRadioGroupField
+    | FormBuilderSelectField
+    | FormBuilderComboboxField
+    | FormBuilderEmptyField
+  >;
 };
 
 export type FormBuilderEmptyField = FormBuilderFieldBase & {
@@ -133,6 +157,7 @@ export type FormBuilderField =
   | FormBuilderRadioGroupField
   | FormBuilderSelectField
   | FormBuilderComboboxField
+  | FormBuilderArrayField
   | FormBuilderEmptyField;
 
 export type FormBuilderValue = {

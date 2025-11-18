@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { endOfToday, endOfTomorrow, endOfYesterday, format, lastDayOfMonth, subDays, startOfMonth } from '@customafk/react-toolkit/date-fns';
+import { endOfToday, endOfTomorrow, endOfYesterday, format, lastDayOfMonth, startOfMonth, subDays } from '@customafk/react-toolkit/date-fns';
 import { cn } from '@customafk/react-toolkit/utils';
 
 import type { FormBuilderDateField } from '@/components/features/form-builders/types';
@@ -23,7 +23,7 @@ export const DateField: React.FC<Pick<FormBuilderDateField, 'label' | 'descripti
   }, [field.state.meta.isTouched, field.state.meta.isValid]);
 
   return (
-    <FieldGroup>
+    <FieldGroup className="px-4">
       <Field orientation={orientation} data-invalid={_isInvalid}>
         <FieldContent>
           <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
@@ -38,6 +38,7 @@ export const DateField: React.FC<Pick<FormBuilderDateField, 'label' | 'descripti
                 <Button
                   variant="outline"
                   color="muted"
+                  size="lg"
                   className={cn(
                     'flex items-center justify-start rounded outline-border',
                     'hover:bg-transparent',

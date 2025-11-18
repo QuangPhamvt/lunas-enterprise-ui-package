@@ -1,6 +1,19 @@
-import { CalendarIcon, ChevronDownCircleIcon, CircleDotIcon, HashIcon, LetterTextIcon, ToggleLeftIcon, TypeIcon, TypeOutlineIcon } from 'lucide-react';
+import {
+  CalendarIcon,
+  ChevronDownCircleIcon,
+  CircleDotIcon,
+  FileSearchIcon,
+  HashIcon,
+  LayoutListIcon,
+  LetterTextIcon,
+  ToggleLeftIcon,
+  TypeIcon,
+  TypeOutlineIcon,
+} from 'lucide-react';
 
 import type { FIELD_ID } from '../types';
+import { FormBuilderComboboxField } from './combobox-field/field';
+import { FormBuilderComboboxFieldTooltipFieldType } from './combobox-field/tooltip';
 import { FormBuilderDateField } from './date-field/field';
 import { FormBuilderDateFieldTooltipFieldType } from './date-field/tooltip';
 import { FormBuilderNotImplement } from './not-implement';
@@ -26,6 +39,7 @@ import {
   FormBuilderTooltipFieldSettingsRules,
   FormBuilderTooltipFieldTrash,
 } from './tooltip';
+import { FormBuilderArrayField } from './array-field/field';
 
 export const FormBuilderMapper: (fieldId: string) => Record<FIELD_ID, Record<'FIELD' | 'TOOLTIP' | 'SIDEBAR_FIELD', React.ReactNode>> = fieldId => ({
   'title-field': {
@@ -213,9 +227,37 @@ export const FormBuilderMapper: (fieldId: string) => Record<FIELD_ID, Record<'FI
     FIELD: <FormBuilderSelectField fieldId={fieldId} />,
   },
   'combobox-field': {
-    TOOLTIP: 'Combobox Field',
-    SIDEBAR_FIELD: <div className="px-2.5 py-2">Combobox Field</div>,
-    FIELD: <div>Combobox Field</div>,
+    TOOLTIP: (
+      <FormBuilderTooltipField>
+        <FormBuilderTooltipFieldCopy />
+        <FormBuilderTooltipFieldSettings>
+          <FormBuilderTooltipFieldSettingsFieldType>
+            <FormBuilderComboboxFieldTooltipFieldType fieldId={fieldId} />
+          </FormBuilderTooltipFieldSettingsFieldType>
+          <FormBuilderTooltipFieldSettingsRules>
+            <FormBuilderNotImplement />
+          </FormBuilderTooltipFieldSettingsRules>
+        </FormBuilderTooltipFieldSettings>
+        <FormBuilderTooltipFieldTrash fieldId={fieldId} />
+      </FormBuilderTooltipField>
+    ),
+    SIDEBAR_FIELD: (
+      <div className="flex items-center space-x-1 px-2.5 py-2 text-sm">
+        <FileSearchIcon size={16} />
+        <p>Combobox Field</p>
+      </div>
+    ),
+    FIELD: <FormBuilderComboboxField fieldId={fieldId} />,
+  },
+  'array-field': {
+    TOOLTIP: <div>Not Implemented Yet</div>,
+    SIDEBAR_FIELD: (
+      <div className="flex items-center space-x-1 px-2.5 py-2 text-sm">
+        <LayoutListIcon size={16} />
+        <p>Array Field</p>
+      </div>
+    ),
+    FIELD: <FormBuilderArrayField fieldId={fieldId} />,
   },
   empty: {
     TOOLTIP: 'Empty Field',

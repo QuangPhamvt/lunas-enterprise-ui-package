@@ -44,7 +44,7 @@ export const TextareaField: React.FC<
   );
 
   return (
-    <FieldGroup>
+    <FieldGroup className="px-4">
       <Field orientation={orientation}>
         <FieldContent>
           <FieldLabel htmlFor={field.name}>{label}</FieldLabel>

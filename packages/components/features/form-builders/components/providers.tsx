@@ -69,6 +69,11 @@ const FormBuilderFields: TFormBuilderField[] = [
     tab: 'FORM_FIELDS',
     accepts: ['FIELD', 'FORM_BUILDER'],
   },
+  {
+    id: 'array-field',
+    tab: 'FORM_FIELDS',
+    accepts: ['FIELD', 'FORM_BUILDER'],
+  },
 ];
 
 // Contexts

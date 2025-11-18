@@ -125,6 +125,11 @@ export const useGenerateValidate = (fields: FormBuilderField[]) => {
             [field.camelCaseName]: z.string().nullable(),
           }).shape;
         }
+        if (field.type === 'combobox-field') {
+          return z.object({
+            [field.camelCaseName]: z.string().nullable(),
+          }).shape;
+        }
         if (field.type === 'date-field') {
           return z.object({
             [field.camelCaseName]: z.date(),
@@ -172,6 +177,11 @@ export const useGenerateValidate = (fields: FormBuilderField[]) => {
           };
         }
         if (field.type === 'select-field') {
+          return {
+            [field.camelCaseName]: null,
+          };
+        }
+        if (field.type === 'combobox-field') {
           return {
             [field.camelCaseName]: null,
           };
