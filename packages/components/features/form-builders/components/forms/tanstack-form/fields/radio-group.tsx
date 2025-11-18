@@ -11,7 +11,7 @@ export const RadioGroupField: React.FC<Pick<FormBuilderRadioGroupField, 'label' 
 }) => {
   const field = useFieldContext<string | null>();
   return (
-    <FieldGroup>
+    <FieldGroup className="px-4">
       <Field orientation={orientation} className="flex-col gap-2">
         <FieldContent>
           <FieldLabel>{label}</FieldLabel>

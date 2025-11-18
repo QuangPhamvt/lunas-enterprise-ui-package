@@ -5,7 +5,7 @@ import { cn } from '@customafk/react-toolkit/utils';
 import type { FormBuilderComboboxField } from '@/components/features/form-builders/types';
 import { Button } from '@/components/ui/button';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '../../../ui/command';
-import { Field, FieldContent, FieldContentMain, FieldDescription, FieldError, FieldGroup, FieldLabel } from '../../../ui/fields';
+import { Field, FieldContent, FieldContentMain, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldSeparator } from '../../../ui/fields';
 import { Popover, PopoverContent, PopoverTrigger } from '../../../ui/popover';
 import { useFieldContext } from '../tanstack-form';
 
@@ -28,7 +28,7 @@ export const ComboboxField: React.FC<Pick<FormBuilderComboboxField, 'label' | 'd
   }, [field.state.meta.errors]);
 
   return (
-    <FieldGroup>
+    <FieldGroup className="px-4">
       <Field orientation={orientation} data-invalid={_isInvalid}>
         <FieldContent>
           <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
@@ -43,6 +43,7 @@ export const ComboboxField: React.FC<Pick<FormBuilderComboboxField, 'label' | 'd
                 <Button
                   variant="outline"
                   color="muted"
+                  size="lg"
                   className={cn(
                     'flex items-center justify-start rounded outline-border',
                     'hover:bg-transparent',
@@ -81,6 +82,7 @@ export const ComboboxField: React.FC<Pick<FormBuilderComboboxField, 'label' | 'd
           </div>
         </FieldContentMain>
       </Field>
+      <FieldSeparator />
     </FieldGroup>
   );
 };

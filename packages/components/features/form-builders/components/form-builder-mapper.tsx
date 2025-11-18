@@ -4,6 +4,7 @@ import {
   CircleDotIcon,
   FileSearchIcon,
   HashIcon,
+  LayoutListIcon,
   LetterTextIcon,
   ToggleLeftIcon,
   TypeIcon,
@@ -38,6 +39,7 @@ import {
   FormBuilderTooltipFieldSettingsRules,
   FormBuilderTooltipFieldTrash,
 } from './tooltip';
+import { FormBuilderArrayField } from './array-field/field';
 
 export const FormBuilderMapper: (fieldId: string) => Record<FIELD_ID, Record<'FIELD' | 'TOOLTIP' | 'SIDEBAR_FIELD', React.ReactNode>> = fieldId => ({
   'title-field': {
@@ -246,6 +248,16 @@ export const FormBuilderMapper: (fieldId: string) => Record<FIELD_ID, Record<'FI
       </div>
     ),
     FIELD: <FormBuilderComboboxField fieldId={fieldId} />,
+  },
+  'array-field': {
+    TOOLTIP: <div>Not Implemented Yet</div>,
+    SIDEBAR_FIELD: (
+      <div className="flex items-center space-x-1 px-2.5 py-2 text-sm">
+        <LayoutListIcon size={16} />
+        <p>Array Field</p>
+      </div>
+    ),
+    FIELD: <FormBuilderArrayField fieldId={fieldId} />,
   },
   empty: {
     TOOLTIP: 'Empty Field',

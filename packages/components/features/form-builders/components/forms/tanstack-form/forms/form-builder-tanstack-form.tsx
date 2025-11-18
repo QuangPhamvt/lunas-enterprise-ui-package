@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+
 import { FieldGroup } from '../../../ui/fields';
 
 export const FormBuilderTanStackForm: React.FC<
@@ -15,7 +16,7 @@ export const FormBuilderTanStackForm: React.FC<
     [onSubmit]
   );
   return (
-    <form className="px-2.5" onSubmit={handleSubmit}>
+    <form className="rounded bg-card pb-4 shadow-card" onSubmit={handleSubmit}>
       <FieldGroup>{children}</FieldGroup>
     </form>
   );

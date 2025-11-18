@@ -48,7 +48,7 @@ export const TextField: React.FC<
   );
 
   return (
-    <FieldGroup>
+    <FieldGroup className="px-4">
       <Field orientation={orientation} data-invalid={state.meta.isTouched && !state.meta.isValid}>
         <FieldContent>
           <FieldLabel htmlFor={name}>{label}</FieldLabel>

@@ -178,7 +178,7 @@ export const FormBuilderTanStackFieldMapper = ({
     const WithHOC = withFormBuilderTanStackForm({
       render: ({ form }) => {
         return (
-          <FieldGroup>
+          <FieldGroup className="px-4">
             <Field orientation="vertical">
               <FieldContent>
                 <FieldLabel>{field.label}</FieldLabel>

@@ -210,6 +210,14 @@ export const FormBuilderFormFieldDroppable: React.FC<
 
         options: [],
       },
+      'array-field': {
+        id: fieldId,
+        type: 'array-field',
+
+        label: 'Array Field',
+
+        fields: [],
+      },
       empty: {
         id: fieldId,
         label: 'Empty Field',
@@ -319,7 +327,7 @@ const FormBuilderFormPreview: React.FC<React.PropsWithChildren> = () => {
         <p>Formn Preview</p>
       </div>
       <Separator />
-      <div className="px-2.5 py-4">
+      <div className="bg-muted-muted px-2.5 py-4">
         <FormBuilderTanStackForm formBuilder={formBuilder} />
       </div>
     </div>
