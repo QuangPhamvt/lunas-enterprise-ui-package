@@ -1,7 +1,19 @@
-export type DRAGGABLE_FIELD_ID = 'FIELD' | 'FORM_FIELD';
+export type DRAGGABLE_FIELD_ID = 'FIELD' | 'FORM_FIELD' | 'FORM_ARRAY_FIELD';
 
 export type FIELD_ID =
   | 'title-field'
+  | 'text-field'
+  | 'textarea-field'
+  | 'number-field'
+  | 'date-field'
+  | 'switch-field'
+  | 'radio-group-field'
+  | 'select-field'
+  | 'combobox-field'
+  | 'array-field'
+  | 'empty';
+
+export type ARRAY_FIELD_ID =
   | 'text-field'
   | 'textarea-field'
   | 'number-field'
@@ -130,7 +142,6 @@ export type FormBuilderArrayField = FormBuilderFieldBase & {
   type: 'array-field';
   description?: undefined;
   fields: Array<
-    | FormBuilderTitleField
     | FormBuilderTextField
     | FormBuilderTextareaField
     | FormBuilderNumberField
@@ -139,6 +150,7 @@ export type FormBuilderArrayField = FormBuilderFieldBase & {
     | FormBuilderRadioGroupField
     | FormBuilderSelectField
     | FormBuilderComboboxField
+    | FormBuilderArrayField
     | FormBuilderEmptyField
   >;
 };

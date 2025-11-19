@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 
 import type { FIELD_ID } from '../types';
+import { FormBuilderArrayField } from './array-field/field';
 import { FormBuilderComboboxField } from './combobox-field/field';
 import { FormBuilderComboboxFieldTooltipFieldType } from './combobox-field/tooltip';
 import { FormBuilderDateField } from './date-field/field';
@@ -39,7 +40,6 @@ import {
   FormBuilderTooltipFieldSettingsRules,
   FormBuilderTooltipFieldTrash,
 } from './tooltip';
-import { FormBuilderArrayField } from './array-field/field';
 
 export const FormBuilderMapper: (fieldId: string) => Record<FIELD_ID, Record<'FIELD' | 'TOOLTIP' | 'SIDEBAR_FIELD', React.ReactNode>> = fieldId => ({
   'title-field': {

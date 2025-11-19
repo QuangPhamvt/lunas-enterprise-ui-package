@@ -2,8 +2,131 @@ import { useCallback, useReducer } from 'react';
 
 import { arrayMove } from '@dnd-kit/sortable';
 import { nanoid } from 'nanoid';
-import type { FormBuilderEmptyField, FormBuilderField, FormBuilderValue } from '../types';
+import type { FormBuilderArrayField, FormBuilderEmptyField, FormBuilderField, FormBuilderValue } from '../types';
 import { toCamelCase } from '../utils';
+
+const createFieldInArrayField = (fieldId: string, field: FormBuilderArrayField, newField: FormBuilderEmptyField): FormBuilderArrayField => {
+  if (fieldId === field.id) {
+    return {
+      ...field,
+      fields: [...field.fields, newField],
+    };
+  }
+
+  if (field.fields.length === 0) {
+    return field;
+  }
+
+  if (!field.fields.some(f => f.type === 'array-field')) {
+    return field;
+  }
+
+  return {
+    ...field,
+    fields: field.fields.map(f => {
+      if (f.type === 'array-field') {
+        return createFieldInArrayField(fieldId, f, newField);
+      }
+      return f;
+    }),
+  };
+};
+
+const updateFieldInArrayField = (
+  fieldId: string,
+  itemId: string,
+  field: FormBuilderArrayField,
+  updatedField: Partial<FormBuilderField>
+): FormBuilderArrayField => {
+  if (fieldId === field.id) {
+    return {
+      ...field,
+      fields: field.fields.map(item => {
+        if (item.id !== itemId) return item;
+        return {
+          ...item,
+          ...Object.fromEntries(Object.entries(updatedField).filter(([_, v]) => v !== undefined)),
+        };
+      }),
+    };
+  }
+
+  if (field.fields.length === 0) {
+    return field;
+  }
+
+  if (!field.fields.some(f => f.type === 'array-field')) {
+    return field;
+  }
+
+  return {
+    ...field,
+    fields: field.fields.map(f => {
+      if (f.type === 'array-field') {
+        return updateFieldInArrayField(fieldId, itemId, f, updatedField);
+      }
+      return f;
+    }),
+  };
+};
+
+const deleteFieldInArrayField = (fieldId: string, itemId: string, field: FormBuilderArrayField): FormBuilderArrayField => {
+  if (fieldId === field.id) {
+    return {
+      ...field,
+      fields: field.fields.filter(item => item.id !== itemId),
+    };
+  }
+
+  if (field.fields.length === 0) {
+    return field;
+  }
+
+  if (!field.fields.some(f => f.type === 'array-field')) {
+    return field;
+  }
+
+  return {
+    ...field,
+    fields: field.fields.map(f => {
+      if (f.type === 'array-field') {
+        return deleteFieldInArrayField(fieldId, itemId, f);
+      }
+      return f;
+    }),
+  };
+};
+
+const reorderFieldInArrayField = (fieldId: string, fromItemId: string, toItemId: string, field: FormBuilderArrayField): FormBuilderArrayField => {
+  if (fieldId === field.id) {
+    return {
+      ...field,
+      fields: arrayMove(
+        field.fields,
+        field.fields.findIndex(item => item.id === fromItemId),
+        field.fields.findIndex(item => item.id === toItemId)
+      ),
+    };
+  }
+
+  if (field.fields.length === 0) {
+    return field;
+  }
+
+  if (!field.fields.some(f => f.type === 'array-field')) {
+    return field;
+  }
+
+  return {
+    ...field,
+    fields: field.fields.map(f => {
+      if (f.type === 'array-field') {
+        return reorderFieldInArrayField(fieldId, fromItemId, toItemId, f);
+      }
+      return f;
+    }),
+  };
+};
 
 type Action =
   | {
@@ -104,11 +227,8 @@ const reducer = (state: FormBuilderValue, action: Action): FormBuilderValue => {
       return {
         ...state,
         form: state.form.map(field => {
-          if (field.id !== action.fieldId || field.type !== 'array-field') return field;
-          return {
-            ...field,
-            fields: [...field.fields, newField],
-          };
+          if (field.type !== 'array-field') return field;
+          return createFieldInArrayField(action.fieldId, field, newField);
         }),
       };
     }
@@ -116,17 +236,8 @@ const reducer = (state: FormBuilderValue, action: Action): FormBuilderValue => {
       return {
         ...state,
         form: state.form.map(field => {
-          if (field.id !== action.fieldId || field.type !== 'array-field') return field;
-          return {
-            ...field,
-            fields: field.fields.map(item => {
-              if (item.id !== action.itemId) return item;
-              return {
-                ...item,
-                ...Object.fromEntries(Object.entries(action.field).filter(([_, v]) => v !== undefined)),
-              };
-            }),
-          };
+          if (field.type !== 'array-field') return field;
+          return updateFieldInArrayField(action.fieldId, action.itemId, field, action.field);
         }),
       };
     }
@@ -134,11 +245,8 @@ const reducer = (state: FormBuilderValue, action: Action): FormBuilderValue => {
       return {
         ...state,
         form: state.form.map(field => {
-          if (field.id !== action.fieldId || field.type !== 'array-field') return field;
-          return {
-            ...field,
-            fields: field.fields.filter(item => item.id !== action.itemId),
-          };
+          if (field.type !== 'array-field') return field;
+          return deleteFieldInArrayField(action.fieldId, action.itemId, field);
         }),
       };
     }
@@ -146,15 +254,8 @@ const reducer = (state: FormBuilderValue, action: Action): FormBuilderValue => {
       return {
         ...state,
         form: state.form.map(field => {
-          if (field.id !== action.fieldId || field.type !== 'array-field') return field;
-          return {
-            ...field,
-            fields: arrayMove(
-              field.fields,
-              field.fields.findIndex(item => item.id === action.fromItemId),
-              field.fields.findIndex(item => item.id === action.toItemId)
-            ),
-          };
+          if (field.type !== 'array-field') return field;
+          return reorderFieldInArrayField(action.fieldId, action.fromItemId, action.toItemId, field);
         }),
       };
     }

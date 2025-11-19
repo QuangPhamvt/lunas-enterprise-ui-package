@@ -4,22 +4,22 @@ import { GripVerticalIcon, PlusIcon } from 'lucide-react';
 
 import { cn } from '@customafk/react-toolkit/utils';
 
-import { type DragEndEvent, useDndMonitor, useDroppable } from '@dnd-kit/core';
+import { type DragCancelEvent, type DragEndEvent, DragOverlay, type DragStartEvent, type UniqueIdentifier, useDndMonitor, useDroppable } from '@dnd-kit/core';
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { createPortal } from 'react-dom';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
 import { useGetCurrentField } from '../../hooks/use-get-current-field';
-import type { FIELD_ID, FormBuilderField, FormBuilderArrayField as TFormBuilderArrayField } from '../../types';
-import { FormBuilderMapper } from '../form-builder-mapper';
+import type { ARRAY_FIELD_ID, FormBuilderField, FormBuilderArrayField as TFormBuilderArrayField } from '../../types';
 import { useFormBuilderValueContext } from '../providers';
 import { Field, FieldContent, FieldContentMain, FieldGroup, FieldLabel, FieldSeparator, FieldSet } from '../ui/fields';
 import { Input } from '../ui/input';
+import { ArrayFieldMapper } from './mapper';
 
-const updateFieldMapper = (fieldId: string): Record<FIELD_ID, Partial<FormBuilderField> | null> => {
+const updateFieldMapper = (fieldId: string): Record<ARRAY_FIELD_ID, Partial<FormBuilderField> | null> => {
   return {
-    'title-field': null,
     'text-field': {
       id: fieldId,
       type: 'text-field',
@@ -129,7 +129,14 @@ const updateFieldMapper = (fieldId: string): Record<FIELD_ID, Partial<FormBuilde
 
       options: [],
     },
-    'array-field': null,
+    'array-field': {
+      id: fieldId,
+      type: 'array-field',
+
+      label: 'Array Field',
+
+      fields: [],
+    },
     empty: null,
   };
 };
@@ -199,64 +206,7 @@ const CreateFieldModal: React.FC<{ fieldId: string }> = ({ fieldId }) => {
   );
 };
 
-const FormFieldDroppable: React.FC<
-  React.PropsWithChildren<{
-    fieldId: string;
-    itemId: string;
-  }>
-> = ({ fieldId, itemId, children }) => {
-  const { onArrayFieldUpdate } = useFormBuilderValueContext();
-
-  const {
-    setNodeRef,
-    isOver: _isOver,
-    active,
-  } = useDroppable({
-    id: itemId,
-    data: {
-      variant: ['FORM_FIELD_DROPPABLE', 'FORM_FIELD_DROPPABLE_ARRAY'],
-      accepts: ['FIELD'],
-    },
-  });
-
-  const isOver = useMemo<boolean>(() => {
-    return _isOver && active?.data.current?.variant?.includes('FIELD');
-  }, [_isOver, active]);
-
-  const handleDragStart = useCallback(() => {}, []);
-  const handleDragOver = useCallback(() => {}, []);
-  const handleDragEnd = useCallback(
-    (event: DragEndEvent) => {
-      const { active, over } = event;
-      if (!_isOver) return;
-      if (!over?.data?.current?.variant?.includes('FORM_FIELD_DROPPABLE_ARRAY')) return;
-      if (!active?.data.current?.variant?.includes('FIELD')) return;
-
-      const [_, fieldVariant] = active.data.current.variant as ['FIELD', FIELD_ID];
-      const prepareField = updateFieldMapper(itemId);
-      if (!prepareField[fieldVariant]) return;
-
-      onArrayFieldUpdate(fieldId, itemId, prepareField[fieldVariant]);
-    },
-    [_isOver, fieldId, itemId, onArrayFieldUpdate]
-  );
-  const handleCancel = useCallback(() => {}, []);
-
-  useDndMonitor({
-    onDragStart: handleDragStart,
-    onDragOver: handleDragOver,
-    onDragEnd: handleDragEnd,
-    onDragCancel: handleCancel,
-  });
-
-  return (
-    <div ref={setNodeRef} className={cn(isOver && 'outline-1 outline-primary outline-offset-5')}>
-      {children}
-    </div>
-  );
-};
-
-const FormField: React.FC<
+const FormFieldSortable: React.FC<
   React.PropsWithChildren<{
     id: string;
     name: string;
@@ -291,13 +241,99 @@ const FormField: React.FC<
   );
 };
 
+const FormFieldDroppable: React.FC<
+  React.PropsWithChildren<{
+    fieldId: string;
+    itemId: string;
+  }>
+> = ({ fieldId, itemId, children }) => {
+  const { onArrayFieldUpdate } = useFormBuilderValueContext();
+
+  const {
+    setNodeRef,
+    isOver: _isOver,
+    active,
+  } = useDroppable({
+    id: itemId,
+    data: {
+      variant: ['FORM_FIELD_DROPPABLE', 'FORM_FIELD_DROPPABLE_ARRAY'],
+      accepts: ['FIELD'],
+    },
+  });
+
+  const isOver = useMemo<boolean>(() => {
+    return _isOver && active?.data.current?.variant?.includes('FIELD');
+  }, [_isOver, active]);
+
+  const handleDragStart = useCallback(() => {}, []);
+  const handleDragOver = useCallback(() => {}, []);
+  const handleDragEnd = useCallback(
+    (event: DragEndEvent) => {
+      const { active } = event;
+      if (!_isOver) return;
+      if (!active?.data.current?.variant?.includes('FIELD')) return;
+
+      const [_, fieldVariant] = active.data.current.variant as ['FIELD', ARRAY_FIELD_ID];
+      const prepareField = updateFieldMapper(itemId)[fieldVariant];
+      if (!prepareField) return;
+
+      onArrayFieldUpdate(fieldId, itemId, prepareField);
+    },
+    [_isOver, fieldId, itemId, onArrayFieldUpdate]
+  );
+  const handleCancel = useCallback((event: DragCancelEvent) => {
+    void event;
+  }, []);
+
+  useDndMonitor({
+    onDragStart: handleDragStart,
+    onDragOver: handleDragOver,
+    onDragEnd: handleDragEnd,
+    onDragCancel: handleCancel,
+  });
+
+  return (
+    <div ref={setNodeRef} className={cn('z-10', isOver && 'outline-1 outline-primary outline-offset-5')}>
+      {children}
+    </div>
+  );
+};
+
 export const FormBuilderArrayField: React.FC<{ fieldId: string }> = ({ fieldId }) => {
+  const { onArrayFieldReorder } = useFormBuilderValueContext();
   const currentField = useGetCurrentField<TFormBuilderArrayField>('array-field', fieldId);
+  const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
 
   const fields = useMemo(() => {
     if (!currentField) return [];
     return currentField.fields;
   }, [currentField]);
+
+  const handleDragStart = useCallback((event: DragStartEvent) => {
+    if (!event.active.data.current?.variant?.includes('FORM_ARRAY_FIELD')) return;
+    setActiveId(event.active.id);
+  }, []);
+
+  const handleDragEnd = useCallback(
+    (event: DragEndEvent) => {
+      setActiveId(null);
+      const { active, over } = event;
+      if (currentField == null) return;
+      if (!over || !over.data?.current?.variant?.includes('FORM_ARRAY_FIELD') || !active.data?.current?.variant?.includes('FORM_ARRAY_FIELD')) return;
+      onArrayFieldReorder(currentField.id, active.id as string, over.id as string);
+    },
+    [currentField, onArrayFieldReorder]
+  );
+
+  const handleDragCancel = useCallback((event: DragEndEvent) => {
+    void event;
+  }, []);
+
+  useDndMonitor({
+    onDragStart: handleDragStart,
+    onDragEnd: handleDragEnd,
+    onDragCancel: handleDragCancel,
+  });
 
   if (!currentField) return null;
 
@@ -318,14 +354,26 @@ export const FormBuilderArrayField: React.FC<{ fieldId: string }> = ({ fieldId }
             <SortableContext items={fields.map(field => field.id)} strategy={verticalListSortingStrategy}>
               {fields.map(field => {
                 return (
-                  <FormField key={field.id} id={field.id} name={field.name}>
+                  <FormFieldSortable key={field.id} id={field.id} name={field.name}>
                     <FormFieldDroppable fieldId={currentField.id} itemId={field.id}>
-                      {FormBuilderMapper(field.id)[field.type].FIELD}
+                      {ArrayFieldMapper(field.id)[field.type].FIELD}
                     </FormFieldDroppable>
-                  </FormField>
+                  </FormFieldSortable>
                 );
               })}
             </SortableContext>
+
+            {activeId &&
+              createPortal(
+                <DragOverlay className="cursor-grabbing">
+                  {activeId ? (
+                    <div className="pointer-events-none flex items-center rounded border border-border bg-card px-2.5 py-2 shadow-lg">
+                      <div className="flex h-24 w-full items-center justify-center rounded-md border border-border border-dashed" />
+                    </div>
+                  ) : null}
+                </DragOverlay>,
+                document.body
+              )}
 
             <div className="flex w-full items-center justify-center">
               <CreateFieldModal fieldId={currentField.id} />
