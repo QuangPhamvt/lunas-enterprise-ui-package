@@ -8,7 +8,9 @@ import { Field, FieldContent, FieldGroup, FieldLabel, FieldSeparator } from '../
 import { useFormBuilderValueContext } from './providers';
 import { Input } from './ui/input';
 
-export const FormBuilderCreateFieldModal: React.FC = () => {
+export const FormBuilderCreateFieldModal: React.FC<{
+  sectionIndex: number;
+}> = ({ sectionIndex }) => {
   const { onFieldCreate } = useFormBuilderValueContext();
 
   const [open, setOpen] = useState<boolean>(false);
@@ -25,8 +27,9 @@ export const FormBuilderCreateFieldModal: React.FC = () => {
       }}
     >
       <DialogTrigger asChild>
-        <Button variant="outline" color="muted" className="size-10 rounded-full">
+        <Button variant="outline" color="muted" size="sm" className="w-24">
           <PlusIcon />
+          Add FIeld
         </Button>
       </DialogTrigger>
       <DialogContent>
@@ -49,7 +52,7 @@ export const FormBuilderCreateFieldModal: React.FC = () => {
           <Button
             disabled={!value.trim()}
             onClick={() => {
-              onFieldCreate(value);
+              onFieldCreate(sectionIndex, value);
               setValue('');
               setOpen(false);
             }}

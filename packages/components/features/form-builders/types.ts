@@ -1,4 +1,4 @@
-export type DRAGGABLE_FIELD_ID = 'FIELD' | 'FORM_FIELD' | 'FORM_ARRAY_FIELD';
+export type DRAGGABLE_FIELD_ID = 'FIELD' | 'SECTION_FIELD' | 'FORM_FIELD' | 'FORM_ARRAY_FIELD';
 
 export type FIELD_ID =
   | 'title-field'
@@ -172,6 +172,11 @@ export type FormBuilderField =
   | FormBuilderArrayField
   | FormBuilderEmptyField;
 
+export type FomrBuilderSection = {
+  name: string;
+  fields: FormBuilderField[];
+};
+
 export type FormBuilderValue = {
-  form: FormBuilderField[];
+  sections: FomrBuilderSection[];
 };

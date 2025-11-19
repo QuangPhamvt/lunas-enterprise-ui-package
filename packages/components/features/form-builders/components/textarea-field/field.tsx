@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 
-import { Textarea } from '@/components/ui/textarea';
-import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, FieldLabel, FieldSeparator, FieldSet } from '../../components/ui/fields';
 import { useFormBuilderValueContext } from '../providers';
+import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, FieldLabel, FieldSeparator, FieldSet } from '../../components/ui/fields';
+import { Textarea } from '../ui/textarea';
 
 export const FormBuilderTextareaField: React.FC<{ fieldId: string }> = ({ fieldId }) => {
   const { formBuilder } = useFormBuilderValueContext();

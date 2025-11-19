@@ -11,9 +11,10 @@ import { createPortal } from 'react-dom';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useGetCurrentSection } from '../hooks/use-get-current-sectiont';
 import type { FIELD_ID, FormBuilderField } from '../types';
 import { FormBuilderCreateFieldModal } from './create-field-modal';
-import { FormBuilderMapper } from './form-builder-mapper';
+import { FormBuilderCreateSectionModal } from './create-section-modal';
 import { FormBuilderTanStackForm } from './forms/form';
 import { useFormBuilderValueContext } from './providers';
 
@@ -35,42 +36,7 @@ const PageField: React.FC<
   );
 };
 
-const PageFieldSortable: React.FC<
-  React.PropsWithChildren<{
-    id: string;
-    name: string;
-  }>
-> = ({ id, name, children }) => {
-  const { attributes, listeners, transform, transition, isDragging, setNodeRef, setActivatorNodeRef } = useSortable({
-    id,
-    data: {
-      variant: ['FORM_FIELD'],
-      accepts: ['FORM_FIELD'],
-    },
-  });
-  return (
-    <div
-      ref={setNodeRef}
-      style={{
-        transform: CSS.Transform.toString(transform),
-        transition,
-        opacity: isDragging ? 0.5 : 1,
-      }}
-      className="flex flex-col rounded border border-border bg-card text-sm"
-    >
-      <div className="flex items-center space-x-2 px-2.5 py-1">
-        <p className="flex-1">{name}</p>
-        <button ref={setActivatorNodeRef} {...attributes} {...listeners} className="cursor-grab">
-          <GripVerticalIcon size={16} />
-        </button>
-      </div>
-      <Separator />
-      <div className="px-2.5 py-4">{children}</div>
-    </div>
-  );
-};
-
-const PageFieldDroppable: React.FC<
+const SectionFieldDroppable: React.FC<
   React.PropsWithChildren<{
     fieldId: string;
   }>
@@ -235,9 +201,9 @@ const PageFieldDroppable: React.FC<
       if (!active?.data.current?.variant.includes('FIELD')) return;
 
       const [_, fieldVariant] = active.data.current.variant as ['FIELD', FIELD_ID];
-      onFieldUpdate(fieldId, updateFieldMapper[fieldVariant]);
+      // onFieldUpdate(fieldId, updateFieldMapper[fieldVariant]);
     },
-    [_isOver, fieldId, updateFieldMapper, onFieldUpdate]
+    [_isOver]
   );
   const handleDragCancel = useCallback((event: DragCancelEvent) => {
     void event;
@@ -257,9 +223,52 @@ const PageFieldDroppable: React.FC<
   );
 };
 
-const FormBuilderFormContent: React.FC<React.PropsWithChildren> = () => {
-  const { formBuilder, onFieldReorder } = useFormBuilderValueContext();
+const SectionFieldSortable: React.FC<
+  React.PropsWithChildren<{
+    id: string;
+    name: string;
+  }>
+> = ({ id, children }) => {
+  const { attributes, listeners, transform, transition, isDragging, setNodeRef, setActivatorNodeRef } = useSortable({
+    id,
+    data: {
+      variant: ['FORM_FIELD'],
+      accepts: ['FORM_FIELD'],
+    },
+  });
+  return (
+    <div
+      ref={setNodeRef}
+      data-slot="section-field-sortable"
+      style={{
+        transform: CSS.Transform.toString(transform),
+        transition,
+        opacity: isDragging ? 0.5 : 1,
+      }}
+      className="group relative flex flex-col text-sm hover:rounded hover:outline-1 hover:outline-primary hover:outline-offset-4"
+    >
+      <button ref={setActivatorNodeRef} {...attributes} {...listeners} className="invisible absolute top-2 right-2 cursor-grab group-hover:visible">
+        <GripVerticalIcon size={16} />
+      </button>
+      {children}
+      <Separator />
+    </div>
+  );
+};
+
+const SectionFieldContainer: React.FC<
+  React.PropsWithChildren<{
+    id: number;
+  }>
+> = ({ id }) => {
+  const { onFieldReorder } = useFormBuilderValueContext();
+  const { currentSection } = useGetCurrentSection(id);
+
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
+
+  const fieldIds = useMemo<string[]>(() => {
+    return currentSection?.fields.map(field => field.id) || [];
+  }, [currentSection.fields]);
 
   const handleDragStart = useCallback((event: DragStartEvent) => {
     if (!event.active.data.current?.variant?.includes('FORM_FIELD')) return;
@@ -271,13 +280,111 @@ const FormBuilderFormContent: React.FC<React.PropsWithChildren> = () => {
       setActiveId(null);
       const { active, over } = event;
       if (!over || !over.data.current?.variant?.includes('FORM_FIELD') || !active.data.current?.variant?.includes('FORM_FIELD')) return;
-      onFieldReorder(active.id as string, over.id as string);
+      onFieldReorder(id, active.id as string, over.id as string);
     },
-    [onFieldReorder]
+    [onFieldReorder, id]
   );
-  const handleDragCancel = useCallback((event: DragEndEvent) => {
-    void event;
+  const handleDragCancel = useCallback(() => {}, []);
+
+  useDndMonitor({
+    onDragStart: handleDragStart,
+    onDragOver: handleDragOver,
+    onDragEnd: handleDragEnd,
+    onDragCancel: handleDragCancel,
+  });
+
+  if (!currentSection) return null;
+
+  return (
+    <div data-slot="section-field-container" className="flex w-full flex-col space-y-4 p-4">
+      <SortableContext items={fieldIds} strategy={verticalListSortingStrategy}>
+        {currentSection.fields.map(field => {
+          return (
+            <SectionFieldSortable key={field.id} id={field.id} name={field.label}>
+              <div className="p-4">{field.name}</div>
+            </SectionFieldSortable>
+          );
+        })}
+      </SortableContext>
+      {!!activeId &&
+        createPortal(
+          <DragOverlay className="cursor-grabbing">
+            {activeId ? (
+              <div className="pointer-events-none flex items-center rounded border border-border bg-card px-2.5 py-2 shadow-lg">
+                <div className="flex h-12 w-full items-center justify-center rounded-md border border-border border-dashed" />
+              </div>
+            ) : null}
+          </DragOverlay>,
+          document.body
+        )}
+      <FormBuilderCreateFieldModal sectionIndex={id} />
+    </div>
+  );
+};
+
+const FormSectionSortable: React.FC<
+  React.PropsWithChildren<{
+    id: number;
+  }>
+> = ({ id, children }) => {
+  const { attributes, listeners, transform, transition, isDragging, setNodeRef, setActivatorNodeRef } = useSortable({
+    id,
+    data: {
+      variant: ['SECTION_FIELD'],
+      accepts: ['SECTION_FIELD'],
+    },
+  });
+
+  const { currentSection } = useGetCurrentSection(id);
+
+  if (!currentSection) return null;
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={{
+        transform: CSS.Transform.toString(transform),
+        transition,
+        opacity: isDragging ? 0.5 : 1,
+      }}
+      className="flex flex-col rounded border border-border bg-card text-sm"
+    >
+      <div className="flex items-center space-x-2 px-4 py-2">
+        <p className="flex-1 font-medium text-base text-primary-strong">{currentSection.name}</p>
+        <button ref={setActivatorNodeRef} {...attributes} {...listeners} className="cursor-grab">
+          <GripVerticalIcon size={16} />
+        </button>
+      </div>
+      <Separator />
+      {children}
+    </div>
+  );
+};
+
+const FormSectionContainer: React.FC = () => {
+  const { formBuilder, onSectionReorder } = useFormBuilderValueContext();
+
+  const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
+
+  const handleDragStart = useCallback((event: DragStartEvent) => {
+    if (!event.active.data.current?.variant?.includes('SECTION_FIELD')) return;
+    setActiveId(event.active.id);
   }, []);
+  const handleDragOver = useCallback(() => {}, []);
+  const handleDragEnd = useCallback(
+    (event: DragEndEvent) => {
+      setActiveId(null);
+      const { active, over } = event;
+      if (!over || !over.data.current?.variant?.includes('SECTION_FIELD') || !active.data.current?.variant?.includes('SECTION_FIELD')) return;
+      onSectionReorder(active.id as number, over.id as number);
+    },
+    [onSectionReorder]
+  );
+  const handleDragCancel = useCallback(() => {}, []);
+
+  const sectionIds = useMemo(() => {
+    return formBuilder.sections.map((_, index) => index);
+  }, [formBuilder]);
 
   useDndMonitor({
     onDragStart: handleDragStart,
@@ -287,20 +394,17 @@ const FormBuilderFormContent: React.FC<React.PropsWithChildren> = () => {
   });
 
   return (
-    <div className="flex w-full flex-col space-y-4">
-      <SortableContext items={formBuilder.form.map(field => field.id) ?? []} strategy={verticalListSortingStrategy}>
-        {formBuilder.form.map(field => {
+    <div className="flex w-full flex-col space-y-6">
+      <SortableContext items={sectionIds} strategy={verticalListSortingStrategy}>
+        {formBuilder.sections.map((section, index) => {
           return (
-            <PageFieldSortable key={field.id} id={field.id} name={field.name}>
-              <PageFieldDroppable fieldId={field.id}>
-                <PageField tooltip={FormBuilderMapper(field.id)[field.type].TOOLTIP}>{FormBuilderMapper(field.id)[field.type].FIELD}</PageField>
-              </PageFieldDroppable>
-            </PageFieldSortable>
+            <FormSectionSortable key={section.name} id={index}>
+              <SectionFieldContainer id={index} />
+            </FormSectionSortable>
           );
         })}
       </SortableContext>
-
-      {activeId &&
+      {!!activeId &&
         createPortal(
           <DragOverlay className="cursor-grabbing">
             {activeId ? (
@@ -311,15 +415,22 @@ const FormBuilderFormContent: React.FC<React.PropsWithChildren> = () => {
           </DragOverlay>,
           document.body
         )}
+    </div>
+  );
+};
 
+const FormContent: React.FC<React.PropsWithChildren> = () => {
+  return (
+    <div className="flex w-full flex-col space-y-4">
+      <FormSectionContainer />
       <div className="flex w-full items-center justify-center">
-        <FormBuilderCreateFieldModal />
+        <FormBuilderCreateSectionModal />
       </div>
     </div>
   );
 };
 
-const FormBuilderFormPreview: React.FC<React.PropsWithChildren> = () => {
+const FormPreview: React.FC<React.PropsWithChildren> = () => {
   const { formBuilder } = useFormBuilderValueContext();
 
   return (
@@ -354,10 +465,10 @@ export const FormBuilderPage: React.FC<React.PropsWithChildren> = () => {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="form-builder" className="mt-4">
-          <FormBuilderFormContent />
+          <FormContent />
         </TabsContent>
         <TabsContent value="form-preview" className="mt-4">
-          <FormBuilderFormPreview />
+          <FormPreview />
         </TabsContent>
       </Tabs>
     </div>

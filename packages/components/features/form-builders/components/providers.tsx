@@ -5,14 +5,19 @@ import { useFormBuilderReducer } from '../hooks/use-form-builder-reducer';
 import type { FIELD, FIELD_ID, FORM_BUILDER, FormBuilderField, FormBuilderValue } from '../types';
 
 const INITIAL_FORM_BUILDERS: FormBuilderValue = {
-  form: [
+  sections: [
     {
-      id: `field-${nanoid(10)}`,
-      type: 'title-field',
-      name: 'Title',
-      camelCaseName: 'title',
-      label: 'Welcome to the Form',
-      description: 'Please fill out the form below.',
+      name: 'Section 1',
+      fields: [
+        {
+          id: `field-${nanoid(10)}`,
+          type: 'title-field',
+          name: 'Title',
+          camelCaseName: 'title',
+          label: 'Welcome to the Form',
+          description: 'Please fill out the form below.',
+        },
+      ],
     },
   ],
 };
@@ -98,16 +103,24 @@ export const useFormBuilderFieldContext = () => {
 // Form Builder Values Context
 type TFormBuilderValueContext = {
   formBuilder: FormBuilderValue;
-  onFieldCreate: (name: string) => void;
-  onFieldUpdate: (fieldId: string, field: Partial<FormBuilderField>) => void;
-  onFieldReorder: (fromFieldId: string, toFieldId: string) => void;
-  onFieldDelete: (fieldId: string) => void;
+
+  // Section handlers
+  onSectionCreate: (name: string) => void;
+  onSectionUpdate: (index: number, name: string) => void;
+  onSectionReorder: (fromSectionIndex: number, toSectionIndex: number) => void;
+  onSectionDelete: (index: number) => void;
+
+  // Field handlers
+  onFieldCreate: (sectionIndex: number, name: string) => void;
+  onFieldUpdate: (sectionIndex: number, fieldId: string, field: Partial<FormBuilderField>) => void;
+  onFieldReorder: (sectionIndex: number, fromFieldId: string, toFieldId: string) => void;
+  onFieldDelete: (sectionIndex: number, fieldId: string) => void;
 
   // Array field handlers
-  onArrayFieldCreate: (fieldId: string, name: string) => void;
-  onArrayFieldUpdate: (fieldId: string, itemId: string, field: Partial<FormBuilderField>) => void;
-  onArrayFieldDelete: (fieldId: string, itemId: string) => void;
-  onArrayFieldReorder: (fieldId: string, fromItemId: string, toItemId: string) => void;
+  onArrayFieldCreate: (arrayFieldId: string, name: string) => void;
+  onArrayFieldUpdate: (arrayFieldId: string, itemIndex: number, field: Partial<FormBuilderField>) => void;
+  onArrayFieldDelete: (arrayFieldId: string, itemIndex: number) => void;
+  onArrayFieldReorder: (arrayFieldId: string, fromItemIndex: number, toItemIndex: number) => void;
 };
 const FormBuilderValueContext = createContext<TFormBuilderValueContext | null>(null);
 // biome-ignore lint/style/useComponentExportOnlyModules: true
@@ -128,6 +141,12 @@ export const FormBuilderProvider: React.FC<
 
   const {
     formBuilder,
+
+    onSectionCreate,
+    onSectionUpdate,
+    onSectionReorder,
+    onSectionDelete,
+
     onFieldCreate,
     onFieldUpdate,
     onFieldReorder,
@@ -146,6 +165,12 @@ export const FormBuilderProvider: React.FC<
   const formBuilderValueContext = useMemo<TFormBuilderValueContext>(() => {
     return {
       formBuilder,
+
+      onSectionCreate,
+      onSectionUpdate,
+      onSectionReorder,
+      onSectionDelete,
+
       onFieldCreate,
       onFieldUpdate,
       onFieldReorder,
@@ -158,10 +183,17 @@ export const FormBuilderProvider: React.FC<
     };
   }, [
     formBuilder,
+
+    onSectionCreate,
+    onSectionUpdate,
+    onSectionReorder,
+    onSectionDelete,
+
     onFieldCreate,
     onFieldUpdate,
     onFieldReorder,
     onFieldDelete,
+
     onArrayFieldCreate,
     onArrayFieldUpdate,
     onArrayFieldDelete,

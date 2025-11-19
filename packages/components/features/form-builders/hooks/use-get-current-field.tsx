@@ -22,8 +22,16 @@ const getRecursionCurrentField = <T extends FormBuilderField>(fieldType: FIELD_I
 
 export const useGetCurrentField = <T extends FormBuilderField>(fieldType: FIELD_ID, fieldId: string): T | null => {
   const { formBuilder } = useFormBuilderValueContext();
+
   const currentField = useMemo(() => {
-    return getRecursionCurrentField<T>(fieldType, fieldId, formBuilder.form);
-  }, [fieldId, fieldType, formBuilder.form]);
+    const field = formBuilder.sections
+      .map(section => {
+        const _field = getRecursionCurrentField<T>(fieldType, fieldId, section.fields);
+        return _field;
+      })
+      .find(f => f !== null);
+    return field || null;
+  }, [fieldId, fieldType, formBuilder]);
+
   return currentField as T | null;
 };
