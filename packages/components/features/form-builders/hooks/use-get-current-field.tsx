@@ -3,14 +3,27 @@ import { useMemo } from 'react';
 import { useFormBuilderValueContext } from '../components/providers';
 import type { FIELD_ID, FormBuilderField } from '../types';
 
+const getRecursionCurrentField = <T extends FormBuilderField>(fieldType: FIELD_ID, fieldId: string, formBuilderForm: FormBuilderField[]): T | null => {
+  for (const field of formBuilderForm) {
+    if (field.type === fieldType && field.id === fieldId) {
+      return field as T;
+    }
+
+    if (field.type === 'array-field') {
+      const arrayField = field;
+      const foundField = getRecursionCurrentField<T>(fieldType, fieldId, arrayField.fields);
+      if (foundField) {
+        return foundField;
+      }
+    }
+  }
+  return null;
+};
+
 export const useGetCurrentField = <T extends FormBuilderField>(fieldType: FIELD_ID, fieldId: string): T | null => {
   const { formBuilder } = useFormBuilderValueContext();
   const currentField = useMemo(() => {
-    const field = formBuilder.form.find(f => f.id === fieldId);
-    if (field && field.type === fieldType) {
-      return field;
-    }
-    return null;
+    return getRecursionCurrentField<T>(fieldType, fieldId, formBuilder.form);
   }, [fieldId, fieldType, formBuilder.form]);
   return currentField as T | null;
 };

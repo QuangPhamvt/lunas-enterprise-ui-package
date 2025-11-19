@@ -4,7 +4,7 @@ import { GripVerticalIcon } from 'lucide-react';
 
 import { cn } from '@customafk/react-toolkit/utils';
 
-import { type DragEndEvent, DragOverlay, type DragStartEvent, type UniqueIdentifier, useDndMonitor, useDroppable } from '@dnd-kit/core';
+import { type DragCancelEvent, type DragEndEvent, DragOverlay, type DragStartEvent, type UniqueIdentifier, useDndMonitor, useDroppable } from '@dnd-kit/core';
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { createPortal } from 'react-dom';
@@ -17,7 +17,7 @@ import { FormBuilderMapper } from './form-builder-mapper';
 import { FormBuilderTanStackForm } from './forms/form';
 import { useFormBuilderValueContext } from './providers';
 
-export const FormBuilderPageField: React.FC<
+const PageField: React.FC<
   React.PropsWithChildren<{
     tooltip: React.ReactNode;
   }>
@@ -35,7 +35,7 @@ export const FormBuilderPageField: React.FC<
   );
 };
 
-const FormBuilderFormField: React.FC<
+const PageFieldSortable: React.FC<
   React.PropsWithChildren<{
     id: string;
     name: string;
@@ -70,7 +70,7 @@ const FormBuilderFormField: React.FC<
   );
 };
 
-export const FormBuilderFormFieldDroppable: React.FC<
+const PageFieldDroppable: React.FC<
   React.PropsWithChildren<{
     fieldId: string;
   }>
@@ -88,7 +88,6 @@ export const FormBuilderFormFieldDroppable: React.FC<
       accepts: ['FIELD'],
     },
   });
-
   const isOver = useMemo<boolean>(() => {
     return _isOver && !!active?.id && active.data.current?.variant?.includes('FIELD');
   }, [_isOver, active]);
@@ -230,15 +229,19 @@ export const FormBuilderFormFieldDroppable: React.FC<
   const handleDragOver = useCallback(() => {}, []);
   const handleDragEnd = useCallback(
     (event: DragEndEvent) => {
-      const { active } = event;
+      const { active, over } = event;
       if (!_isOver) return;
+      if (over?.data.current?.variant?.includes('FORM_FIELD_DROPPABLE_ARRAY')) return;
       if (!active?.data.current?.variant.includes('FIELD')) return;
+
       const [_, fieldVariant] = active.data.current.variant as ['FIELD', FIELD_ID];
       onFieldUpdate(fieldId, updateFieldMapper[fieldVariant]);
     },
     [_isOver, fieldId, updateFieldMapper, onFieldUpdate]
   );
-  const handleDragCancel = useCallback(() => {}, []);
+  const handleDragCancel = useCallback((event: DragCancelEvent) => {
+    void event;
+  }, []);
 
   useDndMonitor({
     onDragStart: handleDragStart,
@@ -288,13 +291,11 @@ const FormBuilderFormContent: React.FC<React.PropsWithChildren> = () => {
       <SortableContext items={formBuilder.form.map(field => field.id) ?? []} strategy={verticalListSortingStrategy}>
         {formBuilder.form.map(field => {
           return (
-            <FormBuilderFormField key={field.id} id={field.id} name={field.name}>
-              <FormBuilderFormFieldDroppable fieldId={field.id}>
-                <FormBuilderPageField tooltip={FormBuilderMapper(field.id)[field.type].TOOLTIP}>
-                  {FormBuilderMapper(field.id)[field.type].FIELD}
-                </FormBuilderPageField>
-              </FormBuilderFormFieldDroppable>
-            </FormBuilderFormField>
+            <PageFieldSortable key={field.id} id={field.id} name={field.name}>
+              <PageFieldDroppable fieldId={field.id}>
+                <PageField tooltip={FormBuilderMapper(field.id)[field.type].TOOLTIP}>{FormBuilderMapper(field.id)[field.type].FIELD}</PageField>
+              </PageFieldDroppable>
+            </PageFieldSortable>
           );
         })}
       </SortableContext>

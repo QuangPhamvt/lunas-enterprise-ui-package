@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 
 import type { FIELD_ID } from '../types';
+import { FormBuilderArrayField } from './array-field/field';
 import { FormBuilderComboboxField } from './combobox-field/field';
 import { FormBuilderComboboxFieldTooltipFieldType } from './combobox-field/tooltip';
 import { FormBuilderDateField } from './date-field/field';
@@ -39,7 +40,6 @@ import {
   FormBuilderTooltipFieldSettingsRules,
   FormBuilderTooltipFieldTrash,
 } from './tooltip';
-import { FormBuilderArrayField } from './array-field/field';
 
 export const FormBuilderMapper: (fieldId: string) => Record<FIELD_ID, Record<'FIELD' | 'TOOLTIP' | 'SIDEBAR_FIELD', React.ReactNode>> = fieldId => ({
   'title-field': {
@@ -250,7 +250,20 @@ export const FormBuilderMapper: (fieldId: string) => Record<FIELD_ID, Record<'FI
     FIELD: <FormBuilderComboboxField fieldId={fieldId} />,
   },
   'array-field': {
-    TOOLTIP: <div>Not Implemented Yet</div>,
+    TOOLTIP: (
+      <FormBuilderTooltipField>
+        <FormBuilderTooltipFieldCopy />
+        <FormBuilderTooltipFieldSettings>
+          <FormBuilderTooltipFieldSettingsFieldType>
+            <FormBuilderNotImplement />
+          </FormBuilderTooltipFieldSettingsFieldType>
+          <FormBuilderTooltipFieldSettingsRules>
+            <FormBuilderNotImplement />
+          </FormBuilderTooltipFieldSettingsRules>
+        </FormBuilderTooltipFieldSettings>
+        <FormBuilderTooltipFieldTrash fieldId={fieldId} />
+      </FormBuilderTooltipField>
+    ),
     SIDEBAR_FIELD: (
       <div className="flex items-center space-x-1 px-2.5 py-2 text-sm">
         <LayoutListIcon size={16} />
