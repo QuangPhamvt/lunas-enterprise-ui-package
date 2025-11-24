@@ -5,22 +5,19 @@ import { z } from 'zod/v4';
 
 import { Button } from '@/components/ui/button';
 import { Field, FieldContent, FieldDescription, FieldGroup, FieldLabel, FieldSeparator, FieldSet } from '../../components/ui/fields';
+import { useGetCurrentField } from '../../hooks/use-get-current-field';
+import type { FormBuilderDateField as TFormBuilderDateField } from '../../types';
 import { toCamelCase } from '../../utils';
 import { useFormBuilderValueContext } from '../providers';
 import { Input } from '../ui/input';
 
 export const FormBuilderDateFieldTooltipFieldType: React.FC<{
+  sectionIndex: number;
   fieldId: string;
-}> = ({ fieldId }) => {
-  const { formBuilder, onFieldUpdate } = useFormBuilderValueContext();
+}> = ({ sectionIndex, fieldId }) => {
+  const { onFieldUpdate } = useFormBuilderValueContext();
 
-  const currentField = useMemo(() => {
-    const data = formBuilder.form.find(field => field.id === fieldId);
-    if (data && data.type === 'date-field') {
-      return data;
-    }
-    return null;
-  }, [fieldId, formBuilder.form]);
+  const currentField = useGetCurrentField<TFormBuilderDateField>('date-field', fieldId);
 
   const schema = useMemo(() => {
     return z.object({
@@ -43,7 +40,7 @@ export const FormBuilderDateFieldTooltipFieldType: React.FC<{
       onChange: schema,
     },
     onSubmit: ({ value, formApi }) => {
-      onFieldUpdate(fieldId, {
+      onFieldUpdate(sectionIndex, fieldId, {
         name: value.name,
         camelCaseName: toCamelCase(value.name),
         label: value.label,

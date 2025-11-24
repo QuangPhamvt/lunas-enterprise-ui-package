@@ -1,20 +1,11 @@
-import { useMemo } from 'react';
-
 import { FieldDescription, FieldGroup, FieldLegend, FieldSeparator, FieldSet } from '../../components/ui/fields';
-import { useFormBuilderValueContext } from '../providers';
+import { useGetCurrentField } from '../../hooks/use-get-current-field';
+import type { FormBuilderTitleField as TFormBuilderTitleField } from '../../types';
 
 export const FormBuilderTitleField: React.FC<{
   fieldId: string;
 }> = ({ fieldId }) => {
-  const { formBuilder } = useFormBuilderValueContext();
-
-  const currentField = useMemo(() => {
-    const field = formBuilder.form.find(field => field.id === fieldId);
-    if (field && field.type === 'title-field') {
-      return field;
-    }
-    return null;
-  }, [fieldId, formBuilder.form]);
+  const currentField = useGetCurrentField<TFormBuilderTitleField>('title-field', fieldId);
 
   if (!currentField) return null;
 

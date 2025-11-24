@@ -1,15 +1,17 @@
 import { useCallback, useState } from 'react';
-
-import { GripVerticalIcon } from 'lucide-react';
+import { createPortal } from 'react-dom';
 
 import { type DragCancelEvent, DragOverlay, type DragStartEvent, type UniqueIdentifier, useDndMonitor } from '@dnd-kit/core';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { createPortal } from 'react-dom';
+
+import { GripVerticalIcon } from 'lucide-react';
+
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+
 import type { FIELD_ID } from '../types';
-import { FormBuilderMapper } from './form-builder-mapper';
+import { FormBuilderSidberMapper } from './form-builder-mapper';
 import { useFormBuilderFieldContext } from './providers';
 
 const FormBuilderFieldDraggable: React.FC<
@@ -78,7 +80,7 @@ export const FormBuilderSidebar: React.FC<React.PropsWithChildren> = () => {
             <Tabs
               defaultValue="input-field"
               value={activeFieldSectionTab}
-              onValueChange={value => setActiveFieldSectionTab(value as 'typography' | 'input-field')}
+              onValueChange={(value: any) => setActiveFieldSectionTab(value as 'typography' | 'input-field')}
               className="w-full"
             >
               <TabsList className="w-full rounded-none bg-transparent px-0">
@@ -103,7 +105,7 @@ export const FormBuilderSidebar: React.FC<React.PropsWithChildren> = () => {
                     .filter(field => field.tab === 'TYPOGRAPHY')
                     .map(field => (
                       <FormBuilderFieldDraggable key={field.id} id={field.id}>
-                        {FormBuilderMapper(field.id)[field.id].SIDEBAR_FIELD}
+                        {FormBuilderSidberMapper[field.id]}
                       </FormBuilderFieldDraggable>
                     ))}
                 </div>
@@ -112,7 +114,7 @@ export const FormBuilderSidebar: React.FC<React.PropsWithChildren> = () => {
                     <DragOverlay className="cursor-grabbing">
                       {activeId ? (
                         <div className="pointer-events-none flex h-13 items-center rounded border border-border bg-card px-2.5 py-2 shadow-lg">
-                          {FormBuilderMapper(activeId as string)[activeId as FIELD_ID].SIDEBAR_FIELD}
+                          {FormBuilderSidberMapper[activeId as FIELD_ID]}
                         </div>
                       ) : null}
                     </DragOverlay>,
@@ -126,7 +128,7 @@ export const FormBuilderSidebar: React.FC<React.PropsWithChildren> = () => {
                     .filter(field => field.tab === 'FORM_FIELDS')
                     .map(field => (
                       <FormBuilderFieldDraggable key={field.id} id={field.id}>
-                        {FormBuilderMapper(field.id)[field.id].SIDEBAR_FIELD}
+                        {FormBuilderSidberMapper[field.id as FIELD_ID]}
                       </FormBuilderFieldDraggable>
                     ))}
                 </div>
@@ -135,7 +137,7 @@ export const FormBuilderSidebar: React.FC<React.PropsWithChildren> = () => {
                     <DragOverlay className="cursor-grabbing">
                       {activeId ? (
                         <div className="pointer-events-none flex h-13 items-center rounded border border-border bg-card px-2.5 py-2 shadow-lg">
-                          {FormBuilderMapper(activeId as string)[activeId as FIELD_ID].SIDEBAR_FIELD}
+                          {FormBuilderSidberMapper[activeId as FIELD_ID]}
                         </div>
                       ) : null}
                     </DragOverlay>,

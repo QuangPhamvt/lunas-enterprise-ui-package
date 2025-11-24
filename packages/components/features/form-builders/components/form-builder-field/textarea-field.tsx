@@ -1,25 +1,33 @@
 import { useMemo } from 'react';
 
 import { useForm } from '@tanstack/react-form';
-import { z } from 'zod/v4';
 
+import z from 'zod';
 import { Button } from '@/components/ui/button';
-import { NumberInput } from '@/components/ui/inputs/number-input';
-import { Switch } from '@/components/ui/switch';
-import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, FieldLabel, FieldSeparator, FieldSet } from '../../components/ui/fields';
-import { useGetCurrentField } from '../../hooks/use-get-current-field';
-import type { FormBuilderTextField } from '../../types';
+import type { formBuilderTextAreaFieldSchema } from '../../schema';
 import { toCamelCase } from '../../utils';
-import { useFormBuilderValueContext } from '../providers';
+import { useFormBuilderFieldContext } from '../form-buidler-form';
+import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, FieldLabel, FieldSeparator, FieldSet } from '../ui/fields';
 import { Input } from '../ui/input';
+import { NumberInput } from '../ui/number-input';
+import { Switch } from '../ui/switch';
+import { Textarea } from '../ui/textarea';
+import {
+  FormBuilderFieldTooltip,
+  FormBuilderFieldTooltipCopy,
+  FormBuilderFieldTooltipSettings,
+  FormBuilderFieldTooltipSettingsFieldType,
+  FormBuilderFieldTooltipSettingsRules,
+  FormBuilderFieldTooltipTrash,
+  FormBuilderFieldTrigger,
+  FormBuilderFieldWrapper,
+} from './wrapper';
 
-export const FormBuilderTextFieldTooltipFieldType: React.FC<{
-  sectionIndex: number;
-  fieldId: string;
-}> = ({ sectionIndex, fieldId }) => {
-  const { onFieldUpdate } = useFormBuilderValueContext();
-
-  const currentField = useGetCurrentField<FormBuilderTextField>('switch-field', fieldId);
+const FieldType: React.FC = () => {
+  const {
+    state: { value: currentField },
+    handleChange,
+  } = useFormBuilderFieldContext<z.infer<typeof formBuilderTextAreaFieldSchema>>();
 
   const schema = useMemo(() => {
     return z.object({
@@ -28,7 +36,6 @@ export const FormBuilderTextFieldTooltipFieldType: React.FC<{
       description: z.string(),
       placeholder: z.string(),
       showCharacterCount: z.boolean(),
-      showClearButton: z.boolean(),
       showErrorMessage: z.boolean(),
     });
   }, []);
@@ -40,25 +47,23 @@ export const FormBuilderTextFieldTooltipFieldType: React.FC<{
       description: currentField?.description || '',
       placeholder: currentField?.placeholder || '',
       showCharacterCount: currentField?.showCharacterCount || false,
-      showClearButton: currentField?.showClearButton || false,
       showErrorMessage: currentField?.showErrorMessage || false,
     },
     validators: {
       onSubmit: schema,
       onChange: schema,
     },
-    onSubmit: ({ value, formApi }) => {
-      onFieldUpdate(sectionIndex, fieldId, {
+    onSubmit: ({ value }) => {
+      handleChange({
+        ...currentField,
         name: value.name,
         camelCaseName: toCamelCase(value.name),
         label: value.label,
         description: value.description,
         placeholder: value.placeholder,
         showCharacterCount: value.showCharacterCount,
-        showClearButton: value.showClearButton,
         showErrorMessage: value.showErrorMessage,
       });
-      formApi.reset(value);
     },
     onSubmitInvalid: state => {
       state.formApi.reset();
@@ -74,7 +79,7 @@ export const FormBuilderTextFieldTooltipFieldType: React.FC<{
     >
       <FieldGroup>
         <FieldSet>
-          <FieldDescription>Configure the settings for the text field.</FieldDescription>
+          <FieldDescription>Configure the settings for the text area field.</FieldDescription>
           <FieldSeparator />
         </FieldSet>
         <FieldGroup>
@@ -163,24 +168,6 @@ export const FormBuilderTextFieldTooltipFieldType: React.FC<{
           />
           <FieldSeparator />
           <form.Field
-            name="showClearButton"
-            children={field => {
-              return (
-                <Field orientation="horizontal" className="*:data-[slot=field-content]:basis-2/5">
-                  <FieldContent>
-                    <FieldLabel htmlFor={field.name} className="text-text-positive-weak">
-                      Show Clear Button
-                    </FieldLabel>
-                  </FieldContent>
-                  <div className="flex basis-3/5 justify-end">
-                    <Switch id={field.name} checked={field.state.value} onCheckedChange={field.handleChange} />
-                  </div>
-                </Field>
-              );
-            }}
-          />
-          <FieldSeparator />
-          <form.Field
             name="showErrorMessage"
             children={field => {
               return (
@@ -200,10 +187,10 @@ export const FormBuilderTextFieldTooltipFieldType: React.FC<{
           <FieldSeparator />
           <Field orientation="responsive">
             <form.Subscribe
-              selector={state => [state.canSubmit, state.isSubmitting, state.isDirty]}
-              children={([canSubmit, isSubmitting, isDirty]) => {
+              selector={state => [state.canSubmit, state.isSubmitting]}
+              children={([canSubmit, isSubmitting]) => {
                 return (
-                  <Button type="submit" disabled={!canSubmit || isSubmitting || !isDirty}>
+                  <Button type="submit" disabled={!canSubmit || isSubmitting}>
                     Submit
                   </Button>
                 );
@@ -219,13 +206,11 @@ export const FormBuilderTextFieldTooltipFieldType: React.FC<{
   );
 };
 
-export const FormBuilderTextFieldTooltipFieldRules: React.FC<{
-  sectionIndex: number;
-  fieldId: string;
-}> = ({ sectionIndex, fieldId }) => {
-  const { onFieldUpdate } = useFormBuilderValueContext();
-
-  const currentField = useGetCurrentField<FormBuilderTextField>('text-field', fieldId);
+const FieldRules: React.FC = () => {
+  const {
+    state: { value: currentField },
+    handleChange,
+  } = useFormBuilderFieldContext<z.infer<typeof formBuilderTextAreaFieldSchema>>();
 
   const schema = useMemo(() => {
     return z
@@ -235,11 +220,13 @@ export const FormBuilderTextFieldTooltipFieldRules: React.FC<{
       })
       .refine(
         data => {
-          if (data.maxLength === null || data.minLength === null) return true;
-          return data.minLength <= data.maxLength;
+          if (data.minLength !== null && data.maxLength !== null) {
+            return data.minLength <= data.maxLength;
+          }
+          return true;
         },
         {
-          message: 'Min length must be less than or equal to max length',
+          message: 'Min Length must be less than or equal to Max Length',
         }
       );
   }, []);
@@ -254,8 +241,10 @@ export const FormBuilderTextFieldTooltipFieldRules: React.FC<{
       onChange: schema,
     },
     onSubmit: ({ value }) => {
-      onFieldUpdate(sectionIndex, fieldId, {
+      handleChange({
+        ...currentField,
         rules: {
+          ...currentField?.rules,
           minLength: value.minLength,
           maxLength: value.maxLength,
         },
@@ -361,5 +350,44 @@ export const FormBuilderTextFieldTooltipFieldRules: React.FC<{
         </Field>
       </FieldGroup>
     </form>
+  );
+};
+
+export const FormBuilderTextAreaField: React.FC<{
+  sectionIndex: number;
+  fieldId: string;
+}> = ({ sectionIndex, fieldId }) => {
+  const { state } = useFormBuilderFieldContext<z.infer<typeof formBuilderTextAreaFieldSchema>>();
+  return (
+    <FormBuilderFieldWrapper>
+      <FormBuilderFieldTrigger>
+        <FieldSet>
+          <FieldGroup>
+            <Field orientation={state.value.orientation}>
+              <FieldContent>
+                <FieldLabel>{state.value.label}</FieldLabel>
+                <FieldDescription>{state.value.description}</FieldDescription>
+              </FieldContent>
+              <FieldContentMain>
+                <Textarea className="pointer-events-none" placeholder={state.value.placeholder} />
+              </FieldContentMain>
+            </Field>
+            <FieldSeparator />
+          </FieldGroup>
+        </FieldSet>
+      </FormBuilderFieldTrigger>
+      <FormBuilderFieldTooltip>
+        <FormBuilderFieldTooltipCopy />
+        <FormBuilderFieldTooltipSettings>
+          <FormBuilderFieldTooltipSettingsFieldType>
+            <FieldType />
+          </FormBuilderFieldTooltipSettingsFieldType>
+          <FormBuilderFieldTooltipSettingsRules>
+            <FieldRules />
+          </FormBuilderFieldTooltipSettingsRules>
+        </FormBuilderFieldTooltipSettings>
+        <FormBuilderFieldTooltipTrash sectionIndex={sectionIndex} fieldId={fieldId} />
+      </FormBuilderFieldTooltip>
+    </FormBuilderFieldWrapper>
   );
 };

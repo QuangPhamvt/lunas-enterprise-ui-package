@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { FormBuilder, FormBuilderContent, FormBuilderProvider, FormBuilderSidebar } from '@/components/features/form-builders';
+import { FormBuilder } from '@/components/features/form-builders/form-builder';
 
 const meta = {
   tags: ['autodocs'],
@@ -15,12 +15,18 @@ export const Default: Story = {
   render: () => {
     return (
       <div className="size-full min-h-50">
-        <FormBuilderProvider>
-          <FormBuilder>
-            <FormBuilderSidebar />
-            <FormBuilderContent />
-          </FormBuilder>
-        </FormBuilderProvider>
+        <FormBuilder.Provider>
+          <FormBuilder.Container>
+            <FormBuilder.Sidebar>
+              <FormBuilder.SidebarHeader />
+              <FormBuilder.SidebarField />
+            </FormBuilder.Sidebar>
+            <FormBuilder.Main>
+              <FormBuilder.MainFormBuilder />
+              <FormBuilder.MainFormPreview />
+            </FormBuilder.Main>
+          </FormBuilder.Container>
+        </FormBuilder.Provider>
       </div>
     );
   },

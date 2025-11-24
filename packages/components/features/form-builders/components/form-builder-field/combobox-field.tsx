@@ -1,29 +1,39 @@
 import { useMemo } from 'react';
 
 import { useForm } from '@tanstack/react-form';
-import { z } from 'zod/v4';
+
+import z from 'zod';
 
 import { Button } from '@/components/ui/button';
-import { Field, FieldContent, FieldDescription, FieldGroup, FieldLabel, FieldSeparator, FieldSet } from '../../components/ui/fields';
-import { useGetCurrentField } from '../../hooks/use-get-current-field';
-import type { FormBuilderTitleField } from '../../types';
+
+import type { formBuilderComboboxFieldSchema } from '../../schema';
 import { toCamelCase } from '../../utils';
-import { useFormBuilderValueContext } from '../providers';
+import { useFormBuilderFieldContext } from '../form-buidler-form';
+import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, FieldLabel, FieldSeparator, FieldSet } from '../ui/fields';
 import { Input } from '../ui/input';
+import {
+  FormBuilderFieldTooltip,
+  FormBuilderFieldTooltipCopy,
+  FormBuilderFieldTooltipSettings,
+  FormBuilderFieldTooltipSettingsFieldType,
+  FormBuilderFieldTooltipSettingsRules,
+  FormBuilderFieldTooltipTrash,
+  FormBuilderFieldTrigger,
+  FormBuilderFieldWrapper,
+} from './wrapper';
 
-export const FormBuilderTitleFieldTooltipFieldType: React.FC<{
-  sectionIndex: number;
-  fieldId: string;
-}> = ({ sectionIndex, fieldId }) => {
-  const { onFieldUpdate } = useFormBuilderValueContext();
-
-  const currentField = useGetCurrentField<FormBuilderTitleField>('title-field', fieldId);
+const FieldType: React.FC = () => {
+  const {
+    state: { value: currentField },
+    handleChange,
+  } = useFormBuilderFieldContext<z.infer<typeof formBuilderComboboxFieldSchema>>();
 
   const schema = useMemo(() => {
     return z.object({
       name: z.string().nonempty('Name is required'),
       label: z.string().nonempty('Label is required'),
       description: z.string(),
+      placeholder: z.string(),
     });
   }, []);
 
@@ -32,18 +42,22 @@ export const FormBuilderTitleFieldTooltipFieldType: React.FC<{
       name: currentField?.name || '',
       label: currentField?.label || '',
       description: currentField?.description || '',
+      placeholder: currentField?.placeholder || '',
     },
     validators: {
       onSubmit: schema,
       onChange: schema,
     },
-    onSubmit: ({ value }) => {
-      onFieldUpdate(sectionIndex, fieldId, {
+    onSubmit: ({ value, formApi }) => {
+      handleChange({
+        ...currentField,
         name: value.name,
         camelCaseName: toCamelCase(value.name),
         label: value.label,
         description: value.description,
+        placeholder: value.placeholder,
       });
+      formApi.reset(value);
     },
     onSubmitInvalid: state => {
       state.formApi.reset();
@@ -110,12 +124,31 @@ export const FormBuilderTitleFieldTooltipFieldType: React.FC<{
             }}
           />
           <FieldSeparator />
+          <form.Field
+            name="placeholder"
+            children={field => {
+              return (
+                <Field orientation="horizontal" className="*:data-[slot=field-content-main]:basis-3/5 *:data-[slot=field-content]:basis-2/5">
+                  <FieldContent>
+                    <FieldLabel className="text-text-positive-weak">Placeholder</FieldLabel>
+                  </FieldContent>
+                  <Input
+                    value={field.state.value}
+                    placeholder="Enter field placeholder"
+                    className="rounded!"
+                    onChange={e => field.handleChange(e.target.value)}
+                  />
+                </Field>
+              );
+            }}
+          />
+          <FieldSeparator />
           <Field orientation="responsive">
             <form.Subscribe
-              selector={state => [state.canSubmit, state.isSubmitting]}
-              children={([canSubmit, isSubmitting]) => {
+              selector={state => [state.canSubmit, state.isSubmitting, state.isDirty]}
+              children={([canSubmit, isSubmitting, isDirty]) => {
                 return (
-                  <Button type="submit" disabled={!canSubmit || isSubmitting}>
+                  <Button type="submit" disabled={!canSubmit || isSubmitting || !isDirty}>
                     Submit
                   </Button>
                 );
@@ -131,6 +164,45 @@ export const FormBuilderTitleFieldTooltipFieldType: React.FC<{
   );
 };
 
-export const FormBuilderTitleFieldTooltipFieldRules: React.FC = () => {
-  return <div className="flex h-40 w-full items-center justify-center rounded border border-border bg-muted-muted px-2.5 py-2">Not implemented yet</div>;
+const FieldRules: React.FC = () => {
+  return <div>FormBuilderDateFieldTooltipFieldRules</div>;
+};
+
+export const FormBuilderComboboxField: React.FC<{
+  sectionIndex: number;
+  fieldId: string;
+}> = ({ sectionIndex, fieldId }) => {
+  const { state } = useFormBuilderFieldContext<z.infer<typeof formBuilderComboboxFieldSchema>>();
+  return (
+    <FormBuilderFieldWrapper>
+      <FormBuilderFieldTrigger>
+        <FieldSet>
+          <FieldGroup>
+            <Field orientation={state.value.orientation}>
+              <FieldContent>
+                <FieldLabel>{state.value.label}</FieldLabel>
+                <FieldDescription>{state.value.description}</FieldDescription>
+              </FieldContent>
+              <FieldContentMain>
+                <Input className="pointer-events-none" placeholder={state.value.placeholder} />
+              </FieldContentMain>
+            </Field>
+            <FieldSeparator />
+          </FieldGroup>
+        </FieldSet>
+      </FormBuilderFieldTrigger>
+      <FormBuilderFieldTooltip>
+        <FormBuilderFieldTooltipCopy />
+        <FormBuilderFieldTooltipSettings>
+          <FormBuilderFieldTooltipSettingsFieldType>
+            <FieldType />
+          </FormBuilderFieldTooltipSettingsFieldType>
+          <FormBuilderFieldTooltipSettingsRules>
+            <FieldRules />
+          </FormBuilderFieldTooltipSettingsRules>
+        </FormBuilderFieldTooltipSettings>
+        <FormBuilderFieldTooltipTrash sectionIndex={sectionIndex} fieldId={fieldId} />
+      </FormBuilderFieldTooltip>
+    </FormBuilderFieldWrapper>
+  );
 };

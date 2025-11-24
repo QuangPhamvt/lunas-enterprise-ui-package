@@ -1,19 +1,12 @@
 import { useMemo } from 'react';
 
-import { useFormBuilderValueContext } from '../providers';
 import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, FieldLabel, FieldSeparator, FieldSet } from '../../components/ui/fields';
+import { useGetCurrentField } from '../../hooks/use-get-current-field';
+import type { FormBuilderTextareaField as TFormBuilderTextareaField } from '../../types';
 import { Textarea } from '../ui/textarea';
 
 export const FormBuilderTextareaField: React.FC<{ fieldId: string }> = ({ fieldId }) => {
-  const { formBuilder } = useFormBuilderValueContext();
-
-  const currentField = useMemo(() => {
-    const field = formBuilder.form.find(field => field.id === fieldId);
-    if (field && field.type === 'textarea-field') {
-      return field;
-    }
-    return null;
-  }, [fieldId, formBuilder.form]);
+  const currentField = useGetCurrentField<TFormBuilderTextareaField>('textarea-field', fieldId);
 
   const orientation = useMemo(() => {
     return currentField?.orientation || 'responsive';

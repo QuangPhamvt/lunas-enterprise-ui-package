@@ -1,21 +1,14 @@
 import { useMemo } from 'react';
 
 import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, FieldLabel, FieldSet } from '../../components/ui/fields';
-import { useFormBuilderValueContext } from '../providers';
+import { useGetCurrentField } from '../../hooks/use-get-current-field';
+import type { FormBuilderNumberField as TFormBuilderNumberField } from '../../types';
 import { NumberInput } from '../ui/number-input';
 
 export const FormBuilderNumberField: React.FC<{
   fieldId: string;
 }> = ({ fieldId }) => {
-  const { formBuilder } = useFormBuilderValueContext();
-
-  const currentField = useMemo(() => {
-    const field = formBuilder.form.find(field => field.id === fieldId);
-    if (field && field.type === 'number-field') {
-      return field;
-    }
-    return null;
-  }, [fieldId, formBuilder.form]);
+  const currentField = useGetCurrentField<TFormBuilderNumberField>('number-field', fieldId);
 
   const orientation = useMemo(() => {
     return currentField?.orientation || 'responsive';

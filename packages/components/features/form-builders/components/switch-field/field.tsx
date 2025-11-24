@@ -3,7 +3,7 @@ import { cn } from '@customafk/react-toolkit/utils';
 import { Switch } from '@/components/ui/switch';
 import { useGetCurrentField } from '../../hooks/use-get-current-field';
 import type { FormBuilderSwitchField as TFormBuilderSwitchField } from '../../types';
-import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, FieldLabel, FieldSet, FieldTitle } from '../ui/fields';
+import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, FieldLabel, FieldSeparator, FieldSet, FieldTitle } from '../ui/fields';
 
 export const FormBuilderSwitchField: React.FC<{
   fieldId: string;
@@ -71,6 +71,7 @@ export const FormBuilderSwitchField: React.FC<{
             </div>
           </FieldContentMain>
         </Field>
+        <FieldSeparator />
       </FieldGroup>
     </FieldSet>
   );

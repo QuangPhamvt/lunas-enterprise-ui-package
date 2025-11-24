@@ -1,20 +1,14 @@
 import { useMemo } from 'react';
 
-import { useFormBuilderValueContext } from '../providers';
+import { useGetCurrentField } from '../../hooks/use-get-current-field';
+import type { FormBuilderSelectField as TFormBuilderSelectField } from '../../types';
 import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, FieldLabel, FieldSeparator, FieldSet } from '../ui/fields';
 import { Select, SelectTrigger, SelectValue } from '../ui/select';
 
 export const FormBuilderSelectField: React.FC<{
   fieldId: string;
 }> = ({ fieldId }) => {
-  const { formBuilder } = useFormBuilderValueContext();
-  const currentField = useMemo(() => {
-    const field = formBuilder.form.find(field => field.id === fieldId);
-    if (field && field.type === 'select-field') {
-      return field;
-    }
-    return null;
-  }, [fieldId, formBuilder.form]);
+  const currentField = useGetCurrentField<TFormBuilderSelectField>('select-field', fieldId);
 
   const orientation = useMemo(() => {
     return currentField?.orientation || 'responsive';

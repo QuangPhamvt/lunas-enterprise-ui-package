@@ -2,24 +2,34 @@ import { useMemo } from 'react';
 
 import { useForm } from '@tanstack/react-form';
 import { PlusIcon, XIcon } from 'lucide-react';
-import { z } from 'zod/v4';
 
+import { cn } from '@customafk/react-toolkit/utils';
+
+import z from 'zod';
 import { Button } from '@/components/ui/button';
-import { Field, FieldContent, FieldDescription, FieldGroup, FieldLabel, FieldSeparator, FieldSet } from '../../components/ui/fields';
-import { useGetCurrentField } from '../../hooks/use-get-current-field';
-import type { FormBuilderRadioGroupField as TFormBuilderRadioGroupField } from '../../types';
+import type { formBuilderSwitchFieldSchema } from '../../schema';
 import { toCamelCase } from '../../utils';
-import { useFormBuilderValueContext } from '../providers';
+import { useFormBuilderFieldContext } from '../form-buidler-form';
+import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, FieldLabel, FieldSeparator, FieldSet, FieldTitle } from '../ui/fields';
 import { Input } from '../ui/input';
+import { Switch } from '../ui/switch';
 import { Textarea } from '../ui/textarea';
+import {
+  FormBuilderFieldTooltip,
+  FormBuilderFieldTooltipCopy,
+  FormBuilderFieldTooltipSettings,
+  FormBuilderFieldTooltipSettingsFieldType,
+  FormBuilderFieldTooltipSettingsRules,
+  FormBuilderFieldTooltipTrash,
+  FormBuilderFieldTrigger,
+  FormBuilderFieldWrapper,
+} from './wrapper';
 
-export const FormBuilderRadioGroupFieldTooltipFieldType: React.FC<{
-  sectionIndex: number;
-  fieldId: string;
-}> = ({ sectionIndex, fieldId }) => {
-  const { onFieldUpdate } = useFormBuilderValueContext();
-
-  const currentField = useGetCurrentField<TFormBuilderRadioGroupField>('radio-group-field', fieldId);
+const FieldType: React.FC = () => {
+  const {
+    state: { value: currentField },
+    handleChange,
+  } = useFormBuilderFieldContext<z.infer<typeof formBuilderSwitchFieldSchema>>();
 
   const schema = useMemo(() => {
     return z.object({
@@ -30,17 +40,17 @@ export const FormBuilderRadioGroupFieldTooltipFieldType: React.FC<{
       options: z
         .array(
           z.object({
+            name: z.string().nonempty('Option name is required'),
             label: z.string().nonempty('Option label is required'),
-            value: z.string().nonempty('Option value is required'),
             description: z.string(),
           })
         )
         .refine(value => value.length > 0, { message: 'At least one option is required' })
         .refine(
           options => {
-            const values = options.map(option => option.value);
-            const uniqueNames = new Set(values);
-            return uniqueNames.size === values.length;
+            const names = options.map(option => option.name);
+            const uniqueNames = new Set(names);
+            return uniqueNames.size === names.length;
           },
           { message: 'Option names must be unique' }
         ),
@@ -60,15 +70,17 @@ export const FormBuilderRadioGroupFieldTooltipFieldType: React.FC<{
       onChange: schema,
     },
     onSubmit: ({ value, formApi }) => {
-      onFieldUpdate(sectionIndex, fieldId, {
+      handleChange({
+        ...currentField,
         name: value.name,
         camelCaseName: toCamelCase(value.name),
         label: value.label,
         description: value.description,
 
         options: value.options.map(option => ({
+          name: option.name,
+          camelCaseName: toCamelCase(option.name),
           label: option.label,
-          value: option.value,
           description: option.description,
         })),
       });
@@ -157,11 +169,7 @@ export const FormBuilderRadioGroupFieldTooltipFieldType: React.FC<{
                       color="muted"
                       size="icon"
                       onClick={() => {
-                        field.pushValue({
-                          label: '',
-                          value: '',
-                          description: '',
-                        });
+                        field.pushValue({ name: '', label: '', description: '' });
                       }}
                     >
                       <PlusIcon size={16} aria-hidden="true" />
@@ -173,12 +181,12 @@ export const FormBuilderRadioGroupFieldTooltipFieldType: React.FC<{
                         <div key={index.toString()}>
                           <div className="flex space-x-2">
                             <form.Field
-                              name={`options[${index}].value`}
+                              name={`options[${index}].name`}
                               children={subField => {
                                 return (
                                   <Input
                                     value={subField.state.value}
-                                    placeholder="Radio Value"
+                                    placeholder="Switch Name"
                                     className="max-w-40"
                                     onChange={e => subField.handleChange(e.target.value)}
                                   />
@@ -188,7 +196,7 @@ export const FormBuilderRadioGroupFieldTooltipFieldType: React.FC<{
                             <form.Field
                               name={`options[${index}].label`}
                               children={subField => {
-                                return <Input value={subField.state.value} placeholder="Radio Label" onChange={e => subField.handleChange(e.target.value)} />;
+                                return <Input value={subField.state.value} placeholder="Switch Label" onChange={e => subField.handleChange(e.target.value)} />;
                               }}
                             />
                             <Button type="button" color="muted" variant="outline" onClick={() => field.removeValue(index)}>
@@ -201,7 +209,7 @@ export const FormBuilderRadioGroupFieldTooltipFieldType: React.FC<{
                               return (
                                 <Textarea
                                   value={subField.state.value}
-                                  placeholder="Radio Description (optional)"
+                                  placeholder="Switch Description (optional)"
                                   className="mt-1"
                                   onChange={e => subField.handleChange(e.target.value)}
                                 />
@@ -239,8 +247,92 @@ export const FormBuilderRadioGroupFieldTooltipFieldType: React.FC<{
   );
 };
 
-export const FormBuilderRadioGroupFieldTooltipFieldRules: React.FC<{
-  fieldId: string;
-}> = () => {
+const FieldRules: React.FC = () => {
   return <div>Select Field Rules</div>;
+};
+
+export const FormBuilderSwitchField: React.FC<{
+  sectionIndex: number;
+  fieldId: string;
+}> = ({ sectionIndex, fieldId }) => {
+  const { state } = useFormBuilderFieldContext<z.infer<typeof formBuilderSwitchFieldSchema>>();
+  return (
+    <FormBuilderFieldWrapper>
+      <FormBuilderFieldTrigger>
+        <FieldSet>
+          <FieldGroup>
+            <Field orientation="vertical">
+              <FieldContent>
+                <FieldLabel>{state.value.label}</FieldLabel>
+                <FieldDescription>{state.value.description}</FieldDescription>
+              </FieldContent>
+              <FieldContentMain className="@container/field-content-main">
+                <div
+                  className={cn(
+                    'grid grid-cols-1 gap-4',
+                    '@md/field-content-main:grid-cols-2 @md/field-content-main:gap-4',
+                    '@5xl/field-content-main:grid-cols-4 @5xl/field-content-main:gap-2',
+                    '@2xl/field-content-main:grid-cols-3 @3xl/field-content-main:gap-4'
+                  )}
+                >
+                  <FieldLabel>
+                    <Field orientation="horizontal" className="justify-between">
+                      <FieldContent>
+                        <FieldTitle>Switch Field.</FieldTitle>
+                        <FieldDescription>This is a placeholder for the switch field options.</FieldDescription>
+                      </FieldContent>
+                      <Switch disabled />
+                    </Field>
+                  </FieldLabel>
+
+                  <FieldLabel>
+                    <Field orientation="horizontal" className="justify-between">
+                      <FieldContent>
+                        <FieldTitle>Switch Field.</FieldTitle>
+                        <FieldDescription>This is a placeholder for the switch field options.</FieldDescription>
+                      </FieldContent>
+                      <Switch disabled className="" />
+                    </Field>
+                  </FieldLabel>
+
+                  <FieldLabel>
+                    <Field orientation="horizontal" className="justify-between">
+                      <FieldContent>
+                        <FieldTitle>Switch Field.</FieldTitle>
+                        <FieldDescription>This is a placeholder for the switch field options.</FieldDescription>
+                      </FieldContent>
+                      <Switch disabled />
+                    </Field>
+                  </FieldLabel>
+
+                  <FieldLabel>
+                    <Field orientation="horizontal" className="justify-between">
+                      <FieldContent>
+                        <FieldTitle>Switch Field.</FieldTitle>
+                        <FieldDescription>This is a placeholder for the switch field options.</FieldDescription>
+                      </FieldContent>
+                      <Switch disabled />
+                    </Field>
+                  </FieldLabel>
+                </div>
+              </FieldContentMain>
+            </Field>
+            <FieldSeparator />
+          </FieldGroup>
+        </FieldSet>
+      </FormBuilderFieldTrigger>
+      <FormBuilderFieldTooltip>
+        <FormBuilderFieldTooltipCopy />
+        <FormBuilderFieldTooltipSettings>
+          <FormBuilderFieldTooltipSettingsFieldType>
+            <FieldType />
+          </FormBuilderFieldTooltipSettingsFieldType>
+          <FormBuilderFieldTooltipSettingsRules>
+            <FieldRules />
+          </FormBuilderFieldTooltipSettingsRules>
+        </FormBuilderFieldTooltipSettings>
+        <FormBuilderFieldTooltipTrash sectionIndex={sectionIndex} fieldId={fieldId} />
+      </FormBuilderFieldTooltip>
+    </FormBuilderFieldWrapper>
+  );
 };

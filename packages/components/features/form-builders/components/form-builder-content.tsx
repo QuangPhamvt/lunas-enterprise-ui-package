@@ -15,10 +15,11 @@ import { useGetCurrentSection } from '../hooks/use-get-current-sectiont';
 import type { FIELD_ID, FormBuilderField } from '../types';
 import { FormBuilderCreateFieldModal } from './create-field-modal';
 import { FormBuilderCreateSectionModal } from './create-section-modal';
+import { FormBuilderMapper } from './form-builder-mapper';
 import { FormBuilderTanStackForm } from './forms/form';
 import { useFormBuilderValueContext } from './providers';
 
-const PageField: React.FC<
+const SectionField: React.FC<
   React.PropsWithChildren<{
     tooltip: React.ReactNode;
   }>
@@ -38,9 +39,10 @@ const PageField: React.FC<
 
 const SectionFieldDroppable: React.FC<
   React.PropsWithChildren<{
+    sectionId: number;
     fieldId: string;
   }>
-> = ({ fieldId, children }) => {
+> = ({ sectionId, fieldId, children }) => {
   const { onFieldUpdate } = useFormBuilderValueContext();
 
   const {
@@ -195,15 +197,14 @@ const SectionFieldDroppable: React.FC<
   const handleDragOver = useCallback(() => {}, []);
   const handleDragEnd = useCallback(
     (event: DragEndEvent) => {
-      const { active, over } = event;
+      const { active } = event;
       if (!_isOver) return;
-      if (over?.data.current?.variant?.includes('FORM_FIELD_DROPPABLE_ARRAY')) return;
       if (!active?.data.current?.variant.includes('FIELD')) return;
 
       const [_, fieldVariant] = active.data.current.variant as ['FIELD', FIELD_ID];
-      // onFieldUpdate(fieldId, updateFieldMapper[fieldVariant]);
+      onFieldUpdate(sectionId, fieldId, updateFieldMapper[fieldVariant]);
     },
-    [_isOver]
+    [_isOver, sectionId, fieldId, updateFieldMapper, onFieldUpdate]
   );
   const handleDragCancel = useCallback((event: DragCancelEvent) => {
     void event;
@@ -247,11 +248,10 @@ const SectionFieldSortable: React.FC<
       }}
       className="group relative flex flex-col text-sm hover:rounded hover:outline-1 hover:outline-primary hover:outline-offset-4"
     >
-      <button ref={setActivatorNodeRef} {...attributes} {...listeners} className="invisible absolute top-2 right-2 cursor-grab group-hover:visible">
+      <button ref={setActivatorNodeRef} {...attributes} {...listeners} className="invisible absolute top-2 right-2 z-10 cursor-grab group-hover:visible">
         <GripVerticalIcon size={16} />
       </button>
       {children}
-      <Separator />
     </div>
   );
 };
@@ -301,7 +301,9 @@ const SectionFieldContainer: React.FC<
         {currentSection.fields.map(field => {
           return (
             <SectionFieldSortable key={field.id} id={field.id} name={field.label}>
-              <div className="p-4">{field.name}</div>
+              <SectionFieldDroppable sectionId={id} fieldId={field.id}>
+                <SectionField tooltip={FormBuilderMapper(id, field.id)[field.type].TOOLTIP}>{FormBuilderMapper(id, field.id)[field.type].FIELD}</SectionField>
+              </SectionFieldDroppable>
             </SectionFieldSortable>
           );
         })}

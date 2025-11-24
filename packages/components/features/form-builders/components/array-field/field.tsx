@@ -243,10 +243,10 @@ const FormFieldSortable: React.FC<
 
 const FormFieldDroppable: React.FC<
   React.PropsWithChildren<{
+    arrayFieldId: string;
     fieldId: string;
-    itemId: string;
   }>
-> = ({ fieldId, itemId, children }) => {
+> = ({ arrayFieldId, fieldId, children }) => {
   const { onArrayFieldUpdate } = useFormBuilderValueContext();
 
   const {
@@ -254,7 +254,7 @@ const FormFieldDroppable: React.FC<
     isOver: _isOver,
     active,
   } = useDroppable({
-    id: itemId,
+    id: fieldId,
     data: {
       variant: ['FORM_FIELD_DROPPABLE', 'FORM_FIELD_DROPPABLE_ARRAY'],
       accepts: ['FIELD'],
@@ -274,12 +274,12 @@ const FormFieldDroppable: React.FC<
       if (!active?.data.current?.variant?.includes('FIELD')) return;
 
       const [_, fieldVariant] = active.data.current.variant as ['FIELD', ARRAY_FIELD_ID];
-      const prepareField = updateFieldMapper(itemId)[fieldVariant];
+      const prepareField = updateFieldMapper(fieldId)[fieldVariant];
       if (!prepareField) return;
 
-      onArrayFieldUpdate(fieldId, itemId, prepareField);
+      onArrayFieldUpdate(arrayFieldId, fieldId, prepareField);
     },
-    [_isOver, fieldId, itemId, onArrayFieldUpdate]
+    [_isOver, arrayFieldId, fieldId, onArrayFieldUpdate]
   );
   const handleCancel = useCallback((event: DragCancelEvent) => {
     void event;
@@ -355,7 +355,7 @@ export const FormBuilderArrayField: React.FC<{ fieldId: string }> = ({ fieldId }
               {fields.map(field => {
                 return (
                   <FormFieldSortable key={field.id} id={field.id} name={field.name}>
-                    <FormFieldDroppable fieldId={currentField.id} itemId={field.id}>
+                    <FormFieldDroppable arrayFieldId={currentField.id} fieldId={field.id}>
                       {ArrayFieldMapper(field.id)[field.type].FIELD}
                     </FormFieldDroppable>
                   </FormFieldSortable>

@@ -2,24 +2,31 @@ import { useMemo } from 'react';
 
 import { useForm } from '@tanstack/react-form';
 import { PlusIcon, XIcon } from 'lucide-react';
-import { z } from 'zod/v4';
 
+import z from 'zod';
 import { Button } from '@/components/ui/button';
-import { Field, FieldContent, FieldDescription, FieldGroup, FieldLabel, FieldSeparator, FieldSet } from '../../components/ui/fields';
-import { useGetCurrentField } from '../../hooks/use-get-current-field';
-import type { FormBuilderSelectField as TFormBuilderSelectField } from '../../types';
+import type { formBuilderSelectFieldSchema } from '../../schema';
 import { toCamelCase } from '../../utils';
-import { useFormBuilderValueContext } from '../providers';
+import { useFormBuilderFieldContext } from '../form-buidler-form';
+import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, FieldLabel, FieldSeparator, FieldSet } from '../ui/fields';
 import { Input } from '../ui/input';
+import { Select, SelectTrigger, SelectValue } from '../ui/select';
+import {
+  FormBuilderFieldTooltip,
+  FormBuilderFieldTooltipCopy,
+  FormBuilderFieldTooltipSettings,
+  FormBuilderFieldTooltipSettingsFieldType,
+  FormBuilderFieldTooltipSettingsRules,
+  FormBuilderFieldTooltipTrash,
+  FormBuilderFieldTrigger,
+  FormBuilderFieldWrapper,
+} from './wrapper';
 
-export const FormBuilderSelectFieldTooltipFieldType: React.FC<{
-  sectionIndex: number;
-  fieldId: string;
-}> = ({ sectionIndex, fieldId }) => {
-  const { onFieldUpdate } = useFormBuilderValueContext();
-
-  const currentField = useGetCurrentField<TFormBuilderSelectField>('select-field', fieldId);
-
+const FieldType: React.FC = () => {
+  const {
+    state: { value: currentField },
+    handleChange,
+  } = useFormBuilderFieldContext<z.infer<typeof formBuilderSelectFieldSchema>>();
   const schema = useMemo(() => {
     return z.object({
       name: z.string().nonempty('Name is required'),
@@ -61,7 +68,8 @@ export const FormBuilderSelectFieldTooltipFieldType: React.FC<{
       onChange: schema,
     },
     onSubmit: ({ value, formApi }) => {
-      onFieldUpdate(sectionIndex, fieldId, {
+      handleChange({
+        ...currentField,
         name: value.name,
         camelCaseName: toCamelCase(value.name),
         label: value.label,
@@ -234,8 +242,49 @@ export const FormBuilderSelectFieldTooltipFieldType: React.FC<{
   );
 };
 
-export const FormBuilderSelectFieldTooltipFieldRules: React.FC<{
-  fieldId: string;
-}> = () => {
+const FieldRules: React.FC = () => {
   return <div>Select Field Rules</div>;
+};
+
+export const FormBuilderSelectField: React.FC<{
+  sectionIndex: number;
+  fieldId: string;
+}> = ({ sectionIndex, fieldId }) => {
+  const { state } = useFormBuilderFieldContext<z.infer<typeof formBuilderSelectFieldSchema>>();
+  return (
+    <FormBuilderFieldWrapper>
+      <FormBuilderFieldTrigger>
+        <FieldSet>
+          <FieldGroup>
+            <Field orientation={state.value.orientation}>
+              <FieldContent>
+                <FieldLabel>{state.value.label}</FieldLabel>
+                <FieldDescription>{state.value.description}</FieldDescription>
+              </FieldContent>
+              <FieldContentMain className="flex justify-end">
+                <Select>
+                  <SelectTrigger className="pointer-events-none w-60">
+                    <SelectValue placeholder="Select an option" />
+                  </SelectTrigger>
+                </Select>
+              </FieldContentMain>
+            </Field>
+            <FieldSeparator />
+          </FieldGroup>
+        </FieldSet>
+      </FormBuilderFieldTrigger>
+      <FormBuilderFieldTooltip>
+        <FormBuilderFieldTooltipCopy />
+        <FormBuilderFieldTooltipSettings>
+          <FormBuilderFieldTooltipSettingsFieldType>
+            <FieldType />
+          </FormBuilderFieldTooltipSettingsFieldType>
+          <FormBuilderFieldTooltipSettingsRules>
+            <FieldRules />
+          </FormBuilderFieldTooltipSettingsRules>
+        </FormBuilderFieldTooltipSettings>
+        <FormBuilderFieldTooltipTrash sectionIndex={sectionIndex} fieldId={fieldId} />
+      </FormBuilderFieldTooltip>
+    </FormBuilderFieldWrapper>
+  );
 };

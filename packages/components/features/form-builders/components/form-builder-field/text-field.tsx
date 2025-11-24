@@ -1,25 +1,34 @@
 import { useMemo } from 'react';
 
 import { useForm } from '@tanstack/react-form';
-import { z } from 'zod/v4';
+
+import z from 'zod';
 
 import { Button } from '@/components/ui/button';
-import { NumberInput } from '@/components/ui/inputs/number-input';
-import { Switch } from '@/components/ui/switch';
-import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, FieldLabel, FieldSeparator, FieldSet } from '../../components/ui/fields';
-import { useGetCurrentField } from '../../hooks/use-get-current-field';
-import type { FormBuilderTextField } from '../../types';
+
+import type { formBuilderTextFieldSchema } from '../../schema';
 import { toCamelCase } from '../../utils';
-import { useFormBuilderValueContext } from '../providers';
+import { useFormBuilderFieldContext } from '../form-buidler-form';
+import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, FieldLabel, FieldSeparator, FieldSet } from '../ui/fields';
 import { Input } from '../ui/input';
+import { NumberInput } from '../ui/number-input';
+import { Switch } from '../ui/switch';
+import {
+  FormBuilderFieldTooltip,
+  FormBuilderFieldTooltipCopy,
+  FormBuilderFieldTooltipSettings,
+  FormBuilderFieldTooltipSettingsFieldType,
+  FormBuilderFieldTooltipSettingsRules,
+  FormBuilderFieldTooltipTrash,
+  FormBuilderFieldTrigger,
+  FormBuilderFieldWrapper,
+} from './wrapper';
 
-export const FormBuilderTextFieldTooltipFieldType: React.FC<{
-  sectionIndex: number;
-  fieldId: string;
-}> = ({ sectionIndex, fieldId }) => {
-  const { onFieldUpdate } = useFormBuilderValueContext();
-
-  const currentField = useGetCurrentField<FormBuilderTextField>('switch-field', fieldId);
+const FieldType: React.FC = () => {
+  const {
+    state: { value: currentField },
+    handleChange,
+  } = useFormBuilderFieldContext<z.infer<typeof formBuilderTextFieldSchema>>();
 
   const schema = useMemo(() => {
     return z.object({
@@ -48,7 +57,8 @@ export const FormBuilderTextFieldTooltipFieldType: React.FC<{
       onChange: schema,
     },
     onSubmit: ({ value, formApi }) => {
-      onFieldUpdate(sectionIndex, fieldId, {
+      handleChange({
+        ...currentField,
         name: value.name,
         camelCaseName: toCamelCase(value.name),
         label: value.label,
@@ -219,13 +229,11 @@ export const FormBuilderTextFieldTooltipFieldType: React.FC<{
   );
 };
 
-export const FormBuilderTextFieldTooltipFieldRules: React.FC<{
-  sectionIndex: number;
-  fieldId: string;
-}> = ({ sectionIndex, fieldId }) => {
-  const { onFieldUpdate } = useFormBuilderValueContext();
-
-  const currentField = useGetCurrentField<FormBuilderTextField>('text-field', fieldId);
+const FieldRules: React.FC = () => {
+  const {
+    state: { value: currentField },
+    handleChange,
+  } = useFormBuilderFieldContext<z.infer<typeof formBuilderTextFieldSchema>>();
 
   const schema = useMemo(() => {
     return z
@@ -254,10 +262,12 @@ export const FormBuilderTextFieldTooltipFieldRules: React.FC<{
       onChange: schema,
     },
     onSubmit: ({ value }) => {
-      onFieldUpdate(sectionIndex, fieldId, {
+      handleChange({
+        ...currentField,
         rules: {
-          minLength: value.minLength,
+          ...currentField?.rules,
           maxLength: value.maxLength,
+          minLength: value.minLength,
         },
       });
     },
@@ -361,5 +371,44 @@ export const FormBuilderTextFieldTooltipFieldRules: React.FC<{
         </Field>
       </FieldGroup>
     </form>
+  );
+};
+
+export const FormBuilderTextField: React.FC<{
+  sectionIndex: number;
+  fieldId: string;
+}> = ({ sectionIndex, fieldId }) => {
+  const { state } = useFormBuilderFieldContext<z.infer<typeof formBuilderTextFieldSchema>>();
+  return (
+    <FormBuilderFieldWrapper>
+      <FormBuilderFieldTrigger>
+        <FieldSet>
+          <FieldGroup>
+            <Field orientation={state.value.orientation}>
+              <FieldContent>
+                <FieldLabel>{state.value.label}</FieldLabel>
+                <FieldDescription>{state.value.description}</FieldDescription>
+              </FieldContent>
+              <FieldContentMain>
+                <Input className="pointer-events-none" placeholder={state.value.placeholder} />
+              </FieldContentMain>
+            </Field>
+            <FieldSeparator />
+          </FieldGroup>
+        </FieldSet>
+      </FormBuilderFieldTrigger>
+      <FormBuilderFieldTooltip>
+        <FormBuilderFieldTooltipCopy />
+        <FormBuilderFieldTooltipSettings>
+          <FormBuilderFieldTooltipSettingsFieldType>
+            <FieldType />
+          </FormBuilderFieldTooltipSettingsFieldType>
+          <FormBuilderFieldTooltipSettingsRules>
+            <FieldRules />
+          </FormBuilderFieldTooltipSettingsRules>
+        </FormBuilderFieldTooltipSettings>
+        <FormBuilderFieldTooltipTrash sectionIndex={sectionIndex} fieldId={fieldId} />
+      </FormBuilderFieldTooltip>
+    </FormBuilderFieldWrapper>
   );
 };

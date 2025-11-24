@@ -1,7 +1,9 @@
 import { useCallback, useReducer } from 'react';
 
 import { arrayMove } from '@dnd-kit/sortable';
+
 import { nanoid } from 'nanoid';
+
 import type { FormBuilderArrayField, FormBuilderEmptyField, FormBuilderField, FormBuilderValue } from '../types';
 import { toCamelCase } from '../utils';
 
@@ -60,9 +62,9 @@ const createRecursiveFieldInArrayField = (fieldId: string, newField: FormBuilder
   };
 };
 
-const updateFieldInArrayField = (
+const updateRecursiveFieldInArrayField = (
   arrayFieldId: string,
-  itemIndex: number,
+  fieldId: string,
   field: FormBuilderArrayField,
   updatedField: Partial<FormBuilderField>
 ): FormBuilderArrayField => {
@@ -71,10 +73,10 @@ const updateFieldInArrayField = (
   if (arrayFieldId === field.id) {
     return {
       ...field,
-      fields: field.fields.map((item, index) => {
-        if (index !== itemIndex) return item;
+      fields: field.fields.map(field => {
+        if (field.id !== fieldId) return field;
         return {
-          ...item,
+          ...field,
           ...Object.fromEntries(Object.entries(updatedField).filter(([_, v]) => v !== undefined)),
         };
       }),
@@ -87,7 +89,7 @@ const updateFieldInArrayField = (
     ...field,
     fields: field.fields.map(f => {
       if (f.type !== 'array-field') return f;
-      return updateFieldInArrayField(arrayFieldId, itemIndex, f, updatedField);
+      return updateRecursiveFieldInArrayField(arrayFieldId, fieldId, f, updatedField);
     }),
   };
 };
@@ -115,11 +117,15 @@ const deleteFieldInArrayField = (arrayFieldId: string, itemIndex: number, field:
   };
 };
 
-const reorderFieldInArrayField = (arrayFieldId: string, fromItemIndex: number, toItemIndex: number, field: FormBuilderArrayField): FormBuilderArrayField => {
+const reorderFieldInArrayField = (arrayFieldId: string, fromFieldId: string, toFieldId: string, field: FormBuilderArrayField): FormBuilderArrayField => {
   if (arrayFieldId === field.id) {
     return {
       ...field,
-      fields: arrayMove(field.fields, fromItemIndex, toItemIndex),
+      fields: arrayMove(
+        field.fields,
+        field.fields.findIndex(f => f.id === fromFieldId),
+        field.fields.findIndex(f => f.id === toFieldId)
+      ),
     };
   }
 
@@ -134,10 +140,8 @@ const reorderFieldInArrayField = (arrayFieldId: string, fromItemIndex: number, t
   return {
     ...field,
     fields: field.fields.map(f => {
-      if (f.type === 'array-field') {
-        return reorderFieldInArrayField(arrayFieldId, fromItemIndex, toItemIndex, f);
-      }
-      return f;
+      if (f.type !== 'array-field') return f;
+      return reorderFieldInArrayField(arrayFieldId, fromFieldId, toFieldId, f);
     }),
   };
 };
@@ -200,8 +204,8 @@ type Action =
   | {
       type: 'ARRAY_FIELD_UPDATE';
 
+      arrayFieldId: string;
       fieldId: string;
-      itemIndex: number;
       field: Partial<FormBuilderField>;
     }
   | {
@@ -214,8 +218,8 @@ type Action =
       type: 'ARRAY_FIELD_REORDER';
 
       fieldId: string;
-      fromItemIndex: number;
-      toItemIndex: number;
+      fromFieldId: string;
+      toFieldId: string;
     };
 
 const reducer = (state: FormBuilderValue, action: Action): FormBuilderValue => {
@@ -334,7 +338,7 @@ const reducer = (state: FormBuilderValue, action: Action): FormBuilderValue => {
           ...section,
           fields: section.fields.map(field => {
             if (field.type !== 'array-field') return field;
-            return updateFieldInArrayField(action.fieldId, action.itemIndex, field, action.field);
+            return updateRecursiveFieldInArrayField(action.arrayFieldId, action.fieldId, field, action.field);
           }),
         })),
       };
@@ -358,7 +362,7 @@ const reducer = (state: FormBuilderValue, action: Action): FormBuilderValue => {
           ...section,
           fields: section.fields.map(field => {
             if (field.type !== 'array-field') return field;
-            return reorderFieldInArrayField(action.fieldId, action.fromItemIndex, action.toItemIndex, field);
+            return reorderFieldInArrayField(action.fieldId, action.fromFieldId, action.toFieldId, field);
           }),
         })),
       };
@@ -409,16 +413,16 @@ export const useFormBuilderReducer = (initialState: FormBuilderValue) => {
     dispatch({ type: 'ARRAY_FIELD_CREATE', fieldId: arrayFieldId, name });
   }, []);
 
-  const onArrayFieldUpdate = useCallback((arrayFieldId: string, itemIndex: number, field: Partial<FormBuilderField>) => {
-    dispatch({ type: 'ARRAY_FIELD_UPDATE', fieldId: arrayFieldId, itemIndex, field });
+  const onArrayFieldUpdate = useCallback((arrayFieldId: string, fieldId: string, field: Partial<FormBuilderField>) => {
+    dispatch({ type: 'ARRAY_FIELD_UPDATE', arrayFieldId, fieldId, field });
   }, []);
 
   const onArrayFieldDelete = useCallback((arrayFieldId: string, itemIndex: number) => {
     dispatch({ type: 'ARRAY_FIELD_DELETE', fieldId: arrayFieldId, itemIndex });
   }, []);
 
-  const onArrayFieldReorder = useCallback((arrayFieldId: string, fromItemIndex: number, toItemIndex: number) => {
-    dispatch({ type: 'ARRAY_FIELD_REORDER', fieldId: arrayFieldId, fromItemIndex, toItemIndex });
+  const onArrayFieldReorder = useCallback((arrayFieldId: string, fromFieldId: string, toFieldId: string) => {
+    dispatch({ type: 'ARRAY_FIELD_REORDER', fieldId: arrayFieldId, fromFieldId, toFieldId });
   }, []);
 
   return {

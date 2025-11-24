@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 
 import { useGetCurrentField } from '../../hooks/use-get-current-field';
 import type { FormBuilderDateField as TFormBuilderDateField } from '../../types';
-import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, FieldLabel, FieldSet } from '../ui/fields';
+import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, FieldLabel, FieldSeparator, FieldSet } from '../ui/fields';
 import { Input } from '../ui/input';
 
 export const FormBuilderDateField: React.FC<{
@@ -28,6 +28,7 @@ export const FormBuilderDateField: React.FC<{
             <Input className="pointer-events-none" placeholder={currentField.placeholder} />
           </FieldContentMain>
         </Field>
+        <FieldSeparator />
       </FieldGroup>
     </FieldSet>
   );

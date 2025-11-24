@@ -7,22 +7,19 @@ import { Button } from '@/components/ui/button';
 import { NumberInput } from '@/components/ui/inputs/number-input';
 import { Switch } from '@/components/ui/switch';
 import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, FieldLabel, FieldSeparator, FieldSet } from '../../components/ui/fields';
+import { useGetCurrentField } from '../../hooks/use-get-current-field';
+import type { FormBuilderTextareaField } from '../../types';
 import { toCamelCase } from '../../utils';
 import { useFormBuilderValueContext } from '../providers';
 import { Input } from '../ui/input';
 
 export const FormBuilderTextareaFieldTooltipFieldType: React.FC<{
+  sectionIndex: number;
   fieldId: string;
-}> = ({ fieldId }) => {
-  const { formBuilder, onFieldUpdate } = useFormBuilderValueContext();
+}> = ({ sectionIndex, fieldId }) => {
+  const { onFieldUpdate } = useFormBuilderValueContext();
 
-  const currentField = useMemo(() => {
-    const data = formBuilder.form.find(field => field.id === fieldId);
-    if (data && data.type === 'textarea-field') {
-      return data;
-    }
-    return null;
-  }, [fieldId, formBuilder.form]);
+  const currentField = useGetCurrentField<FormBuilderTextareaField>('textarea-field', fieldId);
 
   const schema = useMemo(() => {
     return z.object({
@@ -49,7 +46,7 @@ export const FormBuilderTextareaFieldTooltipFieldType: React.FC<{
       onChange: schema,
     },
     onSubmit: ({ value }) => {
-      onFieldUpdate(fieldId, {
+      onFieldUpdate(sectionIndex, fieldId, {
         name: value.name,
         camelCaseName: toCamelCase(value.name),
         label: value.label,
@@ -201,16 +198,13 @@ export const FormBuilderTextareaFieldTooltipFieldType: React.FC<{
 };
 
 export const FormBuilderTextareaFieldTooltipFieldRules: React.FC<{
+  sectionIndex: number;
   fieldId: string;
-}> = ({ fieldId }) => {
-  const { formBuilder, onFieldUpdate } = useFormBuilderValueContext();
-  const currentField = useMemo(() => {
-    const data = formBuilder.form.find(field => field.id === fieldId);
-    if (data && data.type === 'textarea-field') {
-      return data;
-    }
-    return null;
-  }, [fieldId, formBuilder]);
+}> = ({ sectionIndex, fieldId }) => {
+  const { onFieldUpdate } = useFormBuilderValueContext();
+
+  const currentField = useGetCurrentField<FormBuilderTextareaField>('textarea-field', fieldId);
+
   const schema = useMemo(() => {
     return z
       .object({
@@ -240,7 +234,7 @@ export const FormBuilderTextareaFieldTooltipFieldRules: React.FC<{
       onChange: schema,
     },
     onSubmit: ({ value }) => {
-      onFieldUpdate(fieldId, {
+      onFieldUpdate(sectionIndex, fieldId, {
         rules: {
           minLength: value.minLength,
           maxLength: value.maxLength,

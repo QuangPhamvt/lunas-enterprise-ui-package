@@ -118,9 +118,9 @@ type TFormBuilderValueContext = {
 
   // Array field handlers
   onArrayFieldCreate: (arrayFieldId: string, name: string) => void;
-  onArrayFieldUpdate: (arrayFieldId: string, itemIndex: number, field: Partial<FormBuilderField>) => void;
+  onArrayFieldUpdate: (arrayFieldId: string, fieldId: string, field: Partial<FormBuilderField>) => void;
   onArrayFieldDelete: (arrayFieldId: string, itemIndex: number) => void;
-  onArrayFieldReorder: (arrayFieldId: string, fromItemIndex: number, toItemIndex: number) => void;
+  onArrayFieldReorder: (arrayFieldId: string, fromFieldId: string, toFieldId: string) => void;
 };
 const FormBuilderValueContext = createContext<TFormBuilderValueContext | null>(null);
 // biome-ignore lint/style/useComponentExportOnlyModules: true
