@@ -2,10 +2,11 @@
 
 import { SearchIcon } from 'lucide-react';
 
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { Command as CommandPrimitive } from 'cmdk';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 function Command({ className, ...props }: React.ComponentProps<typeof CommandPrimitive>) {
   return (

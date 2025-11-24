@@ -3,11 +3,12 @@ import { type HTMLAttributes, memo, type ThHTMLAttributes, useEffect, useRef } f
 
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 
+import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button.variants';
+
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { type CalendarWeek, type CustomComponents, type DayButton, DayPicker, getDefaultClassNames } from 'react-day-picker';
-import { Button } from '@/components/ui/button';
-import { buttonVariants } from '@/components/ui/button.variants';
 
 const CalendarRoot = memo(
   ({

@@ -2,6 +2,7 @@ import { formOptions } from '@tanstack/react-form';
 
 import { nanoid } from 'nanoid';
 import type z from 'zod';
+
 import { formBuilderSchema } from './schema';
 
 const formatErrorData = (data: z.infer<typeof formBuilderSchema>): Record<string, string> => {

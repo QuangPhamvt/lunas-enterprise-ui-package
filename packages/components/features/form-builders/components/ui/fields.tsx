@@ -2,11 +2,12 @@ import { memo, useMemo } from 'react';
 
 import { BanIcon } from 'lucide-react';
 
+import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
+
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { cva, type VariantProps } from 'class-variance-authority';
-import { Label } from '@/components/ui/label';
-import { Separator } from '@/components/ui/separator';
 
 const fieldVariants = cva('group/field flex w-full gap-3 data-[invalid=true]:text-danger', {
   variants: {
