@@ -176,7 +176,7 @@ export const FormBuilderDateField: React.FC<{
       <FormBuilderFieldTrigger>
         <FieldSet>
           <FieldGroup>
-            <Field orientation={state.value.orientation}>
+            <Field orientation={state.value?.orientation ?? 'vertical'}>
               <FieldContent>
                 <FieldLabel>{state.value.label}</FieldLabel>
                 <FieldDescription>{state.value.description}</FieldDescription>

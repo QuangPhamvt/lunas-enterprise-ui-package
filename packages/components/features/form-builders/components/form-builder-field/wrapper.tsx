@@ -1,34 +1,38 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { useStore } from '@tanstack/react-form';
+
 import { BoltIcon, CopyIcon, TrashIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { ButtonGroup } from '@/components/ui/button-group';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+
 import type { UseFormBuilderFormContext } from '../../types';
 import { useFormBuilderFormContext } from '../form-buidler-form';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { useRecursiveFieldName } from '../../hooks/use-recursive-field-name';
 
 export const FormBuilderFieldWrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
   const [open, setOpen] = useState<boolean>(false);
   return (
     <Popover open={open} onOpenChange={setOpen}>
       {children}
-      {/*<PopoverTrigger asChild tabIndex={0}>
-        <div className={cn('cursor-pointer border border-transparent px-2.5 py-2 transition-colors', open && 'rounded border-primary')}>{children}</div>
-      </PopoverTrigger>
-      <PopoverContent align="start" side="top" className="w-fit rounded p-2">
-        {tooltip}
-      </PopoverContent>*/}
     </Popover>
   );
 };
 
 export const FormBuilderFieldTrigger: React.FC<React.PropsWithChildren> = ({ children }) => {
   return (
-    <PopoverTrigger asChild tabIndex={0}>
-      <div className="cursor-pointer border border-transparent px-2.5 py-2 transition-colors"> {children}</div>
+    <PopoverTrigger
+      asChild
+      tabIndex={0}
+      onClick={e => {
+        e.stopPropagation();
+      }}
+      className="data-[state=open]:border data-[state=open]:border-border data-[state=open]:shadow"
+    >
+      <div className="cursor-pointer border border-transparent px-2.5 py-2 transition-colors">{children}</div>
     </PopoverTrigger>
   );
 };
@@ -54,7 +58,14 @@ export const FormBuilderFieldTooltipSettings: React.FC<React.PropsWithChildren> 
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button size="icon" variant="ghost" color="muted">
+        <Button
+          size="icon"
+          variant="ghost"
+          color="muted"
+          onClick={e => {
+            e.stopPropagation();
+          }}
+        >
           <BoltIcon />
         </Button>
       </PopoverTrigger>
@@ -64,12 +75,18 @@ export const FormBuilderFieldTooltipSettings: React.FC<React.PropsWithChildren> 
             <TabsTrigger
               value="field-type"
               className="rounded-none border-b border-b-border shadow-none! hover:bg-transparent data-[state=active]:border-b-border-strong"
+              onClick={e => {
+                e.stopPropagation();
+              }}
             >
               Field Type
             </TabsTrigger>
             <TabsTrigger
               value="rules"
               className="rounded-none border-b border-b-border shadow-none! hover:bg-transparent data-[state=active]:border-b-border-strong"
+              onClick={e => {
+                e.stopPropagation();
+              }}
             >
               Rules
             </TabsTrigger>
@@ -102,18 +119,35 @@ export const FormBuilderFieldTooltipTrash: React.FC<{
   fieldId: string;
 }> = ({ sectionIndex, fieldId }) => {
   const form = useFormBuilderFormContext() as unknown as UseFormBuilderFormContext;
-  const currentField = useStore(form.store, state => state.values.sections?.[sectionIndex].fields?.find(f => f.id === fieldId));
-  const currentFieldIndex = useStore(form.store, state => state.values.sections?.[sectionIndex].fields?.findIndex(f => f.id === fieldId));
 
-  if (!currentField || currentFieldIndex === -1) return null;
+  const { getFieldName } = useRecursiveFieldName(sectionIndex);
+
+  const name = useMemo(() => {
+    const _name = getFieldName(fieldId);
+    return `${_name.split('.').slice(0, -1).join('.')}.fields` as `sections[${number}].fields`;
+  }, [fieldId, getFieldName]);
+
+  const fieldIndex = useMemo(() => {
+    const _name = getFieldName(fieldId);
+    const indexString = _name
+      .split('.')
+      .pop()
+      ?.match(/\[(\d+)\]/)?.[1];
+    return indexString ? parseInt(indexString, 10) : -1;
+  }, [fieldId, getFieldName]);
+
+  console.log('Deleting field with name:', name, 'and index:', fieldIndex);
+
+  if (fieldIndex === -1) return null;
 
   return (
     <Button
       size="icon"
       variant="ghost"
       color="muted"
-      onClick={() => {
-        form.removeFieldValue(`sections[${sectionIndex}].fields`, currentFieldIndex);
+      onClick={e => {
+        form.removeFieldValue(name, fieldIndex);
+        e.stopPropagation();
       }}
     >
       <TrashIcon />

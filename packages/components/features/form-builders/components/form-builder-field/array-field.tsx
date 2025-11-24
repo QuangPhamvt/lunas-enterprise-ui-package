@@ -1,9 +1,8 @@
 /** biome-ignore-all lint/style/useComponentExportOnlyModules: true */
 
 import { useCallback, useMemo, useState } from 'react';
-import { createPortal } from 'react-dom';
 
-import { type DragCancelEvent, type DragEndEvent, DragOverlay, type DragStartEvent, type UniqueIdentifier, useDndMonitor, useDroppable } from '@dnd-kit/core';
+import { type DragCancelEvent, type DragEndEvent, type DragStartEvent, useDndMonitor, useDroppable } from '@dnd-kit/core';
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
@@ -13,11 +12,11 @@ import type z from 'zod';
 
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Separator } from '@/components/ui/separator';
 
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { formOpts } from '../../form-builder-options';
+import { useGetAllName } from '../../hooks/use-get-all-name';
 import { useRecursiveFieldName } from '../../hooks/use-recursive-field-name';
 import type { formBuilderArrayFieldSchema, formBuilderEmptyFieldSchema, formBuilderSchema } from '../../schema';
 import type { ARRAY_FIELD_ID, UseFormBuilderFormContext } from '../../types';
@@ -48,6 +47,7 @@ import {
 const updateFieldMapper = (
   fieldId: string
 ): Record<ARRAY_FIELD_ID, Partial<z.input<typeof formBuilderSchema>['sections'][number]['fields'][number]> | null> => {
+  const id = nanoid(10);
   return {
     'text-field': {
       id: fieldId,
@@ -164,7 +164,14 @@ const updateFieldMapper = (
 
       label: 'Array Field',
 
-      fields: [],
+      fields: [
+        {
+          id: `field-${id}`,
+          name: `element-${id}`,
+          camelCaseName: toCamelCase(`element-${id}`),
+          type: 'empty',
+        },
+      ],
     },
     empty: null,
   };
@@ -176,9 +183,21 @@ const CreateFieldButton: React.FC<{
 }> = ({ sectionIndex, fieldId }) => {
   const form = useFormBuilderFormContext() as unknown as UseFormBuilderFormContext;
   const { getFieldName } = useRecursiveFieldName(sectionIndex);
+  const { getAllNames } = useGetAllName(fieldId);
 
   const [open, setOpen] = useState<boolean>(false);
   const [value, setValue] = useState<string>('');
+
+  const disabledFieldNames = useMemo(() => {
+    const prefixs = getAllNames();
+    const names = prefixs
+      .flatMap(name => {
+        return (form.getFieldValue(name as `sections[${number}].fields[${number}]`) as any)?.fields.map((field: any) => field.camelCaseName);
+      })
+      .filter(Boolean) as string[];
+    const valueCamelCase = value ? toCamelCase(value) : '';
+    return names.includes(valueCamelCase);
+  }, [value, getAllNames, form.getFieldValue]);
 
   return (
     <Dialog
@@ -218,7 +237,7 @@ const CreateFieldButton: React.FC<{
         </div>
         <DialogFooter>
           <Button
-            disabled={!value.trim()}
+            disabled={!value.trim() || disabledFieldNames}
             onClick={() => {
               const newEmptyField: z.infer<typeof formBuilderEmptyFieldSchema> = {
                 id: `field-${nanoid(10)}`,
@@ -243,9 +262,8 @@ const CreateFieldButton: React.FC<{
 const FormFieldSortable: React.FC<
   React.PropsWithChildren<{
     id: string;
-    name: string;
   }>
-> = ({ id, name, children }) => {
+> = ({ id, children }) => {
   const { attributes, listeners, transform, transition, isDragging, setNodeRef, setActivatorNodeRef } = useSortable({
     id,
     data: {
@@ -256,21 +274,25 @@ const FormFieldSortable: React.FC<
   return (
     <div
       ref={setNodeRef}
+      data-slot="form-field-sortable"
       style={{
         transform: CSS.Transform.toString(transform),
         transition,
         opacity: isDragging ? 0.5 : 1,
       }}
-      className="flex flex-col rounded border border-border bg-card text-sm"
+      className="group/items relative flex cursor-grab flex-col rounded text-sm transition-colors"
     >
-      <div className="flex items-center space-x-2 px-2.5 py-1">
-        <p className="flex-1">{name}</p>
-        <button ref={setActivatorNodeRef} {...attributes} {...listeners} className="cursor-grab">
-          <GripVerticalIcon size={16} />
-        </button>
-      </div>
-      <Separator />
-      <div className="px-2.5 py-4">{children}</div>
+      <button
+        ref={setActivatorNodeRef}
+        type="button"
+        {...attributes}
+        {...listeners}
+        className="invisible absolute top-2 right-2 z-20 cursor-grab bg-muted-bg-subtle group-hover/items:visible"
+        onClick={e => e.stopPropagation()}
+      >
+        <GripVerticalIcon size={16} />
+      </button>
+      {children}
     </div>
   );
 };
@@ -341,19 +363,15 @@ export const FormBuilderArrayField = withFormBuilderForm({
     const { state } = useFormBuilderFieldContext<z.infer<typeof formBuilderArrayFieldSchema>>();
     const { getFieldName } = useRecursiveFieldName(sectionIndex);
 
-    const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
-
     const fields = useMemo(() => {
       return state.value.fields || [];
     }, [state.value.fields]);
 
     const handleDragStart = useCallback((event: DragStartEvent) => {
       if (!event.active.data.current?.variant?.includes('FORM_ARRAY_FIELD')) return;
-      setActiveId(event.active.id);
     }, []);
     const handleDragEnd = useCallback(
       (event: DragEndEvent) => {
-        setActiveId(null);
         const { active, over } = event;
         if (state.value === null) return;
         if (!over || !over.data?.current?.variant?.includes('FORM_ARRAY_FIELD') || !active.data?.current?.variant?.includes('FORM_ARRAY_FIELD')) return;
@@ -406,9 +424,9 @@ export const FormBuilderArrayField = withFormBuilderForm({
                     children={() => {
                       return (
                         <SortableContext items={fields.map(field => field.id)} strategy={verticalListSortingStrategy}>
-                          {fields.map(field => {
+                          {fields.map((field, index) => {
                             return (
-                              <FormFieldSortable key={field.id} id={field.id} name={field.name}>
+                              <FormFieldSortable key={index.toString()} id={field.id}>
                                 <FormFieldDroppable sectionIndex={sectionIndex} fieldId={field.id}>
                                   <AppField
                                     name={getFieldName(field.id) as `sections[${number}].fields[${number}].fields[${number}]`}
@@ -451,19 +469,6 @@ export const FormBuilderArrayField = withFormBuilderForm({
                       );
                     }}
                   />
-
-                  {activeId &&
-                    createPortal(
-                      <DragOverlay className="cursor-grabbing">
-                        {activeId ? (
-                          <div className="pointer-events-none flex items-center rounded border border-border bg-card px-2.5 py-2 shadow-lg">
-                            <div className="flex h-24 w-full items-center justify-center rounded-md border border-border border-dashed" />
-                          </div>
-                        ) : null}
-                      </DragOverlay>,
-                      document.body
-                    )}
-
                   <div className="flex w-full items-center justify-center">
                     <CreateFieldButton sectionIndex={sectionIndex} fieldId={fieldId} />
                   </div>

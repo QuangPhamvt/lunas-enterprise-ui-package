@@ -2,18 +2,21 @@
 import { useCallback, useMemo, useState } from 'react';
 
 import { createFormHook, createFormHookContexts, useStore } from '@tanstack/react-form';
-import { GripVerticalIcon, PlusIcon } from 'lucide-react';
 
-import { cn } from '@customafk/react-toolkit/utils';
-
-import { type DragCancelEvent, type DragEndEvent, DragOverlay, type DragStartEvent, type UniqueIdentifier, useDndMonitor, useDroppable } from '@dnd-kit/core';
+import { type DragCancelEvent, type DragEndEvent, useDndMonitor, useDroppable } from '@dnd-kit/core';
 import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+
 import { nanoid } from 'nanoid';
-import { createPortal } from 'react-dom';
+import { GripVerticalIcon, PlusIcon } from 'lucide-react';
+
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
+
+import { cn } from '@customafk/react-toolkit/utils';
+
+import { useGetAllName } from '../hooks/use-get-all-name';
 import { useUpdateFieldMapper } from '../hooks/use-update-field-mapper';
 import type { FIELD_ID, UseFormBuilderFormContext } from '../types';
 import { toCamelCase, updateRecursiveField } from '../utils';
@@ -53,9 +56,14 @@ const FormBuilderSectionFieldSortable: React.FC<
         transition,
         opacity: isDragging ? 0.5 : 1,
       }}
-      className="group relative flex flex-col text-sm hover:rounded hover:outline-1 hover:outline-primary hover:outline-offset-4"
+      className="group relative flex cursor-grab flex-col rounded text-sm transition-colors"
     >
-      <button ref={setActivatorNodeRef} {...attributes} {...listeners} className="invisible absolute top-2 right-2 z-10 cursor-grab group-hover:visible">
+      <button
+        ref={setActivatorNodeRef}
+        {...attributes}
+        {...listeners}
+        className="invisible absolute top-2 right-2 z-10 cursor-grab bg-muted-bg-subtle group-hover:visible"
+      >
         <GripVerticalIcon size={16} />
       </button>
       {children}
@@ -116,9 +124,22 @@ const FormBuilderSectionFieldCreateFieldButton: React.FC<{
   sectionIndex: number;
 }> = ({ sectionIndex }) => {
   const form = useFormBuilderFormContext() as unknown as UseFormBuilderFormContext;
+  const { getAllNames } = useGetAllName();
 
   const [open, setOpen] = useState<boolean>(false);
   const [value, setValue] = useState<string>('');
+
+  const disableCreate = useMemo(() => {
+    const prefixs = getAllNames();
+    const names = prefixs
+      .map(name => {
+        return (form.getFieldValue(name as `sections[${number}].fields[${number}]`) as any)?.camelCaseName ?? undefined;
+      })
+      .filter(Boolean) as string[];
+    const valueCamelCaseNames = value ? toCamelCase(value) : '';
+    return names.includes(valueCamelCaseNames);
+  }, [value, getAllNames, form.getFieldValue]);
+
   return (
     <Dialog
       open={open}
@@ -153,7 +174,7 @@ const FormBuilderSectionFieldCreateFieldButton: React.FC<{
         </div>
         <DialogFooter>
           <Button
-            disabled={!value.trim()}
+            disabled={!value.trim() || disableCreate}
             onClick={() => {
               form.pushFieldValue(`sections[${sectionIndex}].fields`, {
                 type: 'empty',
@@ -232,8 +253,22 @@ const FormBuilderCreateSectionButton: React.FC = () => {
     return sections.map(section => section.name);
   }, [sections]);
 
-  const handleCreateField = useCallback(() => {
-    form.pushFieldValue('sections' as never, { name: value, fields: [] } as never);
+  const handleCreateSection = useCallback(() => {
+    const id = nanoid(10);
+    form.pushFieldValue(
+      'sections' as never,
+      {
+        name: value,
+        fields: [
+          {
+            id: `field-${id}`,
+            name: `element-${id}`,
+            camelCaseName: toCamelCase(`element-${id}`),
+            type: 'empty',
+          },
+        ],
+      } as never
+    );
     setValue('');
     setOpen(false);
   }, [form.pushFieldValue, value]);
@@ -273,8 +308,8 @@ const FormBuilderCreateSectionButton: React.FC = () => {
           </FieldGroup>
         </div>
         <DialogFooter>
-          <Button disabled={!value.trim() || sectionNames.includes(value.trim())} onClick={handleCreateField}>
-            Create Field
+          <Button disabled={!value.trim() || sectionNames.includes(value.trim())} onClick={handleCreateSection}>
+            Create Section
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -323,18 +358,13 @@ const FormBuilderSectionContainer: React.FC<React.PropsWithChildren> = ({ childr
 
   const sections = useStore(form.store, s => s.values.sections);
 
-  const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
-
-  const handleDragStart = useCallback((event: DragStartEvent) => {
-    if (!event.active.data.current?.variant?.includes('SECTION_FIELD')) return;
-    setActiveId(event.active.id);
-  }, []);
+  const handleDragStart = useCallback(() => {}, []);
   const handleDragOver = useCallback(() => {}, []);
   const handleDragEnd = useCallback(
     (event: DragEndEvent) => {
-      setActiveId(null);
       const { active, over } = event;
       if (!over || !over.data.current?.variant?.includes('SECTION_FIELD') || !active.data.current?.variant?.includes('SECTION_FIELD')) return;
+      console.log('Dragging section', active.id, over.id);
       form.moveFieldValues('sections', active.id as number, over.id as number);
     },
     [form.moveFieldValues]
@@ -357,17 +387,6 @@ const FormBuilderSectionContainer: React.FC<React.PropsWithChildren> = ({ childr
       <SortableContext items={sectionIds} strategy={verticalListSortingStrategy}>
         {children}
       </SortableContext>
-      {!!activeId &&
-        createPortal(
-          <DragOverlay className="cursor-grabbing">
-            {activeId ? (
-              <div className="pointer-events-none flex items-center rounded border border-border bg-card px-2.5 py-2 shadow-lg">
-                <div className="flex h-24 w-full items-center justify-center rounded-md border border-border border-dashed" />
-              </div>
-            ) : null}
-          </DragOverlay>,
-          document.body
-        )}
     </div>
   );
 };
