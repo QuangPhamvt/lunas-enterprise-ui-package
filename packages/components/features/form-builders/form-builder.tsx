@@ -3,7 +3,8 @@
 import { useCallback, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-import { type DragCancelEvent, DragOverlay, type DragStartEvent, type UniqueIdentifier, useDndMonitor } from '@dnd-kit/core';
+import { type DragCancelEvent, DragOverlay, type DragStartEvent, useDndMonitor } from '@dnd-kit/core';
+import { restrictToWindowEdges } from '@dnd-kit/modifiers';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
@@ -12,13 +13,15 @@ import { GripVerticalIcon } from 'lucide-react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
+import { cn } from '@customafk/react-toolkit/utils';
+
 import { FormBuilderDndContext } from './components/dnd-kit';
 import { useFormBuilderForm } from './components/form-buidler-form';
 import { FormBuilderArrayField } from './components/form-builder-field/array-field';
 import { FORM_BUILDER_FIELD, FORM_BUILDER_FIELD_MAPPER } from './constants';
 import { formOpts } from './form-builder-options';
 import { Provider } from './form-builder-provider';
-import type { FIELD_ID } from './types';
+import type { DRAGGABLE_FIELD_ID } from './types';
 
 const SidebarHeader: React.FC = () => {
   return (
@@ -89,22 +92,37 @@ const SidebarFieldInputField: React.FC = () => {
 };
 
 const SidebarField: React.FC = () => {
-  const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
+  const [activeType, setActiveType] = useState<DRAGGABLE_FIELD_ID | null>(null);
   const [activeFieldSectionTab, setActiveFieldSectionTab] = useState<'typography' | 'input-field'>('input-field');
 
   const handleDragStart = useCallback((event: DragStartEvent) => {
     const { active } = event;
-    if (!active.data.current?.variant?.includes('FIELD')) return;
-    setActiveId(active.id);
+    if (active.data.current?.variant?.includes('FIELD')) {
+      setActiveType('FIELD');
+    }
+    if (active.data.current?.variant?.includes('SECTION_FIELD')) {
+      setActiveType('SECTION_FIELD');
+    }
+    if (active.data.current?.variant?.includes('FORM_FIELD')) {
+      setActiveType('FORM_FIELD');
+    }
+    if (active.data.current?.variant?.includes('FORM_ARRAY_FIELD')) {
+      setActiveType('FORM_ARRAY_FIELD');
+    }
+  }, []);
+
+  const handleDragEnd = useCallback(() => {
+    setActiveType(null);
   }, []);
 
   const handleDragCancel = useCallback((event: DragCancelEvent) => {
     void event;
-    setActiveId(null);
+    setActiveType(null);
   }, []);
 
   useDndMonitor({
     onDragStart: handleDragStart,
+    onDragEnd: handleDragEnd,
     onDragCancel: handleDragCancel,
   });
 
@@ -135,14 +153,39 @@ const SidebarField: React.FC = () => {
           </TabsList>
           <SidebarFieldTypography />
           <SidebarFieldInputField />
-          {activeId &&
+          {activeType &&
             createPortal(
-              <DragOverlay className="cursor-grabbing">
-                {activeId ? (
-                  <div className="pointer-events-none flex h-13 items-center rounded border border-border bg-card px-2.5 py-2 shadow-lg">
-                    {FORM_BUILDER_FIELD_MAPPER[activeId as FIELD_ID]}
+              <DragOverlay
+                dropAnimation={{
+                  duration: 500,
+                  easing: 'cubic-bezier(0.18, 0.67, 0.6, 1.22)',
+                }}
+                transition={activatorEvent => {
+                  const isKeyboardActivator = activatorEvent instanceof KeyboardEvent;
+
+                  return isKeyboardActivator ? 'transform 250ms ease' : undefined;
+                }}
+                modifiers={[restrictToWindowEdges]}
+                className={cn('cursor-grabbing', activeType === 'SECTION_FIELD' && 'flex justify-end')}
+              >
+                {activeType === 'FIELD' && (
+                  <div className="pointer-events-none relative flex h-13 items-center rounded border border-border bg-card px-2.5 py-2 shadow-lg">
+                    <div className="absolute inset-y-0 left-0 w-1 rounded-l bg-primary" />
                   </div>
-                ) : null}
+                )}
+                {activeType === 'SECTION_FIELD' && (
+                  <div className="pointer-events-none relative flex h-24 w-full max-w-64 items-center rounded border border-border bg-card px-2.5 py-2 shadow-lg" />
+                )}
+                {activeType === 'FORM_FIELD' && (
+                  <div className="pointer-events-none relative flex h-24 w-full items-center justify-center rounded border border-border bg-card px-2.5 py-2 shadow-lg">
+                    <p className="text-text-positive-weak">Form Field</p>
+                  </div>
+                )}
+                {activeType === 'FORM_ARRAY_FIELD' && (
+                  <div className="pointer-events-none relative flex h-24 w-full items-center justify-center rounded border border-border bg-card px-2.5 py-2 shadow-lg">
+                    <p className="text-text-positive-weak">Form Array Field</p>
+                  </div>
+                )}
               </DragOverlay>,
               document.body
             )}
@@ -190,7 +233,7 @@ const MainFormBuilder: React.FC = () => {
               children={sections => {
                 return sections.map((section, index) => {
                   return (
-                    <FormBuilderSectionSortable key={section.name} id={index} name={section.name}>
+                    <FormBuilderSectionSortable key={index.toString()} id={index} name={section.name}>
                       <FormBuilderSectionFieldContainer id={index}>
                         {section.fields.map((field, fieldIndex) => {
                           return (

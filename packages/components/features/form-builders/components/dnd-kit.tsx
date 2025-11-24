@@ -1,9 +1,3 @@
-import { useCallback } from 'react';
-
-import { GripVerticalIcon } from 'lucide-react';
-
-import { cn } from '@customafk/react-toolkit/utils';
-
 import {
   DndContext,
   KeyboardSensor,
@@ -20,6 +14,10 @@ import {
 } from '@dnd-kit/core';
 import { sortableKeyboardCoordinates, useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+
+import { GripVerticalIcon } from 'lucide-react';
+
+import { cn } from '@customafk/react-toolkit/utils';
 
 export const FormBuilderFieldDroppable: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { setNodeRef, isOver } = useDroppable({
@@ -89,17 +87,20 @@ export const FormBuilderDndContext: React.FC<
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     }),
-    useSensor(MouseSensor),
-    useSensor(TouchSensor)
+    useSensor(MouseSensor, {
+      // Require the mouse to move by 5 pixels before activating
+      activationConstraint: {
+        distance: 5,
+      },
+    }),
+    useSensor(TouchSensor, {
+      // Press delay of 250ms, with tolerance of 5px of movement
+      activationConstraint: {
+        delay: 250,
+        tolerance: 5,
+      },
+    })
   );
-
-  const onDragStart = useCallback(() => {}, []);
-
-  const onDragOver = useCallback(() => {}, []);
-
-  const onDragEnd = useCallback(() => {}, []);
-
-  const onDragCancel = useCallback(() => {}, []);
 
   return (
     <DndContext

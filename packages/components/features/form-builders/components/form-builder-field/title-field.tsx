@@ -3,9 +3,13 @@ import { useMemo } from 'react';
 import { useForm } from '@tanstack/react-form';
 
 import z from 'zod';
+
+import { Button } from '@/components/ui/button';
+
 import type { formBuilderTitleFieldSchema } from '../../schema';
 import { useFormBuilderFieldContext } from '../form-buidler-form';
 import { Field, FieldContent, FieldDescription, FieldGroup, FieldLabel, FieldLegend, FieldSeparator, FieldSet } from '../ui/fields';
+import { Input } from '../ui/input';
 import {
   FormBuilderFieldTooltip,
   FormBuilderFieldTooltipCopy,
@@ -16,8 +20,6 @@ import {
   FormBuilderFieldTrigger,
   FormBuilderFieldWrapper,
 } from './wrapper';
-import { Input } from '../ui/input';
-import { Button } from '@/components/ui/button';
 
 const FieldType: React.FC = () => {
   const {

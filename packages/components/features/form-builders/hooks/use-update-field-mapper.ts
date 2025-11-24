@@ -1,11 +1,14 @@
 import { useMemo } from 'react';
 
+import { nanoid } from 'nanoid';
 import type z from 'zod';
 
 import type { formBuilderSchema } from '../schema';
 import type { FIELD_ID } from '../types';
+import { toCamelCase } from '../utils';
 
 export const useUpdateFieldMapper = (fieldId: string) => {
+  const id = nanoid(10);
   const updateFieldMapper = useMemo<Record<FIELD_ID, Partial<z.input<typeof formBuilderSchema>['sections'][number]['fields'][number]>>>(() => {
     return {
       'title-field': {
@@ -129,7 +132,14 @@ export const useUpdateFieldMapper = (fieldId: string) => {
 
         label: 'Array Field',
 
-        fields: [],
+        fields: [
+          {
+            id: `field-${id}`,
+            name: `element-${id}`,
+            camelCaseName: toCamelCase(`element-${id}`),
+            type: 'empty',
+          },
+        ],
       },
       empty: {
         id: fieldId,
@@ -137,6 +147,6 @@ export const useUpdateFieldMapper = (fieldId: string) => {
         type: 'empty',
       },
     };
-  }, [fieldId]);
+  }, [fieldId, id]);
   return { updateFieldMapper };
 };
