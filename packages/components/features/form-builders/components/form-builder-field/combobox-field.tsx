@@ -1,27 +1,32 @@
 import { useMemo } from 'react';
 
 import { useForm } from '@tanstack/react-form';
-import { PlusIcon, XIcon } from 'lucide-react';
-import { z } from 'zod/v4';
+
+import z from 'zod';
 
 import { Button } from '@/components/ui/button';
-import { Field, FieldContent, FieldDescription, FieldGroup, FieldLabel, FieldSeparator, FieldSet } from '../../components/ui/fields';
+
+import type { formBuilderComboboxFieldSchema } from '../../schema';
 import { toCamelCase } from '../../utils';
-import { useFormBuilderValueContext } from '../providers';
+import { useFormBuilderFieldContext } from '../form-buidler-form';
+import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, FieldLabel, FieldSeparator, FieldSet } from '../ui/fields';
 import { Input } from '../ui/input';
+import {
+  FormBuilderFieldTooltip,
+  FormBuilderFieldTooltipCopy,
+  FormBuilderFieldTooltipSettings,
+  FormBuilderFieldTooltipSettingsFieldType,
+  FormBuilderFieldTooltipSettingsRules,
+  FormBuilderFieldTooltipTrash,
+  FormBuilderFieldTrigger,
+  FormBuilderFieldWrapper,
+} from './wrapper';
 
-export const FormBuilderComboboxFieldTooltipFieldType: React.FC<{
-  fieldId: string;
-}> = ({ fieldId }) => {
-  const { formBuilder, onFieldUpdate } = useFormBuilderValueContext();
-
-  const currentField = useMemo(() => {
-    const data = formBuilder.form.find(field => field.id === fieldId);
-    if (data && data.type === 'combobox-field') {
-      return data;
-    }
-    return null;
-  }, [fieldId, formBuilder.form]);
+const FieldType: React.FC = () => {
+  const {
+    state: { value: currentField },
+    handleChange,
+  } = useFormBuilderFieldContext<z.infer<typeof formBuilderComboboxFieldSchema>>();
 
   const schema = useMemo(() => {
     return z.object({
@@ -29,24 +34,6 @@ export const FormBuilderComboboxFieldTooltipFieldType: React.FC<{
       label: z.string().nonempty('Label is required'),
       description: z.string(),
       placeholder: z.string(),
-
-      options: z
-        .array(
-          z.object({
-            label: z.string().nonempty('Option label is required'),
-            value: z.string().nonempty('Option value is required'),
-          })
-        )
-        .refine(
-          options => {
-            const values = options.map(option => option.value);
-            const uniqueValues = new Set(values);
-            return uniqueValues.size === values.length;
-          },
-          {
-            message: 'Option values must be unique and at least one option is required',
-          }
-        ),
     });
   }, []);
 
@@ -56,24 +43,20 @@ export const FormBuilderComboboxFieldTooltipFieldType: React.FC<{
       label: currentField?.label || '',
       description: currentField?.description || '',
       placeholder: currentField?.placeholder || '',
-
-      options: currentField?.options || [],
-    } as z.input<typeof schema>,
+    },
     validators: {
       onSubmit: schema,
       onChange: schema,
     },
     onSubmit: ({ value, formApi }) => {
-      onFieldUpdate(fieldId, {
+      handleChange({
+        ...currentField,
         name: value.name,
         camelCaseName: toCamelCase(value.name),
         label: value.label,
         description: value.description,
         placeholder: value.placeholder,
-
-        options: value.options,
       });
-
       formApi.reset(value);
     },
     onSubmitInvalid: state => {
@@ -90,7 +73,7 @@ export const FormBuilderComboboxFieldTooltipFieldType: React.FC<{
     >
       <FieldGroup>
         <FieldSet>
-          <FieldDescription>Configure the settings for the combobox field.</FieldDescription>
+          <FieldDescription>Configure the settings for the text field.</FieldDescription>
           <FieldSeparator />
         </FieldSet>
         <FieldGroup>
@@ -108,7 +91,6 @@ export const FormBuilderComboboxFieldTooltipFieldType: React.FC<{
             }}
           />
           <FieldSeparator />
-
           <form.Field
             name="label"
             children={field => {
@@ -123,7 +105,6 @@ export const FormBuilderComboboxFieldTooltipFieldType: React.FC<{
             }}
           />
           <FieldSeparator />
-
           <form.Field
             name="description"
             children={field => {
@@ -143,7 +124,6 @@ export const FormBuilderComboboxFieldTooltipFieldType: React.FC<{
             }}
           />
           <FieldSeparator />
-
           <form.Field
             name="placeholder"
             children={field => {
@@ -163,59 +143,6 @@ export const FormBuilderComboboxFieldTooltipFieldType: React.FC<{
             }}
           />
           <FieldSeparator />
-
-          <form.Field
-            name="options"
-            mode="array"
-            children={field => {
-              return (
-                <Field orientation="vertical">
-                  <FieldContent className="flex flex-row justify-between">
-                    <FieldLabel className="text-text-positive-weak">Options</FieldLabel>
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      color="muted"
-                      size="icon"
-                      onClick={() => {
-                        field.pushValue({
-                          label: '',
-                          value: '',
-                        });
-                      }}
-                    >
-                      <PlusIcon size={16} aria-hidden="true" />
-                    </Button>
-                  </FieldContent>
-                  <div className="flex flex-col space-y-2">
-                    {field.state.value.map((_, index) => {
-                      return (
-                        <div key={index.toString()} className="flex space-x-2">
-                          <form.Field
-                            name={`options[${index}].label`}
-                            children={subField => {
-                              return <Input value={subField.state.value} placeholder="Option Label" onChange={e => subField.handleChange(e.target.value)} />;
-                            }}
-                          />
-                          <form.Field
-                            name={`options[${index}].value`}
-                            children={subField => {
-                              return <Input value={subField.state.value} placeholder="Option Value" onChange={e => subField.handleChange(e.target.value)} />;
-                            }}
-                          />
-                          <Button type="button" color="muted" variant="ghost" onClick={() => field.removeValue(index)}>
-                            <XIcon />
-                          </Button>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </Field>
-              );
-            }}
-          />
-          <FieldSeparator />
-
           <Field orientation="responsive">
             <form.Subscribe
               selector={state => [state.canSubmit, state.isSubmitting, state.isDirty]}
@@ -237,8 +164,45 @@ export const FormBuilderComboboxFieldTooltipFieldType: React.FC<{
   );
 };
 
-export const FormBuilderComboboxFieldTooltipFieldRules: React.FC<{
+const FieldRules: React.FC = () => {
+  return <div>FormBuilderDateFieldTooltipFieldRules</div>;
+};
+
+export const FormBuilderComboboxField: React.FC<{
+  sectionIndex: number;
   fieldId: string;
-}> = () => {
-  return <div>Combobox Field Rules</div>;
+}> = ({ sectionIndex, fieldId }) => {
+  const { state } = useFormBuilderFieldContext<z.infer<typeof formBuilderComboboxFieldSchema>>();
+  return (
+    <FormBuilderFieldWrapper>
+      <FormBuilderFieldTrigger>
+        <FieldSet>
+          <FieldGroup>
+            <Field orientation={state.value.orientation}>
+              <FieldContent>
+                <FieldLabel>{state.value.label}</FieldLabel>
+                <FieldDescription>{state.value.description}</FieldDescription>
+              </FieldContent>
+              <FieldContentMain>
+                <Input className="pointer-events-none" placeholder={state.value.placeholder} />
+              </FieldContentMain>
+            </Field>
+            <FieldSeparator />
+          </FieldGroup>
+        </FieldSet>
+      </FormBuilderFieldTrigger>
+      <FormBuilderFieldTooltip>
+        <FormBuilderFieldTooltipCopy />
+        <FormBuilderFieldTooltipSettings>
+          <FormBuilderFieldTooltipSettingsFieldType>
+            <FieldType />
+          </FormBuilderFieldTooltipSettingsFieldType>
+          <FormBuilderFieldTooltipSettingsRules>
+            <FieldRules />
+          </FormBuilderFieldTooltipSettingsRules>
+        </FormBuilderFieldTooltipSettings>
+        <FormBuilderFieldTooltipTrash sectionIndex={sectionIndex} fieldId={fieldId} />
+      </FormBuilderFieldTooltip>
+    </FormBuilderFieldWrapper>
+  );
 };

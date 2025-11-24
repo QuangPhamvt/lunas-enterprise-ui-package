@@ -1,29 +1,33 @@
 import { useMemo, useState } from 'react';
 
 import { useForm } from '@tanstack/react-form';
-import { z } from 'zod/v4';
 
+import z from 'zod';
 import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Switch } from '@/components/ui/switch';
-import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, FieldLabel, FieldSeparator, FieldSet } from '../../components/ui/fields';
+import type { formBuilderNumberFieldSchema } from '../../schema';
 import { toCamelCase } from '../../utils';
-import { useFormBuilderValueContext } from '../providers';
+import { useFormBuilderFieldContext } from '../form-buidler-form';
+import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, FieldLabel, FieldSeparator, FieldSet } from '../ui/fields';
 import { Input } from '../ui/input';
 import { NumberInput } from '../ui/number-input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+import { Switch } from '../ui/switch';
+import {
+  FormBuilderFieldTooltip,
+  FormBuilderFieldTooltipCopy,
+  FormBuilderFieldTooltipSettings,
+  FormBuilderFieldTooltipSettingsFieldType,
+  FormBuilderFieldTooltipSettingsRules,
+  FormBuilderFieldTooltipTrash,
+  FormBuilderFieldTrigger,
+  FormBuilderFieldWrapper,
+} from './wrapper';
 
-export const FormBuilderNumberFieldTooltipFieldType: React.FC<{
-  fieldId: string;
-}> = ({ fieldId }) => {
-  const { formBuilder, onFieldUpdate } = useFormBuilderValueContext();
-
-  const currentField = useMemo(() => {
-    const data = formBuilder.form.find(field => field.id === fieldId);
-    if (data && data.type === 'number-field') {
-      return data;
-    }
-    return null;
-  }, [fieldId, formBuilder.form]);
+const FieldType: React.FC = () => {
+  const {
+    state: { value: currentField },
+    handleChange,
+  } = useFormBuilderFieldContext<z.infer<typeof formBuilderNumberFieldSchema>>();
 
   const schema = useMemo(() => {
     return z.object({
@@ -51,7 +55,8 @@ export const FormBuilderNumberFieldTooltipFieldType: React.FC<{
       onChange: schema,
     },
     onSubmit: ({ value }) => {
-      onFieldUpdate(fieldId, {
+      handleChange({
+        ...currentField,
         name: value.name,
         camelCaseName: toCamelCase(value.name),
         label: value.label,
@@ -202,21 +207,14 @@ export const FormBuilderNumberFieldTooltipFieldType: React.FC<{
   );
 };
 
-export const FormBuilderNumberFieldTooltipFieldRules: React.FC<{
-  fieldId: string;
-}> = ({ fieldId }) => {
-  const { formBuilder, onFieldUpdate } = useFormBuilderValueContext();
-
-  const currentField = useMemo(() => {
-    const data = formBuilder.form.find(field => field.id === fieldId);
-    if (data && data.type === 'number-field') {
-      return data;
-    }
-    return null;
-  }, [fieldId, formBuilder]);
+const FieldRules: React.FC = () => {
+  const {
+    state: { value: currentField },
+    handleChange,
+  } = useFormBuilderFieldContext<z.infer<typeof formBuilderNumberFieldSchema>>();
 
   const [greaterOption, setGreaterOption] = useState<'greaterThan' | 'greaterThanOrEqualTo'>(
-    fieldId && currentField?.rules.greaterThanOrEqualTo !== null
+    currentField.id && currentField?.rules.greaterThanOrEqualTo !== null
       ? 'greaterThanOrEqualTo'
       : currentField?.rules.greaterThan !== null
         ? 'greaterThan'
@@ -224,7 +222,7 @@ export const FormBuilderNumberFieldTooltipFieldRules: React.FC<{
   );
 
   const [lessOption, setLessOption] = useState<'lessThan' | 'lessThanOrEqualTo'>(
-    fieldId && currentField?.rules.lessThanOrEqualTo !== null ? 'lessThanOrEqualTo' : currentField?.rules.lessThan !== null ? 'lessThan' : 'lessThan'
+    currentField.id && currentField?.rules.lessThanOrEqualTo !== null ? 'lessThanOrEqualTo' : currentField?.rules.lessThan !== null ? 'lessThan' : 'lessThan'
   );
 
   const schema = useMemo(() => {
@@ -289,7 +287,7 @@ export const FormBuilderNumberFieldTooltipFieldRules: React.FC<{
         lessThan: value.lessThanOrEqualTo !== null ? null : value.lessThan,
         lessThanOrEqualTo: value.lessThan !== null ? null : value.lessThanOrEqualTo,
       };
-      onFieldUpdate(fieldId, { rules: newRules });
+      handleChange({ ...currentField, rules: newRules });
     },
     onSubmitInvalid: state => {
       state.formApi.reset();
@@ -499,5 +497,45 @@ export const FormBuilderNumberFieldTooltipFieldRules: React.FC<{
         </Field>
       </FieldGroup>
     </form>
+  );
+};
+
+export const FormBuilderNumberField: React.FC<{
+  sectionIndex: number;
+  fieldId: string;
+}> = ({ sectionIndex, fieldId }) => {
+  const { state } = useFormBuilderFieldContext<z.infer<typeof formBuilderNumberFieldSchema>>();
+  return (
+    <FormBuilderFieldWrapper>
+      <FormBuilderFieldTrigger>
+        <FieldSet>
+          <FieldGroup>
+            <Field orientation={state.value.orientation}>
+              <FieldContent>
+                <FieldLabel>{state.value.label}</FieldLabel>
+                <FieldDescription>{state.value.description}</FieldDescription>
+              </FieldContent>
+
+              <FieldContentMain>
+                <NumberInput placeholder="0" className="pointer-events-none" />
+              </FieldContentMain>
+            </Field>
+            <FieldSeparator />
+          </FieldGroup>
+        </FieldSet>
+      </FormBuilderFieldTrigger>
+      <FormBuilderFieldTooltip>
+        <FormBuilderFieldTooltipCopy />
+        <FormBuilderFieldTooltipSettings>
+          <FormBuilderFieldTooltipSettingsFieldType>
+            <FieldType />
+          </FormBuilderFieldTooltipSettingsFieldType>
+          <FormBuilderFieldTooltipSettingsRules>
+            <FieldRules />
+          </FormBuilderFieldTooltipSettingsRules>
+        </FormBuilderFieldTooltipSettings>
+        <FormBuilderFieldTooltipTrash sectionIndex={sectionIndex} fieldId={fieldId} />
+      </FormBuilderFieldTooltip>
+    </FormBuilderFieldWrapper>
   );
 };

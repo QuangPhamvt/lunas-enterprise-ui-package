@@ -2,28 +2,32 @@ import { useMemo } from 'react';
 
 import { useForm } from '@tanstack/react-form';
 import { PlusIcon, XIcon } from 'lucide-react';
-import { z } from 'zod/v4';
 
+import { z } from 'zod';
 import { Button } from '@/components/ui/button';
-import { Field, FieldContent, FieldDescription, FieldGroup, FieldLabel, FieldSeparator, FieldSet } from '../../components/ui/fields';
+import type { formBuilderRadioGroupFieldSchema } from '../../schema';
 import { toCamelCase } from '../../utils';
-import { useFormBuilderValueContext } from '../providers';
+import { useFormBuilderFieldContext } from '../form-buidler-form';
+import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, FieldLabel, FieldSeparator, FieldSet, FieldTitle } from '../ui/fields';
 import { Input } from '../ui/input';
+import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 import { Textarea } from '../ui/textarea';
+import {
+  FormBuilderFieldTooltip,
+  FormBuilderFieldTooltipCopy,
+  FormBuilderFieldTooltipSettings,
+  FormBuilderFieldTooltipSettingsFieldType,
+  FormBuilderFieldTooltipSettingsRules,
+  FormBuilderFieldTooltipTrash,
+  FormBuilderFieldTrigger,
+  FormBuilderFieldWrapper,
+} from './wrapper';
 
-export const FormBuilderSwitchFieldTooltipFieldType: React.FC<{
-  fieldId: string;
-}> = ({ fieldId }) => {
-  const { formBuilder, onFieldUpdate } = useFormBuilderValueContext();
-
-  const currentField = useMemo(() => {
-    const data = formBuilder.form.find(field => field.id === fieldId);
-    if (data && data.type === 'switch-field') {
-      return data;
-    }
-    return null;
-  }, [fieldId, formBuilder.form]);
-
+const FieldType: React.FC = () => {
+  const {
+    state: { value: currentField },
+    handleChange,
+  } = useFormBuilderFieldContext<z.infer<typeof formBuilderRadioGroupFieldSchema>>();
   const schema = useMemo(() => {
     return z.object({
       name: z.string().nonempty('Name is required'),
@@ -33,17 +37,17 @@ export const FormBuilderSwitchFieldTooltipFieldType: React.FC<{
       options: z
         .array(
           z.object({
-            name: z.string().nonempty('Option name is required'),
             label: z.string().nonempty('Option label is required'),
+            value: z.string().nonempty('Option value is required'),
             description: z.string(),
           })
         )
         .refine(value => value.length > 0, { message: 'At least one option is required' })
         .refine(
           options => {
-            const names = options.map(option => option.name);
-            const uniqueNames = new Set(names);
-            return uniqueNames.size === names.length;
+            const values = options.map(option => option.value);
+            const uniqueNames = new Set(values);
+            return uniqueNames.size === values.length;
           },
           { message: 'Option names must be unique' }
         ),
@@ -63,16 +67,16 @@ export const FormBuilderSwitchFieldTooltipFieldType: React.FC<{
       onChange: schema,
     },
     onSubmit: ({ value, formApi }) => {
-      onFieldUpdate(fieldId, {
+      handleChange({
+        ...currentField,
         name: value.name,
         camelCaseName: toCamelCase(value.name),
         label: value.label,
         description: value.description,
 
         options: value.options.map(option => ({
-          name: option.name,
-          camelCaseName: toCamelCase(option.name),
           label: option.label,
+          value: option.value,
           description: option.description,
         })),
       });
@@ -162,8 +166,8 @@ export const FormBuilderSwitchFieldTooltipFieldType: React.FC<{
                       size="icon"
                       onClick={() => {
                         field.pushValue({
-                          name: '',
                           label: '',
+                          value: '',
                           description: '',
                         });
                       }}
@@ -177,12 +181,12 @@ export const FormBuilderSwitchFieldTooltipFieldType: React.FC<{
                         <div key={index.toString()}>
                           <div className="flex space-x-2">
                             <form.Field
-                              name={`options[${index}].name`}
+                              name={`options[${index}].value`}
                               children={subField => {
                                 return (
                                   <Input
                                     value={subField.state.value}
-                                    placeholder="Switch Name"
+                                    placeholder="Radio Value"
                                     className="max-w-40"
                                     onChange={e => subField.handleChange(e.target.value)}
                                   />
@@ -192,7 +196,7 @@ export const FormBuilderSwitchFieldTooltipFieldType: React.FC<{
                             <form.Field
                               name={`options[${index}].label`}
                               children={subField => {
-                                return <Input value={subField.state.value} placeholder="Switch Label" onChange={e => subField.handleChange(e.target.value)} />;
+                                return <Input value={subField.state.value} placeholder="Radio Label" onChange={e => subField.handleChange(e.target.value)} />;
                               }}
                             />
                             <Button type="button" color="muted" variant="outline" onClick={() => field.removeValue(index)}>
@@ -205,7 +209,7 @@ export const FormBuilderSwitchFieldTooltipFieldType: React.FC<{
                               return (
                                 <Textarea
                                   value={subField.state.value}
-                                  placeholder="Switch Description (optional)"
+                                  placeholder="Radio Description (optional)"
                                   className="mt-1"
                                   onChange={e => subField.handleChange(e.target.value)}
                                 />
@@ -243,8 +247,65 @@ export const FormBuilderSwitchFieldTooltipFieldType: React.FC<{
   );
 };
 
-export const FormBuilderSwitchFieldTooltipFieldRules: React.FC<{
-  fieldId: string;
-}> = () => {
+const FieldRules: React.FC = () => {
   return <div>Select Field Rules</div>;
+};
+
+export const FormBuilderRadioGroupField: React.FC<{
+  sectionIndex: number;
+  fieldId: string;
+}> = ({ sectionIndex, fieldId }) => {
+  const { state } = useFormBuilderFieldContext<z.infer<typeof formBuilderRadioGroupFieldSchema>>();
+  return (
+    <FormBuilderFieldWrapper>
+      <FormBuilderFieldTrigger>
+        <FieldSet>
+          <FieldGroup>
+            <Field orientation={state.value.orientation}>
+              <FieldContent>
+                <FieldLabel>{state.value.label}</FieldLabel>
+
+                <FieldDescription>{state.value.description}</FieldDescription>
+              </FieldContent>
+              <FieldContentMain className="flex justify-end">
+                <RadioGroup defaultValue="one" className="max-w-80">
+                  <FieldLabel>
+                    <Field orientation="horizontal" className="rounded! justify-between p-2!">
+                      <FieldContent className="gap-1">
+                        <FieldTitle>Kubernetes</FieldTitle>
+                        <FieldDescription>Run GPU workloads on a K8s configured cluster.</FieldDescription>
+                      </FieldContent>
+                      <RadioGroupItem value="one" disabled />
+                    </Field>
+                  </FieldLabel>
+                  <FieldLabel>
+                    <Field orientation="horizontal" className="rounded! justify-between p-2!">
+                      <FieldContent className="gap-1">
+                        <FieldTitle>Virtual Machine</FieldTitle>
+                        <FieldDescription>Access a VM configured cluster to run GPU workloads.</FieldDescription>
+                      </FieldContent>
+                      <RadioGroupItem value="two" disabled />
+                    </Field>
+                  </FieldLabel>
+                </RadioGroup>
+              </FieldContentMain>
+            </Field>
+            <FieldSeparator />
+          </FieldGroup>
+        </FieldSet>
+      </FormBuilderFieldTrigger>
+      <FormBuilderFieldTooltip>
+        <FormBuilderFieldTooltipCopy />
+        <FormBuilderFieldTooltipSettings>
+          <FormBuilderFieldTooltipSettingsFieldType>
+            <FieldType />
+          </FormBuilderFieldTooltipSettingsFieldType>
+          <FormBuilderFieldTooltipSettingsRules>
+            <FieldRules />
+          </FormBuilderFieldTooltipSettingsRules>
+        </FormBuilderFieldTooltipSettings>
+        <FormBuilderFieldTooltipTrash sectionIndex={sectionIndex} fieldId={fieldId} />
+      </FormBuilderFieldTooltip>
+    </FormBuilderFieldWrapper>
+  );
 };

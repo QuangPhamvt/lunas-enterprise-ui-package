@@ -1,3 +1,163 @@
+import { arrayMove } from '@dnd-kit/sortable';
+
+import type z from 'zod';
+
+import type { formBuilderArrayFieldSchema, formBuilderEmptyFieldSchema, formBuilderSchema } from './schema';
+
+export function updateRecursiveField(
+  fieldId: string,
+  updateField: Partial<z.infer<typeof formBuilderSchema>['sections'][number]['fields'][number]>,
+  fieldList: z.infer<typeof formBuilderSchema>['sections'][number]['fields']
+): z.infer<typeof formBuilderSchema>['sections'][number]['fields'] {
+  if (fieldList.length === 0) return fieldList;
+
+  if (fieldList.some(field => field.id === fieldId)) {
+    return fieldList.map(f => {
+      if (f.id !== fieldId) return f;
+      return {
+        ...f,
+        ...Object.fromEntries(Object.entries(updateField).filter(([_, v]) => v !== undefined)),
+      };
+    });
+  }
+
+  if (fieldList.some(f => f.type === 'array-field')) {
+    return fieldList.map(f => {
+      if (f.type === 'array-field') {
+        return {
+          ...f,
+          fields: updateRecursiveField(fieldId, updateField, f.fields) as z.infer<typeof formBuilderArrayFieldSchema>['fields'],
+        };
+      }
+      if (f.id === fieldId) {
+        return {
+          ...f,
+          ...Object.fromEntries(Object.entries(updateField).filter(([_, v]) => v !== undefined)),
+        };
+      }
+      return f;
+    });
+  }
+
+  return fieldList;
+}
+
+export function createRecursiveFieldInArrayField(
+  fieldId: string,
+  newField: z.output<typeof formBuilderEmptyFieldSchema>,
+  arrField: z.output<typeof formBuilderArrayFieldSchema>
+): z.output<typeof formBuilderArrayFieldSchema> {
+  if (arrField.fields.length === 0)
+    return {
+      ...arrField,
+      fields: [newField],
+    };
+
+  if (fieldId === arrField.id) {
+    return {
+      ...arrField,
+      fields: [...arrField.fields, newField],
+    };
+  }
+
+  if (arrField.fields.every(f => f.type === 'array-field')) return arrField;
+
+  return {
+    ...arrField,
+    fields: arrField.fields.map(f => {
+      if (f.type !== 'array-field') return f;
+      return createRecursiveFieldInArrayField(fieldId, newField, f);
+    }),
+  };
+}
+
+export function updateRecursiveFieldInArrayField(
+  arrFieldId: string,
+  updateFieldId: string,
+  arrField: z.infer<typeof formBuilderArrayFieldSchema>,
+  updateField: Partial<z.infer<typeof formBuilderSchema>['sections'][number]['fields'][number]>
+): z.output<typeof formBuilderArrayFieldSchema> {
+  if (arrField.fields.length === 0) return arrField;
+
+  if (arrFieldId === arrField.id) {
+    return {
+      ...arrField,
+      fields: arrField.fields.map(f => {
+        if (f.id !== updateFieldId) return f;
+        return {
+          ...f,
+          ...Object.fromEntries(Object.entries(updateField).filter(([_, v]) => v !== undefined)),
+        };
+      }),
+    };
+  }
+
+  if (arrField.fields.every(f => f.type === 'array-field')) return arrField;
+
+  return {
+    ...arrField,
+    fields: arrField.fields.map(f => {
+      if (f.type !== 'array-field') return f;
+      return updateRecursiveFieldInArrayField(arrFieldId, updateFieldId, f, updateField);
+    }),
+  };
+}
+
+export function deleteFieldInArrayField(
+  arrFieldId: string,
+  updateFieldIndex: number,
+  arrField: z.output<typeof formBuilderArrayFieldSchema>
+): z.output<typeof formBuilderArrayFieldSchema> {
+  if (arrField.fields.length === 0) return arrField;
+
+  if (arrFieldId === arrField.id) {
+    return {
+      ...arrField,
+      fields: arrField.fields.filter((_, index) => index !== updateFieldIndex),
+    };
+  }
+
+  if (arrField.fields.every(f => f.type === 'array-field')) return arrField;
+
+  return {
+    ...arrField,
+    fields: arrField.fields.map(f => {
+      if (f.type !== 'array-field') return f;
+      return deleteFieldInArrayField(arrFieldId, updateFieldIndex, f);
+    }),
+  };
+}
+
+export function reorderFieldInArrayField(
+  arrFieldId: string,
+  fromFieldId: string,
+  toFieldId: string,
+  arrField: z.output<typeof formBuilderArrayFieldSchema>
+): z.output<typeof formBuilderArrayFieldSchema> {
+  if (arrField.fields.length === 0) return arrField;
+
+  if (arrFieldId === arrField.id) {
+    return {
+      ...arrField,
+      fields: arrayMove(
+        arrField.fields,
+        arrField.fields.findIndex(f => f.id === fromFieldId),
+        arrField.fields.findIndex(f => f.id === toFieldId)
+      ),
+    };
+  }
+
+  if (arrField.fields.every(f => f.type === 'array-field')) return arrField;
+
+  return {
+    ...arrField,
+    fields: arrField.fields.map(f => {
+      if (f.type !== 'array-field') return f;
+      return reorderFieldInArrayField(arrFieldId, fromFieldId, toFieldId, f);
+    }),
+  };
+}
+
 /**
  * Converts a normal English prompt/sentence to camelCase
  * @param {string} text - The input text to convert

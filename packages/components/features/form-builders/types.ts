@@ -1,4 +1,23 @@
-export type DRAGGABLE_FIELD_ID = 'FIELD' | 'FORM_FIELD' | 'FORM_ARRAY_FIELD';
+import type { FormAsyncValidateOrFn, FormValidateOrFn, ReactFormExtendedApi } from '@tanstack/react-form';
+
+import type z from 'zod';
+
+import type { formBuilderSchema } from './schema';
+
+type TFormData = z.output<typeof formBuilderSchema>;
+type TOnMount = FormValidateOrFn<TFormData>;
+type TOnChange = FormValidateOrFn<TFormData>;
+type TOnChangeAsync = FormAsyncValidateOrFn<TFormData>;
+type TOnBlur = FormValidateOrFn<TFormData>;
+type TOnBlurAsync = FormAsyncValidateOrFn<TFormData>;
+type TOnSubmit = FormValidateOrFn<TFormData>;
+type TOnSubmitAsync = FormAsyncValidateOrFn<TFormData>;
+type TOnDynamic = FormValidateOrFn<TFormData>;
+type TOnDynamicAsync = FormAsyncValidateOrFn<TFormData>;
+type TOnServer = FormAsyncValidateOrFn<TFormData>;
+type TSubmitMeta = unknown;
+
+export type DRAGGABLE_FIELD_ID = 'FIELD' | 'SECTION_FIELD' | 'FORM_FIELD' | 'FORM_ARRAY_FIELD';
 
 export type FIELD_ID =
   | 'title-field'
@@ -142,6 +161,16 @@ export type FormBuilderArrayField = FormBuilderFieldBase & {
   type: 'array-field';
   description?: undefined;
   fields: Array<
+    // | (T extends FormBuilderTextField ? FormBuilderTextField : never)
+    // | (T extends FormBuilderTextareaField ? FormBuilderTextareaField : never)
+    // | (T extends FormBuilderNumberField ? FormBuilderNumberField : never)
+    // | (T extends FormBuilderDateField ? FormBuilderDateField : never)
+    // | (T extends FormBuilderSwitchField ? FormBuilderSwitchField : never)
+    // | (T extends FormBuilderRadioGroupField ? FormBuilderRadioGroupField : never)
+    // | (T extends FormBuilderSelectField ? FormBuilderSelectField : never)
+    // | (T extends FormBuilderComboboxField ? FormBuilderComboboxField : never)
+    // | (T extends FormBuilderArrayField<any> ? FormBuilderArrayField<any> : never)
+    // | (T extends FormBuilderEmptyField ? FormBuilderEmptyField : never)
     | FormBuilderTextField
     | FormBuilderTextareaField
     | FormBuilderNumberField
@@ -172,6 +201,26 @@ export type FormBuilderField =
   | FormBuilderArrayField
   | FormBuilderEmptyField;
 
-export type FormBuilderValue = {
-  form: FormBuilderField[];
+export type FomrBuilderSection = {
+  name: string;
+  fields: FormBuilderField[];
 };
+
+export type FormBuilderValue = {
+  sections: FomrBuilderSection[];
+};
+
+export type UseFormBuilderFormContext = ReactFormExtendedApi<
+  TFormData,
+  TOnMount,
+  TOnChange,
+  TOnChangeAsync,
+  TOnBlur,
+  TOnBlurAsync,
+  TOnSubmit,
+  TOnSubmitAsync,
+  TOnDynamic,
+  TOnDynamicAsync,
+  TOnServer,
+  TSubmitMeta
+>;

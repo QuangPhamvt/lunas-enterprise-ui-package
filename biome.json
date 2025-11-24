@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.3.2/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.3.7/schema.json",
   "files": {
     "includes": [
       "packages/**/*.js",
@@ -55,7 +55,7 @@
           "options": {
             "groups": [
               [":BUN:", ":NODE:"],
-              ["react", "react-router", "react-hook-form"],
+              ["react", "react-dom", "react-router", "react-hook-form"],
               ":BLANK_LINE:",
               "@hookform/resolvers",
               "@tanstack/react-table",
@@ -63,11 +63,17 @@
               "@tanstack/react-router",
               "@tanstack/react-virtual",
               "@tanstack/zod-adapter",
+              ":BLANK_LINE:",
+              ["@dnd-kit/core", "@dnd-kit/modifiers", "@dnd-kit/sortable", "@dnd-kit/utilities"],
+              ":BLANK_LINE:",
+              "nanoid",
               "jotai",
               "lucide-react",
               "next-themes",
               "sonner",
-              "zod/**",
+              ["zod", "zod/**"],
+              ":BLANK_LINE:",
+              "@/components/ui/**",
               ":BLANK_LINE:",
               "@customafk/react-toolkit/**",
               "@customafk/lunas-sdk/**",
