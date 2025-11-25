@@ -8,7 +8,7 @@ import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-
 import { CSS } from '@dnd-kit/utilities';
 
 import { nanoid } from 'nanoid';
-import { GripVerticalIcon, PlusIcon } from 'lucide-react';
+import { GripVerticalIcon, PlusIcon, Trash2 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -218,6 +218,7 @@ const FormBuilderSectionFieldContainer: React.FC<
       if (!over || !over.data.current?.variant?.includes('FORM_FIELD') || !active.data.current?.variant?.includes('FORM_FIELD')) return;
       const activeIndex = currentSection.fields.findIndex(field => field.id === (active.id as string));
       const overIndex = currentSection.fields.findIndex(field => field.id === (over.id as string));
+      if (activeIndex === -1 || overIndex === -1) return;
       form.moveFieldValues(`sections[${id}].fields`, activeIndex, overIndex);
     },
     [currentSection.fields, id, form.moveFieldValues]
@@ -323,6 +324,7 @@ const FormBuilderSectionSortable: React.FC<
     name: string;
   }>
 > = ({ id, name, children }) => {
+  const form = useFormBuilderFormContext() as unknown as UseFormBuilderFormContext;
   const { attributes, listeners, transform, transition, isDragging, setNodeRef, setActivatorNodeRef } = useSortable({
     id,
     data: {
@@ -337,18 +339,34 @@ const FormBuilderSectionSortable: React.FC<
       style={{
         transform: CSS.Transform.toString(transform),
         transition,
-        opacity: isDragging ? 0.5 : 1,
       }}
-      className="flex flex-col rounded border border-border bg-card text-sm"
+      className="flex h-fit flex-col rounded border border-border bg-card text-sm"
     >
       <div className="flex items-center space-x-2 px-4 py-2">
         <p className="flex-1 font-medium text-base text-primary-strong">{name}</p>
-        <button ref={setActivatorNodeRef} {...attributes} {...listeners} className="cursor-grab">
-          <GripVerticalIcon size={16} />
-        </button>
+        <div className="flex space-x-2">
+          <Button
+            type="button"
+            size="icon"
+            color="secondary"
+            variant="ghost"
+            onClick={e => {
+              console.log('remove section', id);
+              form.removeFieldValue('sections', id);
+              e.stopPropagation();
+            }}
+          >
+            <Trash2 />
+          </Button>
+          <Button ref={setActivatorNodeRef} {...attributes} {...listeners} type="button" size="icon" color="secondary" variant="ghost" className="cursor-grab">
+            <GripVerticalIcon />
+          </Button>
+        </div>
       </div>
       <Separator />
-      {children}
+      <div className={cn('w-full animate-pulse overflow-hidden bg-white transition-all duration-300', isDragging && 'h-40 opacity-60')}>
+        {isDragging ? null : children}
+      </div>
     </div>
   );
 };
@@ -364,7 +382,6 @@ const FormBuilderSectionContainer: React.FC<React.PropsWithChildren> = ({ childr
     (event: DragEndEvent) => {
       const { active, over } = event;
       if (!over || !over.data.current?.variant?.includes('SECTION_FIELD') || !active.data.current?.variant?.includes('SECTION_FIELD')) return;
-      console.log('Dragging section', active.id, over.id);
       form.moveFieldValues('sections', active.id as number, over.id as number);
     },
     [form.moveFieldValues]

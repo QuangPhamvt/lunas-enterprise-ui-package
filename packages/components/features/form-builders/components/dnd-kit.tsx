@@ -103,17 +103,7 @@ export const FormBuilderDndContext: React.FC<
   );
 
   return (
-    <DndContext
-      data-slot="form-builder-dnd-context"
-      sensors={sensors}
-      collisionDetection={rectIntersection}
-      measuring={{
-        droppable: {
-          strategy: MeasuringStrategy.Always,
-        },
-      }}
-      modifiers={modifiers}
-    >
+    <DndContext data-slot="form-builder-dnd-context" sensors={sensors} collisionDetection={rectIntersection} modifiers={modifiers}>
       {children}
     </DndContext>
   );
