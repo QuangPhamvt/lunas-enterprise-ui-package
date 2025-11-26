@@ -3,7 +3,7 @@ import { formOptions } from '@tanstack/react-form';
 import { nanoid } from 'nanoid';
 import type z from 'zod';
 
-import { formBuilderSchema } from './schema';
+import { formBuilderSchema, type TFormBuilderSchema } from './schema';
 
 const formatErrorData = (data: z.infer<typeof formBuilderSchema>): Record<string, string> => {
   const result = formBuilderSchema.safeParse(data);
@@ -55,7 +55,7 @@ export const formOpts = formOptions({
         ],
       },
     ],
-  } as z.output<typeof formBuilderSchema>,
+  } as TFormBuilderSchema,
   validators: {
     onChange: ({ value }) => {
       if (formBuilderSchema.safeParse(value).success) return null;

@@ -4,7 +4,6 @@ import { useCallback, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 import { type DragCancelEvent, DragOverlay, type DragStartEvent, useDndMonitor } from '@dnd-kit/core';
-import { restrictToWindowEdges } from '@dnd-kit/modifiers';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
@@ -155,19 +154,7 @@ const SidebarField: React.FC = () => {
           <SidebarFieldInputField />
           {activeType &&
             createPortal(
-              <DragOverlay
-                dropAnimation={{
-                  duration: 500,
-                  easing: 'cubic-bezier(0.18, 0.67, 0.6, 1.22)',
-                }}
-                transition={activatorEvent => {
-                  const isKeyboardActivator = activatorEvent instanceof KeyboardEvent;
-
-                  return isKeyboardActivator ? 'transform 250ms ease' : undefined;
-                }}
-                modifiers={[restrictToWindowEdges]}
-                className={cn('cursor-grabbing', activeType === 'SECTION_FIELD' && 'flex justify-end')}
-              >
+              <DragOverlay className={cn('cursor-grabbing', activeType === 'SECTION_FIELD' && 'flex justify-end')}>
                 {activeType === 'FIELD' && (
                   <div className="pointer-events-none relative flex h-13 items-center rounded border border-border bg-card px-2.5 py-2 shadow-lg">
                     <div className="absolute inset-y-0 left-0 w-1 rounded-l bg-primary" />
@@ -239,6 +226,7 @@ const MainFormBuilder: React.FC = () => {
                           return (
                             <FormBuilderSectionFieldSortable key={field.id} fieldId={field.id}>
                               <FormBuilderSectionFieldDropable sectionId={index} fieldId={field.id}>
+                                {/*@ts-expect-error*/}
                                 <AppField
                                   name={`sections[${index}].fields[${fieldIndex}]`}
                                   children={({

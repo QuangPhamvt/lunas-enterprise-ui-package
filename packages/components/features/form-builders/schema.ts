@@ -139,13 +139,29 @@ export const formBuilderComboboxFieldSchema = z.object({
   ),
 });
 
-export const formBuilderArrayFieldSchema = z.object({
+export const formBuilderArrayFieldSchema: z.ZodType<
+  z.output<typeof formBuilderBaseFieldSchema> & {
+    type: 'array-field';
+    description?: string;
+    fields: Array<
+      | z.output<typeof formBuilderTextFieldSchema>
+      | z.output<typeof formBuilderTextAreaFieldSchema>
+      | z.output<typeof formBuilderNumberFieldSchema>
+      | z.output<typeof formBuilderDateFieldSchema>
+      | z.output<typeof formBuilderSwitchFieldSchema>
+      | z.output<typeof formBuilderRadioGroupFieldSchema>
+      | z.output<typeof formBuilderSelectFieldSchema>
+      | z.output<typeof formBuilderComboboxFieldSchema>
+      | z.output<typeof formBuilderArrayFieldSchema>
+    >;
+  }
+> = z.object({
   ...formBuilderBaseFieldSchema.shape,
   type: z.literal('array-field'),
   description: z.string().optional(),
-  fields: z.array(
-    z.lazy((): any =>
-      z.union([
+  fields: z.lazy(() =>
+    z
+      .union([
         formBuilderTextFieldSchema,
         formBuilderTextAreaFieldSchema,
         formBuilderNumberFieldSchema,
@@ -156,7 +172,7 @@ export const formBuilderArrayFieldSchema = z.object({
         formBuilderComboboxFieldSchema,
         formBuilderArrayFieldSchema,
       ])
-    )
+      .array()
   ),
 });
 
@@ -198,3 +214,51 @@ export const formBuilderSchema = z.object({
     { message: 'Section names must be unique' }
   ),
 });
+
+export type TFormBuilderBaseFieldSchema = z.infer<typeof formBuilderBaseFieldSchema>;
+export type TFormBuilderTitleFieldSchema = z.infer<typeof formBuilderTitleFieldSchema>;
+export type TFormBuilderTextFieldSchema = z.infer<typeof formBuilderTextFieldSchema>;
+export type TFormBuilderTextAreaFieldSchema = z.infer<typeof formBuilderTextAreaFieldSchema>;
+export type TFormBuilderNumberFieldSchema = z.infer<typeof formBuilderNumberFieldSchema>;
+export type TFormBuilderDateFieldSchema = z.infer<typeof formBuilderDateFieldSchema>;
+export type TFormBuilderSwitchFieldSchema = z.infer<typeof formBuilderSwitchFieldSchema>;
+export type TFormBuilderRadioGroupFieldSchema = z.infer<typeof formBuilderRadioGroupFieldSchema>;
+export type TFormBuilderSelectFieldSchema = z.infer<typeof formBuilderSelectFieldSchema>;
+export type TFormBuilderComboboxFieldSchema = z.infer<typeof formBuilderComboboxFieldSchema>;
+export type TFormBuilderArrayFieldSchema = TFormBuilderBaseFieldSchema & {
+  type: 'array-field';
+  description?: string;
+  fields: Array<
+    | TFormBuilderTextFieldSchema
+    | TFormBuilderTextAreaFieldSchema
+    | TFormBuilderNumberFieldSchema
+    | TFormBuilderDateFieldSchema
+    | TFormBuilderSwitchFieldSchema
+    | TFormBuilderRadioGroupFieldSchema
+    | TFormBuilderSelectFieldSchema
+    | TFormBuilderComboboxFieldSchema
+    | TFormBuilderArrayFieldSchema
+  >;
+};
+export type TFormBuilderEmptyFieldSchema = z.infer<typeof formBuilderEmptyFieldSchema>;
+
+export type TFormBuilderSectionSchema = {
+  name: string;
+  fields: Array<
+    | TFormBuilderTitleFieldSchema
+    | TFormBuilderTextFieldSchema
+    | TFormBuilderTextAreaFieldSchema
+    | TFormBuilderNumberFieldSchema
+    | TFormBuilderDateFieldSchema
+    | TFormBuilderSwitchFieldSchema
+    | TFormBuilderRadioGroupFieldSchema
+    | TFormBuilderSelectFieldSchema
+    | TFormBuilderComboboxFieldSchema
+    | TFormBuilderArrayFieldSchema
+    | TFormBuilderEmptyFieldSchema
+  >;
+};
+
+export type TFormBuilderSchema = {
+  sections: TFormBuilderSectionSchema[];
+};

@@ -136,8 +136,6 @@ export const FormBuilderFieldTooltipTrash: React.FC<{
     return indexString ? parseInt(indexString, 10) : -1;
   }, [fieldId, getFieldName]);
 
-  console.log('Deleting field with name:', name, 'and index:', fieldIndex);
-
   if (fieldIndex === -1) return null;
 
   return (
