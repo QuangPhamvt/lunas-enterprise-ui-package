@@ -351,7 +351,6 @@ const FormBuilderSectionSortable: React.FC<
             color="secondary"
             variant="ghost"
             onClick={e => {
-              console.log('remove section', id);
               form.removeFieldValue('sections', id);
               e.stopPropagation();
             }}

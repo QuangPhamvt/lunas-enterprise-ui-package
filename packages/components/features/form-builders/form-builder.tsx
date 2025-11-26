@@ -226,6 +226,7 @@ const MainFormBuilder: React.FC = () => {
                           return (
                             <FormBuilderSectionFieldSortable key={field.id} fieldId={field.id}>
                               <FormBuilderSectionFieldDropable sectionId={index} fieldId={field.id}>
+                                {/*@ts-expect-error*/}
                                 <AppField
                                   name={`sections[${index}].fields[${fieldIndex}]`}
                                   children={({

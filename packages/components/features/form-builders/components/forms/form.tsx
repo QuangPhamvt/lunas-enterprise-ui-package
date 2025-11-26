@@ -1,20 +1,20 @@
 import { revalidateLogic } from '@tanstack/react-form';
 
-import { useGenerateValidate } from '../../hooks/use-generate-validate';
-import type { FormBuilderValue } from '../../types';
 import { useFormBuilderTanStack } from './tanstack-form';
 import { FormBuilderTanStackFieldMapper } from './tanstack-form/mapper';
+import type z from 'zod';
+import type { formBuilderSchema } from '../../schema';
 
 export const FormBuilderTanStackForm: React.FC<{
-  formBuilder: FormBuilderValue;
+  formBuilder: z.infer<typeof formBuilderSchema>;
 }> = ({ formBuilder }) => {
-  const { schema, defaultValues } = useGenerateValidate(formBuilder.form);
+  // const { schema, defaultValues } = useGenerateValidate(formBuilder.form);
+  if (formBuilder.sections[0].fields[0].type === 'array-field') {
+    if (formBuilder.sections[0].fields[0].fields[0].type === 'array-field') {
+      const data = formBuilder.sections[0].fields[0].fields[0];
+    }
+  }
   const form = useFormBuilderTanStack({
-    defaultValues,
-    validators: {
-      onSubmit: schema,
-      onChange: schema,
-    },
     validationLogic: revalidateLogic({
       mode: 'submit',
       modeAfterSubmission: 'change',
