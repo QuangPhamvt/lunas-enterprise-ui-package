@@ -2,19 +2,37 @@ import { useCallback, useMemo } from 'react';
 
 import { useStore } from '@tanstack/react-form';
 
-import { Loader2Icon } from 'lucide-react';
-
-import type { TFormBuilderTextAreaFieldSchema } from '@/components/features/form-builders/schema';
+import { BanIcon, Loader2Icon } from 'lucide-react';
 
 import { useTanStackFieldContext } from '../../tanstack-form';
 import { Field, FieldContent, FieldContentMain, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldSeparator } from '../ui/field';
 import { Textarea } from '../ui/textarea';
 
-export const TextareaField: React.FC<
-  Pick<TFormBuilderTextAreaFieldSchema, 'label' | 'description' | 'placeholder' | 'orientation' | 'rows' | 'showCharacterCount' | 'showErrorMessage'> & {
-    maxLength: number | null;
-  }
-> = ({ label, description, placeholder, orientation, maxLength, rows, showCharacterCount, showErrorMessage }) => {
+type TextareaFieldProps = {
+  label: string;
+  description?: string;
+  placeholder?: string;
+
+  orientation?: 'horizontal' | 'vertical' | 'responsive';
+  required?: boolean;
+  rows?: number;
+  maxLength?: number | undefined;
+
+  showCharacterCount?: boolean;
+  showErrorMessage?: boolean;
+};
+
+export const TextareaField: React.FC<TextareaFieldProps> = ({
+  label,
+  description,
+  placeholder,
+  orientation = 'responsive',
+  required = false,
+  maxLength,
+  rows,
+  showCharacterCount = false,
+  showErrorMessage = true,
+}) => {
   const { form, state, name, handleBlur, handleChange } = useTanStackFieldContext<string>();
 
   const isSubmitting = useStore(form.store, ({ isSubmitting }) => isSubmitting);
@@ -46,7 +64,9 @@ export const TextareaField: React.FC<
     <FieldGroup className="px-4">
       <Field orientation={orientation}>
         <FieldContent>
-          <FieldLabel htmlFor={name}>{label}</FieldLabel>
+          <FieldLabel aria-required={required} htmlFor={name}>
+            {label}
+          </FieldLabel>
           <FieldDescription>{description}</FieldDescription>
         </FieldContent>
         <FieldContentMain>
@@ -58,18 +78,22 @@ export const TextareaField: React.FC<
             autoComplete="off"
             placeholder={placeholder}
             rows={rows}
-            className="rounded!"
             onChange={onChange}
             onBlur={handleBlur}
           />
           {isSubmitting && (
             <div className="absolute inset-y-0 end-2 top-2.5 text-muted-weak">
-              <Loader2Icon size={14} className="animate-spin" />
+              <Loader2Icon size={14} className="animate-spin text-primary-strong" />
             </div>
           )}
-          <div className="mt-1 flex w-full flex-col items-end justify-end">
-            {showCharacterCount && <p className="text-end text-text-positive-weak text-xs">{_countText}</p>}
+          {showErrorMessage && !!_errors.length && (
+            <div className="absolute inset-y-0 end-2 top-2.5 text-danger-strong">
+              <BanIcon size={14} />
+            </div>
+          )}
+          <div className="mt-1 flex w-full items-start justify-end *:basis-1/2">
             {showErrorMessage && <FieldError errors={_errors} />}
+            {showCharacterCount && <p className="text-end text-text-positive-weak text-xs">{_countText}</p>}
           </div>
         </FieldContentMain>
       </Field>

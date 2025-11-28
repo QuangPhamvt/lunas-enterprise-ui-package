@@ -4,10 +4,10 @@ import { BanIcon } from 'lucide-react';
 
 import { cn } from '@customafk/react-toolkit/utils';
 
-import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 
 import { cva, type VariantProps } from 'class-variance-authority';
+import { Label } from './label';
 
 const fieldVariants = cva('group/field flex w-full gap-3 data-[invalid=true]:text-danger', {
   variants: {
@@ -101,7 +101,7 @@ const FieldLabel = memo(({ className, ...props }: React.ComponentProps<typeof La
     <Label
       data-slot="field-label"
       className={cn(
-        'group/field-label peer/field-label flex w-fit gap-2 font-normal leading-snug',
+        'group/field-label peer/field-label flex w-fit gap-1 font-normal leading-snug',
         'has-[>[data-slot=field]]:w-full',
         'has-[>[data-slot=field]]:flex-col',
         'has-[>[data-slot=field]]:rounded-md',
@@ -183,7 +183,6 @@ const FieldError = memo(
       if (errors?.length === 1 && errors[0]?.message) {
         return (
           <div className="flex flex-row items-center justify-start gap-x-0.5">
-            <BanIcon size={14} />
             <p>{errors[0].message}</p>
           </div>
         );
@@ -205,7 +204,7 @@ const FieldError = memo(
     }
 
     return (
-      <div role="alert" data-slot="field-error" className={cn('w-full font-normal text-danger text-xs', className)} {...props}>
+      <div role="alert" data-slot="field-error" className={cn('w-full font-semibold text-danger-strong text-xs', className)} {...props}>
         {content}
       </div>
     );

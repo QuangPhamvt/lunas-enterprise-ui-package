@@ -2,19 +2,37 @@ import { useCallback, useMemo } from 'react';
 
 import { useStore } from '@tanstack/react-form';
 
-import { Loader2Icon, XIcon } from 'lucide-react';
-
-import type { TFormBuilderTextFieldSchema } from '@/components/features/form-builders/schema';
+import { BanIcon, Loader2Icon, XIcon } from 'lucide-react';
 
 import { useTanStackFieldContext } from '../../tanstack-form';
 import { Field, FieldContent, FieldContentMain, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldSeparator } from '../ui/field';
 import { Input } from '../ui/input';
 
-export const TextField: React.FC<
-  Pick<TFormBuilderTextFieldSchema, 'label' | 'description' | 'placeholder' | 'orientation' | 'showCharacterCount' | 'showClearButton' | 'showErrorMessage'> & {
-    maxLength: number | null;
-  }
-> = ({ label, description, orientation, placeholder, maxLength, showClearButton, showCharacterCount, showErrorMessage }) => {
+type TextFieldProps = {
+  label: string;
+  description?: string;
+  placeholder?: string;
+
+  orientation?: 'horizontal' | 'vertical' | 'responsive';
+  required?: boolean;
+  showCharacterCount?: boolean;
+  showClearButton?: boolean;
+  showErrorMessage?: boolean;
+
+  maxLength?: number | undefined;
+};
+
+export const TextField: React.FC<TextFieldProps> = ({
+  label,
+  description,
+  orientation = 'responsive',
+  placeholder,
+  maxLength,
+  required = false,
+  showClearButton = false,
+  showCharacterCount = false,
+  showErrorMessage = true,
+}) => {
   const { form, name, state, handleBlur, handleChange } = useTanStackFieldContext<string>();
 
   const isSubmitting = useStore(form.store, ({ isSubmitting }) => isSubmitting);
@@ -48,11 +66,18 @@ export const TextField: React.FC<
     [isSubmitting, maxLength, handleChange]
   );
 
+  const onClear = useCallback(() => {
+    if (isSubmitting) return;
+    handleChange('');
+  }, [isSubmitting, handleChange]);
+
   return (
     <FieldGroup className="gap-y-4 px-4">
       <Field orientation={orientation} data-invalid={state.meta.isTouched && !state.meta.isValid}>
         <FieldContent>
-          <FieldLabel htmlFor={name}>{label}</FieldLabel>
+          <FieldLabel aria-required={required} htmlFor={name}>
+            {label}
+          </FieldLabel>
           <FieldDescription>{description}</FieldDescription>
         </FieldContent>
         <FieldContentMain>
@@ -63,23 +88,32 @@ export const TextField: React.FC<
             aria-invalid={_invalid}
             autoComplete="off"
             placeholder={placeholder}
-            className="rounded!"
             onBlur={handleBlur}
             onChange={onChange}
           />
-          {_showClearButton && (
-            <button className="absolute inset-y-0 end-0 top-3 flex h-fit w-8 cursor-pointer items-center justify-center rounded-e-md text-text-positive-weak outline-none transition-[color,box-shadow] hover:text-text-positive focus:z-10 focus-visible:ring-2 focus-visible:ring-border">
+          {_showClearButton && !state.meta.errors.length && (
+            <button
+              type="button"
+              aria-label="Clear"
+              className="absolute inset-y-0 end-0 top-3 flex h-fit w-8 cursor-pointer items-center justify-center rounded-e-md text-text-positive-weak outline-none transition-[color,box-shadow] hover:text-text-positive focus:z-10 focus-visible:ring-2 focus-visible:ring-border"
+              onClick={onClear}
+            >
               <XIcon size={14} aria-hidden="true" />
             </button>
           )}
           {isSubmitting && (
             <div className="absolute inset-y-0 end-2 top-2.5 text-muted-weak">
-              <Loader2Icon size={14} className="animate-spin" />
+              <Loader2Icon size={14} className="animate-spin text-primary-strong" />
             </div>
           )}
-          <div className="mt-1 flex w-full flex-col items-end justify-end">
-            {showCharacterCount && <p className="text-end text-text-positive-weak text-xs tabular-nums leading-3.5">{_countText}</p>}
+          {showErrorMessage && !!state.meta.errors.length && (
+            <div className="absolute inset-y-0 end-2 top-2.5 text-danger-strong">
+              <BanIcon size={14} />
+            </div>
+          )}
+          <div className="mt-1 flex w-full items-start justify-end *:basis-1/2">
             {showErrorMessage && <FieldError errors={state.meta.errors} />}
+            {showCharacterCount && <p className="text-end text-text-positive-weak text-xs tabular-nums leading-3.5">{_countText}</p>}
           </div>
         </FieldContentMain>
       </Field>

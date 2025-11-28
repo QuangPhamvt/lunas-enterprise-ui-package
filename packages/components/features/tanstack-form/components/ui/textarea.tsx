@@ -26,7 +26,7 @@ function Textarea({
         // Base styles
         'flex min-h-24 w-full bg-transparent px-3 py-2',
         'rounded shadow-input transition-[color,box-shadow] duration-200',
-        'field-sizing-content resize-y text-sm text-text-positive tabular-nums caret-primary',
+        'resize-y text-sm text-text-positive tabular-nums caret-primary',
 
         // Border and shadow styles
         '-outline-offset-1 outline-1 outline-border',
