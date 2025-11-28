@@ -138,6 +138,7 @@ const FormBuilderSectionFieldCreateFieldButton: React.FC<{
       .filter(Boolean) as string[];
     const valueCamelCaseNames = value ? toCamelCase(value) : '';
     return names.includes(valueCamelCaseNames);
+    // @ts-ignore-next-line
   }, [value, getAllNames, form.getFieldValue]);
 
   return (

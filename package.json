@@ -467,7 +467,7 @@
     "@hookform/error-message": "^2.0.0",
     "@react-oauth/google": "^0.12.0",
     "@tailwindcss/vite": "^4.1.0",
-    "@tanstack/react-form": "^1.25.0",
+    "@tanstack/react-form": "^1.26.0",
     "@tanstack/react-table": "^8.21.0",
     "@tanstack/react-virtual": "^3.13.12",
     "class-variance-authority": "^0.7.0",
