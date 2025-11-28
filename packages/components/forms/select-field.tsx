@@ -40,7 +40,7 @@ export const SelectField = <TFieldValues extends FieldValues = FieldValues>({
               {!!description && <FormDescription>{description}</FormDescription>}
             </FieldContent>
           </Activity>
-          <div className="basis-3/5 flex justify-end">
+          <div className="flex basis-3/5 justify-end">
             <Select defaultValue={field.value} onValueChange={field.onChange}>
               <FormControl>
                 <SelectTrigger className="w-full md:max-w-80">
