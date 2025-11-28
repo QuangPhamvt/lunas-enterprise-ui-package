@@ -1,15 +1,19 @@
-import type { FormBuilderRadioGroupField } from '@/components/features/form-builders/types';
-
 import { useTanStackFieldContext } from '../../tanstack-form';
 import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, FieldLabel, FieldSeparator, FieldTitle } from '../ui/field';
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 
-export const RadioGroupField: React.FC<Pick<FormBuilderRadioGroupField, 'label' | 'description' | 'orientation' | 'options'>> = ({
-  label,
-  description,
-  orientation,
-  options,
-}) => {
+type RadioGroupFieldProps = {
+  label: string;
+  description?: string;
+  orientation?: 'vertical' | 'horizontal' | 'responsive';
+  options: Array<{
+    label: string;
+    value: string;
+    description?: string;
+  }>;
+};
+
+export const RadioGroupField: React.FC<RadioGroupFieldProps> = ({ label, description, orientation, options }) => {
   const field = useTanStackFieldContext<string | null>();
   return (
     <FieldGroup className="px-4">
@@ -19,8 +23,8 @@ export const RadioGroupField: React.FC<Pick<FormBuilderRadioGroupField, 'label' 
           <FieldDescription>{description}</FieldDescription>
         </FieldContent>
 
-        <FieldContentMain className="flex justify-end">
-          <RadioGroup className="w-full max-w-80" onValueChange={field.handleChange}>
+        <FieldContentMain>
+          <RadioGroup className="w-full" onValueChange={field.handleChange}>
             {options.map(option => (
               <FieldLabel key={option.value}>
                 <Field orientation="horizontal" className="rounded! justify-between p-2!">

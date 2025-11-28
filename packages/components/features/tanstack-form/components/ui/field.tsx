@@ -1,7 +1,5 @@
 import { memo, useMemo } from 'react';
 
-import { BanIcon } from 'lucide-react';
-
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { Separator } from '@/components/ui/separator';

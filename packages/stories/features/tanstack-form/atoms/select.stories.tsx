@@ -58,3 +58,19 @@ export const Disabled: Story = {
     );
   },
 };
+
+export const ReadOnly: Story = {
+  render: () => {
+    return (
+      <Select>
+        <SelectTrigger aria-readonly>
+          <SelectValue placeholder="Select an option" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="option1">Option 1</SelectItem>
+          <SelectItem value="option2">Option 2</SelectItem>
+        </SelectContent>
+      </Select>
+    );
+  },
+};

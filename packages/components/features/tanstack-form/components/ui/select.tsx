@@ -66,6 +66,13 @@ function SelectTrigger({
         '*:data-[slot=select-value]:items-center',
         '*:data-[slot=select-value]:gap-2',
 
+        // Readonly state
+        'aria-readonly:bg-muted-muted',
+        'aria-readonly:cursor-default',
+        'aria-readonly:focus:outline-none',
+        'aria-readonly:ring-0',
+        'aria-readonly:pointer-events-none',
+
         // Icon styles
         '[&_svg]:shrink-0',
         '[&_svg]:pointer-events-none',

@@ -2,15 +2,23 @@ import { useCallback, useMemo } from 'react';
 
 import { useStore } from '@tanstack/react-form';
 
-import type { TFormBuilderNumberFieldSchema } from '@/components/features/form-builders/schema';
+import { BanIcon } from 'lucide-react';
 
 import { useTanStackFieldContext } from '../../tanstack-form';
 import { Field, FieldContent, FieldContentMain, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldSeparator } from '../ui/field';
 import { NumberInput } from '../ui/number-input';
 
-export const NumberField: React.FC<
-  Pick<TFormBuilderNumberFieldSchema, 'label' | 'description' | 'orientation' | 'placeholder' | 'unitText' | 'showErrorMessage'>
-> = ({ label, description, orientation, placeholder, unitText, showErrorMessage }) => {
+type NumberFieldProps = {
+  label: string;
+  description?: string;
+  placeholder?: string;
+  unitText?: string;
+
+  orientation?: 'horizontal' | 'vertical' | 'responsive';
+  showErrorMessage?: boolean;
+};
+
+export const NumberField: React.FC<NumberFieldProps> = ({ label, description, orientation, placeholder, unitText, showErrorMessage }) => {
   const field = useTanStackFieldContext<number>();
 
   const isSubmitting = useStore(field.form.store, ({ isSubmitting }) => isSubmitting);
@@ -37,7 +45,7 @@ export const NumberField: React.FC<
         </FieldContent>
 
         <FieldContentMain className="flex justify-end">
-          <div className="flex w-full max-w-60 flex-col">
+          <div className="relative flex w-full max-w-60 flex-col">
             <NumberInput
               id={field.name}
               value={field.state.value}
@@ -47,6 +55,11 @@ export const NumberField: React.FC<
               onBlur={field.handleBlur}
               onValueChange={onValueChange}
             />
+            {showErrorMessage && !!_errors.length && (
+              <div className="absolute inset-y-0 start-2 top-2.75 text-danger-strong">
+                <BanIcon size={14} />
+              </div>
+            )}
             <div className="mt-1 flex w-full flex-col items-end justify-end">{showErrorMessage && <FieldError errors={_errors} />}</div>
           </div>
         </FieldContentMain>

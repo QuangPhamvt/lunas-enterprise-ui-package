@@ -1,23 +1,25 @@
 import { useMemo } from 'react';
 
+import { CalendarDaysIcon } from 'lucide-react';
+
 import { endOfToday, endOfTomorrow, endOfYesterday, format, lastDayOfMonth, startOfMonth, subDays } from '@customafk/react-toolkit/date-fns';
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { Button } from '@/components/ui/button';
-import type { FormBuilderDateField } from '@/components/features/form-builders/types';
 
 import { useTanStackFieldContext } from '../../tanstack-form';
 import { Calendar } from '../ui/calendar';
 import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, FieldLabel, FieldSeparator } from '../ui/field';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
-import { CalendarDaysIcon } from 'lucide-react';
 
-export const DateField: React.FC<Pick<FormBuilderDateField, 'label' | 'description' | 'placeholder' | 'orientation'>> = ({
-  label,
-  description,
-  placeholder,
-  orientation,
-}) => {
+type DateFieldProps = {
+  label: string;
+  description?: string;
+  placeholder?: string;
+  orientation?: 'vertical' | 'horizontal' | 'responsive';
+};
+
+export const DateField: React.FC<DateFieldProps> = ({ label, description, placeholder, orientation }) => {
   const field = useTanStackFieldContext<Date | null>();
 
   const _isInvalid = useMemo(() => {
@@ -42,7 +44,7 @@ export const DateField: React.FC<Pick<FormBuilderDateField, 'label' | 'descripti
                   color="muted"
                   size="lg"
                   className={cn(
-                    'flex items-center justify-between rounded outline-border font-normal',
+                    'flex items-center justify-between rounded font-normal outline-border',
                     'hover:bg-transparent',
                     'focus:outline-1 focus:outline-primary-strong focus:ring-4 focus:ring-primary-weak',
                     'data-[state=open]:text-text-positive-muted',
@@ -53,13 +55,13 @@ export const DateField: React.FC<Pick<FormBuilderDateField, 'label' | 'descripti
                     field.state.value === null && 'text-text-positive-muted'
                   )}
                 >
-                  <p>{field.state.value === null ? placeholder || 'Select date' : format(field.state.value, 'PPP')}</p>
+                  <p>{field.state.value === null ? placeholder || 'Select date' : format(field.state.value, 'PPPP')}</p>
                   <CalendarDaysIcon strokeWidth={1} />
                 </Button>
               </PopoverTrigger>
 
-              <PopoverContent align="end" side="bottom" className="flex w-fit rounded p-0 overflow-y-auto" onBlur={field.handleBlur}>
-                <div className="flex flex-col space-y-2 border-r border-r-border h-full p-2 [&>button]:justify-start [&>button]:text-sm">
+              <PopoverContent align="end" side="bottom" className="flex w-fit overflow-y-auto rounded p-0" onBlur={field.handleBlur}>
+                <div className="flex h-full flex-col space-y-2 border-r border-r-border p-2 [&>button]:justify-start [&>button]:text-sm">
                   <Button
                     variant="ghost"
                     color="muted"
