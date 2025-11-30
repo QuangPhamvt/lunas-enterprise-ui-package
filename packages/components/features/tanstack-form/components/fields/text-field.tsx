@@ -3,34 +3,32 @@ import { useCallback, useMemo } from 'react';
 import { useStore } from '@tanstack/react-form';
 
 import { BanIcon, Loader2Icon, XIcon } from 'lucide-react';
+import type z from 'zod';
 
+import type { TanStackFormTextFieldSchema } from '../../schema';
 import { useTanStackFieldContext } from '../../tanstack-form';
+import { Badge } from '../ui/badge';
 import { Field, FieldContent, FieldContentMain, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldSeparator } from '../ui/field';
 import { Input } from '../ui/input';
 
-type TextFieldProps = {
-  label: string;
-  description?: string;
-  placeholder?: string;
-
-  orientation?: 'horizontal' | 'vertical' | 'responsive';
+type Props = Pick<
+  z.input<typeof TanStackFormTextFieldSchema>,
+  'label' | 'description' | 'placeholder' | 'counter' | 'tooltip' | 'helperText' | 'orientation' | 'showClearButton' | 'showErrorMessage'
+> & {
   required?: boolean;
-  showCharacterCount?: boolean;
-  showClearButton?: boolean;
-  showErrorMessage?: boolean;
-
-  maxLength?: number | undefined;
 };
 
-export const TextField: React.FC<TextFieldProps> = ({
+export const TextField: React.FC<Props> = ({
   label,
   description,
-  orientation = 'responsive',
   placeholder,
-  maxLength,
+
   required = false,
+  counter,
+  // tooltip,
+  helperText,
+  orientation = 'responsive',
   showClearButton = false,
-  showCharacterCount = false,
   showErrorMessage = true,
 }) => {
   const { form, name, state, handleBlur, handleChange } = useTanStackFieldContext<string>();
@@ -47,23 +45,28 @@ export const TextField: React.FC<TextFieldProps> = ({
 
   const _countText = useMemo(() => {
     const unit = `character${[0, 1].includes(_count) ? '' : 's'}`;
-    if (maxLength) {
-      return `${_count} / ${maxLength} ${unit}`;
+    if (counter?.max) {
+      return `${_count} / ${counter.max} ${unit}`;
     }
     return `${_count} ${unit}`;
-  }, [_count, maxLength]);
+  }, [_count, counter?.max]);
 
   const _invalid = useMemo(() => {
     return state.meta.isTouched && !state.meta.isValid;
   }, [state.meta.isTouched, state.meta.isValid]);
 
+  const _isEmpty = useMemo(() => {
+    if (required) return !state.value?.trim().length;
+    return false;
+  }, [required, state.value]);
+
   const onChange = useCallback<React.ChangeEventHandler<HTMLInputElement>>(
     ({ target: { value } }) => {
       if (isSubmitting) return;
-      if (maxLength && value.length > maxLength) return;
+      if (counter?.max && value.length > counter.max) return;
       handleChange(value);
     },
-    [isSubmitting, maxLength, handleChange]
+    [isSubmitting, counter, handleChange]
   );
 
   const onClear = useCallback(() => {
@@ -75,9 +78,12 @@ export const TextField: React.FC<TextFieldProps> = ({
     <FieldGroup className="gap-y-4 px-4">
       <Field orientation={orientation} data-invalid={state.meta.isTouched && !state.meta.isValid}>
         <FieldContent>
-          <FieldLabel aria-required={required} htmlFor={name}>
-            {label}
-          </FieldLabel>
+          <div className="flex h-5.5 w-full justify-between">
+            <FieldLabel aria-required={required} htmlFor={name}>
+              {label}
+            </FieldLabel>
+            {_isEmpty && <Badge label="Required" color="danger" size="xs" />}
+          </div>
           <FieldDescription>{description}</FieldDescription>
         </FieldContent>
         <FieldContentMain>
@@ -95,7 +101,7 @@ export const TextField: React.FC<TextFieldProps> = ({
             <button
               type="button"
               aria-label="Clear"
-              className="absolute inset-y-0 end-0 top-3 flex h-fit w-8 cursor-pointer items-center justify-center rounded-e-md text-text-positive-weak outline-none transition-[color,box-shadow] hover:text-text-positive focus:z-10 focus-visible:ring-2 focus-visible:ring-border"
+              className="absolute inset-y-0 end-0 top-3 flex h-fit w-8 cursor-pointer items-center justify-center rounded-e-md text-text-positive-weak outline-none transition-[color,box-shadow] hover:text-text-positive focus:text-text-positive-strong"
               onClick={onClear}
             >
               <XIcon size={14} aria-hidden="true" />
@@ -113,8 +119,13 @@ export const TextField: React.FC<TextFieldProps> = ({
           )}
           <div className="mt-1 flex w-full items-start justify-end *:basis-1/2">
             {showErrorMessage && <FieldError errors={state.meta.errors} />}
-            {showCharacterCount && <p className="text-end text-text-positive-weak text-xs tabular-nums leading-3.5">{_countText}</p>}
+            {!!counter && <p className="text-end text-text-positive-weak text-xs tabular-nums leading-3.5">{_countText}</p>}
           </div>
+          {!!helperText && (
+            <div className="mt-1 text-wrap rounded bg-primary-bg-subtle p-2 text-text-positive-weak text-xs">
+              <p>{helperText}</p>
+            </div>
+          )}
         </FieldContentMain>
       </Field>
       <FieldSeparator />

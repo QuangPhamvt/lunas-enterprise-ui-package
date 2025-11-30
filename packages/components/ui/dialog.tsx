@@ -1,10 +1,9 @@
 'use client';
 
-import { XIcon } from 'lucide-react';
-
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { Dialog as DialogPrimitive } from 'radix-ui';
+import { CloseButton } from './buttons/close';
 
 function Dialog({ ...props }: React.ComponentProps<typeof DialogPrimitive.Root>) {
   return <DialogPrimitive.Root data-slot="dialog" {...props} />;
@@ -54,8 +53,8 @@ function DialogContent({
         <DialogPrimitive.Content
           data-slot="dialog-content"
           className={cn(
-            'bg-background relative z-50 grid',
-            'shadow-dialog gap-4 p-6 outline-none',
+            'relative z-50 grid bg-background',
+            'gap-4 p-6 shadow-dialog outline-none',
             'max-h-[85dvh] w-full max-w-[calc(100%-2rem)] sm:max-w-lg',
             'rounded-2xl duration-200',
             'data-[state=open]:animate-in',
@@ -70,30 +69,8 @@ function DialogContent({
         >
           {children}
           {showCloseButton && (
-            <DialogPrimitive.Close
-              data-slot="dialog-close"
-              tabIndex={-1}
-              className={cn(
-                'btnClose',
-                'absolute top-3 right-3 rounded-full p-2 opacity-70',
-                'cursor-pointer transition-all',
-                'outline-0',
-                'disabled:pointer-events-none',
-                'focus:ring-2',
-                'focus:ring-border-weak',
-                'hover:opacity-100',
-                'hover:bg-border-muted',
-                'data-[state=open]:bg-accent-weak',
-                'data-[state=open]:text-text-positive-muted',
-                '[&_svg]:text-accent-foreground/60',
-                '[&_svg]:hover:text-text-positive-strong',
-                '[&_svg]:pointer-events-none',
-                '[&_svg]:shrink-0',
-                "[&_svg:not([class*='size-'])]:size-5"
-              )}
-            >
-              <XIcon />
-              <span className="sr-only">Close</span>
+            <DialogPrimitive.Close data-slot="dialog-close" tabIndex={-1} asChild className="absolute top-3 right-3">
+              <CloseButton />
             </DialogPrimitive.Close>
           )}
         </DialogPrimitive.Content>
@@ -112,12 +89,12 @@ function DialogFooter({ className, ...props }: React.ComponentProps<'div'>) {
 
 function DialogTitle({ className, ...props }: React.ComponentProps<typeof DialogPrimitive.Title>) {
   return (
-    <DialogPrimitive.Title data-slot="dialog-title" className={cn('text-text-positive-strong text-lg leading-none font-semibold', className)} {...props} />
+    <DialogPrimitive.Title data-slot="dialog-title" className={cn('font-semibold text-lg text-text-positive-strong leading-none', className)} {...props} />
   );
 }
 
 function DialogDescription({ className, ...props }: React.ComponentProps<typeof DialogPrimitive.Description>) {
-  return <DialogPrimitive.Description data-slot="dialog-description" className={cn('text-text-positive-weak text-sm', className)} {...props} />;
+  return <DialogPrimitive.Description data-slot="dialog-description" className={cn('text-sm text-text-positive-weak', className)} {...props} />;
 }
 
 export { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogOverlay, DialogPortal, DialogTitle, DialogTrigger };

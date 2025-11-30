@@ -3,22 +3,47 @@ import { useCallback, useMemo } from 'react';
 import { useStore } from '@tanstack/react-form';
 
 import { BanIcon } from 'lucide-react';
+import type z from 'zod';
 
+import type { TanStackFormNumberFieldSchema } from '../../schema';
 import { useTanStackFieldContext } from '../../tanstack-form';
 import { Field, FieldContent, FieldContentMain, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldSeparator } from '../ui/field';
 import { NumberInput } from '../ui/number-input';
 
-type NumberFieldProps = {
-  label: string;
-  description?: string;
-  placeholder?: string;
-  unitText?: string;
-
-  orientation?: 'horizontal' | 'vertical' | 'responsive';
-  showErrorMessage?: boolean;
+type NumberFieldProps = Pick<
+  z.input<typeof TanStackFormNumberFieldSchema>,
+  | 'label'
+  | 'description'
+  | 'placeholder'
+  | 'defaultValue'
+  | 'tooltip'
+  | 'helperText'
+  | 'orientation'
+  | 'showErrorMessage'
+  | 'rounding'
+  | 'decimalPlaces'
+  | 'percision'
+  | 'unit'
+> & {
+  required?: boolean;
 };
 
-export const NumberField: React.FC<NumberFieldProps> = ({ label, description, orientation, placeholder, unitText, showErrorMessage }) => {
+export const NumberField: React.FC<NumberFieldProps> = ({
+  label,
+  description,
+  placeholder,
+
+  tooltip,
+  helperText,
+  orientation,
+  showErrorMessage,
+  rounding,
+  decimalPlaces,
+  percision,
+  unit,
+
+  required,
+}) => {
   const field = useTanStackFieldContext<number>();
 
   const isSubmitting = useStore(field.form.store, ({ isSubmitting }) => isSubmitting);
@@ -26,6 +51,11 @@ export const NumberField: React.FC<NumberFieldProps> = ({ label, description, or
   const _errors = useMemo(() => {
     return field.state.meta.errors;
   }, [field.state.meta.errors]);
+
+  const _isEmpty = useMemo(() => {
+    if (required) return field.state.value === undefined || field.state.value === null || field.state.value === 0;
+    return false;
+  }, [required, field.state.value]);
 
   const onValueChange = useCallback(
     (value?: number) => {
@@ -51,7 +81,10 @@ export const NumberField: React.FC<NumberFieldProps> = ({ label, description, or
               value={field.state.value}
               aria-invalid={field.state.meta.isTouched && !field.state.meta.isValid}
               placeholder={placeholder}
-              unitText={unitText}
+              roundingRule={rounding}
+              numberAfterDecimalPoint={decimalPlaces}
+              precision={percision}
+              unitText={unit}
               onBlur={field.handleBlur}
               onValueChange={onValueChange}
             />

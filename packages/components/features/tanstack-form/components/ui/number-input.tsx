@@ -21,7 +21,7 @@ interface IProps extends React.HTMLAttributes<HTMLInputElement> {
    *
    * Usage: Value for the text field
    */
-  value?: string | number;
+  value?: string | number | null;
   /**
    * Description: Disabled state of the text field
    *
@@ -154,7 +154,7 @@ export const NumberInput: React.FC<IProps> = ({
   const _unitRef = useRef<HTMLSpanElement>(null);
   const _inputRef = useRef<HTMLInputElement>(null);
 
-  const [_value, _setValue] = useState<string>(value.toString());
+  const [_value, _setValue] = useState<string>(value?.toString() ?? '');
 
   // Memoized values for validation and formatting
   const maxDecimalPlaces = useMemo(() => decimal?.[1] ?? numberAfterDecimalPoint, [decimal, numberAfterDecimalPoint]);

@@ -1,5 +1,8 @@
+import { useState } from 'react';
+
 import z from 'zod';
 
+import { Button } from '@/components/ui/button';
 import { useTanStackForm } from '@/components/features/tanstack-form';
 
 import type { Meta, StoryObj } from '@storybook/react-vite';
@@ -45,7 +48,6 @@ export const Default: Story = {
                     description="This is a text field."
                     orientation="responsive"
                     showClearButton={true}
-                    showCharacterCount={true}
                     showErrorMessage={true}
                   />
                 );
@@ -61,7 +63,6 @@ export const Default: Story = {
                     description="This is a text field."
                     orientation="responsive"
                     showClearButton={true}
-                    showCharacterCount={true}
                     showErrorMessage={true}
                   />
                 );
@@ -110,6 +111,63 @@ export const Default: Story = {
           <TanStackSectionForm title="Section Form Title"></TanStackSectionForm>
         </TanStackContainerForm>
       </div>
+    );
+  },
+};
+
+export const FormDialog: Story = {
+  render: () => {
+    const { AppForm, TanStackDialogForm, AppField } = useTanStackForm({
+      defaultValues: {
+        textField: '',
+        textareaField: '',
+      },
+    });
+    const [open, setOpen] = useState<boolean>(false);
+    return (
+      <>
+        <Button
+          onClick={() => {
+            setOpen(true);
+          }}
+        >
+          Open Form Dialog
+        </Button>
+        <AppForm>
+          <TanStackDialogForm title="Form Dialog Title" open={open} onOpenChange={setOpen}>
+            <AppField
+              name="textField"
+              children={({ TextField }) => {
+                return (
+                  <TextField
+                    label="Text Field"
+                    placeholder="Enter text here"
+                    description="This is a text field."
+                    orientation="responsive"
+                    showClearButton={true}
+                    showErrorMessage={true}
+                  />
+                );
+              }}
+            />
+            <AppField
+              name="textareaField"
+              children={({ TextareaField }) => {
+                return (
+                  <TextareaField
+                    label="Textarea Field"
+                    placeholder="Enter text here"
+                    description="This is a textarea field."
+                    orientation="responsive"
+                    showCharacterCount={true}
+                    showErrorMessage={true}
+                  />
+                );
+              }}
+            />
+          </TanStackDialogForm>
+        </AppForm>
+      </>
     );
   },
 };

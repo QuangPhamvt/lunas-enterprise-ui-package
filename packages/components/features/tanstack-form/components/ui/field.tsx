@@ -187,7 +187,7 @@ const FieldError = memo(
       }
 
       return (
-        <ul className="ml-4 flex list-disc flex-col gap-1">
+        <ul className="flex list-none flex-col gap-1">
           {errors.map(error => {
             if (typeof error === 'string') return <li key={error}>{error}</li>;
             if (!error?.message) return null;
