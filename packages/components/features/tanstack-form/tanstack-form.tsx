@@ -8,7 +8,9 @@ import { SelectField } from './components/fields/select-field';
 import { SwitchField } from './components/fields/switch-field';
 import { TextField } from './components/fields/text-field';
 import { TextareaField } from './components/fields/textarea-field';
+import { TanStackActionsForm } from './components/forms/actions-form';
 import { TanStackContainerForm } from './components/forms/container-form';
+import { TanStackDialogForm } from './components/forms/dialog-form';
 import { TanStackSectionForm } from './components/forms/section-form';
 import { TanStackTitleField } from './components/forms/title-field';
 
@@ -33,9 +35,11 @@ const {
     RadioGroupField,
   },
   formComponents: {
+    TanStackDialogForm,
     TanStackContainerForm,
     TanStackSectionForm,
     TanStackTitleField,
+    TanStackActionsForm,
   },
 });
 
