@@ -13,7 +13,29 @@ const formatNumberWithCommas = (num: number | string): string => {
   return Number(num).toLocaleString();
 };
 
-interface IProps extends React.HTMLAttributes<HTMLInputElement> {
+const customRoundedValue = (value: number, precision: number, roundingRule: 'up' | 'down' | 'nearest' | 'none') => {
+  if (roundingRule === 'none') return value;
+
+  const factor = 10 ** precision;
+  const scaledValue = value * factor;
+
+  switch (roundingRule) {
+    case 'up':
+      return Math.ceil(scaledValue) / factor;
+    case 'down':
+      return Math.floor(scaledValue) / factor;
+    case 'nearest': {
+      if (scaledValue % 1 < 0.1) return Math.floor(scaledValue) / factor;
+      if (scaledValue % 1 >= 0.59) return Math.ceil(scaledValue) / factor;
+      return (Math.floor(scaledValue) + 0.5) / factor;
+    }
+    default: {
+      return value;
+    }
+  }
+};
+
+type TProps = React.HTMLAttributes<HTMLInputElement> & {
   /**
    * Description: Value for the text field
    *
@@ -21,7 +43,7 @@ interface IProps extends React.HTMLAttributes<HTMLInputElement> {
    *
    * Usage: Value for the text field
    */
-  value?: string | number | null;
+  value?: number | null | undefined;
   /**
    * Description: Disabled state of the text field
    *
@@ -123,9 +145,17 @@ interface IProps extends React.HTMLAttributes<HTMLInputElement> {
    * Usage: Callback function for the value change
    */
   wrapperClassName?: string;
-  onValueChange?: (value?: number) => void;
+  /**
+   * Description: Callback function for the value change
+   * Usage: Callback function for the value change
+   */
+  onValueChange?: (value: number | null) => void;
+  /**
+   * Description: Callback function for the blur event
+   * Usage: Callback function for the blur event
+   */
   onBlur?: () => void;
-}
+};
 /**
  * ## Unit Text Field Component
  *
@@ -133,13 +163,13 @@ interface IProps extends React.HTMLAttributes<HTMLInputElement> {
  *
  * **Usage**: Text field with unit example: 1000 (kg), 100 (m), 1000 (USD)...
  */
-export const NumberInput: React.FC<IProps> = ({
+export const NumberInput: React.FC<TProps> = ({
   disabled = false,
   readOnly = false,
   allowNegative = false,
   numberAfterDecimalPoint = 2,
   roundingRule = 'none',
-  value = '',
+  value = null,
   unitText,
   decimal,
   placeholder,
@@ -148,93 +178,71 @@ export const NumberInput: React.FC<IProps> = ({
   className,
   onChange,
   onValueChange,
+  onFocus,
   onBlur,
   ...props
 }) => {
   const _unitRef = useRef<HTMLSpanElement>(null);
   const _inputRef = useRef<HTMLInputElement>(null);
 
-  const [_value, _setValue] = useState<string>(value?.toString() ?? '');
+  const [_value, _setValue] = useState<string | null>(value?.toString() ?? null);
 
   // Memoized values for validation and formatting
   const maxDecimalPlaces = useMemo(() => decimal?.[1] ?? numberAfterDecimalPoint, [decimal, numberAfterDecimalPoint]);
   const maxIntegerLength = useMemo(() => decimal && decimal[0] - decimal[1], [decimal]);
   const validationRegex = useMemo(() => createValidationRegex(allowNegative), [allowNegative]);
 
-  // Validation functions
-  const isValidDecimalLength = useCallback(
-    (value: string): boolean => {
-      if (!maxDecimalPlaces && value.includes('.')) return false;
-      const decimalPart = value.split('.')[1];
-      return !decimalPart || decimalPart.length <= maxDecimalPlaces;
-    },
-    [maxDecimalPlaces]
-  );
-  const isValidFormat = useCallback(
-    (value: string): boolean => {
-      if (!decimal || value === '-') return true;
-      const [integerPart, decimalPart = ''] = value.split('.');
+  // Validate decimal point is less than or equal to the limit
+  const validateDecimalPoint = useCallback(
+    (value: string) => {
+      if (!maxDecimalPlaces || value === '-') return true;
 
-      return decimalPart.length <= decimal[1] && (integerPart.startsWith('-') ? integerPart.length - 1 : integerPart.length) <= maxIntegerLength!;
-    },
-    [decimal, maxIntegerLength]
-  );
-  const customRoundedValue = useCallback(
-    (value: number, precision: number) => {
-      if (roundingRule === 'none') return value;
+      const [integerPart, decimalPart = ''] = value.split('.') as [string, string];
+      const integerPartLength = integerPart.startsWith('-') ? integerPart.length - 1 : integerPart.length;
+      const decimalPartLength = decimalPart.length;
 
-      const factor = 10 ** precision;
-      const scaledValue = value * factor;
-
-      switch (roundingRule) {
-        case 'up':
-          return Math.ceil(scaledValue) / factor;
-        case 'down':
-          return Math.floor(scaledValue) / factor;
-        case 'nearest': {
-          if (scaledValue % 1 < 0.1) return Math.floor(scaledValue) / factor;
-          if (scaledValue % 1 >= 0.59) return Math.ceil(scaledValue) / factor;
-          return (Math.floor(scaledValue) + 0.5) / factor;
-        }
-        default:
-          return value;
-      }
+      return decimalPartLength <= maxDecimalPlaces && integerPartLength <= (maxIntegerLength ?? 0);
     },
-    [roundingRule]
-  );
-  const isDecimalPointGreaterThanLimit = useCallback(
-    (value: string) => (!numberAfterDecimalPoint && value.includes('.')) || value.split('.')[1]?.length > numberAfterDecimalPoint,
-    [numberAfterDecimalPoint]
+    [maxDecimalPlaces, maxIntegerLength]
   );
   const formattedValue = useCallback(
     (val: string) => {
       if (val === '0') return '0';
-      if (!Number(val)) return '';
+      if (!Number(val)) return null;
 
       const numValue = parseFloat(val);
       const effectivePrecision = Math.min(maxDecimalPlaces - 1, precision || 0);
-      const roundedValue = customRoundedValue(numValue, effectivePrecision).toString();
+      const roundedValue = customRoundedValue(numValue, effectivePrecision, roundingRule).toString();
       const [integerPart, decimalPart = ''] = roundedValue.split('.');
       const formattedInteger = formatNumberWithCommas(integerPart);
       return decimalPart ? `${formattedInteger}.${decimalPart}` : formattedInteger;
     },
-    [customRoundedValue, maxDecimalPlaces, precision]
+    [maxDecimalPlaces, precision, roundingRule]
   );
-  // Validate decimal point is less than or equal to the limit
-  const validateDecimalPoint = useCallback(
+
+  const handleZeroCase = useCallback(
     (value: string) => {
-      if (!decimal || value === '-') return true;
-
-      const [integerPart, decimalPart = ''] = value.split('.');
-      const integerLength = integerPart.startsWith('-') ? integerPart.length - 1 : integerPart.length;
-      const maxIntegerLength = decimal[0] - decimal[1];
-
-      return decimalPart.length <= decimal[1] && integerLength <= maxIntegerLength;
+      // Check for zero
+      const isZero = value === '0';
+      // Check for negative zero patterns. E.g., '-0', '-0.0', '-0.000', '-0.'
+      const isNegativeZero = value === '-' || /^-0+(\.0+)?$/.test(value) || /^-0*\.$/.test(value);
+      if (isZero) {
+        onValueChange?.(0);
+        _setValue(value);
+        return;
+      }
+      if (isNegativeZero) {
+        _setValue(() => {
+          onValueChange?.(0);
+          return value;
+        });
+        return;
+      }
     },
-    [decimal]
+    [onValueChange]
   );
-  const handleChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = useCallback<React.ChangeEventHandler<HTMLInputElement>>(
+    e => {
       // Don't prevent default behavior of input change
       onChange?.(e);
 
@@ -242,62 +250,59 @@ export const NumberInput: React.FC<IProps> = ({
       const { value: inputValue } = e.target;
 
       // Handle empty input
-      if (!inputValue) {
-        onValueChange?.(undefined);
-        _setValue('');
+      if (inputValue === '' || inputValue === undefined) {
+        onValueChange?.(null);
+        _setValue(null);
         return;
       }
 
       // Handle zero and negative zero
-      const isZero = inputValue === '0';
-      const isNegativeZero = inputValue === '-' && allowNegative;
-      if (isZero || isNegativeZero) {
-        onValueChange?.(0);
-        _setValue(inputValue);
-        return;
-      }
+      handleZeroCase(inputValue);
 
       // Validate input format
-      if (!validationRegex.test(inputValue) || !isValidFormat(inputValue) || (!decimal && !isValidDecimalLength(inputValue))) return;
+      if (!validationRegex.test(inputValue) || !validateDecimalPoint(inputValue)) return;
 
       const numericValue = parseFloat(inputValue) || 0;
       onValueChange?.(numericValue);
       _setValue(inputValue);
     },
-    [allowNegative, decimal, isValidDecimalLength, isValidFormat, onChange, onValueChange, validationRegex]
+    [validateDecimalPoint, onChange, onValueChange, handleZeroCase, validationRegex]
   );
 
-  const handleFocus = useCallback(() => {
-    if (readOnly) return;
-    _setValue(prev => prev.replace(/,/g, '')); // Remove commas for easier editing
-  }, [readOnly]);
+  const handleFocus = useCallback<React.FocusEventHandler<HTMLInputElement>>(
+    e => {
+      if (readOnly) return;
+      onFocus?.(e);
+      _setValue(prev => (typeof prev === 'string' ? prev.replace(/,/g, '') : null)); // Remove commas for easier editing
+    },
+    [readOnly, onFocus]
+  );
 
-  const handleBlur = useCallback(() => {
-    if (readOnly) return;
-    onBlur?.();
-    _setValue(prev => formattedValue(prev));
-  }, [readOnly, onBlur, formattedValue]);
+  const handleBlur = useCallback<React.FocusEventHandler<HTMLInputElement>>(
+    e => {
+      if (readOnly) return;
+      onBlur?.(e);
+      _setValue(prev => {
+        if (prev === null) return null;
+        const isZero = prev === '0' || prev === '-' || /^-0+(\.0+)?$/.test(prev) || /^-0*\.$/.test(prev);
+        if (isZero) return '0';
+        return typeof prev === 'string' ? formattedValue(prev) : null;
+      });
+    },
+    [readOnly, formattedValue, onBlur]
+  );
 
   // Set initial value
   useEffect(() => {
     const isFocused = document.activeElement === _inputRef.current;
 
-    if (
-      !value ||
-      !validationRegex.test(value.toString()) ||
-      !validateDecimalPoint(value.toString()) ||
-      (!decimal && isDecimalPointGreaterThanLimit(value.toString()))
-    ) {
-      _setValue('');
+    if (value === undefined || value === null || !validationRegex.test(value.toString()) || !validateDecimalPoint(value.toString())) {
+      _setValue(null);
       return;
     }
 
-    _setValue(prev => {
-      if (prev === '-') return '-';
-      if (!prev) return '';
-      return isFocused ? value.toString() : formattedValue(value.toString());
-    });
-  }, [decimal, formattedValue, value, isDecimalPointGreaterThanLimit, validateDecimalPoint, validationRegex]);
+    _setValue(prev => (isFocused ? prev : formattedValue(value.toString())));
+  }, [formattedValue, value, validateDecimalPoint, validationRegex]);
 
   // Set padding right for the input field
   useEffect(() => {
