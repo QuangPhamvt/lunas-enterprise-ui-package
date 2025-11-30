@@ -1,10 +1,20 @@
 import type z from 'zod';
 
-import type { TanStackFormTextFieldSchema, TanStackFormTitleFieldSchema } from '../tanstack-form/schema';
+import type {
+  TanStackFormNumberFieldSchema,
+  TanStackFormTextAreaFieldSchema,
+  TanStackFormTextFieldSchema,
+  TanStackFormTitleFieldSchema,
+} from '../tanstack-form/schema';
 
 type LunasFormFormSection = {
   name: string;
-  fields: Array<z.input<typeof TanStackFormTitleFieldSchema> | z.input<typeof TanStackFormTextFieldSchema>>;
+  fields: Array<
+    | z.input<typeof TanStackFormTitleFieldSchema>
+    | z.input<typeof TanStackFormTextFieldSchema>
+    | z.input<typeof TanStackFormTextAreaFieldSchema>
+    | z.input<typeof TanStackFormNumberFieldSchema>
+  >;
 };
 
 type LunasFormFormSchema = {

@@ -201,7 +201,7 @@ export const NumberInput: React.FC<TProps> = ({
       const integerPartLength = integerPart.startsWith('-') ? integerPart.length - 1 : integerPart.length;
       const decimalPartLength = decimalPart.length;
 
-      return decimalPartLength <= maxDecimalPlaces && integerPartLength <= (maxIntegerLength ?? 0);
+      return decimalPartLength <= maxDecimalPlaces && integerPartLength <= (maxIntegerLength ?? Infinity);
     },
     [maxDecimalPlaces, maxIntegerLength]
   );

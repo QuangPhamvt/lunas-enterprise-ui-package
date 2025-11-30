@@ -31,5 +31,9 @@ export const Badge: React.FC<
     className?: string;
   }>
 > = ({ label, color, size, className, children }) => {
-  return <div className={badgeVariants({ color, size, className })}>{label || children}</div>;
+  return (
+    <div data-slot="required-indicator" className={badgeVariants({ color, size, className })}>
+      {label || children}
+    </div>
+  );
 };

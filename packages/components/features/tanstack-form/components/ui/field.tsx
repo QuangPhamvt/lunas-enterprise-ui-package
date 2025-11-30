@@ -7,7 +7,7 @@ import { Separator } from '@/components/ui/separator';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { Label } from './label';
 
-const fieldVariants = cva('group/field flex w-full gap-3 data-[invalid=true]:text-danger', {
+const fieldVariants = cva('group/field flex w-full gap-4 data-[invalid=true]:text-danger', {
   variants: {
     orientation: {
       vertical: ['flex-col *:w-full [&>.sr-only]:w-auto'],
@@ -99,7 +99,7 @@ const FieldLabel = memo(({ className, ...props }: React.ComponentProps<typeof La
     <Label
       data-slot="field-label"
       className={cn(
-        'group/field-label peer/field-label flex w-fit gap-1 font-normal leading-snug',
+        'group/field-label peer/field-label flex h-6 gap-1 font-normal leading-snug',
         'has-[>[data-slot=field]]:w-full',
         'has-[>[data-slot=field]]:flex-col',
         'has-[>[data-slot=field]]:rounded-md',

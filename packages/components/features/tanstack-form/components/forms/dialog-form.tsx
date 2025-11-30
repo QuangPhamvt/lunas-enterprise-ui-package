@@ -3,7 +3,8 @@ import { useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
-import { useFormContext } from '@/components/features/form-builders/components/forms/tanstack-form/tanstack-form';
+
+import { useTanStackFormContext } from '../../tanstack-form';
 
 export const TanStackDialogForm: React.FC<
   React.PropsWithChildren<{
@@ -12,7 +13,7 @@ export const TanStackDialogForm: React.FC<
     onOpenChange?: (open: boolean) => void;
   }>
 > = ({ title, open, onOpenChange, children }) => {
-  const form = useFormContext();
+  const form = useTanStackFormContext();
   const handleOpenChange = useCallback(
     (open: boolean) => {
       if (!open) form.reset();

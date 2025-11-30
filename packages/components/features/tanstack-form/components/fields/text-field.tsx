@@ -7,7 +7,6 @@ import type z from 'zod';
 
 import type { TanStackFormTextFieldSchema } from '../../schema';
 import { useTanStackFieldContext } from '../../tanstack-form';
-import { Badge } from '../ui/badge';
 import { Field, FieldContent, FieldContentMain, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldSeparator } from '../ui/field';
 import { Input } from '../ui/input';
 
@@ -31,7 +30,7 @@ export const TextField: React.FC<Props> = ({
   showClearButton = false,
   showErrorMessage = true,
 }) => {
-  const { form, name, state, handleBlur, handleChange } = useTanStackFieldContext<string>();
+  const { form, name, state, handleBlur, handleChange } = useTanStackFieldContext<string | null>();
 
   const isSubmitting = useStore(form.store, ({ isSubmitting }) => isSubmitting);
 
@@ -56,7 +55,7 @@ export const TextField: React.FC<Props> = ({
   }, [state.meta.isTouched, state.meta.isValid]);
 
   const _isEmpty = useMemo(() => {
-    if (required) return !state.value?.trim().length;
+    if (required) return state.value === null;
     return false;
   }, [required, state.value]);
 
@@ -64,7 +63,7 @@ export const TextField: React.FC<Props> = ({
     ({ target: { value } }) => {
       if (isSubmitting) return;
       if (counter?.max && value.length > counter.max) return;
-      handleChange(value);
+      handleChange(value || null);
     },
     [isSubmitting, counter, handleChange]
   );
@@ -76,21 +75,18 @@ export const TextField: React.FC<Props> = ({
 
   return (
     <FieldGroup className="gap-y-4 px-4">
-      <Field orientation={orientation} data-invalid={state.meta.isTouched && !state.meta.isValid}>
+      <Field orientation={orientation} data-invalid={_invalid}>
         <FieldContent>
-          <div className="flex h-5.5 w-full justify-between">
-            <FieldLabel aria-required={required} htmlFor={name}>
-              {label}
-            </FieldLabel>
-            {_isEmpty && <Badge label="Required" color="danger" size="xs" />}
-          </div>
+          <FieldLabel aria-required={_isEmpty} htmlFor={name}>
+            {label}
+          </FieldLabel>
           <FieldDescription>{description}</FieldDescription>
         </FieldContent>
         <FieldContentMain>
           <Input
             id={name}
             name={name}
-            value={state.value}
+            value={state.value === null ? '' : state.value}
             aria-invalid={_invalid}
             autoComplete="off"
             placeholder={placeholder}

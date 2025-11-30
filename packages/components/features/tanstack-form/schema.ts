@@ -26,6 +26,7 @@ export const TanStackFormTitleFieldSchema = z.object({
 
   label: z.string().trim().nonempty(),
   description: z.string().optional(),
+  helperText: z.string().optional(),
 });
 export const TanStackFormTextFieldSchema = z.object({
   id: z.string().nonempty(),
@@ -74,7 +75,48 @@ export const TanStackFormTextFieldSchema = z.object({
     .optional(),
 });
 
-export const TanStackFormTextAreaFieldSchema = z.object({});
+export const TanStackFormTextAreaFieldSchema = z.object({
+  id: z.string().nonempty(),
+  type: z.literal('textarea-field'),
+
+  // Identifiers in form data
+  name: z.string().trim().nonempty(),
+  camelCaseName: z.string().trim().nonempty(),
+
+  // UI
+  label: z.string().trim().nonempty(),
+  description: z.string().optional(),
+  placeholder: z.string().optional(),
+
+  // UI Helpers
+  counter: z
+    .object({
+      enabled: z.boolean().default(false),
+      max: z.number().int().optional(),
+    })
+    .optional(),
+  tooltip: z.string().optional(),
+  helperText: z.string().optional(),
+  orientation: z.enum(OrientationField).default(OrientationField.RESPONSIVE),
+  showErrorMessage: z.boolean().optional(),
+
+  rules: z
+    .object({
+      required: z.boolean().optional(),
+      maxLength: z.number().optional(),
+      minLength: z.number().optional(),
+      exactLength: z.number().optional(),
+    })
+    .optional(),
+
+  visibilityConditions: z
+    .object({
+      when: z.string(),
+      is: z.any(),
+      show: z.boolean().default(true),
+    })
+    .optional(),
+});
 export const TanStackFormNumberFieldSchema = z.object({
   id: z.string().nonempty(),
   type: z.literal('number-field'),
