@@ -9,6 +9,7 @@ import type { TanStackFormTextAreaFieldSchema } from '../../schema';
 import { useTanStackFieldContext } from '../../tanstack-form';
 import { Field, FieldContent, FieldContentMain, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldSeparator } from '../ui/field';
 import { Textarea } from '../ui/textarea';
+import { cn } from '@customafk/react-toolkit/utils';
 
 type Props = Pick<
   z.input<typeof TanStackFormTextAreaFieldSchema>,
@@ -82,6 +83,7 @@ export const TextareaField: React.FC<Props> = ({
             aria-invalid={_invalid}
             autoComplete="off"
             placeholder={placeholder}
+            className={cn(isSubmitting && 'pointer-events-none bg-muted-muted opacity-60')}
             onChange={onChange}
             onBlur={handleBlur}
           />

@@ -1,19 +1,60 @@
 import z from 'zod';
 
-import { sleep } from '@customafk/react-toolkit/utils/sleep';
-
 import { useTanStackForm } from '../tanstack-form';
-import type { LunasFormProps } from './types';
+import { useGetDefaultValues } from './hooks/useGetDefaultValues';
+import type { LunasFormFormMeta, LunasFormProps } from './types';
 
-export const LunasForm: React.FC<React.PropsWithChildren<LunasFormProps>> = ({ formSchema }) => {
+export const LunasForm: React.FC<React.PropsWithChildren<LunasFormProps>> = ({
+  initialValues,
+  changeDebounce = 1000,
+  formSchema,
+  onCreate,
+  onUpdate,
+  onDebounceUpdate,
+}) => {
+  const { defaultValues } = useGetDefaultValues(initialValues ?? {}, formSchema.sections);
   const { AppForm, AppField, TanStackTitleField, TanStackContainerForm, TanStackSectionForm, TanStackActionsForm } = useTanStackForm({
-    onSubmit: async values => {
-      await sleep(2000);
-      console.log('Form submitted:', values);
+    defaultValues: defaultValues as any,
+    onSubmitMeta: {
+      submitAction: null,
+    } as LunasFormFormMeta,
+    onSubmit: async ({ value, meta, formApi }) => {
+      // Create Action
+      if (meta.submitAction === 'create') {
+        await onCreate?.(value);
+        formApi.reset();
+      }
+
+      // Update Action
+      if (meta.submitAction === 'update') {
+        const fieldKeys = Object.keys(formApi.state.fieldMeta);
+        const updatedData: Record<string, unknown> = {};
+        fieldKeys.forEach(key => {
+          if (formApi.state.fieldMeta[key]?.isDefaultValue) return;
+          updatedData[key] = value[key];
+        });
+        await onUpdate?.(updatedData);
+        formApi.reset(value);
+      }
+
+      // Debounce Update
+      if (meta.submitAction === 'debounce_update') {
+        const fieldKeys = Object.keys(formApi.state.fieldMeta);
+        const updatedData: Record<string, unknown> = {};
+        fieldKeys.forEach(key => {
+          if (formApi.state.fieldMeta[key]?.isDefaultValue) return;
+          updatedData[key] = value[key];
+        });
+        await onDebounceUpdate?.(updatedData);
+        formApi.reset(value);
+      }
     },
     listeners: {
+      onChangeDebounceMs: changeDebounce,
       onChange: form => {
-        console.log('Form changed:', form.formApi.state.values);
+        if (onDebounceUpdate) {
+          form.formApi.handleSubmit({ submitAction: 'debounce_update' });
+        }
       },
     },
   });
@@ -33,7 +74,6 @@ export const LunasForm: React.FC<React.PropsWithChildren<LunasFormProps>> = ({ f
                     <AppField
                       key={field.id}
                       name={field.camelCaseName}
-                      defaultValue={null}
                       validators={{
                         onSubmit: ({ fieldApi }) => {
                           const { rules } = field;
@@ -109,7 +149,6 @@ export const LunasForm: React.FC<React.PropsWithChildren<LunasFormProps>> = ({ f
                     <AppField
                       key={field.id}
                       name={field.camelCaseName}
-                      defaultValue={null}
                       validators={{
                         onSubmit: ({ fieldApi }) => {
                           const { rules } = field;
@@ -184,7 +223,6 @@ export const LunasForm: React.FC<React.PropsWithChildren<LunasFormProps>> = ({ f
                     <AppField
                       key={field.id}
                       name={field.camelCaseName}
-                      defaultValue={null}
                       validators={{
                         onSubmit: ({ fieldApi }) => {
                           const { rules } = field;
@@ -269,12 +307,93 @@ export const LunasForm: React.FC<React.PropsWithChildren<LunasFormProps>> = ({ f
                     />
                   );
                 }
+
+                // Select Field
+                if (field.type === 'select-field') {
+                  return (
+                    <AppField
+                      key={field.id}
+                      name={field.camelCaseName}
+                      validators={{
+                        onSubmit: ({ fieldApi }) => {
+                          const { rules } = field;
+                          if (!rules) return undefined;
+                          const errors = fieldApi.parseValueWithSchema(
+                            z
+                              .string()
+                              .nullable()
+                              .refine(val => {
+                                if (rules.required) return val !== null && val.trim().length > 0;
+                                return true;
+                              }, `${field.label} is required.`)
+                          );
+                          if (errors) return errors;
+                          return undefined;
+                        },
+                      }}
+                      children={({ SelectField }) => {
+                        return (
+                          <SelectField
+                            label={field.label}
+                            description={field.description}
+                            placeholder={field.placeholder}
+                            defaultValue={field.defaultValue}
+                            orientation={field.orientation}
+                            options={field.options}
+                            helperText={field.helperText}
+                            required={field.rules?.required}
+                          />
+                        );
+                      }}
+                    />
+                  );
+                }
+
+                if (field.type === 'date-field') {
+                  return (
+                    <AppField
+                      key={field.id}
+                      name={field.camelCaseName}
+                      validators={{
+                        onSubmit: ({ fieldApi }) => {
+                          const { rules } = field;
+                          if (!rules) return undefined;
+                          const errors = fieldApi.parseValueWithSchema(
+                            z
+                              .date()
+                              .nullable()
+                              .refine(val => {
+                                if (rules.required) return val !== null;
+                                return true;
+                              }, `${field.label} is required.`)
+                          );
+                          if (errors) return errors;
+                          return undefined;
+                        },
+                      }}
+                      children={({ DateField }) => {
+                        return (
+                          <DateField
+                            label={field.label}
+                            description={field.description}
+                            placeholder={field.placeholder}
+                            orientation={field.orientation}
+                            helperText={field.helperText}
+                            required={field.rules?.required}
+                            minDate={field.rules?.minDate}
+                            maxDate={field.rules?.maxDate}
+                          />
+                        );
+                      }}
+                    />
+                  );
+                }
                 return null;
               })}
             </TanStackSectionForm>
           );
         })}
-        <TanStackActionsForm />
+        <TanStackActionsForm type={onCreate ? 'create' : onUpdate ? 'update' : 'create'} />
       </TanStackContainerForm>
     </AppForm>
   );

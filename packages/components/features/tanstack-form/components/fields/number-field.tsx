@@ -2,14 +2,14 @@ import { useCallback, useMemo } from 'react';
 
 import { useStore } from '@tanstack/react-form';
 
-import { BanIcon } from 'lucide-react';
+import { BanIcon, Loader2Icon } from 'lucide-react';
 import type z from 'zod';
 
 import type { TanStackFormNumberFieldSchema } from '../../schema';
 import { useTanStackFieldContext } from '../../tanstack-form';
-import { Badge } from '../ui/badge';
 import { Field, FieldContent, FieldContentMain, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldSeparator } from '../ui/field';
 import { NumberInput } from '../ui/number-input';
+import { cn } from '@customafk/react-toolkit/utils';
 
 type NumberFieldProps = Pick<
   z.input<typeof TanStackFormNumberFieldSchema>,
@@ -91,9 +91,15 @@ export const NumberField: React.FC<NumberFieldProps> = ({
                 precision={percision}
                 unitText={unit}
                 allowNegative={allowNegative}
+                className={cn(isSubmitting && 'pointer-events-none bg-muted-muted opacity-60')}
                 onBlur={field.handleBlur}
                 onValueChange={onValueChange}
               />
+              {isSubmitting && (
+                <div className="absolute inset-y-0 start-2 top-2.5 text-muted-weak">
+                  <Loader2Icon size={14} className="animate-spin text-primary-strong" />
+                </div>
+              )}
               {showErrorMessage && !!_errors.length && (
                 <div className="absolute inset-y-0 start-2 top-2.75 text-danger-strong">
                   <BanIcon size={14} />

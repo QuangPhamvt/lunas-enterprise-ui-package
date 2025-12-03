@@ -28,6 +28,7 @@ export const TanStackFormTitleFieldSchema = z.object({
   description: z.string().optional(),
   helperText: z.string().optional(),
 });
+
 export const TanStackFormTextFieldSchema = z.object({
   id: z.string().nonempty(),
   type: z.literal('text-field'),
@@ -117,6 +118,7 @@ export const TanStackFormTextAreaFieldSchema = z.object({
     })
     .optional(),
 });
+
 export const TanStackFormNumberFieldSchema = z.object({
   id: z.string().nonempty(),
   type: z.literal('number-field'),
@@ -169,6 +171,92 @@ export const TanStackFormNumberFieldSchema = z.object({
     .optional(),
 });
 
-export const TanStackFormSectionSchema = z.object({});
+export const TanStackFormSelectFieldSchema = z.object({
+  id: z.string().nonempty(),
+  type: z.literal('select-field'),
+
+  // Identifiers in form data
+  name: z.string().trim().nonempty(),
+  camelCaseName: z.string().trim().nonempty(),
+
+  // UI
+  label: z.string().trim().nonempty(),
+  description: z.string().optional(),
+  placeholder: z.string().optional(),
+  defaultValue: z.string().optional(),
+
+  // Options
+  options: z.array(
+    z.object({
+      label: z.string().trim().nonempty(),
+      value: z.string().trim().nonempty(),
+    })
+  ),
+
+  // UI Helpers
+  tooltip: z.string().optional(),
+  helperText: z.string().optional(),
+  orientation: z.enum(OrientationField).default(OrientationField.RESPONSIVE),
+  clearable: z.boolean().default(false),
+
+  //Rules
+  rules: z
+    .object({
+      required: z.boolean().optional(),
+    })
+    .optional(),
+
+  visibilityConditions: z
+    .object({
+      when: z.string(),
+      is: z.any(),
+      show: z.boolean().default(true),
+    })
+    .optional(),
+});
+
+export const TanStackFormDateFieldSchema = z.object({
+  id: z.string().nonempty(),
+  type: z.literal('date-field'),
+
+  // Identifiers in form data
+  name: z.string().trim().nonempty(),
+  camelCaseName: z.string().trim().nonempty(),
+
+  // UI
+  label: z.string().trim().nonempty(),
+  description: z.string().optional(),
+  placeholder: z.string().optional(),
+  defaultValue: z.string().optional(), // ISO date string
+
+  // UI Helpers
+  tooltip: z.string().optional(),
+  helperText: z.string().optional(),
+  orientation: z.enum(OrientationField).default(OrientationField.RESPONSIVE),
+  showErrorMessage: z.boolean().optional(),
+
+  // Rules
+  rules: z
+    .object({
+      required: z.boolean().optional(),
+      minDate: z.date().optional(), // ISO date string
+      maxDate: z.date().optional(), // ISO date string
+    })
+    .optional(),
+});
+
+export const TanStackFormSectionSchema = z.object({
+  name: z.string().trim().nonempty(),
+  fields: z.array(
+    z.union([
+      TanStackFormTitleFieldSchema,
+      TanStackFormTextFieldSchema,
+      TanStackFormTextAreaFieldSchema,
+      TanStackFormNumberFieldSchema,
+      TanStackFormSelectFieldSchema,
+      TanStackFormDateFieldSchema,
+    ])
+  ),
+});
 
 export const TanStackFormSchema = z.object({});
