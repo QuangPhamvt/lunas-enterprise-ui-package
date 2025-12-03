@@ -1,26 +1,35 @@
 import { useMemo } from 'react';
 
 import { CalendarDaysIcon } from 'lucide-react';
+import type z from 'zod';
 
 import { endOfToday, endOfTomorrow, endOfYesterday, format, lastDayOfMonth, startOfMonth, subDays } from '@customafk/react-toolkit/date-fns';
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { Button } from '@/components/ui/button';
 
+import type { TanStackFormDateFieldSchema } from '../../schema';
 import { useTanStackFieldContext } from '../../tanstack-form';
 import { Calendar } from '../ui/calendar';
 import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, FieldLabel, FieldSeparator } from '../ui/field';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 
-type DateFieldProps = {
-  label: string;
-  description?: string;
-  placeholder?: string;
-  orientation?: 'vertical' | 'horizontal' | 'responsive';
+type Props = Pick<
+  z.input<typeof TanStackFormDateFieldSchema>,
+  'label' | 'description' | 'placeholder' | 'tooltip' | 'helperText' | 'orientation' | 'showErrorMessage'
+> & {
+  required?: boolean;
+  minDate?: Date;
+  maxDate?: Date;
 };
 
-export const DateField: React.FC<DateFieldProps> = ({ label, description, placeholder, orientation }) => {
+export const DateField: React.FC<Props> = ({ label, description, placeholder, orientation, helperText, minDate, maxDate, required }) => {
   const field = useTanStackFieldContext<Date | null>();
+
+  const _isEmpty = useMemo(() => {
+    if (required) return field.state.value === null;
+    return false;
+  }, [required, field.state.value]);
 
   const _isInvalid = useMemo(() => {
     return field.state.meta.isTouched && !field.state.meta.isValid;
@@ -30,12 +39,13 @@ export const DateField: React.FC<DateFieldProps> = ({ label, description, placeh
     <FieldGroup className="px-4">
       <Field orientation={orientation} data-invalid={_isInvalid}>
         <FieldContent>
-          <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
-
+          <FieldLabel htmlFor={field.name} aria-required={_isEmpty}>
+            {label}
+          </FieldLabel>
           <FieldDescription>{description}</FieldDescription>
         </FieldContent>
 
-        <FieldContentMain className="flex justify-end">
+        <FieldContentMain className="flex flex-col">
           <div className="flex w-full flex-col">
             <Popover>
               <PopoverTrigger asChild>
@@ -60,7 +70,7 @@ export const DateField: React.FC<DateFieldProps> = ({ label, description, placeh
                 </Button>
               </PopoverTrigger>
 
-              <PopoverContent align="end" side="bottom" className="flex w-fit overflow-y-auto rounded p-0" onBlur={field.handleBlur}>
+              <PopoverContent align="start" side="bottom" className="flex w-fit min-w-0 overflow-y-auto rounded p-0" onBlur={field.handleBlur}>
                 <div className="flex h-full flex-col space-y-2 border-r border-r-border p-2 [&>button]:justify-start [&>button]:text-sm">
                   <Button
                     variant="ghost"
@@ -151,10 +161,14 @@ export const DateField: React.FC<DateFieldProps> = ({ label, description, placeh
                   </Button>
                 </div>
                 <div className="flex flex-1 flex-col">
-                  <div className="border-b border-b-border p-2">
+                  <div className="min-w-73 border-b border-b-border p-2">
                     <Calendar
                       mode="single"
                       selected={field.state.value ?? undefined}
+                      hidden={{
+                        before: minDate ?? new Date(1900, 0, 1),
+                        after: maxDate ?? new Date(2100, 11, 31),
+                      }}
                       onSelect={date => {
                         if (!date) return;
                         field.handleChange(date);
@@ -165,6 +179,11 @@ export const DateField: React.FC<DateFieldProps> = ({ label, description, placeh
               </PopoverContent>
             </Popover>
           </div>
+          {!!helperText && (
+            <div className="mt-1 text-wrap rounded bg-primary-bg-subtle p-2 text-text-positive-weak text-xs">
+              <p>{helperText}</p>
+            </div>
+          )}
         </FieldContentMain>
       </Field>
       <FieldSeparator />

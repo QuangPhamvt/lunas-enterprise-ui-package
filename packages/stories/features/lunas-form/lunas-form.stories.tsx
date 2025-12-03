@@ -1,3 +1,5 @@
+import { sleep } from '@customafk/react-toolkit/utils/sleep';
+
 import { LunasForm } from '@/components/features/lunas-form/lunas-form';
 
 import type { Meta, StoryObj } from '@storybook/react-vite';
@@ -18,6 +20,13 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
+    initialValues: {
+      textField1: 'Initial text value',
+      textareaField1: 'This is some initial text for the textarea field. It can be quite long, up to 3000 characters.',
+      numberField1: 42,
+      selectField1: 'option2',
+      dateField1: new Date('2025-05-15'),
+    },
     formSchema: {
       sections: [
         {
@@ -113,7 +122,61 @@ export const Default: Story = {
             },
           ],
         },
+        {
+          name: 'Section 2',
+          fields: [
+            {
+              id: 'select-field-1',
+              type: 'select-field',
+
+              name: 'selectField1',
+              camelCaseName: 'selectField1',
+
+              label: 'Select Field 1',
+              description: 'This is the description for Select Field 1.',
+              placeholder: 'Select an option',
+
+              options: [
+                { label: 'Option 1', value: 'option1' },
+                { label: 'Option 2', value: 'option2' },
+                { label: 'Option 3', value: 'option3' },
+              ],
+              helperText: 'Helper text for Select Field 1.',
+              orientation: 'responsive',
+              clearable: true,
+
+              rules: {
+                required: true,
+              },
+            },
+            {
+              id: 'date-field-1',
+              type: 'date-field',
+
+              name: 'dateField1',
+              camelCaseName: 'dateField1',
+
+              label: 'Date Field 1',
+              description: 'This is the description for Date Field 1.',
+              placeholder: 'Select a date',
+
+              helperText: 'Helper text for Date Field 1.',
+              orientation: 'responsive',
+
+              rules: {
+                required: true,
+                minDate: new Date('2023-01-01'),
+                maxDate: new Date('2025-12-31'),
+              },
+            },
+          ],
+        },
       ],
+    },
+
+    onCreate: async value => {
+      await sleep(2000);
+      console.log('Form Submitted:', value);
     },
   },
 };

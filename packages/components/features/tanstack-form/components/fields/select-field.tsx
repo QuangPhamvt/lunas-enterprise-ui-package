@@ -1,27 +1,30 @@
 import { useMemo } from 'react';
 
 import { PackagePlusIcon } from 'lucide-react';
+import type z from 'zod';
 
+import type { TanStackFormSelectFieldSchema } from '../../schema';
 import { useTanStackFieldContext } from '../../tanstack-form';
 import { Field, FieldContent, FieldContentMain, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldSeparator } from '../ui/field';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 
-type SelectFieldProps = {
-  label: string;
-  description?: string;
-  placeholder?: string;
-
-  orientation?: 'horizontal' | 'vertical' | 'responsive';
-  options: Array<{ label: string; value: string }>;
+type Props = Pick<
+  z.input<typeof TanStackFormSelectFieldSchema>,
+  'label' | 'description' | 'placeholder' | 'defaultValue' | 'options' | 'tooltip' | 'helperText' | 'orientation' | 'clearable'
+> & {
+  required?: boolean;
 };
 
-export const SelectField: React.FC<SelectFieldProps> = ({
+export const SelectField: React.FC<Props> = ({
   label,
   description,
   placeholder,
-  orientation,
+
+  orientation = 'responsive',
 
   options,
+  helperText,
+  required = false,
 }) => {
   const field = useTanStackFieldContext<string | null>();
 
@@ -29,15 +32,22 @@ export const SelectField: React.FC<SelectFieldProps> = ({
     return field.state.meta.isTouched && !field.state.meta.isValid;
   }, [field.state.meta.isTouched, field.state.meta.isValid]);
 
+  const _isEmpty = useMemo(() => {
+    if (required) return field.state.value === null;
+    return false;
+  }, [required, field.state.value]);
+
   const _errors = useMemo(() => {
     return field.state.meta.errors;
   }, [field.state.meta.errors]);
 
   return (
-    <FieldGroup className="px-4">
+    <FieldGroup className="gap-y-4 px-4">
       <Field orientation={orientation} data-invalid={field.state.meta.isTouched && !field.state.meta.isValid}>
         <FieldContent>
-          <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
+          <FieldLabel htmlFor={field.name} aria-required={_isEmpty}>
+            {label}
+          </FieldLabel>
           <FieldDescription>{description}</FieldDescription>
         </FieldContent>
         <FieldContentMain className="flex flex-col">
@@ -66,6 +76,12 @@ export const SelectField: React.FC<SelectFieldProps> = ({
           <div className="mt-1 flex w-full flex-col items-end justify-end">
             <FieldError errors={_errors} />
           </div>
+
+          {!!helperText && (
+            <div className="mt-1 text-wrap rounded bg-primary-bg-subtle p-2 text-text-positive-weak text-xs">
+              <p>{helperText}</p>
+            </div>
+          )}
         </FieldContentMain>
       </Field>
       <FieldSeparator />
