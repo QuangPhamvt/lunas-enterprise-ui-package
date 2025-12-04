@@ -19,18 +19,11 @@ type TSubmitMeta = unknown;
 
 export type DRAGGABLE_FIELD_ID = 'FIELD' | 'SECTION_FIELD' | 'FORM_FIELD' | 'FORM_ARRAY_FIELD';
 
-export type FIELD_ID =
-  | 'title-field'
-  | 'text-field'
-  | 'textarea-field'
-  | 'number-field'
-  | 'date-field'
-  | 'switch-field'
-  | 'radio-group-field'
-  | 'select-field'
-  | 'combobox-field'
-  | 'array-field'
-  | 'empty';
+export type FIELD_ID = 'title-field' | 'text-field' | 'textarea-field' | 'number-field' | 'select-field' | 'date-field' | 'empty';
+// | 'switch-field'
+// | 'radio-group-field'
+// | 'combobox-field'
+// | 'array-field'
 
 export type ARRAY_FIELD_ID =
   | 'text-field'

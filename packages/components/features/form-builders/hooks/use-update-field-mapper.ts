@@ -13,25 +13,32 @@ export const useUpdateFieldMapper = (fieldId: string) => {
     return {
       'title-field': {
         id: fieldId,
+        type: 'title-field',
+
         label: 'Title Field',
         description: 'This is a title field',
-        type: 'title-field',
+        helperText: undefined,
       },
+
       'text-field': {
         id: fieldId,
         type: 'text-field',
         orientation: 'responsive',
+
         label: 'Text Field',
         placeholder: 'Enter text here',
         description: 'This is a text field',
+        helperText: '',
 
         showClearButton: false,
-        showCharacterCount: false,
         showErrorMessage: true,
 
+        dataType: 'text',
+
         rules: {
-          minLength: null,
-          maxLength: null,
+          required: true,
+          minLength: undefined,
+          maxLength: undefined,
         },
       },
       'textarea-field': {

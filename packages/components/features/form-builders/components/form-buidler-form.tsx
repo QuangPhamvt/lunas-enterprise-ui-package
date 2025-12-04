@@ -10,11 +10,11 @@ import { CSS } from '@dnd-kit/utilities';
 import { nanoid } from 'nanoid';
 import { GripVerticalIcon, PlusIcon, Trash2 } from 'lucide-react';
 
+import { cn } from '@customafk/react-toolkit/utils';
+
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
-
-import { cn } from '@customafk/react-toolkit/utils';
 
 import { useGetAllName } from '../hooks/use-get-all-name';
 import { useUpdateFieldMapper } from '../hooks/use-update-field-mapper';
@@ -138,7 +138,6 @@ const FormBuilderSectionFieldCreateFieldButton: React.FC<{
       .filter(Boolean) as string[];
     const valueCamelCaseNames = value ? toCamelCase(value) : '';
     return names.includes(valueCamelCaseNames);
-    // @ts-ignore-next-line
   }, [value, getAllNames, form.getFieldValue]);
 
   return (
@@ -364,9 +363,7 @@ const FormBuilderSectionSortable: React.FC<
         </div>
       </div>
       <Separator />
-      <div className={cn('w-full animate-pulse overflow-hidden bg-white transition-all duration-300', isDragging && 'h-40 opacity-60')}>
-        {isDragging ? null : children}
-      </div>
+      <div className={cn('w-full overflow-hidden bg-white', isDragging && 'h-40 opacity-60')}>{isDragging ? null : children}</div>
     </div>
   );
 };

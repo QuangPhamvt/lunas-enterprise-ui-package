@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+import { TanStackFormTextFieldSchema, TanStackFormTitleFieldSchema } from '../tanstack-form/schema';
+
 const formBuilderBaseFieldSchema = z.object({
   id: z.string().nonempty(),
   name: z.string().trim().nonempty(),
@@ -7,13 +9,6 @@ const formBuilderBaseFieldSchema = z.object({
   label: z.string().trim().nonempty(),
   description: z.string().optional(),
 });
-
-export const formBuilderTitleFieldSchema = z
-  .object({
-    ...formBuilderBaseFieldSchema.shape,
-    type: z.literal('title-field'),
-  })
-  .omit({ name: true, camelCaseName: true });
 
 export const formBuilderTextFieldSchema = z.object({
   ...formBuilderBaseFieldSchema.shape,
@@ -187,17 +182,18 @@ export const formBuilderSectionSchema = z.object({
   name: z.string().trim().nonempty(),
   fields: z.array(
     z.union([
-      formBuilderTitleFieldSchema,
+      TanStackFormTitleFieldSchema,
 
-      formBuilderTextFieldSchema,
+      // formBuilderTextFieldSchema,
+      TanStackFormTextFieldSchema,
       formBuilderTextAreaFieldSchema,
       formBuilderNumberFieldSchema,
-      formBuilderDateFieldSchema,
-      formBuilderSwitchFieldSchema,
-      formBuilderRadioGroupFieldSchema,
       formBuilderSelectFieldSchema,
-      formBuilderComboboxFieldSchema,
-      formBuilderArrayFieldSchema,
+      formBuilderDateFieldSchema,
+      // formBuilderSwitchFieldSchema,
+      // formBuilderRadioGroupFieldSchema,
+      // formBuilderComboboxFieldSchema,
+      // formBuilderArrayFieldSchema,
 
       formBuilderEmptyFieldSchema,
     ])
@@ -216,14 +212,16 @@ export const formBuilderSchema = z.object({
 });
 
 export type TFormBuilderBaseFieldSchema = z.infer<typeof formBuilderBaseFieldSchema>;
-export type TFormBuilderTitleFieldSchema = z.infer<typeof formBuilderTitleFieldSchema>;
-export type TFormBuilderTextFieldSchema = z.infer<typeof formBuilderTextFieldSchema>;
+
+export type TFormBuilderTitleFieldSchema = z.infer<typeof TanStackFormTitleFieldSchema>;
+export type TFormBuilderTextFieldSchema = z.infer<typeof TanStackFormTextFieldSchema>;
 export type TFormBuilderTextAreaFieldSchema = z.infer<typeof formBuilderTextAreaFieldSchema>;
 export type TFormBuilderNumberFieldSchema = z.infer<typeof formBuilderNumberFieldSchema>;
+export type TFormBuilderSelectFieldSchema = z.infer<typeof formBuilderSelectFieldSchema>;
 export type TFormBuilderDateFieldSchema = z.infer<typeof formBuilderDateFieldSchema>;
+
 export type TFormBuilderSwitchFieldSchema = z.infer<typeof formBuilderSwitchFieldSchema>;
 export type TFormBuilderRadioGroupFieldSchema = z.infer<typeof formBuilderRadioGroupFieldSchema>;
-export type TFormBuilderSelectFieldSchema = z.infer<typeof formBuilderSelectFieldSchema>;
 export type TFormBuilderComboboxFieldSchema = z.infer<typeof formBuilderComboboxFieldSchema>;
 export type TFormBuilderArrayFieldSchema = TFormBuilderBaseFieldSchema & {
   type: 'array-field';
@@ -254,7 +252,7 @@ export type TFormBuilderSectionSchema = {
     | TFormBuilderRadioGroupFieldSchema
     | TFormBuilderSelectFieldSchema
     | TFormBuilderComboboxFieldSchema
-    | TFormBuilderArrayFieldSchema
+    // | TFormBuilderArrayFieldSchema
     | TFormBuilderEmptyFieldSchema
   >;
 };

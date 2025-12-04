@@ -7,33 +7,37 @@ import { Separator } from '@/components/ui/separator';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { Label } from './label';
 
-const fieldVariants = cva('group/field flex w-full gap-4 data-[invalid=true]:text-danger', {
-  variants: {
-    orientation: {
-      vertical: ['flex-col *:w-full [&>.sr-only]:w-auto'],
-      horizontal: [
-        'flex-row items-center',
-        '*:data-[slot=field-label]:flex-auto',
-        'has-[>[data-slot=field-content]]:items-start',
-        'has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px',
-      ],
-      responsive: [
-        'flex-col *:w-full [&>.sr-only]:w-auto',
-        '@md/field-group:flex-row',
-        '@md/field-group:items-center',
-        '@md/field-group:*:w-auto',
-        '@md/field-group:*:data-[slot=field-content]:basis-1/2',
-        '@md/field-group:*:data-[slot=field-content-main]:basis-1/2',
-        '@md/field-group:*:data-[slot=field-label]:flex-auto',
-        '@md/field-group:has-[>[data-slot=field-content]]:items-start',
-        '@md/field-group:has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px',
-      ],
+const fieldVariants = cva(
+  'group/field flex w-full gap-2 data-[invalid=true]:text-danger *:data-[slot=field-content]:gap-0 @md/field-group:*:data-[slot=field-content]:gap-2',
+  {
+    variants: {
+      orientation: {
+        vertical: ['flex-col *:w-full [&>.sr-only]:w-auto'],
+        horizontal: [
+          'flex-row items-center',
+          '*:data-[slot=field-label]:flex-auto',
+          'has-[>[data-slot=field-content]]:items-start',
+          'has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px',
+        ],
+        responsive: [
+          'flex-col *:w-full [&>.sr-only]:w-auto',
+          '@md/field-group:flex-row',
+          '@md/field-group:items-center',
+          '@md/field-group:gap-4',
+          '@md/field-group:*:w-auto',
+          '@md/field-group:*:data-[slot=field-content]:basis-1/2',
+          '@md/field-group:*:data-[slot=field-content-main]:basis-1/2',
+          '@md/field-group:*:data-[slot=field-label]:flex-auto',
+          '@md/field-group:has-[>[data-slot=field-content]]:items-start',
+          '@md/field-group:has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px',
+        ],
+      },
     },
-  },
-  defaultVariants: {
-    orientation: 'vertical',
-  },
-});
+    defaultVariants: {
+      orientation: 'vertical',
+    },
+  }
+);
 
 const FieldSet = memo(({ className, ...props }: React.ComponentProps<'fieldset'>) => {
   return (
@@ -141,6 +145,12 @@ const FieldDescription = memo(({ className, ...props }: React.ComponentProps<'p'
 });
 FieldDescription.displayName = 'FieldDescription';
 
+const FieldNote = memo(({ isShow = true, className, ...props }: React.ComponentProps<'div'> & { isShow?: boolean }) => {
+  if (isShow === false) return null;
+  return <div data-slot="field-note" className={cn('text-wrap rounded bg-primary-bg-subtle p-2 text-text-positive-weak text-xs', className)} {...props} />;
+});
+FieldNote.displayName = 'FieldNote';
+
 const FieldSeparator = memo(({ children, className, ...props }: React.PropsWithChildren<React.ComponentProps<'div'>>) => {
   return (
     <div
@@ -210,4 +220,17 @@ const FieldError = memo(
 );
 FieldError.displayName = 'FieldError';
 
-export { Field, FieldLabel, FieldDescription, FieldError, FieldGroup, FieldLegend, FieldSeparator, FieldSet, FieldContent, FieldContentMain, FieldTitle };
+export {
+  Field,
+  FieldLabel,
+  FieldDescription,
+  FieldNote,
+  FieldError,
+  FieldGroup,
+  FieldLegend,
+  FieldSeparator,
+  FieldSet,
+  FieldContent,
+  FieldContentMain,
+  FieldTitle,
+};

@@ -1,17 +1,15 @@
 import { useMemo, useState } from 'react';
 
-import { useStore } from '@tanstack/react-form';
-
 import { BoltIcon, CopyIcon, TrashIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { ButtonGroup } from '@/components/ui/button-group';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
+import { useRecursiveFieldName } from '../../hooks/use-recursive-field-name';
 import type { UseFormBuilderFormContext } from '../../types';
 import { useFormBuilderFormContext } from '../form-buidler-form';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
-import { useRecursiveFieldName } from '../../hooks/use-recursive-field-name';
 
 export const FormBuilderFieldWrapper: React.FC<React.PropsWithChildren> = ({ children }) => {
   const [open, setOpen] = useState<boolean>(false);
@@ -32,7 +30,7 @@ export const FormBuilderFieldTrigger: React.FC<React.PropsWithChildren> = ({ chi
       }}
       className="data-[state=open]:border data-[state=open]:border-border data-[state=open]:shadow"
     >
-      <div className="cursor-pointer border border-transparent px-2.5 py-2 transition-colors">{children}</div>
+      <div className="cursor-pointer border border-transparent py-2 transition-colors">{children}</div>
     </PopoverTrigger>
   );
 };
