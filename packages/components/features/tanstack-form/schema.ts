@@ -245,15 +245,95 @@ export const TanStackFormDateFieldSchema = z.object({
     .optional(),
 });
 
+export const TanStackFormSwitchFieldSchema = z.object({
+  id: z.string().nonempty(),
+  type: z.literal('switch-field'),
+
+  // Identifiers in form data
+  name: z.string().trim().nonempty(),
+  camelCaseName: z.string().trim().nonempty(),
+
+  // UI
+  label: z.string().trim().nonempty(),
+  description: z.string().optional(),
+  defaultValue: z.boolean().optional(),
+
+  // UI Helpers
+  helperText: z.string().optional(),
+});
+
+export const TanStackFormRadioGroupFieldSchema = z.object({
+  id: z.string().nonempty(),
+  type: z.literal('radio-group-field'),
+
+  // Identifiers in form data
+  name: z.string().trim().nonempty(),
+  camelCaseName: z.string().trim().nonempty(),
+
+  // UI
+  label: z.string().trim().nonempty(),
+  description: z.string().optional(),
+  helperText: z.string().optional(),
+  defaultValue: z.string().optional(),
+
+  // Options
+  options: z.array(
+    z.object({
+      label: z.string().trim().nonempty(),
+      value: z.string().trim().nonempty(),
+      description: z.string().optional(),
+    })
+  ),
+
+  // UI Helpers
+  tooltip: z.string().optional(),
+  orientation: z.enum(OrientationField).default(OrientationField.RESPONSIVE),
+});
+
+export const TanStackFormCheckboxGroupFieldSchema = z.object({
+  id: z.string().nonempty(),
+  type: z.literal('checkbox-group-field'),
+
+  // Identifiers in form data
+  name: z.string().trim().nonempty(),
+  camelCaseName: z.string().trim().nonempty(),
+
+  // UI
+  label: z.string().trim().nonempty(),
+  description: z.string().optional(),
+  defaultValue: z.array(z.string()).optional(),
+  helperText: z.string().optional(),
+
+  // Options
+  options: z.array(
+    z.object({
+      label: z.string().trim().nonempty(),
+      value: z.string().trim().nonempty(),
+    })
+  ),
+
+  // UI Helpers
+  tooltip: z.string().optional(),
+  orientation: z.enum(OrientationField).default(OrientationField.RESPONSIVE),
+});
+
 export const TanStackFormSectionSchema = z.object({
   name: z.string().trim().nonempty(),
   fields: z.array(
     z.union([
+      // Typography
       TanStackFormTitleFieldSchema,
+
+      // Input Fields
       TanStackFormTextFieldSchema,
       TanStackFormTextAreaFieldSchema,
       TanStackFormNumberFieldSchema,
+
+      // Selection Field
       TanStackFormSelectFieldSchema,
+      TanStackFormSwitchFieldSchema,
+      TanStackFormRadioGroupFieldSchema,
+      TanStackFormCheckboxGroupFieldSchema,
       TanStackFormDateFieldSchema,
     ])
   ),

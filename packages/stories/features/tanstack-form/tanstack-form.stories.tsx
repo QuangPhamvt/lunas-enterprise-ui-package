@@ -18,9 +18,12 @@ type Story = StoryObj<typeof meta>;
 const schema = z.object({
   textField: z.string().min(10, 'Text Field is required'),
   textareaField: z.string().min(20, 'Textarea is required'),
+  numberField: z.number().gte(5, { message: 'Number Field must be at least 5' }).nullable(),
 
-  numberField: z.number().gte(5, { message: 'Number Field must be at least 5' }),
   dataField: z.date(),
+  switchField: z.boolean(),
+  radioField: z.string().min(1, 'Please select an option'),
+  checkboxField: z.string().array().min(1, 'Please select at least one option'),
 });
 
 export const Default: Story = {
@@ -29,8 +32,12 @@ export const Default: Story = {
       defaultValues: {
         textField: '',
         textareaField: '',
-        numberField: 0,
+        numberField: null,
+
         dataField: new Date(),
+        switchField: false,
+        radioField: '',
+        checkboxField: [] as string[],
       } as z.output<typeof schema>,
     });
     return (
@@ -77,21 +84,11 @@ export const Default: Story = {
                     placeholder="Enter text here"
                     description="This is a textarea field."
                     orientation="responsive"
-                    showCharacterCount={true}
                     showErrorMessage={true}
                   />
                 );
               }}
             />
-            <AppField
-              name="dataField"
-              children={({ DateField }) => {
-                return <DateField label="Date Field" placeholder="Select date" description="This is a date field." orientation="responsive" />;
-              }}
-            />
-          </TanStackSectionForm>
-          <TanStackSectionForm title="Section Form Title">
-            <TanStackTitleField title="Section Title" description="This is the description for the section title." />
             <AppField
               name="numberField"
               children={({ NumberField }) => {
@@ -101,8 +98,58 @@ export const Default: Story = {
                     placeholder="Enter number here"
                     description="This is a number field."
                     orientation="responsive"
-                    unitText="cm"
                     showErrorMessage={true}
+                  />
+                );
+              }}
+            />
+          </TanStackSectionForm>
+          <TanStackSectionForm title="Selection Fields">
+            <TanStackTitleField title="Section Title" description="This is the description for the section title." />
+            <AppField
+              name="dataField"
+              children={({ DateField }) => {
+                return <DateField label="Date Field" placeholder="Select date" description="This is a date field." orientation="responsive" />;
+              }}
+            />
+            <AppField
+              name="switchField"
+              children={({ SwitchField }) => {
+                return <SwitchField label="Switch Field" description="This is a switch field." helperText="You can toggle this switch." />;
+              }}
+            />
+            <AppField
+              name="radioField"
+              children={({ RadioGroupField }) => {
+                return (
+                  <RadioGroupField
+                    label="Radio Group Field"
+                    description="This is a radio group field."
+                    options={[
+                      { label: 'Option 1', value: 'option1', description: 'This is option 1' },
+                      { label: 'Option 2', value: 'option2', description: 'This is option 2' },
+                      { label: 'Option 3', value: 'option3', description: 'This is option 3' },
+                    ]}
+                    orientation="responsive"
+                    helperText="Please select one of the options."
+                  />
+                );
+              }}
+            />
+            <AppField
+              name="checkboxField"
+              children={({ CheckboxField }) => {
+                return (
+                  <CheckboxField
+                    label="Checkbox Field"
+                    description="This is a checkbox field."
+                    options={[
+                      { label: 'Option 1', value: 'option1' },
+                      { label: 'Option 2', value: 'option2' },
+                      { label: 'Option 3', value: 'option3' },
+                    ]}
+                    orientation="responsive"
+                    helperText="Please select one or more of the options."
                   />
                 );
               }}
@@ -159,7 +206,6 @@ export const FormDialog: Story = {
                     placeholder="Enter text here"
                     description="This is a textarea field."
                     orientation="responsive"
-                    showCharacterCount={true}
                     showErrorMessage={true}
                   />
                 );

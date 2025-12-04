@@ -9,14 +9,13 @@ import { CSS } from '@dnd-kit/utilities';
 
 import { GripVerticalIcon } from 'lucide-react';
 
+import { cn } from '@customafk/react-toolkit/utils';
+
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-import { cn } from '@customafk/react-toolkit/utils';
-
 import { FormBuilderDndContext } from './components/dnd-kit';
 import { useFormBuilderForm } from './components/form-buidler-form';
-import { FormBuilderArrayField } from './components/form-builder-field/array-field';
 import { FORM_BUILDER_FIELD, FORM_BUILDER_FIELD_MAPPER } from './constants';
 import { formOpts } from './form-builder-options';
 import { Provider } from './form-builder-provider';
@@ -226,7 +225,6 @@ const MainFormBuilder: React.FC = () => {
                           return (
                             <FormBuilderSectionFieldSortable key={field.id} fieldId={field.id}>
                               <FormBuilderSectionFieldDropable sectionId={index} fieldId={field.id}>
-                                {/*@ts-expect-error*/}
                                 <AppField
                                   name={`sections[${index}].fields[${fieldIndex}]`}
                                   children={({
@@ -267,9 +265,6 @@ const MainFormBuilder: React.FC = () => {
                                     }
                                     if (field.type === 'date-field') {
                                       return <FormBuilderDateField sectionIndex={index} fieldId={field.id} />;
-                                    }
-                                    if (field.type === 'array-field') {
-                                      return <FormBuilderArrayField form={form} sectionIndex={index} fieldId={field.id} />;
                                     }
                                     return <FormBuilderEmptyField />;
                                   }}

@@ -6,7 +6,7 @@ import type { formBuilderArrayFieldSchema, formBuilderEmptyFieldSchema, formBuil
 
 export function updateRecursiveField(
   fieldId: string,
-  updateField: Partial<z.infer<typeof formBuilderSchema>['sections'][number]['fields'][number]>,
+  updateField: Partial<z.input<typeof formBuilderSchema>['sections'][number]['fields'][number]>,
   fieldList: z.infer<typeof formBuilderSchema>['sections'][number]['fields']
 ): z.infer<typeof formBuilderSchema>['sections'][number]['fields'] {
   if (fieldList.length === 0) return fieldList;
@@ -21,24 +21,6 @@ export function updateRecursiveField(
     });
   }
 
-  if (fieldList.some(f => f.type === 'array-field')) {
-    return fieldList.map(f => {
-      if (f.type === 'array-field') {
-        return {
-          ...f,
-          fields: updateRecursiveField(fieldId, updateField, f.fields) as z.infer<typeof formBuilderArrayFieldSchema>['fields'],
-        };
-      }
-      if (f.id === fieldId) {
-        return {
-          ...f,
-          ...Object.fromEntries(Object.entries(updateField).filter(([_, v]) => v !== undefined)),
-        };
-      }
-      return f;
-    });
-  }
-
   return fieldList;
 }
 
@@ -47,18 +29,18 @@ export function createRecursiveFieldInArrayField(
   newField: z.output<typeof formBuilderEmptyFieldSchema>,
   arrField: z.output<typeof formBuilderArrayFieldSchema>
 ): z.output<typeof formBuilderArrayFieldSchema> {
-  if (arrField.fields.length === 0)
-    return {
-      ...arrField,
-      fields: [newField],
-    };
+  // if (arrField.fields.length === 0)
+  //   return {
+  //     ...arrField,
+  //     fields: [newField],
+  //   };
 
-  if (fieldId === arrField.id) {
-    return {
-      ...arrField,
-      fields: [...arrField.fields, newField],
-    };
-  }
+  // if (fieldId === arrField.id) {
+  //   return {
+  //     ...arrField,
+  //     fields: [...arrField.fields, newField],
+  //   };
+  // }
 
   if (arrField.fields.every(f => f.type === 'array-field')) return arrField;
 

@@ -6,41 +6,41 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   tags: ['autodocs'],
-  title: 'Features/TanStack Form/Fields/Radio Group Field',
+  title: 'Features/TanStack Form/Fields/Checkbox Field',
 } satisfies Meta;
 
 export default meta;
-
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   render: () => {
     const { AppField, TanStackContainerForm, TanStackSectionForm } = useTanStackForm({
       defaultValues: {
-        value: '',
+        values: [] as string[],
       },
       validators: {
         onChange: z.object({
-          value: z.string().nonempty(),
+          values: z.string().array().min(1, 'Please select at least one option'),
         }),
       },
     });
     return (
       <TanStackContainerForm>
-        <TanStackSectionForm title="Date Field">
+        <TanStackSectionForm title="Text Field">
           <AppField
-            name="value"
-            children={({ RadioGroupField }) => {
+            name="values"
+            children={({ CheckboxField }) => {
               return (
-                <RadioGroupField
-                  label="Select Field"
-                  description="This is a select field."
-                  orientation="responsive"
+                <CheckboxField
+                  label="Checkbox Field"
+                  description="This is a checkbox field."
                   options={[
-                    { label: 'Option 1', value: 'option_1', description: 'This is option 1' },
-                    { label: 'Option 2', value: 'option_2', description: 'This is option 2' },
-                    { label: 'Option 3', value: 'option_3', description: 'This is option 3' },
+                    { label: 'Option 1', value: 'option1' },
+                    { label: 'Option 2', value: 'option2' },
+                    { label: 'Option 3', value: 'option3' },
                   ]}
+                  orientation="responsive"
+                  helperText="Please select one or more of the options."
                 />
               );
             }}

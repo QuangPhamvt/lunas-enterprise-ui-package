@@ -1,15 +1,10 @@
-import { useMemo } from 'react';
+import type z from 'zod';
 
-import { useForm } from '@tanstack/react-form';
+import { useTanStackForm } from '@/components/features/tanstack-form';
+import { Field, FieldContent, FieldDescription, FieldGroup, FieldLegend, FieldSeparator } from '@/components/features/tanstack-form/components/ui/field';
+import type { TanStackFormTitleFieldSchema } from '@/components/features/tanstack-form/schema';
 
-import z from 'zod';
-
-import { Button } from '@/components/ui/button';
-
-import type { formBuilderTitleFieldSchema } from '../../schema';
 import { useFormBuilderFieldContext } from '../form-buidler-form';
-import { Field, FieldContent, FieldDescription, FieldGroup, FieldLabel, FieldLegend, FieldSeparator, FieldSet } from '../ui/fields';
-import { Input } from '../ui/input';
 import {
   FormBuilderFieldTooltip,
   FormBuilderFieldTooltipCopy,
@@ -22,104 +17,52 @@ import {
 } from './wrapper';
 
 const FieldType: React.FC = () => {
-  const {
-    state: { value: currentField },
-    handleChange,
-  } = useFormBuilderFieldContext<z.infer<typeof formBuilderTitleFieldSchema>>();
-
-  const schema = useMemo(() => {
-    return z.object({
-      name: z.string().nonempty('Name is required'),
-      label: z.string().nonempty('Label is required'),
-      description: z.string(),
-    });
-  }, []);
-
-  const form = useForm({
+  const { state, handleChange } = useFormBuilderFieldContext<z.input<typeof TanStackFormTitleFieldSchema>>();
+  const { AppForm, AppField, TanStackContainerForm, TanStackActionsForm } = useTanStackForm({
     defaultValues: {
-      label: currentField?.label || '',
-      description: currentField?.description || '',
-    },
-    validators: {
-      onSubmit: schema,
-      onChange: schema,
+      label: state.value.label,
+      description: state.value.description || null,
+      helperText: state.value.helperText || null,
     },
     onSubmit: ({ value }) => {
       handleChange({
-        ...currentField,
+        ...state.value,
         label: value.label,
-        description: value.description,
+        description: value.description || undefined,
+        helperText: value.helperText || undefined,
       });
-    },
-    onSubmitInvalid: state => {
-      state.formApi.reset();
     },
   });
   return (
-    <form
-      onSubmit={e => {
-        e.preventDefault();
-        e.stopPropagation();
-        void form.handleSubmit();
-      }}
-    >
-      <FieldGroup>
-        <FieldSet>
-          <FieldDescription>Configure the settings for the text field.</FieldDescription>
-          <FieldSeparator />
-        </FieldSet>
-        <FieldGroup>
-          <form.Field
-            name="label"
-            children={field => {
-              return (
-                <Field orientation="horizontal" className="*:data-[slot=field-content-main]:basis-3/5 *:data-[slot=field-content]:basis-2/5">
-                  <FieldContent>
-                    <FieldLabel className="text-text-positive-weak">Label</FieldLabel>
-                  </FieldContent>
-                  <Input value={field.state.value} placeholder="Enter field label" className="rounded!" onChange={e => field.handleChange(e.target.value)} />
-                </Field>
-              );
-            }}
-          />
-          <FieldSeparator />
-          <form.Field
-            name="description"
-            children={field => {
-              return (
-                <Field orientation="horizontal" className="*:data-[slot=field-content-main]:basis-3/5 *:data-[slot=field-content]:basis-2/5">
-                  <FieldContent>
-                    <FieldLabel className="text-text-positive-weak">Description</FieldLabel>
-                  </FieldContent>
-                  <Input
-                    value={field.state.value}
-                    placeholder="Enter field descriltion"
-                    className="rounded!"
-                    onChange={e => field.handleChange(e.target.value)}
-                  />
-                </Field>
-              );
-            }}
-          />
-          <FieldSeparator />
-          <Field orientation="responsive">
-            <form.Subscribe
-              selector={state => [state.canSubmit, state.isSubmitting]}
-              children={([canSubmit, isSubmitting]) => {
-                return (
-                  <Button type="submit" disabled={!canSubmit || isSubmitting}>
-                    Submit
-                  </Button>
-                );
-              }}
+    <TanStackContainerForm>
+      <AppField
+        name="label"
+        children={({ TextField }) => {
+          return <TextField label="Label" description="The title text displayed in the form." />;
+        }}
+      />
+      <AppField
+        name="description"
+        children={({ TextField }) => {
+          return <TextField label="Description" description="The description text displayed below the title." />;
+        }}
+      />
+      <AppField
+        name="helperText"
+        children={({ TextField }) => {
+          return (
+            <TextField
+              label="Helper Text"
+              placeholder='e.g., "This will not be shared publicly."'
+              description="Additional helper text displayed below the description."
             />
-            <Button type="button" color="muted" variant="outline" onClick={() => form.reset()}>
-              Cancel
-            </Button>
-          </Field>
-        </FieldGroup>
-      </FieldGroup>
-    </form>
+          );
+        }}
+      />
+      <AppForm>
+        <TanStackActionsForm type="update" />
+      </AppForm>
+    </TanStackContainerForm>
   );
 };
 
@@ -131,18 +74,26 @@ export const FormBuilderTitleField: React.FC<{
   sectionIndex: number;
   fieldId: string;
 }> = ({ sectionIndex, fieldId }) => {
-  const { state } = useFormBuilderFieldContext<z.infer<typeof formBuilderTitleFieldSchema>>();
+  const { state } = useFormBuilderFieldContext<z.infer<typeof TanStackFormTitleFieldSchema>>();
   return (
     <FormBuilderFieldWrapper>
       <FormBuilderFieldTrigger>
-        <FieldGroup>
-          <FieldSet>
-            <FieldLegend>{state.value.label}</FieldLegend>
-            <FieldDescription>{state.value.description}</FieldDescription>
-            <FieldSeparator />
-          </FieldSet>
+        <FieldGroup className="gap-y-4 px-2">
+          <Field className="gap-0">
+            <FieldContent>
+              <FieldLegend className="mb-1">{state.value.label}</FieldLegend>
+              <FieldDescription>{state.value.description}</FieldDescription>
+            </FieldContent>
+            {!!state.value.helperText && (
+              <div className="mt-1 text-wrap rounded bg-primary-bg-subtle p-2 text-text-positive-weak text-xs">
+                <p>{state.value.helperText}</p>
+              </div>
+            )}
+          </Field>
+          <FieldSeparator />
         </FieldGroup>
       </FormBuilderFieldTrigger>
+
       <FormBuilderFieldTooltip>
         <FormBuilderFieldTooltipCopy />
         <FormBuilderFieldTooltipSettings>

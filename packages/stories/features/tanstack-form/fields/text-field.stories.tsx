@@ -35,11 +35,9 @@ export const Default: Story = {
                   label="Text Field"
                   description="This is a text field."
                   placeholder="Enter some text"
-                  maxLength={50}
                   orientation="responsive"
                   showClearButton={true}
                   showErrorMessage={true}
-                  showCharacterCount={true}
                 />
               );
             }}
@@ -76,11 +74,9 @@ export const Submitting: Story = {
                   label="Text Field"
                   description="This is a text field."
                   placeholder="Enter some text"
-                  maxLength={50}
                   orientation="responsive"
                   showClearButton={true}
                   showErrorMessage={true}
-                  showCharacterCount={true}
                 />
               );
             }}

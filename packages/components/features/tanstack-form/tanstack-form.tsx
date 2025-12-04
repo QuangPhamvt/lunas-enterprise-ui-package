@@ -1,6 +1,6 @@
 import { createFormHook, createFormHookContexts } from '@tanstack/react-form';
 
-import { ComboboxField } from './components/fields/combobox-field';
+import { CheckboxField } from './components/fields/checkbox-field';
 import { DateField } from './components/fields/date-field';
 import { NumberField } from './components/fields/number-field';
 import { RadioGroupField } from './components/fields/radio-group-field';
@@ -28,11 +28,12 @@ const {
     TextField,
     TextareaField,
     NumberField,
+
     SelectField,
-    ComboboxField,
     DateField,
     SwitchField,
     RadioGroupField,
+    CheckboxField,
   },
   formComponents: {
     TanStackDialogForm,

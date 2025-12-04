@@ -1,22 +1,34 @@
+import type z from 'zod';
+
+import type { TanStackFormSwitchFieldSchema } from '../../schema';
 import { useTanStackFieldContext } from '../../tanstack-form';
-import { Field, FieldContent, FieldDescription, FieldLabel, FieldTitle } from '../ui/field';
+import { Field, FieldContent, FieldDescription, FieldGroup, FieldNote, FieldSeparator, FieldTitle } from '../ui/field';
 import { Switch } from '../ui/switch';
 
-export const SwitchField: React.FC<{
-  label: string;
-  description?: string;
-}> = ({ label, description }) => {
-  const field = useTanStackFieldContext<boolean>();
+type Props = Pick<z.input<typeof TanStackFormSwitchFieldSchema>, 'label' | 'description' | 'helperText'>;
+
+export const SwitchField: React.FC<Props> = ({ label, description, helperText }) => {
+  const field = useTanStackFieldContext<boolean | null>();
 
   return (
-    <FieldLabel htmlFor={field.name}>
-      <Field orientation="horizontal" className="justify-between">
+    <FieldGroup className="gap-y-4 px-4">
+      <Field orientation="vertical" className="relative justify-between gap-y-1">
         <FieldContent>
-          <FieldTitle>{label}</FieldTitle>
+          <FieldTitle className="cursor-pointer">
+            <label htmlFor={field.name}>{label}</label>
+          </FieldTitle>
           <FieldDescription>{description}</FieldDescription>
+          <Switch
+            id={field.name}
+            checked={field.state.value ?? false}
+            className="absolute top-1 right-1"
+            onBlur={field.handleBlur}
+            onCheckedChange={field.handleChange}
+          />
         </FieldContent>
-        <Switch id={field.name} checked={field.state.value} onBlur={field.handleBlur} onCheckedChange={field.handleChange} />
+        <FieldNote isShow={!!helperText}>{helperText}</FieldNote>
       </Field>
-    </FieldLabel>
+      <FieldSeparator />
+    </FieldGroup>
   );
 };
