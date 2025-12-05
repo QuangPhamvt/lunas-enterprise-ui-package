@@ -1,10 +1,11 @@
 import { useCallback } from 'react';
 
-import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
 
 import { useTanStackFormContext } from '../../tanstack-form';
+import { CancelButton } from '../ui/cancel-button';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '../ui/dialog';
+import { SubmitButton } from '../ui/submit-button';
 
 export const TanStackDialogForm: React.FC<
   React.PropsWithChildren<{
@@ -39,31 +40,23 @@ export const TanStackDialogForm: React.FC<
             }}
             children={({ disabled }) => {
               return (
-                <Button
-                  variant="outline"
-                  color="muted"
-                  size="lg"
+                <CancelButton
                   disabled={disabled}
-                  className="w-40"
                   onClick={() => {
                     form.reset();
+                    handleOpenChange(false);
                   }}
-                >
-                  Reset
-                </Button>
+                />
               );
             }}
           />
           <form.Subscribe
             selector={state => ({
+              isSubmitting: state.isSubmitting,
               disabled: state.isPristine || !state.isValid || state.isValidating || state.isSubmitting || !state.canSubmit,
             })}
-            children={({ disabled }) => {
-              return (
-                <Button size="lg" disabled={disabled} className="w-40">
-                  Submit
-                </Button>
-              );
+            children={({ isSubmitting, disabled }) => {
+              return <SubmitButton isSubmitting={isSubmitting} disabled={disabled} />;
             }}
           />
         </DialogFooter>

@@ -5,7 +5,7 @@ import type z from 'zod';
 
 import type { TanStackFormSelectFieldSchema } from '../../schema';
 import { useTanStackFieldContext } from '../../tanstack-form';
-import { Field, FieldContent, FieldContentMain, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldSeparator } from '../ui/field';
+import { Field, FieldContent, FieldContentMain, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldNote, FieldSeparator } from '../ui/field';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 
 type Props = Pick<
@@ -77,11 +77,7 @@ export const SelectField: React.FC<Props> = ({
             <FieldError errors={_errors} />
           </div>
 
-          {!!helperText && (
-            <div className="mt-1 text-wrap rounded bg-primary-bg-subtle p-2 text-text-positive-weak text-xs">
-              <p>{helperText}</p>
-            </div>
-          )}
+          <FieldNote isShow={!!helperText}>{helperText}</FieldNote>
         </FieldContentMain>
       </Field>
       <FieldSeparator />

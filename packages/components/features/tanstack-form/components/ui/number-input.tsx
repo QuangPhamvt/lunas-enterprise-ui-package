@@ -320,11 +320,7 @@ export const NumberInput: React.FC<TProps> = ({
         placeholder={placeholder}
         disabled={disabled}
         readOnly={readOnly}
-        className={cn(
-          'text-end font-number text-sm text-text-positive slashed-zero lining-nums tabular-nums',
-          readOnly && 'bg-muted text-muted-foreground',
-          className
-        )}
+        className={cn('text-end font-number text-sm slashed-zero lining-nums tabular-nums', readOnly && 'bg-muted text-muted-foreground', className)}
         onChange={handleChange}
         onFocus={handleFocus}
         onBlur={handleBlur}

@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button';
 import type { TanStackFormDateFieldSchema } from '../../schema';
 import { useTanStackFieldContext } from '../../tanstack-form';
 import { Calendar } from '../ui/calendar';
-import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, FieldLabel, FieldSeparator } from '../ui/field';
+import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, FieldLabel, FieldNote, FieldSeparator } from '../ui/field';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
 
 type Props = Pick<
@@ -45,7 +45,7 @@ export const DateField: React.FC<Props> = ({ label, description, placeholder, or
           <FieldDescription>{description}</FieldDescription>
         </FieldContent>
 
-        <FieldContentMain className="flex flex-col">
+        <FieldContentMain className="flex flex-col space-y-1">
           <div className="flex w-full flex-col">
             <Popover>
               <PopoverTrigger asChild>
@@ -179,11 +179,7 @@ export const DateField: React.FC<Props> = ({ label, description, placeholder, or
               </PopoverContent>
             </Popover>
           </div>
-          {!!helperText && (
-            <div className="mt-1 text-wrap rounded bg-primary-bg-subtle p-2 text-text-positive-weak text-xs">
-              <p>{helperText}</p>
-            </div>
-          )}
+          <FieldNote isShow={!!helperText}>{helperText}</FieldNote>
         </FieldContentMain>
       </Field>
       <FieldSeparator />

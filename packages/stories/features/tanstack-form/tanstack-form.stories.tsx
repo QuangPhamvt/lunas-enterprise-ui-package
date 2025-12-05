@@ -53,6 +53,7 @@ export const Default: Story = {
                     label="Text Field"
                     placeholder="Enter text here"
                     description="This is a text field."
+                    helperText="You can enter up to 100 characters."
                     orientation="responsive"
                     showClearButton={true}
                     showErrorMessage={true}
@@ -155,7 +156,6 @@ export const Default: Story = {
               }}
             />
           </TanStackSectionForm>
-          <TanStackSectionForm title="Section Form Title"></TanStackSectionForm>
         </TanStackContainerForm>
       </div>
     );
@@ -214,6 +214,62 @@ export const FormDialog: Story = {
           </TanStackDialogForm>
         </AppForm>
       </>
+    );
+  },
+};
+
+export const PopoverForm: Story = {
+  render: () => {
+    const { AppForm, AppField, TanStackPopoverForm } = useTanStackForm({
+      defaultValues: {
+        textField: '',
+        textareaField: '',
+      },
+    });
+
+    const [open, setOpen] = useState<boolean>(false);
+
+    return (
+      <AppForm>
+        <Button
+          onClick={() => {
+            setOpen(true);
+          }}
+        >
+          Open Popover Form
+        </Button>
+        <TanStackPopoverForm title="Popover Form Title" open={open} onOpenChange={setOpen}>
+          <AppField
+            name="textField"
+            children={({ TextField }) => {
+              return (
+                <TextField
+                  label="Text Field"
+                  placeholder="Enter text here"
+                  description="This is a text field."
+                  orientation="responsive"
+                  showClearButton={true}
+                  showErrorMessage={true}
+                />
+              );
+            }}
+          />
+          <AppField
+            name="textareaField"
+            children={({ TextareaField }) => {
+              return (
+                <TextareaField
+                  label="Textarea Field"
+                  placeholder="Enter text here"
+                  description="This is a textarea field."
+                  orientation="responsive"
+                  showErrorMessage={true}
+                />
+              );
+            }}
+          />
+        </TanStackPopoverForm>
+      </AppForm>
     );
   },
 };
