@@ -5,11 +5,12 @@ import { useStore } from '@tanstack/react-form';
 import { BanIcon, Loader2Icon } from 'lucide-react';
 import type z from 'zod';
 
+import { cn } from '@customafk/react-toolkit/utils';
+
 import type { TanStackFormTextAreaFieldSchema } from '../../schema';
 import { useTanStackFieldContext } from '../../tanstack-form';
-import { Field, FieldContent, FieldContentMain, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldSeparator } from '../ui/field';
+import { Field, FieldContent, FieldContentMain, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldNote, FieldSeparator } from '../ui/field';
 import { Textarea } from '../ui/textarea';
-import { cn } from '@customafk/react-toolkit/utils';
 
 type Props = Pick<
   z.input<typeof TanStackFormTextAreaFieldSchema>,
@@ -101,11 +102,7 @@ export const TextareaField: React.FC<Props> = ({
             {showErrorMessage && <FieldError errors={_errors} />}
             {!!counter && <p className="text-end text-text-positive-weak text-xs">{_countText}</p>}
           </div>
-          {!!helperText && (
-            <div className="mt-1 text-wrap rounded bg-primary-bg-subtle p-2 text-text-positive-weak text-xs">
-              <p>{helperText}</p>
-            </div>
-          )}
+          <FieldNote isShow={!!helperText}>{helperText}</FieldNote>
         </FieldContentMain>
       </Field>
       <FieldSeparator />

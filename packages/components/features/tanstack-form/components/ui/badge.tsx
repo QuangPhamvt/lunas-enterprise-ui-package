@@ -8,7 +8,7 @@ const badgeVariants = cva(['flex w-fit items-center justify-center rounded-full 
       success: 'bg-success-strong',
       info: 'bg-info-strong',
       warning: 'bg-warning-strong',
-      danger: 'bg-danger-strong',
+      danger: 'border border-danger-strong bg-linear-to-b from-danger-strong/90 via-danger-strong to-danger-strong/90',
     },
     size: {
       xs: 'px-1.5 py-0.5 text-xs',

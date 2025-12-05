@@ -26,7 +26,7 @@ function Textarea({
         // Base styles
         'flex min-h-24 w-full bg-transparent px-3 py-2',
         'rounded shadow-input transition-[color,box-shadow] duration-200',
-        'resize-y text-sm text-text-positive tabular-nums caret-primary',
+        'resize-y text-sm text-text-positive-weak tabular-nums caret-primary',
 
         // Border and shadow styles
         '-outline-offset-1 outline-1 outline-border',
@@ -35,7 +35,7 @@ function Textarea({
         'placeholder:text-text-positive-muted',
 
         // State styles
-        'focus-visible:outline-primary-strong focus-visible:ring-4 focus-visible:ring-primary-weak',
+        'focus:text-text-positive focus:outline-primary-strong focus:ring-4 focus:ring-primary-weak',
 
         // Read-only state
         'read-only:pointer-events-none read-only:bg-muted-muted read-only:placeholder:text-text-positive-weak',

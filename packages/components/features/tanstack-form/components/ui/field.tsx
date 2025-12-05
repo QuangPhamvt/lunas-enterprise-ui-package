@@ -147,7 +147,16 @@ FieldDescription.displayName = 'FieldDescription';
 
 const FieldNote = memo(({ isShow = true, className, ...props }: React.ComponentProps<'div'> & { isShow?: boolean }) => {
   if (isShow === false) return null;
-  return <div data-slot="field-note" className={cn('text-wrap rounded bg-primary-bg-subtle p-2 text-text-positive-weak text-xs', className)} {...props} />;
+  return (
+    <div
+      data-slot="field-note"
+      className={cn(
+        'text-wrap rounded border border-primary-muted bg-linear-to-b from-primary-bg-subtle to-primary-bg-subtle/50 p-2 text-text-positive-weak text-xs',
+        className
+      )}
+      {...props}
+    />
+  );
 });
 FieldNote.displayName = 'FieldNote';
 

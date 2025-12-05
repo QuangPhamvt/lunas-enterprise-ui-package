@@ -29,16 +29,19 @@ function PopoverContent({ className, align = 'start', sideOffset = 4, children, 
           'max-h-(--radix-popover-content-available-height)',
           'origin-(--radix-popover-content-transform-origin)',
           'rounded-md p-4 shadow-dropdown outline-none',
+
           'data-[state=open]:animate-in',
           'data-[state=open]:fade-in-0',
           'data-[state=open]:zoom-in-95',
+
           'data-[state=closed]:animate-out',
           'data-[state=closed]:fade-out-0',
           'data-[state=closed]:zoom-out-95',
-          'data-[side=top]:slide-in-from-bottom-2',
-          'data-[side=right]:slide-in-from-left-2',
-          'data-[side=bottom]:slide-in-from-top-2',
-          'data-[side=left]:slide-in-from-right-2',
+
+          'data-[side=top]:slide-in-from-bottom-8',
+          'data-[side=right]:slide-in-from-left-8',
+          'data-[side=bottom]:slide-in-from-top-8',
+          'data-[side=left]:slide-in-from-right-8',
           className
         )}
         {...props}

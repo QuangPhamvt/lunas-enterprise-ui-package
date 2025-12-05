@@ -11,6 +11,7 @@ import { TextareaField } from './components/fields/textarea-field';
 import { TanStackActionsForm } from './components/forms/actions-form';
 import { TanStackContainerForm } from './components/forms/container-form';
 import { TanStackDialogForm } from './components/forms/dialog-form';
+import { TanStackPopoverForm } from './components/forms/popover-form';
 import { TanStackSectionForm } from './components/forms/section-form';
 import { TanStackTitleField } from './components/forms/title-field';
 
@@ -37,6 +38,7 @@ const {
   },
   formComponents: {
     TanStackDialogForm,
+    TanStackPopoverForm,
     TanStackContainerForm,
     TanStackSectionForm,
     TanStackTitleField,

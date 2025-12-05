@@ -1,4 +1,4 @@
-import { Field, FieldContent, FieldDescription, FieldGroup, FieldLegend, FieldSeparator } from '../ui/field';
+import { Field, FieldContent, FieldDescription, FieldGroup, FieldLegend, FieldNote, FieldSeparator } from '../ui/field';
 
 export const TanStackTitleField: React.FC<{
   title: string;
@@ -12,11 +12,7 @@ export const TanStackTitleField: React.FC<{
           <FieldLegend className="mb-1">{title}</FieldLegend>
           <FieldDescription>{description}</FieldDescription>
         </FieldContent>
-        {!!helperText && (
-          <div className="mt-1 text-wrap rounded bg-primary-bg-subtle p-2 text-text-positive-weak text-xs">
-            <p>{helperText}</p>
-          </div>
-        )}
+        <FieldNote isShow={!!helperText}>{helperText}</FieldNote>
       </Field>
       <FieldSeparator />
     </FieldGroup>

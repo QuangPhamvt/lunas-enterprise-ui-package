@@ -7,7 +7,7 @@ import type z from 'zod';
 
 import type { TanStackFormNumberFieldSchema } from '../../schema';
 import { useTanStackFieldContext } from '../../tanstack-form';
-import { Field, FieldContent, FieldContentMain, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldSeparator } from '../ui/field';
+import { Field, FieldContent, FieldContentMain, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldNote, FieldSeparator } from '../ui/field';
 import { NumberInput } from '../ui/number-input';
 import { cn } from '@customafk/react-toolkit/utils';
 
@@ -107,11 +107,7 @@ export const NumberField: React.FC<NumberFieldProps> = ({
               )}
               <div className="mt-1 flex w-full flex-col items-end justify-end">{showErrorMessage && <FieldError errors={_errors} />}</div>
             </div>
-            {!!helperText && (
-              <div className="mt-1 w-full text-wrap rounded bg-primary-bg-subtle p-2 text-text-positive-weak text-xs">
-                <p>{helperText}</p>
-              </div>
-            )}
+            <FieldNote isShow={!!helperText}>{helperText}</FieldNote>
           </div>
         </FieldContentMain>
       </Field>
