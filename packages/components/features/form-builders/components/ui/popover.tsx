@@ -20,10 +20,11 @@ function PopoverContent({ className, align = 'start', sideOffset = 4, ...props }
         align={align}
         sideOffset={sideOffset}
         className={cn(
-          'bg-popover',
+          'overflow-y-auto overflow-x-hidden bg-popover',
           'text-text-positive',
           'z-50 w-72',
           'origin-(--radix-popover-content-transform-origin)',
+          'max-h-(--radix-popover-content-available-height)',
           'rounded-md p-4 shadow-dropdown outline-none',
           'data-[state=open]:animate-in',
           'data-[state=open]:fade-in-0',

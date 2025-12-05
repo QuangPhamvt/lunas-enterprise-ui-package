@@ -5,26 +5,16 @@ import { useStore } from '@tanstack/react-form';
 import { BanIcon, Loader2Icon } from 'lucide-react';
 import type z from 'zod';
 
+import { cn } from '@customafk/react-toolkit/utils';
+
 import type { TanStackFormNumberFieldSchema } from '../../schema';
 import { useTanStackFieldContext } from '../../tanstack-form';
 import { Field, FieldContent, FieldContentMain, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldNote, FieldSeparator } from '../ui/field';
 import { NumberInput } from '../ui/number-input';
-import { cn } from '@customafk/react-toolkit/utils';
 
 type NumberFieldProps = Pick<
   z.input<typeof TanStackFormNumberFieldSchema>,
-  | 'label'
-  | 'description'
-  | 'placeholder'
-  | 'defaultValue'
-  | 'tooltip'
-  | 'helperText'
-  | 'orientation'
-  | 'showErrorMessage'
-  | 'rounding'
-  | 'decimalPlaces'
-  | 'percision'
-  | 'unit'
+  'label' | 'description' | 'placeholder' | 'orientation' | 'tooltip' | 'helperText' | 'rounding' | 'decimalPlaces' | 'percision' | 'unit' | 'showErrorMessage'
 > & {
   required?: boolean;
   allowNegative?: boolean;
@@ -38,7 +28,7 @@ export const NumberField: React.FC<NumberFieldProps> = ({
   // tooltip,
   helperText,
   orientation,
-  showErrorMessage,
+  showErrorMessage = true,
   rounding,
   decimalPlaces,
   percision,
@@ -69,7 +59,7 @@ export const NumberField: React.FC<NumberFieldProps> = ({
   );
 
   return (
-    <FieldGroup className="px-4">
+    <FieldGroup className="gap-y-4 px-4">
       <Field orientation={orientation} data-invalid={field.state.meta.isTouched && !field.state.meta.isValid}>
         <FieldContent>
           <FieldLabel htmlFor={field.name} aria-required={_isEmpty}>

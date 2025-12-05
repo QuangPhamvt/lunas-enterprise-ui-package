@@ -1,4 +1,5 @@
 /** biome-ignore-all lint/style/useComponentExportOnlyModules: true */
+/** biome-ignore-all lint/correctness/useUniqueElementIds: true */
 
 import { useCallback, useState } from 'react';
 import { createPortal } from 'react-dom';
@@ -78,12 +79,19 @@ const SidebarFieldTypography: React.FC = () => {
 const SidebarFieldInputField: React.FC = () => {
   return (
     <TabsContent value="input-field">
-      <div className="flex flex-col space-y-1">
-        {FORM_BUILDER_FIELD.filter(field => field.tab === 'FORM_FIELDS').map(field => (
-          <SidebarFieldDraggable key={field.id} id={field.id}>
-            {FORM_BUILDER_FIELD_MAPPER[field.id]}
-          </SidebarFieldDraggable>
-        ))}
+      <div className="flex flex-col space-y-5">
+        <div className="flex flex-col space-y-2 px-2">
+          <p className="ml-1 font-medium text-sm text-text-positive-weak">Input Fields</p>
+          <SidebarFieldDraggable id="text-field">{FORM_BUILDER_FIELD_MAPPER['text-field']}</SidebarFieldDraggable>
+          <SidebarFieldDraggable id="textarea-field">{FORM_BUILDER_FIELD_MAPPER['textarea-field']}</SidebarFieldDraggable>
+          <SidebarFieldDraggable id="number-field">{FORM_BUILDER_FIELD_MAPPER['number-field']}</SidebarFieldDraggable>
+        </div>
+
+        <div className="flex flex-col space-y-2 px-2">
+          <p className="ml-1 font-medium text-sm text-text-positive-weak">Selection Fields</p>
+          <SidebarFieldDraggable id="select-field">{FORM_BUILDER_FIELD_MAPPER['select-field']}</SidebarFieldDraggable>
+          <SidebarFieldDraggable id="date-field">{FORM_BUILDER_FIELD_MAPPER['date-field']}</SidebarFieldDraggable>
+        </div>
       </div>
     </TabsContent>
   );

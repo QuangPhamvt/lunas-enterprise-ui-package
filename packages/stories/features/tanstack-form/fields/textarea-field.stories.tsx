@@ -37,7 +37,6 @@ export const Default: Story = {
                   maxLength={3000}
                   orientation="responsive"
                   showErrorMessage={true}
-                  showCharacterCount={true}
                 />
               );
             }}
@@ -77,7 +76,6 @@ export const Submitting: Story = {
                   maxLength={50}
                   orientation="responsive"
                   showErrorMessage={true}
-                  showCharacterCount={true}
                 />
               );
             }}

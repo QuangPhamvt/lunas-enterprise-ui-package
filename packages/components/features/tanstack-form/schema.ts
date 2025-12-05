@@ -43,17 +43,14 @@ export const TanStackFormTextFieldSchema = z.object({
   placeholder: z.string().optional(),
 
   // UI Helpers
-  counter: z
-    .object({
-      enabled: z.boolean().default(false),
-      max: z.number().int().optional(),
-    })
-    .optional(),
+  counter: z.boolean().optional(),
   tooltip: z.string().optional(),
   helperText: z.string().optional(),
-  orientation: z.enum(OrientationField).default(OrientationField.RESPONSIVE),
   showClearButton: z.boolean().optional(),
   showErrorMessage: z.boolean().optional(),
+
+  // Layout
+  orientation: z.enum(OrientationField).default(OrientationField.RESPONSIVE),
 
   // Data
   dataType: z.enum(TextFieldDataType).default(TextFieldDataType.TEXT),
@@ -90,15 +87,10 @@ export const TanStackFormTextAreaFieldSchema = z.object({
   placeholder: z.string().optional(),
 
   // UI Helpers
-  counter: z
-    .object({
-      enabled: z.boolean().default(false),
-      max: z.number().int().optional(),
-    })
-    .optional(),
+  orientation: z.enum(OrientationField).default(OrientationField.RESPONSIVE),
+  counter: z.boolean().optional(),
   tooltip: z.string().optional(),
   helperText: z.string().optional(),
-  orientation: z.enum(OrientationField).default(OrientationField.RESPONSIVE),
   showErrorMessage: z.boolean().optional(),
 
   rules: z
@@ -134,33 +126,35 @@ export const TanStackFormNumberFieldSchema = z.object({
   defaultValue: z.number().optional(),
 
   // UI Helpers
+  orientation: z.enum(OrientationField).default(OrientationField.RESPONSIVE),
   tooltip: z.string().optional(),
   helperText: z.string().optional(),
-  orientation: z.enum(OrientationField).default(OrientationField.RESPONSIVE),
-  showErrorMessage: z.boolean().optional(),
   rounding: z.enum(RoundingField).default(RoundingField.NONE),
   decimalPlaces: z.number().int().min(0).optional(),
   percision: z.number().int().min(0).optional(),
   unit: z.string().optional(),
+  showErrorMessage: z.boolean().optional(),
 
-  rules: z.object({
-    required: z.boolean().optional(),
-    min: z
-      .object({
-        value: z.number(),
-        inclusive: z.boolean().default(true),
-      })
-      .optional(),
-    max: z
-      .object({
-        value: z.number(),
-        inclusive: z.boolean().default(true),
-      })
-      .optional(),
-    integerOnly: z.boolean().optional(),
-    positiveOnly: z.boolean().optional(),
-    exactDigits: z.number().optional(),
-  }),
+  rules: z
+    .object({
+      required: z.boolean().optional(),
+      min: z
+        .object({
+          value: z.number(),
+          inclusive: z.boolean().default(true),
+        })
+        .optional(),
+      max: z
+        .object({
+          value: z.number(),
+          inclusive: z.boolean().default(true),
+        })
+        .optional(),
+      integerOnly: z.boolean().optional(),
+      positiveOnly: z.boolean().optional(),
+      exactDigits: z.number().optional(),
+    })
+    .optional(),
 
   visibilityConditions: z
     .object({

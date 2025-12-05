@@ -23,13 +23,15 @@ export const useUpdateFieldMapper = (fieldId: string) => {
       'text-field': {
         id: fieldId,
         type: 'text-field',
-        orientation: 'responsive',
 
         label: 'Text Field',
         placeholder: 'Enter text here',
         description: 'This is a text field',
-        helperText: '',
 
+        counter: false,
+        tooltip: undefined,
+        orientation: 'responsive',
+        helperText: '',
         showClearButton: false,
         showErrorMessage: true,
 
@@ -44,44 +46,52 @@ export const useUpdateFieldMapper = (fieldId: string) => {
       'textarea-field': {
         id: fieldId,
         type: 'textarea-field',
-        orientation: 'responsive',
 
         label: 'Text Area Field',
         placeholder: 'Enter text here',
         description: 'This is a text area field',
-        rows: 4,
 
-        showCharacterCount: false,
+        orientation: 'responsive',
+        counter: false,
+        tooltip: undefined,
+        helperText: '',
         showErrorMessage: true,
 
         rules: {
-          minLength: null,
-          maxLength: null,
+          required: true,
+          minLength: undefined,
+          maxLength: undefined,
+          exactLength: undefined,
         },
       },
       'number-field': {
         id: fieldId,
         type: 'number-field',
-        orientation: 'responsive',
 
         label: 'Number Field',
         description: 'This is a number field',
         placeholder: '0',
-        unitText: '',
+        defaultValue: undefined,
 
+        orientation: 'responsive',
+        tooltip: undefined,
+        helperText: '',
+        rounding: 'none',
+        decimalPlaces: undefined,
+        percision: undefined,
+        unitText: '',
         showErrorMessage: true,
 
         rules: {
-          greaterThan: null,
-          greaterThanOrEqualTo: null,
-
-          lessThan: null,
-          lessThanOrEqualTo: null,
-
-          positive: false,
-          negative: false,
+          required: true,
+          min: undefined,
+          max: undefined,
+          integerOnly: false,
+          positiveOnly: false,
+          exactDigits: undefined,
         },
       },
+
       'date-field': {
         id: fieldId,
         type: 'date-field',
