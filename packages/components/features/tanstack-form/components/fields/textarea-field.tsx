@@ -17,6 +17,7 @@ type Props = Pick<
   'label' | 'description' | 'placeholder' | 'counter' | 'tooltip' | 'helperText' | 'orientation' | 'showErrorMessage'
 > & {
   required?: boolean;
+  maxLength?: number;
 };
 
 export const TextareaField: React.FC<Props> = ({
@@ -24,12 +25,14 @@ export const TextareaField: React.FC<Props> = ({
   description,
   placeholder,
 
-  required = false,
-  counter,
   // tooltip,
-  helperText,
   orientation = 'responsive',
+  counter,
+  helperText,
   showErrorMessage = true,
+
+  required = false,
+  maxLength,
 }) => {
   const { form, state, name, handleBlur, handleChange } = useTanStackFieldContext<string | null>();
 
@@ -40,10 +43,11 @@ export const TextareaField: React.FC<Props> = ({
   }, [state.value]);
 
   const _countText = useMemo(() => {
+    if (!counter) return '';
     const unit = `character${[0, 1].includes(_count) ? '' : 's'}`;
-    if (counter?.max) return `${_count} / ${counter.max} ${unit}`;
+    if (counter && maxLength) return `${_count} / ${maxLength} ${unit}`;
     return `${_count} ${unit}`;
-  }, [_count, counter?.max]);
+  }, [_count, counter, maxLength]);
 
   const _invalid = useMemo(() => {
     return state.meta.isTouched && !state.meta.isValid;
@@ -61,10 +65,10 @@ export const TextareaField: React.FC<Props> = ({
   const onChange = useCallback<React.ChangeEventHandler<HTMLTextAreaElement>>(
     ({ target: { value } }) => {
       if (isSubmitting) return;
-      if (counter?.max && value.length > counter.max) return;
+      if (counter && maxLength && value.length > maxLength) return;
       handleChange(value || null);
     },
-    [isSubmitting, counter?.max, handleChange]
+    [isSubmitting, counter, maxLength, handleChange]
   );
 
   return (

@@ -8,6 +8,7 @@ import {
   FieldDescription,
   FieldGroup,
   FieldLabel,
+  FieldNote,
   FieldSeparator,
   FieldSet,
 } from '@/components/features/tanstack-form/components/ui/field';
@@ -36,6 +37,8 @@ const FieldType: React.FC = () => {
       label: currentField.label,
       description: currentField.description || null,
       placeholder: currentField.placeholder || null,
+
+      counter: currentField.counter || false,
       helperText: currentField.helperText || null,
     },
     onSubmit: ({ value, formApi }) => {
@@ -44,6 +47,8 @@ const FieldType: React.FC = () => {
         ...(formApi.state.fieldMeta.label?.isDefaultValue ? {} : { label: value.label }),
         ...(formApi.state.fieldMeta.description?.isDefaultValue ? {} : { description: value.description || undefined }),
         ...(formApi.state.fieldMeta.placeholder?.isDefaultValue ? {} : { placeholder: value.placeholder || undefined }),
+
+        ...(formApi.state.fieldMeta.counter?.isDefaultValue ? {} : { counter: value.counter }),
         ...(formApi.state.fieldMeta.helperText?.isDefaultValue ? {} : { helperText: value.helperText || undefined }),
       });
     },
@@ -76,6 +81,12 @@ const FieldType: React.FC = () => {
           );
         }}
       />
+      <AppField
+        name="counter"
+        children={({ SwitchField }) => {
+          return <SwitchField label="Character Counter" description="Display a character counter below the text field." />;
+        }}
+      />
       <AppForm>
         <TanStackActionsForm type="update" />
       </AppForm>
@@ -93,6 +104,7 @@ const FieldRules: React.FC = () => {
       minLength: currentField.rules?.minLength || null,
       maxLength: currentField.rules?.maxLength || null,
       exactLength: currentField.rules?.exactLength || null,
+      required: currentField.rules?.required || null,
     },
     listeners: {
       onChange: ({ formApi }) => {
@@ -120,6 +132,7 @@ const FieldRules: React.FC = () => {
           ...(formApi.state.fieldMeta.minLength?.isDefaultValue ? {} : { minLength: value.minLength ?? undefined }),
           ...(formApi.state.fieldMeta.maxLength?.isDefaultValue ? {} : { maxLength: value.maxLength ?? undefined }),
           ...(formApi.state.fieldMeta.exactLength?.isDefaultValue ? {} : { exactLength: value.exactLength ?? undefined }),
+          ...(formApi.state.fieldMeta.required?.isDefaultValue ? {} : { required: value.required ?? undefined }),
         },
       });
     },
@@ -144,6 +157,12 @@ const FieldRules: React.FC = () => {
           return <NumberField label="Exact Length" description="Set an exact number of characters required." placeholder="e.g., 10" />;
         }}
       />
+      <AppField
+        name="required"
+        children={({ SwitchField }) => {
+          return <SwitchField label="Required" description="Mark this field as required." />;
+        }}
+      />
       <AppForm>
         <TanStackActionsForm type="update" />
       </AppForm>
@@ -163,16 +182,12 @@ export const FormBuilderTextField: React.FC<{
           <FieldGroup className="gap-y-4 px-2">
             <Field orientation={state.value.orientation}>
               <FieldContent>
-                <FieldLabel>{state.value.label}</FieldLabel>
+                <FieldLabel aria-required={!!state.value.rules?.required}>{state.value.label}</FieldLabel>
                 <FieldDescription>{state.value.description}</FieldDescription>
               </FieldContent>
-              <FieldContentMain>
+              <FieldContentMain className="space-y-1">
                 <Input className="pointer-events-none" placeholder={state.value.placeholder} />
-                {!!state.value.helperText && (
-                  <div className="mt-1 text-wrap rounded bg-primary-bg-subtle p-2 text-text-positive-weak text-xs">
-                    <p>{state.value.helperText}</p>
-                  </div>
-                )}
+                <FieldNote isShow={!!state.value.helperText}>{state.value.helperText}</FieldNote>
               </FieldContentMain>
             </Field>
             <FieldSeparator />

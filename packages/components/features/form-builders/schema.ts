@@ -1,6 +1,11 @@
 import { z } from 'zod';
 
-import { TanStackFormTextFieldSchema, TanStackFormTitleFieldSchema } from '../tanstack-form/schema';
+import {
+  TanStackFormNumberFieldSchema,
+  TanStackFormTextAreaFieldSchema,
+  TanStackFormTextFieldSchema,
+  TanStackFormTitleFieldSchema,
+} from '../tanstack-form/schema';
 
 const formBuilderBaseFieldSchema = z.object({
   id: z.string().nonempty(),
@@ -185,9 +190,11 @@ export const formBuilderSectionSchema = z.object({
       TanStackFormTitleFieldSchema,
 
       // formBuilderTextFieldSchema,
+      // formBuilderTextAreaFieldSchema,
+      // formBuilderNumberFieldSchema,
       TanStackFormTextFieldSchema,
-      formBuilderTextAreaFieldSchema,
-      formBuilderNumberFieldSchema,
+      TanStackFormTextAreaFieldSchema,
+      TanStackFormNumberFieldSchema,
       formBuilderSelectFieldSchema,
       formBuilderDateFieldSchema,
       // formBuilderSwitchFieldSchema,

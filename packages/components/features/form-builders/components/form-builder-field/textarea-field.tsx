@@ -1,17 +1,20 @@
-import { useMemo } from 'react';
+import type z from 'zod';
 
-import { useForm } from '@tanstack/react-form';
+import { useTanStackForm } from '@/components/features/tanstack-form';
+import {
+  Field,
+  FieldContent,
+  FieldContentMain,
+  FieldDescription,
+  FieldGroup,
+  FieldLabel,
+  FieldSeparator,
+  FieldSet,
+} from '@/components/features/tanstack-form/components/ui/field';
+import { Textarea } from '@/components/features/tanstack-form/components/ui/textarea';
+import type { TanStackFormTextAreaFieldSchema } from '@/components/features/tanstack-form/schema';
 
-import z from 'zod';
-import { Button } from '@/components/ui/button';
-import type { formBuilderTextAreaFieldSchema } from '../../schema';
-import { toCamelCase } from '../../utils';
 import { useFormBuilderFieldContext } from '../form-buidler-form';
-import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, FieldLabel, FieldSeparator, FieldSet } from '../ui/fields';
-import { Input } from '../ui/input';
-import { NumberInput } from '../ui/number-input';
-import { Switch } from '../ui/switch';
-import { Textarea } from '../ui/textarea';
 import {
   FormBuilderFieldTooltip,
   FormBuilderFieldTooltipCopy,
@@ -27,182 +30,66 @@ const FieldType: React.FC = () => {
   const {
     state: { value: currentField },
     handleChange,
-  } = useFormBuilderFieldContext<z.infer<typeof formBuilderTextAreaFieldSchema>>();
-
-  const schema = useMemo(() => {
-    return z.object({
-      name: z.string().nonempty('Name is required'),
-      label: z.string().nonempty('Label is required'),
-      description: z.string(),
-      placeholder: z.string(),
-      showCharacterCount: z.boolean(),
-      showErrorMessage: z.boolean(),
-    });
-  }, []);
-
-  const form = useForm({
+  } = useFormBuilderFieldContext<z.infer<typeof TanStackFormTextAreaFieldSchema>>();
+  const { AppForm, AppField, TanStackContainerForm, TanStackActionsForm } = useTanStackForm({
     defaultValues: {
-      name: currentField?.name || '',
-      label: currentField?.label || '',
-      description: currentField?.description || '',
-      placeholder: currentField?.placeholder || '',
-      showCharacterCount: currentField?.showCharacterCount || false,
-      showErrorMessage: currentField?.showErrorMessage || false,
+      label: currentField.label,
+      description: currentField.description || null,
+      placeholder: currentField.placeholder || null,
+
+      counter: currentField.counter || false,
+      helperText: currentField.helperText || null,
     },
-    validators: {
-      onSubmit: schema,
-      onChange: schema,
-    },
-    onSubmit: ({ value }) => {
+    onSubmit: ({ value, formApi }) => {
       handleChange({
         ...currentField,
-        name: value.name,
-        camelCaseName: toCamelCase(value.name),
-        label: value.label,
-        description: value.description,
-        placeholder: value.placeholder,
-        showCharacterCount: value.showCharacterCount,
-        showErrorMessage: value.showErrorMessage,
+        ...(formApi.state.fieldMeta.label?.isDefaultValue ? {} : { label: value.label }),
+        ...(formApi.state.fieldMeta.description?.isDefaultValue ? {} : { description: value.description || undefined }),
+        ...(formApi.state.fieldMeta.placeholder?.isDefaultValue ? {} : { placeholder: value.placeholder || undefined }),
+
+        ...(formApi.state.fieldMeta.counter?.isDefaultValue ? {} : { counter: value.counter }),
+        ...(formApi.state.fieldMeta.helperText?.isDefaultValue ? {} : { helperText: value.helperText || undefined }),
       });
-    },
-    onSubmitInvalid: state => {
-      state.formApi.reset();
     },
   });
   return (
-    <form
-      onSubmit={e => {
-        e.preventDefault();
-        e.stopPropagation();
-        void form.handleSubmit();
-      }}
-    >
-      <FieldGroup>
-        <FieldSet>
-          <FieldDescription>Configure the settings for the text area field.</FieldDescription>
-          <FieldSeparator />
-        </FieldSet>
-        <FieldGroup>
-          <form.Field
-            name="name"
-            children={field => {
-              return (
-                <Field orientation="horizontal" className="*:data-[slot=field-content-main]:basis-3/5 *:data-[slot=field-content]:basis-2/5">
-                  <FieldContent>
-                    <FieldLabel className="text-text-positive-weak">Name</FieldLabel>
-                  </FieldContent>
-                  <Input value={field.state.value} placeholder="Enter field name" className="rounded!" onChange={e => field.handleChange(e.target.value)} />
-                </Field>
-              );
-            }}
-          />
-          <FieldSeparator />
-          <form.Field
-            name="label"
-            children={field => {
-              return (
-                <Field orientation="horizontal" className="*:data-[slot=field-content-main]:basis-3/5 *:data-[slot=field-content]:basis-2/5">
-                  <FieldContent>
-                    <FieldLabel className="text-text-positive-weak">Label</FieldLabel>
-                  </FieldContent>
-                  <Input value={field.state.value} placeholder="Enter field label" className="rounded!" onChange={e => field.handleChange(e.target.value)} />
-                </Field>
-              );
-            }}
-          />
-          <FieldSeparator />
-          <form.Field
-            name="description"
-            children={field => {
-              return (
-                <Field orientation="horizontal" className="*:data-[slot=field-content-main]:basis-3/5 *:data-[slot=field-content]:basis-2/5">
-                  <FieldContent>
-                    <FieldLabel className="text-text-positive-weak">Description</FieldLabel>
-                  </FieldContent>
-                  <Input
-                    value={field.state.value}
-                    placeholder="Enter field descriltion"
-                    className="rounded!"
-                    onChange={e => field.handleChange(e.target.value)}
-                  />
-                </Field>
-              );
-            }}
-          />
-          <FieldSeparator />
-          <form.Field
-            name="placeholder"
-            children={field => {
-              return (
-                <Field orientation="horizontal" className="*:data-[slot=field-content-main]:basis-3/5 *:data-[slot=field-content]:basis-2/5">
-                  <FieldContent>
-                    <FieldLabel className="text-text-positive-weak">Placeholder</FieldLabel>
-                  </FieldContent>
-                  <Input
-                    value={field.state.value}
-                    placeholder="Enter field placeholder"
-                    className="rounded!"
-                    onChange={e => field.handleChange(e.target.value)}
-                  />
-                </Field>
-              );
-            }}
-          />
-          <FieldSeparator />
-          <form.Field
-            name="showCharacterCount"
-            children={field => {
-              return (
-                <Field orientation="horizontal" className="*:data-[slot=field-content]:basis-2/5">
-                  <FieldContent>
-                    <FieldLabel htmlFor={field.name} className="text-text-positive-weak">
-                      Show Character Count
-                    </FieldLabel>
-                  </FieldContent>
-                  <div className="flex basis-3/5 justify-end">
-                    <Switch id={field.name} checked={field.state.value} onCheckedChange={field.handleChange} />
-                  </div>
-                </Field>
-              );
-            }}
-          />
-          <FieldSeparator />
-          <form.Field
-            name="showErrorMessage"
-            children={field => {
-              return (
-                <Field orientation="horizontal" className="*:data-[slot=field-content]:basis-2/5">
-                  <FieldContent>
-                    <FieldLabel htmlFor={field.name} className="text-text-positive-weak">
-                      Show Error Message
-                    </FieldLabel>
-                  </FieldContent>
-                  <div className="flex basis-3/5 justify-end">
-                    <Switch id={field.name} checked={field.state.value} onCheckedChange={field.handleChange} />
-                  </div>
-                </Field>
-              );
-            }}
-          />
-          <FieldSeparator />
-          <Field orientation="responsive">
-            <form.Subscribe
-              selector={state => [state.canSubmit, state.isSubmitting]}
-              children={([canSubmit, isSubmitting]) => {
-                return (
-                  <Button type="submit" disabled={!canSubmit || isSubmitting}>
-                    Submit
-                  </Button>
-                );
-              }}
-            />
-            <Button type="button" color="muted" variant="outline" onClick={() => form.reset()}>
-              Cancel
-            </Button>
-          </Field>
-        </FieldGroup>
-      </FieldGroup>
-    </form>
+    <TanStackContainerForm>
+      <AppField
+        name="label"
+        children={({ TextField }) => {
+          return <TextField label="Label" description="The label text displayed for the text field." />;
+        }}
+      />
+      <AppField
+        name="description"
+        children={({ TextField }) => {
+          return <TextField label="Description" description="The description text displayed below the label." />;
+        }}
+      />
+      <AppField
+        name="placeholder"
+        children={({ TextField }) => {
+          return <TextField label="Placeholder" description="The placeholder text displayed inside the text field." />;
+        }}
+      />
+      <AppField
+        name="helperText"
+        children={({ TextField }) => {
+          return (
+            <TextField label="Helper Text" placeholder='e.g., "Enter your full name."' description="Additional helper text displayed below the text field." />
+          );
+        }}
+      />
+      <AppField
+        name="counter"
+        children={({ SwitchField }) => {
+          return <SwitchField label="Character Counter" description="Display a character counter below the text field." />;
+        }}
+      />
+      <AppForm>
+        <TanStackActionsForm type="update" />
+      </AppForm>
+    </TanStackContainerForm>
   );
 };
 
@@ -210,146 +97,75 @@ const FieldRules: React.FC = () => {
   const {
     state: { value: currentField },
     handleChange,
-  } = useFormBuilderFieldContext<z.infer<typeof formBuilderTextAreaFieldSchema>>();
-
-  const schema = useMemo(() => {
-    return z
-      .object({
-        maxLength: z.number().gte(0).nullable(),
-        minLength: z.number().gte(0).nullable(),
-      })
-      .refine(
-        data => {
-          if (data.minLength !== null && data.maxLength !== null) {
-            return data.minLength <= data.maxLength;
-          }
-          return true;
-        },
-        {
-          message: 'Min Length must be less than or equal to Max Length',
-        }
-      );
-  }, []);
-
-  const form = useForm({
+  } = useFormBuilderFieldContext<z.infer<typeof TanStackFormTextAreaFieldSchema>>();
+  const { AppForm, AppField, TanStackContainerForm, TanStackActionsForm } = useTanStackForm({
     defaultValues: {
-      maxLength: currentField?.rules?.maxLength || null,
-      minLength: currentField?.rules?.minLength || null,
-    } as z.infer<typeof schema>,
-    validators: {
-      onSubmit: schema,
-      onChange: schema,
+      minLength: currentField.rules?.minLength || null,
+      maxLength: currentField.rules?.maxLength || null,
+      exactLength: currentField.rules?.exactLength || null,
+      required: currentField.rules?.required || null,
     },
-    onSubmit: ({ value }) => {
+    listeners: {
+      onChange: ({ formApi }) => {
+        // Update the field rules in the form builder context
+        if (formApi.state.values.exactLength !== null) {
+          if (formApi.state.values.minLength !== null) {
+            formApi.setFieldValue('minLength', null, { dontRunListeners: true });
+          }
+          if (formApi.state.values.maxLength !== null) {
+            formApi.setFieldValue('maxLength', null, { dontRunListeners: true });
+          }
+        }
+        if (formApi.state.values.exactLength === null) {
+          if (formApi.state.values.minLength !== null || formApi.state.values.maxLength !== null) {
+            formApi.setFieldValue('exactLength', null, { dontRunListeners: true });
+          }
+        }
+      },
+    },
+    onSubmit: ({ value, formApi }) => {
       handleChange({
         ...currentField,
         rules: {
-          ...currentField?.rules,
-          minLength: value.minLength,
-          maxLength: value.maxLength,
+          ...currentField.rules,
+          ...(formApi.state.fieldMeta.minLength?.isDefaultValue ? {} : { minLength: value.minLength ?? undefined }),
+          ...(formApi.state.fieldMeta.maxLength?.isDefaultValue ? {} : { maxLength: value.maxLength ?? undefined }),
+          ...(formApi.state.fieldMeta.exactLength?.isDefaultValue ? {} : { exactLength: value.exactLength ?? undefined }),
+          ...(formApi.state.fieldMeta.required?.isDefaultValue ? {} : { required: value.required ?? undefined }),
         },
       });
     },
-    onSubmitInvalid: state => {
-      state.formApi.reset();
-    },
   });
   return (
-    <form
-      onSubmit={e => {
-        e.preventDefault();
-        e.stopPropagation();
-        void form.handleSubmit();
-      }}
-    >
-      <FieldGroup>
-        <FieldSet>
-          <FieldDescription>Set validation rules for the text field.</FieldDescription>
-          <FieldSeparator />
-        </FieldSet>
-        <form.Field
-          name="minLength"
-          children={field => {
-            return (
-              <Field orientation="horizontal" className="*:data-[slot=field-content-main]:basis-3/5 *:data-[slot=field-content]:basis-2/5">
-                <FieldContent>
-                  <FieldLabel className="text-text-positive-weak">Min Length</FieldLabel>
-                </FieldContent>
-                <FieldContentMain className="flex justify-end">
-                  <NumberInput
-                    id={field.name}
-                    value={field.state.value ?? 0}
-                    aria-invalid={field.state.meta.isTouched && !field.state.meta.isValid}
-                    unitText=""
-                    placeholder="0"
-                    wrapperClassName="w-48"
-                    className="rounded!"
-                    onBlur={field.handleBlur}
-                    onValueChange={value => {
-                      if (value === undefined) {
-                        field.handleChange(null);
-                        return;
-                      }
-                      field.handleChange(value);
-                    }}
-                  />
-                </FieldContentMain>
-              </Field>
-            );
-          }}
-        />
-        <FieldSeparator />
-        <form.Field
-          name="maxLength"
-          children={field => {
-            return (
-              <Field orientation="horizontal" className="*:data-[slot=field-content-main]:basis-3/5 *:data-[slot=field-content]:basis-2/5">
-                <FieldContent>
-                  <FieldLabel htmlFor={field.name} className="text-text-positive-weak">
-                    Max Length
-                  </FieldLabel>
-                </FieldContent>
-                <FieldContentMain className="flex justify-end">
-                  <NumberInput
-                    id={field.name}
-                    value={field.state.value ?? 0}
-                    aria-invalid={field.state.meta.isTouched && !field.state.meta.isValid}
-                    unitText=""
-                    placeholder="0"
-                    wrapperClassName="w-48"
-                    className="rounded!"
-                    onBlur={field.handleBlur}
-                    onValueChange={value => {
-                      if (value === undefined) {
-                        field.handleChange(null);
-                        return;
-                      }
-                      field.handleChange(value);
-                    }}
-                  />
-                </FieldContentMain>
-              </Field>
-            );
-          }}
-        />
-        <FieldSeparator />
-        <Field orientation="responsive">
-          <form.Subscribe
-            selector={state => [state.canSubmit, state.isSubmitting]}
-            children={([canSubmit, isSubmitting]) => {
-              return (
-                <Button type="submit" disabled={!canSubmit || isSubmitting}>
-                  Submit
-                </Button>
-              );
-            }}
-          />
-          <Button type="button" color="muted" variant="outline" onClick={() => form.reset()}>
-            Cancel
-          </Button>
-        </Field>
-      </FieldGroup>
-    </form>
+    <TanStackContainerForm>
+      <AppField
+        name="minLength"
+        children={({ NumberField }) => {
+          return <NumberField label="Minimum Length" description="Set the minimum number of characters required." placeholder="e.g., 5" />;
+        }}
+      />
+      <AppField
+        name="maxLength"
+        children={({ NumberField }) => {
+          return <NumberField label="Maximum Length" description="Set the maximum number of characters allowed." placeholder="e.g., 100" />;
+        }}
+      />
+      <AppField
+        name="exactLength"
+        children={({ NumberField }) => {
+          return <NumberField label="Exact Length" description="Set an exact number of characters required." placeholder="e.g., 10" />;
+        }}
+      />
+      <AppField
+        name="required"
+        children={({ SwitchField }) => {
+          return <SwitchField label="Required" description="Mark this field as required." />;
+        }}
+      />
+      <AppForm>
+        <TanStackActionsForm type="update" />
+      </AppForm>
+    </TanStackContainerForm>
   );
 };
 
@@ -357,15 +173,15 @@ export const FormBuilderTextAreaField: React.FC<{
   sectionIndex: number;
   fieldId: string;
 }> = ({ sectionIndex, fieldId }) => {
-  const { state } = useFormBuilderFieldContext<z.infer<typeof formBuilderTextAreaFieldSchema>>();
+  const { state } = useFormBuilderFieldContext<z.infer<typeof TanStackFormTextAreaFieldSchema>>();
   return (
     <FormBuilderFieldWrapper>
       <FormBuilderFieldTrigger>
         <FieldSet>
-          <FieldGroup>
+          <FieldGroup className="gap-y-4 px-2">
             <Field orientation={state.value.orientation}>
               <FieldContent>
-                <FieldLabel>{state.value.label}</FieldLabel>
+                <FieldLabel aria-required={!!state.value.rules?.required}>{state.value.label}</FieldLabel>
                 <FieldDescription>{state.value.description}</FieldDescription>
               </FieldContent>
               <FieldContentMain>

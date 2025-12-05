@@ -129,13 +129,14 @@ export const LunasForm: React.FC<React.PropsWithChildren<LunasFormProps>> = ({
                             label={field.label}
                             placeholder={field.placeholder}
                             description={field.description}
-                            required={field.rules?.required}
-                            counter={field.counter}
+                            orientation={field.orientation}
                             tooltip={field.tooltip}
                             helperText={field.helperText}
-                            orientation={field.orientation}
+                            counter={field.counter}
                             showClearButton={field.showClearButton}
                             showErrorMessage={field.showErrorMessage}
+                            required={field.rules?.required}
+                            maxLength={field.rules?.maxLength}
                           />
                         );
                       }}
@@ -204,12 +205,14 @@ export const LunasForm: React.FC<React.PropsWithChildren<LunasFormProps>> = ({
                             label={field.label}
                             placeholder={field.placeholder}
                             description={field.description}
-                            required={field.rules?.required}
-                            counter={field.counter}
                             // tooltip={field.tooltip}
-                            helperText={field.helperText}
+
                             orientation={field.orientation}
+                            counter={field.counter}
+                            helperText={field.helperText}
                             showErrorMessage={field.showErrorMessage}
+                            required={field.rules?.required}
+                            maxLength={field.rules?.maxLength}
                           />
                         );
                       }}
@@ -292,15 +295,18 @@ export const LunasForm: React.FC<React.PropsWithChildren<LunasFormProps>> = ({
                             label={field.label}
                             description={field.description}
                             placeholder={field.placeholder}
-                            helperText={field.helperText}
+                            // UI Helpers
                             orientation={field.orientation}
-                            showErrorMessage={field.showErrorMessage}
+                            tooltip={field.tooltip}
+                            helperText={field.helperText}
                             rounding={field.rounding}
                             decimalPlaces={field.decimalPlaces}
                             percision={field.percision}
                             unit={field.unit}
+                            showErrorMessage={field.showErrorMessage}
+                            // Validation
                             required={field.rules?.required}
-                            allowNegative={!field.rules.positiveOnly}
+                            allowNegative={!field.rules?.positiveOnly}
                           />
                         );
                       }}
