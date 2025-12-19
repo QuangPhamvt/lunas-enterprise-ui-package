@@ -1,4 +1,3 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import {
   UITableContainer,
   UITableFilter,
@@ -8,6 +7,8 @@ import {
   UITableTooltipFilter,
   UITableWrapper,
 } from '@/components/features/tables';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { MockDataColumns, MockDataTables, type TMockDataTable } from './mock-data';
 
 const meta: Meta<typeof UITableProvider<TMockDataTable>> = {

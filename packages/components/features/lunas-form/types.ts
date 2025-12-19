@@ -20,7 +20,7 @@ export type LunasFormProps = {
 };
 
 export type LunasFormFormMeta = {
-  submitAction: null | 'update' | 'create' | 'debounce_update';
+  submitAction: 'null' | 'update' | 'create' | 'debounce_update';
 };
 
 export type LunasFormChangeDebounce = 500 | 1000 | 2000;

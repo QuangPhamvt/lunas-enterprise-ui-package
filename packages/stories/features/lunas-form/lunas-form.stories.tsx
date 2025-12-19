@@ -51,9 +51,6 @@ export const Default: Story = {
               description: 'This is the description for Text Field 1.',
               placeholder: 'Enter text here',
 
-              counter: {
-                max: 100,
-              },
               helperText: 'Helper text for Text Field 1. Max 100 characters. Min 10 characters.',
               showClearButton: true,
               showErrorMessage: true,
@@ -75,9 +72,6 @@ export const Default: Story = {
               description: 'This is the description for Textarea Field 1.',
               placeholder: 'Enter longer text here',
 
-              counter: {
-                max: 3000,
-              },
               helperText: 'Helper text for Textarea Field 1. Max 3000 characters. Min 50 characters.',
               showErrorMessage: true,
 
@@ -169,14 +163,76 @@ export const Default: Story = {
                 maxDate: new Date('2025-12-31'),
               },
             },
+            {
+              id: 'switch-field-1',
+              type: 'switch-field',
+
+              name: 'switchField1',
+              camelCaseName: 'switchField1',
+
+              label: 'Switch Field 1',
+              description: 'This is the description for Switch Field 1.',
+              defaultValue: true,
+
+              helperText: 'Helper text for Switch Field 1.',
+            },
+            {
+              id: 'radio-group-field-1',
+              type: 'radio-group-field',
+
+              name: 'radioGroupField1',
+              camelCaseName: 'radioGroupField1',
+
+              label: 'Radio Group Field 1',
+              description: 'This is the description for Radio Group Field 1.',
+
+              options: [
+                { label: 'Radio Option 1', value: 'radio1', description: 'Description for Radio Option 1' },
+                { label: 'Radio Option 2', value: 'radio2', description: 'Description for Radio Option 2' },
+                { label: 'Radio Option 3', value: 'radio3', description: 'Description for Radio Option 3' },
+              ],
+
+              defaultValue: 'radio2',
+
+              helperText: 'Helper text for Radio Group Field 1.',
+              orientation: 'responsive',
+            },
+            {
+              id: 'checkbox-group-field-1',
+              type: 'checkbox-group-field',
+
+              name: 'checkboxGroupField1',
+              camelCaseName: 'checkboxGroupField1',
+
+              label: 'Checkbox Group Field 1',
+              description: 'This is the description for Checkbox Group Field 1.',
+
+              options: [
+                { label: 'Checkbox Option 1', value: 'checkbox1' },
+                { label: 'Checkbox Option 2', value: 'checkbox2' },
+                { label: 'Checkbox Option 3', value: 'checkbox3' },
+                { label: 'Checkbox Option 4', value: 'checkbox4' },
+                { label: 'Checkbox Option 5', value: 'checkbox5' },
+              ],
+
+              defaultValue: ['checkbox1', 'checkbox3'],
+
+              helperText: 'Helper text for Checkbox Group Field 1.',
+              orientation: 'responsive',
+            },
           ],
         },
       ],
     },
 
-    onCreate: async value => {
-      await sleep(2000);
-      console.log('Form Submitted:', value);
+    // onCreate: async value => {
+    //   await sleep(2000);
+    //   console.log('Form Submitted:', value);
+    // },
+
+    onDebounceUpdate: async value => {
+      await sleep(5000);
+      console.log('Debounce Update:', value);
     },
   },
 };

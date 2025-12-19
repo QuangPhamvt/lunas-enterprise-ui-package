@@ -1,8 +1,15 @@
-import z from 'zod';
-
 import { useTanStackForm } from '../tanstack-form';
 import { useGetDefaultValues } from './hooks/useGetDefaultValues';
 import type { LunasFormFormMeta, LunasFormProps } from './types';
+import {
+  dateFieldOnSubmitValidation,
+  numberFieldOnChangeValidation,
+  numberFieldOnSubmitValidation,
+  selectFieldOnSubmitValidation,
+  textareaFieldOnSubmitValidation,
+  textFieldOnChangeValidation,
+  textFieldOnSubmitValidation,
+} from './utils';
 
 export const LunasForm: React.FC<React.PropsWithChildren<LunasFormProps>> = ({
   initialValues,
@@ -14,40 +21,47 @@ export const LunasForm: React.FC<React.PropsWithChildren<LunasFormProps>> = ({
 }) => {
   const { defaultValues } = useGetDefaultValues(initialValues ?? {}, formSchema.sections);
   const { AppForm, AppField, TanStackTitleField, TanStackContainerForm, TanStackSectionForm, TanStackActionsForm } = useTanStackForm({
-    defaultValues: defaultValues as any,
+    defaultValues: defaultValues,
     onSubmitMeta: {
-      submitAction: null,
+      submitAction: 'null',
     } as LunasFormFormMeta,
     onSubmit: async ({ value, meta, formApi }) => {
-      // Create Action
-      if (meta.submitAction === 'create') {
-        await onCreate?.(value);
-        formApi.reset();
-      }
+      // Handle submit based on action
+      const handleSubmit: Record<LunasFormFormMeta['submitAction'], () => Promise<void>> = {
+        create: async () => {
+          await onCreate?.(value);
+          formApi.reset();
+        },
+        update: async () => {
+          const fieldKeys = Object.keys(formApi.state.fieldMeta);
+          const updatedData: Record<string, string | string[] | number | Date | boolean | null> = {};
+          fieldKeys.forEach(key => {
+            if (formApi.state.fieldMeta[key]?.isDefaultValue) return;
+            updatedData[key] = value[key];
+          });
+          await onUpdate?.(updatedData);
+          formApi.reset(value);
+        },
+        debounce_update: async () => {
+          const fieldKeys = Object.keys(formApi.state.fieldMeta);
+          const updatedData: Record<string, unknown> = {};
+          fieldKeys.forEach(key => {
+            if (formApi.state.fieldMeta[key]?.isDefaultValue) return;
+            updatedData[key] = value[key];
+          });
+          try {
+            await onDebounceUpdate?.(updatedData);
+            formApi.reset(value);
+          } catch (error) {
+            console.error('Debounce update failed:', error);
+          }
+        },
+        null: async () => {
+          // do nothing
+        },
+      };
 
-      // Update Action
-      if (meta.submitAction === 'update') {
-        const fieldKeys = Object.keys(formApi.state.fieldMeta);
-        const updatedData: Record<string, unknown> = {};
-        fieldKeys.forEach(key => {
-          if (formApi.state.fieldMeta[key]?.isDefaultValue) return;
-          updatedData[key] = value[key];
-        });
-        await onUpdate?.(updatedData);
-        formApi.reset(value);
-      }
-
-      // Debounce Update
-      if (meta.submitAction === 'debounce_update') {
-        const fieldKeys = Object.keys(formApi.state.fieldMeta);
-        const updatedData: Record<string, unknown> = {};
-        fieldKeys.forEach(key => {
-          if (formApi.state.fieldMeta[key]?.isDefaultValue) return;
-          updatedData[key] = value[key];
-        });
-        await onDebounceUpdate?.(updatedData);
-        formApi.reset(value);
-      }
+      await handleSubmit[meta.submitAction]();
     },
     listeners: {
       onChangeDebounceMs: changeDebounce,
@@ -75,55 +89,22 @@ export const LunasForm: React.FC<React.PropsWithChildren<LunasFormProps>> = ({
                       key={field.id}
                       name={field.camelCaseName}
                       validators={{
-                        onSubmit: ({ fieldApi }) => {
-                          const { rules } = field;
-                          if (!rules) return undefined;
-                          const errors = fieldApi.parseValueWithSchema(
-                            z
-                              .string()
-                              .nullable()
-                              .refine(val => {
-                                if (rules.required) return val !== null && val.trim().length > 0;
-                                return true;
-                              }, `${field.label} is required.`)
-                          );
-                          if (errors) return errors;
-                          return undefined;
-                        },
                         onChangeAsyncDebounceMs: 300,
+                        onSubmit: ({ fieldApi }) => {
+                          const { label, rules } = field;
+                          const schema = textFieldOnSubmitValidation(label, rules);
+                          if (!schema) return undefined;
+                          return fieldApi.parseValueWithSchema(schema);
+                        },
                         onChangeAsync: ({ fieldApi }) => {
-                          const { rules } = field;
-                          if (!rules) return undefined;
-                          const errors = fieldApi.parseValueWithSchema(
-                            z
-                              .string()
-                              .nullable()
-                              .refine(val => {
-                                if (val === null) return true;
-                                if (rules.required) return val.trim().length > 0;
-                                return true;
-                              }, `${field.label} is required.`)
-                              .refine(val => {
-                                if (val === null) return true;
-                                if (rules.maxLength !== undefined) return val.length <= rules.maxLength;
-                                return true;
-                              }, `${field.label} must be at most ${rules.maxLength} characters.`)
-                              .refine(val => {
-                                if (val === null) return true;
-                                if (rules.minLength !== undefined) return val.length >= rules.minLength;
-                                return true;
-                              }, `${field.label} must be at least ${rules.minLength} characters.`)
-                              .refine(val => {
-                                if (val === null) return true;
-                                if (rules.exactLength !== undefined) return val.length === rules.exactLength;
-                                return true;
-                              }, `${field.label} must be exactly ${rules.exactLength} characters.`)
-                          );
-                          if (errors) return errors;
-                          return undefined;
+                          const { label, rules } = field;
+                          const schema = textFieldOnChangeValidation(label, rules);
+                          if (!schema) return undefined;
+                          return fieldApi.parseValueWithSchema(schema);
                         },
                       }}
-                      children={({ TextField }) => {
+                    >
+                      {({ TextField }) => {
                         return (
                           <TextField
                             label={field.label}
@@ -140,7 +121,7 @@ export const LunasForm: React.FC<React.PropsWithChildren<LunasFormProps>> = ({
                           />
                         );
                       }}
-                    />
+                    </AppField>
                   );
                 }
 
@@ -151,52 +132,18 @@ export const LunasForm: React.FC<React.PropsWithChildren<LunasFormProps>> = ({
                       key={field.id}
                       name={field.camelCaseName}
                       validators={{
-                        onSubmit: ({ fieldApi }) => {
-                          const { rules } = field;
-                          if (!rules) return undefined;
-                          const errors = fieldApi.parseValueWithSchema(
-                            z
-                              .string()
-                              .nullable()
-                              .refine(val => {
-                                if (rules.required) return val !== null && val.trim().length > 0;
-                                return true;
-                              }, `${field.label} is required.`)
-                          );
-                          if (errors) return errors;
-                          return undefined;
-                        },
                         onChangeAsyncDebounceMs: 300,
+                        onSubmit: ({ fieldApi }) => {
+                          const { label, rules } = field;
+                          const schema = textareaFieldOnSubmitValidation(label, rules);
+                          if (!schema) return undefined;
+                          return fieldApi.parseValueWithSchema(schema);
+                        },
                         onChangeAsync: ({ fieldApi }) => {
-                          const { rules } = field;
-                          if (!rules) return undefined;
-                          const errors = fieldApi.parseValueWithSchema(
-                            z
-                              .string()
-                              .nullable()
-                              .refine(val => {
-                                if (val === null) return true;
-                                if (rules.required) return val.trim().length > 0;
-                                return true;
-                              }, `${field.label} is required.`)
-                              .refine(val => {
-                                if (val === null) return true;
-                                if (rules.maxLength !== undefined) return val.length <= rules.maxLength;
-                                return true;
-                              }, `${field.label} must be at most ${rules.maxLength} characters.`)
-                              .refine(val => {
-                                if (val === null) return true;
-                                if (rules.minLength !== undefined) return val.length >= rules.minLength;
-                                return true;
-                              }, `${field.label} must be at least ${rules.minLength} characters.`)
-                              .refine(val => {
-                                if (val === null) return true;
-                                if (rules.exactLength !== undefined) return val.length === rules.exactLength;
-                                return true;
-                              }, `${field.label} must be exactly ${rules.exactLength} characters.`)
-                          );
-                          if (errors) return errors;
-                          return undefined;
+                          const { label, rules } = field;
+                          const schema = textFieldOnChangeValidation(label, rules);
+                          if (!schema) return undefined;
+                          return fieldApi.parseValueWithSchema(schema);
                         },
                       }}
                       children={({ TextareaField }) => {
@@ -205,8 +152,6 @@ export const LunasForm: React.FC<React.PropsWithChildren<LunasFormProps>> = ({
                             label={field.label}
                             placeholder={field.placeholder}
                             description={field.description}
-                            // tooltip={field.tooltip}
-
                             orientation={field.orientation}
                             counter={field.counter}
                             helperText={field.helperText}
@@ -227,69 +172,22 @@ export const LunasForm: React.FC<React.PropsWithChildren<LunasFormProps>> = ({
                       key={field.id}
                       name={field.camelCaseName}
                       validators={{
-                        onSubmit: ({ fieldApi }) => {
-                          const { rules } = field;
-                          if (!rules) return undefined;
-                          const errors = fieldApi.parseValueWithSchema(
-                            z
-                              .number()
-                              .nullable()
-                              .refine(val => {
-                                if (rules.required) return val !== null;
-                                return true;
-                              }, `${field.label} is required.`)
-                          );
-                          if (errors) return errors;
-                          return undefined;
-                        },
                         onChangeAsyncDebounceMs: 300,
+                        onSubmit: ({ fieldApi }) => {
+                          const { label, rules } = field;
+                          const schema = numberFieldOnSubmitValidation(label, rules);
+                          if (!schema) return undefined;
+                          return fieldApi.parseValueWithSchema(schema);
+                        },
                         onChangeAsync: ({ fieldApi }) => {
-                          const { rules } = field;
-                          if (!rules) return undefined;
-                          const errors = fieldApi.parseValueWithSchema(
-                            z
-                              .number()
-                              .nullable()
-                              .refine(
-                                val => {
-                                  if (val === null) return true;
-                                  if (rules.min !== undefined) return rules.min.inclusive ? val >= rules.min.value : val > rules.min.value;
-                                  return true;
-                                },
-                                `${field.label} must be ${rules.min?.inclusive ? 'at least' : 'greater than'} ${rules.min?.value}.`
-                              )
-                              .refine(
-                                val => {
-                                  if (val === null) return true;
-                                  if (rules.max !== undefined) return rules.max.inclusive ? val <= rules.max.value : val < rules.max.value;
-                                  return true;
-                                },
-                                `${field.label} must be ${rules.max?.inclusive ? 'at most' : 'less than'} ${rules.max?.value}.`
-                              )
-                              .refine(val => {
-                                if (val === null) return true;
-                                if (rules.positiveOnly) return val >= 0;
-                                return true;
-                              }, `${field.label} must be a positive number.`)
-                              .refine(val => {
-                                if (val === null) return true;
-                                if (rules.integerOnly) return Number.isInteger(val);
-                                return true;
-                              }, `${field.label} must be an integer.`)
-                              .refine(val => {
-                                if (val === null) return true;
-                                if (rules.exactDigits !== undefined) {
-                                  const digitCount = val.toString().replace('-', '').replace('.', '').length;
-                                  return digitCount === rules.exactDigits;
-                                }
-                                return true;
-                              }, `${field.label} must have exactly ${rules.exactDigits} digits.`)
-                          );
-                          if (errors) return errors;
-                          return undefined;
+                          const { label, rules } = field;
+                          const schema = numberFieldOnChangeValidation(label, rules);
+                          if (!schema) return undefined;
+                          return fieldApi.parseValueWithSchema(schema);
                         },
                       }}
-                      children={({ NumberField }) => {
+                    >
+                      {({ NumberField }) => {
                         return (
                           <NumberField
                             label={field.label}
@@ -310,7 +208,7 @@ export const LunasForm: React.FC<React.PropsWithChildren<LunasFormProps>> = ({
                           />
                         );
                       }}
-                    />
+                    </AppField>
                   );
                 }
 
@@ -322,22 +220,14 @@ export const LunasForm: React.FC<React.PropsWithChildren<LunasFormProps>> = ({
                       name={field.camelCaseName}
                       validators={{
                         onSubmit: ({ fieldApi }) => {
-                          const { rules } = field;
-                          if (!rules) return undefined;
-                          const errors = fieldApi.parseValueWithSchema(
-                            z
-                              .string()
-                              .nullable()
-                              .refine(val => {
-                                if (rules.required) return val !== null && val.trim().length > 0;
-                                return true;
-                              }, `${field.label} is required.`)
-                          );
-                          if (errors) return errors;
-                          return undefined;
+                          const { label, rules } = field;
+                          const schema = selectFieldOnSubmitValidation(label, rules);
+                          if (!schema) return undefined;
+                          return fieldApi.parseValueWithSchema(schema);
                         },
                       }}
-                      children={({ SelectField }) => {
+                    >
+                      {({ SelectField }) => {
                         return (
                           <SelectField
                             label={field.label}
@@ -351,7 +241,74 @@ export const LunasForm: React.FC<React.PropsWithChildren<LunasFormProps>> = ({
                           />
                         );
                       }}
-                    />
+                    </AppField>
+                  );
+                }
+
+                // Switch Field
+                if (field.type === 'switch-field') {
+                  return (
+                    <AppField
+                      key={field.id}
+                      name={field.camelCaseName}
+                      validators={{
+                        onSubmit: () => {},
+                      }}
+                    >
+                      {({ SwitchField }) => {
+                        return <SwitchField label={field.label} description={field.description} helperText={field.helperText} />;
+                      }}
+                    </AppField>
+                  );
+                }
+
+                // Radio Group Field
+                if (field.type === 'radio-group-field') {
+                  return (
+                    <AppField
+                      key={field.id}
+                      name={field.camelCaseName}
+                      validators={{
+                        onSubmit: () => {},
+                      }}
+                    >
+                      {({ RadioGroupField }) => {
+                        return (
+                          <RadioGroupField
+                            label={field.label}
+                            description={field.description}
+                            options={field.options}
+                            orientation={field.orientation}
+                            helperText={field.helperText}
+                          />
+                        );
+                      }}
+                    </AppField>
+                  );
+                }
+
+                // Checkbox Group Field
+                if (field.type === 'checkbox-group-field') {
+                  return (
+                    <AppField
+                      key={field.id}
+                      name={field.camelCaseName}
+                      validators={{
+                        onSubmit: () => {},
+                      }}
+                    >
+                      {({ CheckboxField }) => {
+                        return (
+                          <CheckboxField
+                            label={field.label}
+                            description={field.description}
+                            options={field.options}
+                            orientation={field.orientation}
+                            helperText={field.helperText}
+                          />
+                        );
+                      }}
+                    </AppField>
                   );
                 }
 
@@ -363,22 +320,14 @@ export const LunasForm: React.FC<React.PropsWithChildren<LunasFormProps>> = ({
                       name={field.camelCaseName}
                       validators={{
                         onSubmit: ({ fieldApi }) => {
-                          const { rules } = field;
-                          if (!rules) return undefined;
-                          const errors = fieldApi.parseValueWithSchema(
-                            z
-                              .date()
-                              .nullable()
-                              .refine(val => {
-                                if (rules.required) return val !== null;
-                                return true;
-                              }, `${field.label} is required.`)
-                          );
-                          if (errors) return errors;
-                          return undefined;
+                          const { label, rules } = field;
+                          const schema = dateFieldOnSubmitValidation(label, rules);
+                          if (!schema) return undefined;
+                          return fieldApi.parseValueWithSchema(schema);
                         },
                       }}
-                      children={({ DateField }) => {
+                    >
+                      {({ DateField }) => {
                         return (
                           <DateField
                             label={field.label}
@@ -392,9 +341,10 @@ export const LunasForm: React.FC<React.PropsWithChildren<LunasFormProps>> = ({
                           />
                         );
                       }}
-                    />
+                    </AppField>
                   );
                 }
+
                 return null;
               })}
             </TanStackSectionForm>
