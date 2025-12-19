@@ -3,11 +3,11 @@ import { Activity, memo, useCallback, useEffect, useMemo, useRef } from 'react';
 
 import { type Cell, type Column, type ColumnPinningPosition, flexRender, type Header, type Row } from '@tanstack/react-table';
 import { useVirtualizer, type VirtualItem, type Virtualizer } from '@tanstack/react-virtual';
+
 import { BoxIcon, EllipsisVerticalIcon, EyeOffIcon, MoveLeftIcon, MoveRightIcon, PinOffIcon } from 'lucide-react';
 
 import { cn } from '@customafk/react-toolkit/utils';
 
-import type { ImperativePanelGroupHandle } from 'react-resizable-panels';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
   DropdownMenu,
@@ -19,6 +19,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
+
+import type { ImperativePanelGroupHandle } from 'react-resizable-panels';
 import type { AnyEntity } from '@/types';
 import { useUITableContext } from '../hooks/use-table-context';
 import { useUITableRowsContext } from '../hooks/use-table-rows-context';

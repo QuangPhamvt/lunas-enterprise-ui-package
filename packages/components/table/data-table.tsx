@@ -1,12 +1,14 @@
 import { memo, useCallback } from 'react';
 
 import { type Column, flexRender, type Header, type HeaderGroup, type Row } from '@tanstack/react-table';
+import type { VirtualItem } from '@tanstack/react-virtual';
+
 import { LoaderIcon } from 'lucide-react';
 
 import { cn } from '@customafk/react-toolkit/utils';
 
-import type { VirtualItem } from '@tanstack/react-virtual';
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+
 import type { AnyEntity } from '@/types';
 import { useTableContext } from './context';
 

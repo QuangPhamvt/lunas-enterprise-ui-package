@@ -51,9 +51,6 @@ export const Default: Story = {
               description: 'This is the description for Text Field 1.',
               placeholder: 'Enter text here',
 
-              counter: {
-                max: 100,
-              },
               helperText: 'Helper text for Text Field 1. Max 100 characters. Min 10 characters.',
               showClearButton: true,
               showErrorMessage: true,
@@ -75,9 +72,6 @@ export const Default: Story = {
               description: 'This is the description for Textarea Field 1.',
               placeholder: 'Enter longer text here',
 
-              counter: {
-                max: 3000,
-              },
               helperText: 'Helper text for Textarea Field 1. Max 3000 characters. Min 50 characters.',
               showErrorMessage: true,
 
@@ -174,9 +168,14 @@ export const Default: Story = {
       ],
     },
 
-    onCreate: async value => {
-      await sleep(2000);
-      console.log('Form Submitted:', value);
+    // onCreate: async value => {
+    //   await sleep(2000);
+    //   console.log('Form Submitted:', value);
+    // },
+
+    onDebounceUpdate: async value => {
+      await sleep(5000);
+      console.log('Debounce Update:', value);
     },
   },
 };

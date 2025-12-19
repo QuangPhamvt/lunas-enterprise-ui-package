@@ -1,4 +1,5 @@
 'use client';
+
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { Tooltip as TooltipPrimitive } from 'radix-ui';
@@ -27,7 +28,7 @@ function TooltipContent({ className, sideOffset = 0, children, ...props }: React
         sideOffset={sideOffset}
         className={cn(
           'bg-secondary-strong text-text-negative-intense shadow-dropdown outline-none',
-          'animate-in fade-in-0 zoom-in-95',
+          'fade-in-0 zoom-in-95 animate-in',
           'data-[state=closed]:animate-out',
           'data-[state=closed]:fade-out-0',
           'data-[state=closed]:zoom-out-95',
@@ -37,13 +38,13 @@ function TooltipContent({ className, sideOffset = 0, children, ...props }: React
           'data-[side=top]:slide-in-from-bottom-2',
           'z-50 w-fit',
           'origin-(--radix-tooltip-content-transform-origin)',
-          'rounded-lg px-3 py-1.5 text-xs text-balance',
+          'text-balance rounded-lg px-3 py-1.5 text-xs',
           className
         )}
         {...props}
       >
         {children}
-        <TooltipPrimitive.Arrow className="bg-secondary-strong fill-secondary-strong z-50 size-2.5 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-[2px]" />
+        <TooltipPrimitive.Arrow className="z-50 size-2.5 translate-y-[calc(-50%-2px)] rotate-45 rounded-[2px] bg-secondary-strong fill-secondary-strong" />
       </TooltipPrimitive.Content>
     </TooltipPrimitive.Portal>
   );

@@ -2,6 +2,7 @@ import { Activity } from 'react';
 
 import { Field, FieldContent, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldSeparator } from '@/components/ui/field';
 import { NumberInput } from '@/components/ui/inputs/number-input';
+
 import { useFieldContext } from '../config';
 
 type Props = {

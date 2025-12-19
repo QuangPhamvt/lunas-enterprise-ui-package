@@ -11,44 +11,55 @@ type DefaultValues = {
 
 export const useGetDefaultValues = (defaultValues: DefaultValues, sections: LunasFormFormSection[]) => {
   const _defaultValues = useMemo(() => {
-    const _initial: Record<string, unknown> = {};
+    const _initial: Record<string, string | number | Date | null> = {};
     sections.forEach(section => {
       section.fields.forEach(field => {
-        if (field.type === 'title-field') return;
-        if (field.type === 'text-field') {
-          const parsed = z.string().nullable().default(null).safeParse(defaultValues[field.camelCaseName]);
-          if (!parsed.success) {
-            console.warn(`Failed to parse default value for field ${field.camelCaseName}:`, parsed.error);
+        switch (field.type) {
+          case 'title-field': {
+            break;
           }
-          _initial[field.camelCaseName] = parsed.data;
-        }
-        if (field.type === 'textarea-field') {
-          const parsed = z.string().nullable().default(null).safeParse(defaultValues[field.camelCaseName]);
-          if (!parsed.success) {
-            console.warn(`Failed to parse default value for field ${field.camelCaseName}:`, parsed.error);
+          case 'text-field': {
+            const parsed = z.string().nullable().default(null).safeParse(defaultValues[field.camelCaseName]);
+            if (!parsed.success) {
+              console.warn(`Failed to parse default value for field ${field.camelCaseName}:`, parsed.error);
+            }
+            _initial[field.camelCaseName] = parsed.data ?? null;
+            break;
           }
-          _initial[field.camelCaseName] = parsed.data;
-        }
-        if (field.type === 'number-field') {
-          const parsed = z.number().nullable().default(null).safeParse(defaultValues[field.camelCaseName]);
-          if (!parsed.success) {
-            console.warn(`Failed to parse default value for field ${field.camelCaseName}:`, parsed.error);
+          case 'textarea-field': {
+            const parsed = z.string().nullable().default(null).safeParse(defaultValues[field.camelCaseName]);
+            if (!parsed.success) {
+              console.warn(`Failed to parse default value for field ${field.camelCaseName}:`, parsed.error);
+            }
+            _initial[field.camelCaseName] = parsed.data ?? null;
+            break;
           }
-          _initial[field.camelCaseName] = parsed.data;
-        }
-        if (field.type === 'select-field') {
-          const parsed = z.string().nullable().default(null).safeParse(defaultValues[field.camelCaseName]);
-          if (!parsed.success) {
-            console.warn(`Failed to parse default value for field ${field.camelCaseName}:`, parsed.error);
+          case 'number-field': {
+            const parsed = z.number().nullable().default(null).safeParse(defaultValues[field.camelCaseName]);
+            if (!parsed.success) {
+              console.warn(`Failed to parse default value for field ${field.camelCaseName}:`, parsed.error);
+            }
+            _initial[field.camelCaseName] = parsed.data ?? null;
+            break;
           }
-          _initial[field.camelCaseName] = parsed.data;
-        }
-        if (field.type === 'date-field') {
-          const parsed = z.date().nullable().default(null).safeParse(defaultValues[field.camelCaseName]);
-          if (!parsed.success) {
-            console.warn(`Failed to parse default value for field ${field.camelCaseName}:`, parsed.error);
+          case 'select-field': {
+            const parsed = z.string().nullable().default(null).safeParse(defaultValues[field.camelCaseName]);
+            if (!parsed.success) {
+              console.warn(`Failed to parse default value for field ${field.camelCaseName}:`, parsed.error);
+            }
+            _initial[field.camelCaseName] = parsed.data ?? null;
+            break;
           }
-          _initial[field.camelCaseName] = parsed.data;
+          case 'date-field': {
+            const parsed = z.date().nullable().default(null).safeParse(defaultValues[field.camelCaseName]);
+            if (!parsed.success) {
+              console.warn(`Failed to parse default value for field ${field.camelCaseName}:`, parsed.error);
+            }
+            _initial[field.camelCaseName] = parsed.data ?? null;
+            break;
+          }
+          default:
+            break;
         }
       });
     });
