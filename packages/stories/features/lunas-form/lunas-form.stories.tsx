@@ -163,6 +163,63 @@ export const Default: Story = {
                 maxDate: new Date('2025-12-31'),
               },
             },
+            {
+              id: 'switch-field-1',
+              type: 'switch-field',
+
+              name: 'switchField1',
+              camelCaseName: 'switchField1',
+
+              label: 'Switch Field 1',
+              description: 'This is the description for Switch Field 1.',
+              defaultValue: true,
+
+              helperText: 'Helper text for Switch Field 1.',
+            },
+            {
+              id: 'radio-group-field-1',
+              type: 'radio-group-field',
+
+              name: 'radioGroupField1',
+              camelCaseName: 'radioGroupField1',
+
+              label: 'Radio Group Field 1',
+              description: 'This is the description for Radio Group Field 1.',
+
+              options: [
+                { label: 'Radio Option 1', value: 'radio1', description: 'Description for Radio Option 1' },
+                { label: 'Radio Option 2', value: 'radio2', description: 'Description for Radio Option 2' },
+                { label: 'Radio Option 3', value: 'radio3', description: 'Description for Radio Option 3' },
+              ],
+
+              defaultValue: 'radio2',
+
+              helperText: 'Helper text for Radio Group Field 1.',
+              orientation: 'responsive',
+            },
+            {
+              id: 'checkbox-group-field-1',
+              type: 'checkbox-group-field',
+
+              name: 'checkboxGroupField1',
+              camelCaseName: 'checkboxGroupField1',
+
+              label: 'Checkbox Group Field 1',
+              description: 'This is the description for Checkbox Group Field 1.',
+
+              options: [
+                { label: 'Checkbox Option 1', value: 'checkbox1' },
+                { label: 'Checkbox Option 2', value: 'checkbox2' },
+                { label: 'Checkbox Option 3', value: 'checkbox3' },
+                { label: 'Checkbox Option 4', value: 'checkbox4' },
+                { label: 'Checkbox Option 5', value: 'checkbox5' },
+              ],
+
+              defaultValue: ['checkbox1', 'checkbox3'],
+
+              helperText: 'Helper text for Checkbox Group Field 1.',
+              orientation: 'responsive',
+            },
           ],
         },
       ],

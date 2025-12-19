@@ -1,3 +1,5 @@
+import { useStore } from '@tanstack/react-form';
+
 import type z from 'zod';
 
 import type { TanStackFormCheckboxGroupFieldSchema } from '../../schema';
@@ -9,6 +11,7 @@ type Props = Pick<z.input<typeof TanStackFormCheckboxGroupFieldSchema>, 'label' 
 
 export const CheckboxField: React.FC<Props> = ({ label, description, options, helperText, orientation }) => {
   const field = useTanStackFieldContext<string[] | null>();
+  const isSubmitting = useStore(field.form.store, ({ isSubmitting }) => isSubmitting);
   return (
     <FieldGroup className="gap-y-4 px-4">
       <Field orientation={orientation}>
@@ -26,6 +29,7 @@ export const CheckboxField: React.FC<Props> = ({ label, description, options, he
                     id={`${field.name}-${option.value}`}
                     name={field.name}
                     checked={field.state.value?.includes(option.value) ?? false}
+                    disabled={isSubmitting}
                     onCheckedChange={checked => {
                       // Update the field value based on the checkbox state
 

@@ -34,7 +34,7 @@ export const LunasForm: React.FC<React.PropsWithChildren<LunasFormProps>> = ({
         },
         update: async () => {
           const fieldKeys = Object.keys(formApi.state.fieldMeta);
-          const updatedData: Record<string, unknown> = {};
+          const updatedData: Record<string, string | string[] | number | Date | boolean | null> = {};
           fieldKeys.forEach(key => {
             if (formApi.state.fieldMeta[key]?.isDefaultValue) return;
             updatedData[key] = value[key];
@@ -245,6 +245,73 @@ export const LunasForm: React.FC<React.PropsWithChildren<LunasFormProps>> = ({
                   );
                 }
 
+                // Switch Field
+                if (field.type === 'switch-field') {
+                  return (
+                    <AppField
+                      key={field.id}
+                      name={field.camelCaseName}
+                      validators={{
+                        onSubmit: () => {},
+                      }}
+                    >
+                      {({ SwitchField }) => {
+                        return <SwitchField label={field.label} description={field.description} helperText={field.helperText} />;
+                      }}
+                    </AppField>
+                  );
+                }
+
+                // Radio Group Field
+                if (field.type === 'radio-group-field') {
+                  return (
+                    <AppField
+                      key={field.id}
+                      name={field.camelCaseName}
+                      validators={{
+                        onSubmit: () => {},
+                      }}
+                    >
+                      {({ RadioGroupField }) => {
+                        return (
+                          <RadioGroupField
+                            label={field.label}
+                            description={field.description}
+                            options={field.options}
+                            orientation={field.orientation}
+                            helperText={field.helperText}
+                          />
+                        );
+                      }}
+                    </AppField>
+                  );
+                }
+
+                // Checkbox Group Field
+                if (field.type === 'checkbox-group-field') {
+                  return (
+                    <AppField
+                      key={field.id}
+                      name={field.camelCaseName}
+                      validators={{
+                        onSubmit: () => {},
+                      }}
+                    >
+                      {({ CheckboxField }) => {
+                        return (
+                          <CheckboxField
+                            label={field.label}
+                            description={field.description}
+                            options={field.options}
+                            orientation={field.orientation}
+                            helperText={field.helperText}
+                          />
+                        );
+                      }}
+                    </AppField>
+                  );
+                }
+
                 // Date Field
                 if (field.type === 'date-field') {
                   return (
@@ -277,6 +344,7 @@ export const LunasForm: React.FC<React.PropsWithChildren<LunasFormProps>> = ({
                     </AppField>
                   );
                 }
+
                 return null;
               })}
             </TanStackSectionForm>
