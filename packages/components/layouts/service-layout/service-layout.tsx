@@ -6,7 +6,6 @@ import { LockIcon, LogInIcon, LogOutIcon, ShoppingBag, ShoppingCartIcon, UserIco
 import { useMediaQuery } from '@customafk/react-toolkit/hooks/useMediaQuery';
 import { cn } from '@customafk/react-toolkit/utils';
 
-import { GoogleLogin } from '@react-oauth/google';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -22,6 +21,8 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+
+import { GoogleLogin } from '@react-oauth/google';
 import { CartList } from './components/cart';
 import { ServiceLayoutContext, type ServiceLayoutContextProps, useServiceLayout } from './hooks/use-service-layout';
 import {
@@ -158,16 +159,16 @@ export const ServiceLayoutHeader: React.FC<ServiceLayoutHeaderProps> = () => {
       className={cn(
         'bg-card',
         'h-(--header-height)',
-        'sm:h-[calc(var(--header-height)_+_0.5rem)] sm:px-4 sm:pr-6',
+        'sm:h-[calc(var(--header-height)+0.5rem)] sm:px-4 sm:pr-6',
         'absolute inset-x-0 top-0 z-20 gap-2 px-2 pr-4.5',
-        'shadow-nav flex items-center',
+        'flex items-center shadow-nav',
         'transition-[width,height] ease-linear'
       )}
     >
       {isLoggedIn && <ServiceLayoutSidebarTrigger />}
 
       <div className="flex gap-x-2 sm:ml-2.5">
-        <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
+        <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
           <ShoppingCartIcon size={20} />
         </div>
         <div className="grid flex-1 text-left text-sm leading-tight">

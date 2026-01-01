@@ -1,29 +1,51 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+'use client';
 
-import { LogOutIcon, MenuIcon, ShoppingCartIcon } from 'lucide-react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+
+import { MenuIcon, PanelLeftIcon, ShoppingCartIcon } from 'lucide-react';
 
 import { useIsMobile } from '@customafk/react-toolkit/hooks/useMobile';
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
+import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { Slot as SlotPrimitive } from 'radix-ui';
-import { useServiceLayout } from './hooks/use-service-layout';
-import { SidebarContext, type SidebarContextProps, useServiceLayoutSidebar } from './hooks/use-service-layout-sidebar';
 
 const SIDEBAR_COOKIE_NAME = 'sidebar_state';
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
 const SIDEBAR_WIDTH = '16rem';
-const SIDEBAR_WIDTH_MOBILE = '16rem';
+const SIDEBAR_WIDTH_MOBILE = '18rem';
 const SIDEBAR_WIDTH_ICON = '3rem';
 const SIDEBAR_KEYBOARD_SHORTCUT = 'b';
 
-function ServiceLayoutSidebarProvider({
+type SidebarContextProps = {
+  state: 'expanded' | 'collapsed';
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  openMobile: boolean;
+  setOpenMobile: (open: boolean) => void;
+  isMobile: boolean;
+  toggleSidebar: () => void;
+};
+
+const SidebarContext = createContext<SidebarContextProps | null>(null);
+
+function useSidebar() {
+  const context = useContext(SidebarContext);
+  if (!context) {
+    throw new Error('useSidebar must be used within a SidebarProvider.');
+  }
+
+  return context;
+}
+
+function SidebarProvider({
   defaultOpen = true,
   open: openProp,
   onOpenChange: setOpenProp,
@@ -53,7 +75,7 @@ function ServiceLayoutSidebarProvider({
       }
 
       // This sets the cookie to keep the sidebar state.
-      // biome-ignore lint/suspicious/noDocumentCookie: all
+      // biome-ignore lint/suspicious/noDocumentCookie: true
       document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`;
     },
     [setOpenProp, open]
@@ -84,15 +106,12 @@ function ServiceLayoutSidebarProvider({
   const contextValue = useMemo<SidebarContextProps>(
     () => ({
       state,
-      isMobile,
-
-      toggleSidebar,
-
       open,
       setOpen,
-
+      isMobile,
       openMobile,
       setOpenMobile,
+      toggleSidebar,
     }),
     [state, open, setOpen, isMobile, openMobile, toggleSidebar]
   );
@@ -109,7 +128,7 @@ function ServiceLayoutSidebarProvider({
               ...style,
             } as React.CSSProperties
           }
-          className={cn('group/sidebar-wrapper', 'has-data-[variant=inset]:bg-sidebar', 'flex h-dvh w-full', className)}
+          className={cn('group/sidebar-wrapper flex h-dvh w-full has-data-[variant=inset]:bg-sidebar', className)}
           {...props}
         >
           {children}
@@ -119,7 +138,7 @@ function ServiceLayoutSidebarProvider({
   );
 }
 
-function ServiceLayoutSidebar({
+function Sidebar({
   side = 'left',
   variant = 'sidebar',
   collapsible = 'offcanvas',
@@ -131,7 +150,7 @@ function ServiceLayoutSidebar({
   variant?: 'sidebar' | 'floating' | 'inset';
   collapsible?: 'offcanvas' | 'icon' | 'none';
 }) {
-  const { isMobile, state, openMobile, setOpenMobile } = useServiceLayoutSidebar();
+  const { isMobile, state, openMobile, setOpenMobile, toggleSidebar } = useSidebar();
 
   if (collapsible === 'none') {
     return (
@@ -143,9 +162,8 @@ function ServiceLayoutSidebar({
 
   if (isMobile) {
     return (
-      <Sheet open={openMobile} onOpenChange={setOpenMobile}>
+      <Sheet open={openMobile} onOpenChange={setOpenMobile} {...props}>
         <SheetContent
-          side="left"
           data-sidebar="sidebar"
           data-slot="sidebar"
           data-mobile="true"
@@ -155,6 +173,7 @@ function ServiceLayoutSidebar({
               '--sidebar-width': SIDEBAR_WIDTH_MOBILE,
             } as React.CSSProperties
           }
+          side={side}
         >
           <SheetHeader className="sr-only">
             <SheetTitle>Sidebar</SheetTitle>
@@ -162,7 +181,22 @@ function ServiceLayoutSidebar({
           </SheetHeader>
           <div className="flex size-full flex-col">
             <div className="flex flex-0 items-center gap-x-2 border-border-weak border-b p-2 pr-4">
-              <ServiceLayoutSidebarTrigger />
+              <Button
+                data-sidebar="trigger"
+                data-slot="sidebar-trigger"
+                variant="ghost"
+                color="muted"
+                size="icon"
+                className={cn('size-10 rounded-full', className)}
+                onClick={event => {
+                  toggleSidebar();
+                  event.preventDefault();
+                  event.stopPropagation();
+                }}
+              >
+                <MenuIcon className="size-6!" />
+                <span className="sr-only">Toggle Sidebar</span>
+              </Button>
               <div className="ml-2 flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                 <ShoppingCartIcon size={20} />
               </div>
@@ -238,31 +272,30 @@ function ServiceLayoutSidebar({
   );
 }
 
-function ServiceLayoutSidebarTrigger({ className, onClick, ...props }: React.ComponentProps<typeof Button>) {
-  const { toggleSidebar } = useServiceLayoutSidebar();
+function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<typeof Button>) {
+  const { toggleSidebar } = useSidebar();
 
   return (
     <Button
       data-sidebar="trigger"
       data-slot="sidebar-trigger"
       variant="ghost"
-      color="muted"
       size="icon"
-      className={cn('size-10 rounded-full', className)}
+      className={cn('size-7', className)}
       onClick={event => {
         onClick?.(event);
         toggleSidebar();
       }}
       {...props}
     >
-      <MenuIcon className="size-6!" />
+      <PanelLeftIcon />
       <span className="sr-only">Toggle Sidebar</span>
     </Button>
   );
 }
 
-function ServiceLayoutSidebarRail({ className, ...props }: React.ComponentProps<'button'>) {
-  const { toggleSidebar } = useServiceLayoutSidebar();
+function SidebarRail({ className, ...props }: React.ComponentProps<'button'>) {
+  const { toggleSidebar } = useSidebar();
 
   return (
     <button
@@ -273,18 +306,10 @@ function ServiceLayoutSidebarRail({ className, ...props }: React.ComponentProps<
       onClick={toggleSidebar}
       title="Toggle Sidebar"
       className={cn(
-        'absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear sm:flex',
-        'after:absolute after:inset-y-0 after:left-1/2 after:w-[2px]',
-        'group-data-[side=left]:-right-4',
-        'group-data-[side=right]:left-0',
-        'in-data-[side=left]:cursor-w-resize',
-        'in-data-[side=right]:cursor-e-resize',
-        'hover:after:bg-sidebar-border',
-        'hover:group-data-[collapsible=offcanvas]:bg-sidebar',
-        'group-data-[collapsible=offcanvas]:translate-x-0',
-        'group-data-[collapsible=offcanvas]:after:left-full',
-        '[[data-side=left][data-state=collapsed]_&]:cursor-e-resize',
-        '[[data-side=right][data-state=collapsed]_&]:cursor-w-resize',
+        'absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear after:absolute after:inset-y-0 after:left-1/2 after:w-0.5 hover:after:bg-sidebar-border group-data-[side=left]:-right-4 group-data-[side=right]:left-0 sm:flex',
+        'in-data-[side=left]:cursor-w-resize in-data-[side=right]:cursor-e-resize',
+        '[[data-side=left][data-state=collapsed]_&]:cursor-e-resize [[data-side=right][data-state=collapsed]_&]:cursor-w-resize',
+        'group-data-[collapsible=offcanvas]:translate-x-0 hover:group-data-[collapsible=offcanvas]:bg-sidebar group-data-[collapsible=offcanvas]:after:left-full',
         '[[data-side=left][data-collapsible=offcanvas]_&]:-right-2',
         '[[data-side=right][data-collapsible=offcanvas]_&]:-left-2',
         className
@@ -294,47 +319,32 @@ function ServiceLayoutSidebarRail({ className, ...props }: React.ComponentProps<
   );
 }
 
-function ServiceLayoutSidebarInset({ className, children, ...props }: React.ComponentProps<'main'>) {
+function SidebarInset({ className, children, ...props }: React.ComponentProps<'main'>) {
   return (
     <main data-slot="sidebar-inset" className={cn('relative flex w-full flex-1 flex-col', className)} {...props}>
       <div className="h-(--header-height) w-full sm:h-[calc(var(--header-height)+0.5rem)]" />
-      <div className={cn('inset-shadow-sm flex-1')}>{children}</div>
+      <div className="inset-shadow-sm flex-1">{children}</div>
     </main>
   );
 }
 
-function ServiceLayoutSidebarHeader({ className, ...props }: React.ComponentProps<'div'>) {
+function SidebarInput({ className, ...props }: React.ComponentProps<typeof Input>) {
+  return <Input data-slot="sidebar-input" data-sidebar="input" className={cn('h-8 w-full bg-background shadow-none', className)} {...props} />;
+}
+
+function SidebarHeader({ className, ...props }: React.ComponentProps<'div'>) {
   return <div data-slot="sidebar-header" data-sidebar="header" className={cn('flex flex-col gap-2 p-2', className)} {...props} />;
 }
 
-function ServiceLayoutSidebarFooter({ className, children, ...props }: React.ComponentProps<'div'>) {
-  const { open } = useServiceLayoutSidebar();
-  const { onLogout } = useServiceLayout();
-  return (
-    <div data-slot="sidebar-footer" data-sidebar="footer" className={cn('flex flex-col gap-2', className)} {...props}>
-      {children}
-      <ServiceLayoutSidebarMenu>
-        <ServiceLayoutSidebarMenuItem>
-          <ServiceLayoutSidebarMenuButton className="border-border border" onClick={onLogout}>
-            <LogOutIcon className="text-text-positive-weak" />
-            Đăng xuất
-          </ServiceLayoutSidebarMenuButton>
-        </ServiceLayoutSidebarMenuItem>
-        {open && (
-          <ServiceLayoutSidebarMenuItem className="border-t-border mt-2 border-t">
-            <p className="text-muted-foreground pt-2 text-center text-xs">Copyright © 2025, Lunas.</p>
-          </ServiceLayoutSidebarMenuItem>
-        )}
-      </ServiceLayoutSidebarMenu>
-    </div>
-  );
+function SidebarFooter({ className, ...props }: React.ComponentProps<'div'>) {
+  return <div data-slot="sidebar-footer" data-sidebar="footer" className={cn('flex flex-col gap-2 p-2', className)} {...props} />;
 }
 
-function ServiceLayoutSidebarSeparator({ className, ...props }: React.ComponentProps<typeof Separator>) {
-  return <Separator data-slot="sidebar-separator" data-sidebar="separator" className={cn('bg-sidebar-border mx-2 w-auto', className)} {...props} />;
+function SidebarSeparator({ className, ...props }: React.ComponentProps<typeof Separator>) {
+  return <Separator data-slot="sidebar-separator" data-sidebar="separator" className={cn('mx-2 w-auto bg-sidebar-border', className)} {...props} />;
 }
 
-function ServiceLayoutSidebarContent({ className, ...props }: React.ComponentProps<'div'>) {
+function SidebarContent({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="sidebar-content"
@@ -345,25 +355,20 @@ function ServiceLayoutSidebarContent({ className, ...props }: React.ComponentPro
   );
 }
 
-function ServiceLayoutSidebarGroup({ className, ...props }: React.ComponentProps<'div'>) {
+function SidebarGroup({ className, ...props }: React.ComponentProps<'div'>) {
   return <div data-slot="sidebar-group" data-sidebar="group" className={cn('relative flex w-full min-w-0 flex-col', className)} {...props} />;
 }
 
-function ServiceLayoutSidebarGroupLabel({ className, asChild = false, ...props }: React.ComponentProps<'div'> & { asChild?: boolean }) {
-  const Comp = asChild ? SlotPrimitive.Slot : 'div';
+function SidebarGroupLabel({ className, asChild = false, ...props }: React.ComponentProps<'div'> & { asChild?: boolean }) {
+  const Comp = asChild ? Slot : 'div';
 
   return (
     <Comp
       data-slot="sidebar-group-label"
       data-sidebar="group-label"
       className={cn(
-        'flex h-8 shrink-0 items-center rounded-md px-2 text-xs font-medium outline-hidden transition-[margin,opacity] duration-200 ease-linear focus-visible:ring-2',
-        'text-sidebar-foreground/70',
-        'ring-sidebar-ring',
-        '[&>svg]:size-4',
-        '[&>svg]:shrink-0',
-        'group-data-[collapsible=icon]:-mt-8',
-        'group-data-[collapsible=icon]:opacity-0',
+        'flex h-8 shrink-0 items-center rounded-md px-2 font-medium text-sidebar-foreground/70 text-xs outline-hidden ring-sidebar-ring transition-[margin,opacity] duration-200 ease-linear focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0',
+        'group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0',
         className
       )}
       {...props}
@@ -371,8 +376,8 @@ function ServiceLayoutSidebarGroupLabel({ className, asChild = false, ...props }
   );
 }
 
-function ServiceLayoutSidebarGroupAction({ className, asChild = false, ...props }: React.ComponentProps<'button'> & { asChild?: boolean }) {
-  const Comp = asChild ? SlotPrimitive.Slot : 'button';
+function SidebarGroupAction({ className, asChild = false, ...props }: React.ComponentProps<'button'> & { asChild?: boolean }) {
+  const Comp = asChild ? Slot : 'button';
 
   return (
     <Comp
@@ -393,15 +398,15 @@ function ServiceLayoutSidebarGroupAction({ className, asChild = false, ...props 
   );
 }
 
-function ServiceLayoutSidebarGroupContent({ className, ...props }: React.ComponentProps<'div'>) {
+function SidebarGroupContent({ className, ...props }: React.ComponentProps<'div'>) {
   return <div data-slot="sidebar-group-content" data-sidebar="group-content" className={cn('w-full text-sm', className)} {...props} />;
 }
 
-function ServiceLayoutSidebarMenu({ className, ...props }: React.ComponentProps<'ul'>) {
+function SidebarMenu({ className, ...props }: React.ComponentProps<'ul'>) {
   return <ul data-slot="sidebar-menu" data-sidebar="menu" className={cn('flex w-full min-w-0 flex-col gap-1', className)} {...props} />;
 }
 
-function ServiceLayoutSidebarMenuItem({ className, ...props }: React.ComponentProps<'li'>) {
+function SidebarMenuItem({ className, ...props }: React.ComponentProps<'li'>) {
   return <li data-slot="sidebar-menu-item" data-sidebar="menu-item" className={cn('group/menu-item relative', className)} {...props} />;
 }
 
@@ -454,7 +459,7 @@ const sidebarMenuButtonVariants = cva(
   }
 );
 
-function ServiceLayoutSidebarMenuButton({
+function SidebarMenuButton({
   asChild = false,
   isActive = false,
   variant = 'default',
@@ -467,8 +472,8 @@ function ServiceLayoutSidebarMenuButton({
   isActive?: boolean;
   tooltip?: string | React.ComponentProps<typeof TooltipContent>;
 } & VariantProps<typeof sidebarMenuButtonVariants>) {
-  const Comp = asChild ? SlotPrimitive.Slot : 'button';
-  const { isMobile, state } = useServiceLayoutSidebar();
+  const Comp = asChild ? Slot : 'button';
+  const { isMobile, state } = useSidebar();
 
   const button = (
     <Comp
@@ -499,7 +504,7 @@ function ServiceLayoutSidebarMenuButton({
   );
 }
 
-function ServiceLayoutSidebarMenuAction({
+function SidebarMenuAction({
   className,
   asChild = false,
   showOnHover = false,
@@ -508,27 +513,22 @@ function ServiceLayoutSidebarMenuAction({
   asChild?: boolean;
   showOnHover?: boolean;
 }) {
-  const Comp = asChild ? SlotPrimitive.Slot : 'button';
+  const Comp = asChild ? Slot : 'button';
 
   return (
     <Comp
       data-slot="sidebar-menu-action"
       data-sidebar="menu-action"
       className={cn(
-        'text-sidebar-foreground ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground peer-hover/menu-button:text-sidebar-accent-foreground absolute top-1.5 right-1 flex aspect-square w-5 items-center justify-center rounded-md p-0 outline-hidden transition-transform',
-        'focus-visible:ring-2',
-        '[&>svg]:size-4',
-        '[&>svg]:shrink-0',
+        'absolute top-1.5 right-1 flex aspect-square w-5 items-center justify-center rounded-md p-0 text-sidebar-foreground outline-hidden ring-sidebar-ring transition-transform hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 peer-hover/menu-button:text-sidebar-accent-foreground [&>svg]:size-4 [&>svg]:shrink-0',
         // Increases the hit area of the button on mobile.
         'after:absolute after:-inset-2 md:after:hidden',
         'peer-data-[size=sm]/menu-button:top-1',
         'peer-data-[size=default]/menu-button:top-1.5',
         'peer-data-[size=lg]/menu-button:top-2.5',
         'group-data-[collapsible=icon]:hidden',
-        showOnHover && 'peer-data-[active=true]/menu-button:text-sidebar-accent-foreground',
-        showOnHover && 'group-focus-within/menu-item:opacity-100',
-        showOnHover && 'group-hover/menu-item:opacity-100',
-        showOnHover && 'data-[state=open]:opacity-100 md:opacity-0',
+        showOnHover &&
+          'group-focus-within/menu-item:opacity-100 group-hover/menu-item:opacity-100 data-[state=open]:opacity-100 peer-data-[active=true]/menu-button:text-sidebar-accent-foreground md:opacity-0',
         className
       )}
       {...props}
@@ -536,15 +536,14 @@ function ServiceLayoutSidebarMenuAction({
   );
 }
 
-function ServiceLayoutSidebarMenuBadge({ className, ...props }: React.ComponentProps<'div'>) {
+function SidebarMenuBadge({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="sidebar-menu-badge"
       data-sidebar="menu-badge"
       className={cn(
-        'text-sidebar-foreground pointer-events-none absolute right-1 flex h-5 min-w-5 items-center justify-center rounded-md px-1 text-xs font-medium tabular-nums select-none',
-        'peer-hover/menu-button:text-sidebar-accent-foreground',
-        'peer-data-[active=true]/menu-button:text-sidebar-accent-foreground',
+        'pointer-events-none absolute right-1 flex h-5 min-w-5 select-none items-center justify-center rounded-md px-1 font-medium text-sidebar-foreground text-xs tabular-nums',
+        'peer-hover/menu-button:text-sidebar-accent-foreground peer-data-[active=true]/menu-button:text-sidebar-accent-foreground',
         'peer-data-[size=sm]/menu-button:top-1',
         'peer-data-[size=default]/menu-button:top-1.5',
         'peer-data-[size=lg]/menu-button:top-2.5',
@@ -556,7 +555,7 @@ function ServiceLayoutSidebarMenuBadge({ className, ...props }: React.ComponentP
   );
 }
 
-function ServiceLayoutSidebarMenuSkeleton({
+function SidebarMenuSkeleton({
   className,
   showIcon = false,
   ...props
@@ -584,13 +583,13 @@ function ServiceLayoutSidebarMenuSkeleton({
   );
 }
 
-function ServiceLayoutSidebarMenuSub({ className, ...props }: React.ComponentProps<'ul'>) {
+function SidebarMenuSub({ className, ...props }: React.ComponentProps<'ul'>) {
   return (
     <ul
       data-slot="sidebar-menu-sub"
       data-sidebar="menu-sub"
       className={cn(
-        'border-sidebar-border mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-l px-2.5 py-0.5',
+        'mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-sidebar-border border-l px-2.5 py-0.5',
         'group-data-[collapsible=icon]:hidden',
         className
       )}
@@ -599,11 +598,11 @@ function ServiceLayoutSidebarMenuSub({ className, ...props }: React.ComponentPro
   );
 }
 
-function ServiceLayoutSidebarMenuSubItem({ className, ...props }: React.ComponentProps<'li'>) {
+function SidebarMenuSubItem({ className, ...props }: React.ComponentProps<'li'>) {
   return <li data-slot="sidebar-menu-sub-item" data-sidebar="menu-sub-item" className={cn('group/menu-sub-item relative', className)} {...props} />;
 }
 
-function ServiceLayoutSidebarMenuSubButton({
+function SidebarMenuSubButton({
   asChild = false,
   size = 'md',
   isActive = false,
@@ -614,7 +613,7 @@ function ServiceLayoutSidebarMenuSubButton({
   size?: 'sm' | 'md';
   isActive?: boolean;
 }) {
-  const Comp = asChild ? SlotPrimitive.Slot : 'a';
+  const Comp = asChild ? Slot : 'a';
 
   return (
     <Comp
@@ -623,24 +622,8 @@ function ServiceLayoutSidebarMenuSubButton({
       data-size={size}
       data-active={isActive}
       className={cn(
-        'text-sidebar-foreground',
-        'ring-sidebar-ring',
-        'flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-md px-2 outline-hidden',
-        'focus-visible:ring-2',
-        'hover:bg-sidebar-accent',
-        'hover:text-sidebar-accent-foreground',
-        'active:bg-sidebar-accent',
-        'active:text-sidebar-accent-foreground',
-        'disabled:pointer-events-none',
-        'disabled:opacity-50',
-        'aria-disabled:pointer-events-none',
-        'aria-disabled:opacity-50',
-        '[&>svg]:size-4',
-        '[&>svg]:shrink-0',
-        '[&>svg]:text-sidebar-accent-foreground',
-        '[&>span:last-child]:truncate',
-        'data-[active=true]:bg-sidebar-accent',
-        'data-[active=true]:text-sidebar-accent-foreground',
+        'flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-md px-2 text-sidebar-foreground outline-hidden ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:text-sidebar-accent-foreground',
+        'data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground',
         size === 'sm' && 'text-xs',
         size === 'md' && 'text-sm',
         'group-data-[collapsible=icon]:hidden',
@@ -652,28 +635,29 @@ function ServiceLayoutSidebarMenuSubButton({
 }
 
 export {
-  ServiceLayoutSidebar,
-  ServiceLayoutSidebarContent,
-  ServiceLayoutSidebarFooter,
-  ServiceLayoutSidebarGroup,
-  ServiceLayoutSidebarGroupAction,
-  ServiceLayoutSidebarGroupContent,
-  ServiceLayoutSidebarGroupLabel,
-  ServiceLayoutSidebarHeader,
-  ServiceLayoutSidebarInset,
-  ServiceLayoutSidebarMenu,
-  ServiceLayoutSidebarMenuAction,
-  ServiceLayoutSidebarMenuBadge,
-  ServiceLayoutSidebarMenuButton,
-  ServiceLayoutSidebarMenuItem,
-  ServiceLayoutSidebarMenuSkeleton,
-  ServiceLayoutSidebarMenuSub,
-  ServiceLayoutSidebarMenuSubButton,
-  ServiceLayoutSidebarMenuSubItem,
-  ServiceLayoutSidebarProvider,
-  ServiceLayoutSidebarRail,
-  ServiceLayoutSidebarSeparator,
-  ServiceLayoutSidebarTrigger,
-  // eslint-disable-next-line react-refresh/only-export-components
-  useServiceLayoutSidebar,
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupAction,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarInput,
+  SidebarInset,
+  SidebarMenu,
+  SidebarMenuAction,
+  SidebarMenuBadge,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarMenuSkeleton,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
+  SidebarProvider,
+  SidebarRail,
+  SidebarSeparator,
+  SidebarTrigger,
+  // biome-ignore lint/style/useComponentExportOnlyModules: true
+  useSidebar,
 };

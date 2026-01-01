@@ -18,19 +18,19 @@ export const AppLayoutHeader: React.FC<React.PropsWithChildren> = ({ children })
       className={cn(
         'bg-card',
         'h-(--header-height)',
-        'sm:h-[calc(var(--header-height)_+_0.5rem)]',
+        'sm:h-[calc(var(--header-height)+0.5rem)]',
         'sm:px-4 sm:pr-6',
         'absolute inset-x-0 top-0 z-20 gap-2 px-2 pr-4.5',
-        'shadow-nav flex items-center',
+        'flex items-center shadow-nav',
         'transition-[width,height] ease-linear',
         'group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)',
-        'sm:group-has-data-[collapsible=icon]/sidebar-wrapper:h-[calc(var(--header-height)_+_0.5rem)]'
+        'sm:group-has-data-[collapsible=icon]/sidebar-wrapper:h-[calc(var(--header-height)+0.5rem)]'
       )}
     >
       <AppLayoutSidebarTrigger />
 
       <div className="flex gap-x-2 sm:ml-2.5">
-        <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
+        <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
           <ShoppingCartIcon size={20} />
         </div>
         <div className="grid flex-1 text-left text-sm leading-tight">

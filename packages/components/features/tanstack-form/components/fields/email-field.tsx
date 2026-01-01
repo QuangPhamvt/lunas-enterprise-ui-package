@@ -1,0 +1,91 @@
+import { useCallback, useMemo } from 'react';
+
+import { useStore } from '@tanstack/react-form';
+
+import { AtSignIcon, XIcon } from 'lucide-react';
+import type z from 'zod';
+
+import { cn } from '@customafk/react-toolkit/utils';
+
+import type { TanStackFormEmailFieldSchema } from '../../schema';
+import { useTanStackFieldContext } from '../../tanstack-form';
+import { Field, FieldContent, FieldContentMain, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldNote, FieldSeparator } from '../ui/field';
+import { Input } from '../ui/input';
+
+type Props = Pick<
+  z.input<typeof TanStackFormEmailFieldSchema>,
+  'label' | 'description' | 'placeholder' | 'orientation' | 'tooltip' | 'helperText' | 'showErrorMessage'
+> & {
+  maxLength?: number;
+};
+export const EmailField: React.FC<Props> = ({
+  label,
+  description,
+  placeholder,
+  orientation = 'responsive',
+  helperText,
+  showErrorMessage = true,
+  maxLength,
+}) => {
+  const { form, name, state, handleBlur, handleChange } = useTanStackFieldContext<string | null>();
+
+  const isSubmitting = useStore(form.store, ({ isSubmitting }) => isSubmitting);
+
+  const _invalid = useMemo(() => {
+    return state.meta.isTouched && !state.meta.isValid;
+  }, [state.meta.isTouched, state.meta.isValid]);
+
+  const onChange = useCallback<React.ChangeEventHandler<HTMLInputElement>>(
+    ({ target: { value } }) => {
+      if (isSubmitting) return;
+      if (maxLength && value.length > maxLength) return;
+      handleChange(value || null);
+    },
+    [isSubmitting, maxLength, handleChange]
+  );
+
+  const onClear = useCallback(() => {
+    if (isSubmitting) return;
+    handleChange(null);
+  }, [isSubmitting, handleChange]);
+
+  return (
+    <FieldGroup className="gap-y-4 px-4">
+      <Field data-invalid={_invalid} orientation={orientation}>
+        <FieldContent>
+          <FieldLabel htmlFor={name}>{label}</FieldLabel>
+          <FieldDescription>{description}</FieldDescription>
+        </FieldContent>
+        <FieldContentMain>
+          <Input
+            id={name}
+            name={name}
+            value={state.value === null ? '' : state.value}
+            aria-invalid={_invalid}
+            autoComplete="email"
+            placeholder={placeholder}
+            className={cn('pl-9', isSubmitting && 'pointer-events-none bg-muted-muted opacity-60')}
+            onBlur={handleBlur}
+            onChange={onChange}
+          />
+          <div className="absolute top-0 left-0 flex size-9 items-center justify-center text-muted">
+            <AtSignIcon size={14} />
+          </div>
+
+          <button
+            type="button"
+            aria-label="Clear"
+            className="absolute inset-y-0 end-0 top-3 flex h-fit w-8 cursor-pointer items-center justify-center rounded-e-md text-text-positive-weak outline-none transition-[color,box-shadow] hover:text-text-positive focus:text-text-positive-strong"
+            onClick={onClear}
+          >
+            <XIcon size={14} aria-hidden="true" />
+          </button>
+
+          <div className="mt-1 flex w-full items-start justify-start">{showErrorMessage && <FieldError errors={state.meta.errors} />}</div>
+          <FieldNote isShow={!!helperText}>{helperText}</FieldNote>
+        </FieldContentMain>
+      </Field>
+      <FieldSeparator />
+    </FieldGroup>
+  );
+};

@@ -206,7 +206,7 @@ const FieldError = memo(
       }
 
       return (
-        <ul className="flex list-none flex-col gap-1">
+        <ul className="flex list-none flex-col">
           {errors.map(error => {
             if (typeof error === 'string') return <li key={error}>{error}</li>;
             if (!error?.message) return null;

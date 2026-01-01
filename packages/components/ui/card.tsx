@@ -1,7 +1,7 @@
 import { cn } from '@customafk/react-toolkit/utils';
 
 function Card({ className, ...props }: React.ComponentProps<'div'>) {
-  return <div data-slot="card" className={cn('bg-card text-text-positive shadow-card flex flex-col gap-6 rounded-2xl py-6', className)} {...props} />;
+  return <div data-slot="card" className={cn('flex flex-col gap-6 rounded-2xl bg-card py-6 text-text-positive shadow-card', className)} {...props} />;
 }
 
 function CardHeader({ className, ...props }: React.ComponentProps<'div'>) {
@@ -11,7 +11,7 @@ function CardHeader({ className, ...props }: React.ComponentProps<'div'>) {
       className={cn(
         '@container/card-header',
         'grid auto-rows-min grid-rows-[auto_auto]',
-        'text-text-positive-strong items-start gap-1.5 px-6',
+        'items-start gap-1.5 px-6 text-text-positive-strong',
         'has-data-[slot=card-action]:grid-cols-[1fr_auto]',
         '[.border-b]:pb-6',
         className
@@ -22,11 +22,11 @@ function CardHeader({ className, ...props }: React.ComponentProps<'div'>) {
 }
 
 function CardTitle({ className, ...props }: React.ComponentProps<'div'>) {
-  return <div data-slot="card-title" className={cn('leading-none font-semibold', className)} {...props} />;
+  return <div data-slot="card-title" className={cn('font-semibold leading-none', className)} {...props} />;
 }
 
 function CardDescription({ className, ...props }: React.ComponentProps<'div'>) {
-  return <div data-slot="card-description" className={cn('text-text-positive-weak text-sm', className)} {...props} />;
+  return <div data-slot="card-description" className={cn('text-sm text-text-positive-weak', className)} {...props} />;
 }
 
 function CardAction({ className, ...props }: React.ComponentProps<'div'>) {
