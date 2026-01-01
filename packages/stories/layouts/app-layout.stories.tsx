@@ -1,5 +1,6 @@
 import { PackageIcon } from 'lucide-react';
 
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import {
   AppLayoutHeader,
   AppLayoutMain,
@@ -18,7 +19,6 @@ import {
   AppLayoutSidebarMenuItem,
   AppLayoutWrapper,
 } from '@/components/layouts/app-layout';
-import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   tags: ['autodocs'],
