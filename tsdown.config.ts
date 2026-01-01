@@ -22,23 +22,11 @@ export default defineConfig([
       './packages/components/dialogs/detail-dialog/component/sidebar.tsx',
       './packages/components/dialogs/confirm-dialog.tsx',
       './packages/components/dialogs/error-dialog.tsx',
-      './packages/components/dialogs/form-dialog.tsx',
       './packages/components/dialogs/loading-dialog.tsx',
 
       './packages/components/features/search-modal/index.tsx',
+      './packages/components/features/tanstack-form/index.tsx',
 
-      './packages/components/forms/form-wrapper.tsx',
-      './packages/components/forms/combobox-field.tsx',
-      './packages/components/forms/date-field.tsx',
-      './packages/components/forms/multi-select-field.tsx',
-      './packages/components/forms/number-field.tsx',
-      './packages/components/forms/password-field.tsx',
-      './packages/components/forms/select-field.tsx',
-      './packages/components/forms/switch-field.tsx',
-      './packages/components/forms/text-field.tsx',
-      './packages/components/forms/textarea-field.tsx',
-
-      './packages/components/layouts/main/index.tsx',
       './packages/components/layouts/app-layout/index.tsx',
       './packages/components/layouts/flex.tsx',
       './packages/components/layouts/grid.tsx',
@@ -49,15 +37,7 @@ export default defineConfig([
       './packages/components/pages/NotAuthorized.tsx',
       './packages/components/pages/NotFound.tsx',
 
-      './packages/components/products/add-cart-button.tsx',
-      './packages/components/products/product-quantity-control.tsx',
-      './packages/components/products/product-loading-page.tsx',
-
       './packages/components/systems/google.tsx',
-
-      './packages/components/table/index.tsx',
-
-      './packages/components/tanstack-form/index.tsx',
 
       './packages/components/typography/paragraph.tsx',
       './packages/components/typography/title.tsx',

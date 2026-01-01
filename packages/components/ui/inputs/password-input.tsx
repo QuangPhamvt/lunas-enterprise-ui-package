@@ -1,7 +1,9 @@
 'use client';
-import { cn } from '@customafk/react-toolkit/utils';
-import { EyeIcon, EyeOffIcon } from 'lucide-react';
 import { useCallback, useId, useState } from 'react';
+
+import { EyeIcon, EyeOffIcon } from 'lucide-react';
+
+import { cn } from '@customafk/react-toolkit/utils';
 
 import { Input } from '../input';
 

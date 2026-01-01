@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import z from 'zod';
+import z, { email } from 'zod';
 
 import { Button } from '@/components/ui/button';
 import { useTanStackForm } from '@/components/features/tanstack-form';
@@ -269,6 +269,73 @@ export const PopoverForm: Story = {
             }}
           />
         </TanStackPopoverForm>
+      </AppForm>
+    );
+  },
+};
+
+export const AdminLoginForm: Story = {
+  render: () => {
+    const schema = z.object({
+      email: email().nullable(),
+      password: z
+        .string({ message: 'Nhập mật khẩu của bạn' })
+        .min(8, { message: 'Mật khẩu tối thiểu 8 ký tự' })
+        .max(50, { message: 'Mật khẩu không quá 50 ký tự' })
+        .nullable()
+        .refine(value => /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!-/:-@[-`{-~])\S+$/.test(value ?? ''), {
+          message: 'Mật khẩu phải chứa chữ hoa, chữ thường, số và ký tự đặc biệt',
+        }),
+    });
+    const { AppForm, AppField, TanStackCardForm, TanStackActionSubmit } = useTanStackForm({
+      defaultValues: {
+        email: null,
+        password: null,
+      } as z.output<typeof schema>,
+      onSubmit: () => {},
+      validators: {
+        onChange: schema,
+      },
+    });
+    return (
+      <AppForm>
+        <TanStackCardForm title="Login to your account" description="Enter your email and password to login to your account">
+          <AppField
+            name="email"
+            children={({ EmailField }) => {
+              return (
+                <EmailField
+                  label="Email"
+                  description="We'll never share your email with anyone else."
+                  placeholder="Enter your email"
+                  orientation="responsive"
+                />
+              );
+            }}
+          />
+          <AppField
+            name="password"
+            children={({ PasswordField }) => {
+              return (
+                <PasswordField
+                  label="Password"
+                  description="Must be at least 8 characters long and include uppercase, lowercase, number, and special character."
+                  placeholder="Enter your password"
+                  orientation="responsive"
+                />
+              );
+            }}
+          />
+          <div className="flex justify-end px-4">
+            <TanStackActionSubmit label="Login" />
+          </div>
+        </TanStackCardForm>
+        <div className="mt-4 text-center text-sm">
+          Don&apos;t have an account?{' '}
+          <a href="/" className="underline underline-offset-4">
+            Sign up
+          </a>
+        </div>
       </AppForm>
     );
   },

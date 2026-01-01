@@ -18,8 +18,8 @@ export const GridProductCard: React.FC<Props> = ({ name, thumbnail, price }) => 
     <Card className="h-36 w-full flex-row gap-4 p-2 pr-4">
       <Image className="aspect-square h-full flex-0" src={thumbnail} />
       <div className="flex flex-1 flex-col gap-y-1">
-        <p className="text-text-positive line-clamp-2 h-10 text-sm font-semibold">{name}</p>
-        <p className="text-success text-base font-bold">
+        <p className="line-clamp-2 h-10 font-semibold text-sm text-text-positive">{name}</p>
+        <p className="font-bold text-base text-success">
           {price.toLocaleString('vi-VN')}
           <small className="ml-0.5">VND</small>
         </p>
