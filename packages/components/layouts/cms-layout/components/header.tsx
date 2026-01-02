@@ -1,4 +1,4 @@
-import { MenuIcon } from 'lucide-react';
+import { MenuIcon, ShoppingCartIcon } from 'lucide-react';
 
 import { cn } from '@customafk/react-toolkit/utils';
 
@@ -36,6 +36,16 @@ export const CMSLayoutHeader = () => {
         <MenuIcon className="size-6!" />
         <span className="sr-only">Toggle Sidebar</span>
       </Button>
+
+      <div className="flex gap-x-2 sm:ml-2.5">
+        <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+          <ShoppingCartIcon size={20} />
+        </div>
+        <div className="grid flex-1 text-left text-sm leading-tight">
+          <span className="truncate font-medium">Lunas Enterprise</span>
+          <span className="truncate text-xs">Established 2025</span>
+        </div>
+      </div>
     </header>
   );
 };

@@ -79,7 +79,7 @@ export const ServiceLayoutUserInfo: React.FC<ServiceLayoutUserInfoProps> = ({ us
         <Button size="icon" variant="ghost" color="secondary" className="size-10 rounded-full">
           <Avatar className="size-10">
             <AvatarImage />
-            <AvatarFallback className="bg-muted-muted size-full">
+            <AvatarFallback className="size-full bg-muted-muted">
               <UserIcon />
             </AvatarFallback>
           </Avatar>
@@ -87,8 +87,8 @@ export const ServiceLayoutUserInfo: React.FC<ServiceLayoutUserInfoProps> = ({ us
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="max-w-64">
         <DropdownMenuLabel className="flex min-w-0 flex-col">
-          <span className="text-text-positive truncate text-sm font-medium">{userName}</span>
-          <span className="text-text-positive-weak truncate text-xs font-normal">{userEmail}</span>
+          <span className="truncate font-medium text-sm text-text-positive">{userName}</span>
+          <span className="truncate font-normal text-text-positive-weak text-xs">{userEmail}</span>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={onLogout}>
@@ -114,11 +114,11 @@ export const ServiceLayoutCartInfo: React.FC = () => {
         </Button>
       </SheetTrigger>
       <SheetContent className="w-[95vw] sm:max-w-md">
-        <SheetHeader className="border-border-weak flex-0 border-b pb-3">
+        <SheetHeader className="flex-0 border-border-weak border-b pb-3">
           <SheetTitle className="flex items-center gap-2">
             <ShoppingBag size={20} />
             <span>Giỏ hàng của bạn</span>
-            {totalItems > 0 && <span className="text-text-positive-weak text-sm font-normal">({totalItems} sản phẩm)</span>}
+            {totalItems > 0 && <span className="font-normal text-sm text-text-positive-weak">({totalItems} sản phẩm)</span>}
           </SheetTitle>
         </SheetHeader>
         <Tabs defaultValue={preOrderCount > 0 ? 'pre_order' : 'in_stock'} className="h-full flex-1 overflow-y-auto p-4 pt-0">
@@ -200,9 +200,9 @@ export const ServiceLayoutHeader: React.FC<ServiceLayoutHeaderProps> = () => {
               <DialogTitle className="text-center">Chào mừng bạn đến với Lunas Store!</DialogTitle>
             </DialogHeader>
             <div className="flex flex-1 flex-col">
-              <main className="bg-card size-full flex-1 p-4 pt-0">
+              <main className="size-full flex-1 bg-card p-4 pt-0">
                 <div className="flex flex-col items-center gap-y-1">
-                  <p className="text-text-positive-weak text-sm">Đăng nhập với Google</p>
+                  <p className="text-sm text-text-positive-weak">Đăng nhập với Google</p>
                   <GoogleLogin
                     size="large"
                     theme="outline"
@@ -229,7 +229,7 @@ export const ServiceLayoutHeader: React.FC<ServiceLayoutHeaderProps> = () => {
             <div className="flex flex-1 flex-col">
               <main className="flex size-full flex-1 flex-col p-4 pt-0">
                 <div className="flex flex-col items-center gap-y-1">
-                  <p className="text-text-positive-weak text-sm">Đăng nhập với Google</p>
+                  <p className="text-sm text-text-positive-weak">Đăng nhập với Google</p>
                   <GoogleLogin
                     size="large"
                     theme="outline"
@@ -267,12 +267,12 @@ export const ServiceLayoutMain: React.FC<React.PropsWithChildren> = ({ children 
   if (!isLoggedIn) {
     return (
       <div className="size-full p-4 pt-[calc(var(--header-height)+1.5rem)]">
-        <div className="bg-card shadow-card flex size-full flex-col items-center justify-center gap-6 rounded-lg p-8 text-center">
-          <div className="bg-muted-foreground/10 flex size-20 items-center justify-center rounded-full">
-            <LockIcon className="text-primary size-10" />
+        <div className="flex size-full flex-col items-center justify-center gap-6 rounded-lg bg-card p-8 text-center shadow-card">
+          <div className="flex size-20 items-center justify-center rounded-full bg-muted-foreground/10">
+            <LockIcon className="size-10 text-primary" />
           </div>
           <div className="flex max-w-md flex-col gap-2">
-            <h2 className="text-2xl font-semibold">Bạn chưa đăng nhập</h2>
+            <h2 className="font-semibold text-2xl">Bạn chưa đăng nhập</h2>
             <p className="text-text-positive-weak">Đăng nhập để khám phá đầy đủ các tính năng của Lunas Store và truy cập vào tài khoản của bạn.</p>
           </div>
           <Button size="lg" className="gap-2" onClick={() => setLoginOpen(true)}>
@@ -287,9 +287,9 @@ export const ServiceLayoutMain: React.FC<React.PropsWithChildren> = ({ children 
                   <DialogTitle className="text-center">Chào mừng bạn đến với Lunas Store!</DialogTitle>
                 </DialogHeader>
                 <div className="flex flex-1 flex-col">
-                  <main className="bg-card size-full flex-1 p-4 pt-0">
+                  <main className="size-full flex-1 bg-card p-4 pt-0">
                     <div className="flex flex-col items-center gap-y-1">
-                      <p className="text-text-positive-weak text-sm">Đăng nhập với Google</p>
+                      <p className="text-sm text-text-positive-weak">Đăng nhập với Google</p>
                       <GoogleLogin
                         size="large"
                         theme="outline"
@@ -317,7 +317,7 @@ export const ServiceLayoutMain: React.FC<React.PropsWithChildren> = ({ children 
                 <div className="flex flex-1 flex-col">
                   <main className="flex size-full flex-1 flex-col p-4 pt-0">
                     <div className="flex flex-col items-center gap-y-1">
-                      <p className="text-text-positive-weak text-sm">Đăng nhập với Google</p>
+                      <p className="text-sm text-text-positive-weak">Đăng nhập với Google</p>
                       <GoogleLogin
                         size="large"
                         theme="outline"
@@ -365,7 +365,7 @@ export const ServiceLayoutMainContent: React.FC<React.PropsWithChildren & { clas
 
 export const ServiceLayoutMainFooter: React.FC<React.PropsWithChildren & { className?: string }> = ({ className, children }) => {
   return (
-    <div data-slot="main-footer" className={cn('border-border-weak hidden w-full flex-0 border-t pt-2 sm:flex', className)}>
+    <div data-slot="main-footer" className={cn('hidden w-full flex-0 border-border-weak border-t pt-2 sm:flex', className)}>
       {children}
     </div>
   );
@@ -381,7 +381,7 @@ export const ServiceLayoutMainGroup: React.FC<React.PropsWithChildren<{ classNam
 
 export const ServiceLayoutMainGroupContent: React.FC<React.PropsWithChildren & { className?: string }> = ({ className, children }) => {
   return (
-    <div data-slot="main-group-content" className={cn('bg-card shadow-card max-w-8xl size-full flex-1 rounded-md p-4', className)}>
+    <div data-slot="main-group-content" className={cn('size-full max-w-8xl flex-1 rounded-md bg-card p-4 shadow-card', className)}>
       {children}
     </div>
   );

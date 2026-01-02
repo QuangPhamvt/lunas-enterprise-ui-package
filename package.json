@@ -1,6 +1,6 @@
 {
   "name": "@customafk/lunas-ui",
-  "version": "0.1.16",
+  "version": "0.1.18",
   "description": "UI library for Lunas Enterprise",
   "type": "module",
   "author": {
@@ -112,6 +112,10 @@
     "./layouts/app-layout": {
       "require": "./dist/layouts/app-layout/index.cjs",
       "import": "./dist/layouts/app-layout/index.mjs"
+    },
+    "./layouts/cms-layout": {
+      "require": "./dist/layouts/cms-layout/index.cjs",
+      "import": "./dist/layouts/cms-layout/index.mjs"
     },
     "./layouts/flex": {
       "require": "./dist/layouts/flex.cjs",

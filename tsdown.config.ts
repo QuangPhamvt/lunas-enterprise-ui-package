@@ -28,6 +28,7 @@ export default defineConfig([
       './packages/components/features/tanstack-form/index.tsx',
 
       './packages/components/layouts/app-layout/index.tsx',
+      './packages/components/layouts/cms-layout/index.tsx',
       './packages/components/layouts/flex.tsx',
       './packages/components/layouts/grid.tsx',
       './packages/components/layouts/service-layout/index.ts',

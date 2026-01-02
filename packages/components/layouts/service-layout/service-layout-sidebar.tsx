@@ -274,7 +274,7 @@ function ServiceLayoutSidebarRail({ className, ...props }: React.ComponentProps<
       title="Toggle Sidebar"
       className={cn(
         'absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear sm:flex',
-        'after:absolute after:inset-y-0 after:left-1/2 after:w-[2px]',
+        'after:absolute after:inset-y-0 after:left-1/2 after:w-0.5',
         'group-data-[side=left]:-right-4',
         'group-data-[side=right]:left-0',
         'in-data-[side=left]:cursor-w-resize',
@@ -315,14 +315,14 @@ function ServiceLayoutSidebarFooter({ className, children, ...props }: React.Com
       {children}
       <ServiceLayoutSidebarMenu>
         <ServiceLayoutSidebarMenuItem>
-          <ServiceLayoutSidebarMenuButton className="border-border border" onClick={onLogout}>
+          <ServiceLayoutSidebarMenuButton className="border border-border" onClick={onLogout}>
             <LogOutIcon className="text-text-positive-weak" />
             Đăng xuất
           </ServiceLayoutSidebarMenuButton>
         </ServiceLayoutSidebarMenuItem>
         {open && (
-          <ServiceLayoutSidebarMenuItem className="border-t-border mt-2 border-t">
-            <p className="text-muted-foreground pt-2 text-center text-xs">Copyright © 2025, Lunas.</p>
+          <ServiceLayoutSidebarMenuItem className="mt-2 border-t border-t-border">
+            <p className="pt-2 text-center text-muted-foreground text-xs">Copyright © 2025, Lunas.</p>
           </ServiceLayoutSidebarMenuItem>
         )}
       </ServiceLayoutSidebarMenu>
@@ -331,7 +331,7 @@ function ServiceLayoutSidebarFooter({ className, children, ...props }: React.Com
 }
 
 function ServiceLayoutSidebarSeparator({ className, ...props }: React.ComponentProps<typeof Separator>) {
-  return <Separator data-slot="sidebar-separator" data-sidebar="separator" className={cn('bg-sidebar-border mx-2 w-auto', className)} {...props} />;
+  return <Separator data-slot="sidebar-separator" data-sidebar="separator" className={cn('mx-2 w-auto bg-sidebar-border', className)} {...props} />;
 }
 
 function ServiceLayoutSidebarContent({ className, ...props }: React.ComponentProps<'div'>) {
@@ -357,7 +357,7 @@ function ServiceLayoutSidebarGroupLabel({ className, asChild = false, ...props }
       data-slot="sidebar-group-label"
       data-sidebar="group-label"
       className={cn(
-        'flex h-8 shrink-0 items-center rounded-md px-2 text-xs font-medium outline-hidden transition-[margin,opacity] duration-200 ease-linear focus-visible:ring-2',
+        'flex h-8 shrink-0 items-center rounded-md px-2 font-medium text-xs outline-hidden transition-[margin,opacity] duration-200 ease-linear focus-visible:ring-2',
         'text-sidebar-foreground/70',
         'ring-sidebar-ring',
         '[&>svg]:size-4',
@@ -515,7 +515,7 @@ function ServiceLayoutSidebarMenuAction({
       data-slot="sidebar-menu-action"
       data-sidebar="menu-action"
       className={cn(
-        'text-sidebar-foreground ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground peer-hover/menu-button:text-sidebar-accent-foreground absolute top-1.5 right-1 flex aspect-square w-5 items-center justify-center rounded-md p-0 outline-hidden transition-transform',
+        'absolute top-1.5 right-1 flex aspect-square w-5 items-center justify-center rounded-md p-0 text-sidebar-foreground outline-hidden ring-sidebar-ring transition-transform hover:bg-sidebar-accent hover:text-sidebar-accent-foreground peer-hover/menu-button:text-sidebar-accent-foreground',
         'focus-visible:ring-2',
         '[&>svg]:size-4',
         '[&>svg]:shrink-0',
@@ -542,7 +542,7 @@ function ServiceLayoutSidebarMenuBadge({ className, ...props }: React.ComponentP
       data-slot="sidebar-menu-badge"
       data-sidebar="menu-badge"
       className={cn(
-        'text-sidebar-foreground pointer-events-none absolute right-1 flex h-5 min-w-5 items-center justify-center rounded-md px-1 text-xs font-medium tabular-nums select-none',
+        'pointer-events-none absolute right-1 flex h-5 min-w-5 select-none items-center justify-center rounded-md px-1 font-medium text-sidebar-foreground text-xs tabular-nums',
         'peer-hover/menu-button:text-sidebar-accent-foreground',
         'peer-data-[active=true]/menu-button:text-sidebar-accent-foreground',
         'peer-data-[size=sm]/menu-button:top-1',
@@ -590,7 +590,7 @@ function ServiceLayoutSidebarMenuSub({ className, ...props }: React.ComponentPro
       data-slot="sidebar-menu-sub"
       data-sidebar="menu-sub"
       className={cn(
-        'border-sidebar-border mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-l px-2.5 py-0.5',
+        'mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-sidebar-border border-l px-2.5 py-0.5',
         'group-data-[collapsible=icon]:hidden',
         className
       )}
@@ -674,6 +674,6 @@ export {
   ServiceLayoutSidebarRail,
   ServiceLayoutSidebarSeparator,
   ServiceLayoutSidebarTrigger,
-  // eslint-disable-next-line react-refresh/only-export-components
+  // biome-ignore lint/style/useComponentExportOnlyModules: true
   useServiceLayoutSidebar,
 };
