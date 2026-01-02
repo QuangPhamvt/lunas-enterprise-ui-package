@@ -8,7 +8,8 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ResizablePanel } from '@/components/ui/resizable';
 import { Separator } from '@/components/ui/separator';
-import { useUITableContext } from '../hooks/use-table-context';
+
+import { useUITableContext } from '../../hooks/use-table-context';
 
 const ColumnVisibility: React.FC<{
   checked: boolean;

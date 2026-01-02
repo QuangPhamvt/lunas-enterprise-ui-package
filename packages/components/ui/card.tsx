@@ -1,7 +1,13 @@
 import { cn } from '@customafk/react-toolkit/utils';
 
 function Card({ className, ...props }: React.ComponentProps<'div'>) {
-  return <div data-slot="card" className={cn('flex flex-col gap-6 rounded-2xl bg-card py-6 text-text-positive shadow-card', className)} {...props} />;
+  return (
+    <div
+      data-slot="card"
+      className={cn('flex flex-col gap-6 rounded-2xl bg-card py-6 text-text-positive shadow-card ring-3 ring-border-muted', className)}
+      {...props}
+    />
+  );
 }
 
 function CardHeader({ className, ...props }: React.ComponentProps<'div'>) {

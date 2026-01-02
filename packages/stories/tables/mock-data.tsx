@@ -1,3 +1,4 @@
+import type { TUITableColumn } from '@/components/features/tables';
 import type { ColumnDef } from '@tanstack/react-table';
 
 export type TMockDataTable = {
@@ -17,7 +18,7 @@ export type TMockDataTable = {
   children?: TMockDataTable[];
 };
 
-export const MockDataColumns: ColumnDef<TMockDataTable>[] = [
+export const MockDataColumns: TUITableColumn<TMockDataTable>[] = [
   {
     accessorKey: 'select',
     size: 40,

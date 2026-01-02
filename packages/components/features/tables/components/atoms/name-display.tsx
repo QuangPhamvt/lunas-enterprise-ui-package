@@ -1,11 +1,12 @@
-import { Paragraph } from '../typography/paragraph';
-import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+
+import { Paragraph } from '@/components/typography/paragraph';
 
 type NameDisplayProps = {
   name: string;
 };
 
-export const NameDisplay: React.FC<React.PropsWithChildren<NameDisplayProps>> = ({ name }) => {
+export const UITableNameDisplay: React.FC<NameDisplayProps> = ({ name }) => {
   return (
     <Tooltip>
       <TooltipTrigger>

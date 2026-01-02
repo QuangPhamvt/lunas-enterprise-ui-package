@@ -2,17 +2,18 @@ import { UserRoundIcon } from 'lucide-react';
 
 import { colorHashLight } from '@customafk/react-toolkit/color-hash';
 
-import { Flex } from '../layouts/flex';
-import { Paragraph } from '../typography/paragraph';
-import { Avatar, AvatarFallback } from '../ui/avatar';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 
-type UserDataDisplayProps = {
+import { Flex } from '@/components/layouts/flex';
+import { Paragraph } from '@/components/typography/paragraph';
+
+type Props = {
   uuid: string;
   username: string;
   email: string;
 };
 
-export const UserDataDisplay: React.FC<React.PropsWithChildren<UserDataDisplayProps>> = ({ uuid, username, email }) => {
+export const UITableUserDataDisplay: React.FC<Props> = ({ uuid, username, email }) => {
   return (
     <Flex wrap={false} gap="sm" padding="none">
       <Avatar className="size-10 shadow-card">

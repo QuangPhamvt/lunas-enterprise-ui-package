@@ -1,5 +1,10 @@
-import type { ColumnDef, ColumnPinningState, RowData, RowSelectionState, Table } from '@tanstack/react-table';
+import type { AccessorKeyColumnDef, ColumnPinningState, RowData, RowSelectionState, Table } from '@tanstack/react-table';
 import type { VirtualItem, Virtualizer } from '@tanstack/react-virtual';
+
+export type TUITableColumn<TData extends RowData> = Pick<
+  AccessorKeyColumnDef<TData, unknown>,
+  'accessorKey' | 'size' | 'maxSize' | 'minSize' | 'header' | 'cell'
+>;
 
 export type TTableContext<TData extends RowData> = {
   title: string;
@@ -26,7 +31,7 @@ export type TableProviderProps<TData extends RowData> = {
   title: string;
   isFetching?: boolean;
   data: TData[];
-  columns: ColumnDef<TData>[];
+  columns: TUITableColumn<TData>[];
   totalRows?: number;
   fetchMoreData?: () => void | Promise<void>;
 };

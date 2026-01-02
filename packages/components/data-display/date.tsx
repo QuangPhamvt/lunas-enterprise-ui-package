@@ -1,4 +1,5 @@
 import { useCallback, useMemo } from 'react';
+
 import { format, isThisMonth, isThisWeek, isThisYear, isToday, isTomorrow, isValid, isYesterday, parseISO } from '@customafk/react-toolkit/date-fns';
 import { cn } from '@customafk/react-toolkit/utils';
 
@@ -150,7 +151,7 @@ export const DateDisplay: React.FC<Props> = ({ date, format: formatType = 'mediu
   const tooltipTitle = title || format(parsedDate, 'EEEE, d MMMM yyyy HH:mm:ss');
 
   return (
-    <time dateTime={parsedDate.toISOString()} className={cn('text-accent-foreground font-number text-sm', className)} title={tooltipTitle}>
+    <time dateTime={parsedDate.toISOString()} className={cn('font-number text-accent-foreground text-sm tabular-nums', className)} title={tooltipTitle}>
       {displayText}
     </time>
   );

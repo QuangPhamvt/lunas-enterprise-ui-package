@@ -1,4 +1,5 @@
 'use client';
+
 import { cn } from '@customafk/react-toolkit/utils';
 
 function Skeleton({ className, ...props }: React.ComponentProps<'div'>) {

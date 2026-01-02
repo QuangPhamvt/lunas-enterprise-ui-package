@@ -3,9 +3,9 @@ import { useMemo, useState } from 'react';
 import type { ColumnPinningState, InitialTableState, RowData, RowSelectionState, VisibilityState } from '@tanstack/react-table';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 
-import { TableContext } from '../hooks/use-table-context';
-import { TableRowsContext, type TTableRowsContext } from '../hooks/use-table-rows-context';
-import type { TableProviderProps, TTableContext } from '../types';
+import { TableContext } from '../../hooks/use-table-context';
+import { TableRowsContext, type TTableRowsContext } from '../../hooks/use-table-rows-context';
+import type { TableProviderProps, TTableContext } from '../../types';
 
 const INITIAL_STATE: InitialTableState = {
   columnPinning: { right: ['actions'] },
@@ -56,7 +56,7 @@ export const UITableProvider = <TData extends RowData>({
   // biome-ignore lint/correctness/useExhaustiveDependencies: rows
   const rows = useMemo(() => {
     return table.getRowModel().rows;
-  }, [table.getState().columnPinning]);
+  }, [data, table.getState().columnPinning]);
 
   const isEmpty = useMemo<boolean>(() => {
     return !isFetching && table.getRowModel().rows.length === 0;

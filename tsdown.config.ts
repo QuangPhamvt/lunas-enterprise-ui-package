@@ -25,6 +25,7 @@ export default defineConfig([
       './packages/components/dialogs/loading-dialog.tsx',
 
       './packages/components/features/search-modal/index.tsx',
+      './packages/components/features/tables/index.tsx',
       './packages/components/features/tanstack-form/index.tsx',
 
       './packages/components/layouts/app-layout/index.tsx',

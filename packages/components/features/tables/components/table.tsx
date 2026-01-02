@@ -143,7 +143,7 @@ const UITableHeaderCell: React.FC<
           onDoubleClick={header.column.resetSize}
           onMouseDown={header.getResizeHandler()}
           onTouchStart={header.getResizeHandler()}
-          className={cn('-right-0.5 absolute inset-y-0 w-1 cursor-e-resize bg-transparent hover:bg-border', isResizing && 'bg-border')}
+          className={cn('absolute inset-y-0 -right-0.5 w-1 cursor-e-resize bg-transparent hover:bg-border', isResizing && 'bg-border')}
         />
       </Activity>
     </th>
@@ -191,15 +191,13 @@ const UITableHeaderCellOption: React.FC<{
           </Activity>
           <Activity mode={!isPinned ? 'visible' : 'hidden'}>
             <DropdownMenuItem onClick={handleLeftPin}>
-              {!!isPinned && 'Unpin'}
-              {!isPinned && 'Pin to Left'}
+              {isPinned ? 'Unpin' : 'Pin to Left'}
               <DropdownMenuShortcut>
                 <MoveLeftIcon className="size-4" />
               </DropdownMenuShortcut>
             </DropdownMenuItem>
             <DropdownMenuItem onClick={handleRightPin}>
-              {!!isPinned && 'Unpin'}
-              {!isPinned && 'Pin to Right'}
+              {isPinned ? 'Unpin' : 'Pin to Right'}
               <DropdownMenuShortcut>
                 <MoveRightIcon className="size-4" />
               </DropdownMenuShortcut>
@@ -356,11 +354,10 @@ export const UITableContainer: React.FC<React.PropsWithChildren> = ({ children }
   const columnSizeVars = useMemo(() => {
     const headers = table.getFlatHeaders();
     const colSizes: { [key: string]: number | undefined } = {};
-    for (let i = 0; i < headers.length; i++) {
-      const header = headers[i];
+    headers.forEach(header => {
       colSizes[`--header-${header.id}-size`] = header.getSize() || 0;
       colSizes[`--col-${header.column.id}-size`] = header.column.getSize() || 0;
-    }
+    });
     return colSizes;
   }, [table.getState().columnSizingInfo, table.getState().columnSizing]);
 
@@ -407,7 +404,6 @@ export const UITableContainer: React.FC<React.PropsWithChildren> = ({ children }
             width: table.getTotalSize(),
           }}
           className="grid size-full max-w-full caption-bottom border-collapse border-spacing-0 flex-col content-start overflow-auto bg-card text-sm tabular-nums [&_tfoot_td]:border-t"
-          onScroll={e => fetchMoreOnButtonReached(e.currentTarget)}
         >
           <UITableHeader>
             {table.getHeaderGroups().map(headerGroup => (

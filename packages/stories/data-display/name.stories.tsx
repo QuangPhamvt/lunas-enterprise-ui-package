@@ -1,5 +1,5 @@
-import { NameDisplay } from '@/components/data-display/name';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { NameDisplay } from '@/components/data-display/name';
 
 const meta = {
   tags: ['autodocs'],

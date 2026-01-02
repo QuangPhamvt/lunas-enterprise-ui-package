@@ -51,9 +51,9 @@ export const Image: React.FC<Props> = ({ src, alt, width, height, maxRetries = 3
   if (hasError) {
     return (
       <div style={{ width, height }} className={cn('@container relative inline-block', className)}>
-        <div className="bg-danger-muted shadow-card flex size-full flex-col items-center justify-center gap-y-2 rounded-md">
-          <AlertCircleIcon className="text-danger size-8 @max-[52px]:size-6" />
-          <span className="text-danger-weak text-center text-xs @max-[96px]:sr-only">Image failed to load</span>
+        <div className="flex size-full flex-col items-center justify-center gap-y-2 rounded-md bg-danger-muted shadow-card">
+          <AlertCircleIcon className="@max-[52px]:size-6 size-8 text-danger" />
+          <span className="@max-[96px]:sr-only text-center text-danger-weak text-xs">Image failed to load</span>
         </div>
       </div>
     );
@@ -70,7 +70,7 @@ export const Image: React.FC<Props> = ({ src, alt, width, height, maxRetries = 3
         alt={alt}
         loading="lazy"
         className={cn(
-          'shadow-card relative h-[120%] w-auto object-cover transition-opacity duration-300',
+          'relative h-6/5 w-auto object-cover shadow-card transition-opacity duration-300',
           isLoaded && 'opacity-100',
           !isLoaded && 'pointer-events-none opacity-0',
           imageClassName

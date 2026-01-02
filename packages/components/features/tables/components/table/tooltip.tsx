@@ -1,7 +1,8 @@
 import { ArrowRightIcon, CirclePlus, DownloadIcon, RefreshCwIcon, SearchIcon } from 'lucide-react';
 
 import { Input } from '@/components/ui/input';
-import { useUITableContext } from '../hooks/use-table-context';
+
+import { useUITableContext } from '../../hooks/use-table-context';
 
 export const UITableTooltipFilter: React.FC<React.ComponentProps<typeof Input>> = ({ className: _, ...props }) => {
   return (

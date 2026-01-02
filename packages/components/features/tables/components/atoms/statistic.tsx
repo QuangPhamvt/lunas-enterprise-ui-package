@@ -2,7 +2,7 @@ import { memo, useCallback, useMemo } from 'react';
 
 import { cn } from '@customafk/react-toolkit/utils';
 
-import { Flex } from '../layouts/flex';
+import { Flex } from '@/components/layouts/flex';
 
 type Props = {
   decimalSeparator?: string;
@@ -15,7 +15,7 @@ type Props = {
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'; // Kích thước của component
   value: number | string;
 };
-export const Statistic = memo(
+export const UITableStatisticDisplay = memo(
   ({
     decimalSeparator = '.',
     groupSeparator = ',',
@@ -135,4 +135,4 @@ export const Statistic = memo(
     );
   }
 );
-Statistic.displayName = 'Statistic';
+UITableStatisticDisplay.displayName = 'UITableStatisticDisplay';

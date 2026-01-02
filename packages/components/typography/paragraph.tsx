@@ -1,4 +1,5 @@
 'use client';
+
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { cva } from 'class-variance-authority';
@@ -12,11 +13,11 @@ type Props = {
 const paragraphVariants = cva('', {
   variants: {
     variant: {
-      p: 'leading-7 [&:not(:first-child)]:mt-6',
-      sm: 'text-sm leading-none font-normal',
-      lg: 'text-lg font-semibold',
+      p: 'not-first:mt-6 leading-7',
+      sm: 'font-normal text-sm leading-none',
+      lg: 'font-semibold text-lg',
       lead: 'text-text-positive-strong text-xl',
-      muted: 'text-text-positive-muted text-sm',
+      muted: 'text-sm text-text-positive-muted',
     },
     default: {
       variant: 'sm',

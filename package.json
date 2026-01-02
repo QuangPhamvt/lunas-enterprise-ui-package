@@ -1,6 +1,6 @@
 {
   "name": "@customafk/lunas-ui",
-  "version": "0.1.18",
+  "version": "0.1.25",
   "description": "UI library for Lunas Enterprise",
   "type": "module",
   "author": {
@@ -104,6 +104,10 @@
     "./features/search-modal": {
       "require": "./dist/features/search-modal/index.cjs",
       "import": "./dist/features/search-modal/index.mjs"
+    },
+    "./features/tables": {
+      "require": "./dist/features/tables/index.cjs",
+      "import": "./dist/features/tables/index.mjs"
     },
     "./features/tanstack-form": {
       "require": "./dist/features/tanstack-form/index.cjs",
