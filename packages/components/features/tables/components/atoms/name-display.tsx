@@ -14,7 +14,7 @@ export const UITableNameDisplay: React.FC<NameDisplayProps> = ({ name }) => {
           {name}
         </Paragraph>
       </TooltipTrigger>
-      <TooltipContent align="start" className="max-w-80 whitespace-pre-line text-wrap break-keep">
+      <TooltipContent align="start" className="h-fit max-w-80 whitespace-pre-line text-wrap break-keep">
         {name}
       </TooltipContent>
     </Tooltip>

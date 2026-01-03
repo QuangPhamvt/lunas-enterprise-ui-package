@@ -3,24 +3,27 @@ import { useMemo, useState } from 'react';
 import type { ColumnPinningState, InitialTableState, RowData, RowSelectionState, VisibilityState } from '@tanstack/react-table';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 
+import { TableClickRowContext } from '../../hooks/use-click-row';
 import { TableContext } from '../../hooks/use-table-context';
-import { TableRowsContext, type TTableRowsContext } from '../../hooks/use-table-rows-context';
-import type { TableProviderProps, TTableContext } from '../../types';
+import type { TableProviderProps, TTableClickRow, TTableContext } from '../../types';
 
 const INITIAL_STATE: InitialTableState = {
   columnPinning: { right: ['actions'] },
 };
 
-export const UITableProvider = <TData extends RowData>({
+export const UITableProvider = <TData extends RowData, TKey extends keyof TData>({
   title,
   isFetching = false,
   data,
   columns,
   totalRows,
 
+  keyOfClickRow,
+  onClickRow,
+
   fetchMoreData,
   children,
-}: React.PropsWithChildren<TableProviderProps<TData>>) => {
+}: React.PropsWithChildren<TableProviderProps<TData, TKey>>) => {
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const [columnPinning, setColumnPinning] = useState<ColumnPinningState>({ right: ['actions'] });
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -99,18 +102,17 @@ export const UITableProvider = <TData extends RowData>({
     ]
   );
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: rows
-  const rowsValue = useMemo<TTableRowsContext<TData>>(
+  const clickRowValue = useMemo(
     () => ({
-      rowsLength: rows.length,
-      rows,
+      keyOfClickRow,
+      onClickRow,
     }),
-    [rows, table.getState().rowSelection, table.getState().columnPinning, table.getState().columnSizing]
+    [keyOfClickRow, onClickRow]
   );
 
   return (
     <TableContext.Provider value={value as TTableContext<unknown>}>
-      <TableRowsContext.Provider value={rowsValue as TTableRowsContext<unknown>}>{children}</TableRowsContext.Provider>
+      <TableClickRowContext.Provider value={clickRowValue as TTableClickRow<unknown>}>{children}</TableClickRowContext.Provider>
     </TableContext.Provider>
   );
 };

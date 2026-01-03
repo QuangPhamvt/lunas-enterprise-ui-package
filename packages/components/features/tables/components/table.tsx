@@ -21,6 +21,7 @@ import {
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
 
 import type { AnyEntity } from '@/types';
+import { useUITableClickRowContext } from '../hooks/use-click-row';
 import { useUITableContext } from '../hooks/use-table-context';
 
 const SELECT_WIDTH = 60;
@@ -246,12 +247,28 @@ const UITableBody: React.FC<React.PropsWithChildren<React.ComponentProps<'tbody'
 
 const UITableRow: React.FC<
   React.ComponentProps<'tr'> & {
-    row: Row<unknown>;
+    keyOfClickRow?: string;
+    row: Row<any>;
     virtualRow: VirtualItem;
     rowVirtualizer: Virtualizer<HTMLDivElement, HTMLTableRowElement>;
+
+    onClickRow?: (rowIndex: number, rowId?: AnyEntity) => void;
   }
-> = memo(({ children, row, virtualRow, rowVirtualizer, className, ...props }) => {
+> = memo(({ children, keyOfClickRow, row, virtualRow, rowVirtualizer, onClickRow, className, ...props }) => {
   const { columnPinning: _ } = useUITableContext();
+  const handleClick = useCallback<React.MouseEventHandler<HTMLTableRowElement>>(
+    e => {
+      const value = keyOfClickRow ? row.original?.[keyOfClickRow] : undefined;
+      if (typeof value === 'string' || typeof value === 'number') {
+        onClickRow?.(virtualRow.index, value);
+      } else {
+        onClickRow?.(virtualRow.index);
+      }
+      e.preventDefault();
+      e.stopPropagation();
+    },
+    [keyOfClickRow, onClickRow, row.original, virtualRow.index]
+  );
   return (
     <tr
       data-slot="table-row"
@@ -261,6 +278,7 @@ const UITableRow: React.FC<
         transform: `translateY(${virtualRow.start}px)`,
       }}
       className={cn('group', className)}
+      onClick={handleClick}
       {...props}
     >
       {row.getVisibleCells().map(cell => {
@@ -282,9 +300,6 @@ const UITableCell: React.FC<
   const isPinned = cell.column.getIsPinned();
   const style = getCommonPinningStyles(cell.column);
   const width = `calc(var(--col-${cell.column.id}-size) * 1px)`;
-  if (isPinned) {
-    console.log('Pinned Cell Rendered:', cell.column.getPinnedIndex());
-  }
 
   if (cell.column.id === 'select') {
     return (
@@ -337,6 +352,7 @@ export const UITableFooter: React.FC<React.PropsWithChildren> = ({ children }) =
 
 export const UITableContainer: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { table, isEmpty, isFetching, data, totalRows, fetchMoreData } = useUITableContext();
+  const { keyOfClickRow, onClickRow } = useUITableClickRowContext();
 
   const tableContainerRef = useRef<HTMLDivElement | null>(null);
 
@@ -425,11 +441,12 @@ export const UITableContainer: React.FC<React.PropsWithChildren> = ({ children }
                 return (
                   <UITableRow
                     data-index={virtualRow.index}
-                    // ref={node => rowVirtualizer.measureElement(node)} //measure dynamic row height
                     key={row.id}
+                    keyOfClickRow={keyOfClickRow}
                     row={row}
                     virtualRow={virtualRow}
                     rowVirtualizer={rowVirtualizer}
+                    onClickRow={onClickRow}
                   />
                 );
               })}

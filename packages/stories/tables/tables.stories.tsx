@@ -11,7 +11,7 @@ import {
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { MockDataColumns, MockDataTables, type TMockDataTable } from './mock-data';
 
-const meta: Meta<typeof UITableProvider<TMockDataTable>> = {
+const meta: Meta<typeof UITableProvider<TMockDataTable, 'column_12'>> = {
   tags: ['autodocs'],
   title: 'Features/UI Tables',
   component: UITableProvider,
@@ -31,6 +31,10 @@ export const Default: Story = {
     totalRows: MockDataTables.length + 2,
     fetchMoreData: async () => {
       console.log('Fetch more data...');
+    },
+    keyOfClickRow: 'column_12',
+    onClickRow: (rowIndex, rowId) => {
+      console.log('Clicked row:', rowIndex, 'Row ID:', rowId);
     },
   },
   render: ({ children, ...args }) => {

@@ -22,24 +22,50 @@ export const UITableTooltipFilter: React.FC<React.ComponentProps<typeof Input>> 
   );
 };
 
-const ActionButton: React.FC<React.PropsWithChildren> = ({ children }) => {
+const ActionButton: React.FC<React.PropsWithChildren<React.ComponentProps<'button'>>> = ({ children, onClick }) => {
   return (
-    <button className="flex cursor-pointer items-center gap-x-1 rounded-sm border border-border bg-background p-2.5 text-sm text-text-positive-weak outline-none transition-all hover:shadow-card focus:border-border-emphasis focus:bg-muted-muted active:border-border-emphasis active:bg-muted-muted active:text-text-positive [&_svg]:size-3.5">
+    <button
+      type="button"
+      className="flex cursor-pointer items-center gap-x-1 rounded-sm border border-border bg-background p-2.5 text-sm text-text-positive-weak outline-none transition-all hover:shadow-card focus:border-border-emphasis focus:bg-muted-muted active:border-border-emphasis active:bg-muted-muted active:text-text-positive [&_svg]:size-3.5"
+      onClick={onClick}
+    >
       {children}
     </button>
   );
 };
 
-export const UITableTooltipActions: React.FC = () => {
+export const UITableTooltipActions: React.FC<{
+  onCreate?: () => void;
+  onRefresh?: () => void;
+  onDownload?: () => void;
+}> = ({ onCreate, onDownload, onRefresh }) => {
   return (
     <div className="flex [&>*:not(:first-child)]:rounded-l-none [&>*:not(:first-child)]:border-l-0 [&>*:not(:last-child)]:rounded-r-none">
-      <ActionButton>
+      <ActionButton
+        onClick={e => {
+          onCreate?.();
+          e.stopPropagation();
+          e.preventDefault();
+        }}
+      >
         <CirclePlus />
       </ActionButton>
-      <ActionButton>
+      <ActionButton
+        onClick={e => {
+          onRefresh?.();
+          e.stopPropagation();
+          e.preventDefault();
+        }}
+      >
         <RefreshCwIcon />
       </ActionButton>
-      <ActionButton>
+      <ActionButton
+        onClick={e => {
+          onDownload?.();
+          e.stopPropagation();
+          e.preventDefault();
+        }}
+      >
         <DownloadIcon />
       </ActionButton>
     </div>

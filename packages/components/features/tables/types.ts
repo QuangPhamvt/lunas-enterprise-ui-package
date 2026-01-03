@@ -23,16 +23,26 @@ export type TTableContext<TData extends RowData> = {
   fetchMoreData?: () => void | Promise<void>;
 };
 
+export type TTableClickRow<TData extends RowData, TKey extends keyof TData = keyof TData> = {
+  keyOfClickRow?: TKey;
+  onClickRow?: (rowIndex: number, rowId?: TData[TKey]) => void;
+};
+
 export type TTableVirtualizerContext = {
   rowVirtualizer: Virtualizer<HTMLDivElement, HTMLTableRowElement>;
   virtualItems: VirtualItem[];
 };
 
-export type TableProviderProps<TData extends RowData> = {
+export type TableProviderProps<TData extends RowData, TKey extends keyof TData> = {
   title: string;
   isFetching?: boolean;
   data: TData[];
   columns: TUITableColumn<TData>[];
   totalRows?: number;
   fetchMoreData?: () => void | Promise<void>;
+
+  // Click Row Props
+  // For enabling row click functionality
+  keyOfClickRow?: TTableClickRow<TData, TKey>['keyOfClickRow'];
+  onClickRow?: TTableClickRow<TData, TKey>['onClickRow'];
 };

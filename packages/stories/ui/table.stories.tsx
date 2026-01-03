@@ -1,4 +1,5 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+
 import type { Meta } from '@storybook/react-vite';
 
 const meta = {
@@ -12,11 +13,11 @@ type Story = Meta<typeof meta>;
 
 export const Default: Story = {
   render: () => (
-    <div className="bg-background border-border-weak w-200 min-w-200 overflow-hidden rounded-md border">
+    <div className="w-200 min-w-200 overflow-hidden rounded-md border border-border-weak bg-background">
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[100px]">Invoice</TableHead>
+            <TableHead className="w-25">Invoice</TableHead>
             <TableHead>Status</TableHead>
             <TableHead>Method</TableHead>
             <TableHead className="text-right">Amount</TableHead>
