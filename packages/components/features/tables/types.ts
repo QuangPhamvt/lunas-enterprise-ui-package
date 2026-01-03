@@ -9,6 +9,7 @@ export type TUITableColumn<TData extends RowData> = Pick<
 export type TTableContext<TData extends RowData> = {
   title: string;
   table: Table<TData>;
+  data: TData[];
 
   isEmpty: boolean;
   isFetching?: boolean;

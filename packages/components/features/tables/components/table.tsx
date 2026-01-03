@@ -20,10 +20,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
 
-import type { ImperativePanelGroupHandle } from 'react-resizable-panels';
 import type { AnyEntity } from '@/types';
 import { useUITableContext } from '../hooks/use-table-context';
-import { useUITableRowsContext } from '../hooks/use-table-rows-context';
 
 const SELECT_WIDTH = 60;
 const TABLE_HEADER_Z_INDEX = 20;
@@ -224,7 +222,7 @@ const UITableBody: React.FC<React.PropsWithChildren<React.ComponentProps<'tbody'
       data-slot="table-body"
       style={{ height: `${height}px` }}
       className={cn(
-        'relative grid w-full',
+        'relative grid w-full bg-card',
         '[&_tr]:absolute [&_tr]:flex [&_tr]:w-full [&_tr]:cursor-pointer [&_tr]:border-b [&_tr]:border-b-border [&_tr]:focus:outline-none',
         '[&_td]:z-10',
         '[&_td]:flex',
@@ -338,11 +336,9 @@ export const UITableFooter: React.FC<React.PropsWithChildren> = ({ children }) =
 };
 
 export const UITableContainer: React.FC<React.PropsWithChildren> = ({ children }) => {
-  const { table, isEmpty, isFetching, totalRows, fetchMoreData } = useUITableContext();
-  const { rows, rowsLength } = useUITableRowsContext();
+  const { table, isEmpty, isFetching, data, totalRows, fetchMoreData } = useUITableContext();
 
-  const tableContainerRef = useRef<ImperativePanelGroupHandle | null>(null);
-  const tableRef = useRef<HTMLTableElement | null>(null);
+  const tableContainerRef = useRef<HTMLDivElement | null>(null);
 
   /**
    * Instead of calling `column.getSize()` on every render for every header
@@ -361,73 +357,86 @@ export const UITableContainer: React.FC<React.PropsWithChildren> = ({ children }
     return colSizes;
   }, [table.getState().columnSizingInfo, table.getState().columnSizing]);
 
-  // Important: Keep the row virtualizer in the lowest component possible to avoid unnecessary re-renders.
-  const rowVirtualizer = useVirtualizer<HTMLDivElement, HTMLTableRowElement>({
-    count: rowsLength,
-    getScrollElement: () => tableRef.current,
-    estimateSize: () => 40, // estimated row height
-    measureElement: element => element?.getBoundingClientRect().height,
-    overscan: 2, // Render additional rows beyond viewport for smoother scrolling
-  });
-
   //called on scroll and possibly on mount to fetch more data as the user scrolls and reaches bottom of table
   const fetchMoreOnButtonReached = useCallback(
-    async (containerRefEl?: HTMLTableElement | null) => {
+    async (containerRefEl?: HTMLDivElement | null) => {
       if (!containerRefEl) return null;
       const { scrollHeight, scrollTop, clientHeight } = containerRefEl;
       //once the user has scrolled within 500px of the bottom of the table, fetch more data if we can
-      if (scrollHeight - scrollTop - clientHeight < 500 && !isFetching && totalRows && rowsLength < totalRows) {
-        await fetchMoreData?.();
+      if (scrollHeight - scrollTop - clientHeight < 500 && !isFetching && totalRows && data.length < totalRows) {
+        fetchMoreData?.();
       }
     },
-    [isFetching, rowsLength, totalRows, fetchMoreData]
+    [isFetching, data.length, totalRows, fetchMoreData]
   );
 
   //a check on mount and after a fetch to see if the table is already scrolled to the bottom and immediately needs to fetch more data
   useEffect(() => {
-    fetchMoreOnButtonReached(tableRef.current);
+    fetchMoreOnButtonReached(tableContainerRef.current);
   }, [fetchMoreOnButtonReached]);
+
+  const { rows } = table.getRowModel();
+
+  // Important: Keep the row virtualizer in the lowest component possible to avoid unnecessary re-renders.
+  const rowVirtualizer = useVirtualizer<HTMLDivElement, HTMLTableRowElement>({
+    count: rows.length,
+    estimateSize: () => 40, // estimated row height
+    getScrollElement: () => tableContainerRef.current,
+    //measure dynamic row height, except in firefox because it measures table border height incorrectly
+    measureElement:
+      typeof window !== 'undefined' && navigator.userAgent.indexOf('Firefox') === -1 ? element => element?.getBoundingClientRect().height : undefined,
+    overscan: 2, // Render additional rows beyond viewport for smoother scrolling
+  });
 
   return (
     <ResizablePanelGroup
-      ref={tableContainerRef}
       direction="horizontal"
       style={{ direction: table.options.columnResizeDirection }}
       className="relative flex w-full max-w-full flex-1 gap-1 overflow-auto border-t border-t-border bg-slate-50 p-0 text-sm"
     >
       <ResizablePanel className="overflow-auto">
-        <table
-          ref={tableRef}
-          data-slot="table"
-          style={{
-            ...columnSizeVars,
-            width: table.getTotalSize(),
-          }}
-          className="grid size-full max-w-full caption-bottom border-collapse border-spacing-0 flex-col content-start overflow-auto bg-card text-sm tabular-nums [&_tfoot_td]:border-t"
-        >
-          <UITableHeader>
-            {table.getHeaderGroups().map(headerGroup => (
-              <UITableHeaderRow key={headerGroup.id}>
-                {headerGroup.headers.map(header => (
-                  <UITableHeaderCell
-                    key={header.id}
-                    header={header}
-                    isPinned={header.column.getIsPinned()}
-                    isResizing={header.column.getIsResizing()}
-                    isAllRowsSelected={table.getIsAllRowsSelected()}
+        <div ref={tableContainerRef} className="relative size-full overflow-auto" onScroll={e => fetchMoreOnButtonReached(e.currentTarget)}>
+          <table
+            data-slot="table"
+            style={{
+              ...columnSizeVars,
+              width: table.getTotalSize(),
+            }}
+            className="grid size-full max-w-full caption-bottom border-collapse border-spacing-0 flex-col content-start bg-card text-sm tabular-nums [&_tfoot_td]:border-t"
+          >
+            <UITableHeader>
+              {table.getHeaderGroups().map(headerGroup => (
+                <UITableHeaderRow key={headerGroup.id}>
+                  {headerGroup.headers.map(header => (
+                    <UITableHeaderCell
+                      key={header.id}
+                      header={header}
+                      isPinned={header.column.getIsPinned()}
+                      isResizing={header.column.getIsResizing()}
+                      isAllRowsSelected={table.getIsAllRowsSelected()}
+                    />
+                  ))}
+                </UITableHeaderRow>
+              ))}
+            </UITableHeader>
+            <UITableBody data-slot="table-body" height={rowVirtualizer.getTotalSize()}>
+              {rowVirtualizer.getVirtualItems().map(virtualRow => {
+                const row = rows[virtualRow.index] as Row<AnyEntity>;
+                return (
+                  <UITableRow
+                    data-index={virtualRow.index}
+                    // ref={node => rowVirtualizer.measureElement(node)} //measure dynamic row height
+                    key={row.id}
+                    row={row}
+                    virtualRow={virtualRow}
+                    rowVirtualizer={rowVirtualizer}
                   />
-                ))}
-              </UITableHeaderRow>
-            ))}
-          </UITableHeader>
-          <UITableBody data-slot="table-body" height={rowVirtualizer.getTotalSize()}>
-            {rowVirtualizer.getVirtualItems().map(virtualRow => {
-              const row = rows[virtualRow.index] as Row<AnyEntity>;
-              return <UITableRow key={row.id} data-index={virtualRow.index} row={row} virtualRow={virtualRow} rowVirtualizer={rowVirtualizer} />;
-            })}
-          </UITableBody>
-        </table>
-        {isEmpty && <EmptyDisplay />}
+                );
+              })}
+            </UITableBody>
+          </table>
+          {isEmpty && <EmptyDisplay />}
+        </div>
       </ResizablePanel>
       <ResizableHandle />
       {children}

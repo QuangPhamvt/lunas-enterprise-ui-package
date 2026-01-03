@@ -55,32 +55,35 @@ export const UITableProvider = <TData extends RowData>({
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: rows
   const rows = useMemo(() => {
-    return table.getRowModel().rows;
-  }, [data, table.getState().columnPinning]);
+    const { rows } = table.getRowModel();
+    return rows;
+  }, [table.getRowModel().rows, table.getState().columnPinning]);
 
   const isEmpty = useMemo<boolean>(() => {
-    return !isFetching && table.getRowModel().rows.length === 0;
-  }, [table, isFetching]);
+    return !isFetching && rows.length === 0;
+  }, [rows, isFetching]);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: table get state
   const value = useMemo<TTableContext<TData>>(
     () => ({
-      table,
       title,
+      table,
+      data,
+
       isEmpty,
       isFetching,
 
       totalRows,
 
-      rowSelection: table.getState().rowSelection,
-
-      columnPinning: table.getState().columnPinning,
-
       fetchMoreData,
+
+      rowSelection: table.getState().rowSelection,
+      columnPinning: table.getState().columnPinning,
     }),
     [
-      table,
       title,
+      table,
+      data,
 
       isEmpty,
       isFetching,
