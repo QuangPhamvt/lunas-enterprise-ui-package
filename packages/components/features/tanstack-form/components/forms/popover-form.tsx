@@ -5,7 +5,6 @@ import { CloseButton } from '@/components/ui/buttons/close';
 import { Dialog as DialogPrimitive } from 'radix-ui';
 import { useTanStackFormContext } from '../../tanstack-form';
 import { CancelButton } from '../ui/cancel-button';
-import { Dialog, DialogPortal } from '../ui/dialog';
 import { SubmitButton } from '../ui/submit-button';
 
 export const TanStackPopoverForm: React.FC<
@@ -17,8 +16,8 @@ export const TanStackPopoverForm: React.FC<
 > = ({ title, open, onOpenChange, children }) => {
   const form = useTanStackFormContext();
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogPortal data-slot="dialog-portal">
+    <DialogPrimitive.Root data-slot="dialog" open={open} onOpenChange={onOpenChange}>
+      <DialogPrimitive.Portal data-slot="dialog-portal">
         <DialogPrimitive.Overlay
           data-slot="dialog-overlay"
           className={cn(
@@ -87,7 +86,7 @@ export const TanStackPopoverForm: React.FC<
             </DialogPrimitive.Close>
           </section>
         </DialogPrimitive.Content>
-      </DialogPortal>
-    </Dialog>
+      </DialogPrimitive.Portal>
+    </DialogPrimitive.Root>
   );
 };
