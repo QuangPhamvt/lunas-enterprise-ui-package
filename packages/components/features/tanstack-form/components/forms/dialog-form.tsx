@@ -65,7 +65,7 @@ export const TanStackDialogForm: React.FC<
                 disabled: state.isPristine || !state.isValid || state.isValidating || state.isSubmitting || !state.canSubmit,
               })}
               children={({ isSubmitting, disabled }) => {
-                return <SubmitButton isSubmitting={isSubmitting} disabled={disabled} />;
+                return <SubmitButton isSubmitting={isSubmitting} disabled={disabled} onClick={() => form.handleSubmit()} />;
               }}
             />
           </div>

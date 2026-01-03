@@ -19,7 +19,7 @@ export default defineConfig([
       './packages/components/data-display/user.tsx',
 
       './packages/components/dialogs/detail-dialog/index.tsx',
-      './packages/components/dialogs/detail-dialog/component/sidebar.tsx',
+      './packages/components/dialogs/detail-dialog/components/sidebar.tsx',
       './packages/components/dialogs/confirm-dialog.tsx',
       './packages/components/dialogs/error-dialog.tsx',
       './packages/components/dialogs/loading-dialog.tsx',

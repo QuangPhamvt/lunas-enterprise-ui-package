@@ -6,18 +6,18 @@ import { MenuIcon } from 'lucide-react';
 import { useIsMobile } from '@customafk/react-toolkit/hooks/useMobile';
 import { cn } from '@customafk/react-toolkit/utils';
 
-import { cva, type VariantProps } from 'class-variance-authority';
-import { Slot as SlotPrimitive } from 'radix-ui';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
+import { cva, type VariantProps } from 'class-variance-authority';
+import { Slot as SlotPrimitive } from 'radix-ui';
+
 const SIDEBAR_COOKIE_NAME = 'detai_dialog_sidebar_state';
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
-const SIDEBAR_WIDTH = '16rem';
+const SIDEBAR_WIDTH = '20rem';
 const SIDEBAR_WIDTH_MOBILE = '18rem';
 const SIDEBAR_WIDTH_ICON = '3rem';
 const SIDEBAR_KEYBOARD_SHORTCUT = 'p';
@@ -73,6 +73,7 @@ function SidebarProvider({
       }
 
       // This sets the cookie to keep the sidebar state.
+      // biome-ignore lint/suspicious/noDocumentCookie: true
       document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`;
     },
     [setOpenProp, open]
@@ -113,8 +114,7 @@ function SidebarProvider({
       openMobile,
       setOpenMobile,
     }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [state, open, setOpen, openMobile, setOpenMobile, toggleSidebar]
+    [state, isMobile, open, setOpen, openMobile, toggleSidebar]
   );
 
   return (
@@ -129,7 +129,7 @@ function SidebarProvider({
               ...style,
             } as React.CSSProperties
           }
-          className={cn('group/sidebar-wrapper', 'has-data-[variant=inset]:bg-sidebar', 'flex min-h-dvh w-full', className)}
+          className={cn('group/sidebar-wrapper flex h-full min-h-[85dvh] w-full items-start has-data-[variant=inset]:bg-sidebar', className)}
           {...props}
         >
           {children}
@@ -155,7 +155,7 @@ function Sidebar({
 
   if (collapsible === 'none') {
     return (
-      <div data-slot="sidebar" className={cn('bg-sidebar text-sidebar-foreground flex h-full w-(--sidebar-width) flex-col', className)} {...props}>
+      <div data-slot="sidebar" className={cn('flex h-full w-(--sidebar-width) flex-col bg-sidebar text-sidebar-foreground', className)} {...props}>
         {children}
       </div>
     );
@@ -168,7 +168,7 @@ function Sidebar({
           data-sidebar="sidebar"
           data-slot="sidebar"
           data-mobile="true"
-          className="bg-sidebar text-sidebar-foreground w-(--sidebar-width) p-0 [&>button]:hidden"
+          className="z-20 hidden w-(--sidebar-width) bg-sidebar p-0 text-sidebar-foreground shadow-nav md:flex [&>button]:hidden"
           style={
             {
               '--sidebar-width': SIDEBAR_WIDTH_MOBILE,
@@ -188,7 +188,7 @@ function Sidebar({
 
   return (
     <div
-      className="group peer text-sidebar-foreground hidden md:block"
+      className="group peer hidden text-sidebar-foreground md:block"
       data-state={state}
       data-collapsible={state === 'collapsed' ? collapsible : ''}
       data-variant={variant}
@@ -210,7 +210,7 @@ function Sidebar({
       <div
         data-slot="sidebar-container"
         className={cn(
-          'absolute inset-y-0 hidden w-(--sidebar-width) transition-[left,right,width] duration-200 ease-linear md:flex',
+          'absolute inset-y-0 z-20 hidden w-(--sidebar-width) shadow-nav transition-[left,right,width] duration-200 ease-linear md:flex',
           side === 'left'
             ? 'left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]'
             : 'right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]',
@@ -226,7 +226,7 @@ function Sidebar({
           data-sidebar="sidebar"
           data-slot="sidebar-inner"
           className={cn(
-            'shadow-nav flex size-full flex-col',
+            'flex size-full flex-col shadow-nav',
             'group-data-[variant=floating]:border-sidebar-border',
             'group-data-[variant=floating]:rounded-lg',
             'group-data-[variant=floating]:border',
@@ -250,7 +250,7 @@ function DetailDialogSidebarTrigger({ className, onClick, ...props }: React.Comp
       variant="ghost"
       color="secondary"
       size="icon"
-      className={cn('size-10 rounded-full [&_svg]:!size-6', className)}
+      className={cn('size-10 rounded-full [&_svg]:size-6!', className)}
       onClick={event => {
         onClick?.(event);
         toggleSidebar();
@@ -303,7 +303,7 @@ function SidebarInset({ className, ...props }: React.ComponentProps<'main'>) {
     <main
       data-slot="sidebar-inset"
       className={cn(
-        'bg-background relative flex w-full flex-1 flex-col',
+        'relative flex w-full flex-1 flex-col bg-background',
         'md:peer-data-[variant=inset]:m-2',
         'md:peer-data-[variant=inset]:ml-0',
         'md:peer-data-[variant=inset]:rounded-xl',
@@ -316,10 +316,6 @@ function SidebarInset({ className, ...props }: React.ComponentProps<'main'>) {
   );
 }
 
-function SidebarInput({ className, ...props }: React.ComponentProps<typeof Input>) {
-  return <Input data-slot="sidebar-input" data-sidebar="input" className={cn('bg-background h-8 w-full shadow-none', className)} {...props} />;
-}
-
 function DetailDialogSidebarHeader({ className, ...props }: React.ComponentProps<'div'>) {
   return <div data-slot="sidebar-header" data-sidebar="header" className={cn('flex flex-col gap-2 p-2', className)} {...props} />;
 }
@@ -329,7 +325,7 @@ function DetailDialogSidebarFooter({ className, ...props }: React.ComponentProps
 }
 
 function DetailDialogSidebarSeparator({ className, ...props }: React.ComponentProps<typeof Separator>) {
-  return <Separator data-slot="sidebar-separator" data-sidebar="separator" className={cn('bg-sidebar-border mx-2 w-auto', className)} {...props} />;
+  return <Separator data-slot="sidebar-separator" data-sidebar="separator" className={cn('mx-2 w-auto bg-sidebar-border', className)} {...props} />;
 }
 
 function DetailDialogSidebarContent({ className, ...props }: React.ComponentProps<'div'>) {
@@ -355,7 +351,7 @@ function DetailDialogSidebarGroupLabel({ className, asChild = false, ...props }:
       data-slot="sidebar-group-label"
       data-sidebar="group-label"
       className={cn(
-        'text-sidebar-foreground/70 ring-sidebar-ring flex h-8 shrink-0 items-center rounded-md px-2 text-xs font-medium outline-hidden transition-[margin,opacity] duration-200 ease-linear',
+        'flex h-8 shrink-0 items-center rounded-md px-2 font-medium text-sidebar-foreground/70 text-xs outline-hidden ring-sidebar-ring transition-[margin,opacity] duration-200 ease-linear',
         'focus-visible:ring-2',
         '[&>svg]:size-4',
         '[&>svg]:shrink-0',
@@ -376,7 +372,7 @@ function DetailDialogSidebarGroupAction({ className, asChild = false, ...props }
       data-slot="sidebar-group-action"
       data-sidebar="group-action"
       className={cn(
-        'text-sidebar-foreground ring-sidebar-ring absolute top-3.5 right-3 flex aspect-square w-5 items-center justify-center rounded-md p-0 outline-hidden transition-transform',
+        'absolute top-3.5 right-3 flex aspect-square w-5 items-center justify-center rounded-md p-0 text-sidebar-foreground outline-hidden ring-sidebar-ring transition-transform',
         'hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
         'focus-visible:ring-2',
         '[&>svg]:size-4',
@@ -411,7 +407,7 @@ const sidebarMenuButtonVariants = cva(
     'cursor-pointer',
     'flex w-full items-center gap-2',
     'overflow-hidden rounded-md p-2 outline-hidden',
-    'text-left truncate',
+    'truncate text-left',
     'transition-[color,width,height,padding]',
     'hover:bg-sidebar-accent',
     'hover:text-sidebar-accent-foreground',
@@ -517,7 +513,7 @@ function DetailDialogSidebarMenuAction({
         'text-sidebar-foreground ring-sidebar-ring',
         'hover:bg-sidebar-accent',
         'hover:text-sidebar-accent-foreground',
-        'peer-hover/menu-button:text-sidebar-accent-foreground absolute top-1.5 right-1 flex aspect-square w-5 items-center justify-center rounded-md p-0 outline-hidden transition-transform',
+        'absolute top-1.5 right-1 flex aspect-square w-5 items-center justify-center rounded-md p-0 outline-hidden transition-transform peer-hover/menu-button:text-sidebar-accent-foreground',
         'focus-visible:ring-2',
         '[&>svg]:size-4',
         '[&>svg]:shrink-0',
@@ -544,7 +540,7 @@ function DetailDialogSidebarMenuBadge({ className, ...props }: React.ComponentPr
       data-slot="sidebar-menu-badge"
       data-sidebar="menu-badge"
       className={cn(
-        'text-sidebar-foreground pointer-events-none absolute right-1 flex h-5 min-w-5 items-center justify-center rounded-md px-1 text-xs font-medium tabular-nums select-none',
+        'pointer-events-none absolute right-1 flex h-5 min-w-5 select-none items-center justify-center rounded-md px-1 font-medium text-sidebar-foreground text-xs tabular-nums',
         'peer-hover/menu-button:text-sidebar-accent-foreground',
         'peer-data-[active=true]/menu-button:text-sidebar-accent-foreground',
         'peer-data-[size=sm]/menu-button:top-1',
@@ -592,7 +588,7 @@ function DetailDialogSidebarMenuSub({ className, ...props }: React.ComponentProp
       data-slot="sidebar-menu-sub"
       data-sidebar="menu-sub"
       className={cn(
-        'border-sidebar-border mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-l px-2.5 py-0.5',
+        'mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-sidebar-border border-l px-2.5 py-0.5',
         'group-data-[collapsible=icon]:hidden',
         className
       )}
@@ -673,9 +669,8 @@ export {
   DetailDialogSidebarSeparator,
   DetailDialogSidebarTrigger,
   Sidebar,
-  SidebarInput,
   SidebarInset,
   SidebarProvider,
-  // eslint-disable-next-line react-refresh/only-export-components
+  // biome-ignore lint/style/useComponentExportOnlyModules: true
   useSidebar,
 };
