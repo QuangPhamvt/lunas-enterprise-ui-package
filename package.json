@@ -1,6 +1,6 @@
 {
   "name": "@customafk/lunas-ui",
-  "version": "0.1.41",
+  "version": "0.1.43",
   "description": "UI library for Lunas Enterprise",
   "type": "module",
   "author": {
@@ -89,9 +89,9 @@
       "require": "./dist/dialogs/detail-dialog/index.cjs",
       "import": "./dist/dialogs/detail-dialog/index.mjs"
     },
-    "./dialogs/detail-dialog/component/sidebar": {
-      "require": "./dist/dialogs/detail-dialog/component/sidebar.cjs",
-      "import": "./dist/dialogs/detail-dialog/component/sidebar.mjs"
+    "./dialogs/detail-dialog/components/sidebar": {
+      "require": "./dist/dialogs/detail-dialog/components/sidebar.cjs",
+      "import": "./dist/dialogs/detail-dialog/components/sidebar.mjs"
     },
     "./dialogs/error-dialog": {
       "require": "./dist/dialogs/error-dialog.cjs",
