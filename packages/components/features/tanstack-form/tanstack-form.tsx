@@ -15,6 +15,7 @@ import { TanStackActionsForm } from './components/forms/actions-form';
 import { TanStackCardForm } from './components/forms/card-form';
 import { TanStackContainerForm } from './components/forms/container-form';
 import { TanStackDialogForm } from './components/forms/dialog-form';
+import { TanStackFieldGroup } from './components/forms/group-field';
 import { TanStackPopoverForm } from './components/forms/popover-form';
 import { TanStackSectionForm } from './components/forms/section-form';
 import { TanStackTitleField } from './components/forms/title-field';
@@ -48,6 +49,7 @@ const {
     TanStackContainerForm,
     TanStackSectionForm,
     TanStackCardForm,
+    TanStackFieldGroup,
     TanStackTitleField,
 
     TanStackActionsForm,

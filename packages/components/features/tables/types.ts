@@ -3,7 +3,7 @@ import type { VirtualItem, Virtualizer } from '@tanstack/react-virtual';
 
 export type TUITableColumn<TData extends RowData> = Pick<
   AccessorKeyColumnDef<TData, unknown>,
-  'accessorKey' | 'size' | 'maxSize' | 'minSize' | 'header' | 'cell'
+  'id' | 'accessorKey' | 'size' | 'maxSize' | 'minSize' | 'header' | 'cell'
 >;
 
 export type TTableContext<TData extends RowData> = {
@@ -40,6 +40,10 @@ export type TableProviderProps<TData extends RowData, TKey extends keyof TData> 
   columns: TUITableColumn<TData>[];
   totalRows?: number;
   fetchMoreData?: () => void | Promise<void>;
+
+  // Pinned Columns Props
+  leftPinnedColumns?: string[];
+  rightPinnedColumns?: string[];
 
   // Click Row Props
   // For enabling row click functionality

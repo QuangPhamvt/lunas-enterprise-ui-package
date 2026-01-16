@@ -41,6 +41,7 @@ export const Default: Story = {
                   description="This is a Number field."
                   placeholder="Enter some Number"
                   orientation="responsive"
+                  helperText="Helper text for the number field."
                   showErrorMessage={true}
                 />
               );

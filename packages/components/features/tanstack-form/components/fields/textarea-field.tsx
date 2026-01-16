@@ -26,9 +26,9 @@ export const TextareaField: React.FC<Props> = ({
   placeholder,
 
   // tooltip,
-  orientation = 'responsive',
-  counter,
   helperText,
+  counter = false,
+  orientation = 'responsive',
   showErrorMessage = true,
 
   required = false,
@@ -102,9 +102,9 @@ export const TextareaField: React.FC<Props> = ({
               <BanIcon size={14} />
             </div>
           )}
-          <div className="mt-1 flex w-full items-start justify-end *:basis-1/2">
-            {showErrorMessage && <FieldError errors={_errors} />}
-            {!!counter && <p className="text-end text-text-positive-weak text-xs">{_countText}</p>}
+          <div className="mt-1 flex w-full items-start gap-x-2">
+            {showErrorMessage && <FieldError className="flex-1" errors={_errors} />}
+            {!!counter && <p className="h-4 flex-0 text-nowrap text-end text-text-positive-weak text-xs tabular-nums">{_countText}</p>}
           </div>
           <FieldNote isShow={!!helperText}>{helperText}</FieldNote>
         </FieldContentMain>

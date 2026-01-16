@@ -32,6 +32,9 @@ export const Default: Story = {
     fetchMoreData: async () => {
       console.log('Fetch more data...');
     },
+
+    leftPinnedColumns: ['column_1', 'column_2'],
+
     keyOfClickRow: 'column_12',
     onClickRow: (rowIndex, rowId) => {
       console.log('Clicked row:', rowIndex, 'Row ID:', rowId);

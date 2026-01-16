@@ -10,7 +10,7 @@ import { useFieldContext } from '../tanstack-form';
 export const NumberField: React.FC<Pick<FormBuilderNumberField, 'label' | 'description' | 'orientation' | 'placeholder' | 'unitText' | 'showErrorMessage'>> = ({
   label,
   description,
-  orientation,
+  orientation = 'responsive',
   placeholder,
   unitText,
   showErrorMessage,

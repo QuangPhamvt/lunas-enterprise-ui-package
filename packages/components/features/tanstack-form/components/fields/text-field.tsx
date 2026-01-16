@@ -7,10 +7,21 @@ import type z from 'zod';
 
 import { cn } from '@customafk/react-toolkit/utils';
 
+import {
+  Field,
+  FieldContent,
+  FieldContentMain,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldNote,
+  FieldSeparator,
+} from '@/components/features/tanstack-form/components/ui/field';
+import { Input } from '@/components/features/tanstack-form/components/ui/input';
+import { useTanStackFieldContext } from '@/components/features/tanstack-form/tanstack-form';
+
 import type { TanStackFormTextFieldSchema } from '../../schema';
-import { useTanStackFieldContext } from '../../tanstack-form';
-import { Field, FieldContent, FieldContentMain, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldNote, FieldSeparator } from '../ui/field';
-import { Input } from '../ui/input';
 
 type Props = Pick<
   z.input<typeof TanStackFormTextFieldSchema>,
@@ -25,9 +36,9 @@ export const TextField: React.FC<Props> = ({
   description,
   placeholder,
 
-  counter = false,
   // tooltip,
   helperText,
+  counter = false,
   orientation = 'responsive',
   showClearButton = false,
   showErrorMessage = true,
@@ -94,7 +105,7 @@ export const TextField: React.FC<Props> = ({
             aria-invalid={_invalid}
             autoComplete="off"
             placeholder={placeholder}
-            className={cn(isSubmitting && 'pointer-events-none bg-muted-muted opacity-60')}
+            className={cn('pr-6', isSubmitting && 'pointer-events-none bg-muted-muted opacity-60')}
             onBlur={handleBlur}
             onChange={onChange}
           />
@@ -102,10 +113,10 @@ export const TextField: React.FC<Props> = ({
             <button
               type="button"
               aria-label="Clear"
-              className="absolute inset-y-0 end-0 top-3 flex h-fit w-8 cursor-pointer items-center justify-center rounded-e-md text-text-positive-weak outline-none transition-[color,box-shadow] hover:text-text-positive focus:text-text-positive-strong"
+              className="absolute inset-y-0 end-0 top-3 flex h-fit w-8 cursor-pointer items-center justify-center rounded-e-md text-text-positive-weak outline-none transition-[color,box-shadow] hover:text-text-positive focus:text-text-positive-intense [&>svg]:size-3.5"
               onClick={onClear}
             >
-              <XIcon size={14} aria-hidden="true" />
+              <XIcon aria-hidden="true" />
             </button>
           )}
           {isSubmitting && (
@@ -118,9 +129,9 @@ export const TextField: React.FC<Props> = ({
               <BanIcon size={14} />
             </div>
           )}
-          <div className="mt-1 flex w-full items-start justify-end *:basis-1/2">
-            {showErrorMessage && <FieldError errors={state.meta.errors} />}
-            {!!counter && <p className="text-end text-text-positive-weak text-xs tabular-nums leading-3.5">{_countText}</p>}
+          <div className="mt-1 flex w-full items-start gap-x-2">
+            {showErrorMessage && <FieldError className="flex-1" errors={state.meta.errors} />}
+            {!!counter && <p className="h-4 flex-0 text-nowrap text-end text-text-positive-weak text-xs tabular-nums">{_countText}</p>}
           </div>
           <FieldNote isShow={!!helperText}>{helperText}</FieldNote>
         </FieldContentMain>

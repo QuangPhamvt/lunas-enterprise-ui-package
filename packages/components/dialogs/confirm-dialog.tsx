@@ -15,7 +15,7 @@ type Props = {
   title: string;
   description: string;
   onOpenChange?: (open: boolean) => void;
-  onConfirm?: () => void;
+  onConfirm?: () => Promise<void> | void;
 };
 
 export const ConfirmDialog: React.FC<React.PropsWithChildren<Props>> = ({ open, isLoading = false, title, description, onOpenChange, onConfirm }) => {
@@ -28,7 +28,15 @@ export const ConfirmDialog: React.FC<React.PropsWithChildren<Props>> = ({ open, 
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction className="min-h-9 w-full md:w-24" onClick={onConfirm}>
+          <AlertDialogAction
+            type="button"
+            className="min-h-9 w-full md:w-24"
+            onClick={e => {
+              onConfirm?.();
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+          >
             {!isLoading ? (
               'Confirm'
             ) : (

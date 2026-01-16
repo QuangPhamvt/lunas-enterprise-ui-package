@@ -1,15 +1,11 @@
 import { useMemo, useState } from 'react';
 
-import type { ColumnPinningState, InitialTableState, RowData, RowSelectionState, VisibilityState } from '@tanstack/react-table';
+import type { ColumnPinningState, RowData, RowSelectionState, VisibilityState } from '@tanstack/react-table';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 
 import { TableClickRowContext } from '../../hooks/use-click-row';
 import { TableContext } from '../../hooks/use-table-context';
 import type { TableProviderProps, TTableClickRow, TTableContext } from '../../types';
-
-const INITIAL_STATE: InitialTableState = {
-  columnPinning: { right: ['actions'] },
-};
 
 export const UITableProvider = <TData extends RowData, TKey extends keyof TData>({
   title,
@@ -18,6 +14,9 @@ export const UITableProvider = <TData extends RowData, TKey extends keyof TData>
   columns,
   totalRows,
 
+  leftPinnedColumns,
+  rightPinnedColumns,
+
   keyOfClickRow,
   onClickRow,
 
@@ -25,11 +24,10 @@ export const UITableProvider = <TData extends RowData, TKey extends keyof TData>
   children,
 }: React.PropsWithChildren<TableProviderProps<TData, TKey>>) => {
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
-  const [columnPinning, setColumnPinning] = useState<ColumnPinningState>({ right: ['actions'] });
+  const [columnPinning, setColumnPinning] = useState<ColumnPinningState>({ right: rightPinnedColumns, left: leftPinnedColumns });
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 
   const table = useReactTable<TData>({
-    initialState: INITIAL_STATE,
     data: data,
     columns,
     state: {
@@ -45,6 +43,7 @@ export const UITableProvider = <TData extends RowData, TKey extends keyof TData>
     columnResizeMode: 'onChange',
     columnResizeDirection: 'ltr',
 
+    enableColumnPinning: true,
     enableRowSelection: true,
     enableColumnResizing: true,
     enableMultiRowSelection: true,

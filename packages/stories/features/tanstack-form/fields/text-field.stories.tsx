@@ -36,6 +36,9 @@ export const Default: Story = {
                   description="This is a text field."
                   placeholder="Enter some text"
                   orientation="responsive"
+                  helperText="Helper text for additional info."
+                  required
+                  counter
                   showClearButton={true}
                   showErrorMessage={true}
                 />

@@ -1,6 +1,6 @@
 {
   "name": "@customafk/lunas-ui",
-  "version": "0.1.43",
+  "version": "0.1.48",
   "description": "UI library for Lunas Enterprise",
   "type": "module",
   "author": {
@@ -17,9 +17,6 @@
     "dist",
     "styles",
     "README.md"
-  ],
-  "workspaces": [
-    "packages/*"
   ],
   "engines": {
     "node": ">= 22.0.0"

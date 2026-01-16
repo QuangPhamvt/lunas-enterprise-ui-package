@@ -103,7 +103,7 @@ const FieldLabel = memo(({ className, ...props }: React.ComponentProps<typeof La
     <Label
       data-slot="field-label"
       className={cn(
-        'group/field-label peer/field-label flex h-6 gap-1 font-normal leading-snug',
+        'group/field-label peer/field-label flex h-6 gap-1 font-medium leading-snug',
         'has-[>[data-slot=field]]:w-full',
         'has-[>[data-slot=field]]:flex-col',
         'has-[>[data-slot=field]]:rounded-md',
@@ -136,7 +136,7 @@ const FieldDescription = memo(({ className, ...props }: React.ComponentProps<'p'
       data-slot="field-description"
       className={cn(
         // biome-ignore lint/security/noSecrets: true
-        'nth-last-2:-mt-1 [[data-variant=legend]+&]:-mt-1.5 font-normal text-sm text-text-positive-weak leading-normal last:mt-0 [&>a:hover]:text-primary [&>a]:underline [&>a]:underline-offset-4',
+        'nth-last-2:-mt-1 font-normal text-sm text-text-positive-weak leading-normal last:mt-0 [&>a:hover]:text-primary [&>a]:underline [&>a]:underline-offset-4 [[data-variant=legend]+&]:-mt-1.5',
         className
       )}
       {...props}
@@ -150,10 +150,7 @@ const FieldNote = memo(({ isShow = true, className, ...props }: React.ComponentP
   return (
     <div
       data-slot="field-note"
-      className={cn(
-        'text-wrap rounded border border-primary-muted bg-linear-to-b from-primary-bg-subtle to-primary-bg-subtle/50 p-2 text-text-positive-weak text-xs',
-        className
-      )}
+      className={cn('text-wrap rounded border border-primary-muted bg-primary-bg-subtle p-2 text-text-positive-weak text-xs', className)}
       {...props}
     />
   );
@@ -165,7 +162,7 @@ const FieldSeparator = memo(({ children, className, ...props }: React.PropsWithC
     <div
       data-slot="field-separator"
       data-content={!!children}
-      className={cn('-my-2 group-data-[variant=outline]/field-group:-mb-2 relative h-5 text-sm', className)}
+      className={cn('relative -my-2 h-5 text-sm group-data-[variant=outline]/field-group:-mb-2', className)}
       {...props}
     >
       <Separator className="absolute inset-0 top-1/2" />
