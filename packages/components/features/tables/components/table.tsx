@@ -55,17 +55,17 @@ const UITableHeader: React.FC<React.PropsWithChildren> = memo(({ children }) => 
       data-slot="table-header"
       style={{ zIndex: TABLE_HEADER_Z_INDEX }}
       className={cn(
-        'sticky top-0 grid bg-muted-bg-subtle text-sm text-text-positive',
+        'sticky top-0 grid bg-muted-bg-subtle text-[13px] text-text-positive-weak',
         '[&_tr:not(:last-child)_td]:border-b',
         '[&_th]:flex',
-        '[&_th]:h-10',
+        '[&_th]:h-9',
         '[&_th]:select-none',
         '[&_th]:items-center',
         '[&_th]:whitespace-nowrap',
         '[&_th]:border-border',
-        '[&_th]:font-normal',
-        '[&_th]:border-r',
-        '[&_th]:border-b-border',
+        '[&_th]:font-medium',
+        // '[&_th]:border-r',
+        // '[&_th]:border-b-border',
         '[&_th]:text-left',
         '[&_th]:align-middle',
         '[&_th]:last:border-r-0',
