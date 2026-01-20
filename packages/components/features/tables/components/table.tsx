@@ -37,7 +37,7 @@ const getCommonPinningStyles = (column: Column<unknown>): React.CSSProperties =>
     zIndex: isPinned ? PINNED_COLUMN_Z_INDEX : undefined,
     left: isPinned === 'left' ? `${column.getStart('left')}px` : undefined,
     right: isPinned === 'right' ? `${column.getAfter('right')}px` : undefined,
-    position: isPinned ? 'sticky' : 'relative',
+    // position: isPinned ? 'sticky' : 'relative',
   };
 };
 
@@ -106,7 +106,7 @@ const UITableHeaderCell: React.FC<
 
   if (header.id === 'select') {
     return (
-      <th data-slot="table-header-cell" style={{ ...style, width: SELECT_WIDTH }} className="relative" {...props}>
+      <th data-slot="table-header-cell" style={{ ...style, width: SELECT_WIDTH }} className={cn(isPinned ? 'sticky' : 'relative')} {...props}>
         <div className="absolute inset-0 flex items-center justify-center">
           <Checkbox
             aria-label="Select All Rows"
@@ -120,7 +120,14 @@ const UITableHeaderCell: React.FC<
     );
   }
   return (
-    <th data-slot="table-header-cell" data-pinned={isPinned} style={{ ...style, width }} colSpan={header.colSpan} className={cn('group relative')} {...props}>
+    <th
+      data-slot="table-header-cell"
+      data-pinned={isPinned}
+      style={{ ...style, width }}
+      colSpan={header.colSpan}
+      className={cn('group relative', isPinned ? 'sticky' : 'relative')}
+      {...props}
+    >
       <div className="absolute inset-0 gap-1 truncate">
         <div className="flex h-full flex-1 cursor-pointer select-none items-center justify-between">
           <div className="flex size-full flex-1 items-center truncate pl-4">{flexRender(header.column.columnDef.header, header.getContext())}</div>
@@ -301,10 +308,17 @@ const UITableCell: React.FC<
   const style = getCommonPinningStyles(cell.column);
   const width = `calc(var(--col-${cell.column.id}-size) * 1px)`;
 
+  const position = ((cell.column.columnDef.meta as any)?.position ?? 'start') as unknown as 'start' | 'center' | 'end';
+
   if (cell.column.id === 'select') {
     return (
-      <td data-slot="table-cell" style={{ ...style, width: SELECT_WIDTH }} className={cn('border-none! bg-transparent! shadow-none!', className)} {...props}>
-        <div className="absolute inset-0 flex items-center justify-center bg-transparent">
+      <td
+        data-slot="table-cell"
+        style={{ ...style, width: SELECT_WIDTH }}
+        className={cn('border-none! bg-transparent! shadow-none!', isPinned ? 'sticky' : 'relative', className)}
+        {...props}
+      >
+        <div data-slot="table-cell-inner" className="inline-flex w-full items-center justify-center bg-transparent text-center align-middle">
           <Checkbox
             aria-label="Select Row"
             checked={cell.row.getIsSelected()}
@@ -322,10 +336,20 @@ const UITableCell: React.FC<
       data-slot="table-cell"
       data-pinned={isPinned}
       style={{ ...style, width }}
-      className={cn(isPinned && cell.column.getPinnedIndex() === 0 && 'shadow!', className)}
+      className={cn(isPinned && cell.column.getPinnedIndex() === 0 && 'shadow!', isPinned && 'sticky', !isPinned && 'relative', className)}
       {...props}
     >
-      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+      <div
+        data-slot="table-cell-inner"
+        className={cn(
+          'inline-flex w-full items-center bg-transparent text-center align-middle',
+          position === 'start' && 'justify-start',
+          position === 'center' && 'justify-center',
+          position === 'end' && 'justify-end'
+        )}
+      >
+        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+      </div>
     </td>
   );
 });
@@ -333,7 +357,7 @@ UITableCell.displayName = 'TableCell';
 
 const EmptyDisplay: React.FC = () => {
   return (
-    <div className="sticky left-0 flex flex-1 items-center justify-center bg-transparent text-text-positive-weak opacity-100">
+    <div className="sticky left-0 flex min-h-96 flex-1 items-center justify-center bg-transparent text-text-positive-weak opacity-100">
       <div className="flex flex-col items-center gap-1">
         <BoxIcon strokeWidth={1} size={48} />
         <p>No data available</p>
@@ -418,7 +442,7 @@ export const UITableContainer: React.FC<React.PropsWithChildren> = ({ children }
               ...columnSizeVars,
               width: table.getTotalSize(),
             }}
-            className="grid size-full max-w-full caption-bottom border-collapse border-spacing-0 flex-col content-start bg-card text-sm tabular-nums [&_tfoot_td]:border-t"
+            className="grid w-full max-w-full caption-bottom border-collapse border-spacing-0 flex-col content-start bg-card text-sm tabular-nums [&_tfoot_td]:border-t"
           >
             <UITableHeader>
               {table.getHeaderGroups().map(headerGroup => (

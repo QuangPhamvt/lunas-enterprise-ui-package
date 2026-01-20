@@ -3,7 +3,7 @@ import { memo, useCallback, useMemo } from 'react';
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { Flex } from '@/components/layouts/flex';
-import { UITableEmpty } from './empty';
+import { DescriptionEmpty } from './empty';
 
 const applyRounding = (num: number, precisionValue: number, roundingMode?: 'round' | 'floor' | 'ceil') => {
   const multiplier = 10 ** precisionValue;
@@ -30,7 +30,7 @@ type Props = {
   value: number | string | null | undefined;
 };
 
-export const UITableStatisticDisplay = memo(
+export const DescriptionStatistic = memo(
   ({
     decimalSeparator = '.',
     groupSeparator = ',',
@@ -39,7 +39,7 @@ export const UITableStatisticDisplay = memo(
     precision,
     roundingMode = 'round',
     showTrailingZeros = false,
-    size = 'lg',
+    size = 'sm',
     value = 0,
   }: Props) => {
     // Memoize number formatting options
@@ -113,14 +113,14 @@ export const UITableStatisticDisplay = memo(
     }, [processedValue, decimalSeparator, groupSeparator]);
 
     if (finalFormattedValue === '0' || finalFormattedValue === 'N/A' || !finalFormattedValue) {
-      return <UITableEmpty />;
+      return <DescriptionEmpty />;
     }
 
     return (
       <Flex
         padding="none"
         className={cn(
-          'font-number text-lg text-secondary-foreground tabular-nums',
+          'font-number text-lg text-text-positive tabular-nums',
           size === 'xs' && 'text-xs',
           size === 'sm' && 'text-sm',
           size === 'md' && 'text-base',
@@ -135,4 +135,4 @@ export const UITableStatisticDisplay = memo(
     );
   }
 );
-UITableStatisticDisplay.displayName = 'UITableStatisticDisplay';
+DescriptionStatistic.displayName = 'DescriptionStatistic';

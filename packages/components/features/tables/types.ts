@@ -3,8 +3,12 @@ import type { VirtualItem, Virtualizer } from '@tanstack/react-virtual';
 
 export type TUITableColumn<TData extends RowData> = Pick<
   AccessorKeyColumnDef<TData, unknown>,
-  'id' | 'accessorKey' | 'size' | 'maxSize' | 'minSize' | 'header' | 'cell'
->;
+  'id' | 'accessorKey' | 'size' | 'maxSize' | 'minSize' | 'header' | 'cell' | 'meta'
+> & {
+  meta?: {
+    position: 'start' | 'center' | 'end';
+  };
+};
 
 export type TTableContext<TData extends RowData> = {
   title: string;

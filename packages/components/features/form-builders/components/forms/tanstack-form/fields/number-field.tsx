@@ -3,6 +3,7 @@ import { useCallback, useMemo } from 'react';
 import { useStore } from '@tanstack/react-form';
 
 import type { FormBuilderNumberField } from '@/components/features/form-builders/types';
+
 import { Field, FieldContent, FieldContentMain, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldSeparator } from '../../../../components/ui/fields';
 import { NumberInput } from '../../../ui/number-input';
 import { useFieldContext } from '../tanstack-form';
@@ -41,7 +42,7 @@ export const NumberField: React.FC<Pick<FormBuilderNumberField, 'label' | 'descr
         </FieldContent>
 
         <FieldContentMain className="flex justify-end">
-          <div className="flex w-full max-w-60 flex-col">
+          <div className="flex w-full flex-col">
             <NumberInput
               id={field.name}
               value={field.state.value}

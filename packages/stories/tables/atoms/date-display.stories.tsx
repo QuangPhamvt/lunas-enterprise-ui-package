@@ -18,3 +18,10 @@ export const Default: Story = {
   },
   render: args => <UITableDateDisplay {...args} />,
 };
+
+export const Empty: Story = {
+  args: {
+    date: null,
+  },
+  render: args => <UITableDateDisplay {...args} />,
+};

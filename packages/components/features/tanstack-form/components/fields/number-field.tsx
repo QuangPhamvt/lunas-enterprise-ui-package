@@ -69,7 +69,7 @@ export const NumberField: React.FC<NumberFieldProps> = ({
         </FieldContent>
 
         <FieldContentMain>
-          <div className="relative w-full max-w-120">
+          <div className="relative w-full">
             <NumberInput
               id={field.name}
               value={field.state.value}

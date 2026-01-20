@@ -24,3 +24,15 @@ export const Default: Story = {
   },
   render: args => <UITableStatisticDisplay {...args} />,
 };
+
+export const Empty: Story = {
+  args: {
+    value: 0,
+    roundingMode: 'round',
+    showTrailingZeros: true,
+    size: 'md',
+    prefix: '$',
+    suffix: 'USD',
+  },
+  render: args => <UITableStatisticDisplay {...args} />,
+};

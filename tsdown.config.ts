@@ -24,6 +24,7 @@ export default defineConfig([
       './packages/components/dialogs/error-dialog.tsx',
       './packages/components/dialogs/loading-dialog.tsx',
 
+      './packages/components/features/descriptions/index.tsx',
       './packages/components/features/search-modal/index.tsx',
       './packages/components/features/tables/index.tsx',
       './packages/components/features/tanstack-form/index.tsx',

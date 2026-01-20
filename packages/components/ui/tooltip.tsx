@@ -27,7 +27,7 @@ function TooltipContent({ className, sideOffset = 0, children, ...props }: React
         data-slot="tooltip-content"
         sideOffset={sideOffset}
         className={cn(
-          'bg-secondary-strong text-text-negative-intense shadow-dropdown outline-none',
+          'bg-secondary-strong text-text-negative-weak shadow-dropdown outline-none',
           'fade-in-0 zoom-in-95 animate-in',
           'data-[state=closed]:animate-out',
           'data-[state=closed]:fade-out-0',

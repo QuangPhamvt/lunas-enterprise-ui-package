@@ -1,4 +1,7 @@
+export * from './badge-display';
+export * from './boolean-display';
 export * from './date-display';
+export * from './description-display';
 export * from './name-display';
 export * from './phone-number';
 export * from './remove-button';

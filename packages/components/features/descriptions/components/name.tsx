@@ -1,16 +1,16 @@
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 import { Paragraph } from '@/components/typography/paragraph';
+import { DescriptionEmpty } from './empty';
 
-type NameDisplayProps = {
-  name: string;
-};
-
-export const UITableNameDisplay: React.FC<NameDisplayProps> = ({ name }) => {
+export const DescriptionName: React.FC<{
+  name?: string | null | undefined;
+}> = ({ name }) => {
+  if (!name) return <DescriptionEmpty />;
   return (
     <Tooltip>
       <TooltipTrigger>
-        <Paragraph variant="sm" className="line-clamp-2 w-full truncate text-wrap pb-px text-start">
+        <Paragraph variant="sm" className="line-clamp-2 w-full truncate">
           {name}
         </Paragraph>
       </TooltipTrigger>

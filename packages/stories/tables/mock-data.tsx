@@ -33,12 +33,13 @@ export const MockDataColumns: TUITableColumn<TMockDataTable>[] = [
     id: 'column_2',
     accessorKey: 'column_2',
     header: 'Column 2',
-    cell: ({ row }) => row.original.column_2,
+    cell: ({ row }) => <div>{row.original.column_2}</div>,
   },
   {
     accessorKey: 'column_3',
     header: 'Column 3',
-    cell: ({ row }) => row.original.column_3,
+    cell: ({ row }) => <div className="h-16 flex items-center">{row.original.column_3}</div>,
+    size: 240,
   },
   {
     accessorKey: 'column_4',
