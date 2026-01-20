@@ -10,7 +10,7 @@ export const DescriptionLongText: React.FC<{ content: string | null | undefined 
   return (
     <Tooltip>
       <TooltipTrigger>
-        <Paragraph variant="sm" className="line-clamp-2 whitespace-pre-line break-all text-start text-sm">
+        <Paragraph variant="sm" className="whitespace-pre-line break-all text-start text-sm">
           {content}
         </Paragraph>
       </TooltipTrigger>

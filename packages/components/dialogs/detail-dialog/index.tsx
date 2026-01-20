@@ -101,7 +101,7 @@ export const DetailDialog: React.FC<
                   ) : (
                     <section
                       data-slot="detail-dialog-body-loading"
-                      className="relative inset-shadow-sm flex flex-1 snap-y flex-col gap-0 overflow-y-auto bg-muted-muted"
+                      className="relative inset-shadow-sm flex flex-1 snap-y flex-col gap-0 overflow-y-auto bg-muted-bg-subtle"
                     >
                       {children}
                     </section>

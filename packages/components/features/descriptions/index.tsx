@@ -1,4 +1,6 @@
-export * from './components'
+import { cn } from '@customafk/react-toolkit/utils';
+
+export * from './components';
 
 export const DescriptionItem: React.FC<
   React.PropsWithChildren<{
@@ -18,7 +20,7 @@ export const DescriptionItem: React.FC<
         style={{
           gridColumn: `span ${labelColSpan} / span ${labelColSpan}`,
         }}
-        className="flex min-w-full items-center justify-start overflow-x-hidden text-wrap break-all border-r border-r-border bg-secondary-bg-subtle py-3 pr-2 pl-4 text-sm text-text-positive-weak tabular-nums"
+        className="flex min-w-full items-center justify-start overflow-x-hidden text-wrap break-all border-r border-r-border bg-secondary-muted py-3 pr-2 pl-4 text-sm text-text-positive-weak tabular-nums"
       >
         {label}
       </div>
@@ -34,11 +36,15 @@ export const DescriptionItem: React.FC<
   );
 };
 
-export const Description: React.FC<React.PropsWithChildren> = ({ children }) => {
+export const Description: React.FC<
+  React.PropsWithChildren<{
+    className?: string;
+  }>
+> = ({ children, className }) => {
   return (
     <div
       data-slot="description-wrapper"
-      className="relative flex size-full flex-col gap-y-0 space-y-0 overflow-hidden rounded-lg border border-border bg-card shadow-sm ring-3 ring-border-muted"
+      className={cn('relative flex size-full flex-col gap-y-0 space-y-0 rounded-lg border border-border bg-card shadow-xs ring-3 ring-border-muted', className)}
     >
       {children}
     </div>

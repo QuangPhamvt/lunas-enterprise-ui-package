@@ -16,7 +16,7 @@ export const DescriptionImages: React.FC<{
   if (images.length === 1)
     return (
       <div className="flex flex-wrap gap-4">
-        <div key={images[0].id} className="group relative size-42 rounded-sm shadow-xs">
+        <div key={images[0].id} className="group relative size-42 rounded-sm border border-border shadow-xs">
           <Image src={images[0].src} alt={images[0].alt} width="100%" height="100%" />
         </div>
       </div>
@@ -24,7 +24,7 @@ export const DescriptionImages: React.FC<{
   return (
     <div className="flex flex-wrap gap-4">
       {images.map(image => (
-        <div key={image.id} className="group relative size-16 rounded-sm shadow-xs">
+        <div key={image.id} className="group relative size-16 rounded-lg border border-border shadow-xs">
           <Image src={image.src} alt={image.alt} width="100%" height="100%" />
         </div>
       ))}

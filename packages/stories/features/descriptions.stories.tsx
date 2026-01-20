@@ -54,19 +54,17 @@ export const Default: Story = {
         </DescriptionItem>
         <DescriptionItem label="Item 7">
           <DescriptionImages
-            images={
-              [
-                { id: '1', src: 'https://ui.shadcn.com/placeholder.svg', alt: 'Image 1' },
-                { id: '2', src: 'https://ui.shadcn.com/placeholder.svg', alt: 'Image 2' },
-                { id: '3', src: 'https://ui.shadcn.com/placeholder.svg', alt: 'Image 3' },
-                { id: '4', src: 'https://ui.shadcn.com/placeholder.svg', alt: 'Image 4' },
-                { id: '5', src: 'https://ui.shadcn.com/placeholder.svg', alt: 'Image 5' },
-                { id: '6', src: 'https://ui.shadcn.com/placeholder.svg', alt: 'Image 6' },
-                { id: '7', src: 'https://ui.shadcn.com/placeholder.svg', alt: 'Image 7' },
-                { id: '8', src: 'https://ui.shadcn.com/placeholder.svg', alt: 'Image 8' },
-                { id: '9', src: 'https://ui.shadcn.com/placeholder.svg', alt: 'Image 9' },
-              ]
-            }
+            images={[
+              { id: '1', src: 'https://ui.shadcn.com/placeholder.svg', alt: 'Image 1' },
+              { id: '2', src: 'https://ui.shadcn.com/placeholder.svg', alt: 'Image 2' },
+              { id: '3', src: 'https://ui.shadcn.com/placeholder.svg', alt: 'Image 3' },
+              { id: '4', src: 'https://ui.shadcn.com/placeholder.svg', alt: 'Image 4' },
+              { id: '5', src: 'https://ui.shadcn.com/placeholder.svg', alt: 'Image 5' },
+              { id: '6', src: 'https://ui.shadcn.com/placeholder.svg', alt: 'Image 6' },
+              { id: '7', src: 'https://ui.shadcn.com/placeholder.svg', alt: 'Image 7' },
+              { id: '8', src: 'https://ui.shadcn.com/placeholder.svg', alt: 'Image 8' },
+              { id: '9', src: 'https://ui.shadcn.com/placeholder.svg', alt: 'Image 9' },
+            ]}
           />
         </DescriptionItem>
         <DescriptionItem label="Item 8">
