@@ -22,7 +22,7 @@ export const DetailDialog: React.FC<
     isLoading?: boolean;
 
     title: string;
-    createdAt?: string | Date | number;
+    createdAt?: string | Date | number | null;
 
     sidebar?: {
       title?: string;
@@ -68,14 +68,7 @@ export const DetailDialog: React.FC<
                   </DetailDialogSidebarMenu>
                 </DetailDialogSidebarHeader>
                 <DetailDialogSidebarContent>{SidebarContent}</DetailDialogSidebarContent>
-                <DetailDialogSidebarFooter>
-                  <DetailDialogSidebarMenu>
-                    <DetailDialogSidebarMenuItem>{SidebarFooter}</DetailDialogSidebarMenuItem>
-                    <DetailDialogSidebarMenuItem>
-                      <p className="pt-2 text-center text-muted-foreground text-xs">Copyright © 2025, Lunas.</p>
-                    </DetailDialogSidebarMenuItem>
-                  </DetailDialogSidebarMenu>
-                </DetailDialogSidebarFooter>
+                <DetailDialogSidebarFooter>{SidebarFooter}</DetailDialogSidebarFooter>
               </Sidebar>
 
               <main data-slot="detail-dialog-main" className="relative h-full flex-1">
@@ -87,9 +80,9 @@ export const DetailDialog: React.FC<
                         {title || 'Detail Dialog'}
                       </Title>
                       {!!createdAt && (
-                        <Flex padding="none" className="relative text-text-positive-weak">
-                          <CalendarIcon size={12} className="absolute top-0.5 md:top-1" />
-                          <DateDisplay showTime showHoliday date={createdAt} format="full" className="ml-4 text-xs md:text-sm" />
+                        <Flex padding="none" className="relative items-center text-text-positive-weak">
+                          <CalendarIcon size={12} />
+                          <DateDisplay showTime showHoliday date={createdAt} format="full" />
                         </Flex>
                       )}
                     </Flex>

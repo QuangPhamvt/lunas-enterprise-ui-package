@@ -320,8 +320,18 @@ function DetailDialogSidebarHeader({ className, ...props }: React.ComponentProps
   return <div data-slot="sidebar-header" data-sidebar="header" className={cn('flex flex-col gap-2 p-2', className)} {...props} />;
 }
 
-function DetailDialogSidebarFooter({ className, ...props }: React.ComponentProps<'div'>) {
-  return <div data-slot="sidebar-footer" data-sidebar="footer" className={cn('flex flex-col gap-2 p-2', className)} {...props} />;
+function DetailDialogSidebarFooter({ className, children, ...props }: React.ComponentProps<'div'>) {
+  const { open } = useSidebar();
+  return (
+    <div data-slot="sidebar-footer" data-sidebar="footer" className={cn('flex flex-col gap-2 p-2', className)} {...props}>
+      <DetailDialogSidebarMenu>
+        {open && <DetailDialogSidebarMenuItem>{children}</DetailDialogSidebarMenuItem>}
+        <DetailDialogSidebarMenuItem>
+          <p className="pt-2 text-center text-muted-foreground text-xs">Copyright © 2025, Lunas.</p>
+        </DetailDialogSidebarMenuItem>
+      </DetailDialogSidebarMenu>
+    </div>
+  );
 }
 
 function DetailDialogSidebarSeparator({ className, ...props }: React.ComponentProps<typeof Separator>) {
@@ -407,7 +417,7 @@ const sidebarMenuButtonVariants = cva(
     'cursor-pointer',
     'flex w-full items-center gap-2',
     'overflow-hidden rounded-md p-2 outline-hidden',
-    'truncate text-left',
+    'truncate text-left font-normal',
     'transition-[color,width,height,padding]',
     'hover:bg-sidebar-accent',
     'hover:text-sidebar-accent-foreground',
@@ -419,7 +429,7 @@ const sidebarMenuButtonVariants = cva(
     'aria-disabled:pointer-events-none',
     'aria-disabled:opacity-50',
     'data-[active=true]:bg-sidebar-primary-muted',
-    'data-[active=true]:font-medium',
+    'data-[active=true]:font-normal',
     'data-[active=true]:text-sidebar-primary',
     'data-[state=open]:hover:bg-sidebar-accent',
     'data-[state=open]:hover:text-sidebar-accent-foreground',

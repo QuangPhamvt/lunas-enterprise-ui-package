@@ -416,7 +416,7 @@ const sidebarMenuButtonVariants = cva(
     'cursor-pointer',
     'flex w-full items-center gap-2',
     'overflow-hidden rounded-md p-2 outline-hidden',
-    'truncate text-left font-medium',
+    'truncate text-left font-normal',
     'transition-[color,width,height,padding]',
     'hover:bg-sidebar-accent',
     'hover:text-sidebar-accent-foreground',

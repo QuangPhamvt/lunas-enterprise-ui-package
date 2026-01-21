@@ -30,7 +30,7 @@ function SelectTrigger({
       data-slot="select-trigger"
       className={cn(
         'flex w-full items-center justify-between',
-        '-outline-offset-1 outline-1 outline-border',
+        'outline-1 outline-border -outline-offset-1',
         'gap-2 rounded bg-transparent px-3 py-2',
         'rounded shadow-input transition-all',
         'cursor-pointer whitespace-nowrap text-sm',
@@ -96,10 +96,9 @@ function SelectContent({ className, children, position = 'popper', ...props }: R
       <SelectPrimitive.Content
         data-slot="select-content"
         className={cn(
-          'relative z-50 min-w-32 overflow-y-auto overflow-x-hidden rounded shadow-dropdown duration-300',
+          'relative z-50 max-h-80 min-w-32 overflow-y-auto overflow-x-hidden rounded shadow-dropdown duration-300',
           'bg-white',
           'w-(--radix-select-trigger-width)',
-          'max-h-(--radix-select-content-available-height)',
           'origin-(--radix-select-content-transform-origin)',
 
           'data-[state=open]:animate-in',
@@ -122,9 +121,6 @@ function SelectContent({ className, children, position = 'popper', ...props }: R
           className
         )}
         position={position}
-        style={{
-          maxHeight: 'var(--radix-select-content-available-height)',
-        }}
         {...props}
       >
         <SelectScrollUpButton />
@@ -147,16 +143,14 @@ function SelectItem({ className, children, ...props }: React.ComponentProps<type
     <SelectPrimitive.Item
       data-slot="select-item"
       className={cn(
-        'relative flex select-none items-center border border-transparent',
+        'relative flex select-none items-center',
         'gap-2 rounded py-2.5 pr-8 pl-2',
         'w-full',
         'cursor-pointer outline-none transition-colors',
         'font-medium text-sm text-text-positive-weak',
 
-        'focus:border-border-weak',
-        'focus:bg-linear-to-b',
-        'focus:from-muted-bg-subtle',
-        'focus:to-muted-muted',
+        'focus:shadow-xs',
+        'focus:bg-muted-muted',
 
         'data-disabled:opacity-50',
         'data-disabled:pointer-events-none',
@@ -184,7 +178,7 @@ function SelectItem({ className, children, ...props }: React.ComponentProps<type
 }
 
 function SelectSeparator({ className, ...props }: React.ComponentProps<typeof SelectPrimitive.Separator>) {
-  return <SelectPrimitive.Separator data-slot="select-separator" className={cn('-mx-1 pointer-events-none my-1 h-px bg-border-weak', className)} {...props} />;
+  return <SelectPrimitive.Separator data-slot="select-separator" className={cn('pointer-events-none -mx-1 my-1 h-px bg-border-weak', className)} {...props} />;
 }
 
 function SelectScrollUpButton({ className, ...props }: React.ComponentProps<typeof SelectPrimitive.ScrollUpButton>) {

@@ -26,7 +26,7 @@ export const CMSLayoutHeader = () => {
         variant="ghost"
         color="muted"
         size="icon"
-        className="size-10 rounded-full"
+        className="size-10 rounded-full transition-all hover:text-text-positive"
         onClick={event => {
           event.preventDefault();
           event.stopPropagation();

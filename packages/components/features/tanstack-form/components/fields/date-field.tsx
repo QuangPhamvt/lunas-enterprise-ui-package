@@ -23,7 +23,7 @@ type Props = Pick<
   maxDate?: Date;
 };
 
-export const DateField: React.FC<Props> = ({ label, description, placeholder, orientation, helperText, minDate, maxDate, required }) => {
+export const DateField: React.FC<Props> = ({ label, description, placeholder, orientation = 'responsive', helperText, minDate, maxDate, required }) => {
   const field = useTanStackFieldContext<Date | null>();
 
   const _isEmpty = useMemo(() => {

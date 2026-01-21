@@ -15,5 +15,8 @@ export const Default: Story = {
     open: true,
     title: 'Detail Dialog Title',
     createdAt: new Date('03-01-2025'),
+    sidebar: {
+      footer: <div>Footer Content</div>,
+    },
   },
 };

@@ -435,7 +435,11 @@ export const UITableContainer: React.FC<React.PropsWithChildren> = ({ children }
       className="relative flex w-full max-w-full flex-1 gap-1 overflow-auto border-t border-t-border bg-slate-50 p-0 text-sm"
     >
       <ResizablePanel className="overflow-auto">
-        <div ref={tableContainerRef} className="relative size-full overflow-auto" onScroll={e => fetchMoreOnButtonReached(e.currentTarget)}>
+        <div
+          ref={tableContainerRef}
+          className="relative size-full overflow-auto border-b border-b-border border-l border-l-border"
+          onScroll={e => fetchMoreOnButtonReached(e.currentTarget)}
+        >
           <table
             data-slot="table"
             style={{
