@@ -51,7 +51,7 @@ export const SelectField: React.FC<Props> = ({
           <FieldDescription>{description}</FieldDescription>
         </FieldContent>
         <FieldContentMain className="flex flex-col">
-          <Select defaultValue={field.state.value ?? undefined} onValueChange={field.handleChange}>
+          <Select defaultValue={field.state.value || undefined} onValueChange={field.handleChange}>
             <SelectTrigger aria-invalid={_isInvalid ? 'true' : undefined} onBlur={field.handleBlur}>
               <SelectValue placeholder={placeholder} />
             </SelectTrigger>

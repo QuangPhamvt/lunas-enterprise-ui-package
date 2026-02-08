@@ -29,11 +29,10 @@ export default defineConfig([
       './packages/components/features/tables/index.tsx',
       './packages/components/features/tanstack-form/index.tsx',
 
-      './packages/components/layouts/app-layout/index.tsx',
       './packages/components/layouts/cms-layout/index.tsx',
+      './packages/components/layouts/payment-layout/index.tsx',
       './packages/components/layouts/flex.tsx',
       './packages/components/layouts/grid.tsx',
-      './packages/components/layouts/service-layout/index.ts',
 
       './packages/components/pages/FeatureDeveloping.tsx',
       './packages/components/pages/FeatureFixing.tsx',
@@ -64,6 +63,7 @@ export default defineConfig([
       './packages/components/ui/calendar.tsx',
       './packages/components/ui/card.tsx',
       './packages/components/ui/carousel.tsx',
+      './packages/components/ui/checkbox.tsx',
       './packages/components/ui/collapsible.tsx',
       './packages/components/ui/command.tsx',
       './packages/components/ui/context-menu.tsx',

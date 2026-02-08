@@ -20,3 +20,12 @@ export const Default: Story = {
   },
   render: args => <UITableUserDataDisplay {...args} />,
 };
+
+export const EmptyState: Story = {
+  args: {
+    uuid: null,
+    username: null,
+    email: null,
+  },
+  render: args => <UITableUserDataDisplay {...args} />,
+};

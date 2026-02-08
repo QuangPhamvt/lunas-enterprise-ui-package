@@ -9,7 +9,7 @@ export const UITableDescriptionDisplay: React.FC<{ content: string | null | unde
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <div className="line-clamp-2 whitespace-pre-line break-all text-start text-sm text-text-positive-weak">{content}</div>
+        <div className="line-clamp-2 whitespace-pre-line break-all text-start text-[13px] text-text-positive-weak">{content}</div>
       </TooltipTrigger>
       <TooltipContent align="start" className="h-fit min-w-48 max-w-80 pt-4">
         <div className="flex flex-col gap-y-2">
