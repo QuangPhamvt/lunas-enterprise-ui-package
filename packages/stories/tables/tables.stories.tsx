@@ -29,6 +29,10 @@ export const Default: Story = {
     columns: MockDataColumns,
     data: MockDataTables,
     totalRows: MockDataTables.length + 2,
+
+    isFetching: false,
+    isRefetching: false,
+
     fetchMoreData: async () => {
       console.log('Fetch more data...');
     },

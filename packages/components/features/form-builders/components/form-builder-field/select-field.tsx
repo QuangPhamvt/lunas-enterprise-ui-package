@@ -1,10 +1,12 @@
 import { useMemo } from 'react';
 
 import { useForm } from '@tanstack/react-form';
-import { PlusIcon, XIcon } from 'lucide-react';
 
+import { PlusIcon, XIcon } from 'lucide-react';
 import z from 'zod';
+
 import { Button } from '@/components/ui/button';
+
 import type { formBuilderSelectFieldSchema } from '../../schema';
 import { toCamelCase } from '../../utils';
 import { useFormBuilderFieldContext } from '../form-buidler-form';

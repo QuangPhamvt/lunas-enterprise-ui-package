@@ -17,6 +17,7 @@ export type TTableContext<TData extends RowData> = {
 
   isEmpty: boolean;
   isFetching?: boolean;
+  isRefetching?: boolean;
 
   totalRows?: number;
 
@@ -39,7 +40,10 @@ export type TTableVirtualizerContext = {
 
 export type TableProviderProps<TData extends RowData, TKey extends keyof TData> = {
   title: string;
+
   isFetching?: boolean;
+  isRefetching?: boolean;
+
   data: TData[];
   columns: TUITableColumn<TData>[];
   totalRows?: number;

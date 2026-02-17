@@ -9,7 +9,10 @@ import type { TableProviderProps, TTableClickRow, TTableContext } from '../../ty
 
 export const UITableProvider = <TData extends RowData, TKey extends keyof TData>({
   title,
+
   isFetching = false,
+  isRefetching = false,
+
   data,
   columns,
   totalRows,
@@ -74,6 +77,7 @@ export const UITableProvider = <TData extends RowData, TKey extends keyof TData>
 
       isEmpty,
       isFetching,
+      isRefetching,
 
       totalRows,
 
@@ -88,6 +92,7 @@ export const UITableProvider = <TData extends RowData, TKey extends keyof TData>
       data,
 
       isEmpty,
+      isRefetching,
       isFetching,
 
       totalRows,

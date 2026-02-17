@@ -17,8 +17,8 @@ export const UITableDateDisplay: React.FC<Props> = ({ date }) => {
             <DateDisplay date={date} format="medium" className="font-normal text-white" />
           </Badge>
         </TooltipTrigger>
-        <TooltipContent>
-          <DateDisplay date={date} format="full" showTime className="font-medium text-xs" />
+        <TooltipContent className='rounded'>
+          <DateDisplay date={date} format="full" showTime className="font-medium text-text-negative text-xs" />
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

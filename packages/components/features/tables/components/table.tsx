@@ -4,7 +4,7 @@ import { Activity, memo, useCallback, useEffect, useMemo, useRef } from 'react';
 import { type Cell, type Column, type ColumnPinningPosition, flexRender, type Header, type Row } from '@tanstack/react-table';
 import { useVirtualizer, type VirtualItem, type Virtualizer } from '@tanstack/react-virtual';
 
-import { BoxIcon, EllipsisVerticalIcon, EyeOffIcon, MoveLeftIcon, MoveRightIcon, PinOffIcon } from 'lucide-react';
+import { BoxIcon, EllipsisVerticalIcon, EyeOffIcon, LoaderIcon, MoveLeftIcon, MoveRightIcon, PinOffIcon } from 'lucide-react';
 
 import { cn } from '@customafk/react-toolkit/utils';
 
@@ -355,7 +355,7 @@ const UITableCell: React.FC<
 });
 UITableCell.displayName = 'TableCell';
 
-const EmptyDisplay: React.FC = () => {
+const EmptyDisplay = memo(() => {
   return (
     <div className="sticky left-0 flex min-h-96 flex-1 items-center justify-center bg-transparent text-text-positive-weak opacity-100">
       <div className="flex flex-col items-center gap-1">
@@ -364,7 +364,17 @@ const EmptyDisplay: React.FC = () => {
       </div>
     </div>
   );
-};
+});
+EmptyDisplay.displayName = 'EmptyDisplay';
+
+const RefetchingDisplay = memo(() => {
+  return (
+    <div className="absolute top-0 z-30 flex size-full items-center justify-center bg-black/10">
+      <LoaderIcon className="animate-spin text-text-positive" />
+    </div>
+  );
+});
+RefetchingDisplay.displayName = 'RefetchingDisplay';
 
 export const UITableFooter: React.FC<React.PropsWithChildren> = ({ children }) => {
   return (
@@ -375,7 +385,7 @@ export const UITableFooter: React.FC<React.PropsWithChildren> = ({ children }) =
 };
 
 export const UITableContainer: React.FC<React.PropsWithChildren> = ({ children }) => {
-  const { table, isEmpty, isFetching, data, totalRows, fetchMoreData } = useUITableContext();
+  const { table, isEmpty, isRefetching, isFetching, data, totalRows, fetchMoreData } = useUITableContext();
   const { keyOfClickRow, onClickRow } = useUITableClickRowContext();
 
   const tableContainerRef = useRef<HTMLDivElement | null>(null);
@@ -432,9 +442,12 @@ export const UITableContainer: React.FC<React.PropsWithChildren> = ({ children }
     <ResizablePanelGroup
       direction="horizontal"
       style={{ direction: table.options.columnResizeDirection }}
-      className="relative flex w-full max-w-full flex-1 gap-1 overflow-auto border-t border-t-border bg-slate-50 p-0 text-sm"
+      className={cn(
+        'relative flex w-full max-w-full flex-1 gap-1 overflow-auto border-t border-t-border bg-slate-50 p-0 text-sm',
+        !children && 'border-r border-r-border'
+      )}
     >
-      <ResizablePanel className="overflow-auto">
+      <ResizablePanel className="relative overflow-auto">
         <div
           ref={tableContainerRef}
           className="relative size-full overflow-auto border-b border-b-border border-l border-l-border"
@@ -482,9 +495,14 @@ export const UITableContainer: React.FC<React.PropsWithChildren> = ({ children }
           </table>
           {isEmpty && <EmptyDisplay />}
         </div>
+        {isRefetching && <RefetchingDisplay />}
       </ResizablePanel>
-      <ResizableHandle />
-      {children}
+      {!!children && (
+        <>
+          <ResizableHandle />
+          {children}
+        </>
+      )}
     </ResizablePanelGroup>
   );
 };

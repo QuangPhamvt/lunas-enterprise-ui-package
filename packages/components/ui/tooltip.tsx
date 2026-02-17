@@ -38,7 +38,7 @@ function TooltipContent({ className, sideOffset = 0, children, ...props }: React
           'data-[side=top]:slide-in-from-bottom-2',
           'z-50 w-fit',
           'origin-(--radix-tooltip-content-transform-origin)',
-          'text-balance rounded-lg px-3 py-1.5 text-xs',
+          'text-balance rounded-sm px-3 py-1.5 text-xs',
           className
         )}
         {...props}
