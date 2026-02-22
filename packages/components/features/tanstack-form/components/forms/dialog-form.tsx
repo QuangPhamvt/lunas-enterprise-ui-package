@@ -10,10 +10,11 @@ import { SubmitButton } from '../ui/submit-button';
 export const TanStackDialogForm: React.FC<
   React.PropsWithChildren<{
     title: string;
+    submitText?: string;
     open?: boolean;
     onOpenChange?: (open: boolean) => void;
   }>
-> = ({ title, open, onOpenChange, children }) => {
+> = ({ title, submitText, open, onOpenChange, children }) => {
   const form = useTanStackFormContext();
   const handleOpenChange = useCallback(
     (open: boolean) => {
@@ -68,7 +69,7 @@ export const TanStackDialogForm: React.FC<
                 disabled: state.isPristine || !state.isValid || state.isValidating || state.isSubmitting || !state.canSubmit,
               })}
               children={({ isSubmitting, disabled }) => {
-                return <SubmitButton isSubmitting={isSubmitting} disabled={disabled} onClick={() => form.handleSubmit()} />;
+                return <SubmitButton isSubmitting={isSubmitting} disabled={disabled} submitText={submitText} onClick={() => form.handleSubmit()} />;
               }}
             />
           </div>

@@ -1,6 +1,6 @@
 {
   "name": "@customafk/lunas-ui",
-  "version": "0.1.85",
+  "version": "0.1.89",
   "description": "UI library for Lunas Enterprise",
   "type": "module",
   "author": {
@@ -443,11 +443,11 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.3.7",
-    "@storybook/addon-a11y": "^10.1.0-alpha.0",
-    "@storybook/addon-docs": "^10.1.0-alpha.0",
-    "@storybook/addon-onboarding": "^10.1.0-alpha.0",
-    "@storybook/addon-themes": "^10.1.0-alpha.0",
-    "@storybook/react-vite": "^10.1.0-alpha.0",
+    "@storybook/addon-a11y": "^10.1.0",
+    "@storybook/addon-docs": "^10.1.0",
+    "@storybook/addon-onboarding": "^10.1.0",
+    "@storybook/addon-themes": "^10.1.0",
+    "@storybook/react-vite": "^10.1.0",
     "@types/react": "*",
     "@types/react-dom": "*",
     "@vitejs/plugin-react": "^4.4.1",

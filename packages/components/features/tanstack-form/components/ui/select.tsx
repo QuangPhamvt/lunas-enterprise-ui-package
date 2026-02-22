@@ -1,6 +1,6 @@
 'use client';
 
-import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
+import { CheckIcon, ChevronDownIcon } from 'lucide-react';
 
 import { cn } from '@customafk/react-toolkit/utils';
 
@@ -103,11 +103,9 @@ function SelectContent({ className, children, position = 'popper', ...props }: R
 
           'data-[state=open]:animate-in',
           'data-[state=open]:fade-in',
-          'data-[state=open]:zoom-in-95',
 
           'data-[state=closed]:animate-out',
           'data-[state=closed]:fade-out',
-          'data-[state=closed]:zoom-out-95',
 
           'data-[side=bottom]:slide-in-from-top-8',
           'data-[side=left]:slide-in-from-right-8',
@@ -123,12 +121,10 @@ function SelectContent({ className, children, position = 'popper', ...props }: R
         position={position}
         {...props}
       >
-        <SelectScrollUpButton />
         <SelectPrimitive.Viewport
           className={cn('p-1', position === 'popper' && 'h-(--radix-select-trigger-height) w-full min-w-(--radix-select-trigger-width) scroll-my-1')}
           children={children}
         />
-        <SelectScrollDownButton />
       </SelectPrimitive.Content>
     </SelectPrimitive.Portal>
   );
@@ -181,39 +177,4 @@ function SelectSeparator({ className, ...props }: React.ComponentProps<typeof Se
   return <SelectPrimitive.Separator data-slot="select-separator" className={cn('pointer-events-none -mx-1 my-1 h-px bg-border-weak', className)} {...props} />;
 }
 
-function SelectScrollUpButton({ className, ...props }: React.ComponentProps<typeof SelectPrimitive.ScrollUpButton>) {
-  return (
-    <SelectPrimitive.ScrollUpButton
-      data-slot="select-scroll-up-button"
-      className={cn('flex cursor-default items-center justify-center py-1', className)}
-      {...props}
-    >
-      <ChevronUpIcon size={16} />
-    </SelectPrimitive.ScrollUpButton>
-  );
-}
-
-function SelectScrollDownButton({ className, ...props }: React.ComponentProps<typeof SelectPrimitive.ScrollDownButton>) {
-  return (
-    <SelectPrimitive.ScrollDownButton
-      data-slot="select-scroll-down-button"
-      className={cn('flex cursor-default items-center justify-center py-1', className)}
-      {...props}
-    >
-      <ChevronDownIcon size={16} />
-    </SelectPrimitive.ScrollDownButton>
-  );
-}
-
-export {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectScrollDownButton,
-  SelectScrollUpButton,
-  SelectSeparator,
-  SelectTrigger,
-  SelectValue,
-};
+export { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue };

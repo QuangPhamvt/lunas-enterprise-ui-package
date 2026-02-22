@@ -70,9 +70,8 @@ const UITableHeader: React.FC<React.PropsWithChildren> = memo(({ children }) => 
         '[&_th]:align-middle',
         '[&_th]:last:border-r-0',
         '[&_th]:first:border-l-0',
-        '[&_th]:data-[pinned=right]:border-l',
-        '[&_th]:data-[pinned=right]:border-r-0',
-        '[&_th]:data-[pinned=left]:border-r',
+        // '[&_th]:data-[pinned=right]:border-l',
+        // '[&_th]:data-[pinned=left]:border-r',
         '[&_tr_th:not([data-pinned=false])]:bg-muted-bg-subtle'
       )}
     >
@@ -101,6 +100,11 @@ const UITableHeaderCell: React.FC<
     }
   >
 > = ({ header, isPinned, isResizing, isAllRowsSelected, children, ...props }) => {
+  const leftHeaderGroups = header.getContext().table.getLeftHeaderGroups()[0].headers;
+  const rightHeaderGroups = header.getContext().table.getRightHeaderGroups()[0].headers;
+  const lastColumnId = leftHeaderGroups[leftHeaderGroups.length - 1]?.id;
+  const firstColumnId = rightHeaderGroups[0]?.id;
+
   const style = getCommonPinningStyles(header.column);
   const width = `calc(var(--header-${header.id}-size) * 1px)`;
 
@@ -125,7 +129,12 @@ const UITableHeaderCell: React.FC<
       data-pinned={isPinned}
       style={{ ...style, width }}
       colSpan={header.colSpan}
-      className={cn('group relative', isPinned ? 'sticky' : 'relative')}
+      className={cn(
+        'group relative',
+        isPinned ? 'sticky' : 'relative',
+        isPinned === 'left' && header.id === lastColumnId && 'border-r border-r-border',
+        isPinned === 'right' && header.id === firstColumnId && 'border-l border-l-border'
+      )}
       {...props}
     >
       <div className="absolute inset-0 gap-1 truncate">
@@ -240,10 +249,10 @@ const UITableBody: React.FC<React.PropsWithChildren<React.ComponentProps<'tbody'
         '[&_td]:py-2.5',
         '[&_td]:align-middle',
         '[&_td]:border-border',
-        '[&_td]:data-[pinned=right]:border-l',
-        '[&_td]:data-[pinned=left]:border-r',
-        '[&_td:not([data-pinned=false])]:bg-card',
-        '[&_td:not([data-pinned=false])]:shadow-xs'
+        // '[&_td]:data-[pinned=right]:border-l',
+        // '[&_td]:data-[pinned=left]:border-r',
+        '[&_td:not([data-pinned=false])]:bg-card'
+        // '[&_td:not([data-pinned=false])]:shadow-xs'
       )}
       {...props}
     >
@@ -305,6 +314,12 @@ const UITableCell: React.FC<
 > = memo(({ cell, children, className, ...props }) => {
   const { rowSelection: _ } = useUITableContext();
   const isPinned = cell.column.getIsPinned();
+
+  const leftHeaderGroups = cell.getContext().table.getLeftHeaderGroups()[0].headers;
+  const rightHeaderGroups = cell.getContext().table.getRightHeaderGroups()[0].headers;
+  const lastColumnId = leftHeaderGroups[leftHeaderGroups.length - 1]?.id;
+  const firstColumnId = rightHeaderGroups[0]?.id;
+
   const style = getCommonPinningStyles(cell.column);
   const width = `calc(var(--col-${cell.column.id}-size) * 1px)`;
 
@@ -336,7 +351,13 @@ const UITableCell: React.FC<
       data-slot="table-cell"
       data-pinned={isPinned}
       style={{ ...style, width }}
-      className={cn(isPinned && cell.column.getPinnedIndex() === 0 && 'shadow!', isPinned && 'sticky', !isPinned && 'relative', className)}
+      className={cn(
+        isPinned && 'sticky',
+        !isPinned && 'relative',
+        isPinned === 'left' && cell.column.id === lastColumnId && 'border-r border-r-border',
+        isPinned === 'right' && cell.column.id === firstColumnId && 'border-l border-l-border',
+        className
+      )}
       {...props}
     >
       <div

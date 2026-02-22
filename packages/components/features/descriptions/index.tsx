@@ -44,7 +44,10 @@ export const Description: React.FC<
   return (
     <div
       data-slot="description-wrapper"
-      className={cn('relative flex size-full flex-col gap-y-0 space-y-0 overflow-hidden rounded-lg border border-border bg-card shadow-xs ring-3 ring-border-muted', className)}
+      className={cn(
+        'relative flex size-full flex-col gap-y-0 space-y-0 overflow-hidden rounded-lg border border-border bg-card shadow-xs ring-3 ring-border-muted',
+        className
+      )}
     >
       {children}
     </div>

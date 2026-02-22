@@ -3,8 +3,9 @@ import { Loader2 } from 'lucide-react';
 export const SubmitButton: React.FC<
   React.ComponentProps<'button'> & {
     isSubmitting?: boolean;
+    submitText?: string;
   }
-> = ({ isSubmitting, ...props }) => {
+> = ({ isSubmitting, submitText = 'Submit', ...props }) => {
   return (
     <button
       {...props}
@@ -15,7 +16,7 @@ export const SubmitButton: React.FC<
       {isSubmitting ? (
         <Loader2 size={16} strokeWidth={3} className="absolute top-1/2 left-1/2 z-10 -translate-x-1/2 -translate-y-1/2 animate-spin" />
       ) : (
-        'Submit'
+        submitText
       )}
     </button>
   );

@@ -1,13 +1,32 @@
 import { ArrowRightIcon, CirclePlus, DownloadIcon, RefreshCwIcon, SearchIcon } from 'lucide-react';
 
+import { useDebounceCallback } from '@customafk/react-toolkit/hooks/useDebounceCallback';
+
 import { Input } from '@/components/ui/input';
 
 import { useUITableContext } from '../../hooks/use-table-context';
 
-export const UITableTooltipFilter: React.FC<React.ComponentProps<typeof Input>> = ({ className: _, ...props }) => {
+export const UITableTooltipFilter: React.FC<
+  Omit<React.ComponentProps<typeof Input>, 'className'> & {
+    onSearch?: (value: string) => void;
+  }
+> = ({ onSearch, onChange, ...props }) => {
+  const debouncedSearch = useDebounceCallback((value: string) => {
+    onSearch?.(value);
+  }, 500);
   return (
-    <div className="relative">
-      <Input {...props} size="lg" type="search" placeholder="Search records..." className="ps-9 pe-9" />
+    <div className="relative w-full max-w-80 flex-1">
+      <Input
+        {...props}
+        size="lg"
+        type="search"
+        placeholder="Search records..."
+        className="flex-1 ps-9 pe-9"
+        onChange={e => {
+          onChange?.(e);
+          debouncedSearch(e.target.value ?? '');
+        }}
+      />
       <div className="pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 text-text-positive-weak peer-disabled:opacity-50">
         <SearchIcon size={16} />
       </div>
@@ -22,11 +41,12 @@ export const UITableTooltipFilter: React.FC<React.ComponentProps<typeof Input>> 
   );
 };
 
-const ActionButton: React.FC<React.PropsWithChildren<React.ComponentProps<'button'>>> = ({ children, onClick }) => {
+const ActionButton: React.FC<React.PropsWithChildren<React.ComponentProps<'button'>>> = ({ children, disabled, onClick }) => {
   return (
     <button
       type="button"
-      className="flex cursor-pointer items-center gap-x-1 rounded-sm border border-border bg-background p-2.5 text-sm text-text-positive-weak outline-none transition-all hover:shadow-card focus:border-border-emphasis focus:bg-muted-muted active:border-border-emphasis active:bg-muted-muted active:text-text-positive [&_svg]:size-3.5"
+      disabled={disabled}
+      className="flex cursor-pointer items-center gap-x-1 rounded-sm border border-border bg-background p-2.5 text-sm text-text-positive-weak outline-none transition-all hover:shadow-card focus:border-border-emphasis focus:bg-muted-muted active:border-border-emphasis active:bg-muted-muted active:text-text-positive disabled:pointer-events-none disabled:cursor-default disabled:opacity-60 [&_svg]:size-3.5"
       onClick={onClick}
     >
       {children}
@@ -42,6 +62,7 @@ export const UITableTooltipActions: React.FC<{
   return (
     <div className="flex [&>*:not(:first-child)]:rounded-l-none [&>*:not(:first-child)]:border-l-0 [&>*:not(:last-child)]:rounded-r-none">
       <ActionButton
+        disabled={!onCreate}
         onClick={e => {
           onCreate?.();
           e.stopPropagation();
@@ -51,6 +72,7 @@ export const UITableTooltipActions: React.FC<{
         <CirclePlus />
       </ActionButton>
       <ActionButton
+        disabled={!onRefresh}
         onClick={e => {
           onRefresh?.();
           e.stopPropagation();
@@ -60,6 +82,7 @@ export const UITableTooltipActions: React.FC<{
         <RefreshCwIcon />
       </ActionButton>
       <ActionButton
+        disabled={!onDownload}
         onClick={e => {
           onDownload?.();
           e.stopPropagation();
@@ -77,7 +100,7 @@ export const UITableTooltip: React.FC<React.PropsWithChildren> = ({ children }) 
   return (
     <div data-slot="table-tooltip" className="relative m-0 flex w-full flex-0 flex-col flex-wrap items-start space-y-2 p-0 px-2 text-sm">
       <h3 className="font-semibold text-base text-text-positive">{title}</h3>
-      <div className="flex w-full flex-1 justify-between">{children}</div>
+      <div className="flex w-full flex-1 justify-between gap-x-2">{children}</div>
     </div>
   );
 };

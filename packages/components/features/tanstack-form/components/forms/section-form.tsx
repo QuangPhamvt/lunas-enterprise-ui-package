@@ -22,7 +22,7 @@ export const TanStackSectionForm: React.FC<
   }>
 > = ({ title, children }) => {
   return (
-    <section data-slot="section-form" className="flex flex-col rounded-md bg-background shadow-card ring-3 ring-border-muted">
+    <section data-slot="section-form" className="flex flex-col rounded-md bg-background shadow-card ring-4 ring-border-weak">
       <SectionHeader>{title}</SectionHeader>
       <Separator />
       <SectionMain>{children}</SectionMain>

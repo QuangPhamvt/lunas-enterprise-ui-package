@@ -12,7 +12,7 @@ export const TanStackCardForm: React.FC<
   }>
 > = ({ title, description, onDelete, children }) => {
   return (
-    <section data-slot="card-form" className="relative flex flex-col rounded-md bg-card pb-4 shadow-card ring-3 ring-border-muted">
+    <section data-slot="card-form" className="relative flex flex-col rounded-md bg-card pb-4 shadow-card ring-4 ring-border-weak">
       <div data-slot="card-form-header" className="flex flex-col space-y-1 p-4">
         <p className="font-semibold text-lg">{title}</p>
         {!!description && <p className="text-muted text-sm">{description}</p>}

@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 
 import type { ColumnPinningState, RowData, RowSelectionState, VisibilityState } from '@tanstack/react-table';
-import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import { getCoreRowModel, getExpandedRowModel, getGroupedRowModel, useReactTable } from '@tanstack/react-table';
 
 import { TableClickRowContext } from '../../hooks/use-click-row';
 import { TableContext } from '../../hooks/use-table-context';
@@ -52,6 +52,8 @@ export const UITableProvider = <TData extends RowData, TKey extends keyof TData>
     enableMultiRowSelection: true,
 
     getCoreRowModel: getCoreRowModel(),
+    getGroupedRowModel: getGroupedRowModel(),
+    getExpandedRowModel: getExpandedRowModel(),
 
     onRowSelectionChange: setRowSelection,
     onColumnPinningChange: setColumnPinning,

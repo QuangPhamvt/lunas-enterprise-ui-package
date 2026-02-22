@@ -50,7 +50,11 @@ export const Default: Story = {
         <UITableProvider {...args}>
           <UITableWrapper>
             <UITableTooltip>
-              <UITableTooltipFilter />
+              <UITableTooltipFilter
+                onSearch={value => {
+                  console.log('value', value);
+                }}
+              />
               <UITableTooltipActions />
             </UITableTooltip>
             <UITableContainer>
