@@ -4,7 +4,7 @@ import { useDebounceCallback } from '@customafk/react-toolkit/hooks/useDebounceC
 
 import { Input } from '@/components/ui/input';
 
-import { useUITableContext } from '../../hooks/use-table-context';
+import { useUITableContext } from '../../hooks/use-context';
 
 export const UITableTooltipFilter: React.FC<
   Omit<React.ComponentProps<typeof Input>, 'className'> & {

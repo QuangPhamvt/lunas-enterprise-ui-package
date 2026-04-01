@@ -13,8 +13,20 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     variant: 'p',
-    children: 'This is a paragraph. It can contain text, links, and other inline elements.',
   },
+  render: args => (
+    <div className="flex flex-col gap-y-4">
+      <Paragraph variant="p">This is a default paragraph. It has a normal font weight and is used for regular text content.</Paragraph>
+      <Paragraph variant="lead">
+        This is a lead paragraph. It is typically used to introduce the content of a section and has a larger font size and stronger text color.
+      </Paragraph>
+      <Paragraph variant="lg">This is a large paragraph. It is used for more emphasis and visibility, with a larger font size.</Paragraph>
+      <Paragraph variant="sm">This is a small paragraph. It is used for less important text and has a smaller font size.</Paragraph>
+      <Paragraph variant="muted">
+        This is a muted paragraph. It has a lighter color to indicate less emphasis and is often used for secondary information.
+      </Paragraph>
+    </div>
+  ),
 };
 
 export const Muted: Story = {

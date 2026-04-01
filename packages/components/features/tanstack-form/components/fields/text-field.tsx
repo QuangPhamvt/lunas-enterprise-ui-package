@@ -18,7 +18,7 @@ import {
   FieldNote,
   FieldSeparator,
 } from '@/components/features/tanstack-form/components/ui/field';
-import { Input } from '@/components/features/tanstack-form/components/ui/input';
+import { Input } from '@/components/ui/input';
 import { useTanStackFieldContext } from '@/components/features/tanstack-form/tanstack-form';
 
 import type { TanStackFormTextFieldSchema } from '../../schema';
@@ -113,19 +113,19 @@ export const TextField: React.FC<Props> = ({
             <button
               type="button"
               aria-label="Clear"
-              className="absolute inset-y-0 end-0 top-3 flex h-fit w-8 cursor-pointer items-center justify-center rounded-e-md text-text-positive-weak outline-none transition-[color,box-shadow] hover:text-text-positive focus:text-text-positive-intense [&>svg]:size-3.5"
+              className="absolute inset-y-0 inset-e-0 top-3 flex h-fit w-8 cursor-pointer items-center justify-center rounded-e-md text-text-positive-weak outline-none transition-[color,box-shadow] hover:text-text-positive focus:text-text-positive-intense [&>svg]:size-3.5"
               onClick={onClear}
             >
               <XIcon aria-hidden="true" />
             </button>
           )}
           {isSubmitting && (
-            <div className="absolute inset-y-0 end-2 top-2.5 text-muted-weak">
+            <div className="absolute inset-y-0 inset-e-2 top-2.5 text-muted-weak">
               <Loader2Icon size={14} className="animate-spin text-primary-strong" />
             </div>
           )}
           {showErrorMessage && !!state.meta.errors.length && (
-            <div className="absolute inset-y-0 end-2 top-2.5 text-danger-strong">
+            <div className="absolute inset-y-0 inset-e-2 top-2.5 text-danger-strong">
               <BanIcon size={14} />
             </div>
           )}

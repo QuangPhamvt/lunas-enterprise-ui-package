@@ -1,6 +1,6 @@
 'use client';
 
-import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from 'lucide-react';
+import { CheckIcon, ChevronDownIcon } from 'lucide-react';
 
 import { cn } from '@customafk/react-toolkit/utils';
 
@@ -31,30 +31,51 @@ function SelectTrigger({
       data-slot="select-trigger"
       data-size={size}
       className={cn(
-        'border-border-weak shadow-input',
-        'flex w-fit items-center justify-between',
-        'gap-2 rounded-md border bg-transparent px-3 py-2 text-sm',
-        'whitespace-nowrap outline-none transition-all',
-        'cursor-pointer',
-        'hover:border-border',
-        'focus:border-primary-strong',
-        'focus:ring-primary-weak',
-        'focus:ring-4',
-        'aria-invalid:ring-danger-weak',
-        'aria-invalid:border-danger-strong',
+        'flex w-full items-center justify-between',
+        'outline-1 outline-border -outline-offset-1',
+        'gap-2 rounded bg-transparent px-3 py-2',
+        'rounded shadow-input transition-all',
+        'cursor-pointer whitespace-nowrap text-sm',
+
+        // Text styles
+        'focus-visible:text-text-positive-strong',
+        'focus-visible:outline-primary-strong',
+        'focus-visible:ring-4',
+        'focus-visible:ring-primary-weak',
+
+        // State styles
+        'data-[state=open]:text-text-positive-muted',
+        'data-[state=open]:outline-primary-strong',
+        'data-[state=open]:ring-4',
+        'data-[state=open]:ring-primary-weak',
         'disabled:cursor-not-allowed',
         'disabled:opacity-50',
-        'data-[state=open]:text-text-positive-muted',
-        'data-[state=open]:border-primary',
-        'data-[state=open]:ring-ring',
-        'data-[state=open]:ring-4',
+
+        // Invalid state
+        'aria-invalid:bg-danger-bg-subtle',
+        'aria-invalid:outline-danger',
+        'aria-invalid:ring-danger-weak',
+        'aria-invalid:focus:outline-danger-strong',
+        'aria-invalid:focus:ring-4',
+        'aria-invalid:placeholder:text-text-positive-weak',
+        'aria-invalid:data-[state=open]:outline-danger-strong',
+        'aria-invalid:data-[state=open]:ring-danger-weak',
+
+        // Placeholder styles
         'data-placeholder:text-text-positive-muted',
-        'data-[size=default]:h-9',
-        'data-[size=sm]:h-8',
         '*:data-[slot=select-value]:line-clamp-1',
         '*:data-[slot=select-value]:flex',
         '*:data-[slot=select-value]:items-center',
         '*:data-[slot=select-value]:gap-2',
+
+        // Readonly state
+        'aria-readonly:bg-muted-muted',
+        'aria-readonly:cursor-default',
+        'aria-readonly:focus:outline-none',
+        'aria-readonly:ring-0',
+        'aria-readonly:pointer-events-none',
+
+        // Icon styles
         '[&_svg]:shrink-0',
         '[&_svg]:pointer-events-none',
         "[&_svg:not([class*='size-'])]:size-4",
@@ -77,23 +98,22 @@ function SelectContent({ className, children, position = 'popper', ...props }: R
       <SelectPrimitive.Content
         data-slot="select-content"
         className={cn(
-          'bg-popover',
-          'relative z-50',
-          'min-w-32',
-          'overflow-y-auto overflow-x-hidden',
-          'rounded-md shadow-dropdown',
-          'data-[state=open]:animate-in',
-          'data-[state=open]:fade-in-0',
-          'data-[state=open]:zoom-in-95',
-          'data-[state=closed]:animate-out',
-          'data-[state=closed]:fade-out-0',
-          'data-[state=closed]:zoom-out-95',
-          'data-[side=bottom]:slide-in-from-top-2',
-          'data-[side=left]:slide-in-from-right-2',
-          'data-[side=right]:slide-in-from-left-2',
-          'data-[side=top]:slide-in-from-bottom-2',
-          'origin-(--radix-select-content-transform-origin)',
+          'relative z-50 max-h-80 min-w-32 overflow-y-auto overflow-x-hidden rounded shadow-dropdown duration-300',
+          'bg-white',
           'w-(--radix-select-trigger-width)',
+          'origin-(--radix-select-content-transform-origin)',
+
+          'data-[state=open]:animate-in',
+          'data-[state=open]:fade-in',
+
+          'data-[state=closed]:animate-out',
+          'data-[state=closed]:fade-out',
+
+          'data-[side=bottom]:slide-in-from-top-8',
+          'data-[side=left]:slide-in-from-right-8',
+          'data-[side=right]:slide-in-from-left-8',
+          'data-[side=top]:slide-in-from-bottom-8',
+
           position === 'popper' && 'data-[side=bottom]:translate-y-1',
           position === 'popper' && 'data-[side=left]:-translate-x-1',
           position === 'popper' && 'data-[side=right]:translate-x-1',
@@ -101,12 +121,8 @@ function SelectContent({ className, children, position = 'popper', ...props }: R
           className
         )}
         position={position}
-        style={{
-          maxHeight: 'var(--radix-select-content-available-height)',
-        }}
         {...props}
       >
-        <SelectScrollUpButton />
         <SelectPrimitive.Viewport
           className={cn(
             'p-1',
@@ -117,7 +133,6 @@ function SelectContent({ className, children, position = 'popper', ...props }: R
         >
           {children}
         </SelectPrimitive.Viewport>
-        <SelectScrollDownButton />
       </SelectPrimitive.Content>
     </SelectPrimitive.Portal>
   );
@@ -133,18 +148,22 @@ function SelectItem({ className, children, ...props }: React.ComponentProps<type
       data-slot="select-item"
       className={cn(
         'relative flex select-none items-center',
-        'gap-2 rounded-md py-2.5 pr-8 pl-2',
+        'gap-2 rounded py-2.5 pr-8 pl-2',
         'w-full',
-        'cursor-pointer transition-colors',
-        'text-sm text-text-positive outline-hidden',
+        'cursor-pointer outline-none transition-colors',
+        'font-medium text-sm text-text-positive-weak',
+
+        'focus:shadow-xs',
         'focus:bg-muted-muted',
-        'focus:text-text-positive-strong',
+
         'data-disabled:opacity-50',
         'data-disabled:pointer-events-none',
+
         '[&_svg]:pointer-events-none',
         '[&_svg]:shrink-0',
         "[&_svg:not([class*='size-'])]:size-4",
         "[&_svg:not([class*='text-'])]:text-text-positive-weak",
+
         '*:[span]:last:flex',
         '*:[span]:last:items-center',
         '*:[span]:last:gap-2',
@@ -166,39 +185,4 @@ function SelectSeparator({ className, ...props }: React.ComponentProps<typeof Se
   return <SelectPrimitive.Separator data-slot="select-separator" className={cn('-mx-1 pointer-events-none my-1 h-px bg-border-weak', className)} {...props} />;
 }
 
-function SelectScrollUpButton({ className, ...props }: React.ComponentProps<typeof SelectPrimitive.ScrollUpButton>) {
-  return (
-    <SelectPrimitive.ScrollUpButton
-      data-slot="select-scroll-up-button"
-      className={cn('flex cursor-default items-center justify-center py-1', className)}
-      {...props}
-    >
-      <ChevronUpIcon size={16} />
-    </SelectPrimitive.ScrollUpButton>
-  );
-}
-
-function SelectScrollDownButton({ className, ...props }: React.ComponentProps<typeof SelectPrimitive.ScrollDownButton>) {
-  return (
-    <SelectPrimitive.ScrollDownButton
-      data-slot="select-scroll-down-button"
-      className={cn('flex cursor-default items-center justify-center py-1', className)}
-      {...props}
-    >
-      <ChevronDownIcon size={16} />
-    </SelectPrimitive.ScrollDownButton>
-  );
-}
-
-export {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectScrollDownButton,
-  SelectScrollUpButton,
-  SelectSeparator,
-  SelectTrigger,
-  SelectValue,
-};
+export { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue };

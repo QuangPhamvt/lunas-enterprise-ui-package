@@ -16,19 +16,21 @@ export const Default: Story = {
     const [date, setDate] = useState<Date | undefined>(new Date());
 
     return (
-      <Calendar
-        mode="single"
-        selected={date}
-        disabled={[
-          {
-            before: new Date(2025, 9, 10),
-            after: new Date(2025, 9, 5),
-          },
-        ]}
-        onSelect={setDate}
-        className="rounded-md border border-border shadow-sm"
-        captionLayout="dropdown"
-      />
+      <div className="w-72">
+        <Calendar
+          mode="single"
+          selected={date}
+          disabled={[
+            {
+              before: new Date(2025, 9, 10),
+              after: new Date(2025, 9, 5),
+            },
+          ]}
+          onSelect={setDate}
+          className="rounded-md border border-border shadow-sm"
+          captionLayout="dropdown"
+        />
+      </div>
     );
   },
 };

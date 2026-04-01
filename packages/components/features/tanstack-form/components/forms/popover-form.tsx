@@ -11,9 +11,10 @@ export const TanStackPopoverForm: React.FC<
   React.PropsWithChildren<{
     title: string;
     open?: boolean;
+    contentClassName?: string;
     onOpenChange?: (open: boolean) => void;
   }>
-> = ({ title, open, onOpenChange, children }) => {
+> = ({ title, open, contentClassName, onOpenChange, children }) => {
   const form = useTanStackFormContext();
   return (
     <DialogPrimitive.Root data-slot="dialog" open={open} onOpenChange={onOpenChange}>
@@ -48,7 +49,7 @@ export const TanStackPopoverForm: React.FC<
               <h2 className="font-semibold text-lg text-primary-strong">{title}</h2>
             </header>
 
-            <div className="flex-1 overflow-y-auto py-4">{children}</div>
+            <div className={cn('flex flex-1 flex-col overflow-y-auto py-4', contentClassName)}>{children}</div>
 
             <div className="flex flex-col space-y-4 border-border border-t px-4 py-2">
               <form.Subscribe
@@ -57,7 +58,7 @@ export const TanStackPopoverForm: React.FC<
                   disabled: state.isPristine || !state.isValid || state.isValidating || state.isSubmitting || !state.canSubmit,
                 })}
                 children={({ isSubmitting, disabled }) => {
-                  return <SubmitButton isSubmitting={isSubmitting} disabled={disabled} className="w-full" />;
+                  return <SubmitButton isSubmitting={isSubmitting} disabled={disabled} className="w-full" onClick={() => form.handleSubmit()} />;
                 }}
               />
               <form.Subscribe

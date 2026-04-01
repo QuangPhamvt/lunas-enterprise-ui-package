@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   tags: ['autodocs'],
-  title: 'Features/UI Tables/Atoms/Name Display',
+  title: 'UI Tables/Atoms/Name Display',
   component: UITableNameDisplay,
 } satisfies Meta<typeof UITableNameDisplay>;
 

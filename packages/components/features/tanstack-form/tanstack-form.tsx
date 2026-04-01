@@ -19,6 +19,7 @@ import { TanStackFieldGroup } from './components/forms/group-field';
 import { TanStackPopoverForm } from './components/forms/popover-form';
 import { TanStackSectionForm } from './components/forms/section-form';
 import { TanStackTitleField } from './components/forms/title-field';
+import { Field, FieldContent, FieldContentMain, FieldError, FieldGroup, FieldLabel, FieldSeparator } from './components/ui/field';
 
 const { fieldContext, formContext, useFieldContext: useTanStackFieldContext, useFormContext: useTanStackFormContext } = createFormHookContexts();
 
@@ -42,6 +43,14 @@ const {
     SwitchField,
     RadioGroupField,
     CheckboxField,
+
+    FieldGroup,
+    Field,
+    FieldContent,
+    FieldLabel,
+    FieldContentMain,
+    FieldSeparator,
+    FieldError,
   },
   formComponents: {
     TanStackDialogForm,
@@ -57,4 +66,17 @@ const {
   },
 });
 
-export { useTanStackForm, withTanStackForm, withTanStackFieldGroup, useTanStackFieldContext, useTanStackFormContext };
+export {
+  useTanStackForm,
+  withTanStackForm,
+  withTanStackFieldGroup,
+  useTanStackFieldContext,
+  useTanStackFormContext,
+  FieldGroup,
+  Field,
+  FieldContent,
+  FieldLabel,
+  FieldContentMain,
+  FieldSeparator,
+  FieldError,
+};

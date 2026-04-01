@@ -11,7 +11,7 @@ import {
   FieldSeparator,
   FieldSet,
 } from '@/components/features/tanstack-form/components/ui/field';
-import { Textarea } from '@/components/features/tanstack-form/components/ui/textarea';
+import { Textarea } from '@/components/ui/textarea';
 import type { TanStackFormTextAreaFieldSchema } from '@/components/features/tanstack-form/schema';
 
 import { useFormBuilderFieldContext } from '../form-buidler-form';

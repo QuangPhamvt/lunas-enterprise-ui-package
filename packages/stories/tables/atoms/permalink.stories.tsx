@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   tags: ['autodocs'],
-  title: 'Features/UI Tables/Atoms/Permalink',
+  title: 'UI Tables/Atoms/Permalink',
   component: UITablePermalink,
 } satisfies Meta<typeof UITablePermalink>;
 

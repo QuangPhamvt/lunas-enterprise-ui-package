@@ -6,9 +6,9 @@ import { Button } from '@/components/ui/button';
 import type { FormBuilderComboboxField } from '@/components/features/form-builders/types';
 
 import { useTanStackFieldContext } from '../../tanstack-form';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '../ui/command';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Field, FieldContent, FieldContentMain, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldSeparator } from '../ui/field';
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 export const ComboboxField: React.FC<Pick<FormBuilderComboboxField, 'label' | 'description' | 'placeholder' | 'orientation' | 'options'>> = ({
   label,

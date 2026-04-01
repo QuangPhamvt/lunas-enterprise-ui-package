@@ -7,10 +7,11 @@ import type z from 'zod';
 
 import { cn } from '@customafk/react-toolkit/utils';
 
+import { NumberInput } from '@/components/ui/inputs/number-input';
+
 import type { TanStackFormNumberFieldSchema } from '../../schema';
 import { useTanStackFieldContext } from '../../tanstack-form';
 import { Field, FieldContent, FieldContentMain, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldNote, FieldSeparator } from '../ui/field';
-import { NumberInput } from '../ui/number-input';
 
 type NumberFieldProps = Pick<
   z.input<typeof TanStackFormNumberFieldSchema>,
@@ -85,12 +86,12 @@ export const NumberField: React.FC<NumberFieldProps> = ({
               onValueChange={onValueChange}
             />
             {isSubmitting && (
-              <div className="absolute inset-y-0 start-2 top-2.5 text-muted-weak [&>svg]:size-3.5">
+              <div className="absolute inset-y-0 inset-s-2 top-2.5 text-muted-weak [&>svg]:size-3.5">
                 <Loader2Icon className="animate-spin text-primary-strong" />
               </div>
             )}
             {showErrorMessage && !!_errors.length && (
-              <div className="absolute inset-y-0 start-2 top-2.75 text-danger-strong [&>svg]:size-3.5">
+              <div className="absolute inset-y-0 inset-s-2 top-2.75 text-danger-strong [&>svg]:size-3.5">
                 <BanIcon />
               </div>
             )}

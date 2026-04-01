@@ -10,7 +10,7 @@ import { cn } from '@customafk/react-toolkit/utils';
 import type { TanStackFormTextAreaFieldSchema } from '../../schema';
 import { useTanStackFieldContext } from '../../tanstack-form';
 import { Field, FieldContent, FieldContentMain, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldNote, FieldSeparator } from '../ui/field';
-import { Textarea } from '../ui/textarea';
+import { Textarea } from '@/components/ui/textarea';
 
 type Props = Pick<
   z.input<typeof TanStackFormTextAreaFieldSchema>,
@@ -93,12 +93,12 @@ export const TextareaField: React.FC<Props> = ({
             onBlur={handleBlur}
           />
           {isSubmitting && (
-            <div className="absolute inset-y-0 end-2 top-2.5 text-muted-weak">
+            <div className="absolute inset-y-0 inset-e-2 top-2.5 text-muted-weak">
               <Loader2Icon size={14} className="animate-spin text-primary-strong" />
             </div>
           )}
           {showErrorMessage && !!_errors.length && (
-            <div className="absolute inset-y-0 end-2 top-2.5 text-danger-strong">
+            <div className="absolute inset-y-0 inset-e-2 top-2.5 text-danger-strong">
               <BanIcon size={14} />
             </div>
           )}

@@ -1,3 +1,5 @@
+import { sleep } from '@customafk/react-toolkit/utils/sleep';
+
 import {
   UITableContainer,
   UITableFilter,
@@ -11,9 +13,9 @@ import {
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { MockDataColumns, MockDataTables, type TMockDataTable } from './mock-data';
 
-const meta: Meta<typeof UITableProvider<TMockDataTable, 'column_12'>> = {
+const meta: Meta<typeof UITableProvider<TMockDataTable>> = {
   tags: ['autodocs'],
-  title: 'Features/UI Tables',
+  title: 'UI Tables',
   component: UITableProvider,
   subcomponents: {
     UITableTooltip,
@@ -28,13 +30,16 @@ export const Default: Story = {
     title: 'Mock Data Table',
     columns: MockDataColumns,
     data: MockDataTables,
+    // data: [],
     totalRows: MockDataTables.length + 2,
 
     isFetching: false,
     isRefetching: false,
 
     fetchMoreData: async () => {
+      await sleep(2000);
       console.log('Fetch more data...');
+      // throw new Error('No more data to fetch');
     },
 
     leftPinnedColumns: ['column_1', 'column_2'],
@@ -57,9 +62,7 @@ export const Default: Story = {
               />
               <UITableTooltipActions />
             </UITableTooltip>
-            <UITableContainer>
-              <UITableFilter />
-            </UITableContainer>
+            <UITableContainer>{/*<UITableFilter />*/}</UITableContainer>
           </UITableWrapper>
         </UITableProvider>
       </div>

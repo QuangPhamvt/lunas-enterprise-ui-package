@@ -17,7 +17,14 @@ export const UITableMoreButton: React.FC<{
       <DropdownMenuContent>
         <DropdownMenuGroup>
           {items.map(item => (
-            <DropdownMenuItem key={item.id} className="px-3" onSelect={() => item.onClick(item.id)}>
+            <DropdownMenuItem
+              key={item.id}
+              className="px-3"
+              onSelect={e => {
+                item.onClick(item.id);
+                e.stopPropagation();
+              }}
+            >
               {item.label}
             </DropdownMenuItem>
           ))}

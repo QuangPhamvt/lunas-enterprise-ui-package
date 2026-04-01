@@ -10,9 +10,9 @@ import { Button } from '@/components/ui/button';
 
 import type { TanStackFormDateFieldSchema } from '../../schema';
 import { useTanStackFieldContext } from '../../tanstack-form';
-import { Calendar } from '../ui/calendar';
 import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, FieldLabel, FieldNote, FieldSeparator } from '../ui/field';
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Calendar } from '@/components/ui/calendar';
 
 type Props = Pick<
   z.input<typeof TanStackFormDateFieldSchema>,

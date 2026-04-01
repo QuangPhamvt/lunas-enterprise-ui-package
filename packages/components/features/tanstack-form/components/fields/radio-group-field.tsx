@@ -7,7 +7,7 @@ import { cn } from '@customafk/react-toolkit/utils';
 import type { TanStackFormRadioGroupFieldSchema } from '../../schema';
 import { useTanStackFieldContext } from '../../tanstack-form';
 import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, FieldLabel, FieldNote, FieldSeparator, FieldTitle } from '../ui/field';
-import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 type Props = Pick<z.input<typeof TanStackFormRadioGroupFieldSchema>, 'label' | 'description' | 'options' | 'orientation' | 'helperText'>;
 

@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   tags: ['autodocs'],
-  title: 'Features/UI Tables/Atoms/Boolean Display',
+  title: 'UI Tables/Atoms/Boolean Display',
   component: UITableBooleanDisplay,
 } satisfies Meta<typeof UITableBooleanDisplay>;
 

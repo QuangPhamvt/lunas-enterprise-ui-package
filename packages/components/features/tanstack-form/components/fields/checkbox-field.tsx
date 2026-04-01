@@ -4,8 +4,8 @@ import type z from 'zod';
 
 import type { TanStackFormCheckboxGroupFieldSchema } from '../../schema';
 import { useTanStackFieldContext } from '../../tanstack-form';
-import { Checkbox } from '../ui/checkbox';
 import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, FieldLabel, FieldNote, FieldSeparator } from '../ui/field';
+import { Checkbox } from '@/components/ui/checkbox';
 
 type Props = Pick<z.input<typeof TanStackFormCheckboxGroupFieldSchema>, 'label' | 'description' | 'orientation' | 'options' | 'helperText'>;
 
