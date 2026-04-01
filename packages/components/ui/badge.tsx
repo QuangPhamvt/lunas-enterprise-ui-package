@@ -5,7 +5,7 @@ import { cn } from '@customafk/react-toolkit/utils';
 import { cva, type VariantProps } from 'class-variance-authority';
 
 const badgeVariants = cva(
-  'focus:ring-ring rounded-sm inline-flex items-center px-2.5 py-0.5 font-semibold text-white shadow-sm transition-colors focus:ring-2 focus:ring-offset-2 focus:outline-hidden forced-colors:outline',
+  'rounded-sm inline-flex items-center justify-center font-semibold text-white shadow-sm transition-colors focus:ring-2 focus:ring-offset-2 focus:outline-hidden focus:ring-ring forced-colors:outline',
   {
     variants: {
       color: {
@@ -29,14 +29,16 @@ const badgeVariants = cva(
         zinc: 'bg-zinc-500 text-white',
       },
       size: {
-        xs: 'text-[8px]/3 px-1 py-0.5 gap-1',
-        sm: 'text-[10px]/3 px-1.5 py-1 gap-1',
-        md: 'text-xs px-2 py-1 gap-1',
-        lg: 'text-sm px-2 py-1 gap-1.5',
-        xl: 'text-base px-2.5 py-1 gap-1.5',
+        // Lưu ý: text-[8px] là quá nhỏ so với mắt thường. Nếu đây là chủ đích design của bạn thì giữ nguyên.
+        xs: 'text-[10px]/3 px-1.5 py-0.5 gap-1',
+        sm: 'text-xs px-2 py-0.5 gap-1',
+        md: 'text-sm px-2.5 py-0.5 gap-1.5',
+        lg: 'text-base px-3 py-1 gap-1.5',
+        xl: 'text-lg px-3.5 py-1 gap-1.5',
       },
       pill: {
         true: 'rounded-full',
+        false: 'rounded-sm', // Explicitly define false to handle the default shape safely
       },
     },
     defaultVariants: {
@@ -47,10 +49,10 @@ const badgeVariants = cva(
   }
 );
 
-export type BadgeProps = VariantProps<typeof badgeVariants> & React.ComponentPropsWithoutRef<'div'>;
+export type BadgeProps = VariantProps<typeof badgeVariants> & React.ComponentPropsWithoutRef<'span'>;
 
 function Badge({ className, color, size, pill, ...props }: BadgeProps) {
-  return <div className={cn(badgeVariants({ color, pill, size }), className)} {...props} />;
+  return <span className={cn(badgeVariants({ color, pill, size }), className)} {...props} />;
 }
 
 // eslint-disable-next-line react-refresh/only-export-components

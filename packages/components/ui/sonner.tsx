@@ -1,7 +1,7 @@
 'use client';
 import { LoaderIcon } from 'lucide-react';
 import { useTheme } from 'next-themes';
-import { Toaster as Sonner, type ToasterProps } from 'sonner';
+import { Toaster as Sonner, toast, type ToasterProps } from 'sonner';
 
 const Toaster = () => {
   const { theme = 'system' } = useTheme();
@@ -37,5 +37,5 @@ const Toaster = () => {
   );
 };
 
-export { Toaster };
+export { Toaster, toast };
 export default Toaster;

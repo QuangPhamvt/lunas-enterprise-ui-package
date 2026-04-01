@@ -40,6 +40,23 @@ export const Default: Story = {
                     { label: 'Option 1', value: 'option_1' },
                     { label: 'Option 2', value: 'option_2' },
                     { label: 'Option 3', value: 'option_3' },
+                    { label: 'Option 4', value: 'option_4' },
+                    { label: 'Option 5', value: 'option_5' },
+                    { label: 'Option 6', value: 'option_6' },
+                    { label: 'Option 7', value: 'option_7' },
+                    { label: 'Option 8', value: 'option_8' },
+                    { label: 'Option 9', value: 'option_9' },
+                    { label: 'Option 10', value: 'option_10' },
+                    { label: 'Option 11', value: 'option_11' },
+                    { label: 'Option 12', value: 'option_12' },
+                    { label: 'Option 13', value: 'option_13' },
+                    { label: 'Option 14', value: 'option_14' },
+                    { label: 'Option 15', value: 'option_15' },
+                    { label: 'Option 16', value: 'option_16' },
+                    { label: 'Option 17', value: 'option_17' },
+                    { label: 'Option 18', value: 'option_18' },
+                    { label: 'Option 19', value: 'option_19' },
+                    { label: 'Option 20', value: 'option_20' },
                   ]}
                 />
               );

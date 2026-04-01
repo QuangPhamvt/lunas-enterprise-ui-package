@@ -10,7 +10,7 @@ import { cn } from '@customafk/react-toolkit/utils';
 import type { TanStackFormEmailFieldSchema } from '../../schema';
 import { useTanStackFieldContext } from '../../tanstack-form';
 import { Field, FieldContent, FieldContentMain, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldNote, FieldSeparator } from '../ui/field';
-import { Input } from '../ui/input';
+import { Input } from '@/components/ui/input';
 
 type Props = Pick<
   z.input<typeof TanStackFormEmailFieldSchema>,
@@ -75,7 +75,7 @@ export const EmailField: React.FC<Props> = ({
           <button
             type="button"
             aria-label="Clear"
-            className="absolute inset-y-0 end-0 top-3 flex h-fit w-8 cursor-pointer items-center justify-center rounded-e-md text-text-positive-weak outline-none transition-[color,box-shadow] hover:text-text-positive focus:text-text-positive-strong"
+            className="absolute inset-y-0 inset-e-0 top-3 flex h-fit w-8 cursor-pointer items-center justify-center rounded-e-md text-text-positive-weak outline-none transition-[color,box-shadow] hover:text-text-positive focus:text-text-positive-strong"
             onClick={onClear}
           >
             <XIcon size={14} aria-hidden="true" />

@@ -3,6 +3,7 @@
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { Popover as PopoverPrimitive } from 'radix-ui';
+import { CloseButton } from './buttons/close';
 
 function Popover({ ...props }: React.ComponentProps<typeof PopoverPrimitive.Root>) {
   return <PopoverPrimitive.Root data-slot="popover" {...props} />;
@@ -20,17 +21,22 @@ function PopoverContent({ className, align = 'start', sideOffset = 4, ...props }
         align={align}
         sideOffset={sideOffset}
         className={cn(
-          'bg-popover',
+          'relative bg-popover',
           'text-text-positive',
-          'z-50 w-72',
+          'z-50',
+          'min-w-(--radix-popover-trigger-width)',
+          'max-h-(--radix-popover-content-available-height)',
           'origin-(--radix-popover-content-transform-origin)',
           'rounded-md p-4 shadow-dropdown outline-none',
+
           'data-[state=open]:animate-in',
           'data-[state=open]:fade-in-0',
           'data-[state=open]:zoom-in-95',
+
           'data-[state=closed]:animate-out',
           'data-[state=closed]:fade-out-0',
           'data-[state=closed]:zoom-out-95',
+
           'data-[side=bottom]:slide-in-from-top-2',
           'data-[side=left]:slide-in-from-right-2',
           'data-[side=right]:slide-in-from-left-2',
@@ -47,4 +53,12 @@ function PopoverAnchor({ ...props }: React.ComponentProps<typeof PopoverPrimitiv
   return <PopoverPrimitive.Anchor data-slot="popover-anchor" {...props} />;
 }
 
-export { Popover, PopoverAnchor, PopoverContent, PopoverTrigger };
+function PopoverClose({ className, ...props }: React.ComponentProps<typeof PopoverPrimitive.Close>) {
+  return (
+    <PopoverPrimitive.Close data-slot="popover-close" {...props} asChild>
+      <CloseButton className="absolute top-2 right-2" />
+    </PopoverPrimitive.Close>
+  );
+}
+
+export { Popover, PopoverAnchor, PopoverContent, PopoverTrigger, PopoverClose };

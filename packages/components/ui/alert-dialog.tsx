@@ -4,6 +4,8 @@ import { cn } from '@customafk/react-toolkit/utils';
 
 import { AlertDialog as AlertDialogPrimitive } from 'radix-ui';
 import { buttonVariants } from './button.variants';
+import { headingVariants } from '../typography/heading';
+import { paragraphVariants } from '../typography/paragraph';
 
 function AlertDialog({ ...props }: React.ComponentProps<typeof AlertDialogPrimitive.Root>) {
   return <AlertDialogPrimitive.Root data-slot="alert-dialog" {...props} />;
@@ -70,11 +72,17 @@ function AlertDialogFooter({ className, ...props }: React.ComponentProps<'div'>)
 }
 
 function AlertDialogTitle({ className, ...props }: React.ComponentProps<typeof AlertDialogPrimitive.Title>) {
-  return <AlertDialogPrimitive.Title data-slot="alert-dialog-title" className={cn('text-text-positive-strong text-lg font-semibold', className)} {...props} />;
+  return <AlertDialogPrimitive.Title data-slot="alert-dialog-title" className={cn(headingVariants({ level: 'h3' }), className)} {...props} />;
 }
 
 function AlertDialogDescription({ className, ...props }: React.ComponentProps<typeof AlertDialogPrimitive.Description>) {
-  return <AlertDialogPrimitive.Description data-slot="alert-dialog-description" className={cn('text-text-positive-weak text-sm', className)} {...props} />;
+  return (
+    <AlertDialogPrimitive.Description
+      data-slot="alert-dialog-description"
+      className={cn(paragraphVariants({ variant: 'muted' }), 'not-first:mt-0', className)}
+      {...props}
+    />
+  );
 }
 
 function AlertDialogAction({ className, ...props }: React.ComponentProps<typeof AlertDialogPrimitive.Action>) {

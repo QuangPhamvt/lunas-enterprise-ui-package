@@ -214,9 +214,9 @@ export const buttonVariants = cva(
     variants: {
       variant: {
         default: 'text-text-negative outline-0 outline-offset-0',
-        outline: '-outline-offset-1 bg-card outline-1',
+        outline: 'bg-card outline-1 -outline-offset-1',
         soft: 'outline-none outline-0',
-        subtle: '-outline-offset-1 outline-1',
+        subtle: 'outline-1 -outline-offset-1',
         ghost: 'outline-0',
         link: '',
       },

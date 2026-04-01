@@ -5,10 +5,11 @@ import { useStore } from '@tanstack/react-form';
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
 import type z from 'zod';
 
+import { Input } from '@/components/ui/input';
+
 import type { TanStackFormPasswordFieldSchema } from '../../schema';
 import { useTanStackFieldContext } from '../../tanstack-form';
 import { Field, FieldContent, FieldContentMain, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldNote } from '../ui/field';
-import { Input } from '../ui/input';
 
 type Props = Pick<
   z.input<typeof TanStackFormPasswordFieldSchema>,
@@ -55,7 +56,7 @@ export const PasswordField: React.FC<Props> = ({ label, description, placeholder
           />
 
           <button
-            className="absolute inset-y-0 end-0 flex size-9 items-center justify-center rounded-e-md text-muted outline-none transition-[color,box-shadow] focus:z-10 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
+            className="absolute inset-y-0 inset-e-0 flex size-9 items-center justify-center rounded-e-md text-muted outline-none transition-[color,box-shadow] focus:z-10 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
             type="button"
             onClick={toggleVisibility}
             aria-label={isVisible ? 'Hide password' : 'Show password'}

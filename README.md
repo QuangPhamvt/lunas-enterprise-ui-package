@@ -147,7 +147,6 @@ The following table provides a structured reference for all components available
 | Forms        | MultiSelectField  | `@customafk/lunas-ui/forms/multi-select-field`  |
 | Layout       | Flex              | `@customafk/lunas-ui/layouts/flex`              |
 | Layout       | Grid              | `@customafk/lunas-ui/layouts/grid`              |
-| Layout       | AppLayout         | `@customafk/lunas-ui/layouts/app-layout`        |
 | Layout       | Main              | `@customafk/lunas-ui/layouts/main`              |
 | Data Display | Country           | `@customafk/lunas-ui/data-display/country`      |
 | Data Display | DataList          | `@customafk/lunas-ui/data-display/data-list`    |

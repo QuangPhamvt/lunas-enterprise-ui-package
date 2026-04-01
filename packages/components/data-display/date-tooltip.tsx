@@ -1,5 +1,6 @@
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+
 import { DateDisplay } from './date';
 
 type Props = {
@@ -11,11 +12,11 @@ export const DateTooltip: React.FC<Props> = ({ date }) => {
       <Tooltip>
         <TooltipTrigger asChild>
           <Badge className="h-fit">
-            <DateDisplay date={date} format="medium" className="font-normal text-white" />
+            <DateDisplay date={date} format="medium" className="font-normal text-white text-xs" />
           </Badge>
         </TooltipTrigger>
         <TooltipContent>
-          <DateDisplay date={date} format="full" showTime className="!font-[Inter] font-medium" />
+          <DateDisplay date={date} format="full" showTime className="font-[Inter]! font-medium" />
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

@@ -6,7 +6,7 @@ export const inputVariants = cva(
     variants: {
       variant: {
         outline:
-          '-outline-offset-1 outline-1 outline-border placeholder:text-text-positive-muted focus:outline-primary-strong focus:ring-4 focus:ring-primary-weak aria-invalid:bg-danger-bg-subtle aria-invalid:outline-danger aria-invalid:ring-danger-weak aria-invalid:focus:outline-danger-strong aria-invalid:focus:ring-4',
+          'outline-1 outline-border -outline-offset-1 placeholder:text-text-positive-muted focus:outline-primary-strong focus:ring-4 focus:ring-primary-weak aria-invalid:bg-danger-bg-subtle aria-invalid:outline-danger aria-invalid:ring-danger-weak aria-invalid:focus:outline-danger-strong aria-invalid:focus:ring-4',
         ghost: '',
         none: '',
         soft: '',

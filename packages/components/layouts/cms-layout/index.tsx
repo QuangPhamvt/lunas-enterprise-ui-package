@@ -1,5 +1,7 @@
 import { useMemo } from 'react';
 
+import { LogOutIcon } from 'lucide-react';
+
 import { CMSLayoutHeader } from './components/header';
 import {
   Sidebar,
@@ -8,7 +10,6 @@ import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
-  SidebarHeader,
   SidebarInset,
   SidebarMenu,
   SidebarMenuButton,
@@ -16,19 +17,24 @@ import {
   SidebarProvider,
 } from './components/sidebar';
 
-export const CMSLayout: React.FC<{
-  sidebar?: {
-    groupcontent: {
-      id: string;
-      label?: string;
-      items: {
+export const CMSLayout: React.FC<
+  React.PropsWithChildren<{
+    activeNavItemId?: string;
+    sidebar?: {
+      groupcontent: {
         id: string;
-        icon?: React.ReactNode;
-        label: string;
+        label?: string;
+        items: {
+          id: string;
+          label: string;
+          icon?: React.ReactNode;
+          onClick?: () => void;
+        }[];
       }[];
-    }[];
-  };
-}> = ({ sidebar }) => {
+    };
+    onLogout?: () => void;
+  }>
+> = ({ activeNavItemId, sidebar, children, onLogout }) => {
   const groupcontent = useMemo(() => {
     return sidebar?.groupcontent || [];
   }, [sidebar]);
@@ -48,7 +54,14 @@ export const CMSLayout: React.FC<{
                     {group.items.map(item => {
                       return (
                         <SidebarMenuItem key={item.id}>
-                          <SidebarMenuButton>
+                          <SidebarMenuButton
+                            isActive={item.id === activeNavItemId}
+                            onClick={event => {
+                              item.onClick?.();
+                              event.preventDefault();
+                              event.stopPropagation();
+                            }}
+                          >
                             {item.icon}
                             {item.label}
                           </SidebarMenuButton>
@@ -61,10 +74,33 @@ export const CMSLayout: React.FC<{
             );
           })}
         </SidebarContent>
-        <SidebarFooter></SidebarFooter>
+        <SidebarFooter>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton
+                className="border border-border"
+                onClick={event => {
+                  onLogout?.();
+                  event.preventDefault();
+                  event.stopPropagation();
+                }}
+              >
+                <LogOutIcon className="text-text-positive-weak" />
+                Đăng xuất
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem className="mt-2 border-t border-t-border">
+              <p className="pt-2 text-center text-muted-foreground text-xs">Copyright © 2025, Lunas.</p>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarFooter>
       </Sidebar>
 
-      <SidebarInset>Content goes here</SidebarInset>
+      <SidebarInset>
+        <section className="relative size-full">
+          <div className="absolute inset-0">{children}</div>
+        </section>
+      </SidebarInset>
     </SidebarProvider>
   );
 };

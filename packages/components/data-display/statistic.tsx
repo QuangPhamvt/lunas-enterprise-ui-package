@@ -1,4 +1,5 @@
 import { memo, useCallback, useMemo } from 'react';
+
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { Flex } from '../layouts/flex';
@@ -29,14 +30,13 @@ export const Statistic = memo(
     // Memoize rounding function
     const applyRounding = useCallback(
       (num: number, precisionValue: number): number => {
-        const multiplier = Math.pow(10, precisionValue);
+        const multiplier = 10 ** precisionValue;
 
         switch (roundingMode) {
           case 'floor':
             return Math.floor(num * multiplier) / multiplier;
           case 'ceil':
             return Math.ceil(num * multiplier) / multiplier;
-          case 'round':
           default:
             return Math.round(num * multiplier) / multiplier;
         }
@@ -78,7 +78,7 @@ export const Statistic = memo(
     const processedValue = useMemo((): string => {
       // Xử lý giá trị number
       if (typeof value === 'number') {
-        if (isNaN(value) || !isFinite(value)) {
+        if (Number.isNaN(value) || !Number.isFinite(value)) {
           return 'N/A';
         }
         return formatNumber(value);
@@ -96,7 +96,7 @@ export const Statistic = memo(
         // Thử convert sang number
         const numValue = Number(trimmedValue);
 
-        if (isNaN(numValue) || !isFinite(numValue)) {
+        if (Number.isNaN(numValue) || !Number.isFinite(numValue)) {
           // Nếu không phải số, trả về string gốc
           return 'N/A';
         }
@@ -120,7 +120,7 @@ export const Statistic = memo(
       <Flex
         padding="none"
         className={cn(
-          'text-secondary-foreground font-number text-lg',
+          'font-number text-lg text-secondary-foreground tabular-nums',
           size === 'xs' && 'text-xs',
           size === 'sm' && 'text-sm',
           size === 'md' && 'text-base',

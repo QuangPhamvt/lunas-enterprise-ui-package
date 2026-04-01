@@ -1,3 +1,5 @@
+import { sleep } from '@customafk/react-toolkit/utils/sleep';
+
 import {
   UITableContainer,
   UITableFilter,
@@ -13,7 +15,7 @@ import { MockDataColumns, MockDataTables, type TMockDataTable } from './mock-dat
 
 const meta: Meta<typeof UITableProvider<TMockDataTable>> = {
   tags: ['autodocs'],
-  title: 'Features/UI Tables',
+  title: 'UI Tables',
   component: UITableProvider,
   subcomponents: {
     UITableTooltip,
@@ -28,9 +30,23 @@ export const Default: Story = {
     title: 'Mock Data Table',
     columns: MockDataColumns,
     data: MockDataTables,
+    // data: [],
     totalRows: MockDataTables.length + 2,
+
+    isFetching: false,
+    isRefetching: false,
+
     fetchMoreData: async () => {
+      await sleep(2000);
       console.log('Fetch more data...');
+      // throw new Error('No more data to fetch');
+    },
+
+    leftPinnedColumns: ['column_1', 'column_2'],
+
+    keyOfClickRow: 'column_12',
+    onClickRow: (rowIndex, rowId) => {
+      console.log('Clicked row:', rowIndex, 'Row ID:', rowId);
     },
   },
   render: ({ children, ...args }) => {
@@ -39,12 +55,14 @@ export const Default: Story = {
         <UITableProvider {...args}>
           <UITableWrapper>
             <UITableTooltip>
-              <UITableTooltipFilter />
+              <UITableTooltipFilter
+                onSearch={value => {
+                  console.log('value', value);
+                }}
+              />
               <UITableTooltipActions />
             </UITableTooltip>
-            <UITableContainer>
-              <UITableFilter />
-            </UITableContainer>
+            <UITableContainer>{/*<UITableFilter />*/}</UITableContainer>
           </UITableWrapper>
         </UITableProvider>
       </div>

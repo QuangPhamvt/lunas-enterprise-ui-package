@@ -9,11 +9,11 @@ export const NameDisplay: React.FC<React.PropsWithChildren<NameDisplayProps>> = 
   return (
     <Tooltip>
       <TooltipTrigger>
-        <Paragraph variant="sm" className="line-clamp-2 w-full truncate pb-px text-start text-wrap">
+        <Paragraph variant="sm" className="line-clamp-2 w-full truncate text-wrap pb-px text-start">
           {name}
         </Paragraph>
       </TooltipTrigger>
-      <TooltipContent align="start" className="max-w-80 text-wrap break-keep whitespace-pre-line">
+      <TooltipContent align="start" className="max-w-80 whitespace-pre-line text-wrap break-keep">
         {name}
       </TooltipContent>
     </Tooltip>

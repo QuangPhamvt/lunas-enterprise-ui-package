@@ -7,10 +7,11 @@ import type z from 'zod';
 
 import { cn } from '@customafk/react-toolkit/utils';
 
+import { NumberInput } from '@/components/ui/inputs/number-input';
+
 import type { TanStackFormNumberFieldSchema } from '../../schema';
 import { useTanStackFieldContext } from '../../tanstack-form';
 import { Field, FieldContent, FieldContentMain, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldNote, FieldSeparator } from '../ui/field';
-import { NumberInput } from '../ui/number-input';
 
 type NumberFieldProps = Pick<
   z.input<typeof TanStackFormNumberFieldSchema>,
@@ -27,7 +28,7 @@ export const NumberField: React.FC<NumberFieldProps> = ({
 
   // tooltip,
   helperText,
-  orientation,
+  orientation = 'responsive',
   showErrorMessage = true,
   rounding,
   decimalPlaces,
@@ -68,37 +69,35 @@ export const NumberField: React.FC<NumberFieldProps> = ({
           <FieldDescription>{description}</FieldDescription>
         </FieldContent>
 
-        <FieldContentMain className="flex justify-end">
-          <div className="relative flex w-full flex-col items-end">
-            <div className="relative w-full max-w-120">
-              <NumberInput
-                id={field.name}
-                value={field.state.value}
-                aria-invalid={field.state.meta.isTouched && !field.state.meta.isValid}
-                placeholder={placeholder}
-                roundingRule={rounding}
-                numberAfterDecimalPoint={decimalPlaces}
-                precision={percision}
-                unitText={unit}
-                allowNegative={allowNegative}
-                className={cn(isSubmitting && 'pointer-events-none bg-muted-muted opacity-60')}
-                onBlur={field.handleBlur}
-                onValueChange={onValueChange}
-              />
-              {isSubmitting && (
-                <div className="absolute inset-y-0 start-2 top-2.5 text-muted-weak">
-                  <Loader2Icon size={14} className="animate-spin text-primary-strong" />
-                </div>
-              )}
-              {showErrorMessage && !!_errors.length && (
-                <div className="absolute inset-y-0 start-2 top-2.75 text-danger-strong">
-                  <BanIcon size={14} />
-                </div>
-              )}
-              <div className="mt-1 flex w-full flex-col items-end justify-end">{showErrorMessage && <FieldError errors={_errors} />}</div>
-            </div>
-            <FieldNote isShow={!!helperText}>{helperText}</FieldNote>
+        <FieldContentMain>
+          <div className="relative w-full">
+            <NumberInput
+              id={field.name}
+              value={field.state.value}
+              aria-invalid={field.state.meta.isTouched && !field.state.meta.isValid}
+              placeholder={placeholder}
+              roundingRule={rounding}
+              numberAfterDecimalPoint={decimalPlaces}
+              precision={percision}
+              unitText={unit}
+              allowNegative={allowNegative}
+              className={cn(isSubmitting && 'pointer-events-none bg-muted-muted opacity-60')}
+              onBlur={field.handleBlur}
+              onValueChange={onValueChange}
+            />
+            {isSubmitting && (
+              <div className="absolute inset-y-0 inset-s-2 top-2.5 text-muted-weak [&>svg]:size-3.5">
+                <Loader2Icon className="animate-spin text-primary-strong" />
+              </div>
+            )}
+            {showErrorMessage && !!_errors.length && (
+              <div className="absolute inset-y-0 inset-s-2 top-2.75 text-danger-strong [&>svg]:size-3.5">
+                <BanIcon />
+              </div>
+            )}
+            <div className="mt-1 flex w-full flex-col items-end justify-end">{showErrorMessage && <FieldError errors={_errors} />}</div>
           </div>
+          <FieldNote isShow={!!helperText}>{helperText}</FieldNote>
         </FieldContentMain>
       </Field>
       <FieldSeparator />

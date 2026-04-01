@@ -4,6 +4,8 @@ import { cn } from '@customafk/react-toolkit/utils';
 
 import { Dialog as DialogPrimitive } from 'radix-ui';
 import { CloseButton } from './buttons/close';
+import { headingVariants } from '../typography/heading';
+import { paragraphVariants } from '../typography/paragraph';
 
 function Dialog({ ...props }: React.ComponentProps<typeof DialogPrimitive.Root>) {
   return <DialogPrimitive.Root data-slot="dialog" {...props} />;
@@ -49,32 +51,31 @@ function DialogContent({
   return (
     <DialogPortal data-slot="dialog-portal">
       <DialogOverlay />
-      <div className="fixed inset-0 z-50 flex items-center justify-center">
-        <DialogPrimitive.Content
-          data-slot="dialog-content"
-          className={cn(
-            'relative z-50 grid bg-background',
-            'gap-4 p-6 shadow-dialog outline-none',
-            'max-h-[85dvh] w-full max-w-[calc(100%-2rem)] sm:max-w-lg',
-            'rounded-2xl duration-200',
-            'data-[state=open]:animate-in',
-            'data-[state=open]:fade-in-0',
-            'data-[state=open]:zoom-in-80',
-            'data-[state=closed]:animate-out',
-            'data-[state=closed]:fade-out-0',
-            'data-[state=closed]:zoom-out-80',
-            className
-          )}
-          {...props}
-        >
-          {children}
-          {showCloseButton && (
-            <DialogPrimitive.Close data-slot="dialog-close" tabIndex={-1} asChild className="absolute top-3 right-3">
-              <CloseButton />
-            </DialogPrimitive.Close>
-          )}
-        </DialogPrimitive.Content>
-      </div>
+      <DialogPrimitive.Content
+        data-slot="dialog-content"
+        className={cn(
+          'relative z-50 grid bg-background',
+          'gap-4 p-6 shadow-dialog outline-none',
+          'max-h-[85dvh] w-full max-w-[calc(100%-2rem)] sm:max-w-lg',
+          'rounded-2xl duration-200',
+          'data-[state=open]:animate-in',
+          'data-[state=open]:fade-in-0',
+          'data-[state=open]:zoom-in-80',
+          'data-[state=closed]:animate-out',
+          'data-[state=closed]:fade-out-0',
+          'data-[state=closed]:zoom-out-80',
+          'fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2',
+          className
+        )}
+        {...props}
+      >
+        {children}
+        {showCloseButton && (
+          <DialogPrimitive.Close data-slot="dialog-close" tabIndex={-1} asChild className="absolute top-3 right-3">
+            <CloseButton />
+          </DialogPrimitive.Close>
+        )}
+      </DialogPrimitive.Content>
     </DialogPortal>
   );
 }
@@ -88,13 +89,17 @@ function DialogFooter({ className, ...props }: React.ComponentProps<'div'>) {
 }
 
 function DialogTitle({ className, ...props }: React.ComponentProps<typeof DialogPrimitive.Title>) {
-  return (
-    <DialogPrimitive.Title data-slot="dialog-title" className={cn('font-semibold text-lg text-text-positive-strong leading-none', className)} {...props} />
-  );
+  return <DialogPrimitive.Title data-slot="dialog-title" className={cn(headingVariants({ level: 'h3' }), className)} {...props} />;
 }
 
 function DialogDescription({ className, ...props }: React.ComponentProps<typeof DialogPrimitive.Description>) {
-  return <DialogPrimitive.Description data-slot="dialog-description" className={cn('text-sm text-text-positive-weak', className)} {...props} />;
+  return (
+    <DialogPrimitive.Description
+      data-slot="dialog-description"
+      className={cn(paragraphVariants({ variant: 'muted' }), 'not-first:mt-0', className)}
+      {...props}
+    />
+  );
 }
 
 export { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogOverlay, DialogPortal, DialogTitle, DialogTrigger };

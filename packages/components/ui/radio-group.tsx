@@ -16,12 +16,13 @@ function RadioGroupItem({ className, ...props }: React.ComponentProps<typeof Rad
       data-slot="radio-group-item"
       className={cn(
         'aspect-square size-4 shrink-0 rounded-full border border-border shadow-xs outline-none transition-all',
-        'focus:border-border',
-        'focus:ring-primary/50',
-        'focus:ring-[3px]',
-        'aria-invalid:ring-danger-weak',
-        'aria-invalid:border-danger-strong',
         'disabled:cursor-not-allowed disabled:opacity-50',
+        'focus:border-border focus:ring-4 focus:ring-primary-weak',
+        'aria-invalid:border-danger-strong aria-invalid:ring-danger-weak',
+        'aria-readonly:pointer-events-none',
+        'aria-readonly:[&_div]:bg-muted',
+        'aria-readonly:[&_svg]:fill-muted-weak',
+        'aria-readonly:[&_svg]:text-muted-weak',
         className
       )}
       {...props}

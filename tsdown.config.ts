@@ -19,18 +19,20 @@ export default defineConfig([
       './packages/components/data-display/user.tsx',
 
       './packages/components/dialogs/detail-dialog/index.tsx',
-      './packages/components/dialogs/detail-dialog/component/sidebar.tsx',
+      './packages/components/dialogs/detail-dialog/components/sidebar.tsx',
       './packages/components/dialogs/confirm-dialog.tsx',
       './packages/components/dialogs/error-dialog.tsx',
       './packages/components/dialogs/loading-dialog.tsx',
 
+      './packages/components/features/descriptions/index.tsx',
       './packages/components/features/search-modal/index.tsx',
+      './packages/components/features/tables/index.tsx',
       './packages/components/features/tanstack-form/index.tsx',
 
-      './packages/components/layouts/app-layout/index.tsx',
+      './packages/components/layouts/cms-layout/index.tsx',
+      './packages/components/layouts/payment-layout/index.tsx',
       './packages/components/layouts/flex.tsx',
       './packages/components/layouts/grid.tsx',
-      './packages/components/layouts/service-layout/index.ts',
 
       './packages/components/pages/FeatureDeveloping.tsx',
       './packages/components/pages/FeatureFixing.tsx',
@@ -61,6 +63,7 @@ export default defineConfig([
       './packages/components/ui/calendar.tsx',
       './packages/components/ui/card.tsx',
       './packages/components/ui/carousel.tsx',
+      './packages/components/ui/checkbox.tsx',
       './packages/components/ui/collapsible.tsx',
       './packages/components/ui/command.tsx',
       './packages/components/ui/context-menu.tsx',

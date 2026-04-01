@@ -1,7 +1,15 @@
 import { cn } from '@customafk/react-toolkit/utils';
+import { headingVariants } from '../typography/heading';
+import { paragraphVariants } from '../typography/paragraph';
 
 function Card({ className, ...props }: React.ComponentProps<'div'>) {
-  return <div data-slot="card" className={cn('flex flex-col gap-6 rounded-2xl bg-card py-6 text-text-positive shadow-card', className)} {...props} />;
+  return (
+    <div
+      data-slot="card"
+      className={cn('flex flex-col gap-6 rounded-lg border border-border bg-card py-6 text-text-positive shadow-card ring-4 ring-border-weak', className)}
+      {...props}
+    />
+  );
 }
 
 function CardHeader({ className, ...props }: React.ComponentProps<'div'>) {
@@ -22,11 +30,11 @@ function CardHeader({ className, ...props }: React.ComponentProps<'div'>) {
 }
 
 function CardTitle({ className, ...props }: React.ComponentProps<'div'>) {
-  return <div data-slot="card-title" className={cn('font-semibold leading-none', className)} {...props} />;
+  return <div data-slot="card-title" className={cn(headingVariants({ level: 'h3' }), className)} {...props} />;
 }
 
 function CardDescription({ className, ...props }: React.ComponentProps<'div'>) {
-  return <div data-slot="card-description" className={cn('text-sm text-text-positive-weak', className)} {...props} />;
+  return <div data-slot="card-description" className={cn(paragraphVariants({ variant: 'muted' }), className)} {...props} />;
 }
 
 function CardAction({ className, ...props }: React.ComponentProps<'div'>) {

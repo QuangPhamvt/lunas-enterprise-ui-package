@@ -1,4 +1,8 @@
-import type { ColumnDef } from '@tanstack/react-table';
+import { useState } from 'react';
+
+import { ChevronDown, ChevronRight, DotIcon, MoreHorizontal } from 'lucide-react';
+
+import type { TUITableColumn } from '@/components/features/tables';
 
 export type TMockDataTable = {
   column_1: string;
@@ -14,39 +18,75 @@ export type TMockDataTable = {
   column_11: string;
   column_12: string;
   column_13: string;
-  children?: TMockDataTable[];
+  subRows?: TMockDataTable[] | undefined;
 };
 
-export const MockDataColumns: ColumnDef<TMockDataTable>[] = [
+export const MockDataColumns: TUITableColumn<TMockDataTable>[] = [
   {
     accessorKey: 'select',
-    size: 40,
+    size: 60,
   },
   {
+    id: 'column_1',
     accessorKey: 'column_1',
     header: 'Column 1',
-    cell: ({ row }) => row.original.column_1,
-    size: 200,
+    cell: ({ row, getValue }) => {
+      const [isExpanded, setIsExpanded] = useState<boolean>(row.getIsExpanded());
+      return (
+        <div
+          className="flex gap-x-2"
+          style={{
+            paddingLeft: `${row.depth * 2}rem`,
+          }}
+          onClick={e => {
+            e.stopPropagation();
+          }}
+        >
+          {row.getCanExpand() ? (
+            <button
+              className="cursor-pointer [&>svg]:size-4"
+              onClick={() => {
+                setIsExpanded(prev => !prev);
+                row.getToggleExpandedHandler()();
+              }}
+            >
+              {isExpanded ? <ChevronDown /> : <ChevronRight />}
+            </button>
+          ) : (
+            <DotIcon className="size-4" />
+          )}
+          <p>{getValue<string>()}</p>
+        </div>
+      );
+    },
+    size: 360,
   },
   {
+    id: 'column_2',
     accessorKey: 'column_2',
     header: 'Column 2',
-    cell: ({ row }) => row.original.column_2,
+    cell: ({ row }) => <div>{row.original.column_2}</div>,
   },
   {
     accessorKey: 'column_3',
     header: 'Column 3',
-    cell: ({ row }) => row.original.column_3,
+    cell: ({ row }) => <div className="flex h-16 items-center">{row.original.column_3}</div>,
   },
   {
     accessorKey: 'column_4',
     header: 'Column 4',
     cell: ({ row }) => row.original.column_4,
+    maxSize: 200,
   },
   {
     accessorKey: 'column_5',
     header: 'Column 5',
     cell: ({ row }) => row.original.column_5,
+    minSize: 300,
+    maxSize: 400,
+    meta: {
+      fitContent: true,
+    },
   },
   {
     accessorKey: 'column_6',
@@ -57,6 +97,7 @@ export const MockDataColumns: ColumnDef<TMockDataTable>[] = [
     accessorKey: 'column_7',
     header: 'Column 7',
     cell: ({ row }) => row.original.column_7,
+    // maxSize: 200
   },
   {
     accessorKey: 'column_8',
@@ -92,7 +133,13 @@ export const MockDataColumns: ColumnDef<TMockDataTable>[] = [
     accessorKey: 'actions',
     header: '',
     size: 60,
-    cell: () => '•••',
+    cell: () => {
+      return (
+        <button className="cursor-pointer rounded-full bg-primary p-1 text-text-negative shadow-lg">
+          <MoreHorizontal size={20} />
+        </button>
+      );
+    },
   },
 ];
 
@@ -111,7 +158,7 @@ export const MockDataTables: TMockDataTable[] = [
     column_11: 'Row 1 Col 11',
     column_12: 'Row 1 Col 12',
     column_13: 'Row 1 Col 13',
-    children: [
+    subRows: [
       {
         column_1: 'Row 1.1 Col 1',
         column_2: 'Row 1.1 Col 2',
@@ -141,6 +188,38 @@ export const MockDataTables: TMockDataTable[] = [
         column_11: 'Row 1.2 Col 11',
         column_12: 'Row 1.2 Col 12',
         column_13: 'Row 1.2 Col 13',
+        subRows: [
+          {
+            column_1: 'Row 1.2.1 Col 1',
+            column_2: 'Row 1.2.1 Col 2',
+            column_3: 'Row 1.2.1 Col 3',
+            column_4: 'Row 1.2.1 Col 4',
+            column_5: 'Row 1.2.1 Col 5',
+            column_6: 'Row 1.2.1 Col 6',
+            column_7: 'Row 1.2.1 Col 7',
+            column_8: 'Row 1.2.1 Col 8',
+            column_9: 'Row 1.2.1 Col 9',
+            column_10: 'Row 1.2.1 Col 10',
+            column_11: 'Row 1.2.1 Col 11',
+            column_12: 'Row 1.2.1 Col 12',
+            column_13: 'Row 1.2.1 Col 13',
+          },
+          {
+            column_1: 'Row 1.2.2 Col 1',
+            column_2: 'Row 1.2.2 Col 2',
+            column_3: 'Row 1.2.2 Col 3',
+            column_4: 'Row 1.2.2 Col 4',
+            column_5: 'Row 1.2.2 Col 5',
+            column_6: 'Row 1.2.2 Col 6',
+            column_7: 'Row 1.2.2 Col 7',
+            column_8: 'Row 1.2.2 Col 8',
+            column_9: 'Row 1.2.2 Col 9',
+            column_10: 'Row 1.2.2 Col 10',
+            column_11: 'Row 1.2.2 Col 11',
+            column_12: 'Row 1.2.2 Col 12',
+            column_13: 'Row 1.2.2 Col 13',
+          },
+        ],
       },
       {
         column_1: 'Row 1.3 Col 1',
@@ -218,7 +297,7 @@ export const MockDataTables: TMockDataTable[] = [
     column_11: 'Row 5 Col 11',
     column_12: 'Row 5 Col 12',
     column_13: 'Row 5 Col 13',
-    children: [
+    subRows: [
       {
         column_1: 'Row 5.1 Col 1',
         column_2: 'Row 5.1 Col 2',
@@ -355,7 +434,7 @@ export const MockDataTables: TMockDataTable[] = [
     column_11: 'Row 10 Col 11',
     column_12: 'Row 10 Col 12',
     column_13: 'Row 10 Col 13',
-    children: [
+    subRows: [
       {
         column_1: 'Row 10.1 Col 1',
         column_2: 'Row 10.1 Col 2',
@@ -507,7 +586,7 @@ export const MockDataTables: TMockDataTable[] = [
     column_11: 'Row 15 Col 11',
     column_12: 'Row 15 Col 12',
     column_13: 'Row 15 Col 13',
-    children: [
+    subRows: [
       {
         column_1: 'Row 15.1 Col 1',
         column_2: 'Row 15.1 Col 2',
@@ -629,7 +708,7 @@ export const MockDataTables: TMockDataTable[] = [
     column_11: 'Row 20 Col 11',
     column_12: 'Row 20 Col 12',
     column_13: 'Row 20 Col 13',
-    children: [
+    subRows: [
       {
         column_1: 'Row 20.1 Col 1',
         column_2: 'Row 20.1 Col 2',
@@ -766,7 +845,7 @@ export const MockDataTables: TMockDataTable[] = [
     column_11: 'Row 25 Col 11',
     column_12: 'Row 25 Col 12',
     column_13: 'Row 25 Col 13',
-    children: [
+    subRows: [
       {
         column_1: 'Row 25.1 Col 1',
         column_2: 'Row 25.1 Col 2',
@@ -903,7 +982,7 @@ export const MockDataTables: TMockDataTable[] = [
     column_11: 'Row 30 Col 11',
     column_12: 'Row 30 Col 12',
     column_13: 'Row 30 Col 13',
-    children: [
+    subRows: [
       {
         column_1: 'Row 30.1 Col 1',
         column_2: 'Row 30.1 Col 2',
@@ -1016,7 +1095,7 @@ export const MockDataTables: TMockDataTable[] = [
     column_2: 'Row 34 Col 2',
     column_3: 'Row 34 Col 3',
     column_4: 'Row 34 Col 4',
-    column_5: 'Row 34 Col 5',
+    column_5: 'Row 35 Col 5 Long Long Long Long Long Long Long Long Long',
     column_6: 'Row 34 Col 6',
     column_7: 'Row 34 Col 7',
     column_8: 'Row 34 Col 8',
@@ -1031,7 +1110,7 @@ export const MockDataTables: TMockDataTable[] = [
     column_2: 'Row 35 Col 2',
     column_3: 'Row 35 Col 3',
     column_4: 'Row 35 Col 4',
-    column_5: 'Row 35 Col 5',
+    column_5: 'Row 35 Col 5 Long Long Long Long',
     column_6: 'Row 35 Col 6',
     column_7: 'Row 35 Col 7',
     column_8: 'Row 35 Col 8',
@@ -1040,7 +1119,7 @@ export const MockDataTables: TMockDataTable[] = [
     column_11: 'Row 35 Col 11',
     column_12: 'Row 35 Col 12',
     column_13: 'Row 35 Col 13',
-    children: [
+    subRows: [
       {
         column_1: 'Row 35.1 Col 1',
         column_2: 'Row 35.1 Col 2',
