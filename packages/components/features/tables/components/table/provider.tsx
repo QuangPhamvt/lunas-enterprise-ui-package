@@ -1,6 +1,6 @@
-import { memo, useId, useMemo, useState } from 'react';
+import { memo, useCallback, useId, useMemo, useState } from 'react';
 
-import type { ColumnPinningState, ExpandedState, RowSelectionState, VisibilityState } from '@tanstack/react-table';
+import type { ColumnDef, ColumnPinningState, ExpandedState, RowSelectionState } from '@tanstack/react-table';
 import { getCoreRowModel, getExpandedRowModel, getGroupedRowModel, useReactTable } from '@tanstack/react-table';
 
 import type { AnyEntity } from '@/types';
@@ -21,6 +21,7 @@ import type {
   TTableInnerTableContext,
   TTableInnerWrapperContext,
   TTableRowContext,
+  TUITableColumn,
 } from '../../types';
 
 const UITableInnerWrapperProvider = memo<React.PropsWithChildren<TTableInnerWrapperContext>>(({ innerWrapperId, children }) => {
@@ -70,7 +71,11 @@ const UITableRowProvider = memo<React.PropsWithChildren<TTableRowContext<AnyEnti
 );
 UITableRowProvider.displayName = 'UITableRowProvider';
 
-export const UITableProvider = <TData extends RowData<TData>>({
+export const UITableProvider = <
+  TData extends RowData<TData> = RowData<AnyEntity>,
+  TKey extends keyof TData = keyof TData,
+  TColumns extends ReadonlyArray<TUITableColumn<TData>> = TUITableColumn<TData>[],
+>({
   title,
 
   isFetching = false,
@@ -81,29 +86,49 @@ export const UITableProvider = <TData extends RowData<TData>>({
   totalRows,
 
   leftPinnedColumns = [],
-  rightPinnedColumns,
+  rightPinnedColumns = [],
 
   keyOfClickRow,
   onClickRow,
+  onRowSelection,
+  onColumnPinning,
 
   fetchMoreData,
   children,
-}: React.PropsWithChildren<TableProviderProps<TData>>) => {
+}: React.PropsWithChildren<TableProviderProps<TData, TKey, TColumns>>) => {
   const innerWrapperId = useId();
   const innerTableId = useId();
 
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
-  const [columnPinning, setColumnPinning] = useState<ColumnPinningState>({ right: rightPinnedColumns, left: ['select', ...leftPinnedColumns] });
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [columnPinning, setColumnPinning] = useState<ColumnPinningState>({
+    right: rightPinnedColumns as unknown as string[],
+    left: ['select', ...leftPinnedColumns] as unknown as string[],
+  });
   const [expanded, setExpanded] = useState<ExpandedState>({});
+
+  const handleRowSelectionChange = useCallback<React.Dispatch<React.SetStateAction<RowSelectionState>>>(
+    newRowSelection => {
+      setRowSelection(newRowSelection);
+      onRowSelection?.(newRowSelection instanceof Function ? newRowSelection(rowSelection) : newRowSelection);
+      return newRowSelection;
+    },
+    [rowSelection, onRowSelection]
+  );
+
+  const handleColumnPinningChange = useCallback<React.Dispatch<React.SetStateAction<ColumnPinningState>>>(
+    newColumnPinning => {
+      setColumnPinning(newColumnPinning);
+      onColumnPinning?.(newColumnPinning instanceof Function ? newColumnPinning(columnPinning) : newColumnPinning);
+    },
+    [columnPinning, onColumnPinning]
+  );
 
   const table = useReactTable<TData>({
     data: data,
-    columns,
+    columns: columns as unknown as ColumnDef<AnyEntity, unknown>[],
     state: {
       rowSelection,
       columnPinning,
-      columnVisibility,
       expanded,
     },
     defaultColumn: {
@@ -129,9 +154,8 @@ export const UITableProvider = <TData extends RowData<TData>>({
     getGroupedRowModel: getGroupedRowModel(),
     getExpandedRowModel: getExpandedRowModel(),
 
-    onRowSelectionChange: setRowSelection,
-    onColumnPinningChange: setColumnPinning,
-    onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: handleRowSelectionChange,
+    onColumnPinningChange: handleColumnPinningChange,
     onExpandedChange: setExpanded,
   });
 
@@ -188,7 +212,6 @@ export const UITableProvider = <TData extends RowData<TData>>({
   const rowSelectionState = useMemo(() => {
     return tableState.rowSelection;
   }, [tableState.rowSelection]);
-  console.log('rowSelectionState', rowSelectionState);
 
   const columnPinningState = useMemo(() => {
     return tableState.columnPinning;

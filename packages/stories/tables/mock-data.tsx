@@ -69,7 +69,7 @@ export const MockDataColumns: TUITableColumn<TMockDataTable>[] = [
   },
   {
     accessorKey: 'column_3',
-    header: 'Column 3',
+    header: 'Column 3 Column Long Name Long Name Long Name',
     cell: ({ row }) => <div className="flex h-16 items-center">{row.original.column_3}</div>,
   },
   {
@@ -86,6 +86,7 @@ export const MockDataColumns: TUITableColumn<TMockDataTable>[] = [
     maxSize: 400,
     meta: {
       fitContent: true,
+      position: 'start',
     },
   },
   {
