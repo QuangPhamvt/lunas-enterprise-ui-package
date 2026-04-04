@@ -1,14 +1,6 @@
 import { sleep } from '@customafk/react-toolkit/utils/sleep';
 
-import {
-  UITableContainer,
-  UITableFilter,
-  UITableProvider,
-  UITableTooltip,
-  UITableTooltipActions,
-  UITableTooltipFilter,
-  UITableWrapper,
-} from '@/components/features/tables';
+import { UITableContainer, UITableProvider, UITableTooltip, UITableTooltipActions, UITableTooltipFilter, UITableWrapper } from '@/components/features/tables';
 
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { MockDataColumns, MockDataTables, type TMockDataTable } from './mock-data';
@@ -42,7 +34,8 @@ export const Default: Story = {
       // throw new Error('No more data to fetch');
     },
 
-    leftPinnedColumns: ['column_1', 'column_2'],
+    leftPinnedColumns: ['column_1'],
+    rightPinnedColumns: ['column_13', 'column_11'],
 
     keyOfClickRow: 'column_12',
     onClickRow: (rowIndex, rowId) => {

@@ -3,14 +3,12 @@ import { useMemo, useRef } from 'react';
 
 import { useVirtualizer } from '@tanstack/react-virtual';
 
-import { cn } from '@customafk/react-toolkit/utils';
-
-import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
+import { ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
 
 import { useUITableBodyContext, useUITableContext } from '../hooks/use-context';
 import { UITableBody, UITableEmptyDisplay, UITableHead, UITableHeadRow, UITableInnerTable, UITableInnerWrapper, UITableLoadMore, UITableRow } from './common';
 
-export const UITableContainer: React.FC<React.PropsWithChildren> = ({ children }) => {
+export const UITableContainer: React.FC<React.PropsWithChildren> = () => {
   const { table, isEmpty, isFetching, fetchMoreData } = useUITableContext();
   const { rowSelectionState } = useUITableBodyContext();
 
@@ -40,10 +38,7 @@ export const UITableContainer: React.FC<React.PropsWithChildren> = ({ children }
     <ResizablePanelGroup
       direction="horizontal"
       style={{ direction: table.options.columnResizeDirection }}
-      className={cn(
-        'relative flex w-full max-w-full flex-1 gap-1 overflow-auto border-t border-t-border bg-slate-50 p-0 text-sm',
-        !children && 'border-r border-r-border'
-      )}
+      className="relative flex w-full max-w-full flex-1 gap-1 overflow-auto border-t border-t-border border-r border-r-border bg-slate-50 p-0 text-sm"
     >
       <ResizablePanel className="relative">
         <UITableInnerWrapper ref={tableContainerRef}>
@@ -56,8 +51,7 @@ export const UITableContainer: React.FC<React.PropsWithChildren> = ({ children }
             <UITableBody height={tableBodyHeight}>
               {rowVirtualizer.getVirtualItems().map(virtualRow => {
                 const row = rows[virtualRow.index];
-                console.log('virtualRow', virtualRow, 'row', row);
-                const isSelected = Object.entries(rowSelectionState).some(([k, v]) => k === `${row.id}` && v);
+                const isSelected = Object.entries(rowSelectionState).some(([k, v]) => k === `${row?.id}` && v);
                 if (!row) {
                   return (
                     <UITableLoadMore
@@ -84,12 +78,6 @@ export const UITableContainer: React.FC<React.PropsWithChildren> = ({ children }
           <UITableEmptyDisplay isEmpty={isEmpty} isFetching={isFetching} />
         </UITableInnerWrapper>
       </ResizablePanel>
-      {!!children && (
-        <>
-          <ResizableHandle />
-          {children}
-        </>
-      )}
     </ResizablePanelGroup>
   );
 };

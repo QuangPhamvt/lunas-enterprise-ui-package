@@ -2,7 +2,7 @@ import { Activity, memo, useCallback, useEffect, useMemo, useRef, useState } fro
 
 import { flexRender } from '@tanstack/react-table';
 
-import { AlertTriangle, BoxIcon, ChevronDown, EllipsisVerticalIcon, EyeOffIcon, MoveLeftIcon, MoveRightIcon, PinOffIcon } from 'lucide-react';
+import { AlertTriangle, BoxIcon, ChevronDown, EllipsisVerticalIcon, MoveLeftIcon, MoveRightIcon, PinOffIcon } from 'lucide-react';
 
 import { cn } from '@customafk/react-toolkit/utils';
 
@@ -12,12 +12,12 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Spinner } from '@/components/ui/spinner';
 
+import type { AnyEntity } from '@/types';
 import { ACTION_WIDTH, PINNED_COLUMN_Z_INDEX, SELECT_WIDTH, TABLE_HEADER_Z_INDEX } from '../constants';
 import {
   useUITableBodyContext,
@@ -45,7 +45,7 @@ import type {
   TUITableWrapper,
 } from '../types';
 
-export const UITableHeadCellOption = memo<TUITableHeadCellOption>(({ isPinned, onLeftPin, onRightPin, onToggleVisibility, onUnpin, className }) => {
+export const UITableHeadCellOption = memo<TUITableHeadCellOption>(({ isPinned, onLeftPin, onRightPin, onUnpin, className }) => {
   const handleLeftPin = useCallback(() => {
     onLeftPin?.('left');
   }, [onLeftPin]);
@@ -53,10 +53,6 @@ export const UITableHeadCellOption = memo<TUITableHeadCellOption>(({ isPinned, o
   const handleRightPin = useCallback(() => {
     onRightPin?.('right');
   }, [onRightPin]);
-
-  const handleToggleVisibility = useCallback(() => {
-    onToggleVisibility?.(false);
-  }, [onToggleVisibility]);
 
   const handleUnpin = useCallback(() => {
     onUnpin?.(false);
@@ -103,15 +99,6 @@ export const UITableHeadCellOption = memo<TUITableHeadCellOption>(({ isPinned, o
               </DropdownMenuShortcut>
             </DropdownMenuItem>
           </Activity>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup className="*:data-[slot=dropdown-menu-item]:rounded-xs *:data-[slot=dropdown-menu-item]:p-2">
-          <DropdownMenuItem onClick={handleToggleVisibility}>
-            Hide Field
-            <DropdownMenuShortcut>
-              <EyeOffIcon className="size-4" />
-            </DropdownMenuShortcut>
-          </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -299,20 +286,17 @@ export const UITableHead = memo<TUITableHead>(({ className, children, ...props }
     <thead
       slot="table-head"
       className={cn(
-        'sticky top-0 z-20 w-full',
+        'sticky top-0 z-20 h-9 w-full',
         'grid select-none bg-muted-bg-subtle',
         'border-b border-b-border shadow',
         'font-medium text-[13px] text-text-positive-weak',
 
         '[&_tr:not(:last-child)_td]:border-b',
 
-        '[&_th]:h-9',
-        '[&_th]:flex',
+        '[&_th]:inline-flex',
         '[&_th]:items-center',
         '[&_th]:transition-all',
         '[&_th]:duration-300',
-        '[&_th]:text-left',
-        '[&_th]:align-middle',
         '[&_th]:whitespace-nowrap',
         '[&_th]:border-border',
         '[&_th]:last:border-r-0',
@@ -425,24 +409,20 @@ export const UITableHeadCell = memo<TUITableHeadCell>(
           maxWidth: maxSize,
         }}
         className={cn(
-          'group flex justify-between',
+          'group flex',
           isPinned ? 'sticky' : 'relative',
           isPinned === 'left' && isLastCell && 'border-r border-r-border',
           isPinned === 'right' && isFirstCell && 'border-l border-l-border',
+          (headerColumn?.columnDef.meta as AnyEntity)?.position === 'center' && 'justify-center',
+          (headerColumn?.columnDef.meta as AnyEntity)?.position === 'end' && 'justify-end',
+          (headerColumn?.columnDef.meta as AnyEntity)?.position === 'start' && 'justify-start',
           className
         )}
         {...props}
       >
-        <div className="pl-4">{children}</div>
+        <div className="truncate pl-4">{children}</div>
         {isOptionsVisible && (
-          <UITableHeadCellOption
-            isPinned={isPinned}
-            isVisible={isVisible}
-            onLeftPin={onColumnPin}
-            onRightPin={onColumnPin}
-            onUnpin={onColumnPin}
-            onToggleVisibility={onToggleVisibility}
-          />
+          <UITableHeadCellOption isPinned={isPinned} isVisible={isVisible} onLeftPin={onColumnPin} onRightPin={onColumnPin} onUnpin={onColumnPin} />
         )}
       </th>
     );
@@ -480,13 +460,16 @@ export const UITableBody = memo<TUITableBody>(({ height, className, children, ..
         '[&_td]:align-middle',
         '[&_td]:border-border',
 
+        '[&_td]:data-[selected=true]:bg-muted-muted!',
+        '[&_td]:data-[selected=true]:hover:bg-muted-muted!',
+
         '[&_td>div]:inline-flex',
         '[&_td>div]:items-center',
-        '[&_td>div]:w-auto',
+        '[&_td>div]:w-full',
 
-        '[&_td:not([data-pinned=false])]:bg-card',
         '[&_td:not([data-pinned=false])]:z-20',
         '[&_td:not([data-pinned=false])]:sticky',
+        '[&_td:not([data-pinned=false])]:bg-card',
 
         '**:data-lastcell:border-r',
         '**:data-firstcell:border-l',
@@ -515,7 +498,7 @@ export const UITableRow = memo<TUITableRow>(({ row, isSelected, virtualRowIndex,
       e.preventDefault();
       e.stopPropagation();
     },
-    [keyOfClickRow, onClickRow, row.original, virtualRowIndex]
+    [keyOfClickRow, onClickRow, row, virtualRowIndex]
   );
   return (
     <tr
@@ -533,7 +516,17 @@ export const UITableRow = memo<TUITableRow>(({ row, isSelected, virtualRowIndex,
         const isPinnedRight = pinnedRightColumns.includes(cell.column.id);
         const isPinned = isPinnedLeft ? 'left' : isPinnedRight ? 'right' : false;
         if (cell.column.id === 'actions') {
-          return <UITableCellActions key={`${cell.id}-${index}`} virtualRowIndex={virtualRowIndex} column={cell.column} getContext={cell.getContext} />;
+          return (
+            <UITableCellActions
+              key={`${cell.id}-${index}`}
+              data-col={cell.column.id}
+              data-cell={virtualRowIndex}
+              data-selected={isSelected || undefined}
+              virtualRowIndex={virtualRowIndex}
+              column={cell.column}
+              getContext={cell.getContext}
+            />
+          );
         }
         if (cell.column.id === 'select') {
           return (
@@ -541,6 +534,7 @@ export const UITableRow = memo<TUITableRow>(({ row, isSelected, virtualRowIndex,
               key={`${cell.id}-${index}`}
               data-col={cell.column.id}
               data-cell={virtualRowIndex}
+              data-selected={isSelected || undefined}
               isPinned={isPinned}
               isSelected={isAllRowsSelected || isSelected}
               onToggleRowSelected={cell.row.toggleSelected}
@@ -552,11 +546,12 @@ export const UITableRow = memo<TUITableRow>(({ row, isSelected, virtualRowIndex,
             key={`${cell.id}-${index}`}
             data-col={cell.column.id}
             data-cell={virtualRowIndex}
+            data-selected={isSelected || undefined}
             isPinned={isPinned}
             isFirstCell={cell.column.id === firstRightPinnedHeaderId}
             isLastCell={cell.column.id === lastLeftPinnedHeaderId}
             colId={cell.column.id}
-            position={(cell.column.columnDef.meta as any)?.position ?? 'start'}
+            position={(cell.column.columnDef.meta as AnyEntity)?.position ?? 'start'}
             column={cell.column}
             getContext={cell.getContext}
           />
@@ -605,7 +600,7 @@ export const UITableCellActions = memo<TUITableCellActions>(({ virtualRowIndex, 
     <td
       data-col="actions"
       data-cell={virtualRowIndex}
-      className="sticky inset-y-0 right-0 z-50 flex items-center bg-transparent! pr-4 opacity-0 group-hover:bg-muted-bg-subtle! group-hover:opacity-100"
+      className="sticky inset-y-0 right-0 z-50 flex items-center pr-4 group-hover:bg-muted-bg-subtle!"
       {...props}
     >
       {render}
@@ -655,7 +650,7 @@ export const UITableCell = memo<TUITableCell>(
 
       // Nếu cell này dài hơn size hiện tại của cột, cập nhật lại size cho column
       if (!!currentSize && width > currentSize) {
-        if (tableRef.current instanceof HTMLTableElement && typeof colId === 'string' && !!(column?.columnDef.meta as any)?.['fitContent']) {
+        if (tableRef.current instanceof HTMLTableElement && typeof colId === 'string' && !!(column?.columnDef.meta as AnyEntity)?.['fitContent']) {
           table.setColumnSizing(old => ({
             ...old,
             [colId]: width + 32,
@@ -677,7 +672,7 @@ export const UITableCell = memo<TUITableCell>(
           minWidth: minSize,
           maxWidth: maxSize,
         }}
-        className="group-hover:bg-muted-bg-subtle! data-pinned:bg-card"
+        className="group-hover:bg-muted-bg-subtle!"
         {...props}
       >
         <div

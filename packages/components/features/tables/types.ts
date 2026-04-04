@@ -4,7 +4,6 @@ import type {
   Column,
   ColumnPinningPosition,
   ColumnPinningState,
-  ExpandedState,
   Header,
   HeaderGroup,
   Row,
@@ -119,7 +118,7 @@ export type TUITableLoadMore = React.PropsWithChildren<
 >;
 
 export type TUITableColumn<TData extends RowData<TData>> = Pick<
-  AccessorKeyColumnDef<TData, unknown>,
+  AccessorKeyColumnDef<TData, AnyEntity>,
   'id' | 'accessorKey' | 'size' | 'maxSize' | 'minSize' | 'header' | 'cell' | 'meta'
 > & {
   meta?: {
@@ -165,7 +164,7 @@ export type TTableBodyContext = {
   rowSelectionState: RowSelectionState;
 };
 
-export type TTableRowContext<TData extends RowData<TData>, TKey extends keyof TData = keyof TData> = {
+export type TTableRowContext<TData extends RowData<TData> = RowData<AnyEntity>, TKey extends keyof TData = keyof TData> = {
   keyOfClickRow?: TKey;
   isAllRowsSelected?: boolean;
   columnPinningState: ColumnPinningState;
@@ -179,22 +178,29 @@ export type TTableVirtualizerContext = {
   virtualItems: VirtualItem[];
 };
 
-export type TableProviderProps<TData extends RowData<TData>, TKey extends keyof TData = keyof TData> = {
+export type TableProviderProps<
+  TData extends RowData<TData>,
+  TKey extends keyof TData = keyof TData,
+  TColumns extends ReadonlyArray<TUITableColumn<TData>> = TUITableColumn<TData>[],
+> = {
   title: string;
 
   isFetching?: boolean;
   isRefetching?: boolean;
 
   data: TData[];
-  columns: TUITableColumn<TData>[];
+  columns: TColumns;
   totalRows?: number;
   fetchMoreData?: () => void | Promise<void>;
 
   // Pinned Columns Props
-  leftPinnedColumns?: string[];
-  rightPinnedColumns?: string[];
+  leftPinnedColumns?: Array<TColumns[number]['accessorKey']>;
+
+  rightPinnedColumns?: Array<TColumns[number]['accessorKey']> | string[];
 
   // Row Props
   keyOfClickRow?: TTableRowContext<TData, TKey>['keyOfClickRow'];
   onClickRow?: TTableRowContext<TData, TKey>['onClickRow'];
+  onRowSelection?: (rowSelection: RowSelectionState) => void;
+  onColumnPinning?: (columnPinning: ColumnPinningState) => void;
 };
