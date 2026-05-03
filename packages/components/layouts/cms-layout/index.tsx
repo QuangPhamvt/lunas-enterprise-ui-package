@@ -1,24 +1,60 @@
-import { useMemo } from 'react';
+import { memo, useMemo } from 'react';
 
 import { LogOutIcon } from 'lucide-react';
 
 import { CMSLayoutHeader } from './components/header';
 import {
-  Sidebar,
+  CMSLayoutSidebar,
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
-  SidebarInset,
+  CMSLayoutMain,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarProvider,
+  CMSLayoutProvider,
 } from './components/sidebar';
+
+const SidebarContentGroupItem: React.FC<{
+  id: string;
+  label: string;
+  icon?: React.ReactNode;
+  activeNavItemId?: string;
+  onClick?: () => void;
+}> = memo(({ id, label, icon, activeNavItemId, onClick }) => {
+  return (
+    <SidebarMenuItem key={id}>
+      <SidebarMenuButton isActive={id === activeNavItemId} onClick={onClick}>
+        {icon}
+        {label}
+      </SidebarMenuButton>
+    </SidebarMenuItem>
+  );
+});
+SidebarContentGroupItem.displayName = 'SidebarContentGroupItem';
+
+const SidebarContentGroup: React.FC<
+  React.PropsWithChildren<{
+    id: string;
+    label?: string;
+  }>
+> = memo(({ id, label, children }) => {
+  return (
+    <SidebarGroup key={id}>
+      <SidebarGroupLabel>{label}</SidebarGroupLabel>
+      <SidebarGroupContent>
+        <SidebarMenu>{children}</SidebarMenu>
+      </SidebarGroupContent>
+    </SidebarGroup>
+  );
+});
+SidebarContentGroup.displayName = 'SidebarContentGroup';
 
 export const CMSLayout: React.FC<
   React.PropsWithChildren<{
+    i18nText?: string;
     activeNavItemId?: string;
     sidebar?: {
       groupcontent: {
@@ -33,58 +69,38 @@ export const CMSLayout: React.FC<
       }[];
     };
     onLogout?: () => void;
+    onChangeToEnLocale?: () => void;
+    onChangeToViLocale?: () => void;
   }>
-> = ({ activeNavItemId, sidebar, children, onLogout }) => {
+> = ({ i18nText, activeNavItemId, sidebar, children, onChangeToEnLocale, onChangeToViLocale, onLogout }) => {
   const groupcontent = useMemo(() => {
     return sidebar?.groupcontent || [];
   }, [sidebar]);
-  return (
-    <SidebarProvider>
-      <CMSLayoutHeader />
 
-      <Sidebar variant="inset" collapsible="icon">
-        {/*<SidebarHeader></SidebarHeader>*/}
+  return (
+    <CMSLayoutProvider>
+      <CMSLayoutHeader i18nText={i18nText} onChangeToEnLocale={onChangeToEnLocale} onChangeToViLocale={onChangeToViLocale} />
+      <CMSLayoutSidebar variant="inset" collapsible="icon">
         <SidebarContent>
-          {groupcontent.map(group => {
-            return (
-              <SidebarGroup key={group.id}>
-                <SidebarGroupLabel>{group.label}</SidebarGroupLabel>
-                <SidebarGroupContent>
-                  <SidebarMenu>
-                    {group.items.map(item => {
-                      return (
-                        <SidebarMenuItem key={item.id}>
-                          <SidebarMenuButton
-                            isActive={item.id === activeNavItemId}
-                            onClick={event => {
-                              item.onClick?.();
-                              event.preventDefault();
-                              event.stopPropagation();
-                            }}
-                          >
-                            {item.icon}
-                            {item.label}
-                          </SidebarMenuButton>
-                        </SidebarMenuItem>
-                      );
-                    })}
-                  </SidebarMenu>
-                </SidebarGroupContent>
-              </SidebarGroup>
-            );
-          })}
+          {groupcontent.map(group => (
+            <SidebarContentGroup key={group.id} id={group.id} label={group.label}>
+              {group.items.map(groupItem => (
+                <SidebarContentGroupItem
+                  key={groupItem.id}
+                  activeNavItemId={activeNavItemId}
+                  id={groupItem.id}
+                  label={groupItem.label}
+                  icon={groupItem.icon}
+                  onClick={groupItem.onClick}
+                />
+              ))}
+            </SidebarContentGroup>
+          ))}
         </SidebarContent>
         <SidebarFooter>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton
-                className="border border-border"
-                onClick={event => {
-                  onLogout?.();
-                  event.preventDefault();
-                  event.stopPropagation();
-                }}
-              >
+              <SidebarMenuButton className="border border-border" onClick={onLogout}>
                 <LogOutIcon className="text-text-positive-weak" />
                 Đăng xuất
               </SidebarMenuButton>
@@ -94,13 +110,8 @@ export const CMSLayout: React.FC<
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarFooter>
-      </Sidebar>
-
-      <SidebarInset>
-        <section className="relative size-full">
-          <div className="absolute inset-0">{children}</div>
-        </section>
-      </SidebarInset>
-    </SidebarProvider>
+      </CMSLayoutSidebar>
+      <CMSLayoutMain>{children}</CMSLayoutMain>
+    </CMSLayoutProvider>
   );
 };

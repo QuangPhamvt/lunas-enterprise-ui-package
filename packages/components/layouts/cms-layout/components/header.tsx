@@ -1,12 +1,17 @@
-import { MenuIcon, ShoppingCartIcon } from 'lucide-react';
+import { EarthIcon, MenuIcon, ShoppingCartIcon } from 'lucide-react';
 
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { Button } from '@/components/ui/button';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
 import { useSidebar } from './sidebar';
 
-export const CMSLayoutHeader = () => {
+export const CMSLayoutHeader: React.FC<{
+  i18nText?: string;
+  onChangeToEnLocale?: () => void;
+  onChangeToViLocale?: () => void;
+}> = ({ i18nText, onChangeToEnLocale, onChangeToViLocale }) => {
   const { toggleSidebar } = useSidebar();
   return (
     <header
@@ -37,7 +42,7 @@ export const CMSLayoutHeader = () => {
         <span className="sr-only">Toggle Sidebar</span>
       </Button>
 
-      <div className="flex gap-x-2 sm:ml-2.5">
+      <div className="flex flex-1 gap-x-2 sm:ml-2.5">
         <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
           <ShoppingCartIcon size={20} />
         </div>
@@ -46,6 +51,43 @@ export const CMSLayoutHeader = () => {
           <span className="truncate text-xs">Established 2025</span>
         </div>
       </div>
+
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            data-sidebar="trigger"
+            data-slot="sidebar-trigger"
+            variant="ghost"
+            color="muted"
+            className="gap-x-1 rounded-full transition-all hover:text-text-positive"
+          >
+            <EarthIcon className="size-6!" />
+            {i18nText}
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuGroup>
+            <DropdownMenuItem
+              onClick={event => {
+                onChangeToEnLocale?.();
+                event.preventDefault();
+                event.stopPropagation();
+              }}
+            >
+              EN - English
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={event => {
+                onChangeToViLocale?.();
+                event.preventDefault();
+                event.stopPropagation();
+              }}
+            >
+              VI - Vietnamese
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </header>
   );
 };

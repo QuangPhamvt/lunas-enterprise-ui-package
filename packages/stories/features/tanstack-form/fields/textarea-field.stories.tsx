@@ -32,10 +32,13 @@ export const Default: Story = {
               return (
                 <TextareaField
                   label="Text Field"
-                  description="This is a text field."
+                  description="This is a text field. It can be used to input text data. It supports validation, error messages, and helper text. The counter can be enabled to show the number of characters entered. The clear button allows users to quickly clear the input. The orientation can be set to responsive, horizontal, or vertical."
                   placeholder="Enter some text"
-                  maxLength={3000}
                   orientation="responsive"
+                  helperText="Helper text for additional info."
+                  required
+                  counter
+                  maxLength={50}
                   showErrorMessage={true}
                 />
               );

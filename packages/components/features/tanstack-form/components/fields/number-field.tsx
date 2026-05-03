@@ -74,7 +74,7 @@ export const NumberField: React.FC<NumberFieldProps> = ({
             <NumberInput
               id={field.name}
               value={field.state.value}
-              aria-invalid={field.state.meta.isTouched && !field.state.meta.isValid}
+              aria-invalid={field.state.meta.isTouched && !field.state.meta.isValid && field.state.meta.isDirty}
               placeholder={placeholder}
               roundingRule={rounding}
               numberAfterDecimalPoint={decimalPlaces}
@@ -86,16 +86,18 @@ export const NumberField: React.FC<NumberFieldProps> = ({
               onValueChange={onValueChange}
             />
             {isSubmitting && (
-              <div className="absolute inset-y-0 inset-s-2 top-2.5 text-muted-weak [&>svg]:size-3.5">
+              <div className="absolute inset-s-2 inset-y-0 top-2.5 text-muted-weak [&>svg]:size-3.5">
                 <Loader2Icon className="animate-spin text-primary-strong" />
               </div>
             )}
-            {showErrorMessage && !!_errors.length && (
-              <div className="absolute inset-y-0 inset-s-2 top-2.75 text-danger-strong [&>svg]:size-3.5">
+            {field.state.meta.isDirty && showErrorMessage && !!_errors.length && (
+              <div className="absolute inset-s-2 inset-y-0 top-2.75 text-danger-strong [&>svg]:size-3.5">
                 <BanIcon />
               </div>
             )}
-            <div className="mt-1 flex w-full flex-col items-end justify-end">{showErrorMessage && <FieldError errors={_errors} />}</div>
+            <div className="mt-1 flex w-full flex-col items-end justify-end">
+              {field.state.meta.isDirty && showErrorMessage && <FieldError errors={_errors} />}
+            </div>
           </div>
           <FieldNote isShow={!!helperText}>{helperText}</FieldNote>
         </FieldContentMain>

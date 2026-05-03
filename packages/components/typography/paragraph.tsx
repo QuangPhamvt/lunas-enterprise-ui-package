@@ -13,26 +13,30 @@ type Props = {
    * - `sm`: The small paragraph style. It is used for less important text and has a smaller font size.
    * - `lg`: The large paragraph style. It is used for more emphasis and visibility, with a larger font size.
    */
-  variant?: 'p' | 'muted' | 'lead' | 'sm' | 'lg';
+  variant?: 'p' | 'muted' | 'lead' | 'sm' | 'lg' | 'xs';
   className?: string;
   children?: React.ReactNode;
 };
 
-export const paragraphVariants = cva('text-wrap text-sm text-start max-w-prose tabular-nums transition-colors not-first:mt-3', {
-  variants: {
-    variant: {
-      // Lead: Nhấn mạnh mạnh mẽ nhất, dùng cho mở bài/highlight
-      lead: 'text-text-positive-strong font-semibold tracking-tight',
-      lg: 'font-medium text-text-positive-strong',
-      p: 'font-normal text-text-positive',
-      sm: 'font-light text-text-positive-weak',
-      muted: 'text-text-positive-weak font-normal',
+export const paragraphVariants = cva(
+  'not-first:mt-3 max-w-prose whitespace-pre-line text-wrap text-start font-stretch-expanded text-sm slashed-zero tabular-nums transition-colors',
+  {
+    variants: {
+      variant: {
+        // Lead: Nhấn mạnh mạnh mẽ nhất, dùng cho mở bài/highlight
+        lead: 'font-semibold text-text-positive-strong tracking-tight',
+        lg: 'font-medium text-text-positive-strong',
+        p: 'font-normal text-text-positive',
+        sm: 'font-light text-text-positive-weak',
+        muted: 'font-normal text-text-positive-weak',
+        xs: 'text-xs text-text-positive-weak',
+      },
     },
-  },
-  defaultVariants: {
-    variant: 'sm',
-  },
-});
+    defaultVariants: {
+      variant: 'sm',
+    },
+  }
+);
 
 export const Paragraph = ({ variant = 'p', className, children }: Props) => {
   return <p className={cn(paragraphVariants({ variant }), className)}>{children}</p>;

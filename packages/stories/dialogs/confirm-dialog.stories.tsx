@@ -12,7 +12,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    open: false,
+    open: true,
     isLoading: false,
     title: 'Confirm Action',
     description: 'Are you sure you want to proceed with this action?',

@@ -3,9 +3,9 @@
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { AlertDialog as AlertDialogPrimitive } from 'radix-ui';
-import { buttonVariants } from './button.variants';
 import { headingVariants } from '../typography/heading';
 import { paragraphVariants } from '../typography/paragraph';
+import { buttonVariants } from './button.variants';
 
 function AlertDialog({ ...props }: React.ComponentProps<typeof AlertDialogPrimitive.Root>) {
   return <AlertDialogPrimitive.Root data-slot="alert-dialog" {...props} />;
@@ -46,7 +46,7 @@ function AlertDialogContent({ className, ...props }: React.ComponentProps<typeof
         className={cn(
           'bg-background',
           'fixed z-50',
-          'top-1/2 left-1/2 -translate-1/2',
+          '-translate-1/2 top-1/2 left-1/2',
           'grid w-full max-w-[calc(100%-2rem)] sm:max-w-lg',
           'gap-4 rounded-lg p-6 shadow-lg duration-200',
           'data-[state=open]:animate-in',

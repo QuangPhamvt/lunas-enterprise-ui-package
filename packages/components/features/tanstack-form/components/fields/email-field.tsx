@@ -7,10 +7,21 @@ import type z from 'zod';
 
 import { cn } from '@customafk/react-toolkit/utils';
 
-import type { TanStackFormEmailFieldSchema } from '../../schema';
-import { useTanStackFieldContext } from '../../tanstack-form';
-import { Field, FieldContent, FieldContentMain, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldNote, FieldSeparator } from '../ui/field';
 import { Input } from '@/components/ui/input';
+import {
+  Field,
+  FieldContent,
+  FieldContentMain,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldNote,
+  FieldSeparator,
+} from '@/components/features/tanstack-form/components/ui/field';
+import { useTanStackFieldContext } from '@/components/features/tanstack-form/tanstack-form';
+
+import type { TanStackFormEmailFieldSchema } from '../../schema';
 
 type Props = Pick<
   z.input<typeof TanStackFormEmailFieldSchema>,
@@ -22,8 +33,8 @@ export const EmailField: React.FC<Props> = ({
   label,
   description,
   placeholder,
-  orientation = 'responsive',
   helperText,
+  orientation = 'responsive',
   showErrorMessage = true,
   maxLength,
 }) => {
@@ -32,8 +43,8 @@ export const EmailField: React.FC<Props> = ({
   const isSubmitting = useStore(form.store, ({ isSubmitting }) => isSubmitting);
 
   const _invalid = useMemo(() => {
-    return state.meta.isTouched && !state.meta.isValid;
-  }, [state.meta.isTouched, state.meta.isValid]);
+    return state.meta.isDirty && state.meta.isTouched && !state.meta.isValid;
+  }, [state.meta.isDirty, state.meta.isTouched, state.meta.isValid]);
 
   const onChange = useCallback<React.ChangeEventHandler<HTMLInputElement>>(
     ({ target: { value } }) => {
@@ -75,13 +86,15 @@ export const EmailField: React.FC<Props> = ({
           <button
             type="button"
             aria-label="Clear"
-            className="absolute inset-y-0 inset-e-0 top-3 flex h-fit w-8 cursor-pointer items-center justify-center rounded-e-md text-text-positive-weak outline-none transition-[color,box-shadow] hover:text-text-positive focus:text-text-positive-strong"
+            className="absolute inset-e-0 inset-y-0 top-3 flex h-fit w-8 cursor-pointer items-center justify-center rounded-e-md text-text-positive-weak outline-none transition-[color,box-shadow] hover:text-text-positive focus:text-text-positive-strong"
             onClick={onClear}
           >
             <XIcon size={14} aria-hidden="true" />
           </button>
 
-          <div className="mt-1 flex w-full items-start justify-start">{showErrorMessage && <FieldError errors={state.meta.errors} />}</div>
+          <div className="mt-1 flex w-full items-start justify-start">
+            {showErrorMessage && state.meta.isDirty && <FieldError errors={state.meta.errors} />}
+          </div>
           <FieldNote isShow={!!helperText}>{helperText}</FieldNote>
         </FieldContentMain>
       </Field>

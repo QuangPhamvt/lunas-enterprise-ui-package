@@ -2,7 +2,7 @@ import { Separator } from '../ui/separator';
 
 const SectionHeader: React.FC<React.PropsWithChildren> = ({ children }) => {
   return (
-    <header data-slot="section-header" className="px-4 pt-2.5 pb-2 font-medium text-base text-primary-strong">
+    <header data-slot="section-header" className="px-4 pt-2.5 pb-2 font-medium text-base text-text-positive">
       {children}
     </header>
   );

@@ -12,7 +12,7 @@ export const UITableNameDisplay: React.FC<NameDisplayProps> = ({ name }) => {
   return (
     <Tooltip>
       <TooltipTrigger>
-        <Paragraph variant="sm" className="line-clamp-2 w-full truncate text-wrap pb-px text-start text-sm">
+        <Paragraph variant="sm" className="line-clamp-2 w-full truncate text-wrap pb-px text-start">
           {name}
         </Paragraph>
       </TooltipTrigger>
