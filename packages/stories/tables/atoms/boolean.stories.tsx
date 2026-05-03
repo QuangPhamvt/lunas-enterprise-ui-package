@@ -19,6 +19,13 @@ export const Default: Story = {
   render: args => <UITableBooleanDisplay {...args} />,
 };
 
+export const False: Story = {
+  args: {
+    value: false,
+  },
+  render: args => <UITableBooleanDisplay {...args} />,
+};
+
 export const Empty: Story = {
   args: {
     value: null,

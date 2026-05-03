@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { memo, useCallback, useId, useMemo } from 'react';
 
 import { useStore } from '@tanstack/react-form';
 
@@ -7,10 +7,11 @@ import type z from 'zod';
 
 import { cn } from '@customafk/react-toolkit/utils';
 
+import { Textarea } from '@/components/ui/textarea';
+
 import type { TanStackFormTextAreaFieldSchema } from '../../schema';
 import { useTanStackFieldContext } from '../../tanstack-form';
 import { Field, FieldContent, FieldContentMain, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldNote, FieldSeparator } from '../ui/field';
-import { Textarea } from '@/components/ui/textarea';
 
 type Props = Pick<
   z.input<typeof TanStackFormTextAreaFieldSchema>,
@@ -20,96 +21,107 @@ type Props = Pick<
   maxLength?: number;
 };
 
-export const TextareaField: React.FC<Props> = ({
-  label,
-  description,
-  placeholder,
+export const TextareaField: React.FC<Props> = memo(
+  ({
+    label,
+    description,
+    placeholder,
 
-  // tooltip,
-  helperText,
-  counter = false,
-  orientation = 'responsive',
-  showErrorMessage = true,
+    // tooltip,
+    helperText,
+    counter = false,
+    orientation = 'responsive',
+    showErrorMessage = true,
 
-  required = false,
-  maxLength,
-}) => {
-  const { form, state, name, handleBlur, handleChange } = useTanStackFieldContext<string | null>();
+    required = false,
+    maxLength,
+  }) => {
+    const id = useId();
+    const { form, state, name, handleBlur, handleChange } = useTanStackFieldContext<string | null>();
 
-  const isSubmitting = useStore(form.store, ({ isSubmitting }) => isSubmitting);
+    const isSubmitting = useStore(form.store, ({ isSubmitting }) => isSubmitting);
 
-  const _count = useMemo(() => {
-    return state.value ? state.value.length : 0;
-  }, [state.value]);
+    const _count = state.value ? state.value.length : 0;
 
-  const _countText = useMemo(() => {
-    if (!counter) return '';
-    const unit = `character${[0, 1].includes(_count) ? '' : 's'}`;
-    if (counter && maxLength) return `${_count} / ${maxLength} ${unit}`;
-    return `${_count} ${unit}`;
-  }, [_count, counter, maxLength]);
+    const _countText = useMemo(() => {
+      if (!counter) return '';
+      const unit = `character${[0, 1].includes(_count) ? '' : 's'}`;
+      if (counter && maxLength) return `${_count} / ${maxLength} character${!_count ? '' : 's'}`;
+      return `${_count} ${unit}`;
+    }, [_count, counter, maxLength]);
 
-  const _invalid = useMemo(() => {
-    return state.meta.isTouched && !state.meta.isValid;
-  }, [state.meta.isTouched, state.meta.isValid]);
+    const _invalid = state.meta.isDirty && state.meta.isTouched && !state.meta.isValid;
 
-  const _errors = useMemo(() => {
-    return state.meta.errors;
-  }, [state.meta.errors]);
+    const _isEmpty = required ? state.value === null : false;
 
-  const _isEmpty = useMemo(() => {
-    if (required) return state.value === null;
-    return false;
-  }, [required, state.value]);
+    const _errors = state.meta.errors;
 
-  const onChange = useCallback<React.ChangeEventHandler<HTMLTextAreaElement>>(
-    ({ target: { value } }) => {
-      if (isSubmitting) return;
-      if (counter && maxLength && value.length > maxLength) return;
-      handleChange(value || null);
-    },
-    [isSubmitting, counter, maxLength, handleChange]
-  );
+    const _isNearLimit = maxLength && _count >= maxLength * 0.8;
 
-  return (
-    <FieldGroup className="px-4">
-      <Field orientation={orientation} data-invalid={_invalid}>
-        <FieldContent>
-          <FieldLabel aria-required={_isEmpty} htmlFor={name}>
-            {label}
-          </FieldLabel>
-          <FieldDescription>{description}</FieldDescription>
-        </FieldContent>
-        <FieldContentMain>
-          <Textarea
-            id={name}
-            name={name}
-            value={state.value === null ? '' : state.value}
-            aria-invalid={_invalid}
-            autoComplete="off"
-            placeholder={placeholder}
-            className={cn(isSubmitting && 'pointer-events-none bg-muted-muted opacity-60')}
-            onChange={onChange}
-            onBlur={handleBlur}
-          />
-          {isSubmitting && (
-            <div className="absolute inset-y-0 inset-e-2 top-2.5 text-muted-weak">
-              <Loader2Icon size={14} className="animate-spin text-primary-strong" />
+    const _isAtLimit = maxLength && _count >= maxLength;
+
+    const onChange = useCallback<React.ChangeEventHandler<HTMLTextAreaElement>>(
+      ({ target: { value } }) => {
+        if (isSubmitting) return;
+        if (counter && maxLength && value.length > maxLength) return;
+        handleChange(value || null);
+      },
+      [isSubmitting, counter, maxLength, handleChange]
+    );
+
+    return (
+      <FieldGroup className="gap-y-4 px-4">
+        <Field orientation={orientation} data-invalid={_invalid}>
+          <FieldContent>
+            <FieldLabel aria-required={_isEmpty} htmlFor={id}>
+              <p>
+                {label}
+                {required && <span className="text-danger-strong"> *</span>}
+              </p>
+            </FieldLabel>
+            <FieldDescription>{description}</FieldDescription>
+          </FieldContent>
+          <FieldContentMain>
+            <Textarea
+              id={id}
+              name={name}
+              value={state.value === null ? '' : state.value}
+              aria-invalid={_invalid}
+              autoCapitalize="none"
+              autoComplete="off"
+              placeholder={placeholder}
+              className={cn(isSubmitting && 'pointer-events-none bg-muted-muted opacity-60')}
+              onChange={onChange}
+              onBlur={handleBlur}
+            />
+            {isSubmitting && (
+              <div className="absolute inset-e-2 inset-y-0 top-2.5 text-muted-weak">
+                <Loader2Icon size={14} className="animate-spin text-primary-strong" />
+              </div>
+            )}
+            {state.meta.isDirty && showErrorMessage && !!_errors.length && (
+              <div className="absolute inset-e-2 inset-y-0 top-2.5 text-danger-strong">
+                <BanIcon size={14} />
+              </div>
+            )}
+            <div className="my-1 flex w-full items-start justify-between gap-x-2">
+              {state.meta.isDirty && showErrorMessage ? <FieldError className="flex-1" errors={state.meta.errors} /> : <div />}
+              {!!counter && (
+                <p
+                  className={cn(
+                    'h-4 flex-0 text-nowrap text-end text-xs tabular-nums transition-colors',
+                    _isAtLimit ? 'font-medium text-danger-strong' : _isNearLimit ? 'text-warning-strong' : 'text-text-positive-weak'
+                  )}
+                >
+                  {_countText}
+                </p>
+              )}
             </div>
-          )}
-          {showErrorMessage && !!_errors.length && (
-            <div className="absolute inset-y-0 inset-e-2 top-2.5 text-danger-strong">
-              <BanIcon size={14} />
-            </div>
-          )}
-          <div className="mt-1 flex w-full items-start gap-x-2">
-            {showErrorMessage && <FieldError className="flex-1" errors={_errors} />}
-            {!!counter && <p className="h-4 flex-0 text-nowrap text-end text-text-positive-weak text-xs tabular-nums">{_countText}</p>}
-          </div>
-          <FieldNote isShow={!!helperText}>{helperText}</FieldNote>
-        </FieldContentMain>
-      </Field>
-      <FieldSeparator />
-    </FieldGroup>
-  );
-};
+            <FieldNote isShow={!!helperText}>{helperText}</FieldNote>
+          </FieldContentMain>
+        </Field>
+        <FieldSeparator />
+      </FieldGroup>
+    );
+  }
+);

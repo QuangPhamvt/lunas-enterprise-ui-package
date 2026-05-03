@@ -213,12 +213,12 @@ export const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: 'text-text-negative outline-0 outline-offset-0',
-        outline: 'bg-card outline-1 -outline-offset-1',
+        default: 'border border-transparent text-text-negative outline-none',
+        outline: 'border bg-card outline-none',
         soft: 'outline-none outline-0',
-        subtle: 'outline-1 -outline-offset-1',
-        ghost: 'outline-0',
-        link: '',
+        subtle: 'border border-transparent outline-1 -outline-offset-1',
+        ghost: 'border border-transparent outline-none',
+        link: 'border border-transparent outline-none',
       },
       color: {
         primary: '',
@@ -249,77 +249,77 @@ export const buttonVariants = cva(
       {
         variant: 'default',
         color: 'primary',
-        className: 'bg-primary hover:opacity-80 focus:outline-2 focus:outline-primary focus:outline-offset-2',
+        className: 'bg-primary hover:opacity-80 focus:ring-2 focus:ring-primary focus:ring-offset-2',
       },
       {
         variant: 'default',
         color: 'secondary',
-        className: 'bg-secondary hover:opacity-80 focus:outline-2 focus:outline-secondary focus:outline-offset-2',
+        className: 'bg-secondary hover:opacity-80 focus:ring-2 focus:ring-secondary focus:ring-offset-2',
       },
       {
         variant: 'default',
         color: 'muted',
-        className: 'bg-muted hover:opacity-80 focus:outline-2 focus:outline-muted focus:outline-offset-2',
+        className: 'bg-muted hover:opacity-80 focus:ring-2 focus:ring-muted focus:ring-offset-2',
       },
       {
         variant: 'default',
         color: 'success',
-        className: 'bg-success hover:opacity-80 focus:outline-2 focus:outline-success focus:outline-offset-2',
+        className: 'bg-success hover:opacity-80 focus:ring-2 focus:ring-success focus:ring-offset-2',
       },
       {
         variant: 'default',
         color: 'important',
-        className: 'bg-important hover:opacity-80 focus:outline-2 focus:outline-important focus:outline-offset-2',
+        className: 'bg-important hover:opacity-80 focus:ring-2 focus:ring-important focus:ring-offset-2',
       },
       {
         variant: 'default',
         color: 'info',
-        className: 'bg-info hover:opacity-80 focus:outline-2 focus:outline-info focus:outline-offset-2',
+        className: 'bg-info hover:opacity-80 focus:ring-2 focus:ring-info focus:ring-offset-2',
       },
       {
         variant: 'default',
         color: 'warning',
-        className: 'bg-warning hover:opacity-80 focus:outline-2 focus:outline-warning focus:outline-offset-2',
+        className: 'bg-warning hover:opacity-80 focus:ring-2 focus:ring-warning focus:ring-offset-2',
       },
       {
         variant: 'default',
         color: 'danger',
-        className: 'bg-danger hover:opacity-80 focus:outline-2 focus:outline-danger focus:outline-offset-2',
+        className: 'bg-danger hover:opacity-80 focus:ring-2 focus:ring-danger focus:ring-offset-2',
       },
       {
         variant: 'outline',
         color: 'primary',
-        className: 'text-primary outline-primary hover:bg-primary-bg-subtle focus:outline-2 focus:outline-primary-strong',
+        className: 'border-primary text-primary hover:bg-primary-bg-subtle focus:border-primary-strong focus:ring-2 focus:ring-primary-weak',
       },
       {
         variant: 'outline',
         color: 'secondary',
-        className: 'text-secondary outline-secondary hover:bg-secondary-muted focus:outline-2 focus:outline-secondary',
+        className: 'border-secondary text-secondary hover:bg-secondary-muted focus:border-secondary focus:ring-2 focus:ring-secondary-weak',
       },
       {
         variant: 'outline',
         color: 'muted',
-        className: 'text-muted outline-muted-weak hover:bg-muted-muted focus:outline-2 focus:outline-muted-weak',
+        className: 'border-muted-weak text-muted hover:bg-muted-muted focus:border-muted-weak focus:ring-2 focus:ring-muted-weak',
       },
       {
         variant: 'outline',
         color: 'success',
-        className: 'text-success outline-success hover:bg-success-muted focus:outline-2 focus:outline-success-strong',
+        className: 'border-success text-success hover:bg-success-muted focus:border-success-strong focus:ring-2 focus:ring-success-weak',
       },
       {
         variant: 'outline',
         color: 'info',
-        className: 'text-info outline-info hover:bg-info-muted focus:outline-2 focus:outline-info-strong',
+        className: 'border-info text-info hover:bg-info-muted focus:border-info-strong focus:ring-2 focus:ring-info-weak',
       },
       {
         variant: 'outline',
         color: 'warning',
-        className: 'text-warning outline-warning hover:bg-warning-muted focus:outline-2 focus:outline-warning-strong',
+        className: 'border-warning text-warning hover:bg-warning-muted focus:border-warning-strong focus:ring-2 focus:ring-warning-weak',
       },
       {
         variant: 'outline',
         color: 'danger',
-        className: 'text-danger outline-danger hover:bg-danger-muted focus:outline-2 focus:outline-danger-strong',
+        className: 'border-danger text-danger hover:bg-danger-muted focus:border-danger-strong focus:ring-2 focus:ring-danger-weak',
       },
       {
         variant: 'soft',
@@ -429,42 +429,42 @@ export const buttonVariants = cva(
       {
         variant: 'link',
         color: 'primary',
-        className: '-outline-offset-2 focus:-outline-offset-2 text-primary focus:outline-2 focus:outline-primary',
+        className: 'text-primary focus:ring-2 focus:ring-primary focus:-ring-offset-2',
       },
       {
         variant: 'link',
         color: 'secondary',
-        className: '-outline-offset-2 focus:-outline-offset-2 text-secondary focus:outline-2 focus:outline-secondary',
+        className: 'text-secondary -ring-offset-2 focus:ring-2 focus:ring-secondary focus:-ring-offset-2',
       },
       {
         variant: 'link',
         color: 'muted',
-        className: '-outline-offset-2 focus:-outline-offset-2 text-muted focus:outline-2 focus:outline-muted',
+        className: 'text-muted -ring-offset-2 focus:ring-2 focus:ring-muted focus:-ring-offset-2',
       },
       {
         variant: 'link',
         color: 'success',
-        className: '-outline-offset-2 focus:-outline-offset-2 text-success focus:outline-2 focus:outline-success',
+        className: 'text-success -ring-offset-2 focus:ring-2 focus:ring-success focus:-ring-offset-2',
       },
       {
         variant: 'link',
         color: 'important',
-        className: '-outline-offset-2 focus:-outline-offset-2 text-important focus:outline-2 focus:outline-important',
+        className: 'text-important -ring-offset-2 focus:ring-2 focus:ring-important focus:-ring-offset-2',
       },
       {
         variant: 'link',
         color: 'info',
-        className: '-outline-offset-2 focus:-outline-offset-2 text-info focus:outline-2 focus:outline-info',
+        className: 'text-info -ring-offset-2 focus:ring-2 focus:ring-info focus:-ring-offset-2',
       },
       {
         variant: 'link',
         color: 'warning',
-        className: '-outline-offset-2 focus:-outline-offset-2 text-warning focus:outline-2 focus:outline-warning',
+        className: 'text-warning -ring-offset-2 focus:ring-2 focus:ring-warning focus:-ring-offset-2',
       },
       {
         variant: 'link',
         color: 'danger',
-        className: '-outline-offset-2 focus:-outline-offset-2 text-danger focus:outline-2 focus:outline-danger',
+        className: 'text-danger -ring-offset-2 focus:ring-2 focus:ring-danger focus:-ring-offset-2',
       },
     ],
   }

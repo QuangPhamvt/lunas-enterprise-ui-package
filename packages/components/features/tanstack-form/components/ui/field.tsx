@@ -7,37 +7,34 @@ import { Separator } from '@/components/ui/separator';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { Label } from './label';
 
-const fieldVariants = cva(
-  'group/field flex w-full gap-2 data-[invalid=true]:text-danger *:data-[slot=field-content]:gap-0 @md/field-group:*:data-[slot=field-content]:gap-2',
-  {
-    variants: {
-      orientation: {
-        vertical: ['flex-col *:w-full [&>.sr-only]:w-auto'],
-        horizontal: [
-          'flex-row items-center',
-          '*:data-[slot=field-label]:flex-auto',
-          'has-[>[data-slot=field-content]]:items-start',
-          'has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px',
-        ],
-        responsive: [
-          'flex-col *:w-full [&>.sr-only]:w-auto',
-          '@md/field-group:flex-row',
-          '@md/field-group:items-center',
-          '@md/field-group:gap-4',
-          '@md/field-group:*:w-auto',
-          '@md/field-group:*:data-[slot=field-content]:basis-1/2',
-          '@md/field-group:*:data-[slot=field-content-main]:basis-1/2',
-          '@md/field-group:*:data-[slot=field-label]:flex-auto',
-          '@md/field-group:has-[>[data-slot=field-content]]:items-start',
-          '@md/field-group:has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px',
-        ],
-      },
+const fieldVariants = cva('group/field flex w-full gap-2 data-[invalid=true]:text-danger *:data-[slot=field-content]:gap-0', {
+  variants: {
+    orientation: {
+      vertical: ['flex-col *:w-full [&>.sr-only]:w-auto'],
+      horizontal: [
+        'flex-row items-center',
+        '*:data-[slot=field-label]:flex-auto',
+        'has-[>[data-slot=field-content]]:items-start',
+        'has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px',
+      ],
+      responsive: [
+        'flex-col *:w-full [&>.sr-only]:w-auto',
+        '@md/field-group:flex-row',
+        '@md/field-group:items-center',
+        '@md/field-group:gap-4',
+        '@md/field-group:*:w-auto',
+        '@md/field-group:*:data-[slot=field-content]:basis-1/2',
+        '@md/field-group:*:data-[slot=field-content-main]:basis-1/2',
+        '@md/field-group:*:data-[slot=field-label]:flex-auto',
+        '@md/field-group:has-[>[data-slot=field-content]]:items-start',
+        '@md/field-group:has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px',
+      ],
     },
-    defaultVariants: {
-      orientation: 'vertical',
-    },
-  }
-);
+  },
+  defaultVariants: {
+    orientation: 'vertical',
+  },
+});
 
 const FieldSet = memo(({ className, ...props }: React.ComponentProps<'fieldset'>) => {
   return (
@@ -75,7 +72,9 @@ const FieldGroup = memo(({ className, ...props }: React.ComponentProps<'div'>) =
     <div
       data-slot="field-group"
       className={cn(
-        'group/field-group @container/field-group flex w-full flex-col gap-7 data-[slot=checkbox-group]:gap-3 *:data-[slot=field-group]:gap-4',
+        'group/field-group @container/field-group',
+        'flex flex-col gap-7',
+        'data-[slot=checkbox-group]:gap-3 *:data-[slot=field-group]:gap-4',
         className
       )}
       {...props}
@@ -136,7 +135,7 @@ const FieldDescription = memo(({ className, ...props }: React.ComponentProps<'p'
       data-slot="field-description"
       className={cn(
         // biome-ignore lint/security/noSecrets: true
-        'nth-last-2:-mt-1 font-normal text-sm text-text-positive-weak leading-normal last:mt-0 [&>a:hover]:text-primary [&>a]:underline [&>a]:underline-offset-4 [[data-variant=legend]+&]:-mt-1.5',
+        'nth-last-2:-mt-1 font-normal text-text-positive-weak text-xs leading-normal last:mt-0 [&>a:hover]:text-primary [&>a]:underline [&>a]:underline-offset-4 [[data-variant=legend]+&]:-mt-1.5',
         className
       )}
       {...props}
@@ -183,7 +182,7 @@ const FieldError = memo(
     errors,
     ...props
   }: React.ComponentProps<'div'> & {
-    errors?: Array<{ message?: string } | undefined>;
+    errors?: Array<{ code?: string; message?: string } | undefined>;
   }) => {
     const content = useMemo(() => {
       if (children) {
@@ -197,7 +196,7 @@ const FieldError = memo(
       if (errors?.length === 1 && errors[0]?.message) {
         return (
           <div className="flex flex-row items-center justify-start gap-x-0.5">
-            <p>{errors[0].message}</p>
+            <p>{errors[0]?.code === 'invalid_type' ? 'Không đúng định dạng' : errors[0].message}</p>
           </div>
         );
       }

@@ -736,6 +736,8 @@ export const UITableLoadMore = memo<TUITableLoadMore>(({ virtualRowIndex, virtua
     return () => observer.disconnect(); // Cleanup on unmount
   }, []);
 
+  if (!fetchMoreData) return null;
+
   return (
     <tr
       ref={rowRef}

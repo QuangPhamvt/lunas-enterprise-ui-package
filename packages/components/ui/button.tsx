@@ -66,12 +66,12 @@ function Button({
       )}
       {...props}
     >
-      <Activity mode={isLoading ? 'hidden' : 'visible'}>{children}</Activity>
-      <Activity mode={isLoading ? 'visible' : 'hidden'}>
+      {isLoading && (
         <div className={buttonLoadingVariant({ variant, color })}>
           <Loader2Icon size={16} className="animate-spin" />
         </div>
-      </Activity>
+      )}
+      {children}
     </Comp>
   );
 }

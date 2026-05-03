@@ -105,7 +105,7 @@ export const DateDisplay: React.FC<Props> = ({ date, format: formatType = 'mediu
   // Main formatting function
   const formatDate = useCallback(
     (date: Date, type: string): string => {
-      const timeStr = showTime ? format(date, ', HH:mm') : '';
+      const timeStr = showTime ? format(date, ', HH:mm:ss') : '';
 
       switch (type) {
         case 'short':

@@ -16,8 +16,8 @@ export const Default: Story = {
   render: () => {
     const { AppField, TanStackContainerForm, TanStackSectionForm } = useTanStackForm({
       defaultValues: {
-        value: 0,
-      },
+        value: null,
+      } as { value: number | null },
       listeners: {
         onChange: ({ fieldApi }) => {
           console.log('Number Field Changed:', fieldApi.state.value);

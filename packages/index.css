@@ -15,6 +15,14 @@
   --header-height: 3rem;
   --radius: 0.75rem;
 }
+/* Chỉ áp dụng ghi đè font-size 16px cho các thiết bị iOS */
+@supports (-webkit-touch-callout: none) {
+  input,
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+}
 
 @theme inline {
   /* Typography */

@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import type { ButtonVariantProps } from '@/components/ui/button-variants';
+import type { ButtonVariantProps } from '@/components/ui/button.variants';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { CircleIcon } from 'lucide-react';

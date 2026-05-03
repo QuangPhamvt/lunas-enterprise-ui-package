@@ -17,6 +17,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
+    i18nText: 'En',
     activeNavItemId: 'posts',
     sidebar: {
       groupcontent: [
@@ -38,8 +39,21 @@ export const Default: Story = {
         },
       ],
     },
+    onChangeToEnLocale: () => {
+      console.log('Change to English locale');
+    },
+    onChangeToViLocale: () => {
+      console.log('Change to Vietnamese locale');
+    },
+    onLogout: () => {
+      console.log('Logout');
+    },
   },
   render: args => {
-    return <CMSLayout {...args} />;
+    return (
+      <CMSLayout {...args}>
+        <div className="h-300">Main content goes here</div>
+      </CMSLayout>
+    );
   },
 };
