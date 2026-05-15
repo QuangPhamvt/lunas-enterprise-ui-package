@@ -1,3 +1,5 @@
+import { useCallback } from 'react';
+
 import { CalendarIcon, CatIcon, XIcon } from 'lucide-react';
 
 import { Dialog as DialogPrimitive } from 'radix-ui';
@@ -15,6 +17,7 @@ import {
   Sidebar,
   SidebarProvider,
 } from './components/sidebar';
+import { cn } from '@customafk/react-toolkit/utils';
 
 export const DetailDialog: React.FC<
   React.PropsWithChildren<{
@@ -34,6 +37,10 @@ export const DetailDialog: React.FC<
   }>
 > = ({ open, isLoading, title, createdAt, onOpenChange, sidebar, children }) => {
   const { content: SidebarContent, footer: SidebarFooter } = sidebar || {};
+  const handleInteractOutside = useCallback<NonNullable<React.ComponentProps<typeof DialogPrimitive.Content>['onInteractOutside']>>(event => {
+    event.preventDefault();
+    event.stopPropagation();
+  }, []);
   return (
     <DialogPrimitive.Root data-slot="detail-dialog" open={open} onOpenChange={onOpenChange}>
       <DialogPrimitive.Portal data-slot="detail-dialog-portal">
@@ -44,11 +51,18 @@ export const DetailDialog: React.FC<
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <DialogPrimitive.Content
             data-slot="dialog-content"
-            className="data-[state=open]:fade-in-0 data-[state=open]:zoom-in-80 data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-80 relative z-50 grid h-full max-h-dvh w-full max-w-svw gap-4 overflow-hidden rounded-none border-none bg-background p-0 shadow-dialog outline-none duration-200 data-[state=closed]:animate-out data-[state=open]:animate-in sm:max-w-lg md:max-h-[90dvh] md:max-w-[90svw] md:rounded-lg xl:max-h-[90dvh] xl:max-w-[90svw] 2xl:max-h-[90dvh] 2xl:max-w-[90svw]"
-            onInteractOutside={e => {
-              e.preventDefault();
-              e.stopPropagation();
-            }}
+            className={cn(
+              'data-[state=open]:fade-in-0 data-[state=open]:zoom-in-80 data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-80',
+              'data-[state=closed]:animate-out data-[state=open]:animate-in',
+              'relative z-50 grid',
+              'gap-4 overflow-hidden rounded-none border-none bg-background p-0 shadow-dialog outline-none duration-200',
+              'h-full max-h-dvh w-full max-w-svw',
+              'sm:max-w-lg',
+              'sm:rounded-lg',
+              'md:max-h-[calc(100dvh-2rem)]',
+              'md:max-w-[calc(100svw-2rem)]'
+            )}
+            onInteractOutside={handleInteractOutside}
           >
             <SidebarProvider>
               <Sidebar collapsible="icon">

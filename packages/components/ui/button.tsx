@@ -1,7 +1,5 @@
 'use client';
 
-import { Activity } from 'react';
-
 import { Loader2Icon } from 'lucide-react';
 
 import { cn } from '@customafk/react-toolkit/utils';
@@ -30,6 +28,8 @@ export interface ButtonProps extends Omit<React.ComponentProps<'button'>, 'color
    * Size of the button
    */
   size?: ButtonVariantProps['size'];
+
+  innerClassName?: string;
 }
 
 /**
@@ -45,6 +45,7 @@ function Button({
   children,
   disabled,
   type = 'button',
+  innerClassName,
   ...props
 }: ButtonProps) {
   const Comp = asChild ? Slot : 'button';
@@ -71,7 +72,7 @@ function Button({
           <Loader2Icon size={16} className="animate-spin" />
         </div>
       )}
-      {children}
+      <div className={cn('inline-flex items-center justify-center gap-x-1', isLoading && 'invisible', innerClassName)}>{children}</div>
     </Comp>
   );
 }

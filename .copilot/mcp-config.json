@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "storybook": {
+      "type": "http",
+      "url": "http://localhost:6006/mcp",
+      "scope": "project",
+      "tools": ["*"]
+    }
+  }
+}
