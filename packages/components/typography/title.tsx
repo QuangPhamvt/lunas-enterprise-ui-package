@@ -1,31 +1,34 @@
-import type { JSX } from 'react';
+import type { JSX, ReactNode } from 'react';
 import { cn } from '@customafk/react-toolkit/utils';
-
 import { cva } from 'class-variance-authority';
 
-const titleVariants = cva('scroll-m-20 text-text-positive-strong tracking-tight', {
+const titleVariants = cva('scroll-m-20 text-balance text-text-positive-strong tracking-tight', {
   variants: {
     level: {
-      1: 'text-center text-4xl font-extrabold text-balance',
-      2: 'border-b pb-2 text-3xl font-semibold first:mt-0',
-      3: 'text-2xl font-semibold',
-      4: 'text-xl font-semibold',
-      5: 'text-lg font-semibold',
-      6: 'text-base font-semibold',
+      1: 'text-3xl leading-tight font-bold md:text-4xl',
+      2: 'text-2xl leading-tight font-semibold md:text-3xl',
+      3: 'text-xl leading-snug font-semibold md:text-2xl',
+      4: 'text-lg leading-snug font-semibold md:text-xl',
+      5: 'text-base leading-normal font-semibold md:text-lg',
+      6: 'text-sm leading-normal font-semibold md:text-base',
     },
-    default: {
-      level: 1,
-    },
+  },
+  defaultVariants: {
+    level: 1,
   },
 });
 
 type Props = {
   level?: 1 | 2 | 3 | 4 | 5 | 6;
   className?: string;
-  children?: React.ReactNode;
+  children?: ReactNode;
 };
 
 export const Title = ({ level = 1, className, children }: Props) => {
-  const Comp = `h${level}` as keyof JSX.IntrinsicElements;
-  return <Comp className={cn(titleVariants({ level }), className)}>{children}</Comp>;
+  const Comp = ('h' + level) as keyof JSX.IntrinsicElements;
+  return (
+    <Comp data-slot="title" className={cn(titleVariants({ level }), className)}>
+      {children}
+    </Comp>
+  );
 };

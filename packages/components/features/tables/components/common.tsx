@@ -63,7 +63,7 @@ export const UITableHeadCellOption = memo<TUITableHeadCellOption>(({ isPinned, o
       <DropdownMenuTrigger asChild>
         <button
           className={cn(
-            'absolute right-2 z-10 p-0.5 opacity-0',
+            'absolute right-2 z-10 p-0.5 opacity-0 bg-card',
             'cursor-pointer rounded-full transition-all',
             'text-text-positive-weak',
             '[&>svg]:size-4',
@@ -299,6 +299,7 @@ export const UITableHead = memo<TUITableHead>(({ className, children, ...props }
         '[&_th]:duration-300',
         '[&_th]:whitespace-nowrap',
         '[&_th]:border-border',
+        '[&_th]:border-r',
         '[&_th]:last:border-r-0',
         '[&_th]:first:border-l-0',
 
@@ -410,6 +411,7 @@ export const UITableHeadCell = memo<TUITableHeadCell>(
         }}
         className={cn(
           'group flex',
+          headerId === 'actions' && 'border-r-0!',
           isPinned ? 'sticky' : 'relative',
           isPinned === 'left' && isLastCell && 'border-r border-r-border',
           isPinned === 'right' && isFirstCell && 'border-l border-l-border',
@@ -420,7 +422,7 @@ export const UITableHeadCell = memo<TUITableHeadCell>(
         )}
         {...props}
       >
-        <div className="truncate pl-4">{children}</div>
+        <div className="truncate px-4">{children}</div>
         {isOptionsVisible && (
           <UITableHeadCellOption isPinned={isPinned} isVisible={isVisible} onLeftPin={onColumnPin} onRightPin={onColumnPin} onUnpin={onColumnPin} />
         )}
@@ -471,8 +473,8 @@ export const UITableBody = memo<TUITableBody>(({ height, className, children, ..
         '[&_td:not([data-pinned=false])]:sticky',
         '[&_td:not([data-pinned=false])]:bg-card',
 
-        '**:data-lastcell:border-r',
-        '**:data-firstcell:border-l',
+        // '**:data-lastcell:border-r',
+        // '**:data-firstcell:border-l',
         className
       )}
       {...props}
@@ -507,7 +509,7 @@ export const UITableRow = memo<TUITableRow>(({ row, isSelected, virtualRowIndex,
       style={{
         transform: `translateY(${virtualRowStart}px)`,
       }}
-      className="group"
+      className="group [&_td]:border-r [&_td]:border-r-border [&_td]:last:border-r-0"
       onClick={handleClick}
       {...props}
     >
@@ -600,7 +602,7 @@ export const UITableCellActions = memo<TUITableCellActions>(({ virtualRowIndex, 
     <td
       data-col="actions"
       data-cell={virtualRowIndex}
-      className="sticky inset-y-0 right-0 z-50 flex items-center pr-4 group-hover:bg-muted-bg-subtle!"
+      className="sticky border-r-0! inset-y-0 right-0 z-50 flex items-center pr-4 group-hover:bg-muted-bg-subtle!"
       {...props}
     >
       {render}
@@ -672,13 +674,17 @@ export const UITableCell = memo<TUITableCell>(
           minWidth: minSize,
           maxWidth: maxSize,
         }}
-        className="group-hover:bg-muted-bg-subtle!"
+        className={cn(
+          'group-hover:bg-muted-bg-subtle!',
+          isPinned === 'left' && isLastCell && 'border-r border-r-border',
+          isPinned === 'right' && isFirstCell && 'border-l border-l-border'
+        )}
         {...props}
       >
         <div
           ref={cellRef}
           slot="table-body-cell-inner"
-          className={cn(position === 'start' && 'justify-start', position === 'center' && 'justify-center', position === 'end' && 'justify-end')}
+          className={cn('overflow-x-hidden', position === 'start' && 'justify-start', position === 'center' && 'justify-center', position === 'end' && 'justify-end')}
         >
           {render}
         </div>

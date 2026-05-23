@@ -49,19 +49,20 @@ function Button({
   ...props
 }: ButtonProps) {
   const Comp = asChild ? Slot : 'button';
+  const isDisabled = disabled || isLoading;
 
   return (
     <Comp
-      type={type}
+      {...(!asChild ? { type, disabled: isDisabled } : undefined)}
       data-slot="button"
       data-state={isLoading ? 'loading' : undefined}
-      disabled={disabled}
-      aria-disabled={disabled ? true : undefined}
+      aria-disabled={isDisabled ? true : undefined}
+      aria-busy={isLoading ? true : undefined}
       className={cn(
         buttonVariants({
           variant,
           size,
-          color: color as ButtonVariantProps['color'],
+          color,
           className,
         })
       )}
@@ -70,9 +71,10 @@ function Button({
       {isLoading && (
         <div className={buttonLoadingVariant({ variant, color })}>
           <Loader2Icon size={16} className="animate-spin" />
+          <span className="sr-only">Loading</span>
         </div>
       )}
-      <div className={cn('inline-flex items-center justify-center gap-x-1', isLoading && 'invisible', innerClassName)}>{children}</div>
+      <div className={cn('inline-flex items-center justify-center gap-x-1', isLoading && 'invisible pointer-events-none', innerClassName)}>{children}</div>
     </Comp>
   );
 }

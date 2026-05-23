@@ -1,6 +1,6 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const buttonLoadingVariant = cva(['pointer-events-none absolute inset-0 top-0 left-0 z-10 flex cursor-default items-center justify-center rounded-sm'], {
+export const buttonLoadingVariant = cva(['pointer-events-none absolute inset-0 z-10 flex cursor-default items-center justify-center rounded-sm'], {
   variants: {
     variant: {
       default: '',
@@ -40,6 +40,11 @@ export const buttonLoadingVariant = cva(['pointer-events-none absolute inset-0 t
     },
     {
       variant: 'default',
+      color: 'important',
+      className: 'bg-important-weak',
+    },
+    {
+      variant: 'default',
       color: 'info',
       className: 'bg-info-weak',
     },
@@ -72,6 +77,11 @@ export const buttonLoadingVariant = cva(['pointer-events-none absolute inset-0 t
       variant: 'outline',
       color: 'success',
       className: 'bg-card outline-1 outline-success-weak',
+    },
+    {
+      variant: 'outline',
+      color: 'important',
+      className: 'bg-card outline-1 outline-important-weak',
     },
     {
       variant: 'outline',
@@ -110,6 +120,11 @@ export const buttonLoadingVariant = cva(['pointer-events-none absolute inset-0 t
     },
     {
       variant: 'soft',
+      color: 'important',
+      className: 'bg-important-bg-subtle',
+    },
+    {
+      variant: 'soft',
       color: 'info',
       className: 'bg-info-bg-subtle',
     },
@@ -145,6 +160,11 @@ export const buttonLoadingVariant = cva(['pointer-events-none absolute inset-0 t
     },
     {
       variant: 'subtle',
+      color: 'important',
+      className: 'bg-important-bg-subtle outline-1 outline-important-weak',
+    },
+    {
+      variant: 'subtle',
       color: 'info',
       className: 'bg-info-bg-subtle outline-1 outline-info-weak',
     },
@@ -177,6 +197,11 @@ export const buttonLoadingVariant = cva(['pointer-events-none absolute inset-0 t
       variant: 'ghost',
       color: 'success',
       className: 'bg-success-bg-subtle',
+    },
+    {
+      variant: 'ghost',
+      color: 'important',
+      className: 'bg-important-bg-subtle',
     },
     {
       variant: 'ghost',
@@ -308,6 +333,11 @@ export const buttonVariants = cva(
       },
       {
         variant: 'outline',
+        color: 'important',
+        className: 'border-important text-important hover:bg-important-muted focus:border-important-strong focus:ring-2 focus:ring-important-weak',
+      },
+      {
+        variant: 'outline',
         color: 'info',
         className: 'border-info text-info hover:bg-info-muted focus:border-info-strong focus:ring-2 focus:ring-info-weak',
       },
@@ -340,6 +370,11 @@ export const buttonVariants = cva(
         variant: 'soft',
         color: 'success',
         className: 'bg-success-bg-subtle text-success hover:bg-success-muted hover:text-success-strong focus:bg-success-weak',
+      },
+      {
+        variant: 'soft',
+        color: 'important',
+        className: 'bg-important-bg-subtle text-important hover:bg-important-muted hover:text-important-strong focus:bg-important-weak',
       },
       {
         variant: 'soft',
@@ -378,6 +413,11 @@ export const buttonVariants = cva(
       },
       {
         variant: 'subtle',
+        color: 'important',
+        className: 'bg-important-bg-subtle text-important outline-important hover:bg-important-bg-subtle focus:outline-2 focus:outline-important',
+      },
+      {
+        variant: 'subtle',
         color: 'info',
         className: 'bg-info-bg-subtle text-info outline-info hover:bg-info-bg-subtle focus:outline-2 focus:outline-info',
       },
@@ -413,6 +453,11 @@ export const buttonVariants = cva(
       },
       {
         variant: 'ghost',
+        color: 'important',
+        className: 'text-important hover:bg-important-bg-subtle focus:bg-important-muted',
+      },
+      {
+        variant: 'ghost',
         color: 'info',
         className: 'text-info hover:bg-info-bg-subtle focus:bg-info-muted',
       },
@@ -429,42 +474,42 @@ export const buttonVariants = cva(
       {
         variant: 'link',
         color: 'primary',
-        className: 'text-primary focus:ring-2 focus:ring-primary focus:-ring-offset-2',
+        className: 'text-primary focus:ring-2 focus:ring-primary focus:ring-offset-2',
       },
       {
         variant: 'link',
         color: 'secondary',
-        className: 'text-secondary -ring-offset-2 focus:ring-2 focus:ring-secondary focus:-ring-offset-2',
+        className: 'text-secondary focus:ring-2 focus:ring-secondary focus:ring-offset-2',
       },
       {
         variant: 'link',
         color: 'muted',
-        className: 'text-muted -ring-offset-2 focus:ring-2 focus:ring-muted focus:-ring-offset-2',
+        className: 'text-muted focus:ring-2 focus:ring-muted focus:ring-offset-2',
       },
       {
         variant: 'link',
         color: 'success',
-        className: 'text-success -ring-offset-2 focus:ring-2 focus:ring-success focus:-ring-offset-2',
+        className: 'text-success focus:ring-2 focus:ring-success focus:ring-offset-2',
       },
       {
         variant: 'link',
         color: 'important',
-        className: 'text-important -ring-offset-2 focus:ring-2 focus:ring-important focus:-ring-offset-2',
+        className: 'text-important focus:ring-2 focus:ring-important focus:ring-offset-2',
       },
       {
         variant: 'link',
         color: 'info',
-        className: 'text-info -ring-offset-2 focus:ring-2 focus:ring-info focus:-ring-offset-2',
+        className: 'text-info focus:ring-2 focus:ring-info focus:ring-offset-2',
       },
       {
         variant: 'link',
         color: 'warning',
-        className: 'text-warning -ring-offset-2 focus:ring-2 focus:ring-warning focus:-ring-offset-2',
+        className: 'text-warning focus:ring-2 focus:ring-warning focus:ring-offset-2',
       },
       {
         variant: 'link',
         color: 'danger',
-        className: 'text-danger -ring-offset-2 focus:ring-2 focus:ring-danger focus:-ring-offset-2',
+        className: 'text-danger focus:ring-2 focus:ring-danger focus:ring-offset-2',
       },
     ],
   }
