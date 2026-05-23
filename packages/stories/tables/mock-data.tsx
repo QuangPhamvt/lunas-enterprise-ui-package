@@ -82,8 +82,8 @@ export const MockDataColumns: TUITableColumn<TMockDataTable>[] = [
     accessorKey: 'column_5',
     header: 'Column 5',
     cell: ({ row }) => row.original.column_5,
-    minSize: 300,
-    maxSize: 400,
+    minSize: 200,
+    maxSize: 700,
     meta: {
       fitContent: true,
       position: 'start',

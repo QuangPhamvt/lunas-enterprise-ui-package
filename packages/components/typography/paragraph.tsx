@@ -1,43 +1,27 @@
 'use client';
 
+import type { ComponentPropsWithoutRef } from 'react';
 import { cn } from '@customafk/react-toolkit/utils';
+import { cva, type VariantProps } from 'class-variance-authority';
 
-import { cva } from 'class-variance-authority';
-
-type Props = {
-  /**
-   * The variant of the paragraph. It can be one of the following:
-   * - `p`: The default paragraph style. It has a normal font weight and is used for regular text content.
-   * - `muted`: The muted paragraph style. It has a lighter color to indicate less emphasis and is often used for secondary information.
-   * - `lead`: The lead paragraph style. It is typically used to introduce the content of a section and has a larger font size and stronger text color.
-   * - `sm`: The small paragraph style. It is used for less important text and has a smaller font size.
-   * - `lg`: The large paragraph style. It is used for more emphasis and visibility, with a larger font size.
-   */
-  variant?: 'p' | 'muted' | 'lead' | 'sm' | 'lg' | 'xs';
-  className?: string;
-  children?: React.ReactNode;
-};
-
-export const paragraphVariants = cva(
-  'not-first:mt-3 max-w-prose whitespace-pre-line text-wrap text-start font-stretch-expanded text-sm slashed-zero tabular-nums transition-colors',
-  {
-    variants: {
-      variant: {
-        // Lead: Nhấn mạnh mạnh mẽ nhất, dùng cho mở bài/highlight
-        lead: 'font-semibold text-text-positive-strong tracking-tight',
-        lg: 'font-medium text-text-positive-strong',
-        p: 'font-normal text-text-positive',
-        sm: 'font-light text-text-positive-weak',
-        muted: 'font-normal text-text-positive-weak',
-        xs: 'text-xs text-text-positive-weak',
-      },
+export const paragraphVariants = cva('not-first:mt-3 max-w-prose whitespace-pre-line text-pretty text-start leading-7 transition-colors', {
+  variants: {
+    variant: {
+      lead: 'text-base leading-8 font-medium text-text-positive-strong md:text-lg',
+      lg: 'text-base leading-8 font-normal text-text-positive md:text-lg',
+      p: 'text-sm font-normal text-text-positive md:text-base',
+      sm: 'text-sm leading-6 font-normal text-text-positive',
+      muted: 'text-sm font-normal text-text-positive-weak md:text-base',
+      xs: 'text-xs leading-5 font-normal text-text-positive-weak',
     },
-    defaultVariants: {
-      variant: 'sm',
-    },
-  }
-);
+  },
+  defaultVariants: {
+    variant: 'p',
+  },
+});
 
-export const Paragraph = ({ variant = 'p', className, children }: Props) => {
-  return <p className={cn(paragraphVariants({ variant }), className)}>{children}</p>;
+export type ParagraphProps = ComponentPropsWithoutRef<'p'> & VariantProps<typeof paragraphVariants>;
+
+export const Paragraph = ({ variant, className, ...props }: ParagraphProps) => {
+  return <p data-slot="paragraph" className={cn(paragraphVariants({ variant }), className)} {...props} />;
 };

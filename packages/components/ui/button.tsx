@@ -1,7 +1,5 @@
 'use client';
 
-import { Activity } from 'react';
-
 import { Loader2Icon } from 'lucide-react';
 
 import { cn } from '@customafk/react-toolkit/utils';
@@ -30,6 +28,8 @@ export interface ButtonProps extends Omit<React.ComponentProps<'button'>, 'color
    * Size of the button
    */
   size?: ButtonVariantProps['size'];
+
+  innerClassName?: string;
 }
 
 /**
@@ -45,22 +45,24 @@ function Button({
   children,
   disabled,
   type = 'button',
+  innerClassName,
   ...props
 }: ButtonProps) {
   const Comp = asChild ? Slot : 'button';
+  const isDisabled = disabled || isLoading;
 
   return (
     <Comp
-      type={type}
+      {...(!asChild ? { type, disabled: isDisabled } : undefined)}
       data-slot="button"
       data-state={isLoading ? 'loading' : undefined}
-      disabled={disabled}
-      aria-disabled={disabled ? true : undefined}
+      aria-disabled={isDisabled ? true : undefined}
+      aria-busy={isLoading ? true : undefined}
       className={cn(
         buttonVariants({
           variant,
           size,
-          color: color as ButtonVariantProps['color'],
+          color,
           className,
         })
       )}
@@ -69,9 +71,10 @@ function Button({
       {isLoading && (
         <div className={buttonLoadingVariant({ variant, color })}>
           <Loader2Icon size={16} className="animate-spin" />
+          <span className="sr-only">Loading</span>
         </div>
       )}
-      {children}
+      <div className={cn('inline-flex items-center justify-center gap-x-1', isLoading && 'invisible pointer-events-none', innerClassName)}>{children}</div>
     </Comp>
   );
 }

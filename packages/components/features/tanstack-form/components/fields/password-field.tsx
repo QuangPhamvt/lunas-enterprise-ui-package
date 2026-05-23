@@ -23,8 +23,8 @@ export const PasswordField: React.FC<Props> = ({ label, description, placeholder
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
   const _invalid = useMemo(() => {
-    return state.meta.isTouched && !state.meta.isValid;
-  }, [state.meta.isTouched, state.meta.isValid]);
+    return state.meta.isDirty && state.meta.isTouched && !state.meta.isValid;
+  }, [state.meta.isDirty, state.meta.isTouched, state.meta.isValid]);
 
   const toggleVisibility = useCallback(() => setIsVisible(prevState => !prevState), []);
 
@@ -56,7 +56,7 @@ export const PasswordField: React.FC<Props> = ({ label, description, placeholder
           />
 
           <button
-            className="absolute inset-y-0 inset-e-0 flex size-9 items-center justify-center rounded-e-md text-muted outline-none transition-[color,box-shadow] focus:z-10 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
+            className="absolute inset-e-0 inset-y-0 flex size-9 items-center justify-center rounded-e-md text-muted outline-none transition-[color,box-shadow] focus:z-10 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
             type="button"
             onClick={toggleVisibility}
             aria-label={isVisible ? 'Hide password' : 'Show password'}
@@ -66,7 +66,9 @@ export const PasswordField: React.FC<Props> = ({ label, description, placeholder
             {isVisible ? <EyeOffIcon size={16} aria-hidden="true" /> : <EyeIcon size={16} aria-hidden="true" />}
           </button>
 
-          <div className="mt-1 flex w-full items-start justify-start">{showErrorMessage && <FieldError errors={state.meta.errors} />}</div>
+          <div className="mt-1 flex w-full items-start justify-start">
+            {showErrorMessage && state.meta.isDirty && <FieldError errors={state.meta.errors} />}
+          </div>
           <FieldNote isShow={!!helperText}>{helperText}</FieldNote>
         </FieldContentMain>
       </Field>
