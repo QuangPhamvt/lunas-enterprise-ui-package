@@ -41,6 +41,26 @@ function useCarousel() {
   return context;
 }
 
+/**
+ * Embla-powered carousel that supports horizontal and vertical orientations with keyboard navigation.
+ *
+ * @example
+ * ```tsx
+ * import {
+ *   Carousel, CarouselContent, CarouselItem,
+ *   CarouselPrevious, CarouselNext,
+ * } from '@customafk/lunas-ui/ui/carousel';
+ *
+ * <Carousel>
+ *   <CarouselContent>
+ *     <CarouselItem>Slide 1</CarouselItem>
+ *     <CarouselItem>Slide 2</CarouselItem>
+ *   </CarouselContent>
+ *   <CarouselPrevious />
+ *   <CarouselNext />
+ * </Carousel>
+ * ```
+ */
 function Carousel({ orientation = 'horizontal', opts, setApi, plugins, className, children, ...props }: React.ComponentProps<'div'> & CarouselProps) {
   const [carouselRef, api] = useEmblaCarousel(
     {
@@ -115,6 +135,7 @@ function Carousel({ orientation = 'horizontal', opts, setApi, plugins, className
   );
 }
 
+/** The scrollable track that holds all CarouselItem elements. */
 function CarouselContent({ className, ...props }: React.ComponentProps<'div'>) {
   const { carouselRef, orientation } = useCarousel();
 
@@ -125,6 +146,7 @@ function CarouselContent({ className, ...props }: React.ComponentProps<'div'>) {
   );
 }
 
+/** A single slide within a CarouselContent; occupies the full width (or height for vertical carousels). */
 function CarouselItem({ className, ...props }: React.ComponentProps<'div'>) {
   const { orientation } = useCarousel();
 
@@ -139,6 +161,7 @@ function CarouselItem({ className, ...props }: React.ComponentProps<'div'>) {
   );
 }
 
+/** Circular button positioned to the left (or top for vertical) that scrolls to the previous slide. */
 function CarouselPrevious({ className, variant = 'outline', size = 'icon', ...props }: React.ComponentProps<typeof Button>) {
   const { orientation, scrollPrev, canScrollPrev } = useCarousel();
 
@@ -162,6 +185,7 @@ function CarouselPrevious({ className, variant = 'outline', size = 'icon', ...pr
   );
 }
 
+/** Circular button positioned to the right (or bottom for vertical) that scrolls to the next slide. */
 function CarouselNext({ className, variant = 'outline', size = 'icon', ...props }: React.ComponentProps<typeof Button>) {
   const { orientation, scrollNext, canScrollNext } = useCarousel();
 

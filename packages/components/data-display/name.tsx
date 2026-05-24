@@ -1,14 +1,27 @@
+'use client';
+
 import { Paragraph } from '../typography/paragraph';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 
 type NameDisplayProps = {
+  /** The full name string to display; shown truncated inline and in full via tooltip. */
   name: string;
 };
 
-export const NameDisplay: React.FC<React.PropsWithChildren<NameDisplayProps>> = ({ name }) => {
+/**
+ * Renders a clamped, truncated name with a tooltip that reveals the complete text on hover.
+ *
+ * @example
+ * ```tsx
+ * import { NameDisplay } from '@customafk/lunas-ui/data-display/name';
+ *
+ * <NameDisplay name="Nguyễn Văn An" />
+ * ```
+ */
+export const NameDisplay: React.FC<NameDisplayProps> = ({ name }) => {
   return (
     <Tooltip>
-      <TooltipTrigger>
+      <TooltipTrigger data-slot="name-display">
         <Paragraph variant="sm" className="line-clamp-2 w-full truncate text-wrap pb-px text-start">
           {name}
         </Paragraph>

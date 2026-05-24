@@ -4,6 +4,14 @@ import { cn } from '@customafk/react-toolkit/utils';
 
 import { Switch as SwitchPrimitive } from 'radix-ui';
 
+/**
+ * Accessible toggle switch built on Radix UI, styled with primary-color checked state and smooth thumb transition.
+ *
+ * @example
+ * import { Switch } from '@customafk/lunas-ui/features/tanstack-form';
+ *
+ * <Switch defaultChecked onCheckedChange={(checked) => console.log(checked)} />
+ */
 function Switch({ className, ...props }: React.ComponentProps<typeof SwitchPrimitive.Root>) {
   return (
     <SwitchPrimitive.Root

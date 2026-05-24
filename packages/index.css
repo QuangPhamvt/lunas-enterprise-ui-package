@@ -40,6 +40,7 @@
   --color-popover: var(--popover);
 
   --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
   --color-primary-muted: var(--primary-muted);
   --color-primary-weak: var(--primary-weak);
   --color-primary-strong: var(--primary-strong);
@@ -48,6 +49,7 @@
   --color-primary-border-subtle: var(--primary-border-subtle);
 
   --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
   --color-secondary-muted: var(--secondary-muted);
   --color-secondary-weak: var(--secondary-weak);
   --color-secondary-strong: var(--secondary-strong);
@@ -56,6 +58,7 @@
   --color-secondary-border-subtle: var(--secondary-border-subtle);
 
   --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
   --color-muted-muted: var(--muted-muted);
   --color-muted-weak: var(--muted-weak);
   --color-muted-strong: var(--muted-strong);
@@ -64,6 +67,7 @@
   --color-muted-border-subtle: var(--muted-border-subtle);
 
   --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
   --color-accent-muted: var(--accent-muted);
   --color-accent-weak: var(--accent-weak);
   --color-accent-strong: var(--accent-strong);
@@ -72,6 +76,7 @@
   --color-accent-border-subtle: var(--accent-border-subtle);
 
   --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
   --color-info-muted: var(--info-muted);
   --color-info-weak: var(--info-weak);
   --color-info-strong: var(--info-strong);
@@ -80,6 +85,7 @@
   --color-info-border-subtle: var(--info-border-subtle);
 
   --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
   --color-success-muted: var(--success-muted);
   --color-success-weak: var(--success-weak);
   --color-success-strong: var(--success-strong);
@@ -88,6 +94,7 @@
   --color-success-border-subtle: var(--success-border-subtle);
 
   --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
   --color-warning-muted: var(--warning-muted);
   --color-warning-weak: var(--warning-weak);
   --color-warning-strong: var(--warning-strong);
@@ -96,6 +103,7 @@
   --color-warning-border-subtle: var(--warning-border-subtle);
 
   --color-danger: var(--danger);
+  --color-danger-foreground: var(--danger-foreground);
   --color-danger-muted: var(--danger-muted);
   --color-danger-weak: var(--danger-weak);
   --color-danger-strong: var(--danger-strong);
@@ -156,6 +164,17 @@
   --shadow-card: var(--shadow-card);
   --shadow-dropdown: var(--shadow-dropdown);
   --shadow-dialog: var(--shadow-dialog);
+
+  /* Transitions */
+  --duration-instant: var(--duration-instant);
+  --duration-fast: var(--duration-fast);
+  --duration-base: var(--duration-base);
+  --duration-slow: var(--duration-slow);
+  --duration-slower: var(--duration-slower);
+  --ease-default: var(--ease-default);
+  --ease-in: var(--ease-in);
+  --ease-out: var(--ease-out);
+  --ease-spring: var(--ease-spring);
 
   /* Container queries */
   --container-8xl: 96rem; /* 1536px */

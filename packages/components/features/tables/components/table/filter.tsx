@@ -1,3 +1,8 @@
+/**
+ * @file filter.tsx
+ * Collapsible side-panel that exposes column-visibility toggles and a future
+ * filter builder, rendered as a resizable panel alongside the main table.
+ */
 import { Activity, useState } from 'react';
 
 import { Columns4Icon, ListFilterIcon, ListFilterPlus } from 'lucide-react';
@@ -24,6 +29,28 @@ const ColumnVisibility: React.FC<{
   );
 };
 
+/**
+ * Collapsible side-panel that lets users toggle column visibility and (in
+ * future) add row filters without leaving the table view.
+ *
+ * The panel collapses to a narrow icon strip when no tab is active and expands
+ * to at least 64 units when the "Columns" or "Filters" tab is selected.  The
+ * `select` and `actions` columns are excluded from the visibility list.
+ *
+ * @example
+ * ```tsx
+ * import { UITableFilter } from '@customafk/lunas-ui/features/tables';
+ *
+ * // Render inside a ResizablePanelGroup alongside UITable
+ * <ResizablePanelGroup direction="horizontal">
+ *   <ResizablePanel>
+ *     <UITable />
+ *   </ResizablePanel>
+ *   <ResizableHandle />
+ *   <UITableFilter />
+ * </ResizablePanelGroup>
+ * ```
+ */
 export const UITableFilter = () => {
   const { table } = useUITableContext();
   const [tab, setTab] = useState<'columns' | 'filters' | null>(null);

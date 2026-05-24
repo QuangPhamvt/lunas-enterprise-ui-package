@@ -4,6 +4,18 @@ import { cn } from '@customafk/react-toolkit/utils';
 
 import { Label as LabelPrimitive } from 'radix-ui';
 
+/**
+ * Accessible form label built on Radix UI's `Label.Root`, with styles for disabled and peer-disabled states.
+ *
+ * @example
+ * ```tsx
+ * import { Label } from '@customafk/lunas-ui/ui/label';
+ * import { Input } from '@customafk/lunas-ui/ui/input';
+ *
+ * <Label htmlFor="email">Email address</Label>
+ * <Input id="email" type="email" placeholder="you@example.com" />
+ * ```
+ */
 function Label({ className, ...props }: React.ComponentProps<typeof LabelPrimitive.Root>) {
   return (
     <LabelPrimitive.Root

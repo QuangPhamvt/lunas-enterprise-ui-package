@@ -1,3 +1,5 @@
+'use client';
+
 import { useCallback, useId, useMemo, useRef } from 'react';
 
 import { useStore } from '@tanstack/react-form';
@@ -18,25 +20,50 @@ import {
   FieldLabel,
   FieldNote,
   FieldSeparator,
+  FieldTooltip,
 } from '@/components/features/tanstack-form/components/ui/field';
-import { useTanStackFieldContext } from '@/components/features/tanstack-form/tanstack-form';
+import { useTanStackFieldContext } from '../../tanstack-form';
 
 import type { TanStackFormTextFieldSchema } from '../../schema';
 
+/**
+ * Props for the TextField component, derived from the TanStack Form text field schema.
+ */
 type Props = Pick<
   z.input<typeof TanStackFormTextFieldSchema>,
   'label' | 'description' | 'placeholder' | 'orientation' | 'counter' | 'tooltip' | 'helperText' | 'showClearButton' | 'showErrorMessage'
 > & {
+  /** Marks the field as required; triggers an empty-state indicator when the value is null. */
   required?: boolean;
+  /** Maximum number of characters allowed; enforced when `counter` is true. */
   maxLength?: number;
 };
 
+/**
+ * A TanStack Form-connected single-line text input field with optional character counter,
+ * clear button, error display, and submission-state feedback.
+ *
+ * @example
+ * import { TextField } from '@customafk/lunas-ui/features/tanstack-form';
+ *
+ * <form.Field name="username">
+ *   {() => (
+ *     <TextField
+ *       label="Username"
+ *       placeholder="Enter username"
+ *       counter
+ *       maxLength={50}
+ *       showClearButton
+ *     />
+ *   )}
+ * </form.Field>
+ */
 export const TextField: React.FC<Props> = ({
   label,
   description,
   placeholder,
 
-  // tooltip,
+  tooltip,
   helperText,
   counter = false,
   orientation = 'responsive',
@@ -46,14 +73,13 @@ export const TextField: React.FC<Props> = ({
   required = false,
   maxLength,
 }) => {
-  // console.log('TextField is in early development stage, expect breaking changes in the future');
   const id = useId();
   const inputRef = useRef<HTMLInputElement>(null);
   const { form, name, state, handleBlur, handleChange } = useTanStackFieldContext<string | null>();
 
   const isSubmitting = useStore(form.store, ({ isSubmitting }) => isSubmitting);
 
-  const _showClearButton = showClearButton && !isSubmitting && !!state.value && !state.meta.errors.length;
+  const _showClearButton = showClearButton && !isSubmitting && !!state.value;
 
   const _count = state.value ? state.value.length : 0;
 
@@ -65,10 +91,8 @@ export const TextField: React.FC<Props> = ({
   }, [_count, counter, maxLength]);
 
   const _invalid = state.meta.isDirty && state.meta.isTouched && !state.meta.isValid;
+  const _isEmpty = required && state.value === null;
 
-  const _isEmpty = required ? state.value === null : false;
-
-  // Tính toán % để đổi màu Counter
   const _isNearLimit = maxLength && _count >= maxLength * 0.8;
   const _isAtLimit = maxLength && _count >= maxLength;
 
@@ -92,10 +116,8 @@ export const TextField: React.FC<Props> = ({
       <Field orientation={orientation} data-invalid={_invalid}>
         <FieldContent>
           <FieldLabel aria-required={_isEmpty} htmlFor={id}>
-            <p>
-              {label}
-              {required && <span className="text-danger-strong"> *</span>}
-            </p>
+            {label}
+            {tooltip && <FieldTooltip tooltip={tooltip} />}
           </FieldLabel>
           <FieldDescription>{description}</FieldDescription>
         </FieldContent>
@@ -129,7 +151,7 @@ export const TextField: React.FC<Props> = ({
               <Loader2Icon size={14} className="animate-spin text-primary-strong" />
             </div>
           )}
-          {state.meta.isDirty && showErrorMessage && !!state.meta.errors.length && (
+          {!_showClearButton && state.meta.isDirty && showErrorMessage && !!state.meta.errors.length && (
             <div className="absolute inset-e-2 inset-y-0 top-2.5 text-danger-strong">
               <BanIcon aria-hidden="true" size={14} />
             </div>

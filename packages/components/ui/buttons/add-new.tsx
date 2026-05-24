@@ -5,8 +5,18 @@ import { Paragraph } from '@/components/typography/paragraph';
 import { Button } from '../button';
 
 type Props = {
+  /** Callback invoked when the button is clicked. Defaults to a no-op. */
   onClick?: () => void;
 };
+
+/**
+ * A toolbar button that triggers a "create new" action, displaying a plus icon alongside a "Create" label that is hidden on small screens.
+ *
+ * @example
+ * import { AddNewBtn } from '@customafk/lunas-ui/ui/buttons/add-new';
+ *
+ * <AddNewBtn onClick={() => setOpen(true)} />
+ */
 export const AddNewBtn: React.FC<React.PropsWithChildren<Props>> = ({ onClick = () => {} }) => {
   return (
     <Button

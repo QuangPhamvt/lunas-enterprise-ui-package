@@ -2,6 +2,20 @@
 
 import { cn } from '@customafk/react-toolkit/utils';
 
+/**
+ * A responsive, container-query-driven grid that automatically adjusts column count based on available width.
+ *
+ * @example
+ * ```tsx
+ * import { Grid } from '@customafk/lunas-ui/layouts/grid';
+ *
+ * <Grid>
+ *   <Card />
+ *   <Card />
+ *   <Card />
+ * </Grid>
+ * ```
+ */
 export const Grid: React.FC<React.PropsWithChildren> = ({ children }) => {
   return (
     <div className="@container size-full">

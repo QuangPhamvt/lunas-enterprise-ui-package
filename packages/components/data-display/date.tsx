@@ -1,3 +1,5 @@
+'use client';
+
 import { useCallback, useMemo } from 'react';
 
 import { format, isThisMonth, isThisWeek, isThisYear, isToday, isTomorrow, isValid, isYesterday, parseISO } from '@customafk/react-toolkit/date-fns';
@@ -5,8 +7,20 @@ import { cn } from '@customafk/react-toolkit/utils';
 
 import { TIME_IN_SECONDS, vietnameseHolidays, vietnameseLocale } from '@/constants';
 
-interface Props {
+interface DateDisplayProps {
+  /** The date value to display; accepts a `Date` object, an ISO string, or a Unix timestamp (ms). */
   date: Date | string | number;
+  /**
+   * Controls how the date is formatted.
+   * - `'short'`    — `15/03/24`
+   * - `'medium'`   — `15/03/2024` (default)
+   * - `'long'`     — `15 tháng 3, 2024`
+   * - `'full'`     — `Thứ Sáu, ngày 15 tháng 3 năm 2024`
+   * - `'relative'` — `2 giờ trước`
+   * - `'datetime'` — `15/03/2024 14:30`
+   * - `'time'`     — `14:30`
+   * - `'smart'`    — auto-selects the most human-readable format based on recency
+   */
   format?:
     | 'short' // 15/03/24
     | 'medium' // 15/03/2024
@@ -15,19 +29,38 @@ interface Props {
     | 'relative' // 2 giờ trước
     | 'datetime' // 15/03/2024 14:30
     | 'time' // 14:30
-    | 'smart'; // Tự động chọn format phù hợp
+    | 'smart'; // auto-selects format based on recency
+  /** When `true`, appends any recognised Vietnamese public holiday name to the formatted date. Defaults to `false`. */
   showHoliday?: boolean;
+  /** When `true`, appends the time component to the formatted output. Defaults to `false`. */
   showTime?: boolean;
+  /** Additional CSS classes applied to the `<time>` element. */
   className?: string;
-  title?: string; // Tooltip khi hover
+  /** Custom HTML `title` attribute; defaults to the full ISO datetime string. */
+  title?: string;
 }
 
-export const DateDisplay: React.FC<Props> = ({ date, format: formatType = 'medium', showHoliday = false, showTime = false, className = '', title }) => {
+/**
+ * Renders a formatted date using Vietnamese locale conventions inside a semantic `<time>` element.
+ *
+ * @example
+ * ```tsx
+ * import { DateDisplay } from '@customafk/lunas-ui/data-display/date';
+ *
+ * <DateDisplay date="2024-03-15T14:30:00Z" format="medium" showTime />
+ * ```
+ */
+export const DateDisplay: React.FC<DateDisplayProps> = ({
+  date,
+  format: formatType = 'medium',
+  showHoliday = false,
+  showTime = false,
+  className = '',
+  title,
+}) => {
   const parsedDate = useMemo(() => {
     try {
-      if (date instanceof Date) {
-        return isValid(date) ? date : null;
-      }
+      if (date instanceof Date) return isValid(date) ? date : null;
       if (typeof date === 'string') {
         const parsed = parseISO(date);
         return isValid(parsed) ? parsed : new Date(date);
@@ -42,11 +75,8 @@ export const DateDisplay: React.FC<Props> = ({ date, format: formatType = 'mediu
     }
   }, [date]);
 
-  // Format relative time in Vietnamese
-  const formatRelativeTime = useCallback((date: Date): string => {
-    const now = new Date();
-    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
-
+  const formatRelativeTime = useCallback((d: Date): string => {
+    const diffInSeconds = Math.floor((Date.now() - d.getTime()) / 1000);
     if (diffInSeconds < 60) return 'Vừa xong';
     if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / TIME_IN_SECONDS.MINUTE)} phút trước`;
     if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / TIME_IN_SECONDS.HOUR)} giờ trước`;
@@ -56,93 +86,67 @@ export const DateDisplay: React.FC<Props> = ({ date, format: formatType = 'mediu
     return `${Math.floor(diffInSeconds / TIME_IN_SECONDS.YEAR)} năm trước`;
   }, []);
 
-  // Vietnamese weekday
-  const getVietnameseWeekday = useCallback((date: Date, short: boolean = false): string => {
-    const dayIndex = date.getDay();
-    return short ? vietnameseLocale.weekdaysShort[dayIndex] : vietnameseLocale.weekdays[dayIndex];
+  const getVietnameseWeekday = useCallback((d: Date, short = false): string => {
+    return short ? vietnameseLocale.weekdaysShort[d.getDay()] : vietnameseLocale.weekdays[d.getDay()];
   }, []);
 
-  // Vietnamese month
-  const getVietnameseMonth = useCallback((date: Date, short: boolean = false): string => {
-    const monthIndex = date.getMonth();
-    return short ? vietnameseLocale.monthsShort[monthIndex] : vietnameseLocale.months[monthIndex];
+  const getVietnameseMonth = useCallback((d: Date, short = false): string => {
+    return short ? vietnameseLocale.monthsShort[d.getMonth()] : vietnameseLocale.months[d.getMonth()];
   }, []);
 
-  // Check holiday
-  const getHoliday = useCallback((date: Date): string | null => {
-    const monthDay = format(date, 'MM-dd') as keyof typeof vietnameseHolidays;
+  const getHoliday = useCallback((d: Date): string | null => {
+    const monthDay = format(d, 'MM-dd') as keyof typeof vietnameseHolidays;
     return vietnameseHolidays[monthDay] || null;
   }, []);
 
-  // Smart format - choose appropriate format based on date
   const getSmartFormat = useCallback(
-    (date: Date): string => {
-      if (isToday(date)) {
-        return showTime ? `Hôm nay ${format(date, 'HH:mm')}` : 'Hôm nay';
+    (d: Date): string => {
+      if (isToday(d)) return showTime ? `Hôm nay ${format(d, 'HH:mm')}` : 'Hôm nay';
+      if (isYesterday(d)) return showTime ? `Hôm qua ${format(d, 'HH:mm')}` : 'Hôm qua';
+      if (isTomorrow(d)) return showTime ? `Ngày mai ${format(d, 'HH:mm')}` : 'Ngày mai';
+      if (isThisWeek(d)) {
+        const weekday = getVietnameseWeekday(d);
+        return showTime ? `${weekday} ${format(d, 'HH:mm')}` : weekday;
       }
-      if (isYesterday(date)) {
-        return showTime ? `Hôm qua ${format(date, 'HH:mm')}` : 'Hôm qua';
+      if (isThisMonth(d)) {
+        const day = format(d, 'd');
+        return showTime ? `${day}/${format(d, 'M')} ${format(d, 'HH:mm')}` : `${day}/${format(d, 'M')}`;
       }
-      if (isTomorrow(date)) {
-        return showTime ? `Ngày mai ${format(date, 'HH:mm')}` : 'Ngày mai';
-      }
-      if (isThisWeek(date)) {
-        const weekday = getVietnameseWeekday(date);
-        return showTime ? `${weekday} ${format(date, 'HH:mm')}` : weekday;
-      }
-      if (isThisMonth(date)) {
-        const day = format(date, 'd');
-        return showTime ? `${day}/${format(date, 'M')} ${format(date, 'HH:mm')}` : `${day}/${format(date, 'M')}`;
-      }
-      if (isThisYear(date)) {
-        return showTime ? format(date, 'd/M HH:mm') : format(date, 'd/M');
-      }
-      return showTime ? format(date, 'd/M/yyyy HH:mm') : format(date, 'd/M/yyyy');
+      if (isThisYear(d)) return showTime ? format(d, 'd/M HH:mm') : format(d, 'd/M');
+      return showTime ? format(d, 'd/M/yyyy HH:mm') : format(d, 'd/M/yyyy');
     },
     [getVietnameseWeekday, showTime]
   );
 
-  // Main formatting function
   const formatDate = useCallback(
-    (date: Date, type: string): string => {
-      const timeStr = showTime ? format(date, ', HH:mm:ss') : '';
-
+    (d: Date, type: string): string => {
+      const timeStr = showTime ? format(d, ', HH:mm:ss') : '';
       switch (type) {
         case 'short':
-          return format(date, 'd/M/yy') + timeStr;
-
+          return format(d, 'd/M/yy') + timeStr;
         case 'medium':
-          return format(date, 'dd/MM/yyyy') + timeStr;
-
+          return format(d, 'dd/MM/yyyy') + timeStr;
         case 'long':
-          return `${format(date, 'd')} ${getVietnameseMonth(date)} ${format(date, 'yyyy')}` + timeStr;
-
-        case 'full': {
-          const data = `${getVietnameseWeekday(date)}, ngày ${format(date, 'd')} ${getVietnameseMonth(date)} năm ${format(date, 'yyyy')}`;
-          return data + timeStr;
-        }
-
+          return `${format(d, 'd')} ${getVietnameseMonth(d)} ${format(d, 'yyyy')}` + timeStr;
+        case 'full':
+          return `${getVietnameseWeekday(d)}, ngày ${format(d, 'd')} ${getVietnameseMonth(d)} năm ${format(d, 'yyyy')}` + timeStr;
         case 'relative':
-          return formatRelativeTime(date);
-
+          return formatRelativeTime(d);
         case 'datetime':
-          return format(date, 'd/M/yyyy HH:mm');
-
+          return format(d, 'd/M/yyyy HH:mm');
         case 'time':
-          return format(date, 'HH:mm');
-
+          return format(d, 'HH:mm');
         case 'smart':
-          return getSmartFormat(date);
-
+          return getSmartFormat(d);
         default:
-          return format(date, 'd/M/yyyy') + timeStr;
+          return format(d, 'd/M/yyyy') + timeStr;
       }
     },
     [getSmartFormat, getVietnameseMonth, getVietnameseWeekday, formatRelativeTime, showTime]
   );
 
   if (!parsedDate) {
-    return <span className={cn('text-muted-foreground text-sm', className)}>--/--/----</span>;
+    return <span className={cn('text-sm text-text-positive-subtle', className)}>--/--/----</span>;
   }
 
   const formattedDate = formatDate(parsedDate, formatType);
@@ -151,7 +155,12 @@ export const DateDisplay: React.FC<Props> = ({ date, format: formatType = 'mediu
   const tooltipTitle = title || format(parsedDate, 'EEEE, d MMMM yyyy HH:mm:ss');
 
   return (
-    <time dateTime={parsedDate.toISOString()} className={cn('text-text-positive-weak text-xs tabular-nums', className)} title={tooltipTitle}>
+    <time
+      data-slot="date-display"
+      dateTime={parsedDate.toISOString()}
+      className={cn('tabular-nums text-xs text-text-positive-weak transition-colors', className)}
+      title={tooltipTitle}
+    >
       {displayText}
     </time>
   );

@@ -3,12 +3,27 @@ import { useCallback } from 'react';
 
 import { cn } from '@customafk/react-toolkit/utils';
 
+/**
+ * Styled multi-line text area built on the native `<textarea>` element with resize, focus, and validation state styles.
+ *
+ * @example
+ * ```tsx
+ * import { Textarea } from '@customafk/lunas-ui/ui/textarea';
+ *
+ * <Textarea
+ *   placeholder="Write a description…"
+ *   rows={4}
+ *   onValueChange={(value) => console.log(value)}
+ * />
+ * ```
+ */
 function Textarea({
   className,
   onChange,
   onValueChange,
   ...props
 }: React.ComponentProps<'textarea'> & {
+  /** Convenience callback that receives the raw string value on every change, bypassing the synthetic event. */
   onValueChange?: (value: string) => void;
 }) {
   const handleChange = useCallback(

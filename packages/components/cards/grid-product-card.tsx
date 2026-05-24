@@ -5,14 +5,38 @@ import { Card } from '../ui/card';
 import { Image } from '../ui/image';
 
 type Props = {
+  /** Unique identifier for the product. */
   id: string;
+  /** URL-friendly slug for the product. */
   slug: string;
+  /** Display name of the product shown on the card. */
   name: string;
+  /** URL of the product's thumbnail image. */
   thumbnail: string;
+  /** Regular price of the product in VND. */
   price: number;
+  /** Optional sale / discounted price in VND. */
   salePrice?: number;
+  /** Optional sale discount percentage (0–100). */
   salePercentage?: number;
 };
+
+/**
+ * A horizontal (grid-row) product card displaying a thumbnail, name, price, and add-to-cart / favourite actions.
+ *
+ * @example
+ * ```tsx
+ * import { GridProductCard } from '@customafk/lunas-ui/cards/grid-product-card';
+ *
+ * <GridProductCard
+ *   id="prod-1"
+ *   slug="awesome-widget"
+ *   name="Awesome Widget"
+ *   thumbnail="/images/widget.png"
+ *   price={299000}
+ * />
+ * ```
+ */
 export const GridProductCard: React.FC<Props> = ({ name, thumbnail, price }) => {
   return (
     <Card className="h-36 w-full flex-row gap-4 p-2 pr-4">

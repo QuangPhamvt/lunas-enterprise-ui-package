@@ -3,22 +3,44 @@ import { cn } from '@customafk/react-toolkit/utils';
 
 import { Drawer as DrawerPrimitive } from 'vaul';
 
+/**
+ * Root provider for the Drawer — a vaul-powered slide-in panel supporting top, bottom, left, and right directions.
+ *
+ * @example
+ * ```tsx
+ * import { Drawer, DrawerTrigger, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription } from '@customafk/lunas-ui/ui/drawer';
+ *
+ * <Drawer>
+ *   <DrawerTrigger>Open Drawer</DrawerTrigger>
+ *   <DrawerContent>
+ *     <DrawerHeader>
+ *       <DrawerTitle>Confirm action</DrawerTitle>
+ *       <DrawerDescription>This action cannot be undone.</DrawerDescription>
+ *     </DrawerHeader>
+ *   </DrawerContent>
+ * </Drawer>
+ * ```
+ */
 function Drawer({ ...props }: React.ComponentProps<typeof DrawerPrimitive.Root>) {
   return <DrawerPrimitive.Root data-slot="drawer" {...props} />;
 }
 
+/** Element that opens the Drawer when activated. */
 function DrawerTrigger({ ...props }: React.ComponentProps<typeof DrawerPrimitive.Trigger>) {
   return <DrawerPrimitive.Trigger data-slot="drawer-trigger" {...props} />;
 }
 
+/** Portals Drawer content outside the current DOM tree. */
 function DrawerPortal({ ...props }: React.ComponentProps<typeof DrawerPrimitive.Portal>) {
   return <DrawerPrimitive.Portal data-slot="drawer-portal" {...props} />;
 }
 
+/** Button that programmatically closes the Drawer. */
 function DrawerClose({ ...props }: React.ComponentProps<typeof DrawerPrimitive.Close>) {
   return <DrawerPrimitive.Close data-slot="drawer-close" {...props} />;
 }
 
+/** Dimmed backdrop rendered behind the Drawer panel. */
 function DrawerOverlay({ className, ...props }: React.ComponentProps<typeof DrawerPrimitive.Overlay>) {
   return (
     <DrawerPrimitive.Overlay
@@ -36,6 +58,7 @@ function DrawerOverlay({ className, ...props }: React.ComponentProps<typeof Draw
   );
 }
 
+/** The main Drawer panel; automatically positions itself based on the direction set on the root. */
 function DrawerContent({ className, children, ...props }: React.ComponentProps<typeof DrawerPrimitive.Content>) {
   return (
     <DrawerPortal data-slot="drawer-portal">
@@ -77,6 +100,7 @@ function DrawerContent({ className, children, ...props }: React.ComponentProps<t
   );
 }
 
+/** Padded header section at the top of the Drawer for the title and description. */
 function DrawerHeader({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
@@ -93,14 +117,17 @@ function DrawerHeader({ className, ...props }: React.ComponentProps<'div'>) {
   );
 }
 
+/** Footer section pinned to the bottom of the Drawer, typically used for action buttons. */
 function DrawerFooter({ className, ...props }: React.ComponentProps<'div'>) {
   return <div data-slot="drawer-footer" className={cn('mt-auto flex flex-col gap-2 p-4', className)} {...props} />;
 }
 
+/** Accessible title element for the Drawer, announced by screen readers on open. */
 function DrawerTitle({ className, ...props }: React.ComponentProps<typeof DrawerPrimitive.Title>) {
   return <DrawerPrimitive.Title data-slot="drawer-title" className={cn('text-text-positive font-semibold', className)} {...props} />;
 }
 
+/** Accessible description element for the Drawer, providing supplemental context to the title. */
 function DrawerDescription({ className, ...props }: React.ComponentProps<typeof DrawerPrimitive.Description>) {
   return <DrawerPrimitive.Description data-slot="drawer-description" className={cn('text-text-positive-weak text-sm', className)} {...props} />;
 }

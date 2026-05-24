@@ -3,6 +3,8 @@ import { defineConfig } from 'tsdown'
 export default defineConfig([
   {
     entry: [
+      './packages/components/index.ts',
+
       './packages/components/cards/simple-card.tsx',
       './packages/components/cards/product-card.tsx',
       './packages/components/cards/grid-product-card.tsx',

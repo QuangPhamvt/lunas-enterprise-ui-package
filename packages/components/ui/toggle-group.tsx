@@ -12,6 +12,20 @@ const ToggleGroupContext = createContext<VariantProps<typeof toggleVariants>>({
   variant: 'default',
 });
 
+/**
+ * A group of connected Toggle buttons where one or multiple items can be active at a time.
+ *
+ * @example
+ * ```tsx
+ * import { ToggleGroup, ToggleGroupItem } from '@customafk/lunas-ui/ui/toggle-group';
+ *
+ * <ToggleGroup type="single" variant="outline">
+ *   <ToggleGroupItem value="left">Left</ToggleGroupItem>
+ *   <ToggleGroupItem value="center">Center</ToggleGroupItem>
+ *   <ToggleGroupItem value="right">Right</ToggleGroupItem>
+ * </ToggleGroup>
+ * ```
+ */
 function ToggleGroup({
   className,
   variant,
@@ -32,6 +46,7 @@ function ToggleGroup({
   );
 }
 
+/** A single item/button within a ToggleGroup that inherits the group's variant and size. */
 function ToggleGroupItem({
   className,
   children,

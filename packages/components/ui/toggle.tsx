@@ -25,6 +25,19 @@ const toggleVariants = cva(
   }
 );
 
+/**
+ * A two-state button that switches between pressed (`on`) and unpressed (`off`).
+ *
+ * @example
+ * ```tsx
+ * import { Toggle } from '@customafk/lunas-ui/ui/toggle';
+ * import { Bold } from 'lucide-react';
+ *
+ * <Toggle aria-label="Toggle bold" variant="outline">
+ *   <Bold />
+ * </Toggle>
+ * ```
+ */
 function Toggle({ className, variant, size, ...props }: React.ComponentProps<typeof TogglePrimitive.Root> & VariantProps<typeof toggleVariants>) {
   return <TogglePrimitive.Root data-slot="toggle" className={cn(toggleVariants({ variant, size, className }))} {...props} />;
 }

@@ -3,7 +3,20 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { UITableEmpty } from './empty';
 import { Paragraph } from '@/components/typography/paragraph';
 
-export const UITableDescriptionDisplay: React.FC<{ content: string | null | undefined | number }> = ({ content }) => {
+/**
+ * Renders a two-line-clamped description in a table cell with a tooltip that
+ * reveals the full text and its character count; falls back to
+ * {@link UITableEmpty} when `content` is `null` or `undefined`.
+ *
+ * @example
+ * import { UITableDescriptionDisplay } from '@customafk/lunas-ui/features/tables';
+ *
+ * <UITableDescriptionDisplay content="A detailed description of this record." />
+ */
+export const UITableDescriptionDisplay: React.FC<{
+  /** The text or numeric value to display; `null`/`undefined` renders an empty state. */
+  content: string | null | undefined | number;
+}> = ({ content }) => {
   if (content === undefined || content === null) {
     return <UITableEmpty />;
   }

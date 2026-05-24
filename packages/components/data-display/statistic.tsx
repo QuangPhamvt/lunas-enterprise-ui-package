@@ -1,20 +1,63 @@
-import { memo, useCallback, useMemo } from 'react';
+'use client';
 
+import { memo, useCallback, useMemo } from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@customafk/react-toolkit/utils';
 
-import { Flex } from '../layouts/flex';
+const statisticVariants = cva('inline-flex items-center gap-1 font-number tabular-nums transition-colors', {
+  variants: {
+    size: {
+      xs: 'text-xs',
+      sm: 'text-sm',
+      md: 'text-base',
+      lg: 'text-lg',
+      xl: 'text-xl',
+    },
+    trend: {
+      neutral: 'text-text-positive-strong',
+      up: 'text-success',
+      down: 'text-danger',
+    },
+  },
+  defaultVariants: {
+    size: 'lg',
+    trend: 'neutral',
+  },
+});
 
-type Props = {
+export type StatisticProps = VariantProps<typeof statisticVariants> & {
+  /** Character used to separate the decimal part. Defaults to `'.'`. */
   decimalSeparator?: string;
+  /** Character used to separate thousands groups. Defaults to `','`. */
   groupSeparator?: string;
+  /** Optional node rendered before the numeric value (e.g. a currency symbol). */
   prefix?: React.ReactNode;
+  /** Optional node rendered after the numeric value (e.g. a unit label). */
   suffix?: React.ReactNode;
-  precision?: number; // Số chữ số thập phân
-  roundingMode?: 'round' | 'floor' | 'ceil'; // Kiểu làm tròn
-  showTrailingZeros?: boolean; // Hiển thị số 0 cuối
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'; // Kích thước của component
+  /** Number of decimal digits to display; omit to show all significant digits. */
+  precision?: number;
+  /** Rounding strategy applied before formatting. Defaults to `'round'`. */
+  roundingMode?: 'round' | 'floor' | 'ceil';
+  /** When `true`, pads the decimal part with trailing zeros up to `precision`. Defaults to `false`. */
+  showTrailingZeros?: boolean;
+  /** The numeric (or numeric-string) value to format and display. */
   value: number | string;
+  /** Additional CSS classes applied to the wrapper element. */
+  className?: string;
+  /** Colour trend indicator: `'neutral'` (default), `'up'` (green), or `'down'` (red). */
+  trend?: 'neutral' | 'up' | 'down';
 };
+
+/**
+ * A memoised numeric display component with locale-aware formatting, optional prefix/suffix, trend colouring, and configurable rounding.
+ *
+ * @example
+ * ```tsx
+ * import { Statistic } from '@customafk/lunas-ui/data-display/statistic';
+ *
+ * <Statistic value={1234567.89} precision={2} prefix="$" trend="up" size="lg" />
+ * ```
+ */
 export const Statistic = memo(
   ({
     decimalSeparator = '.',
@@ -25,13 +68,13 @@ export const Statistic = memo(
     roundingMode = 'round',
     showTrailingZeros = false,
     size = 'lg',
+    trend = 'neutral',
     value,
-  }: Props) => {
-    // Memoize rounding function
+    className,
+  }: StatisticProps) => {
     const applyRounding = useCallback(
       (num: number, precisionValue: number): number => {
         const multiplier = 10 ** precisionValue;
-
         switch (roundingMode) {
           case 'floor':
             return Math.floor(num * multiplier) / multiplier;
@@ -44,10 +87,8 @@ export const Statistic = memo(
       [roundingMode]
     );
 
-    // Memoize number formatting options
     const formatOptions = useMemo((): Intl.NumberFormatOptions => {
       const options: Intl.NumberFormatOptions = {};
-
       if (typeof precision === 'number' && precision >= 0) {
         if (showTrailingZeros) {
           options.minimumFractionDigits = precision;
@@ -56,82 +97,46 @@ export const Statistic = memo(
           options.maximumFractionDigits = precision;
         }
       }
-
       return options;
     }, [precision, showTrailingZeros]);
 
     const formatNumber = useCallback(
       (num: number): string => {
         let processedNum = num;
-
-        // Áp dụng làm tròn nếu có precision
         if (typeof precision === 'number' && precision >= 0) {
           processedNum = applyRounding(num, precision);
         }
-
         return processedNum.toLocaleString('en-US', formatOptions);
       },
       [applyRounding, formatOptions, precision]
     );
 
-    // Memoize value processing
     const processedValue = useMemo((): string => {
-      // Xử lý giá trị number
       if (typeof value === 'number') {
-        if (Number.isNaN(value) || !Number.isFinite(value)) {
-          return 'N/A';
-        }
+        if (Number.isNaN(value) || !Number.isFinite(value)) return 'N/A';
         return formatNumber(value);
       }
-
-      // Xử lý giá trị string
       if (typeof value === 'string') {
         const trimmedValue = value.trim();
-
-        // Nếu là chuỗi rỗng
-        if (!trimmedValue) {
-          return 'N/A';
-        }
-
-        // Thử convert sang number
+        if (!trimmedValue) return 'N/A';
         const numValue = Number(trimmedValue);
-
-        if (Number.isNaN(numValue) || !Number.isFinite(numValue)) {
-          // Nếu không phải số, trả về string gốc
-          return 'N/A';
-        }
-
+        if (Number.isNaN(numValue) || !Number.isFinite(numValue)) return 'N/A';
         return formatNumber(numValue);
       }
-
       return 'N/A';
     }, [value, formatNumber]);
 
-    // Memoize separator replacement
     const finalFormattedValue = useMemo((): string => {
-      // Chỉ thay thế separators nếu khác mặc định
-      if (decimalSeparator === '.' && groupSeparator === ',') {
-        return processedValue;
-      }
+      if (decimalSeparator === '.' && groupSeparator === ',') return processedValue;
       return processedValue.replace(/,/g, groupSeparator).replace(/\./g, decimalSeparator);
     }, [processedValue, decimalSeparator, groupSeparator]);
 
     return (
-      <Flex
-        padding="none"
-        className={cn(
-          'font-number text-lg text-secondary-foreground tabular-nums',
-          size === 'xs' && 'text-xs',
-          size === 'sm' && 'text-sm',
-          size === 'md' && 'text-base',
-          size === 'lg' && 'text-lg',
-          size === 'xl' && 'text-xl'
-        )}
-      >
-        {Prefix}
-        <p>{finalFormattedValue}</p>
-        {Suffix}
-      </Flex>
+      <div data-slot="statistic" className={cn(statisticVariants({ size, trend }), className)}>
+        {Prefix && <span data-slot="statistic-prefix">{Prefix}</span>}
+        <p data-slot="statistic-value">{finalFormattedValue}</p>
+        {Suffix && <span data-slot="statistic-suffix">{Suffix}</span>}
+      </div>
     );
   }
 );

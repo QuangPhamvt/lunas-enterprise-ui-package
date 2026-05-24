@@ -16,6 +16,20 @@ type TResizableHandle = React.ComponentProps<typeof ResizablePrimitive.PanelResi
   withHandle?: boolean;
 };
 
+/**
+ * Root container that manages a group of resizable panels; supports horizontal and vertical orientations.
+ *
+ * @example
+ * ```tsx
+ * import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from '@customafk/lunas-ui/ui/resizable';
+ *
+ * <ResizablePanelGroup direction="horizontal">
+ *   <ResizablePanel defaultSize={50}>Left</ResizablePanel>
+ *   <ResizableHandle withHandle />
+ *   <ResizablePanel defaultSize={50}>Right</ResizablePanel>
+ * </ResizablePanelGroup>
+ * ```
+ */
 const ResizablePanelGroup = memo<TResizablePanelGroup>(({ className, ...props }) => {
   return (
     <ResizablePrimitive.PanelGroup
@@ -27,11 +41,17 @@ const ResizablePanelGroup = memo<TResizablePanelGroup>(({ className, ...props })
 });
 ResizablePanelGroup.displayName = 'ResizablePanelGroup';
 
+/** An individual resizable panel within a ResizablePanelGroup. */
 const ResizablePanel = memo<TResizablePanel>(({ ...props }) => {
   return <ResizablePrimitive.Panel data-slot="resizable-panel" {...props} />;
 });
 ResizablePanel.displayName = 'ResizablePanel';
 
+/**
+ * The drag handle placed between two ResizablePanels to resize them.
+ *
+ * @param withHandle - When true, renders a visible grip icon centered on the handle.
+ */
 const ResizableHandle = memo<TResizableHandle>(({ withHandle, className, ...props }) => {
   return (
     <ResizablePrimitive.PanelResizeHandle

@@ -1,3 +1,5 @@
+'use client';
+
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { CloseButton } from '@/components/ui/buttons/close';
@@ -7,83 +9,88 @@ import { useTanStackFormContext } from '../../tanstack-form';
 import { CancelButton } from '../ui/cancel-button';
 import { SubmitButton } from '../ui/submit-button';
 
+/**
+ * Renders a slide-in side-panel dialog that wraps a TanStack form with built-in submit and cancel actions.
+ *
+ * @example
+ * import { TanStackPopoverForm } from '@customafk/lunas-ui/features/tanstack-form';
+ *
+ * <TanStackPopoverForm
+ *   title="Edit Profile"
+ *   open={isOpen}
+ *   onOpenChange={setIsOpen}
+ * >
+ *   <EmailField />
+ * </TanStackPopoverForm>
+ */
 export const TanStackPopoverForm: React.FC<
   React.PropsWithChildren<{
+    /** Heading text displayed in the panel header. */
     title: string;
+    /** Controlled open state of the popover dialog. */
     open?: boolean;
+    /** Additional CSS class names applied to the scrollable content area. */
     contentClassName?: string;
+    /** Callback fired when the open state changes. */
     onOpenChange?: (open: boolean) => void;
   }>
 > = ({ title, open, contentClassName, onOpenChange, children }) => {
   const form = useTanStackFormContext();
+
   return (
     <DialogPrimitive.Root data-slot="dialog" open={open} onOpenChange={onOpenChange}>
       <DialogPrimitive.Portal data-slot="dialog-portal">
         <DialogPrimitive.Overlay
           data-slot="dialog-overlay"
           className={cn(
-            'fixed inset-0 z-40 bg-black/50 backdrop-blur-sm',
-            'data-[state=open]:animate-in',
-            'data-[state=open]:fade-in',
-            'data-[state=closed]:animate-out',
-            'data-[state=closed]:fade-out'
+            'fixed inset-0 z-40 bg-black/40 backdrop-blur-sm',
+            'data-[state=open]:animate-in data-[state=open]:fade-in',
+            'data-[state=closed]:animate-out data-[state=closed]:fade-out'
           )}
         />
         <DialogPrimitive.Content
           data-slot="dialog-content"
           className={cn(
-            'fixed top-4 right-4 z-50 h-[calc(100dvh-2rem)] min-w-sm max-w-xl rounded-md bg-background drop-shadow-lg',
+            'fixed top-4 right-4 z-50 h-[calc(100dvh-2rem)] min-w-sm max-w-xl rounded-md bg-background shadow-lg ring-1 ring-border',
             'duration-300',
-
-            'data-[state=open]:animate-in',
-            'data-[state=open]:slide-in-from-right',
-            'data-[state=open]:fade-in',
-
-            'data-[state=closed]:animate-out',
-            'data-[state=closed]:slide-out-to-right',
-            'data-[state=closed]:fade-out'
+            'data-[state=open]:animate-in data-[state=open]:slide-in-from-right data-[state=open]:fade-in',
+            'data-[state=closed]:animate-out data-[state=closed]:slide-out-to-right data-[state=closed]:fade-out'
           )}
         >
           <section className="relative flex size-full flex-col">
-            <header className="flex h-14 items-center border-border border-b px-4">
-              <h2 className="font-semibold text-lg text-primary-strong">{title}</h2>
+            <header className="flex h-14 shrink-0 items-center border-b border-border px-5">
+              <h2 className="font-semibold text-base tracking-tight text-text-positive">{title}</h2>
             </header>
 
             <div className={cn('flex flex-1 flex-col overflow-y-auto py-4', contentClassName)}>{children}</div>
 
-            <div className="flex flex-col space-y-4 border-border border-t px-4 py-2">
+            <div className="flex shrink-0 flex-col gap-2 border-t border-border px-4 py-3">
               <form.Subscribe
                 selector={state => ({
                   isSubmitting: state.isSubmitting,
                   disabled: state.isPristine || !state.isValid || state.isValidating || state.isSubmitting || !state.canSubmit,
                 })}
-                children={({ isSubmitting, disabled }) => {
-                  return <SubmitButton isSubmitting={isSubmitting} disabled={disabled} className="w-full" onClick={() => form.handleSubmit()} />;
-                }}
+                children={({ isSubmitting, disabled }) => (
+                  <SubmitButton isSubmitting={isSubmitting} disabled={disabled} className="w-full" onClick={() => form.handleSubmit()} />
+                )}
               />
               <form.Subscribe
-                selector={state => {
-                  return {
-                    disabled: state.isPristine || state.isSubmitting,
-                  };
-                }}
-                children={({ disabled }) => {
-                  return (
-                    <CancelButton
-                      disabled={disabled}
-                      className="w-full"
-                      onClick={() => {
-                        form.reset();
-                        onOpenChange?.(false);
-                      }}
-                    />
-                  );
-                }}
+                selector={state => ({ disabled: state.isPristine || state.isSubmitting })}
+                children={({ disabled }) => (
+                  <CancelButton
+                    disabled={disabled}
+                    className="w-full"
+                    onClick={() => {
+                      form.reset();
+                      onOpenChange?.(false);
+                    }}
+                  />
+                )}
               />
             </div>
 
             <DialogPrimitive.Close asChild>
-              <CloseButton className="absolute top-2 right-2" />
+              <CloseButton className="absolute top-2.5 right-3" />
             </DialogPrimitive.Close>
           </section>
         </DialogPrimitive.Content>

@@ -3,14 +3,31 @@ import { cn } from '@customafk/react-toolkit/utils';
 
 import { HoverCard as HoverCardPrimitive } from 'radix-ui';
 
+/**
+ * Root provider for the HoverCard — shows a floating card when the trigger is hovered.
+ *
+ * @example
+ * ```tsx
+ * import { HoverCard, HoverCardTrigger, HoverCardContent } from '@customafk/lunas-ui/ui/hover-card';
+ *
+ * <HoverCard>
+ *   <HoverCardTrigger>@username</HoverCardTrigger>
+ *   <HoverCardContent>
+ *     <p>Profile details here</p>
+ *   </HoverCardContent>
+ * </HoverCard>
+ * ```
+ */
 function HoverCard({ ...props }: React.ComponentProps<typeof HoverCardPrimitive.Root>) {
   return <HoverCardPrimitive.Root data-slot="hover-card" {...props} />;
 }
 
+/** The element that triggers the HoverCard on pointer enter. */
 function HoverCardTrigger({ ...props }: React.ComponentProps<typeof HoverCardPrimitive.Trigger>) {
   return <HoverCardPrimitive.Trigger data-slot="hover-card-trigger" {...props} />;
 }
 
+/** The floating card panel displayed when the trigger is hovered. */
 function HoverCardContent({ className, align = 'center', sideOffset = 4, ...props }: React.ComponentProps<typeof HoverCardPrimitive.Content>) {
   return (
     <HoverCardPrimitive.Portal data-slot="hover-card-portal">

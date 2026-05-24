@@ -1,3 +1,11 @@
+/**
+ * @file provider.tsx
+ * Context providers that wire TanStack Table state into the UITable component tree.
+ *
+ * Each sub-provider is a memoised wrapper around a single React context so that
+ * only the subtree that consumes a particular slice of state re-renders when that
+ * slice changes.
+ */
 import { memo, useCallback, useId, useMemo, useState } from 'react';
 
 import type { ColumnDef, ColumnPinningState, ExpandedState, RowSelectionState } from '@tanstack/react-table';
@@ -24,18 +32,32 @@ import type {
   TUITableColumn,
 } from '../../types';
 
+/**
+ * Provides the inner-wrapper DOM element id to all descendants via
+ * `TableInnerWrapperContext`, enabling virtual-scroll sentinels to locate the
+ * scrollable container without prop-drilling.
+ */
 const UITableInnerWrapperProvider = memo<React.PropsWithChildren<TTableInnerWrapperContext>>(({ innerWrapperId, children }) => {
   const value = useMemo<TTableInnerWrapperContext>(() => ({ innerWrapperId }), [innerWrapperId]);
   return <TableInnerWrapperContext.Provider value={value}>{children}</TableInnerWrapperContext.Provider>;
 });
 UITableInnerWrapperProvider.displayName = 'UITableInnerWrapperProvider';
 
+/**
+ * Provides the TanStack `table` instance, the inner `<table>` element id, and
+ * the pre-computed `totalSize` (sum of all column widths) to descendants via
+ * `TableInnerTableContext`.
+ */
 const UITableInnerTableProvider = memo<React.PropsWithChildren<TTableInnerTableContext>>(({ table, innerTableId, totalSize, children }) => {
   const value = useMemo<TTableInnerTableContext>(() => ({ table, innerTableId, totalSize }), [table, innerTableId, totalSize]);
   return <TableInnerTableContext.Provider value={value}>{children}</TableInnerTableContext.Provider>;
 });
 UITableInnerTableProvider.displayName = 'UITableInnerTableProvider';
 
+/**
+ * Provides column-pinning state and the "select all" toggle to the header-row
+ * layer via `TableHeadRowContext`, preventing unnecessary re-renders in the body.
+ */
 const UITableHeadRowProvider = memo<React.PropsWithChildren<TTableHeadRowContext>>(
   ({ isAllRowsSelected, columnPinningState, leftPinnedHeaders, rightPinnedHeaders, onToggleAllRowsSelected, children }) => {
     const value = useMemo<TTableHeadRowContext>(
@@ -47,12 +69,20 @@ const UITableHeadRowProvider = memo<React.PropsWithChildren<TTableHeadRowContext
 );
 UITableHeadRowProvider.displayName = 'UITableHeadRowProvider';
 
+/**
+ * Provides loading/empty state and the current row-selection map to the table
+ * body layer via `TableBodyContext`.
+ */
 const UITableBodyProvider = memo<React.PropsWithChildren<TTableBodyContext>>(({ isFetching, isEmpty, rowSelectionState, children }) => {
   const value = useMemo<TTableBodyContext>(() => ({ isFetching, isEmpty, rowSelectionState }), [isFetching, isEmpty, rowSelectionState]);
   return <TableBodyContext.Provider value={value}>{children}</TableBodyContext.Provider>;
 });
 UITableBodyProvider.displayName = 'UITableBodyProvider';
 
+/**
+ * Provides per-row interaction state — click handler, pinning, and the
+ * "select all" flag — to individual row renderers via `TableRowContext`.
+ */
 const UITableRowProvider = memo<React.PropsWithChildren<TTableRowContext<AnyEntity, AnyEntity>>>(
   ({ keyOfClickRow, isAllRowsSelected, columnPinningState, leftPinnedHeaders, rightPinnedHeaders, onClickRow, children }) => {
     const value = useMemo<TTableRowContext<AnyEntity, AnyEntity>>(
@@ -71,6 +101,38 @@ const UITableRowProvider = memo<React.PropsWithChildren<TTableRowContext<AnyEnti
 );
 UITableRowProvider.displayName = 'UITableRowProvider';
 
+/**
+ * Root context provider for the UITable component family.
+ *
+ * Instantiates a TanStack Table instance with virtualisation-friendly settings
+ * (column pinning, row selection, row grouping, row expansion) and propagates
+ * all derived state through a nested set of memoised context providers so that
+ * each layer only re-renders when its own slice of state changes.
+ *
+ * @example
+ * ```tsx
+ * import { UITableProvider } from '@customafk/lunas-ui/features/tables';
+ *
+ * const columns = [
+ *   { accessorKey: 'name', header: 'Name' },
+ *   { accessorKey: 'email', header: 'Email' },
+ * ];
+ *
+ * function MyPage() {
+ *   return (
+ *     <UITableProvider
+ *       title="Users"
+ *       data={users}
+ *       columns={columns}
+ *       isFetching={isLoading}
+ *       onClickRow={(index, id) => console.log(index, id)}
+ *     >
+ *       <UITable />
+ *     </UITableProvider>
+ *   );
+ * }
+ * ```
+ */
 export const UITableProvider = <
   TData extends RowData<TData> = RowData<AnyEntity>,
   TKey extends keyof TData = keyof TData,

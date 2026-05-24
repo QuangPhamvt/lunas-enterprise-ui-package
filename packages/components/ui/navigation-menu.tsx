@@ -6,12 +6,35 @@ import { ChevronDownIcon } from 'lucide-react';
 import { cva } from 'class-variance-authority';
 import { NavigationMenu as NavigationMenuPrimitive } from 'radix-ui';
 
+/**
+ * Root provider for the NavigationMenu — a horizontal nav bar with dropdown content panels.
+ *
+ * @example
+ * ```tsx
+ * import {
+ *   NavigationMenu, NavigationMenuList, NavigationMenuItem,
+ *   NavigationMenuTrigger, NavigationMenuContent, NavigationMenuLink,
+ * } from '@customafk/lunas-ui/ui/navigation-menu';
+ *
+ * <NavigationMenu>
+ *   <NavigationMenuList>
+ *     <NavigationMenuItem>
+ *       <NavigationMenuTrigger>Products</NavigationMenuTrigger>
+ *       <NavigationMenuContent>
+ *         <NavigationMenuLink href="/products">All Products</NavigationMenuLink>
+ *       </NavigationMenuContent>
+ *     </NavigationMenuItem>
+ *   </NavigationMenuList>
+ * </NavigationMenu>
+ * ```
+ */
 function NavigationMenu({
   className,
   children,
   viewport = true,
   ...props
 }: React.ComponentProps<typeof NavigationMenuPrimitive.Root> & {
+  /** When false, the viewport animation panel is omitted (useful for inline menus). */
   viewport?: boolean;
 }) {
   return (
@@ -27,6 +50,7 @@ function NavigationMenu({
   );
 }
 
+/** Horizontal list that holds NavigationMenuItems. */
 function NavigationMenuList({ className, ...props }: React.ComponentProps<typeof NavigationMenuPrimitive.List>) {
   return (
     <NavigationMenuPrimitive.List
@@ -37,6 +61,7 @@ function NavigationMenuList({ className, ...props }: React.ComponentProps<typeof
   );
 }
 
+/** A single navigation entry that may contain a trigger and a dropdown content panel. */
 function NavigationMenuItem({ className, ...props }: React.ComponentProps<typeof NavigationMenuPrimitive.Item>) {
   return <NavigationMenuPrimitive.Item data-slot="navigation-menu-item" className={cn('relative', className)} {...props} />;
 }
@@ -59,6 +84,7 @@ const navigationMenuTriggerStyle = cva([
   'focus-visible:outline-1',
 ]);
 
+/** Button that opens the associated NavigationMenuContent panel on focus or hover. */
 function NavigationMenuTrigger({ className, children, ...props }: React.ComponentProps<typeof NavigationMenuPrimitive.Trigger>) {
   return (
     <NavigationMenuPrimitive.Trigger data-slot="navigation-menu-trigger" className={cn(navigationMenuTriggerStyle(), 'group', className)} {...props}>
@@ -67,6 +93,7 @@ function NavigationMenuTrigger({ className, children, ...props }: React.Componen
   );
 }
 
+/** Dropdown content panel revealed when a NavigationMenuTrigger is activated. */
 function NavigationMenuContent({ className, ...props }: React.ComponentProps<typeof NavigationMenuPrimitive.Content>) {
   return (
     <NavigationMenuPrimitive.Content
@@ -81,6 +108,7 @@ function NavigationMenuContent({ className, ...props }: React.ComponentProps<typ
   );
 }
 
+/** Animated viewport container that hosts the active NavigationMenuContent. */
 function NavigationMenuViewport({ className, ...props }: React.ComponentProps<typeof NavigationMenuPrimitive.Viewport>) {
   return (
     <div className={cn('absolute top-full left-0 isolate z-50 flex justify-center')}>
@@ -96,6 +124,7 @@ function NavigationMenuViewport({ className, ...props }: React.ComponentProps<ty
   );
 }
 
+/** A styled link used inside NavigationMenuContent that highlights when active. */
 function NavigationMenuLink({ className, ...props }: React.ComponentProps<typeof NavigationMenuPrimitive.Link>) {
   return (
     <NavigationMenuPrimitive.Link
@@ -122,6 +151,7 @@ function NavigationMenuLink({ className, ...props }: React.ComponentProps<typeof
   );
 }
 
+/** Small arrow indicator that points from the active NavigationMenuTrigger to its content panel. */
 function NavigationMenuIndicator({ className, ...props }: React.ComponentProps<typeof NavigationMenuPrimitive.Indicator>) {
   return (
     <NavigationMenuPrimitive.Indicator

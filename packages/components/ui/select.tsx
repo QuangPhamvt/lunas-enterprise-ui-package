@@ -6,24 +6,53 @@ import { cn } from '@customafk/react-toolkit/utils';
 
 import { Select as SelectPrimitive } from 'radix-ui';
 
+/**
+ * Accessible dropdown select built on Radix UI's Select primitives, composed from `Select`, `SelectTrigger`, `SelectContent`, and `SelectItem`.
+ *
+ * @example
+ * ```tsx
+ * import {
+ *   Select, SelectTrigger, SelectValue,
+ *   SelectContent, SelectItem,
+ * } from '@customafk/lunas-ui/ui/select';
+ *
+ * <Select>
+ *   <SelectTrigger>
+ *     <SelectValue placeholder="Pick a fruit" />
+ *   </SelectTrigger>
+ *   <SelectContent>
+ *     <SelectItem value="apple">Apple</SelectItem>
+ *     <SelectItem value="banana">Banana</SelectItem>
+ *   </SelectContent>
+ * </Select>
+ * ```
+ */
 function Select({ ...props }: React.ComponentProps<typeof SelectPrimitive.Root>) {
   return <SelectPrimitive.Root data-slot="select" {...props} />;
 }
 
+/** Groups related `SelectItem` elements with an optional `SelectLabel` header. */
 function SelectGroup({ ...props }: React.ComponentProps<typeof SelectPrimitive.Group>) {
   return <SelectPrimitive.Group data-slot="select-group" {...props} />;
 }
 
+/** Renders the currently selected value (or a placeholder) inside `SelectTrigger`. */
 function SelectValue({ ...props }: React.ComponentProps<typeof SelectPrimitive.Value>) {
   return <SelectPrimitive.Value data-slot="select-value" {...props} />;
 }
 
+/**
+ * The button that opens the select dropdown; renders the current value and a chevron icon.
+ *
+ * @param size - `'default'` (standard padding) or `'sm'` (compact).
+ */
 function SelectTrigger({
   className,
   size = 'default',
   children,
   ...props
 }: React.ComponentProps<typeof SelectPrimitive.Trigger> & {
+  /** Controls the trigger's padding — `'default'` or `'sm'`. */
   size?: 'sm' | 'default';
 }) {
   return (
@@ -92,6 +121,7 @@ function SelectTrigger({
   );
 }
 
+/** Floating dropdown panel that renders inside a portal with enter/exit animations. */
 function SelectContent({ className, children, position = 'popper', ...props }: React.ComponentProps<typeof SelectPrimitive.Content>) {
   return (
     <SelectPrimitive.Portal>
@@ -138,10 +168,12 @@ function SelectContent({ className, children, position = 'popper', ...props }: R
   );
 }
 
+/** Non-interactive label displayed above a `SelectGroup` to describe its options. */
 function SelectLabel({ className, ...props }: React.ComponentProps<typeof SelectPrimitive.Label>) {
   return <SelectPrimitive.Label data-slot="select-label" className={cn('px-2 py-1.5 text-text-positive-weak text-xs', className)} {...props} />;
 }
 
+/** A selectable option within `SelectContent`; shows a check icon when chosen. */
 function SelectItem({ className, children, ...props }: React.ComponentProps<typeof SelectPrimitive.Item>) {
   return (
     <SelectPrimitive.Item
@@ -181,6 +213,7 @@ function SelectItem({ className, children, ...props }: React.ComponentProps<type
   );
 }
 
+/** Thin horizontal rule used to visually separate groups of `SelectItem` elements. */
 function SelectSeparator({ className, ...props }: React.ComponentProps<typeof SelectPrimitive.Separator>) {
   return <SelectPrimitive.Separator data-slot="select-separator" className={cn('-mx-1 pointer-events-none my-1 h-px bg-border-weak', className)} {...props} />;
 }

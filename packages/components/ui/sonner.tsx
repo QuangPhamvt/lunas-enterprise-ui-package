@@ -3,6 +3,21 @@ import { LoaderIcon } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { Toaster as Sonner, toast, type ToasterProps } from 'sonner';
 
+/**
+ * Global toast notification container — mount once near the root of your app; use the exported `toast` helper to trigger toasts from anywhere.
+ *
+ * @example
+ * ```tsx
+ * import { Toaster, toast } from '@customafk/lunas-ui/ui/sonner';
+ *
+ * // In your app root:
+ * <Toaster />
+ *
+ * // Anywhere in your code:
+ * toast.success('Saved!');
+ * toast.error('Something went wrong.');
+ * ```
+ */
 const Toaster = () => {
   const { theme = 'system' } = useTheme();
 

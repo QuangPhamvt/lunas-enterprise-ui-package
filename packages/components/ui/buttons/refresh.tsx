@@ -5,8 +5,18 @@ import { Paragraph } from '@/components/typography/paragraph';
 import { Button } from '../button';
 
 type Props = {
+  /** Callback invoked when the button is clicked. Defaults to a no-op. */
   onClick?: () => void;
 };
+
+/**
+ * A toolbar button that triggers a refresh/reset action, displaying a rotating arrows icon alongside a "Reset" label that is hidden on small screens.
+ *
+ * @example
+ * import { RefreshBtn } from '@customafk/lunas-ui/ui/buttons/refresh';
+ *
+ * <RefreshBtn onClick={() => resetFilters()} />
+ */
 export const RefreshBtn: React.FC<React.PropsWithChildren<Props>> = ({ onClick = () => {} }) => {
   return (
     <Button

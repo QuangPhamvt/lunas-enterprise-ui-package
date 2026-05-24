@@ -1,3 +1,5 @@
+'use client';
+
 import { memo, useCallback, useId, useMemo } from 'react';
 
 import { useStore } from '@tanstack/react-form';
@@ -11,23 +13,58 @@ import { Textarea } from '@/components/ui/textarea';
 
 import type { TanStackFormTextAreaFieldSchema } from '../../schema';
 import { useTanStackFieldContext } from '../../tanstack-form';
-import { Field, FieldContent, FieldContentMain, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldNote, FieldSeparator } from '../ui/field';
+import {
+  Field,
+  FieldContent,
+  FieldContentMain,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldNote,
+  FieldSeparator,
+  FieldTooltip,
+} from '../ui/field';
 
+/**
+ * Props for the TextareaField component, derived from the TanStack Form textarea field schema.
+ */
 type Props = Pick<
   z.input<typeof TanStackFormTextAreaFieldSchema>,
   'label' | 'description' | 'placeholder' | 'counter' | 'tooltip' | 'helperText' | 'orientation' | 'showErrorMessage'
 > & {
+  /** Marks the field as required; triggers an empty-state indicator when the value is null. */
   required?: boolean;
+  /** Maximum number of characters allowed; enforced when `counter` is true. */
   maxLength?: number;
 };
 
+/**
+ * A TanStack Form-connected multi-line textarea field with optional character counter,
+ * error display, and submission-state feedback. Wrapped in `React.memo` to prevent
+ * unnecessary re-renders.
+ *
+ * @example
+ * import { TextareaField } from '@customafk/lunas-ui/features/tanstack-form';
+ *
+ * <form.Field name="bio">
+ *   {() => (
+ *     <TextareaField
+ *       label="Bio"
+ *       placeholder="Tell us about yourself…"
+ *       counter
+ *       maxLength={200}
+ *     />
+ *   )}
+ * </form.Field>
+ */
 export const TextareaField: React.FC<Props> = memo(
   ({
     label,
     description,
     placeholder,
 
-    // tooltip,
+    tooltip,
     helperText,
     counter = false,
     orientation = 'responsive',
@@ -51,13 +88,10 @@ export const TextareaField: React.FC<Props> = memo(
     }, [_count, counter, maxLength]);
 
     const _invalid = state.meta.isDirty && state.meta.isTouched && !state.meta.isValid;
-
-    const _isEmpty = required ? state.value === null : false;
-
+    const _isEmpty = required && state.value === null;
     const _errors = state.meta.errors;
 
     const _isNearLimit = maxLength && _count >= maxLength * 0.8;
-
     const _isAtLimit = maxLength && _count >= maxLength;
 
     const onChange = useCallback<React.ChangeEventHandler<HTMLTextAreaElement>>(
@@ -74,10 +108,8 @@ export const TextareaField: React.FC<Props> = memo(
         <Field orientation={orientation} data-invalid={_invalid}>
           <FieldContent>
             <FieldLabel aria-required={_isEmpty} htmlFor={id}>
-              <p>
-                {label}
-                {required && <span className="text-danger-strong"> *</span>}
-              </p>
+              {label}
+              {tooltip && <FieldTooltip tooltip={tooltip} />}
             </FieldLabel>
             <FieldDescription>{description}</FieldDescription>
           </FieldContent>
@@ -125,3 +157,4 @@ export const TextareaField: React.FC<Props> = memo(
     );
   }
 );
+TextareaField.displayName = 'TextareaField';

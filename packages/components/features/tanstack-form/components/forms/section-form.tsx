@@ -1,28 +1,48 @@
+'use client';
+
 import { Separator } from '../ui/separator';
 
+/**
+ * Internal header sub-component for `TanStackSectionForm` that renders a styled section title.
+ */
 const SectionHeader: React.FC<React.PropsWithChildren> = ({ children }) => {
   return (
-    <header data-slot="section-header" className="px-4 pt-2.5 pb-2 font-medium text-base text-text-positive">
+    <header data-slot="section-header" className="flex items-center px-4 py-3 font-semibold text-base text-text-positive tracking-tight">
       {children}
     </header>
   );
 };
 
+/**
+ * Internal body sub-component for `TanStackSectionForm` that wraps field content with vertical padding.
+ */
 const SectionMain: React.FC<React.PropsWithChildren> = ({ children }) => {
   return (
-    <main data-slot="section-main" className="relative flex flex-col space-y-4 py-4">
+    <main data-slot="section-main" className="relative flex flex-col py-4">
       {children}
     </main>
   );
 };
 
+/**
+ * Renders a card-like form section with a titled header, separator, and a content area for form fields.
+ *
+ * @example
+ * import { TanStackSectionForm } from '@customafk/lunas-ui/features/tanstack-form';
+ *
+ * <TanStackSectionForm title="Account Settings">
+ *   <EmailField />
+ *   <PasswordField />
+ * </TanStackSectionForm>
+ */
 export const TanStackSectionForm: React.FC<
   React.PropsWithChildren<{
+    /** Heading text displayed in the section header bar. */
     title: string;
   }>
 > = ({ title, children }) => {
   return (
-    <section data-slot="section-form" className="flex flex-col rounded-md bg-background shadow-card ring-4 ring-border-weak">
+    <section data-slot="section-form" className="flex flex-col rounded-md bg-background shadow-card ring-1 ring-border">
       <SectionHeader>{title}</SectionHeader>
       <Separator />
       <SectionMain>{children}</SectionMain>

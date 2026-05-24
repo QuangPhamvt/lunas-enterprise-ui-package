@@ -1,23 +1,54 @@
+'use client';
+
 import { useMemo } from 'react';
 
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { Button } from '@/components/ui/button';
-import type { FormBuilderComboboxField } from '@/components/features/form-builders/types';
-
-import { useTanStackFieldContext } from '../../tanstack-form';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
-import { Field, FieldContent, FieldContentMain, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldSeparator } from '../ui/field';
+import { Field, FieldContent, FieldContentMain, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldSeparator, FieldTooltip } from '../ui/field';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { useTanStackFieldContext } from '../../tanstack-form';
 
-export const ComboboxField: React.FC<Pick<FormBuilderComboboxField, 'label' | 'description' | 'placeholder' | 'orientation' | 'options'>> = ({
-  label,
-  description,
-  placeholder,
-  orientation,
+/**
+ * Props for the ComboboxField component.
+ */
+type ComboboxFieldProps = {
+  /** Visible label rendered above the combobox trigger. */
+  label: string;
+  /** Optional supporting text displayed beneath the label. */
+  description?: string;
+  /** Placeholder shown inside the trigger button and the search input when no value is selected. */
+  placeholder?: string;
+  /** Tooltip content rendered next to the label via an icon button. */
+  tooltip?: string;
+  /** Layout orientation of the label/field pair. Defaults to `'responsive'`. */
+  orientation?: 'horizontal' | 'vertical' | 'responsive';
+  /** Array of selectable options, each with a string `value` and display `label`. */
+  options: Array<{ value: string; label: string }>;
+};
 
-  options,
-}) => {
+/**
+ * A TanStack Form-connected searchable combobox field powered by Radix UI Popover
+ * and a Command menu, allowing the user to filter and select a single string value.
+ *
+ * @example
+ * import { ComboboxField } from '@customafk/lunas-ui/features/tanstack-form';
+ *
+ * <form.Field name="city">
+ *   {() => (
+ *     <ComboboxField
+ *       label="City"
+ *       placeholder="Search city…"
+ *       options={[
+ *         { value: 'tokyo', label: 'Tokyo' },
+ *         { value: 'hanoi', label: 'Hanoi' },
+ *       ]}
+ *     />
+ *   )}
+ * </form.Field>
+ */
+export const ComboboxField: React.FC<ComboboxFieldProps> = ({ label, description, placeholder, tooltip, orientation = 'responsive', options }) => {
   const field = useTanStackFieldContext<string | null>();
 
   const _isInvalid = useMemo(() => {
@@ -28,12 +59,16 @@ export const ComboboxField: React.FC<Pick<FormBuilderComboboxField, 'label' | 'd
     return field.state.meta.errors;
   }, [field.state.meta.errors]);
 
+  const selectedLabel = options.find(({ value }) => value === field.state.value)?.label;
+
   return (
     <FieldGroup className="px-4">
       <Field orientation={orientation} data-invalid={_isInvalid}>
         <FieldContent>
-          <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
-
+          <FieldLabel htmlFor={field.name}>
+            {label}
+            {tooltip && <FieldTooltip tooltip={tooltip} />}
+          </FieldLabel>
           <FieldDescription>{description}</FieldDescription>
         </FieldContent>
 
@@ -50,19 +85,20 @@ export const ComboboxField: React.FC<Pick<FormBuilderComboboxField, 'label' | 'd
                     'hover:bg-transparent',
                     'focus:outline-1 focus:outline-primary-strong focus:ring-4 focus:ring-primary-weak',
                     'data-[state=open]:text-text-positive-muted data-[state=open]:outline-1 data-[state=open]:outline-primary-strong data-[state=open]:ring-4 data-[state=open]:ring-primary-weak',
-                    field.state.value === null && 'text-text-positive-muted'
+                    !field.state.value && 'text-text-positive-muted'
                   )}
                 >
-                  {!!field.state.value && (
-                    <p className="flex min-w-0 flex-1 items-center gap-2 text-start">{options?.find(({ value }) => value === field.state.value)?.label}</p>
+                  {selectedLabel ? (
+                    <p className="flex min-w-0 flex-1 items-center gap-2 text-start">{selectedLabel}</p>
+                  ) : (
+                    <p className="flex-1 text-start text-text-positive-muted">{placeholder}</p>
                   )}
-                  {!field.state.value && <p className="flex-1 text-start text-text-positive-muted">{placeholder}</p>}
                 </Button>
               </PopoverTrigger>
 
               <PopoverContent align="end" side="bottom" className="flex w-fit rounded p-0" onBlur={field.handleBlur}>
                 <Command className="border-none">
-                  <CommandInput placeholder={placeholder ?? 'Tìm kiếm'} />
+                  <CommandInput placeholder={placeholder ?? 'Search…'} />
                   <CommandList>
                     <CommandGroup className="max-h-40 overflow-y-auto">
                       {options.map(({ value, label }) => (
@@ -72,7 +108,7 @@ export const ComboboxField: React.FC<Pick<FormBuilderComboboxField, 'label' | 'd
                       ))}
                     </CommandGroup>
                   </CommandList>
-                  <CommandEmpty>Không có kết quả</CommandEmpty>
+                  <CommandEmpty>No results found.</CommandEmpty>
                 </Command>
               </PopoverContent>
             </Popover>

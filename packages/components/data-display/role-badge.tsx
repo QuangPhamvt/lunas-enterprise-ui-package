@@ -1,29 +1,45 @@
-import { useMemo } from 'react';
+'use client';
 
 import { ERole } from '@/types';
 
 import { Badge } from '../ui/badge';
 
-type Props = {
+const ROLE_COLORS: Record<ERole, React.ComponentProps<typeof Badge>['color']> = {
+  [ERole.ADMIN]: 'primary',
+  [ERole.SUPER_ADMIN]: 'danger',
+  [ERole.MODERATOR]: 'info',
+  [ERole.STAFF]: 'accent',
+  [ERole.USER]: 'muted',
+};
+
+const ROLE_LABELS: Record<ERole, string> = {
+  [ERole.SUPER_ADMIN]: 'Super Admin',
+  [ERole.ADMIN]: 'Admin',
+  [ERole.MODERATOR]: 'Moderator',
+  [ERole.STAFF]: 'Staff',
+  [ERole.USER]: 'User',
+};
+
+type RoleBadgeProps = {
+  /** The user role enum value that determines the badge label and colour. */
   status: ERole;
 };
-export const RoleBadge: React.FC<React.PropsWithChildren<Props>> = ({ status }) => {
-  const colors = useMemo<Record<ERole, React.ComponentProps<typeof Badge>['color']>>(() => {
-    return {
-      [ERole.ADMIN]: 'red',
-      [ERole.SUPER_ADMIN]: 'purple',
-      [ERole.MODERATOR]: 'indigo',
-      [ERole.STAFF]: 'green',
-      [ERole.USER]: 'blue',
-    };
-  }, []);
+
+/**
+ * Renders a colour-coded badge for a user role (e.g. Admin, Staff, User).
+ *
+ * @example
+ * ```tsx
+ * import { RoleBadge } from '@customafk/lunas-ui/data-display/role-badge';
+ * import { ERole } from '@customafk/lunas-ui/types';
+ *
+ * <RoleBadge status={ERole.ADMIN} />
+ * ```
+ */
+export const RoleBadge: React.FC<RoleBadgeProps> = ({ status }) => {
   return (
-    <Badge color={colors[status]} className="min-w-24 justify-center">
-      {status === ERole.SUPER_ADMIN && 'Super Admin'}
-      {status === ERole.ADMIN && 'Admin'}
-      {status === ERole.MODERATOR && 'Moderator'}
-      {status === ERole.STAFF && 'Staff'}
-      {status === ERole.USER && 'User'}
+    <Badge data-slot="role-badge" color={ROLE_COLORS[status]} className="min-w-24 justify-center">
+      {ROLE_LABELS[status]}
     </Badge>
   );
 };

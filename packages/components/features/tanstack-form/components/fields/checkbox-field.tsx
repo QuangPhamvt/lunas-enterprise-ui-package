@@ -1,22 +1,51 @@
+'use client';
+
 import { useStore } from '@tanstack/react-form';
 
 import type z from 'zod';
 
 import type { TanStackFormCheckboxGroupFieldSchema } from '../../schema';
 import { useTanStackFieldContext } from '../../tanstack-form';
-import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, FieldLabel, FieldNote, FieldSeparator } from '../ui/field';
+import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, FieldLabel, FieldNote, FieldSeparator, FieldTooltip } from '../ui/field';
 import { Checkbox } from '@/components/ui/checkbox';
 
-type Props = Pick<z.input<typeof TanStackFormCheckboxGroupFieldSchema>, 'label' | 'description' | 'orientation' | 'options' | 'helperText'>;
+/**
+ * Props for the CheckboxField component, derived from the TanStack Form checkbox group field schema.
+ */
+type Props = Pick<z.input<typeof TanStackFormCheckboxGroupFieldSchema>, 'label' | 'description' | 'orientation' | 'options' | 'helperText' | 'tooltip'>;
 
-export const CheckboxField: React.FC<Props> = ({ label, description, options, helperText, orientation }) => {
+/**
+ * A TanStack Form-connected checkbox group field that manages an array of selected string values,
+ * supporting multi-selection and submission-state disabling.
+ *
+ * @example
+ * import { CheckboxField } from '@customafk/lunas-ui/features/tanstack-form';
+ *
+ * <form.Field name="roles">
+ *   {() => (
+ *     <CheckboxField
+ *       label="Roles"
+ *       options={[
+ *         { value: 'admin', label: 'Admin' },
+ *         { value: 'editor', label: 'Editor' },
+ *       ]}
+ *       helperText="Select one or more roles"
+ *     />
+ *   )}
+ * </form.Field>
+ */
+export const CheckboxField: React.FC<Props> = ({ label, description, options, tooltip, helperText, orientation }) => {
   const field = useTanStackFieldContext<string[] | null>();
   const isSubmitting = useStore(field.form.store, ({ isSubmitting }) => isSubmitting);
+
   return (
     <FieldGroup className="gap-y-4 px-4">
       <Field orientation={orientation}>
         <FieldContent>
-          <FieldLabel>{label}</FieldLabel>
+          <FieldLabel>
+            {label}
+            {tooltip && <FieldTooltip tooltip={tooltip} />}
+          </FieldLabel>
           <FieldDescription>{description}</FieldDescription>
           <FieldNote isShow={!!helperText}>{helperText}</FieldNote>
         </FieldContent>
@@ -31,20 +60,14 @@ export const CheckboxField: React.FC<Props> = ({ label, description, options, he
                     checked={field.state.value?.includes(option.value) ?? false}
                     disabled={isSubmitting}
                     onCheckedChange={checked => {
-                      // Update the field value based on the checkbox state
-
-                      // If checked and field value is not null, push the option value
                       if (checked && field.state.value !== null) {
                         field.pushValue(option.value);
-                        // If the field value is null, initialize it with the selected option
                       } else if (checked && field.state.value === null) {
                         field.setValue([option.value]);
-                        // If unchecked and field value is not null, remove the option value
                       } else if (!checked && field.state.value !== null) {
                         const index = field.state.value.indexOf(option.value);
                         if (index > -1) field.removeValue(index);
-                        // If unchecked and field value is null, do nothing
-                      } else if (!checked && field.state.value === null) {
+                      } else {
                         field.setValue(null);
                       }
                     }}

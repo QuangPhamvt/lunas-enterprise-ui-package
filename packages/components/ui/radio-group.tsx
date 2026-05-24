@@ -6,10 +6,31 @@ import { cn } from '@customafk/react-toolkit/utils';
 
 import { RadioGroup as RadioGroupPrimitive } from 'radix-ui';
 
+/**
+ * Accessible radio button group built on Radix UI's RadioGroup primitive, where only one option can be selected at a time.
+ *
+ * @example
+ * ```tsx
+ * import { RadioGroup, RadioGroupItem } from '@customafk/lunas-ui/ui/radio-group';
+ * import { Label } from '@customafk/lunas-ui/ui/label';
+ *
+ * <RadioGroup defaultValue="monthly">
+ *   <div className="flex items-center gap-2">
+ *     <RadioGroupItem value="monthly" id="monthly" />
+ *     <Label htmlFor="monthly">Monthly</Label>
+ *   </div>
+ *   <div className="flex items-center gap-2">
+ *     <RadioGroupItem value="annually" id="annually" />
+ *     <Label htmlFor="annually">Annually</Label>
+ *   </div>
+ * </RadioGroup>
+ * ```
+ */
 function RadioGroup({ className, ...props }: React.ComponentProps<typeof RadioGroupPrimitive.Root>) {
   return <RadioGroupPrimitive.Root data-slot="radio-group" className={cn('grid gap-3', className)} {...props} />;
 }
 
+/** Individual radio button within a `RadioGroup`; shows a filled circle indicator when selected. */
 function RadioGroupItem({ className, ...props }: React.ComponentProps<typeof RadioGroupPrimitive.Item>) {
   return (
     <RadioGroupPrimitive.Item

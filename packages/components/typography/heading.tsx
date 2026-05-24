@@ -6,14 +6,14 @@ import { cva } from 'class-variance-authority';
 
 type HeadingLevel = 'h1' | 'h2' | 'h3' | 'h4' | 'h5';
 
-type HeadingProps = {
+export type HeadingProps = {
   level?: HeadingLevel;
   className?: string;
   children?: ReactNode;
   as?: ElementType;
 };
 
-export const headingVariants = cva('text-start text-balance text-text-positive-strong tracking-tight', {
+export const headingVariants = cva('scroll-m-20 text-start text-balance text-text-positive-strong tracking-tight transition-colors', {
   variants: {
     level: {
       h1: 'text-3xl leading-tight font-bold md:text-4xl',

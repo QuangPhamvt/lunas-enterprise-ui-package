@@ -1,4 +1,6 @@
-import { useCallback, useMemo } from 'react';
+'use client';
+
+import { useCallback } from 'react';
 
 import { useStore } from '@tanstack/react-form';
 
@@ -11,22 +13,57 @@ import { NumberInput } from '@/components/ui/inputs/number-input';
 
 import type { TanStackFormNumberFieldSchema } from '../../schema';
 import { useTanStackFieldContext } from '../../tanstack-form';
-import { Field, FieldContent, FieldContentMain, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldNote, FieldSeparator } from '../ui/field';
+import {
+  Field,
+  FieldContent,
+  FieldContentMain,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldNote,
+  FieldSeparator,
+  FieldTooltip,
+} from '../ui/field';
 
+/**
+ * Props for the NumberField component, derived from the TanStack Form number field schema.
+ */
 type NumberFieldProps = Pick<
   z.input<typeof TanStackFormNumberFieldSchema>,
   'label' | 'description' | 'placeholder' | 'orientation' | 'tooltip' | 'helperText' | 'rounding' | 'decimalPlaces' | 'percision' | 'unit' | 'showErrorMessage'
 > & {
+  /** Marks the field as required; triggers an empty-state indicator when the value is null. */
   required?: boolean;
+  /** When true, the input accepts negative numbers. */
   allowNegative?: boolean;
 };
 
+/**
+ * A TanStack Form-connected numeric input field supporting rounding rules,
+ * decimal precision, unit labels, and submission-state feedback.
+ *
+ * @example
+ * import { NumberField } from '@customafk/lunas-ui/features/tanstack-form';
+ *
+ * <form.Field name="quantity">
+ *   {() => (
+ *     <NumberField
+ *       label="Quantity"
+ *       placeholder="0"
+ *       unit="pcs"
+ *       decimalPlaces={2}
+ *       required
+ *     />
+ *   )}
+ * </form.Field>
+ */
 export const NumberField: React.FC<NumberFieldProps> = ({
   label,
   description,
   placeholder,
 
-  // tooltip,
+  tooltip,
   helperText,
   orientation = 'responsive',
   showErrorMessage = true,
@@ -42,14 +79,8 @@ export const NumberField: React.FC<NumberFieldProps> = ({
 
   const isSubmitting = useStore(field.form.store, ({ isSubmitting }) => isSubmitting);
 
-  const _errors = useMemo(() => {
-    return field.state.meta.errors;
-  }, [field.state.meta.errors]);
-
-  const _isEmpty = useMemo(() => {
-    if (required) return field.state.value === null;
-    return false;
-  }, [required, field.state.value]);
+  const _errors = field.state.meta.errors;
+  const _isEmpty = required ? field.state.value === null : false;
 
   const onValueChange = useCallback(
     (value: number | null) => {
@@ -65,6 +96,7 @@ export const NumberField: React.FC<NumberFieldProps> = ({
         <FieldContent>
           <FieldLabel htmlFor={field.name} aria-required={_isEmpty}>
             {label}
+            {tooltip && <FieldTooltip tooltip={tooltip} />}
           </FieldLabel>
           <FieldDescription>{description}</FieldDescription>
         </FieldContent>

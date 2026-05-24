@@ -5,16 +5,34 @@ import { cn } from '@customafk/react-toolkit/utils';
 import { Button } from '../ui/button';
 
 export interface FeatureDevelopingProps {
+  /** Main heading shown beneath the construction icon. Defaults to `'Tính năng đang phát triển'`. */
   title?: string;
+  /** Supporting text shown below the title. Defaults to a Vietnamese message asking the user to check back later. */
   subtitle?: string;
+  /** Label for the action button. Defaults to `'Quay lại'`. */
   buttonText?: string;
+  /** Handler called when the action button is clicked. Defaults to `window.history.back()`. */
   onButtonClick?: () => void;
+  /** Additional class names applied to the root container element. */
   className?: string;
+  /** Additional class names applied to the `Construction` icon. */
   iconClassName?: string;
 }
 
 /**
- * FeatureDeveloping component for displaying pages with features under development
+ * Full-page placeholder displayed when a feature is still under active development.
+ *
+ * @example
+ * ```tsx
+ * import { FeatureDeveloping } from '@customafk/lunas-ui/pages/FeatureDeveloping';
+ *
+ * <FeatureDeveloping
+ *   title="Coming Soon"
+ *   subtitle="This feature is not ready yet."
+ *   buttonText="Go Back"
+ *   onButtonClick={() => router.back()}
+ * />
+ * ```
  */
 export const FeatureDeveloping = ({
   title = 'Tính năng đang phát triển',

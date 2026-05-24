@@ -226,7 +226,7 @@ export const buttonLoadingVariant = cva(['pointer-events-none absolute inset-0 z
  */
 export const buttonVariants = cva(
   [
-    'relative cursor-pointer rounded-sm transition-all',
+    'relative cursor-pointer rounded-sm transition-[color,background-color,border-color,box-shadow,opacity] duration-150 ease-in-out',
     'whitespace-normal',
     'inline-flex items-center justify-center',
     '[&_svg]:pointer-events-none',
@@ -238,7 +238,7 @@ export const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: 'border border-transparent text-text-negative outline-none',
+        default: 'border border-transparent outline-none shadow-btn',
         outline: 'border bg-card outline-none',
         soft: 'outline-none outline-0',
         subtle: 'border border-transparent outline-1 -outline-offset-1',
@@ -274,42 +274,42 @@ export const buttonVariants = cva(
       {
         variant: 'default',
         color: 'primary',
-        className: 'bg-primary hover:opacity-80 focus:ring-2 focus:ring-primary focus:ring-offset-2',
+        className: 'bg-primary text-primary-foreground hover:bg-primary-strong focus:ring-2 focus:ring-primary focus:ring-offset-2',
       },
       {
         variant: 'default',
         color: 'secondary',
-        className: 'bg-secondary hover:opacity-80 focus:ring-2 focus:ring-secondary focus:ring-offset-2',
+        className: 'bg-secondary text-secondary-foreground hover:bg-secondary-strong focus:ring-2 focus:ring-secondary focus:ring-offset-2',
       },
       {
         variant: 'default',
         color: 'muted',
-        className: 'bg-muted hover:opacity-80 focus:ring-2 focus:ring-muted focus:ring-offset-2',
+        className: 'bg-muted text-text-negative hover:opacity-80 focus:ring-2 focus:ring-muted focus:ring-offset-2',
       },
       {
         variant: 'default',
         color: 'success',
-        className: 'bg-success hover:opacity-80 focus:ring-2 focus:ring-success focus:ring-offset-2',
+        className: 'bg-success text-success-foreground hover:bg-success-strong focus:ring-2 focus:ring-success focus:ring-offset-2',
       },
       {
         variant: 'default',
         color: 'important',
-        className: 'bg-important hover:opacity-80 focus:ring-2 focus:ring-important focus:ring-offset-2',
+        className: 'bg-important text-text-negative hover:opacity-80 focus:ring-2 focus:ring-important focus:ring-offset-2',
       },
       {
         variant: 'default',
         color: 'info',
-        className: 'bg-info hover:opacity-80 focus:ring-2 focus:ring-info focus:ring-offset-2',
+        className: 'bg-info text-info-foreground hover:bg-info-strong focus:ring-2 focus:ring-info focus:ring-offset-2',
       },
       {
         variant: 'default',
         color: 'warning',
-        className: 'bg-warning hover:opacity-80 focus:ring-2 focus:ring-warning focus:ring-offset-2',
+        className: 'bg-warning text-warning-foreground hover:bg-warning-strong focus:ring-2 focus:ring-warning focus:ring-offset-2',
       },
       {
         variant: 'default',
         color: 'danger',
-        className: 'bg-danger hover:opacity-80 focus:ring-2 focus:ring-danger focus:ring-offset-2',
+        className: 'bg-danger text-danger-foreground hover:bg-danger-strong focus:ring-2 focus:ring-danger focus:ring-offset-2',
       },
       {
         variant: 'outline',

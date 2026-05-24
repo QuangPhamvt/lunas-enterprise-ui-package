@@ -13,158 +13,74 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    pill: true,
     children: 'Badge',
-  },
-};
-
-export const Pill: Story = {
-  args: {
+    color: 'primary',
+    variant: 'solid',
     pill: true,
-    children: 'Pill Badge',
+    size: 'md',
   },
 };
 
-export const Red: Story = {
-  args: {
-    ...Default.args,
-    color: 'red',
-    children: 'Red Badge',
-  },
+export const Solid: Story = {
+  args: { ...Default.args, variant: 'solid', children: 'Solid' },
 };
 
-export const Orange: Story = {
-  args: {
-    ...Default.args,
-    color: 'orange',
-    children: 'Orange Badge',
-  },
+export const Soft: Story = {
+  args: { ...Default.args, variant: 'soft', children: 'Soft' },
 };
 
-export const Amber: Story = {
-  args: {
-    ...Default.args,
-    color: 'amber',
-    children: 'Amber Badge',
-  },
+export const Outline: Story = {
+  args: { ...Default.args, variant: 'outline', children: 'Outline' },
 };
 
-export const Yellow: Story = {
-  args: {
-    ...Default.args,
-    color: 'yellow',
-    children: 'Yellow Badge',
-  },
+export const Primary: Story = {
+  args: { ...Default.args, color: 'primary', children: 'Primary' },
 };
 
-export const Lime: Story = {
-  args: {
-    ...Default.args,
-    color: 'lime',
-    children: 'Lime Badge',
-  },
+export const Secondary: Story = {
+  args: { ...Default.args, color: 'secondary', children: 'Secondary' },
 };
 
-export const Green: Story = {
-  args: {
-    ...Default.args,
-    color: 'green',
-    children: 'Green Badge',
-  },
+export const Muted: Story = {
+  args: { ...Default.args, color: 'muted', children: 'Muted' },
 };
 
-export const Emerald: Story = {
-  args: {
-    ...Default.args,
-    color: 'emerald',
-    children: 'Emerald Badge',
-  },
+export const Accent: Story = {
+  args: { ...Default.args, color: 'accent', children: 'Accent' },
 };
 
-export const Teal: Story = {
-  args: {
-    ...Default.args,
-    color: 'teal',
-    children: 'Teal Badge',
-  },
+export const Info: Story = {
+  args: { ...Default.args, color: 'info', children: 'Info' },
 };
 
-export const Cyan: Story = {
-  args: {
-    ...Default.args,
-    color: 'cyan',
-    children: 'Cyan Badge',
-  },
+export const Success: Story = {
+  args: { ...Default.args, color: 'success', children: 'Success' },
 };
 
-export const Sky: Story = {
-  args: {
-    ...Default.args,
-    color: 'sky',
-    children: 'Sky Badge',
-  },
+export const Warning: Story = {
+  args: { ...Default.args, color: 'warning', children: 'Warning' },
 };
 
-export const Blue: Story = {
-  args: {
-    ...Default.args,
-    color: 'blue',
-    children: 'Blue Badge',
-  },
+export const Danger: Story = {
+  args: { ...Default.args, color: 'danger', children: 'Danger' },
 };
 
-export const Indigo: Story = {
-  args: {
-    ...Default.args,
-    color: 'indigo',
-    children: 'Indigo Badge',
-  },
+export const Square: Story = {
+  args: { ...Default.args, pill: false, children: 'Square' },
 };
 
-export const Violet: Story = {
-  args: {
-    ...Default.args,
-    color: 'violet',
-    children: 'Violet Badge',
-  },
+export const SizeXs: Story = {
+  args: { ...Default.args, size: 'xs', children: 'XS' },
 };
 
-export const Purple: Story = {
-  args: {
-    ...Default.args,
-    color: 'purple',
-    children: 'Purple Badge',
-  },
+export const SizeSm: Story = {
+  args: { ...Default.args, size: 'sm', children: 'SM' },
 };
 
-export const Fuchsia: Story = {
-  args: {
-    ...Default.args,
-    color: 'fuchsia',
-    children: 'Fuchsia Badge',
-  },
+export const SizeLg: Story = {
+  args: { ...Default.args, size: 'lg', children: 'LG' },
 };
 
-export const Pink: Story = {
-  args: {
-    ...Default.args,
-    color: 'pink',
-    children: 'Pink Badge',
-  },
-};
-
-export const Rose: Story = {
-  args: {
-    ...Default.args,
-    color: 'rose',
-    children: 'Rose Badge',
-  },
-};
-
-export const Zinc: Story = {
-  args: {
-    ...Default.args,
-    color: 'zinc',
-    children: 'Zinc Badge',
-  },
+export const SizeXl: Story = {
+  args: { ...Default.args, size: 'xl', children: 'XL' },
 };

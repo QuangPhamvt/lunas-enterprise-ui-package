@@ -90,6 +90,23 @@ const CalendarWeekNumber = ({
   );
 };
 
+/**
+ * A fully styled date-picker calendar built on top of react-day-picker, supporting single, range, and multiple selection modes.
+ *
+ * @example
+ * ```tsx
+ * import { Calendar } from '@customafk/lunas-ui/ui/calendar';
+ *
+ * const [date, setDate] = React.useState<Date>();
+ *
+ * <Calendar
+ *   mode="single"
+ *   selected={date}
+ *   onSelect={setDate}
+ *   captionLayout="dropdown"
+ * />
+ * ```
+ */
 function Calendar({
   className,
   classNames,
@@ -100,6 +117,7 @@ function Calendar({
   components,
   ...props
 }: React.ComponentProps<typeof DayPicker> & {
+  /** Variant applied to the previous/next navigation buttons. */
   buttonVariant?: React.ComponentProps<typeof Button>['variant'];
 }) {
   const defaultClassNames = getDefaultClassNames();

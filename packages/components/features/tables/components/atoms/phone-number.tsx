@@ -1,6 +1,21 @@
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
-export const UITablePhoneNumberDisplay: React.FC<React.PropsWithChildren<{ value: string }>> = ({ value }) => {
+/**
+ * Formats and displays a phone number string in a table cell using the
+ * `(NXX) NXX-XXXX` pattern, with a tooltip that shows the full international
+ * dialling representation.
+ *
+ * @example
+ * import { UITablePhoneNumberDisplay } from '@customafk/lunas-ui/features/tables';
+ *
+ * <UITablePhoneNumberDisplay value="0843456789" />
+ */
+export const UITablePhoneNumberDisplay: React.FC<
+  React.PropsWithChildren<{
+    /** The raw phone number string to format and display. */
+    value: string;
+  }>
+> = ({ value }) => {
   return (
     <Tooltip>
       <TooltipTrigger asChild>

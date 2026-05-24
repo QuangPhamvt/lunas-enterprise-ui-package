@@ -4,10 +4,28 @@ import { cn } from '@customafk/react-toolkit/utils';
 
 import { Tabs as TabsPrimitive } from 'radix-ui';
 
+/**
+ * Keyboard-accessible tabbed panel built on Radix UI's Tabs primitives, composed from `Tabs`, `TabsList`, `TabsTrigger`, and `TabsContent`.
+ *
+ * @example
+ * ```tsx
+ * import { Tabs, TabsList, TabsTrigger, TabsContent } from '@customafk/lunas-ui/ui/tabs';
+ *
+ * <Tabs defaultValue="overview">
+ *   <TabsList>
+ *     <TabsTrigger value="overview">Overview</TabsTrigger>
+ *     <TabsTrigger value="settings">Settings</TabsTrigger>
+ *   </TabsList>
+ *   <TabsContent value="overview">Overview content here.</TabsContent>
+ *   <TabsContent value="settings">Settings content here.</TabsContent>
+ * </Tabs>
+ * ```
+ */
 function Tabs({ className, ...props }: React.ComponentProps<typeof TabsPrimitive.Root>) {
   return <TabsPrimitive.Root data-slot="tabs" className={cn('flex flex-col gap-2', className)} {...props} />;
 }
 
+/** Container that holds the row of `TabsTrigger` buttons with a muted background pill style. */
 function TabsList({ className, ...props }: React.ComponentProps<typeof TabsPrimitive.List>) {
   return (
     <TabsPrimitive.List
@@ -18,6 +36,7 @@ function TabsList({ className, ...props }: React.ComponentProps<typeof TabsPrimi
   );
 }
 
+/** Individual tab button that activates its associated `TabsContent` panel when clicked. */
 function TabsTrigger({ className, ...props }: React.ComponentProps<typeof TabsPrimitive.Trigger>) {
   return (
     <TabsPrimitive.Trigger
@@ -47,6 +66,7 @@ function TabsTrigger({ className, ...props }: React.ComponentProps<typeof TabsPr
   );
 }
 
+/** Panel whose visibility is controlled by the active `TabsTrigger`; each panel must have a matching `value`. */
 function TabsContent({ className, ...props }: React.ComponentProps<typeof TabsPrimitive.Content>) {
   return <TabsPrimitive.Content data-slot="tabs-content" className={cn('flex-1 outline-none', className)} {...props} />;
 }
