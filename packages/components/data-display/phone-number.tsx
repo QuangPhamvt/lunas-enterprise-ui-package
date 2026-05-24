@@ -3,9 +3,20 @@
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 
 type PhoneNumberDisplayProps = {
+  /** The raw phone number string (e.g. `'0901234567'`); automatically formatted as `(090) 123-4567` with a +84 tooltip. */
   value: string;
 };
 
+/**
+ * Formats and displays a Vietnamese phone number with a tooltip showing the international dialling format.
+ *
+ * @example
+ * ```tsx
+ * import { PhoneNumberDisplay } from '@customafk/lunas-ui/data-display/phone-number';
+ *
+ * <PhoneNumberDisplay value="0901234567" />
+ * ```
+ */
 export const PhoneNumberDisplay: React.FC<PhoneNumberDisplayProps> = ({ value }) => {
   return (
     <Tooltip>

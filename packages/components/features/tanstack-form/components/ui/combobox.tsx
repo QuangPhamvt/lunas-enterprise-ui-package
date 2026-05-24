@@ -5,6 +5,24 @@ import { cn } from '@customafk/react-toolkit/utils';
 import { Command } from 'cmdk';
 import { Popover as PopoverPrimitive, Separator } from 'radix-ui';
 
+/**
+ * Root combobox wrapper built on Radix UI Popover; manages open/close state and provides context to sub-components.
+ *
+ * @example
+ * import { Combobox, ComboboxTrigger, ComboboxContent, ComboboxCommand, ComboboxInput, ComboboxList, ComboboxItem } from '@customafk/lunas-ui/features/tanstack-form';
+ *
+ * <Combobox>
+ *   <ComboboxTrigger>Select an option</ComboboxTrigger>
+ *   <ComboboxContent>
+ *     <ComboboxCommand>
+ *       <ComboboxInput placeholder="Search…" />
+ *       <ComboboxList>
+ *         <ComboboxItem value="a">Option A</ComboboxItem>
+ *       </ComboboxList>
+ *     </ComboboxCommand>
+ *   </ComboboxContent>
+ * </Combobox>
+ */
 const Combobox: React.FC<React.ComponentProps<typeof PopoverPrimitive.Root>> = ({ children, ...props }) => {
   return (
     <PopoverPrimitive.Root data-slot="combobox" {...props}>
@@ -13,6 +31,14 @@ const Combobox: React.FC<React.ComponentProps<typeof PopoverPrimitive.Root>> = (
   );
 };
 
+/**
+ * Clickable trigger element that toggles the combobox dropdown, styled with focus-ring and open-state outline.
+ *
+ * @example
+ * import { ComboboxTrigger } from '@customafk/lunas-ui/features/tanstack-form';
+ *
+ * <ComboboxTrigger>Pick a country</ComboboxTrigger>
+ */
 const ComboboxTrigger: React.FC<React.ComponentProps<typeof PopoverPrimitive.Trigger>> = ({ children, className, ...props }) => {
   return (
     <PopoverPrimitive.Trigger
@@ -32,6 +58,14 @@ const ComboboxTrigger: React.FC<React.ComponentProps<typeof PopoverPrimitive.Tri
   );
 };
 
+/**
+ * Animated dropdown panel rendered in a portal, aligned to the trigger width with enter/exit transitions.
+ *
+ * @example
+ * import { ComboboxContent } from '@customafk/lunas-ui/features/tanstack-form';
+ *
+ * <ComboboxContent align="start">…</ComboboxContent>
+ */
 const ComboboxContent: React.FC<React.ComponentProps<typeof PopoverPrimitive.Content>> = ({ className, align = 'start', children, ...props }) => {
   return (
     <PopoverPrimitive.Portal>
@@ -66,10 +100,26 @@ const ComboboxContent: React.FC<React.ComponentProps<typeof PopoverPrimitive.Con
   );
 };
 
+/**
+ * Placeholder display area for the currently selected combobox value.
+ *
+ * @example
+ * import { ComboboxValue } from '@customafk/lunas-ui/features/tanstack-form';
+ *
+ * <ComboboxValue>{selectedLabel}</ComboboxValue>
+ */
 const ComboboxValue: React.FC<React.ComponentProps<'div'>> = ({ children }) => {
   return <div>asdasd</div>;
 };
 
+/**
+ * Toolbar row with "Clear" and "Add Item" action buttons rendered at the top of the dropdown.
+ *
+ * @example
+ * import { ComboboxActions } from '@customafk/lunas-ui/features/tanstack-form';
+ *
+ * <ComboboxActions />
+ */
 const ComboboxActions: React.FC<React.ComponentProps<'div'>> = ({ children, ...props }) => {
   return (
     <div className="flex items-center justify-between px-3 pt-1.5 pb-1 text-text-positive-weak text-xs" {...props}>
@@ -85,6 +135,17 @@ const ComboboxActions: React.FC<React.ComponentProps<'div'>> = ({ children, ...p
   );
 };
 
+/**
+ * `cmdk` Command root that provides keyboard-navigable filtering logic for the combobox item list.
+ *
+ * @example
+ * import { ComboboxCommand } from '@customafk/lunas-ui/features/tanstack-form';
+ *
+ * <ComboboxCommand>
+ *   <ComboboxInput placeholder="Search…" />
+ *   <ComboboxList>…</ComboboxList>
+ * </ComboboxCommand>
+ */
 const ComboboxCommand: React.FC<React.ComponentProps<typeof Command>> = ({ className, children, ...props }) => {
   return (
     <Command {...props} className={cn('flex size-full flex-col', className)}>
@@ -93,6 +154,14 @@ const ComboboxCommand: React.FC<React.ComponentProps<typeof Command>> = ({ class
   );
 };
 
+/**
+ * Padded search input wired into the `cmdk` Command context for real-time item filtering.
+ *
+ * @example
+ * import { ComboboxInput } from '@customafk/lunas-ui/features/tanstack-form';
+ *
+ * <ComboboxInput placeholder="Search countries…" />
+ */
 const ComboboxInput: React.FC<React.ComponentProps<typeof Command.Input>> = ({ ...props }) => {
   return (
     <div className="p-2">
@@ -105,6 +174,14 @@ const ComboboxInput: React.FC<React.ComponentProps<typeof Command.Input>> = ({ .
   );
 };
 
+/**
+ * Empty state panel shown by `cmdk` when no items match the current search query.
+ *
+ * @example
+ * import { ComboboxEmpty } from '@customafk/lunas-ui/features/tanstack-form';
+ *
+ * <ComboboxEmpty>No results found.</ComboboxEmpty>
+ */
 const ComboboxEmpty: React.FC<React.ComponentProps<'div'>> = ({ ...props }) => {
   return (
     <Command.Empty data-slot="combobox-empty" {...props} className="p-1 pt-0">
@@ -116,6 +193,16 @@ const ComboboxEmpty: React.FC<React.ComponentProps<'div'>> = ({ ...props }) => {
   );
 };
 
+/**
+ * Logical grouping container for a set of related `ComboboxItem` elements within the list.
+ *
+ * @example
+ * import { ComboboxGroup } from '@customafk/lunas-ui/features/tanstack-form';
+ *
+ * <ComboboxGroup heading="Fruits">
+ *   <ComboboxItem value="apple">Apple</ComboboxItem>
+ * </ComboboxGroup>
+ */
 const ComboboxGroup: React.FC<React.ComponentProps<typeof Command.Group>> = ({ children, ...props }) => {
   return (
     <Command.Group data-slot="combobox-group" {...props} className="flex flex-col overflow-hidden p-1">
@@ -124,6 +211,14 @@ const ComboboxGroup: React.FC<React.ComponentProps<typeof Command.Group>> = ({ c
   );
 };
 
+/**
+ * Individual selectable row inside a `ComboboxList`, highlighted on keyboard or pointer selection.
+ *
+ * @example
+ * import { ComboboxItem } from '@customafk/lunas-ui/features/tanstack-form';
+ *
+ * <ComboboxItem value="react">React</ComboboxItem>
+ */
 const ComboboxItem: React.FC<React.ComponentProps<typeof Command.Item>> = ({ children, className, ...props }) => {
   return (
     <Command.Item
@@ -144,6 +239,16 @@ const ComboboxItem: React.FC<React.ComponentProps<typeof Command.Item>> = ({ chi
   );
 };
 
+/**
+ * Scrollable container that wraps all `ComboboxItem` / `ComboboxGroup` children with a max-height overflow scroll.
+ *
+ * @example
+ * import { ComboboxList } from '@customafk/lunas-ui/features/tanstack-form';
+ *
+ * <ComboboxList>
+ *   <ComboboxItem value="a">Option A</ComboboxItem>
+ * </ComboboxList>
+ */
 const ComboboxList: React.FC<React.ComponentProps<'div'>> = ({ children, ...props }) => {
   return (
     <Command.List data-slot="combobox-list" {...props} className="max-h-80 overflow-y-auto overflow-x-hidden">
@@ -152,6 +257,14 @@ const ComboboxList: React.FC<React.ComponentProps<'div'>> = ({ children, ...prop
   );
 };
 
+/**
+ * Thin horizontal rule used to visually separate sections within a combobox dropdown.
+ *
+ * @example
+ * import { ComboboxSeparator } from '@customafk/lunas-ui/features/tanstack-form';
+ *
+ * <ComboboxSeparator />
+ */
 const ComboboxSeparator: React.FC<React.ComponentProps<typeof Separator.Root>> = ({ ...props }) => {
   return <Separator.Root data-slot="combobox-separator" {...props} className="h-px w-full bg-border-weak" />;
 };

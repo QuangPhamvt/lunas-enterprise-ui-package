@@ -6,6 +6,20 @@ import { cn } from '@customafk/react-toolkit/utils';
 
 import { Checkbox as CheckboxPrimitive } from 'radix-ui';
 
+/**
+ * Accessible checkbox input built on Radix UI's Checkbox primitive with checked, indeterminate, focus, invalid, and read-only states.
+ *
+ * @example
+ * ```tsx
+ * import { Checkbox } from '@customafk/lunas-ui/ui/checkbox';
+ * import { Label } from '@customafk/lunas-ui/ui/label';
+ *
+ * <div className="flex items-center gap-2">
+ *   <Checkbox id="terms" />
+ *   <Label htmlFor="terms">Accept terms and conditions</Label>
+ * </div>
+ * ```
+ */
 function Checkbox({ className, ...props }: React.ComponentProps<typeof CheckboxPrimitive.Root>) {
   return (
     <CheckboxPrimitive.Root

@@ -35,9 +35,21 @@ const COUNTRY_LABELS: Record<ECountry, string> = {
 };
 
 type CountryDisplayProps = {
+  /** The country enum value to display; renders "No country" when `null` or `undefined`. */
   country?: ECountry | null;
 };
 
+/**
+ * Displays a country flag (SVG) alongside the country's English name, or a muted "No country" label when the value is absent.
+ *
+ * @example
+ * ```tsx
+ * import { CountryDisplay } from '@customafk/lunas-ui/data-display/country';
+ * import { ECountry } from '@customafk/lunas-ui/types';
+ *
+ * <CountryDisplay country={ECountry.VIETNAM} />
+ * ```
+ */
 export const CountryDisplay: React.FC<CountryDisplayProps> = ({ country }) => {
   const code = useMemo(() => (country ? COUNTRY_CODES[country] : 'VN'), [country]);
 

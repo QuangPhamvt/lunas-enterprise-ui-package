@@ -5,6 +5,18 @@ import { cn } from '@customafk/react-toolkit/utils';
 
 import { ScrollArea as ScrollAreaPrimitive } from 'radix-ui';
 
+/**
+ * A scrollable container with a styled, custom scrollbar that overlays the content.
+ *
+ * @example
+ * ```tsx
+ * import { ScrollArea } from '@customafk/lunas-ui/ui/scroll-area';
+ *
+ * <ScrollArea className="h-64 w-full">
+ *   <div className="p-4">Long content goes here…</div>
+ * </ScrollArea>
+ * ```
+ */
 const ScrollArea = memo(({ className, children, ref, onScroll, ...props }: React.ComponentProps<typeof ScrollAreaPrimitive.Root>) => {
   return (
     <ScrollAreaPrimitive.Root data-slot="scroll-area" className={cn('relative overflow-hidden', className)} {...props}>
@@ -18,6 +30,11 @@ const ScrollArea = memo(({ className, children, ref, onScroll, ...props }: React
 });
 ScrollArea.displayName = 'ScrollArea';
 
+/**
+ * The styled scrollbar track and thumb rendered inside a ScrollArea.
+ *
+ * @param orientation - Direction of the scrollbar: `'vertical'` (default) or `'horizontal'`.
+ */
 const ScrollBar = memo(({ className, orientation = 'vertical', ...props }: React.ComponentProps<typeof ScrollAreaPrimitive.ScrollAreaScrollbar>) => {
   return (
     <ScrollAreaPrimitive.ScrollAreaScrollbar

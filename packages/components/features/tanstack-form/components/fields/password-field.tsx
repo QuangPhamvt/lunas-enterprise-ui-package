@@ -24,11 +24,31 @@ import {
   FieldTooltip,
 } from '../ui/field';
 
+/**
+ * Props for the PasswordField component, derived from the TanStack Form password field schema.
+ */
 type Props = Pick<
   z.input<typeof TanStackFormPasswordFieldSchema>,
   'label' | 'description' | 'placeholder' | 'orientation' | 'tooltip' | 'helperText' | 'showErrorMessage'
 >;
 
+/**
+ * A TanStack Form-connected password input field with a show/hide toggle button
+ * and inline validation error display.
+ *
+ * @example
+ * import { PasswordField } from '@customafk/lunas-ui/features/tanstack-form';
+ *
+ * <form.Field name="password">
+ *   {() => (
+ *     <PasswordField
+ *       label="Password"
+ *       placeholder="Enter your password"
+ *       helperText="Must be at least 8 characters"
+ *     />
+ *   )}
+ * </form.Field>
+ */
 export const PasswordField: React.FC<Props> = ({
   label,
   description,

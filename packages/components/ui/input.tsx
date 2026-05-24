@@ -3,6 +3,7 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 import { useCallback } from 'react';
 
+/** CVA variant definitions for the `Input` component — controls sizing and visual style. */
 export const inputVariants = cva(
   [
     'w-full rounded font-normal text-text-positive caret-primary transition-all tabular-nums',
@@ -47,6 +48,21 @@ export const inputVariants = cva(
 
 export type InputVariantProps = VariantProps<typeof inputVariants>;
 
+/**
+ * Styled text input field built on the native `<input>` element with CVA-driven size and variant tokens.
+ *
+ * @example
+ * ```tsx
+ * import { Input } from '@customafk/lunas-ui/ui/input';
+ *
+ * <Input
+ *   placeholder="Enter your name"
+ *   variant="outline"
+ *   size="md"
+ *   onValueChange={(value) => console.log(value)}
+ * />
+ * ```
+ */
 function Input({
   className,
   variant,
@@ -55,8 +71,11 @@ function Input({
   onValueChange,
   ...props
 }: Omit<React.ComponentProps<'input'>, 'size'> & {
+  /** Visual style of the input border — `'outline'` (default), `'ghost'`, `'none'`, `'soft'`, or `'subtle'`. */
   variant?: InputVariantProps['variant'];
+  /** Controls padding and font size — `'xs'` | `'sm'` | `'md'` (default) | `'lg'` | `'xl'`. */
   size?: InputVariantProps['size'];
+  /** Convenience callback that receives the raw string value on every change, bypassing the synthetic event. */
   onValueChange?: (value: string) => void;
 }) {
   const handleChange = useCallback(

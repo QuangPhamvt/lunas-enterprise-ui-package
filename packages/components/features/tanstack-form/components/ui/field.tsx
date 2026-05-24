@@ -41,6 +41,16 @@ const fieldVariants = cva('group/field flex w-full gap-2 data-[invalid=true]:tex
   },
 });
 
+/**
+ * Outermost `<fieldset>` wrapper that stacks multiple `Field` rows with consistent vertical spacing.
+ *
+ * @example
+ * import { FieldSet } from '@customafk/lunas-ui/features/tanstack-form';
+ *
+ * <FieldSet>
+ *   <Field><FieldLabel>Name</FieldLabel><FieldContent><input /></FieldContent></Field>
+ * </FieldSet>
+ */
 const FieldSet = memo(({ className, ...props }: React.ComponentProps<'fieldset'>) => {
   return (
     <fieldset
@@ -52,26 +62,52 @@ const FieldSet = memo(({ className, ...props }: React.ComponentProps<'fieldset'>
 });
 FieldSet.displayName = 'FieldSet';
 
-const FieldLegend = memo(
-  ({
-    className,
-    variant = 'legend',
-    ...props
-  }: React.ComponentProps<'legend'> & {
-    variant?: 'legend' | 'label';
-  }) => {
-    return (
-      <legend
-        data-slot="field-legend"
-        data-variant={variant}
-        className={cn('mb-3 font-medium data-[variant=label]:text-sm data-[variant=legend]:text-base', className)}
-        {...props}
-      />
-    );
-  }
-);
+/**
+ * Props for {@link FieldLegend}.
+ */
+type FieldLegendProps = React.ComponentProps<'legend'> & {
+  /**
+   * Visual weight of the legend text.
+   * - `'legend'` — larger base-size text (section heading).
+   * - `'label'` — smaller label-size text (matches field label weight).
+   * @default 'legend'
+   */
+  variant?: 'legend' | 'label';
+};
+
+/**
+ * `<legend>` element for a `<fieldset>`, styled as either a section heading or a compact label.
+ *
+ * @example
+ * import { FieldSet, FieldLegend } from '@customafk/lunas-ui/features/tanstack-form';
+ *
+ * <FieldSet>
+ *   <FieldLegend variant="legend">Personal details</FieldLegend>
+ * </FieldSet>
+ */
+const FieldLegend = memo(({ className, variant = 'legend', ...props }: FieldLegendProps) => {
+  return (
+    <legend
+      data-slot="field-legend"
+      data-variant={variant}
+      className={cn('mb-3 font-medium data-[variant=label]:text-sm data-[variant=legend]:text-base', className)}
+      {...props}
+    />
+  );
+});
 FieldLegend.displayName = 'FieldLegend';
 
+/**
+ * Container `<div>` that groups a set of `Field` rows with container-query support for responsive layouts.
+ *
+ * @example
+ * import { FieldGroup } from '@customafk/lunas-ui/features/tanstack-form';
+ *
+ * <FieldGroup>
+ *   <Field>…</Field>
+ *   <Field>…</Field>
+ * </FieldGroup>
+ */
 const FieldGroup = memo(({ className, ...props }: React.ComponentProps<'div'>) => {
   return (
     <div
@@ -88,21 +124,62 @@ const FieldGroup = memo(({ className, ...props }: React.ComponentProps<'div'>) =
 });
 FieldGroup.displayName = 'FieldGroup';
 
+/**
+ * Single form field row that arranges label, input, and meta elements with configurable orientation.
+ *
+ * @example
+ * import { Field } from '@customafk/lunas-ui/features/tanstack-form';
+ *
+ * <Field orientation="horizontal">
+ *   <FieldLabel htmlFor="username">Username</FieldLabel>
+ *   <FieldContent><input id="username" /></FieldContent>
+ * </Field>
+ */
 const Field = memo(({ className, orientation = 'vertical', ...props }: React.ComponentProps<'div'> & VariantProps<typeof fieldVariants>) => {
   return <div data-slot="field" data-orientation={orientation} className={cn(fieldVariants({ orientation }), className)} {...props} />;
 });
 Field.displayName = 'Field';
 
+/**
+ * Flex column wrapper that houses the primary input control together with description and error slots.
+ *
+ * @example
+ * import { FieldContent } from '@customafk/lunas-ui/features/tanstack-form';
+ *
+ * <FieldContent>
+ *   <input type="text" />
+ *   <FieldDescription>Enter your full name.</FieldDescription>
+ * </FieldContent>
+ */
 const FieldContent = memo(({ className, ...props }: React.ComponentProps<'div'>) => {
   return <div data-slot="field-content" className={cn('group/field-content flex flex-col gap-1.5 leading-snug', className)} {...props} />;
 });
 FieldContent.displayName = 'FieldContent';
 
+/**
+ * Positioned wrapper for the main input element that enables absolutely-placed adornments (icons, spinners).
+ *
+ * @example
+ * import { FieldContentMain } from '@customafk/lunas-ui/features/tanstack-form';
+ *
+ * <FieldContentMain>
+ *   <input type="text" className="pr-8" />
+ *   <SearchIcon className="absolute right-2 top-2" />
+ * </FieldContentMain>
+ */
 const FieldContentMain = memo(({ className, ...props }: React.ComponentProps<'div'>) => {
   return <div data-slot="field-content-main" className={cn('relative', className)} {...props} />;
 });
 FieldContentMain.displayName = 'FieldContentMain';
 
+/**
+ * Styled `<label>` element for a `Field`, extending the base `Label` with field-group-aware spacing and border states.
+ *
+ * @example
+ * import { FieldLabel } from '@customafk/lunas-ui/features/tanstack-form';
+ *
+ * <FieldLabel htmlFor="email" aria-required>Email</FieldLabel>
+ */
 const FieldLabel = memo(({ className, ...props }: React.ComponentProps<typeof Label>) => {
   return (
     <Label
@@ -124,6 +201,14 @@ const FieldLabel = memo(({ className, ...props }: React.ComponentProps<typeof La
 });
 FieldLabel.displayName = 'FieldLabel';
 
+/**
+ * Inline title element (non-`<label>`) for fields whose label cannot be a native `<label>`, such as custom checkbox groups.
+ *
+ * @example
+ * import { FieldTitle } from '@customafk/lunas-ui/features/tanstack-form';
+ *
+ * <FieldTitle>Notification preferences</FieldTitle>
+ */
 const FieldTitle = memo(({ className, ...props }: React.ComponentProps<'div'>) => {
   return (
     <div
@@ -135,6 +220,14 @@ const FieldTitle = memo(({ className, ...props }: React.ComponentProps<'div'>) =
 });
 FieldTitle.displayName = 'FieldTitle';
 
+/**
+ * Supplementary hint text rendered below the input to guide the user, with support for inline anchor links.
+ *
+ * @example
+ * import { FieldDescription } from '@customafk/lunas-ui/features/tanstack-form';
+ *
+ * <FieldDescription>Must be at least 8 characters.</FieldDescription>
+ */
 const FieldDescription = memo(({ className, ...props }: React.ComponentProps<'p'>) => {
   return (
     <p
@@ -150,7 +243,26 @@ const FieldDescription = memo(({ className, ...props }: React.ComponentProps<'p'
 });
 FieldDescription.displayName = 'FieldDescription';
 
-const FieldNote = memo(({ isShow = true, className, children, ...props }: React.ComponentProps<'div'> & { isShow?: boolean }) => {
+/**
+ * Props for {@link FieldNote}.
+ */
+type FieldNoteProps = React.ComponentProps<'div'> & {
+  /**
+   * When `false` the note is not rendered at all; useful for conditional display without wrapper conditionals.
+   * @default true
+   */
+  isShow?: boolean;
+};
+
+/**
+ * Highlighted informational callout box with an info icon, shown below a field to surface contextual guidance.
+ *
+ * @example
+ * import { FieldNote } from '@customafk/lunas-ui/features/tanstack-form';
+ *
+ * <FieldNote isShow={isDraftMode}>Changes are saved automatically in draft mode.</FieldNote>
+ */
+const FieldNote = memo(({ isShow = true, className, children, ...props }: FieldNoteProps) => {
   if (isShow === false) return null;
   return (
     <div
@@ -168,7 +280,25 @@ const FieldNote = memo(({ isShow = true, className, children, ...props }: React.
 });
 FieldNote.displayName = 'FieldNote';
 
-const FieldTooltip = memo(({ tooltip }: { tooltip: string }) => {
+/**
+ * Props for {@link FieldTooltip}.
+ */
+type FieldTooltipProps = {
+  /** Text content displayed inside the tooltip when the help icon is hovered or focused. */
+  tooltip: string;
+};
+
+/**
+ * Small help-circle icon button that reveals a tooltip with additional field context on hover or focus.
+ *
+ * @example
+ * import { FieldTooltip } from '@customafk/lunas-ui/features/tanstack-form';
+ *
+ * <FieldLabel>
+ *   Password <FieldTooltip tooltip="Use at least one uppercase letter and one number." />
+ * </FieldLabel>
+ */
+const FieldTooltip = memo(({ tooltip }: FieldTooltipProps) => {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
@@ -189,6 +319,14 @@ const FieldTooltip = memo(({ tooltip }: { tooltip: string }) => {
 });
 FieldTooltip.displayName = 'FieldTooltip';
 
+/**
+ * Visual divider row that optionally displays a centered text label, used to separate logical sections within a `FieldGroup`.
+ *
+ * @example
+ * import { FieldSeparator } from '@customafk/lunas-ui/features/tanstack-form';
+ *
+ * <FieldSeparator>or</FieldSeparator>
+ */
 const FieldSeparator = memo(({ children, className, ...props }: React.PropsWithChildren<React.ComponentProps<'div'>>) => {
   return (
     <div
@@ -208,54 +346,65 @@ const FieldSeparator = memo(({ children, className, ...props }: React.PropsWithC
 });
 FieldSeparator.displayName = 'FieldSeparator';
 
-const FieldError = memo(
-  ({
-    className,
-    children,
-    errors,
-    ...props
-  }: React.ComponentProps<'div'> & {
-    errors?: Array<{ code?: string; message?: string } | undefined>;
-  }) => {
-    const content = useMemo(() => {
-      if (children) {
-        return children;
-      }
+/**
+ * Props for {@link FieldError}.
+ */
+type FieldErrorProps = React.ComponentProps<'div'> & {
+  /**
+   * Array of validation error objects, typically sourced from a form library's field-level error state.
+   * Each entry may carry an optional `code` (e.g. `'invalid_type'`) and a human-readable `message`.
+   * Rendered automatically when `children` is omitted.
+   */
+  errors?: Array<{ code?: string; message?: string } | undefined>;
+};
 
-      if (!errors) {
-        return null;
-      }
+/**
+ * ARIA-live error region that renders field validation messages from either an explicit `errors` array or arbitrary `children`.
+ *
+ * @example
+ * import { FieldError } from '@customafk/lunas-ui/features/tanstack-form';
+ *
+ * <FieldError errors={field.state.meta.errors} />
+ */
+const FieldError = memo(({ className, children, errors, ...props }: FieldErrorProps) => {
+  const content = useMemo(() => {
+    if (children) {
+      return children;
+    }
 
-      if (errors?.length === 1 && errors[0]?.message) {
-        return (
-          <div className="flex flex-row items-center justify-start gap-x-0.5">
-            <p>{errors[0]?.code === 'invalid_type' ? 'Invalid format' : errors[0].message}</p>
-          </div>
-        );
-      }
-
-      return (
-        <ul className="flex list-none flex-col">
-          {errors.map(error => {
-            if (typeof error === 'string') return <li key={error}>{error}</li>;
-            if (!error?.message) return null;
-            return <li key={error.message}>{error.message}</li>;
-          })}
-        </ul>
-      );
-    }, [children, errors]);
-
-    if (!content) {
+    if (!errors) {
       return null;
     }
 
+    if (errors?.length === 1 && errors[0]?.message) {
+      return (
+        <div className="flex flex-row items-center justify-start gap-x-0.5">
+          <p>{errors[0]?.code === 'invalid_type' ? 'Invalid format' : errors[0].message}</p>
+        </div>
+      );
+    }
+
     return (
-      <div role="alert" data-slot="field-error" className={cn('w-full font-medium text-danger-strong text-xs', className)} {...props}>
-        {content}
-      </div>
+      <ul className="flex list-none flex-col">
+        {errors.map(error => {
+          if (typeof error === 'string') return <li key={error}>{error}</li>;
+          if (!error?.message) return null;
+          return <li key={error.message}>{error.message}</li>;
+        })}
+      </ul>
     );
+  }, [children, errors]);
+
+  if (!content) {
+    return null;
   }
-);
+
+  return (
+    <div role="alert" data-slot="field-error" className={cn('w-full font-medium text-danger-strong text-xs', className)} {...props}>
+      {content}
+    </div>
+  );
+});
 FieldError.displayName = 'FieldError';
 
 export {

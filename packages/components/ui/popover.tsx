@@ -5,14 +5,37 @@ import { cn } from '@customafk/react-toolkit/utils';
 import { Popover as PopoverPrimitive } from 'radix-ui';
 import { CloseButton } from './buttons/close';
 
+/**
+ * Floating panel built on Radix UI's Popover primitives, anchored to a trigger element with animated open/close transitions.
+ *
+ * @example
+ * ```tsx
+ * import {
+ *   Popover, PopoverTrigger, PopoverContent, PopoverClose,
+ * } from '@customafk/lunas-ui/ui/popover';
+ * import { Button } from '@customafk/lunas-ui/ui/button';
+ *
+ * <Popover>
+ *   <PopoverTrigger asChild>
+ *     <Button variant="outline">Open popover</Button>
+ *   </PopoverTrigger>
+ *   <PopoverContent>
+ *     <PopoverClose />
+ *     <p>Popover body content goes here.</p>
+ *   </PopoverContent>
+ * </Popover>
+ * ```
+ */
 function Popover({ ...props }: React.ComponentProps<typeof PopoverPrimitive.Root>) {
   return <PopoverPrimitive.Root data-slot="popover" {...props} />;
 }
 
+/** Element that opens or closes the popover on click; use `asChild` to render a custom trigger element. */
 function PopoverTrigger({ ...props }: React.ComponentProps<typeof PopoverPrimitive.Trigger>) {
   return <PopoverPrimitive.Trigger data-slot="popover-trigger" {...props} />;
 }
 
+/** Floating content panel rendered in a portal, matching the trigger width and animated on open/close. */
 function PopoverContent({ className, align = 'start', sideOffset = 4, ...props }: React.ComponentProps<typeof PopoverPrimitive.Content>) {
   return (
     <PopoverPrimitive.Portal>
@@ -49,10 +72,12 @@ function PopoverContent({ className, align = 'start', sideOffset = 4, ...props }
   );
 }
 
+/** Optional anchor element that overrides the trigger as the popover's positioning reference point. */
 function PopoverAnchor({ ...props }: React.ComponentProps<typeof PopoverPrimitive.Anchor>) {
   return <PopoverPrimitive.Anchor data-slot="popover-anchor" {...props} />;
 }
 
+/** Close button pre-positioned at the top-right corner of `PopoverContent` using the shared `CloseButton` primitive. */
 function PopoverClose({ className, ...props }: React.ComponentProps<typeof PopoverPrimitive.Close>) {
   return (
     <PopoverPrimitive.Close data-slot="popover-close" {...props} asChild>

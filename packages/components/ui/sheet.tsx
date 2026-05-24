@@ -6,22 +6,44 @@ import { cn } from '@customafk/react-toolkit/utils';
 
 import { Dialog as SheetPrimitive } from 'radix-ui';
 
+/**
+ * Root provider for the Sheet panel — wraps all Sheet sub-components and manages open state.
+ *
+ * @example
+ * ```tsx
+ * import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '@customafk/lunas-ui/ui/sheet';
+ *
+ * <Sheet>
+ *   <SheetTrigger>Open</SheetTrigger>
+ *   <SheetContent side="right">
+ *     <SheetHeader>
+ *       <SheetTitle>Settings</SheetTitle>
+ *       <SheetDescription>Manage your preferences.</SheetDescription>
+ *     </SheetHeader>
+ *   </SheetContent>
+ * </Sheet>
+ * ```
+ */
 function Sheet({ ...props }: React.ComponentProps<typeof SheetPrimitive.Root>) {
   return <SheetPrimitive.Root data-slot="sheet" {...props} />;
 }
 
+/** Button or element that opens the Sheet when interacted with. */
 function SheetTrigger({ ...props }: React.ComponentProps<typeof SheetPrimitive.Trigger>) {
   return <SheetPrimitive.Trigger data-slot="sheet-trigger" {...props} />;
 }
 
+/** Button that programmatically closes the Sheet. */
 function SheetClose({ ...props }: React.ComponentProps<typeof SheetPrimitive.Close>) {
   return <SheetPrimitive.Close data-slot="sheet-close" {...props} />;
 }
 
+/** Portals Sheet content outside the current DOM hierarchy. */
 function SheetPortal({ ...props }: React.ComponentProps<typeof SheetPrimitive.Portal>) {
   return <SheetPrimitive.Portal data-slot="sheet-portal" {...props} />;
 }
 
+/** Semi-transparent backdrop rendered behind the Sheet panel. */
 function SheetOverlay({ className, ...props }: React.ComponentProps<typeof SheetPrimitive.Overlay>) {
   return (
     <SheetPrimitive.Overlay
@@ -39,12 +61,16 @@ function SheetOverlay({ className, ...props }: React.ComponentProps<typeof Sheet
   );
 }
 
+/**
+ * The sliding panel itself; renders on the specified `side` of the viewport and includes a built-in close button.
+ */
 function SheetContent({
   className,
   children,
   side = 'right',
   ...props
 }: React.ComponentProps<typeof SheetPrimitive.Content> & {
+  /** Edge of the viewport from which the sheet slides in. */
   side?: 'top' | 'right' | 'bottom' | 'left';
 }) {
   return (
@@ -102,18 +128,22 @@ function SheetContent({
   );
 }
 
+/** Padded container for the Sheet title and description at the top of the panel. */
 function SheetHeader({ className, ...props }: React.ComponentProps<'div'>) {
   return <div data-slot="sheet-header" className={cn('flex flex-0 flex-col gap-1.5 p-4', className)} {...props} />;
 }
 
+/** Sticky footer area at the bottom of the Sheet panel, typically used for action buttons. */
 function SheetFooter({ className, ...props }: React.ComponentProps<'div'>) {
   return <div data-slot="sheet-footer" className={cn('mt-auto flex flex-0 flex-col gap-2 p-4', className)} {...props} />;
 }
 
+/** Accessible title element for the Sheet, announced by screen readers on open. */
 function SheetTitle({ className, ...props }: React.ComponentProps<typeof SheetPrimitive.Title>) {
   return <SheetPrimitive.Title data-slot="sheet-title" className={cn('font-semibold text-text-positive-strong', className)} {...props} />;
 }
 
+/** Accessible description element for the Sheet, providing supplemental context to the title. */
 function SheetDescription({ className, ...props }: React.ComponentProps<typeof SheetPrimitive.Description>) {
   return <SheetPrimitive.Description data-slot="sheet-description" className={cn('text-sm text-text-positive-weak', className)} {...props} />;
 }

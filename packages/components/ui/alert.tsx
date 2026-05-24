@@ -7,23 +7,36 @@ import { AlertCircle, AlertTriangle, CheckCircle, Info, X } from 'lucide-react';
 
 import { type AlertVariantProps, alertVariants } from './alert-variants';
 
+/**
+ * Props for the Alert component.
+ */
 export interface AlertProps extends React.HTMLAttributes<HTMLDivElement>, Omit<AlertVariantProps, 'className'> {
   /**
-   * Optional icon to display in the alert
+   * Optional icon to display in the alert; defaults to a variant-appropriate icon when omitted.
    */
   icon?: React.ReactNode;
   /**
-   * Whether the alert can be dismissed
+   * Whether the alert can be dismissed by the user.
    */
   dismissible?: boolean;
   /**
-   * Callback when the alert is dismissed
+   * Callback invoked when the dismiss button is clicked.
    */
   onDismiss?: () => void;
 }
 
 /**
- * Alert component for displaying informational messages to users
+ * Displays a contextual feedback message with optional icon, title, description, and dismiss button.
+ *
+ * @example
+ * ```tsx
+ * import { Alert, AlertTitle, AlertDescription } from '@customafk/lunas-ui/ui/alert';
+ *
+ * <Alert variant="success" dismissible onDismiss={() => setOpen(false)}>
+ *   <AlertTitle>Saved successfully</AlertTitle>
+ *   <AlertDescription>Your changes have been saved.</AlertDescription>
+ * </Alert>
+ * ```
  */
 function Alert({ className, variant, children, icon, dismissible, onDismiss, ...props }: AlertProps) {
   // Default icons based on variant
@@ -64,29 +77,35 @@ function Alert({ className, variant, children, icon, dismissible, onDismiss, ...
   );
 }
 
+/**
+ * Props for the AlertTitle component.
+ */
 export interface AlertTitleProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
-   * Title text or elements
+   * Title text or elements to display.
    */
   children: React.ReactNode;
 }
 
 /**
- * Title component for the Alert
+ * Renders the bold title line inside an Alert.
  */
 function AlertTitle({ className, ...props }: AlertTitleProps) {
   return <div data-slot="alert-title" className={cn('col-start-2 line-clamp-1 min-h-4 font-medium tracking-tight', className)} {...props} />;
 }
 
+/**
+ * Props for the AlertDescription component.
+ */
 export interface AlertDescriptionProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
-   * Description text or elements
+   * Descriptive text or elements displayed below the title.
    */
   children: React.ReactNode;
 }
 
 /**
- * Description component for the Alert
+ * Renders the supporting body text inside an Alert.
  */
 function AlertDescription({ className, ...props }: AlertDescriptionProps) {
   return (

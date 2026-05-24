@@ -5,6 +5,14 @@ import { cn } from '@customafk/react-toolkit/utils';
 import { Label as LabelPrimitive } from 'radix-ui';
 import { Badge } from './badge';
 
+/**
+ * Form field label that automatically renders a "Required" badge when the field is marked aria-required.
+ *
+ * @example
+ * import { Label } from '@customafk/lunas-ui/features/tanstack-form';
+ *
+ * <Label htmlFor="email">Email address</Label>
+ */
 function Label({ className, children, ...props }: React.ComponentProps<typeof LabelPrimitive.Root>) {
   return (
     <LabelPrimitive.Root

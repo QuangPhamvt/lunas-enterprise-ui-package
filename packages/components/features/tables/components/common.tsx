@@ -1,3 +1,12 @@
+/**
+ * @file common.tsx
+ * Low-level, memoised building blocks that compose into a full UITable.
+ *
+ * Each component corresponds to a standard HTML table element (`<table>`,
+ * `<thead>`, `<tbody>`, `<tr>`, `<td>`, `<th>`, `<tfoot>`) with additional
+ * TanStack Table integration for column pinning, virtual scrolling, and
+ * dynamic CSS-variable-based sizing.
+ */
 import { Activity, memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { flexRender } from '@tanstack/react-table';
@@ -45,6 +54,25 @@ import type {
   TUITableWrapper,
 } from '../types';
 
+/**
+ * Ellipsis dropdown menu attached to a header cell that lets the user pin the
+ * column to the left, pin it to the right, or unpin it.
+ *
+ * The trigger button is invisible until the parent `<th>` is hovered
+ * (`group-hover:opacity-100`), keeping the header clean by default.
+ *
+ * @example
+ * ```tsx
+ * import { UITableHeadCellOption } from '@customafk/lunas-ui/features/tables';
+ *
+ * <UITableHeadCellOption
+ *   isPinned="left"
+ *   onLeftPin={col.pin}
+ *   onRightPin={col.pin}
+ *   onUnpin={col.pin}
+ * />
+ * ```
+ */
 export const UITableHeadCellOption = memo<TUITableHeadCellOption>(({ isPinned, onLeftPin, onRightPin, onUnpin, className }) => {
   const handleLeftPin = useCallback(() => {
     onLeftPin?.('left');
@@ -106,6 +134,24 @@ export const UITableHeadCellOption = memo<TUITableHeadCellOption>(({ isPinned, o
 });
 UITableHeadCellOption.displayName = 'UITableHeadCellOption';
 
+/**
+ * Sticky `<th>` cell that renders a "select all rows" checkbox in the leftmost
+ * header position.
+ *
+ * The cell is always pinned at `left: 0` and uses a fixed width of
+ * `SELECT_WIDTH` to align with the corresponding body select cells.
+ *
+ * @example
+ * ```tsx
+ * import { UITableHeadCellSelect } from '@customafk/lunas-ui/features/tables';
+ *
+ * <UITableHeadCellSelect
+ *   isPinned="left"
+ *   isAllRowsSelected={table.getIsAllRowsSelected()}
+ *   onToggleAllRowsSelected={table.toggleAllRowsSelected}
+ * />
+ * ```
+ */
 export const UITableHeadCellSelect = memo<TUITableHeadCellSelect>(({ isPinned, isAllRowsSelected, style, onToggleAllRowsSelected, ...props }) => {
   const handleToggleAllRowsSelected = useCallback(
     (value: boolean | 'indeterminate') => {
@@ -135,6 +181,20 @@ export const UITableHeadCellSelect = memo<TUITableHeadCellSelect>(({ isPinned, i
 });
 UITableHeadCellSelect.displayName = 'UITableHeadCellSelect';
 
+/**
+ * Overlay displayed in place of table rows when the table is loading data or
+ * when the dataset is empty after a successful fetch.
+ *
+ * Returns `null` when neither `isEmpty` nor `isFetching` is true, so it adds
+ * zero DOM overhead during normal rendering.
+ *
+ * @example
+ * ```tsx
+ * import { UITableEmptyDisplay } from '@customafk/lunas-ui/features/tables';
+ *
+ * <UITableEmptyDisplay isFetching={isLoading} isEmpty={data.length === 0} />
+ * ```
+ */
 export const UITableEmptyDisplay = memo<TUITableEmptyDisplay>(({ isEmpty, isFetching }) => {
   if (!isEmpty && !isFetching) return null;
   return (
@@ -156,6 +216,21 @@ export const UITableEmptyDisplay = memo<TUITableEmptyDisplay>(({ isEmpty, isFetc
 });
 UITableEmptyDisplay.displayName = 'UITableEmptyDisplay';
 
+/**
+ * Outermost layout container for the entire UITable composition.
+ *
+ * Renders a full-width, full-height flex column that positions the toolbar,
+ * the scrollable table area, and the footer in a single stack.
+ *
+ * @example
+ * ```tsx
+ * import { UITableWrapper } from '@customafk/lunas-ui/features/tables';
+ *
+ * <UITableWrapper className="h-[600px]">
+ *   {children}
+ * </UITableWrapper>
+ * ```
+ */
 export const UITableWrapper = memo<TUITableWrapper>(({ className, children, ...props }) => {
   return (
     <div slot="table-wrapper" className={cn('relative m-0 flex size-full flex-col flex-nowrap items-start justify-start gap-2', className)} {...props}>
@@ -165,6 +240,23 @@ export const UITableWrapper = memo<TUITableWrapper>(({ className, children, ...p
 });
 UITableWrapper.displayName = 'UITableWrapper';
 
+/**
+ * Scrollable `<div>` that wraps the `<table>` element and acts as the
+ * viewport for both horizontal and vertical virtual scrolling.
+ *
+ * Reads its stable id from `UITableInnerWrapperContext` so that other
+ * components (e.g. `UITableLoadMore`) can reference the DOM node via
+ * `document.querySelector` without prop-drilling.
+ *
+ * @example
+ * ```tsx
+ * import { UITableInnerWrapper } from '@customafk/lunas-ui/features/tables';
+ *
+ * <UITableInnerWrapper>
+ *   <UITableInnerTable>…</UITableInnerTable>
+ * </UITableInnerWrapper>
+ * ```
+ */
 export const UITableInnerWrapper = memo<TUITableInnerWrapper>(({ children, ...props }) => {
   const { innerWrapperId } = useUITableInnerWrapperContext();
   return (
@@ -180,6 +272,25 @@ export const UITableInnerWrapper = memo<TUITableInnerWrapper>(({ children, ...pr
 });
 UITableInnerWrapper.displayName = 'UITableInnerWrapper';
 
+/**
+ * The actual `<table>` element that drives the UITable layout.
+ *
+ * Attaches a `ResizeObserver` to the table element and calculates per-column
+ * CSS custom properties (`--header-<id>-size`, `--col-<id>-size`) in a single
+ * pass on every resize, avoiding expensive per-cell `column.getSize()` calls.
+ * Flexible columns share the remaining width equally; fixed-size and pinned
+ * columns are excluded from the distribution.
+ *
+ * @example
+ * ```tsx
+ * import { UITableInnerTable } from '@customafk/lunas-ui/features/tables';
+ *
+ * <UITableInnerTable>
+ *   <UITableHead>…</UITableHead>
+ *   <UITableBody height="600px">…</UITableBody>
+ * </UITableInnerTable>
+ * ```
+ */
 export const UITableInnerTable = memo<TUITableInnerTable>(({ children, ...props }) => {
   const { table, innerTableId, totalSize } = useUITableInnerTableContext();
   const tableRef = useRef<HTMLTableElement>(null);
@@ -281,6 +392,24 @@ export const UITableInnerTable = memo<TUITableInnerTable>(({ children, ...props 
 });
 UITableInnerTable.displayName = 'UITableInnerTable';
 
+/**
+ * Sticky `<thead>` element that stays fixed at the top of the scrollable
+ * table area while the body scrolls beneath it.
+ *
+ * Applies column-border, background, and font styling uniformly to all
+ * descendant `<th>` elements via Tailwind child selectors.
+ *
+ * @example
+ * ```tsx
+ * import { UITableHead } from '@customafk/lunas-ui/features/tables';
+ *
+ * <UITableHead>
+ *   {table.getHeaderGroups().map(hg => (
+ *     <UITableHeadRow key={hg.id} headerGroup={hg} />
+ *   ))}
+ * </UITableHead>
+ * ```
+ */
 export const UITableHead = memo<TUITableHead>(({ className, children, ...props }) => {
   return (
     <thead
@@ -314,6 +443,23 @@ export const UITableHead = memo<TUITableHead>(({ className, children, ...props }
 });
 UITableHead.displayName = 'UITableHead';
 
+/**
+ * Renders a single `<tr>` for a TanStack `HeaderGroup`, mapping each header
+ * to either `UITableHeadCellSelect` (for the `select` column) or
+ * `UITableHeadCell` (for all other columns).
+ *
+ * Reads pinning state and "select all" handler from `UITableHeadRowContext`
+ * so the row itself does not need to receive those as props.
+ *
+ * @example
+ * ```tsx
+ * import { UITableHeadRow } from '@customafk/lunas-ui/features/tables';
+ *
+ * {table.getHeaderGroups().map(hg => (
+ *   <UITableHeadRow key={hg.id} headerGroup={hg} />
+ * ))}
+ * ```
+ */
 export const UITableHeadRow = memo<TUITableHeadRow>(({ headerGroup, className, ...props }) => {
   const { isAllRowsSelected, columnPinningState, leftPinnedHeaders, rightPinnedHeaders, onToggleAllRowsSelected } = useUITableHeadRowContext();
   const firstRightPinnedHeaderId = rightPinnedHeaders[0]?.id;
@@ -356,6 +502,29 @@ export const UITableHeadRow = memo<TUITableHeadRow>(({ headerGroup, className, .
 });
 UITableHeadRow.displayName = 'UITableHeadRow';
 
+/**
+ * Individual `<th>` cell that supports left/right sticky pinning, dynamic
+ * CSS-variable-driven width, min/max size constraints, and an optional
+ * `UITableHeadCellOption` pin/unpin dropdown.
+ *
+ * Width is driven by the CSS custom property `--header-<headerId>-size` set
+ * by `UITableInnerTable`, avoiding per-cell `column.getSize()` calls.
+ *
+ * @example
+ * ```tsx
+ * import { UITableHeadCell } from '@customafk/lunas-ui/features/tables';
+ *
+ * <UITableHeadCell
+ *   headerId={header.id}
+ *   headerColumn={header.column}
+ *   isPinned="left"
+ *   isLastCell
+ *   onColumnPin={header.column.pin}
+ * >
+ *   {flexRender(header.column.columnDef.header, header.getContext())}
+ * </UITableHeadCell>
+ * ```
+ */
 export const UITableHeadCell = memo<TUITableHeadCell>(
   ({
     isVisible = true,
@@ -432,6 +601,25 @@ export const UITableHeadCell = memo<TUITableHeadCell>(
 );
 UITableHeadCell.displayName = 'UITableHeadCell';
 
+/**
+ * `<tbody>` element that acts as the virtual-scroll container.
+ *
+ * Renders `null` while data is loading or the table is empty (the
+ * `UITableEmptyDisplay` overlay handles those states instead).  The `height`
+ * prop must be supplied as the total height of all virtual rows so that the
+ * scroll track reflects the full dataset length.
+ *
+ * @example
+ * ```tsx
+ * import { UITableBody } from '@customafk/lunas-ui/features/tables';
+ *
+ * <UITableBody height={`${rowVirtualizer.getTotalSize()}px`}>
+ *   {virtualItems.map(vRow => (
+ *     <UITableRow key={vRow.index} … />
+ *   ))}
+ * </UITableBody>
+ * ```
+ */
 export const UITableBody = memo<TUITableBody>(({ height, className, children, ...props }) => {
   const { isFetching, isEmpty } = useUITableBodyContext();
   if (isEmpty || isFetching) return null;
@@ -485,6 +673,33 @@ export const UITableBody = memo<TUITableBody>(({ height, className, children, ..
 });
 UITableBody.displayName = 'UITableBody';
 
+/**
+ * Virtualised `<tr>` that renders a single data row by translating itself to
+ * the correct vertical position via a CSS `transform`.
+ *
+ * Iterates the row's visible cells and delegates to `UITableCellActions`,
+ * `UITableCellSelect`, or `UITableCell` based on the column id.  Click
+ * handling, pinning state, and the "select all" flag are sourced from
+ * `UITableRowContext`.
+ *
+ * @example
+ * ```tsx
+ * import { UITableRow } from '@customafk/lunas-ui/features/tables';
+ *
+ * {virtualItems.map(vRow => {
+ *   const row = rows[vRow.index];
+ *   return (
+ *     <UITableRow
+ *       key={row.id}
+ *       row={row}
+ *       isSelected={row.getIsSelected()}
+ *       virtualRowIndex={vRow.index}
+ *       virtualRowStart={vRow.start}
+ *     />
+ *   );
+ * })}
+ * ```
+ */
 export const UITableRow = memo<TUITableRow>(({ row, isSelected, virtualRowIndex, virtualRowStart, children, ...props }) => {
   const { keyOfClickRow, isAllRowsSelected, columnPinningState, leftPinnedHeaders, rightPinnedHeaders, onClickRow } = useUITableRowContext();
 
@@ -564,6 +779,24 @@ export const UITableRow = memo<TUITableRow>(({ row, isSelected, virtualRowIndex,
 });
 UITableRow.displayName = 'UITableRow';
 
+/**
+ * Sticky `<td>` cell in the leftmost column that renders a per-row selection
+ * checkbox.
+ *
+ * The cell stops click-event propagation so that selecting a row does not also
+ * trigger the row's `onClickRow` handler.
+ *
+ * @example
+ * ```tsx
+ * import { UITableCellSelect } from '@customafk/lunas-ui/features/tables';
+ *
+ * <UITableCellSelect
+ *   isPinned="left"
+ *   isSelected={row.getIsSelected()}
+ *   onToggleRowSelected={row.toggleSelected}
+ * />
+ * ```
+ */
 export const UITableCellSelect = memo<TUITableCellSelect>(({ isPinned, isSelected = false, className, onToggleRowSelected, ...props }) => {
   const handleToggleRowSelected = useCallback(
     (value: boolean | 'indeterminate') => {
@@ -594,6 +827,24 @@ export const UITableCellSelect = memo<TUITableCellSelect>(({ isPinned, isSelecte
 });
 UITableCellSelect.displayName = 'UITableCellSelect';
 
+/**
+ * Sticky `<td>` cell pinned to the right edge of each row that renders the
+ * column's custom `cell` renderer (typically a row-action menu).
+ *
+ * The cell is always sticky (`right: 0`, `z-index: 50`) and gains a hover
+ * background via the `group-hover` Tailwind variant on the parent `<tr>`.
+ *
+ * @example
+ * ```tsx
+ * import { UITableCellActions } from '@customafk/lunas-ui/features/tables';
+ *
+ * <UITableCellActions
+ *   virtualRowIndex={vRow.index}
+ *   column={cell.column}
+ *   getContext={cell.getContext}
+ * />
+ * ```
+ */
 export const UITableCellActions = memo<TUITableCellActions>(({ virtualRowIndex, column, getContext, className, ...props }) => {
   const render = useMemo(() => {
     return flexRender(column?.columnDef.cell, getContext());
@@ -611,6 +862,29 @@ export const UITableCellActions = memo<TUITableCellActions>(({ virtualRowIndex, 
 });
 UITableCellActions.displayName = 'UITableCellActions';
 
+/**
+ * Standard `<td>` data cell with support for left/right sticky pinning,
+ * CSS-variable-driven width, content-fit auto-sizing, and configurable
+ * horizontal alignment (`start` | `center` | `end`).
+ *
+ * A `ResizeObserver` on the inner content div measures actual rendered content
+ * width and calls `table.setColumnSizing` when the content overflows the
+ * column's current size, but only when the column definition has
+ * `meta.fitContent: true`.
+ *
+ * @example
+ * ```tsx
+ * import { UITableCell } from '@customafk/lunas-ui/features/tables';
+ *
+ * <UITableCell
+ *   colId={cell.column.id}
+ *   isPinned="left"
+ *   position="start"
+ *   column={cell.column}
+ *   getContext={cell.getContext}
+ * />
+ * ```
+ */
 export const UITableCell = memo<TUITableCell>(
   ({ isPinned = false, isFirstCell = false, isLastCell = false, colId, position = 'start', column, getContext, ...props }) => {
     const { innerTableId, table } = useUITableInnerTableContext();
@@ -699,6 +973,19 @@ export const UITableCell = memo<TUITableCell>(
 );
 UITableCell.displayName = 'UITableCell';
 
+/**
+ * `<tfoot>` element rendered below the table body, typically used for
+ * summary rows or pagination controls.
+ *
+ * @example
+ * ```tsx
+ * import { UITableFooter } from '@customafk/lunas-ui/features/tables';
+ *
+ * <UITableFooter>
+ *   <tr><td>Total: {totalRows}</td></tr>
+ * </UITableFooter>
+ * ```
+ */
 export const UITableFooter = memo<TUITableFooter>(({ className, children, ...props }) => {
   return (
     <tfoot
@@ -712,6 +999,25 @@ export const UITableFooter = memo<TUITableFooter>(({ className, children, ...pro
 });
 UITableFooter.displayName = 'UITableFooter';
 
+/**
+ * Virtualised `<tr>` appended after the last data row that renders a
+ * "Load More" / "Loading…" / "Error! Retry?" button.
+ *
+ * Returns `null` when `fetchMoreData` is not provided, making it safe to
+ * include unconditionally in the row list.  A `ResizeObserver` on the inner
+ * wrapper ensures the row always matches the current table width.
+ *
+ * @example
+ * ```tsx
+ * import { UITableLoadMore } from '@customafk/lunas-ui/features/tables';
+ *
+ * <UITableLoadMore
+ *   virtualRowIndex={rows.length}
+ *   virtualRowStart={rowVirtualizer.getTotalSize()}
+ *   fetchMoreData={fetchNextPage}
+ * />
+ * ```
+ */
 export const UITableLoadMore = memo<TUITableLoadMore>(({ virtualRowIndex, virtualRowStart, fetchMoreData }) => {
   const { innerWrapperId } = useUITableInnerWrapperContext();
 

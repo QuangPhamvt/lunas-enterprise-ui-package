@@ -9,11 +9,31 @@ import { CancelButton } from '../ui/cancel-button';
 import { SubmitButton } from '../ui/submit-button';
 import { Dialog, DialogContent, DialogOverlay, DialogPortal, DialogTitle } from '@/components/ui/dialog';
 
+/**
+ * Renders a modal dialog that wraps a TanStack Form with a title, scrollable content area, and built-in submit/cancel actions.
+ *
+ * @example
+ * import { TanStackDialogForm } from '@customafk/lunas-ui/features/tanstack-form';
+ *
+ * <TanStackDialogForm
+ *   title="Create User"
+ *   submitText="Create"
+ *   open={isOpen}
+ *   onOpenChange={setIsOpen}
+ * >
+ *   <NameField />
+ *   <EmailField />
+ * </TanStackDialogForm>
+ */
 export const TanStackDialogForm: React.FC<
   React.PropsWithChildren<{
+    /** Heading text displayed in the dialog title bar. */
     title: string;
+    /** Custom label for the submit button. Defaults to the `SubmitButton` component's built-in label when omitted. */
     submitText?: string;
+    /** Controlled open state of the dialog. */
     open?: boolean;
+    /** Callback fired when the dialog open state changes; the form is reset on close. */
     onOpenChange?: (open: boolean) => void;
   }>
 > = ({ title, submitText, open, onOpenChange, children }) => {

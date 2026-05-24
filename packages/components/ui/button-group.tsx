@@ -19,12 +19,32 @@ const buttonGroupVariants = cva(
   }
 );
 
+/**
+ * Groups buttons (or inputs) into a visually connected row or column by removing the border radii on adjacent sides.
+ *
+ * @example
+ * ```tsx
+ * import { ButtonGroup, ButtonGroupSeparator } from '@customafk/lunas-ui/ui/button-group';
+ * import { Button } from '@customafk/lunas-ui/ui/button';
+ *
+ * <ButtonGroup orientation="horizontal">
+ *   <Button variant="outline">Left</Button>
+ *   <ButtonGroupSeparator />
+ *   <Button variant="outline">Right</Button>
+ * </ButtonGroup>
+ * ```
+ */
 function ButtonGroup({ className, orientation, ...props }: React.ComponentProps<'div'> & VariantProps<typeof buttonGroupVariants>) {
   return (
     <div role="group" data-slot="button-group" data-orientation={orientation} className={cn(buttonGroupVariants({ orientation }), className)} {...props} />
   );
 }
 
+/**
+ * A static text or icon addon rendered inside a ButtonGroup with muted background styling.
+ *
+ * @param asChild - When true, renders as the child element via Radix Slot instead of `<div>`.
+ */
 function ButtonGroupText({
   className,
   asChild = false,
@@ -45,6 +65,7 @@ function ButtonGroupText({
   );
 }
 
+/** A visual Separator rendered between items inside a ButtonGroup. */
 function ButtonGroupSeparator({ className, orientation = 'vertical', ...props }: React.ComponentProps<typeof Separator>) {
   return (
     <Separator

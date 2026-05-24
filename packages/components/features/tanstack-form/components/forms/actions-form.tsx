@@ -4,8 +4,26 @@ import { Button } from '@/components/ui/button';
 
 import { useTanStackFormContext } from '../../tanstack-form';
 
+/**
+ * Renders a form action bar with a Cancel button and a context-aware submit button (Add New or Update) driven by TanStack Form state.
+ *
+ * @example
+ * import { TanStackActionsForm } from '@customafk/lunas-ui/features/tanstack-form';
+ *
+ * // Inside a TanStack Form provider:
+ * <TanStackActionsForm type="create" />
+ *
+ * // For an update workflow:
+ * <TanStackActionsForm type="update" />
+ */
 export const TanStackActionsForm: React.FC<
   React.PropsWithChildren<{
+    /**
+     * Determines which submit button variant is rendered.
+     * - `'create'` — shows an "Add New" button that resets the form on success.
+     * - `'update'` — shows an "Update" button that resets the form on success.
+     * Defaults to `'create'`.
+     */
     type?: 'create' | 'update';
   }>
 > = ({ type = 'create' }) => {

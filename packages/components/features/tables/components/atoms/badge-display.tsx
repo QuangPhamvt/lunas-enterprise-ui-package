@@ -2,9 +2,26 @@ import { XIcon } from 'lucide-react';
 
 import { UITableEmpty } from './empty';
 
+/**
+ * Renders a pill-shaped badge for a table cell that optionally supports a click
+ * action and an inline remove button; falls back to {@link UITableEmpty} when
+ * `label` is falsy.
+ *
+ * @example
+ * import { UITableBadgeDisplay } from '@customafk/lunas-ui/features/tables';
+ *
+ * <UITableBadgeDisplay
+ *   label="Active"
+ *   onClick={() => console.log('badge clicked')}
+ *   onRemove={() => console.log('remove clicked')}
+ * />
+ */
 export const UITableBadgeDisplay: React.FC<{
+  /** The text or number to display inside the badge. */
   label: string | number | null | undefined;
+  /** Optional callback fired when the badge itself is clicked. */
   onClick?: () => void;
+  /** When provided, renders a remove (×) button and fires this callback on click. */
   onRemove?: () => void;
 }> = ({ label, onClick, onRemove }) => {
   if (!label) return <UITableEmpty />;

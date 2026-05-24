@@ -26,14 +26,38 @@ import {
   FieldTooltip,
 } from '../ui/field';
 
+/**
+ * Props for the NumberField component, derived from the TanStack Form number field schema.
+ */
 type NumberFieldProps = Pick<
   z.input<typeof TanStackFormNumberFieldSchema>,
   'label' | 'description' | 'placeholder' | 'orientation' | 'tooltip' | 'helperText' | 'rounding' | 'decimalPlaces' | 'percision' | 'unit' | 'showErrorMessage'
 > & {
+  /** Marks the field as required; triggers an empty-state indicator when the value is null. */
   required?: boolean;
+  /** When true, the input accepts negative numbers. */
   allowNegative?: boolean;
 };
 
+/**
+ * A TanStack Form-connected numeric input field supporting rounding rules,
+ * decimal precision, unit labels, and submission-state feedback.
+ *
+ * @example
+ * import { NumberField } from '@customafk/lunas-ui/features/tanstack-form';
+ *
+ * <form.Field name="quantity">
+ *   {() => (
+ *     <NumberField
+ *       label="Quantity"
+ *       placeholder="0"
+ *       unit="pcs"
+ *       decimalPlaces={2}
+ *       required
+ *     />
+ *   )}
+ * </form.Field>
+ */
 export const NumberField: React.FC<NumberFieldProps> = ({
   label,
   description,

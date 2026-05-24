@@ -24,12 +24,19 @@ const SIDEBAR_WIDTH_ICON = '3rem';
 const SIDEBAR_KEYBOARD_SHORTCUT = 'p';
 
 type SidebarContextProps = {
+  /** Current visual state of the sidebar. */
   state: 'expanded' | 'collapsed';
+  /** Whether the sidebar is open on desktop. */
   open: boolean;
+  /** Setter for the desktop open state. */
   setOpen: (open: boolean) => void;
+  /** Whether the sidebar sheet is open on mobile. */
   openMobile: boolean;
+  /** Setter for the mobile open state. */
   setOpenMobile: (open: boolean) => void;
+  /** `true` when the viewport is considered mobile-sized. */
   isMobile: boolean;
+  /** Toggles the sidebar between expanded and collapsed. */
   toggleSidebar: () => void;
 };
 
@@ -43,6 +50,18 @@ function useSidebar() {
   return context;
 }
 
+/**
+ * Context provider that manages sidebar open/collapsed state and persists it via a cookie.
+ *
+ * @example
+ * ```tsx
+ * import { SidebarProvider } from '@customafk/lunas-ui/dialogs/detail-dialog/components/sidebar';
+ *
+ * <SidebarProvider defaultOpen={true}>
+ *   <Sidebar collapsible="icon">{...}</Sidebar>
+ * </SidebarProvider>
+ * ```
+ */
 function SidebarProvider({
   defaultOpen = true,
   open: openProp,
@@ -52,8 +71,11 @@ function SidebarProvider({
   children,
   ...props
 }: React.ComponentProps<'div'> & {
+  /** Whether the sidebar is open by default (uncontrolled). Defaults to `true`. */
   defaultOpen?: boolean;
+  /** Controlled open state. When provided the component becomes controlled. */
   open?: boolean;
+  /** Callback fired when the open state changes in controlled mode. */
   onOpenChange?: (open: boolean) => void;
 }) {
   const isMobile = useIsMobile();
@@ -113,6 +135,18 @@ function SidebarProvider({
   );
 }
 
+/**
+ * Responsive sidebar container that supports desktop icon-collapse and a mobile Sheet overlay.
+ *
+ * @example
+ * ```tsx
+ * import { Sidebar } from '@customafk/lunas-ui/dialogs/detail-dialog/components/sidebar';
+ *
+ * <Sidebar collapsible="icon" side="left">
+ *   {children}
+ * </Sidebar>
+ * ```
+ */
 function Sidebar({
   side = 'left',
   variant = 'sidebar',
@@ -121,8 +155,11 @@ function Sidebar({
   children,
   ...props
 }: React.ComponentProps<'div'> & {
+  /** Which edge the sidebar is anchored to. Defaults to `'left'`. */
   side?: 'left' | 'right';
+  /** Visual style variant of the sidebar. Defaults to `'sidebar'`. */
   variant?: 'sidebar' | 'floating' | 'inset';
+  /** Collapse behaviour — slides off-canvas, shrinks to icon strip, or stays fixed. Defaults to `'offcanvas'`. */
   collapsible?: 'offcanvas' | 'icon' | 'none';
 }) {
   const { state, isMobile, openMobile, setOpenMobile } = useSidebar();
@@ -209,6 +246,16 @@ function Sidebar({
   );
 }
 
+/**
+ * Icon button that toggles the detail-dialog sidebar open or collapsed.
+ *
+ * @example
+ * ```tsx
+ * import { DetailDialogSidebarTrigger } from '@customafk/lunas-ui/dialogs/detail-dialog/components/sidebar';
+ *
+ * <DetailDialogSidebarTrigger />
+ * ```
+ */
 function DetailDialogSidebarTrigger({ className, onClick, ...props }: React.ComponentProps<typeof Button>) {
   const { toggleSidebar } = useSidebar();
 

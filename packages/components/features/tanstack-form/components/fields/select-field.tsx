@@ -19,13 +19,38 @@ import {
 } from '../ui/field';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
+/**
+ * Props for the SelectField component, derived from the TanStack Form select field schema.
+ */
 type Props = Pick<
   z.input<typeof TanStackFormSelectFieldSchema>,
   'label' | 'description' | 'placeholder' | 'defaultValue' | 'options' | 'tooltip' | 'helperText' | 'orientation' | 'clearable'
 > & {
+  /** Marks the field as required; triggers an empty-state indicator when the value is null. */
   required?: boolean;
 };
 
+/**
+ * A TanStack Form-connected single-select dropdown field backed by Radix UI Select,
+ * with an empty-state illustration when no options are provided.
+ *
+ * @example
+ * import { SelectField } from '@customafk/lunas-ui/features/tanstack-form';
+ *
+ * <form.Field name="country">
+ *   {() => (
+ *     <SelectField
+ *       label="Country"
+ *       placeholder="Select a country"
+ *       options={[
+ *         { value: 'jp', label: 'Japan' },
+ *         { value: 'vn', label: 'Vietnam' },
+ *       ]}
+ *       required
+ *     />
+ *   )}
+ * </form.Field>
+ */
 export const SelectField: React.FC<Props> = ({
   label,
   description,

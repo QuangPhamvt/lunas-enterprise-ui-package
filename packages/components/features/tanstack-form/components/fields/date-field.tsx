@@ -16,15 +16,39 @@ import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, Fi
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 
+/**
+ * Props for the DateField component, derived from the TanStack Form date field schema.
+ */
 type Props = Pick<
   z.input<typeof TanStackFormDateFieldSchema>,
   'label' | 'description' | 'placeholder' | 'tooltip' | 'helperText' | 'orientation' | 'showErrorMessage'
 > & {
+  /** Marks the field as required; triggers an empty-state indicator when the value is null. */
   required?: boolean;
+  /** Earliest selectable date; days before this are hidden in the calendar. */
   minDate?: Date;
+  /** Latest selectable date; days after this are hidden in the calendar. */
   maxDate?: Date;
 };
 
+/**
+ * A TanStack Form-connected date picker field combining a calendar popover with
+ * quick-select presets (Today, Tomorrow, Yesterday, Last N Days, This/Last Month).
+ *
+ * @example
+ * import { DateField } from '@customafk/lunas-ui/features/tanstack-form';
+ *
+ * <form.Field name="dueDate">
+ *   {() => (
+ *     <DateField
+ *       label="Due date"
+ *       placeholder="Pick a date"
+ *       minDate={new Date()}
+ *       required
+ *     />
+ *   )}
+ * </form.Field>
+ */
 export const DateField: React.FC<Props> = ({
   label,
   description,

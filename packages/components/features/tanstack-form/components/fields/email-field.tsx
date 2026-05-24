@@ -26,14 +26,36 @@ import { useTanStackFieldContext } from '../../tanstack-form';
 
 import type { TanStackFormEmailFieldSchema } from '../../schema';
 
+/**
+ * Props for the EmailField component, derived from the TanStack Form email field schema.
+ */
 type Props = Pick<
   z.input<typeof TanStackFormEmailFieldSchema>,
   'label' | 'description' | 'placeholder' | 'orientation' | 'tooltip' | 'helperText' | 'showErrorMessage'
 > & {
+  /** Marks the field as required; triggers an empty-state indicator when the value is null. */
   required?: boolean;
+  /** Maximum number of characters the user may enter. */
   maxLength?: number;
 };
 
+/**
+ * A TanStack Form-connected email input field with an at-sign prefix icon,
+ * optional clear button, and inline validation error display.
+ *
+ * @example
+ * import { EmailField } from '@customafk/lunas-ui/features/tanstack-form';
+ *
+ * <form.Field name="email">
+ *   {() => (
+ *     <EmailField
+ *       label="Email address"
+ *       placeholder="you@example.com"
+ *       required
+ *     />
+ *   )}
+ * </form.Field>
+ */
 export const EmailField: React.FC<Props> = ({
   label,
   description,

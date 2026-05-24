@@ -26,14 +26,38 @@ import {
   FieldTooltip,
 } from '../ui/field';
 
+/**
+ * Props for the TextareaField component, derived from the TanStack Form textarea field schema.
+ */
 type Props = Pick<
   z.input<typeof TanStackFormTextAreaFieldSchema>,
   'label' | 'description' | 'placeholder' | 'counter' | 'tooltip' | 'helperText' | 'orientation' | 'showErrorMessage'
 > & {
+  /** Marks the field as required; triggers an empty-state indicator when the value is null. */
   required?: boolean;
+  /** Maximum number of characters allowed; enforced when `counter` is true. */
   maxLength?: number;
 };
 
+/**
+ * A TanStack Form-connected multi-line textarea field with optional character counter,
+ * error display, and submission-state feedback. Wrapped in `React.memo` to prevent
+ * unnecessary re-renders.
+ *
+ * @example
+ * import { TextareaField } from '@customafk/lunas-ui/features/tanstack-form';
+ *
+ * <form.Field name="bio">
+ *   {() => (
+ *     <TextareaField
+ *       label="Bio"
+ *       placeholder="Tell us about yourself…"
+ *       counter
+ *       maxLength={200}
+ *     />
+ *   )}
+ * </form.Field>
+ */
 export const TextareaField: React.FC<Props> = memo(
   ({
     label,

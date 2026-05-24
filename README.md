@@ -303,18 +303,48 @@ See [CHANGELOG.md](CHANGELOG.md) for version history and changes.
 
 ISC © [CustomAFK](https://github.com/QuangPhamvt)
 
-## 🤖 Component API Documentation for Developers and AI Assistants
+## 🤖 For Claude / AI Coding Assistants
 
-The following provides a simplified component reference for all components in the library. For detailed props documentation and usage examples, visit our documentation site.
+This package ships an `ai-docs.md` file at the package root, optimized for AI
+context windows. It covers import rules, the full component catalog with prop
+types, and copy-ready usage patterns.
 
-### Integration Patterns
+### Option A — Point Claude's project context at the file
 
-- Form components should be used within a `FormWrapper` component
-- Dialog components typically need `open` and `onOpenChange` props to be controlled
-- All components support `className` for custom styling with Tailwind
-- Many components have variants that can be accessed via the `variant` prop
-- Component styles are customizable through CSS variables in `:root`
-- All UI components are responsive and support various screen sizes
+Add this to your project's `.claude/CLAUDE.md` (or create one):
+
+```markdown
+## UI Library Context
+
+This project uses `@customafk/lunas-ui`. Read the library reference before writing components:
+
+@node_modules/@customafk/lunas-ui/ai-docs.md
+```
+
+Claude Code will attach the file automatically to every conversation in the project.
+
+### Option B — Add to your AI tooling's context source list
+
+For Cursor `.cursorrules`, Copilot `codeGeneration.instructions`, or an MCP RAG server, add:
+
+```
+node_modules/@customafk/lunas-ui/ai-docs.md
+```
+
+### Option C — One-shot reference in chat
+
+```
+I'm using @customafk/lunas-ui.
+Read node_modules/@customafk/lunas-ui/ai-docs.md for import paths and usage.
+```
+
+### Key rules the AI must follow
+
+1. **Named imports only** — `import { Button } from '@customafk/lunas-ui/ui/button'`
+2. **No default imports** — the library has no default exports
+3. **Use full category paths** — `…/ui/button`, not `…/button`
+4. **Import styles in root layout** — `styles/base` + `styles/theme` are required
+5. **Never import from `@radix-ui/*` directly** — use the lunas-ui wrappers
 
 ## 🙋‍♀️ Support
 

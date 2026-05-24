@@ -3,16 +3,34 @@ import { cn } from '@customafk/react-toolkit/utils';
 import { FileQuestion } from 'lucide-react';
 
 export interface NotFoundProps {
+  /** Main heading shown beneath the file-question icon. Defaults to `'Không tìm thấy trang'`. */
   title?: string;
+  /** Supporting text shown below the title. Defaults to a Vietnamese 404 message. */
   subtitle?: string;
+  /** Label for the action button. Defaults to `'Trở về trang chủ'`. */
   buttonText?: string;
+  /** Handler called when the action button is clicked. Defaults to `window.history.back()`. */
   onButtonClick?: () => void;
+  /** Additional class names applied to the root container element. */
   className?: string;
+  /** Additional class names applied to the `FileQuestion` icon. */
   iconClassName?: string;
 }
 
 /**
- * NotFound component for displaying 404 page content
+ * Full-page 404 error screen displayed when a requested route or resource does not exist.
+ *
+ * @example
+ * ```tsx
+ * import { NotFound } from '@customafk/lunas-ui/pages/NotFound';
+ *
+ * <NotFound
+ *   title="Page Not Found"
+ *   subtitle="The page you are looking for does not exist."
+ *   buttonText="Go Home"
+ *   onButtonClick={() => router.push('/')}
+ * />
+ * ```
  */
 export const NotFound = ({
   title = 'Không tìm thấy trang',

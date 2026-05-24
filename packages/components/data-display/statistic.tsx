@@ -26,18 +26,38 @@ const statisticVariants = cva('inline-flex items-center gap-1 font-number tabula
 });
 
 export type StatisticProps = VariantProps<typeof statisticVariants> & {
+  /** Character used to separate the decimal part. Defaults to `'.'`. */
   decimalSeparator?: string;
+  /** Character used to separate thousands groups. Defaults to `','`. */
   groupSeparator?: string;
+  /** Optional node rendered before the numeric value (e.g. a currency symbol). */
   prefix?: React.ReactNode;
+  /** Optional node rendered after the numeric value (e.g. a unit label). */
   suffix?: React.ReactNode;
+  /** Number of decimal digits to display; omit to show all significant digits. */
   precision?: number;
+  /** Rounding strategy applied before formatting. Defaults to `'round'`. */
   roundingMode?: 'round' | 'floor' | 'ceil';
+  /** When `true`, pads the decimal part with trailing zeros up to `precision`. Defaults to `false`. */
   showTrailingZeros?: boolean;
+  /** The numeric (or numeric-string) value to format and display. */
   value: number | string;
+  /** Additional CSS classes applied to the wrapper element. */
   className?: string;
+  /** Colour trend indicator: `'neutral'` (default), `'up'` (green), or `'down'` (red). */
   trend?: 'neutral' | 'up' | 'down';
 };
 
+/**
+ * A memoised numeric display component with locale-aware formatting, optional prefix/suffix, trend colouring, and configurable rounding.
+ *
+ * @example
+ * ```tsx
+ * import { Statistic } from '@customafk/lunas-ui/data-display/statistic';
+ *
+ * <Statistic value={1234567.89} precision={2} prefix="$" trend="up" size="lg" />
+ * ```
+ */
 export const Statistic = memo(
   ({
     decimalSeparator = '.',

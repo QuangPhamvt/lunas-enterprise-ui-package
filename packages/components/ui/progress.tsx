@@ -3,6 +3,16 @@ import { cn } from '@customafk/react-toolkit/utils';
 
 import { Progress as ProgressPrimitive } from 'radix-ui';
 
+/**
+ * A horizontal progress bar that visually represents a completion percentage.
+ *
+ * @example
+ * ```tsx
+ * import { Progress } from '@customafk/lunas-ui/ui/progress';
+ *
+ * <Progress value={65} />
+ * ```
+ */
 function Progress({ className, value, ...props }: React.ComponentProps<typeof ProgressPrimitive.Root>) {
   return (
     <ProgressPrimitive.Root data-slot="progress" className={cn('bg-primary-weak relative h-2 w-full overflow-hidden rounded-full', className)} {...props}>

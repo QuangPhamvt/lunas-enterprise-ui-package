@@ -9,9 +9,13 @@ import { Command, CommandGroup, CommandItem, CommandList, CommandSeparator } fro
 
 import { Command as CommandPrimitive, useCommandState } from 'cmdk';
 
+/** Represents a single selectable option in the MultipleSelector. */
 export interface Option {
+  /** Unique value used for selection and comparison. */
   value: string;
+  /** Human-readable label displayed in the dropdown and as a badge. */
   label: string;
+  /** When true, the option is disabled and cannot be selected. */
   disable?: boolean;
   /** fixed option that can&lsquo;t be removed. */
   fixed?: boolean;
@@ -22,8 +26,11 @@ interface GroupOption {
   [key: string]: Option[];
 }
 
+/** Props for the MultipleSelector component. */
 interface MultipleSelectorProps {
+  /** Controlled list of currently selected options. */
   value?: Option[];
+  /** Initial options pre-loaded into the dropdown (uncontrolled). */
   defaultOptions?: Option[];
   /** manually controlled options */
   options?: Option[];
@@ -79,13 +86,24 @@ interface MultipleSelectorProps {
   onAddNewItem?: () => void;
 }
 
+/** Imperative handle exposed by MultipleSelector via `ref`. */
 export interface MultipleSelectorRef {
+  /** The currently selected options. */
   selectedValue: Option[];
+  /** The underlying `<input>` DOM element. */
   input: HTMLInputElement;
+  /** Programmatically focus the search input. */
   focus: () => void;
+  /** Clear all selected options. */
   reset: () => void;
 }
 
+/**
+ * Returns a debounced copy of `value` that only updates after `delay` ms of inactivity.
+ *
+ * @param value - The value to debounce.
+ * @param delay - Debounce delay in milliseconds (default 500).
+ */
 // eslint-disable-next-line react-refresh/only-export-components
 export function useDebounce<T>(value: T, delay?: number): T {
   const [debouncedValue, setDebouncedValue] = useState<T>(value);
@@ -156,6 +174,25 @@ const CommandEmpty = forwardRef<HTMLDivElement, React.ComponentProps<typeof Comm
 
 CommandEmpty.displayName = 'CommandEmpty';
 
+/**
+ * A combobox-style input that allows selecting multiple options displayed as removable badge chips, with optional async search and creatable mode.
+ *
+ * @example
+ * ```tsx
+ * import { MultipleSelector } from '@customafk/lunas-ui/ui/multi-select';
+ *
+ * const options = [
+ *   { value: 'react', label: 'React' },
+ *   { value: 'vue', label: 'Vue' },
+ * ];
+ *
+ * <MultipleSelector
+ *   options={options}
+ *   placeholder="Select frameworks…"
+ *   onChange={(selected) => console.log(selected)}
+ * />
+ * ```
+ */
 export const MultipleSelector = forwardRef<MultipleSelectorRef, MultipleSelectorProps>(
   (
     {

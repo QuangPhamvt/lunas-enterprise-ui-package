@@ -23,14 +23,35 @@ const badgeVariants = cva(['flex w-fit items-center justify-center rounded-full 
   },
 });
 
-export const Badge: React.FC<
-  React.PropsWithChildren<{
-    label: string;
-    color?: VariantProps<typeof badgeVariants>['color'];
-    size?: VariantProps<typeof badgeVariants>['size'];
-    className?: string;
-  }>
-> = ({ label, color, size, className, children }) => {
+/**
+ * Props for the {@link Badge} component.
+ */
+type BadgeProps = React.PropsWithChildren<{
+  /** Text content rendered inside the badge; takes precedence over `children` when both are provided. */
+  label: string;
+  /**
+   * Color theme of the badge.
+   * @default 'default'
+   */
+  color?: VariantProps<typeof badgeVariants>['color'];
+  /**
+   * Size variant controlling padding and font size.
+   * @default 'sm'
+   */
+  size?: VariantProps<typeof badgeVariants>['size'];
+  /** Additional Tailwind class names merged onto the root element. */
+  className?: string;
+}>;
+
+/**
+ * Pill-shaped status badge with configurable color and size, used primarily as the "Required" indicator inside form labels.
+ *
+ * @example
+ * import { Badge } from '@customafk/lunas-ui/features/tanstack-form';
+ *
+ * <Badge label="Required" color="danger" size="xs" />
+ */
+export const Badge: React.FC<BadgeProps> = ({ label, color, size, className, children }) => {
   return (
     <div data-slot="required-indicator" className={badgeVariants({ color, size, className })}>
       {label || children}

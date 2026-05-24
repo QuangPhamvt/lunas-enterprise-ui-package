@@ -73,8 +73,27 @@ const badgeVariants = cva(
   }
 );
 
+/**
+ * Props for the `Badge` component.
+ *
+ * @property variant - Visual fill style — `'solid'` (filled, default), `'soft'` (tinted background), or `'outline'` (border only).
+ * @property color - Semantic color token — `'primary'` | `'secondary'` | `'muted'` | `'accent'` | `'info'` | `'success'` | `'warning'` | `'danger'`. Defaults to `'primary'`.
+ * @property size - Badge size — `'xs'` | `'sm'` | `'md'` (default) | `'lg'` | `'xl'`.
+ * @property pill - When `true` (default), renders with fully rounded corners (`rounded-full`); when `false`, uses `rounded-sm`.
+ */
 export type BadgeProps = VariantProps<typeof badgeVariants> & React.ComponentPropsWithoutRef<'span'>;
 
+/**
+ * Inline status label rendered as a `<span>` with CVA-driven variant, color, size, and shape options.
+ *
+ * @example
+ * ```tsx
+ * import { Badge } from '@customafk/lunas-ui/ui/badge';
+ *
+ * <Badge variant="soft" color="success" size="sm">Active</Badge>
+ * <Badge variant="outline" color="danger">Overdue</Badge>
+ * ```
+ */
 function Badge({ className, variant, color, size, pill, ...props }: BadgeProps) {
   return <span className={cn(badgeVariants({ variant, color, pill, size }), className)} {...props} />;
 }

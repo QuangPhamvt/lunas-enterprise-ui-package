@@ -20,26 +20,47 @@ import {
 } from './components/sidebar';
 
 type NavItem = {
+  /** Unique identifier for the nav item, used as React key and for active-state comparison. */
   id: string;
+  /** Human-readable label rendered inside the sidebar button. */
   label: string;
+  /** Optional icon element rendered to the left of the label. */
   icon?: React.ReactNode;
+  /** Callback fired when the sidebar button is clicked. */
   onClick?: () => void;
 };
 
 type NavGroup = {
+  /** Unique identifier for the group, used as React key. */
   id: string;
+  /** Optional section heading rendered above the group's items. */
   label?: string;
+  /** Navigation items that belong to this group. */
   items: NavItem[];
 };
 
 export type CMSLayoutProps = {
+  /** Text label used by the header for language-toggle or i18n display. */
   i18nText?: string;
+  /** ID of the currently active navigation item; matched against `NavItem.id` to highlight the active button. */
   activeNavItemId?: string;
+  /** Sidebar navigation definition; omitting this prop renders an empty sidebar. */
   sidebar?: { groupcontent: NavGroup[] };
+  /** Callback fired when the logout button is clicked. */
   onLogout?: () => void;
+  /** Callback fired when the user switches the UI locale to English. */
   onChangeToEnLocale?: () => void;
+  /** Callback fired when the user switches the UI locale to Vietnamese. */
   onChangeToViLocale?: () => void;
+  /**
+   * Label displayed on the logout button.
+   * @default 'Log out'
+   */
   logoutLabel?: string;
+  /**
+   * Copyright string shown at the bottom of the sidebar.
+   * @default `Copyright © <current year>, Lunas.`
+   */
   copyright?: string;
 };
 
@@ -63,6 +84,33 @@ const SidebarContentGroup = memo<React.PropsWithChildren<Omit<NavGroup, 'items'>
 ));
 SidebarContentGroup.displayName = 'SidebarContentGroup';
 
+/**
+ * Full-page CMS application shell with a collapsible inset sidebar, header, and main content area.
+ *
+ * @example
+ * ```tsx
+ * import { CMSLayout } from '@customafk/lunas-ui/layouts/cms-layout';
+ * import { LayoutDashboardIcon } from 'lucide-react';
+ *
+ * <CMSLayout
+ *   activeNavItemId="dashboard"
+ *   sidebar={{
+ *     groupcontent: [
+ *       {
+ *         id: 'main',
+ *         label: 'Main',
+ *         items: [
+ *           { id: 'dashboard', label: 'Dashboard', icon: <LayoutDashboardIcon />, onClick: () => router.push('/') },
+ *         ],
+ *       },
+ *     ],
+ *   }}
+ *   onLogout={() => signOut()}
+ * >
+ *   <DashboardPage />
+ * </CMSLayout>
+ * ```
+ */
 export const CMSLayout: React.FC<React.PropsWithChildren<CMSLayoutProps>> = ({
   i18nText,
   activeNavItemId,

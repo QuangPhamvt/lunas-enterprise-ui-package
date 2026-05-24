@@ -7,11 +7,34 @@ import { cn } from '@customafk/react-toolkit/utils';
 
 import { OTPInput, OTPInputContext } from 'input-otp';
 
+/**
+ * One-time password (OTP) input composed of individual character slots.
+ *
+ * @example
+ * ```tsx
+ * import { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator } from '@customafk/lunas-ui/ui/input-otp';
+ *
+ * <InputOTP maxLength={6}>
+ *   <InputOTPGroup>
+ *     <InputOTPSlot index={0} />
+ *     <InputOTPSlot index={1} />
+ *     <InputOTPSlot index={2} />
+ *   </InputOTPGroup>
+ *   <InputOTPSeparator />
+ *   <InputOTPGroup>
+ *     <InputOTPSlot index={3} />
+ *     <InputOTPSlot index={4} />
+ *     <InputOTPSlot index={5} />
+ *   </InputOTPGroup>
+ * </InputOTP>
+ * ```
+ */
 function InputOTP({
   className,
   containerClassName,
   ...props
 }: React.ComponentProps<typeof OTPInput> & {
+  /** Class name applied to the outer container div. */
   containerClassName?: string;
 }) {
   return (
@@ -24,10 +47,16 @@ function InputOTP({
   );
 }
 
+/** Flex container that groups a sequence of InputOTPSlot elements. */
 function InputOTPGroup({ className, ...props }: React.ComponentProps<'div'>) {
   return <div data-slot="input-otp-group" className={cn('flex items-center', className)} {...props} />;
 }
 
+/**
+ * A single character slot in an InputOTP — displays the typed character and a blinking caret when focused.
+ *
+ * @param index - Zero-based position of this slot within the OTP sequence.
+ */
 function InputOTPSlot({
   index,
   className,
@@ -58,6 +87,7 @@ function InputOTPSlot({
   );
 }
 
+/** Visual separator (dash) placed between InputOTPGroup elements. */
 function InputOTPSeparator({ ...props }: React.ComponentProps<'div'>) {
   return (
     <div data-slot="input-otp-separator" role="separator" {...props}>

@@ -7,8 +7,28 @@ import { useTanStackFieldContext } from '../../tanstack-form';
 import { Field, FieldContent, FieldDescription, FieldGroup, FieldNote, FieldSeparator, FieldTitle } from '../ui/field';
 import { Switch } from '../ui/switch';
 
+/**
+ * Props for the SwitchField component, derived from the TanStack Form switch field schema.
+ */
 type Props = Pick<z.input<typeof TanStackFormSwitchFieldSchema>, 'label' | 'description' | 'helperText'>;
 
+/**
+ * A TanStack Form-connected boolean toggle field rendered as a labelled switch,
+ * positioned absolutely in the top-right corner of the field card.
+ *
+ * @example
+ * import { SwitchField } from '@customafk/lunas-ui/features/tanstack-form';
+ *
+ * <form.Field name="notifications">
+ *   {() => (
+ *     <SwitchField
+ *       label="Enable notifications"
+ *       description="Receive email alerts for important events"
+ *       helperText="You can change this at any time"
+ *     />
+ *   )}
+ * </form.Field>
+ */
 export const SwitchField: React.FC<Props> = ({ label, description, helperText }) => {
   const field = useTanStackFieldContext<boolean | null>();
 

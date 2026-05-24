@@ -10,15 +10,44 @@ import { Field, FieldContent, FieldContentMain, FieldDescription, FieldError, Fi
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useTanStackFieldContext } from '../../tanstack-form';
 
+/**
+ * Props for the ComboboxField component.
+ */
 type ComboboxFieldProps = {
+  /** Visible label rendered above the combobox trigger. */
   label: string;
+  /** Optional supporting text displayed beneath the label. */
   description?: string;
+  /** Placeholder shown inside the trigger button and the search input when no value is selected. */
   placeholder?: string;
+  /** Tooltip content rendered next to the label via an icon button. */
   tooltip?: string;
+  /** Layout orientation of the label/field pair. Defaults to `'responsive'`. */
   orientation?: 'horizontal' | 'vertical' | 'responsive';
+  /** Array of selectable options, each with a string `value` and display `label`. */
   options: Array<{ value: string; label: string }>;
 };
 
+/**
+ * A TanStack Form-connected searchable combobox field powered by Radix UI Popover
+ * and a Command menu, allowing the user to filter and select a single string value.
+ *
+ * @example
+ * import { ComboboxField } from '@customafk/lunas-ui/features/tanstack-form';
+ *
+ * <form.Field name="city">
+ *   {() => (
+ *     <ComboboxField
+ *       label="City"
+ *       placeholder="Search city…"
+ *       options={[
+ *         { value: 'tokyo', label: 'Tokyo' },
+ *         { value: 'hanoi', label: 'Hanoi' },
+ *       ]}
+ *     />
+ *   )}
+ * </form.Field>
+ */
 export const ComboboxField: React.FC<ComboboxFieldProps> = ({ label, description, placeholder, tooltip, orientation = 'responsive', options }) => {
   const field = useTanStackFieldContext<string | null>();
 

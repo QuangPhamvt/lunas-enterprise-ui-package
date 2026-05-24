@@ -5,6 +5,14 @@ import { cn } from '@customafk/react-toolkit/utils';
 import { Flex } from '@/components/layouts/flex';
 import { UITableEmpty } from './empty';
 
+/**
+ * Applies the specified rounding mode to `num` at the given decimal precision.
+ *
+ * @param num - The number to round.
+ * @param precisionValue - Number of decimal places to keep.
+ * @param roundingMode - Rounding strategy: `'round'` (default), `'floor'`, or `'ceil'`.
+ * @returns The rounded number.
+ */
 const applyRounding = (num: number, precisionValue: number, roundingMode?: 'round' | 'floor' | 'ceil') => {
   const multiplier = 10 ** precisionValue;
 
@@ -18,18 +26,38 @@ const applyRounding = (num: number, precisionValue: number, roundingMode?: 'roun
   }
 };
 
+/** Props for the {@link UITableStatisticDisplay} component. */
 type Props = {
+  /** Character used to separate the integer and fractional parts (default: `'.'`). */
   decimalSeparator?: string;
+  /** Character used to separate thousands groups (default: `','`). */
   groupSeparator?: string;
+  /** Optional node rendered before the formatted number (e.g. a currency symbol). */
   prefix?: React.ReactNode;
+  /** Optional node rendered after the formatted number (e.g. a unit label). */
   suffix?: React.ReactNode;
-  precision?: number; // Số chữ số thập phân
-  roundingMode?: 'round' | 'floor' | 'ceil'; // Kiểu làm tròn
-  showTrailingZeros?: boolean; // Hiển thị số 0 cuối
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'; // Kích thước của component
+  /** Number of decimal digits to display. */
+  precision?: number;
+  /** Rounding strategy applied before formatting (default: `'round'`). */
+  roundingMode?: 'round' | 'floor' | 'ceil';
+  /** When `true`, pads the fractional part with trailing zeros up to `precision` digits. */
+  showTrailingZeros?: boolean;
+  /** Font-size variant for the displayed number (default: `'lg'`). */
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  /** The numeric or string value to format; falsy / invalid values render an empty state. */
   value: number | string | null | undefined;
 };
 
+/**
+ * A memoized table-cell component that formats a numeric value with configurable
+ * separators, precision, rounding, and size; renders {@link UITableEmpty} when
+ * the value is zero, invalid, or absent.
+ *
+ * @example
+ * import { UITableStatisticDisplay } from '@customafk/lunas-ui/features/tables';
+ *
+ * <UITableStatisticDisplay value={1234567.89} precision={2} prefix="$" size="md" />
+ */
 export const UITableStatisticDisplay = memo(
   ({
     decimalSeparator = '.',

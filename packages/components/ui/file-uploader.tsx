@@ -10,6 +10,22 @@ import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 
+/**
+ * Props for the FileUploader component.
+ *
+ * @example
+ * ```tsx
+ * import { FileUploader } from '@customafk/lunas-ui/ui/file-uploader';
+ *
+ * <FileUploader
+ *   accept={{ 'image/*': [] }}
+ *   maxSize={1024 * 1024 * 5}
+ *   maxFileCount={3}
+ *   multiple
+ *   onUpload={async (files) => { await uploadFiles(files); }}
+ * />
+ * ```
+ */
 interface FileUploaderProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
    * Value of the uploader.
@@ -86,10 +102,18 @@ interface FileUploaderProps extends React.HTMLAttributes<HTMLDivElement> {
    */
   disabled?: boolean;
 
+  /**
+   * Whether to show the instructional drag-and-drop text inside the drop zone.
+   * @default true
+   */
   showText?: boolean;
+  /** Size in pixels for the upload icon. */
   iconSize?: number;
 }
 
+/**
+ * A drag-and-drop file upload zone that manages file selection, validation, preview generation, and optional async upload with progress tracking.
+ */
 export function FileUploader(props: FileUploaderProps) {
   const {
     value: valueProp,

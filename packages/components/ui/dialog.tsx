@@ -7,22 +7,54 @@ import { CloseButton } from './buttons/close';
 import { headingVariants } from '../typography/heading';
 import { paragraphVariants } from '../typography/paragraph';
 
+/**
+ * Accessible modal dialog built on Radix UI's Dialog primitives with animated overlay, close button, and responsive sizing.
+ *
+ * @example
+ * ```tsx
+ * import {
+ *   Dialog, DialogTrigger, DialogContent,
+ *   DialogHeader, DialogTitle, DialogDescription, DialogFooter,
+ * } from '@customafk/lunas-ui/ui/dialog';
+ * import { Button } from '@customafk/lunas-ui/ui/button';
+ *
+ * <Dialog>
+ *   <DialogTrigger asChild>
+ *     <Button>Open dialog</Button>
+ *   </DialogTrigger>
+ *   <DialogContent>
+ *     <DialogHeader>
+ *       <DialogTitle>Confirm action</DialogTitle>
+ *       <DialogDescription>This cannot be undone.</DialogDescription>
+ *     </DialogHeader>
+ *     <DialogFooter>
+ *       <Button variant="outline">Cancel</Button>
+ *       <Button>Confirm</Button>
+ *     </DialogFooter>
+ *   </DialogContent>
+ * </Dialog>
+ * ```
+ */
 function Dialog({ ...props }: React.ComponentProps<typeof DialogPrimitive.Root>) {
   return <DialogPrimitive.Root data-slot="dialog" {...props} />;
 }
 
+/** Element that opens the dialog when clicked; typically wrapped with `asChild` around a `Button`. */
 function DialogTrigger({ ...props }: React.ComponentProps<typeof DialogPrimitive.Trigger>) {
   return <DialogPrimitive.Trigger data-slot="dialog-trigger" {...props} />;
 }
 
+/** Renders dialog overlay and content into a portal outside the normal React tree. */
 function DialogPortal({ ...props }: React.ComponentProps<typeof DialogPrimitive.Portal>) {
   return <DialogPrimitive.Portal data-slot="dialog-portal" {...props} />;
 }
 
+/** Button that closes the dialog; can be composed with `asChild` to use a custom element. */
 function DialogClose({ ...props }: React.ComponentProps<typeof DialogPrimitive.Close>) {
   return <DialogPrimitive.Close data-slot="dialog-close" {...props} />;
 }
 
+/** Semi-transparent backdrop rendered behind the dialog panel with fade-in/out animation. */
 function DialogOverlay({ className, ...props }: React.ComponentProps<typeof DialogPrimitive.Overlay>) {
   return (
     <DialogPrimitive.Overlay
@@ -38,12 +70,18 @@ function DialogOverlay({ className, ...props }: React.ComponentProps<typeof Dial
   );
 }
 
+/**
+ * Animated dialog panel centred on screen; includes `DialogOverlay` and an optional close button.
+ *
+ * @param showCloseButton - When `true` (default), renders a `CloseButton` in the top-right corner.
+ */
 function DialogContent({
   className,
   children,
   showCloseButton = true,
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Content> & {
+  /** When `true` (default), renders an `×` close button fixed to the top-right corner of the panel. */
   showCloseButton?: boolean;
 }) {
   return (
@@ -73,18 +111,22 @@ function DialogContent({
   );
 }
 
+/** Layout wrapper for the dialog title and description, stacked vertically with left alignment on wider screens. */
 function DialogHeader({ className, ...props }: React.ComponentProps<'div'>) {
   return <div data-slot="dialog-header" className={cn('flex flex-col gap-2 text-center sm:text-left', className)} {...props} />;
 }
 
+/** Layout wrapper for dialog action buttons, stacked on mobile and right-aligned in a row on wider screens. */
 function DialogFooter({ className, ...props }: React.ComponentProps<'div'>) {
   return <div data-slot="dialog-footer" className={cn('flex flex-col-reverse gap-2 sm:flex-row sm:justify-end', className)} {...props} />;
 }
 
+/** Accessible heading for the dialog panel, styled with the h3 heading variant and announced by screen readers. */
 function DialogTitle({ className, ...props }: React.ComponentProps<typeof DialogPrimitive.Title>) {
   return <DialogPrimitive.Title data-slot="dialog-title" className={cn(headingVariants({ level: 'h3' }), className)} {...props} />;
 }
 
+/** Muted supporting text that describes the dialog's purpose; read by screen readers alongside the title. */
 function DialogDescription({ className, ...props }: React.ComponentProps<typeof DialogPrimitive.Description>) {
   return <DialogPrimitive.Description data-slot="dialog-description" className={cn(paragraphVariants({ variant: 'muted' }), className)} {...props} />;
 }

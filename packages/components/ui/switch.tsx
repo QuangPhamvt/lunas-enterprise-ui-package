@@ -4,6 +4,20 @@ import { cn } from '@customafk/react-toolkit/utils';
 
 import { Switch as SwitchPrimitive } from 'radix-ui';
 
+/**
+ * Accessible toggle switch built on Radix UI's Switch primitive, with animated thumb and primary/muted color states.
+ *
+ * @example
+ * ```tsx
+ * import { Switch } from '@customafk/lunas-ui/ui/switch';
+ * import { Label } from '@customafk/lunas-ui/ui/label';
+ *
+ * <div className="flex items-center gap-2">
+ *   <Switch id="notifications" />
+ *   <Label htmlFor="notifications">Enable notifications</Label>
+ * </div>
+ * ```
+ */
 function Switch({ className, ...props }: React.ComponentProps<typeof SwitchPrimitive.Root>) {
   return (
     <SwitchPrimitive.Root

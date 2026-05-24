@@ -4,6 +4,16 @@ import { cn } from '@customafk/react-toolkit/utils';
 
 import { Slider as SliderPrimitive } from 'radix-ui';
 
+/**
+ * An accessible range slider supporting single-thumb, multi-thumb, and vertical orientations.
+ *
+ * @example
+ * ```tsx
+ * import { Slider } from '@customafk/lunas-ui/ui/slider';
+ *
+ * <Slider defaultValue={[40]} min={0} max={100} step={5} />
+ * ```
+ */
 function Slider({ className, defaultValue, value, min = 0, max = 100, ...props }: React.ComponentProps<typeof SliderPrimitive.Root>) {
   const _values = useMemo(() => (Array.isArray(value) ? value : Array.isArray(defaultValue) ? defaultValue : [min, max]), [value, defaultValue, min, max]);
 

@@ -3,16 +3,34 @@ import { cn } from '@customafk/react-toolkit/utils';
 import { Wrench } from 'lucide-react';
 
 export interface FeatureFixingProps {
+  /** Main heading shown beneath the wrench icon. Defaults to `'Tính năng đang bảo trì'`. */
   title?: string;
+  /** Supporting text shown below the title. Defaults to a Vietnamese maintenance message. */
   subtitle?: string;
+  /** Label for the action button. Defaults to `'Quay lại'`. */
   buttonText?: string;
+  /** Handler called when the action button is clicked. Defaults to `window.history.back()`. */
   onButtonClick?: () => void;
+  /** Additional class names applied to the root container element. */
   className?: string;
+  /** Additional class names applied to the `Wrench` icon. */
   iconClassName?: string;
 }
 
 /**
- * FeatureFixing component for displaying pages with features under maintenance or being fixed
+ * Full-page placeholder displayed when a feature is temporarily unavailable due to maintenance or bug fixes.
+ *
+ * @example
+ * ```tsx
+ * import { FeatureFixing } from '@customafk/lunas-ui/pages/FeatureFixing';
+ *
+ * <FeatureFixing
+ *   title="Under Maintenance"
+ *   subtitle="We are fixing an issue. Please check back later."
+ *   buttonText="Go Back"
+ *   onButtonClick={() => router.back()}
+ * />
+ * ```
  */
 export const FeatureFixing = ({
   title = 'Tính năng đang bảo trì',

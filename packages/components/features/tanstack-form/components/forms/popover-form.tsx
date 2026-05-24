@@ -9,11 +9,29 @@ import { useTanStackFormContext } from '../../tanstack-form';
 import { CancelButton } from '../ui/cancel-button';
 import { SubmitButton } from '../ui/submit-button';
 
+/**
+ * Renders a slide-in side-panel dialog that wraps a TanStack form with built-in submit and cancel actions.
+ *
+ * @example
+ * import { TanStackPopoverForm } from '@customafk/lunas-ui/features/tanstack-form';
+ *
+ * <TanStackPopoverForm
+ *   title="Edit Profile"
+ *   open={isOpen}
+ *   onOpenChange={setIsOpen}
+ * >
+ *   <EmailField />
+ * </TanStackPopoverForm>
+ */
 export const TanStackPopoverForm: React.FC<
   React.PropsWithChildren<{
+    /** Heading text displayed in the panel header. */
     title: string;
+    /** Controlled open state of the popover dialog. */
     open?: boolean;
+    /** Additional CSS class names applied to the scrollable content area. */
     contentClassName?: string;
+    /** Callback fired when the open state changes. */
     onOpenChange?: (open: boolean) => void;
   }>
 > = ({ title, open, contentClassName, onOpenChange, children }) => {

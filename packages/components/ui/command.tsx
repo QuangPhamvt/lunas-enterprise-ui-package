@@ -8,6 +8,28 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 
 import { Command as CommandPrimitive } from 'cmdk';
 
+/**
+ * A cmdk-powered command palette for searching and executing commands.
+ *
+ * @example
+ * ```tsx
+ * import {
+ *   Command, CommandInput, CommandList, CommandEmpty,
+ *   CommandGroup, CommandItem,
+ * } from '@customafk/lunas-ui/ui/command';
+ *
+ * <Command>
+ *   <CommandInput placeholder="Type a command…" />
+ *   <CommandList>
+ *     <CommandEmpty>No results found.</CommandEmpty>
+ *     <CommandGroup heading="Suggestions">
+ *       <CommandItem>Calendar</CommandItem>
+ *       <CommandItem>Search</CommandItem>
+ *     </CommandGroup>
+ *   </CommandList>
+ * </Command>
+ * ```
+ */
 function Command({ className, ...props }: React.ComponentProps<typeof CommandPrimitive>) {
   return (
     <CommandPrimitive
@@ -18,6 +40,13 @@ function Command({ className, ...props }: React.ComponentProps<typeof CommandPri
   );
 }
 
+/**
+ * A Command palette rendered inside a Dialog overlay.
+ *
+ * @param title - Accessible title for the dialog (screen-reader only).
+ * @param description - Accessible description for the dialog (screen-reader only).
+ * @param showCloseButton - Whether to show the built-in close button on the dialog.
+ */
 function CommandDialog({
   title = 'Command Palette',
   description = 'Search for a command to run...',
@@ -60,6 +89,7 @@ function CommandDialog({
   );
 }
 
+/** Search input with a leading search icon that filters CommandItems in real time. */
 function CommandInput({ className, ...props }: React.ComponentProps<typeof CommandPrimitive.Input>) {
   return (
     <div data-slot="command-input-wrapper" className="flex h-9 items-center gap-2 border-border-weak border-b px-3">
@@ -79,14 +109,17 @@ function CommandInput({ className, ...props }: React.ComponentProps<typeof Comma
   );
 }
 
+/** Scrollable list that renders filtered CommandGroups and CommandItems. */
 function CommandList({ className, ...props }: React.ComponentProps<typeof CommandPrimitive.List>) {
   return <CommandPrimitive.List data-slot="command-list" className={cn('max-h-80 scroll-py-1 overflow-y-auto overflow-x-hidden', className)} {...props} />;
 }
 
+/** Fallback message displayed when no CommandItems match the current search query. */
 function CommandEmpty({ ...props }: React.ComponentProps<typeof CommandPrimitive.Empty>) {
   return <CommandPrimitive.Empty data-slot="command-empty" className="py-6 text-center text-sm" {...props} />;
 }
 
+/** Groups CommandItems under an optional heading label. */
 function CommandGroup({ className, ...props }: React.ComponentProps<typeof CommandPrimitive.Group>) {
   return (
     <CommandPrimitive.Group
@@ -106,10 +139,12 @@ function CommandGroup({ className, ...props }: React.ComponentProps<typeof Comma
   );
 }
 
+/** Horizontal dividing line between groups in a CommandList. */
 function CommandSeparator({ className, ...props }: React.ComponentProps<typeof CommandPrimitive.Separator>) {
   return <CommandPrimitive.Separator data-slot="command-separator" className={cn('-mx-1 h-px bg-border-weak', className)} {...props} />;
 }
 
+/** A selectable row inside a CommandGroup that is highlighted when active or hovered. */
 function CommandItem({ className, ...props }: React.ComponentProps<typeof CommandPrimitive.Item>) {
   return (
     <CommandPrimitive.Item
@@ -134,6 +169,7 @@ function CommandItem({ className, ...props }: React.ComponentProps<typeof Comman
   );
 }
 
+/** Displays a keyboard shortcut hint aligned to the right of a CommandItem. */
 function CommandShortcut({ className, ...props }: React.ComponentProps<'span'>) {
   return <span data-slot="command-shortcut" className={cn('ml-auto text-text-positive-muted text-xs tracking-widest', className)} {...props} />;
 }

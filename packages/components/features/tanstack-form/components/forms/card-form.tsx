@@ -6,10 +6,27 @@ import { Button } from '@/components/ui/button';
 
 import { Separator } from '../ui/separator';
 
+/**
+ * Renders a card-style form section with a header, optional description, a delete button, and a content area for fields.
+ *
+ * @example
+ * import { TanStackCardForm } from '@customafk/lunas-ui/features/tanstack-form';
+ *
+ * <TanStackCardForm
+ *   title="Shipping Address"
+ *   description="Where should we deliver your order?"
+ *   onDelete={() => removeAddress(id)}
+ * >
+ *   <TextField name="street" />
+ * </TanStackCardForm>
+ */
 export const TanStackCardForm: React.FC<
   React.PropsWithChildren<{
+    /** Bold heading text shown at the top of the card. */
     title: string;
+    /** Optional secondary text rendered beneath the title. */
     description?: string;
+    /** When provided, renders a danger "Remove" button in the card's top-right corner. */
     onDelete?: () => void | Promise<void>;
   }>
 > = ({ title, description, onDelete, children }) => {

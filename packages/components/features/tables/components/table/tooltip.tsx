@@ -1,3 +1,9 @@
+/**
+ * @file tooltip.tsx
+ * Toolbar components rendered above the table: a debounced search input,
+ * an action button group (create / refresh / download), and the outer
+ * toolbar shell that displays the table title.
+ */
 import { ArrowRightIcon, CirclePlus, DownloadIcon, RefreshCwIcon, SearchIcon } from 'lucide-react';
 
 import { useDebounceCallback } from '@customafk/react-toolkit/hooks/useDebounceCallback';
@@ -6,6 +12,22 @@ import { Input } from '@/components/ui/input';
 
 import { useUITableContext } from '../../hooks/use-context';
 
+/**
+ * Debounced search input rendered inside the table toolbar.
+ *
+ * Fires `onSearch` 500 ms after the user stops typing and delegates all other
+ * native input events via the spread `props`.
+ *
+ * @example
+ * ```tsx
+ * import { UITableTooltipFilter } from '@customafk/lunas-ui/features/tables';
+ *
+ * <UITableTooltipFilter
+ *   placeholder="Search users…"
+ *   onSearch={value => setQuery(value)}
+ * />
+ * ```
+ */
 export const UITableTooltipFilter: React.FC<
   Omit<React.ComponentProps<typeof Input>, 'className'> & {
     onSearch?: (value: string) => void;
@@ -54,6 +76,23 @@ const ActionButton: React.FC<React.PropsWithChildren<React.ComponentProps<'butto
   );
 };
 
+/**
+ * Grouped action buttons (create, refresh, download) displayed in the table
+ * toolbar.
+ *
+ * Each button is disabled automatically when the corresponding handler prop is
+ * omitted, so only the actions relevant to a given table need to be provided.
+ *
+ * @example
+ * ```tsx
+ * import { UITableTooltipActions } from '@customafk/lunas-ui/features/tables';
+ *
+ * <UITableTooltipActions
+ *   onCreate={() => setOpenCreate(true)}
+ *   onRefresh={() => refetch()}
+ * />
+ * ```
+ */
 export const UITableTooltipActions: React.FC<{
   onCreate?: () => void;
   onRefresh?: () => void;
@@ -95,6 +134,27 @@ export const UITableTooltipActions: React.FC<{
   );
 };
 
+/**
+ * Outer toolbar shell for the UITable component.
+ *
+ * Reads the table `title` from `UITableContext` and renders it as a heading
+ * above the `children` slot, which typically contains a
+ * `UITableTooltipFilter` and/or `UITableTooltipActions`.
+ *
+ * @example
+ * ```tsx
+ * import {
+ *   UITableTooltip,
+ *   UITableTooltipFilter,
+ *   UITableTooltipActions,
+ * } from '@customafk/lunas-ui/features/tables';
+ *
+ * <UITableTooltip>
+ *   <UITableTooltipFilter onSearch={setQuery} />
+ *   <UITableTooltipActions onCreate={handleCreate} onRefresh={refetch} />
+ * </UITableTooltip>
+ * ```
+ */
 export const UITableTooltip: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { title } = useUITableContext();
   return (

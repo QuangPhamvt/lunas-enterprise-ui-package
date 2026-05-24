@@ -76,9 +76,93 @@ const flexVariants = cva(['relative flex', 'text-sm'], {
 });
 
 type Props = {
+  /** Additional Tailwind classes merged on top of the variant-generated classes. */
   className?: string;
+  /**
+   * Stacks children vertically (`flex-col`) when `true`, horizontally (`flex-row`) when `false`.
+   * @default false
+   */
+  vertical?: boolean;
+  /**
+   * Controls the width of the flex container.
+   * - `'full'` — `w-full`
+   * - `'auto'` — `w-auto`
+   * - `'fit'`  — `w-fit` (default)
+   * - `'screen'` — `w-screen`
+   * - `'min'` — `w-min`
+   * - `'max'` — `w-max`
+   * - `'null'` — no width utility applied
+   * @default 'fit'
+   */
+  width?: 'full' | 'auto' | 'fit' | 'screen' | 'min' | 'max' | 'null';
+  /**
+   * Allows children to wrap onto multiple lines when `true`.
+   * @default true
+   */
+  wrap?: boolean;
+  /**
+   * Uniform margin applied to the container.
+   * - `'none'` — `m-0` (default)
+   * - `'sm'` — `m-2`
+   * - `'md'` — `m-4`
+   * - `'lg'` — `m-6`
+   * - `'xl'` — `m-8`
+   * @default 'none'
+   */
+  margin?: 'sm' | 'md' | 'lg' | 'xl' | 'none';
+  /**
+   * Uniform padding applied to the container.
+   * - `'none'` — `p-0`
+   * - `'sm'`  — `p-2` (default)
+   * - `'md'`  — `p-4`
+   * - `'lg'`  — `p-6`
+   * - `'xl'`  — `p-8`
+   * @default 'sm'
+   */
+  padding?: 'sm' | 'md' | 'lg' | 'xl' | 'none';
+  /**
+   * Gap between child elements.
+   * - `'none'` — `gap-0`
+   * - `'xs'`  — `gap-1` (default)
+   * - `'sm'`  — `gap-2`
+   * - `'md'`  — `gap-4`
+   * - `'lg'`  — `gap-6`
+   * - `'xl'`  — `gap-8`
+   * @default 'xs'
+   */
+  gap?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'none';
+  /**
+   * Justification of children along the main axis (`justify-content`).
+   * @default 'start'
+   */
+  justify?: 'start' | 'center' | 'end' | 'between' | 'around' | 'evenly' | 'stretch';
+  /**
+   * Alignment of children along the cross axis (`align-items`).
+   * @default 'center'
+   */
+  align?: 'start' | 'center' | 'end' | 'baseline' | 'stretch';
 } & VariantProps<typeof flexVariants>;
 
+/**
+ * A flexible, variant-driven flex container built on CVA and TailwindCSS.
+ *
+ * @example
+ * ```tsx
+ * import { Flex } from '@customafk/lunas-ui/layouts/flex';
+ *
+ * // Horizontal row with centered children and a medium gap
+ * <Flex gap="md" justify="between" align="center">
+ *   <span>Left</span>
+ *   <span>Right</span>
+ * </Flex>
+ *
+ * // Vertical stack that fills parent width
+ * <Flex vertical width="full" gap="sm" padding="md">
+ *   <p>First item</p>
+ *   <p>Second item</p>
+ * </Flex>
+ * ```
+ */
 export const Flex = memo(({ vertical, wrap, width, margin, padding, gap, justify, align, className, children }: React.PropsWithChildren<Props>) => {
   return (
     <div

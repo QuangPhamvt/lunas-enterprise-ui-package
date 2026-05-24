@@ -8,7 +8,19 @@ import { cn } from '@customafk/react-toolkit/utils';
 import { TIME_IN_SECONDS, vietnameseHolidays, vietnameseLocale } from '@/constants';
 
 interface DateDisplayProps {
+  /** The date value to display; accepts a `Date` object, an ISO string, or a Unix timestamp (ms). */
   date: Date | string | number;
+  /**
+   * Controls how the date is formatted.
+   * - `'short'`    — `15/03/24`
+   * - `'medium'`   — `15/03/2024` (default)
+   * - `'long'`     — `15 tháng 3, 2024`
+   * - `'full'`     — `Thứ Sáu, ngày 15 tháng 3 năm 2024`
+   * - `'relative'` — `2 giờ trước`
+   * - `'datetime'` — `15/03/2024 14:30`
+   * - `'time'`     — `14:30`
+   * - `'smart'`    — auto-selects the most human-readable format based on recency
+   */
   format?:
     | 'short' // 15/03/24
     | 'medium' // 15/03/2024
@@ -18,12 +30,26 @@ interface DateDisplayProps {
     | 'datetime' // 15/03/2024 14:30
     | 'time' // 14:30
     | 'smart'; // auto-selects format based on recency
+  /** When `true`, appends any recognised Vietnamese public holiday name to the formatted date. Defaults to `false`. */
   showHoliday?: boolean;
+  /** When `true`, appends the time component to the formatted output. Defaults to `false`. */
   showTime?: boolean;
+  /** Additional CSS classes applied to the `<time>` element. */
   className?: string;
+  /** Custom HTML `title` attribute; defaults to the full ISO datetime string. */
   title?: string;
 }
 
+/**
+ * Renders a formatted date using Vietnamese locale conventions inside a semantic `<time>` element.
+ *
+ * @example
+ * ```tsx
+ * import { DateDisplay } from '@customafk/lunas-ui/data-display/date';
+ *
+ * <DateDisplay date="2024-03-15T14:30:00Z" format="medium" showTime />
+ * ```
+ */
 export const DateDisplay: React.FC<DateDisplayProps> = ({
   date,
   format: formatType = 'medium',

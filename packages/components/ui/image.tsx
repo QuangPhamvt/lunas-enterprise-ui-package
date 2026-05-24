@@ -6,17 +6,38 @@ import { cn } from '@customafk/react-toolkit/utils';
 
 import { Skeleton } from './skeleton';
 
+/** Props for the Image component. */
 type Props = {
+  /** URL of the image to display. */
   src?: string;
+  /** Accessible alt text for the image. */
   alt?: string;
+  /** Width of the image container (number treated as pixels). */
   width?: number | string;
+  /** Height of the image container (number treated as pixels). */
   height?: number | string;
+  /** Maximum number of retry attempts on load failure before showing an error state. @default 3 */
   maxRetries?: number;
+  /** Base delay in milliseconds between retry attempts (multiplied by the attempt count). @default 500 */
   retryDelay?: number;
+  /** Class name applied to the outer container div. */
   className?: string;
+  /** Class name applied to the `<img>` element. */
   imageClassName?: string;
+  /** Click handler for the image container. */
   onClick?: () => void;
 };
+
+/**
+ * A lazy-loading image with an automatic retry mechanism, a blurred background placeholder, a skeleton loader, and an error fallback.
+ *
+ * @example
+ * ```tsx
+ * import { Image } from '@customafk/lunas-ui/ui/image';
+ *
+ * <Image src="/hero.jpg" alt="Hero" width={400} height={300} maxRetries={3} />
+ * ```
+ */
 export const Image: React.FC<Props> = ({ src, alt, width, height, maxRetries = 3, retryDelay = 500, className, imageClassName, onClick }) => {
   const imageRef = useRef<HTMLImageElement>(null);
   const [currentSrc, setCurrentSrc] = useState<string | undefined>(src);

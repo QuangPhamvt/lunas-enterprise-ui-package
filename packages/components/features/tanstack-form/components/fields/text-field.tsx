@@ -26,14 +26,38 @@ import { useTanStackFieldContext } from '../../tanstack-form';
 
 import type { TanStackFormTextFieldSchema } from '../../schema';
 
+/**
+ * Props for the TextField component, derived from the TanStack Form text field schema.
+ */
 type Props = Pick<
   z.input<typeof TanStackFormTextFieldSchema>,
   'label' | 'description' | 'placeholder' | 'orientation' | 'counter' | 'tooltip' | 'helperText' | 'showClearButton' | 'showErrorMessage'
 > & {
+  /** Marks the field as required; triggers an empty-state indicator when the value is null. */
   required?: boolean;
+  /** Maximum number of characters allowed; enforced when `counter` is true. */
   maxLength?: number;
 };
 
+/**
+ * A TanStack Form-connected single-line text input field with optional character counter,
+ * clear button, error display, and submission-state feedback.
+ *
+ * @example
+ * import { TextField } from '@customafk/lunas-ui/features/tanstack-form';
+ *
+ * <form.Field name="username">
+ *   {() => (
+ *     <TextField
+ *       label="Username"
+ *       placeholder="Enter username"
+ *       counter
+ *       maxLength={50}
+ *       showClearButton
+ *     />
+ *   )}
+ * </form.Field>
+ */
 export const TextField: React.FC<Props> = ({
   label,
   description,
