@@ -1,3 +1,5 @@
+'use client';
+
 import type z from 'zod';
 
 import type { TanStackFormSwitchFieldSchema } from '../../schema';

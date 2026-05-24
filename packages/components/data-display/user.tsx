@@ -1,3 +1,5 @@
+'use client';
+
 import { UserRoundIcon } from 'lucide-react';
 
 import { colorHashLight } from '@customafk/react-toolkit/color-hash';
@@ -12,17 +14,17 @@ type UserDataDisplayProps = {
   email: string;
 };
 
-export const UserDataDisplay: React.FC<React.PropsWithChildren<UserDataDisplayProps>> = ({ uuid, username, email }) => {
+export const UserDataDisplay: React.FC<UserDataDisplayProps> = ({ uuid, username, email }) => {
   return (
-    <Flex wrap={false} gap="sm" padding="none">
+    <Flex data-slot="user-display" wrap={false} gap="sm" padding="none">
       <Avatar className="size-10 shadow-card">
         <AvatarFallback style={{ backgroundColor: colorHashLight.hex(uuid) }}>
           <UserRoundIcon size={28} className="text-white" />
         </AvatarFallback>
       </Avatar>
       <Flex vertical padding="none" gap="none" align="start">
-        <Paragraph className="font-medium text-sm text-text-positive">{username}</Paragraph>
-        <Paragraph variant="sm" className="mt-0! text-text-positive-weak text-xs">
+        <Paragraph className="text-sm font-medium text-text-positive">{username}</Paragraph>
+        <Paragraph variant="sm" className="mt-0! text-xs text-text-positive-weak">
           {email}
         </Paragraph>
       </Flex>

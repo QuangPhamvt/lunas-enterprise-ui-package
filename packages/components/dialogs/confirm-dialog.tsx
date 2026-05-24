@@ -1,3 +1,7 @@
+'use client';
+
+import { useCallback } from 'react';
+
 import { TriangleAlert } from 'lucide-react';
 
 import {
@@ -11,7 +15,7 @@ import {
   AlertDialogTitle,
 } from '../ui/alert-dialog';
 
-type Props = {
+export type ConfirmDialogProps = {
   open?: boolean;
   isLoading?: boolean;
   title: string;
@@ -23,17 +27,26 @@ type Props = {
   onConfirm?: () => Promise<void> | void;
 };
 
-export const ConfirmDialog: React.FC<React.PropsWithChildren<Props>> = ({
+export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   open,
   isLoading = false,
   title,
   description,
-  cancelText,
-  submitText,
+  cancelText = 'Cancel',
+  submitText = 'Confirm',
   descriptionClassName,
   onOpenChange,
   onConfirm,
 }) => {
+  const handleConfirm = useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      onConfirm?.();
+    },
+    [onConfirm]
+  );
+
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent className="p-4 pb-5">
@@ -45,22 +58,14 @@ export const ConfirmDialog: React.FC<React.PropsWithChildren<Props>> = ({
           <AlertDialogDescription className={descriptionClassName}>{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>{cancelText || 'Cancel'}</AlertDialogCancel>
-          <AlertDialogAction
-            type="button"
-            className="min-h-9 w-full md:w-24"
-            onClick={e => {
-              onConfirm?.();
-              e.preventDefault();
-              e.stopPropagation();
-            }}
-          >
-            {!isLoading ? (
-              submitText || 'Confirm'
-            ) : (
+          <AlertDialogCancel>{cancelText}</AlertDialogCancel>
+          <AlertDialogAction type="button" className="min-h-9 w-full md:w-24" onClick={handleConfirm}>
+            {isLoading ? (
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="loader-spinner text-muted-foreground" />
+                <div className="loader-spinner text-text-positive-weak" />
               </div>
+            ) : (
+              submitText
             )}
           </AlertDialogAction>
         </AlertDialogFooter>

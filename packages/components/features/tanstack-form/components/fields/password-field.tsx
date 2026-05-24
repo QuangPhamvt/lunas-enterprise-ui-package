@@ -1,4 +1,6 @@
-import { useCallback, useMemo, useState } from 'react';
+'use client';
+
+import { useCallback, useId, useState } from 'react';
 
 import { useStore } from '@tanstack/react-form';
 
@@ -9,24 +11,43 @@ import { Input } from '@/components/ui/input';
 
 import type { TanStackFormPasswordFieldSchema } from '../../schema';
 import { useTanStackFieldContext } from '../../tanstack-form';
-import { Field, FieldContent, FieldContentMain, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldNote } from '../ui/field';
+import {
+  Field,
+  FieldContent,
+  FieldContentMain,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldNote,
+  FieldSeparator,
+  FieldTooltip,
+} from '../ui/field';
 
 type Props = Pick<
   z.input<typeof TanStackFormPasswordFieldSchema>,
   'label' | 'description' | 'placeholder' | 'orientation' | 'tooltip' | 'helperText' | 'showErrorMessage'
 >;
-export const PasswordField: React.FC<Props> = ({ label, description, placeholder, orientation = 'responsive', helperText, showErrorMessage = true }) => {
+
+export const PasswordField: React.FC<Props> = ({
+  label,
+  description,
+  placeholder,
+  orientation = 'responsive',
+  tooltip,
+  helperText,
+  showErrorMessage = true,
+}) => {
+  const id = useId();
   const { form, name, state, handleBlur, handleChange } = useTanStackFieldContext<string | null>();
 
   const isSubmitting = useStore(form.store, ({ isSubmitting }) => isSubmitting);
 
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
-  const _invalid = useMemo(() => {
-    return state.meta.isDirty && state.meta.isTouched && !state.meta.isValid;
-  }, [state.meta.isDirty, state.meta.isTouched, state.meta.isValid]);
+  const _invalid = state.meta.isDirty && state.meta.isTouched && !state.meta.isValid;
 
-  const toggleVisibility = useCallback(() => setIsVisible(prevState => !prevState), []);
+  const toggleVisibility = useCallback(() => setIsVisible(prev => !prev), []);
 
   const onChange = useCallback<React.ChangeEventHandler<HTMLInputElement>>(
     ({ target: { value } }) => {
@@ -40,12 +61,16 @@ export const PasswordField: React.FC<Props> = ({ label, description, placeholder
     <FieldGroup className="gap-y-4 px-4">
       <Field data-invalid={_invalid} orientation={orientation}>
         <FieldContent>
-          <FieldLabel htmlFor={name}>{label}</FieldLabel>
+          <FieldLabel htmlFor={id}>
+            {label}
+            {tooltip && <FieldTooltip tooltip={tooltip} />}
+          </FieldLabel>
           <FieldDescription>{description}</FieldDescription>
         </FieldContent>
         <FieldContentMain>
           <Input
-            id={name}
+            id={id}
+            name={name}
             type={isVisible ? 'text' : 'password'}
             placeholder={placeholder}
             value={state.value ?? ''}
@@ -61,7 +86,7 @@ export const PasswordField: React.FC<Props> = ({ label, description, placeholder
             onClick={toggleVisibility}
             aria-label={isVisible ? 'Hide password' : 'Show password'}
             aria-pressed={isVisible}
-            aria-controls="password"
+            aria-controls={id}
           >
             {isVisible ? <EyeOffIcon size={16} aria-hidden="true" /> : <EyeIcon size={16} aria-hidden="true" />}
           </button>
@@ -72,6 +97,7 @@ export const PasswordField: React.FC<Props> = ({ label, description, placeholder
           <FieldNote isShow={!!helperText}>{helperText}</FieldNote>
         </FieldContentMain>
       </Field>
+      <FieldSeparator />
     </FieldGroup>
   );
 };

@@ -1,3 +1,5 @@
+'use client';
+
 import { Trash2Icon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -12,21 +14,21 @@ export const TanStackCardForm: React.FC<
   }>
 > = ({ title, description, onDelete, children }) => {
   return (
-    <section data-slot="card-form" className="relative flex flex-col rounded-md bg-card pb-4 shadow-card ring-4 ring-border-weak">
-      <div data-slot="card-form-header" className="flex flex-col space-y-1 p-4">
-        <p className="font-semibold text-lg">{title}</p>
-        {!!description && <p className="text-muted text-sm">{description}</p>}
+    <section data-slot="card-form" className="relative flex flex-col rounded-md bg-card pb-4 shadow-card ring-1 ring-border">
+      <div data-slot="card-form-header" className="flex flex-col space-y-0.5 px-4 py-3">
+        <p className="font-semibold text-base tracking-tight">{title}</p>
+        {!!description && <p className="text-text-positive-weak text-sm">{description}</p>}
       </div>
       <Separator />
-      <div data-slot="card-form-main" className="flex flex-col space-y-4 py-4">
+      <div data-slot="card-form-main" className="flex flex-col py-4">
         {children}
       </div>
       {!!onDelete && (
         <Button
           color="danger"
-          variant="outline"
+          variant="ghost"
           size="sm"
-          className="absolute top-2 right-2"
+          className="absolute top-2.5 right-3"
           onClick={e => {
             onDelete?.();
             e.preventDefault();

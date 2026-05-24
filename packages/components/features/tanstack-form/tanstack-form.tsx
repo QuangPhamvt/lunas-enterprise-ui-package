@@ -1,6 +1,7 @@
 import { createFormHook, createFormHookContexts } from '@tanstack/react-form';
 
 import { CheckboxField } from './components/fields/checkbox-field';
+import { ComboboxField } from './components/fields/combobox-field';
 import { DateField } from './components/fields/date-field';
 import { EmailField } from './components/fields/email-field';
 import { NumberField } from './components/fields/number-field';
@@ -39,6 +40,7 @@ const {
     PasswordField,
 
     SelectField,
+    ComboboxField,
     DateField,
     SwitchField,
     RadioGroupField,

@@ -29,10 +29,8 @@ function DialogOverlay({ className, ...props }: React.ComponentProps<typeof Dial
       data-slot="dialog-overlay"
       className={cn(
         'fixed inset-0 z-50 bg-black/50',
-        'data-[state=open]:animate-in',
-        'data-[state=open]:fade-in-0',
-        'data-[state=closed]:animate-out',
-        'data-[state=closed]:fade-out-0',
+        'data-[state=open]:animate-in data-[state=open]:fade-in-0',
+        'data-[state=closed]:animate-out data-[state=closed]:fade-out-0',
         className
       )}
       {...props}
@@ -49,22 +47,17 @@ function DialogContent({
   showCloseButton?: boolean;
 }) {
   return (
-    <DialogPortal data-slot="dialog-portal">
+    <DialogPortal>
       <DialogOverlay />
       <DialogPrimitive.Content
         data-slot="dialog-content"
         className={cn(
-          'relative z-50 grid bg-background',
-          'gap-4 p-6 shadow-dialog outline-none',
-          'max-h-[85dvh] w-full max-w-[calc(100%-2rem)] sm:max-w-lg',
-          'rounded-2xl duration-200',
-          'data-[state=open]:animate-in',
-          'data-[state=open]:fade-in-0',
-          'data-[state=open]:zoom-in-80',
-          'data-[state=closed]:animate-out',
-          'data-[state=closed]:fade-out-0',
-          'data-[state=closed]:zoom-out-80',
-          'fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2',
+          'fixed top-1/2 left-1/2 z-50 -translate-x-1/2 -translate-y-1/2',
+          'grid w-full max-w-[calc(100%-2rem)] bg-background',
+          'max-h-[85dvh] gap-4 rounded-2xl p-6 shadow-dialog outline-none duration-200',
+          'sm:max-w-lg',
+          'data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-80',
+          'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-80',
           className
         )}
         {...props}
@@ -93,13 +86,7 @@ function DialogTitle({ className, ...props }: React.ComponentProps<typeof Dialog
 }
 
 function DialogDescription({ className, ...props }: React.ComponentProps<typeof DialogPrimitive.Description>) {
-  return (
-    <DialogPrimitive.Description
-      data-slot="dialog-description"
-      className={cn(paragraphVariants({ variant: 'muted' }), 'not-first:mt-0', className)}
-      {...props}
-    />
-  );
+  return <DialogPrimitive.Description data-slot="dialog-description" className={cn(paragraphVariants({ variant: 'muted' }), className)} {...props} />;
 }
 
 export { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogOverlay, DialogPortal, DialogTitle, DialogTrigger };

@@ -1,3 +1,7 @@
+'use client';
+
+import { useCallback } from 'react';
+
 import { EarthIcon, MenuIcon, ShoppingCartIcon } from 'lucide-react';
 
 import { cn } from '@customafk/react-toolkit/utils';
@@ -13,6 +17,34 @@ export const CMSLayoutHeader: React.FC<{
   onChangeToViLocale?: () => void;
 }> = ({ i18nText, onChangeToEnLocale, onChangeToViLocale }) => {
   const { toggleSidebar } = useSidebar();
+
+  const handleToggleSidebar = useCallback(
+    (event: React.MouseEvent) => {
+      event.preventDefault();
+      event.stopPropagation();
+      toggleSidebar();
+    },
+    [toggleSidebar]
+  );
+
+  const handleEnLocale = useCallback(
+    (event: React.MouseEvent) => {
+      event.preventDefault();
+      event.stopPropagation();
+      onChangeToEnLocale?.();
+    },
+    [onChangeToEnLocale]
+  );
+
+  const handleViLocale = useCallback(
+    (event: React.MouseEvent) => {
+      event.preventDefault();
+      event.stopPropagation();
+      onChangeToViLocale?.();
+    },
+    [onChangeToViLocale]
+  );
+
   return (
     <header
       data-slot="cms-layout-header"
@@ -22,7 +54,7 @@ export const CMSLayoutHeader: React.FC<{
         'sm:h-[calc(var(--header-height)+0.5rem)] sm:px-4 sm:pr-6',
         'absolute inset-x-0 top-0 z-20 gap-2 px-2 pr-4.5',
         'flex items-center shadow-nav',
-        'transition-[width,height] ease-linear'
+        'transition-[height] ease-linear'
       )}
     >
       <Button
@@ -32,11 +64,7 @@ export const CMSLayoutHeader: React.FC<{
         color="muted"
         size="icon"
         className="size-10 rounded-full transition-all hover:text-text-positive"
-        onClick={event => {
-          event.preventDefault();
-          event.stopPropagation();
-          toggleSidebar();
-        }}
+        onClick={handleToggleSidebar}
       >
         <MenuIcon className="size-6!" />
         <span className="sr-only">Toggle Sidebar</span>
@@ -54,37 +82,15 @@ export const CMSLayoutHeader: React.FC<{
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button
-            data-sidebar="trigger"
-            data-slot="sidebar-trigger"
-            variant="ghost"
-            color="muted"
-            className="gap-x-1 rounded-full transition-all hover:text-text-positive"
-          >
+          <Button data-slot="locale-trigger" variant="ghost" color="muted" className="gap-x-1 rounded-full transition-all hover:text-text-positive">
             <EarthIcon className="size-6!" />
             {i18nText}
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuGroup>
-            <DropdownMenuItem
-              onClick={event => {
-                onChangeToEnLocale?.();
-                event.preventDefault();
-                event.stopPropagation();
-              }}
-            >
-              EN - English
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={event => {
-                onChangeToViLocale?.();
-                event.preventDefault();
-                event.stopPropagation();
-              }}
-            >
-              VI - Vietnamese
-            </DropdownMenuItem>
+            <DropdownMenuItem onClick={handleEnLocale}>EN - English</DropdownMenuItem>
+            <DropdownMenuItem onClick={handleViLocale}>VI - Vietnamese</DropdownMenuItem>
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>

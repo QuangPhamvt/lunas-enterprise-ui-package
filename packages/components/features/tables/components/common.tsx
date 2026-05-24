@@ -684,7 +684,12 @@ export const UITableCell = memo<TUITableCell>(
         <div
           ref={cellRef}
           slot="table-body-cell-inner"
-          className={cn('overflow-x-hidden', position === 'start' && 'justify-start', position === 'center' && 'justify-center', position === 'end' && 'justify-end')}
+          className={cn(
+            'overflow-x-hidden',
+            position === 'start' && 'justify-start',
+            position === 'center' && 'justify-center',
+            position === 'end' && 'justify-end'
+          )}
         >
           {render}
         </div>

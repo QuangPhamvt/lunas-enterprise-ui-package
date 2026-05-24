@@ -1,4 +1,6 @@
-import { useCallback, useMemo } from 'react';
+'use client';
+
+import { useCallback } from 'react';
 
 import { useStore } from '@tanstack/react-form';
 
@@ -11,7 +13,18 @@ import { NumberInput } from '@/components/ui/inputs/number-input';
 
 import type { TanStackFormNumberFieldSchema } from '../../schema';
 import { useTanStackFieldContext } from '../../tanstack-form';
-import { Field, FieldContent, FieldContentMain, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldNote, FieldSeparator } from '../ui/field';
+import {
+  Field,
+  FieldContent,
+  FieldContentMain,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldNote,
+  FieldSeparator,
+  FieldTooltip,
+} from '../ui/field';
 
 type NumberFieldProps = Pick<
   z.input<typeof TanStackFormNumberFieldSchema>,
@@ -26,7 +39,7 @@ export const NumberField: React.FC<NumberFieldProps> = ({
   description,
   placeholder,
 
-  // tooltip,
+  tooltip,
   helperText,
   orientation = 'responsive',
   showErrorMessage = true,
@@ -42,14 +55,8 @@ export const NumberField: React.FC<NumberFieldProps> = ({
 
   const isSubmitting = useStore(field.form.store, ({ isSubmitting }) => isSubmitting);
 
-  const _errors = useMemo(() => {
-    return field.state.meta.errors;
-  }, [field.state.meta.errors]);
-
-  const _isEmpty = useMemo(() => {
-    if (required) return field.state.value === null;
-    return false;
-  }, [required, field.state.value]);
+  const _errors = field.state.meta.errors;
+  const _isEmpty = required ? field.state.value === null : false;
 
   const onValueChange = useCallback(
     (value: number | null) => {
@@ -65,6 +72,7 @@ export const NumberField: React.FC<NumberFieldProps> = ({
         <FieldContent>
           <FieldLabel htmlFor={field.name} aria-required={_isEmpty}>
             {label}
+            {tooltip && <FieldTooltip tooltip={tooltip} />}
           </FieldLabel>
           <FieldDescription>{description}</FieldDescription>
         </FieldContent>

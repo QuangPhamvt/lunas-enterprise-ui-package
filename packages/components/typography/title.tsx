@@ -1,8 +1,10 @@
+'use client';
+
 import type { JSX, ReactNode } from 'react';
 import { cn } from '@customafk/react-toolkit/utils';
 import { cva } from 'class-variance-authority';
 
-const titleVariants = cva('scroll-m-20 text-balance text-text-positive-strong tracking-tight', {
+const titleVariants = cva('scroll-m-20 text-start text-balance text-text-positive-strong tracking-tight transition-colors', {
   variants: {
     level: {
       1: 'text-3xl leading-tight font-bold md:text-4xl',
@@ -18,13 +20,13 @@ const titleVariants = cva('scroll-m-20 text-balance text-text-positive-strong tr
   },
 });
 
-type Props = {
+export type TitleProps = {
   level?: 1 | 2 | 3 | 4 | 5 | 6;
   className?: string;
   children?: ReactNode;
 };
 
-export const Title = ({ level = 1, className, children }: Props) => {
+export const Title = ({ level = 1, className, children }: TitleProps) => {
   const Comp = ('h' + level) as keyof JSX.IntrinsicElements;
   return (
     <Comp data-slot="title" className={cn(titleVariants({ level }), className)}>

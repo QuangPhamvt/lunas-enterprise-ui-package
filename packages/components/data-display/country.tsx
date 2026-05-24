@@ -1,3 +1,5 @@
+'use client';
+
 import { useMemo } from 'react';
 import ReactCountryFlag from 'react-country-flag';
 
@@ -6,48 +8,53 @@ import { ECountry } from '@/types';
 import { Flex } from '../layouts/flex';
 import { Paragraph } from '../typography/paragraph';
 
-type Props = {
+const COUNTRY_CODES: Record<ECountry, string> = {
+  [ECountry.VIETNAM]: 'VN',
+  [ECountry.USA]: 'US',
+  [ECountry.JAPAN]: 'JP',
+  [ECountry.CHINA]: 'CN',
+  [ECountry.KOREA]: 'KR',
+  [ECountry.SINGAPORE]: 'SG',
+  [ECountry.MALAYSIA]: 'MY',
+  [ECountry.INDONESIA]: 'ID',
+  [ECountry.TAIWAN]: 'TW',
+  [ECountry.THAILAND]: 'TH',
+};
+
+const COUNTRY_LABELS: Record<ECountry, string> = {
+  [ECountry.VIETNAM]: 'Vietnam',
+  [ECountry.USA]: 'America',
+  [ECountry.JAPAN]: 'Japan',
+  [ECountry.CHINA]: 'China',
+  [ECountry.KOREA]: 'Korea',
+  [ECountry.SINGAPORE]: 'Singapore',
+  [ECountry.MALAYSIA]: 'Malaysia',
+  [ECountry.INDONESIA]: 'Indonesia',
+  [ECountry.TAIWAN]: 'Taiwan',
+  [ECountry.THAILAND]: 'Thailand',
+};
+
+type CountryDisplayProps = {
   country?: ECountry | null;
 };
-export const CountryDisplay: React.FC<React.PropsWithChildren<Props>> = ({ country }) => {
-  const code = useMemo(() => {
-    return {
-      [ECountry.VIETNAM]: 'VN',
-      [ECountry.USA]: 'US',
-      [ECountry.JAPAN]: 'JP',
-      [ECountry.CHINA]: 'CN',
-      [ECountry.KOREA]: 'KR',
-      [ECountry.SINGAPORE]: 'SG',
-      [ECountry.MALAYSIA]: 'MY',
-      [ECountry.INDONESIA]: 'ID',
-      [ECountry.TAIWAN]: 'TW',
-      [ECountry.THAILAND]: 'TH',
-    };
-  }, []);
+
+export const CountryDisplay: React.FC<CountryDisplayProps> = ({ country }) => {
+  const code = useMemo(() => (country ? COUNTRY_CODES[country] : 'VN'), [country]);
+
   if (!country) {
     return (
-      <Flex padding="none" className="h-4 px-1">
+      <Flex data-slot="country-display" padding="none" className="px-1">
         <Paragraph variant="muted" className="line-clamp-1 text-xs">
           No country
         </Paragraph>
       </Flex>
     );
   }
+
   return (
-    <Flex padding="none" className="h-4 px-1">
-      <ReactCountryFlag svg countryCode={country ? code[country] : 'VN'} className="emojiFlag border" />
-      <Paragraph variant="sm">
-        {country === ECountry.VIETNAM && 'Vietnam'}
-        {country === ECountry.USA && 'America'}
-        {country === ECountry.JAPAN && 'Japan'}
-        {country === ECountry.CHINA && 'China'}
-        {country === ECountry.KOREA && 'Korea'}
-        {country === ECountry.SINGAPORE && 'Singapore'}
-        {country === ECountry.MALAYSIA && 'Malaysia'}
-        {country === ECountry.INDONESIA && 'Indonesia'}
-        {country === ECountry.TAIWAN && 'Taiwan'}
-        {country === ECountry.THAILAND && 'Thailand'}
-      </Paragraph>
+    <Flex data-slot="country-display" padding="none" className="px-1">
+      <ReactCountryFlag svg countryCode={code} className="emojiFlag border" />
+      <Paragraph variant="sm">{COUNTRY_LABELS[country]}</Paragraph>
     </Flex>
   );
 };

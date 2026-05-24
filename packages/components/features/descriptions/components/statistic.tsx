@@ -1,13 +1,13 @@
-import { memo, useCallback, useMemo } from 'react';
+'use client';
 
+import { memo, useCallback, useMemo } from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@customafk/react-toolkit/utils';
 
-import { Flex } from '@/components/layouts/flex';
 import { DescriptionEmpty } from './empty';
 
 const applyRounding = (num: number, precisionValue: number, roundingMode?: 'round' | 'floor' | 'ceil') => {
   const multiplier = 10 ** precisionValue;
-
   switch (roundingMode) {
     case 'floor':
       return Math.floor(num * multiplier) / multiplier;
@@ -18,16 +18,37 @@ const applyRounding = (num: number, precisionValue: number, roundingMode?: 'roun
   }
 };
 
-type Props = {
+const descriptionStatisticVariants = cva('inline-flex items-center gap-1 font-number tabular-nums transition-colors', {
+  variants: {
+    size: {
+      xs: 'text-xs',
+      sm: 'text-sm',
+      md: 'text-base',
+      lg: 'text-lg',
+      xl: 'text-xl',
+    },
+    trend: {
+      neutral: 'text-text-positive',
+      up: 'text-success',
+      down: 'text-danger',
+    },
+  },
+  defaultVariants: {
+    size: 'sm',
+    trend: 'neutral',
+  },
+});
+
+export type DescriptionStatisticProps = VariantProps<typeof descriptionStatisticVariants> & {
   decimalSeparator?: string;
   groupSeparator?: string;
   prefix?: React.ReactNode;
   suffix?: React.ReactNode;
-  precision?: number; // Số chữ số thập phân
-  roundingMode?: 'round' | 'floor' | 'ceil'; // Kiểu làm tròn
-  showTrailingZeros?: boolean; // Hiển thị số 0 cuối
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'; // Kích thước của component
+  precision?: number;
+  roundingMode?: 'round' | 'floor' | 'ceil';
+  showTrailingZeros?: boolean;
   value: number | string | null | undefined;
+  className?: string;
 };
 
 export const DescriptionStatistic = memo(
@@ -40,75 +61,51 @@ export const DescriptionStatistic = memo(
     roundingMode = 'round',
     showTrailingZeros = false,
     size = 'sm',
+    trend = 'neutral',
     value = 0,
-  }: Props) => {
-    // Memoize number formatting options
+    className,
+  }: DescriptionStatisticProps) => {
     const formatOptions = useMemo((): Intl.NumberFormatOptions => {
       const options: Intl.NumberFormatOptions = {};
-
-      if (typeof precision === 'number' && precision >= 0 && showTrailingZeros) {
-        options.minimumFractionDigits = precision;
-        options.maximumFractionDigits = precision;
-      } else {
-        options.maximumFractionDigits = precision;
+      if (typeof precision === 'number' && precision >= 0) {
+        if (showTrailingZeros) {
+          options.minimumFractionDigits = precision;
+          options.maximumFractionDigits = precision;
+        } else {
+          options.maximumFractionDigits = precision;
+        }
       }
-
       return options;
     }, [precision, showTrailingZeros]);
 
     const formatNumber = useCallback(
       (num: number): string => {
         let processedNum = num;
-
-        // Áp dụng làm tròn nếu có precision
         if (typeof precision === 'number' && precision >= 0) {
           processedNum = applyRounding(num, precision, roundingMode);
         }
-
         return processedNum.toLocaleString('en-US', formatOptions);
       },
       [roundingMode, formatOptions, precision]
     );
 
-    // Memoize value processing
     const processedValue = useMemo((): string => {
-      // Xử lý giá trị number
       if (typeof value === 'number') {
-        if (Number.isNaN(value) || !Number.isFinite(value)) {
-          return 'N/A';
-        }
+        if (Number.isNaN(value) || !Number.isFinite(value)) return 'N/A';
         return formatNumber(value);
       }
-
-      // Xử lý giá trị string
       if (typeof value === 'string') {
         const trimmedValue = value.trim();
-
-        // Nếu là chuỗi rỗng
-        if (!trimmedValue) {
-          return 'N/A';
-        }
-
-        // Thử convert sang number
+        if (!trimmedValue) return 'N/A';
         const numValue = Number(trimmedValue);
-
-        if (Number.isNaN(numValue) || !Number.isFinite(numValue)) {
-          // Nếu không phải số, trả về string gốc
-          return 'N/A';
-        }
-
+        if (Number.isNaN(numValue) || !Number.isFinite(numValue)) return 'N/A';
         return formatNumber(numValue);
       }
-
       return 'N/A';
     }, [value, formatNumber]);
 
-    // Memoize separator replacement
     const finalFormattedValue = useMemo((): string => {
-      // Chỉ thay thế separators nếu khác mặc định
-      if (decimalSeparator === '.' && groupSeparator === ',') {
-        return processedValue;
-      }
+      if (decimalSeparator === '.' && groupSeparator === ',') return processedValue;
       return processedValue.replace(/,/g, groupSeparator).replace(/\./g, decimalSeparator);
     }, [processedValue, decimalSeparator, groupSeparator]);
 
@@ -117,21 +114,11 @@ export const DescriptionStatistic = memo(
     }
 
     return (
-      <Flex
-        padding="none"
-        className={cn(
-          'font-number text-lg text-text-positive tabular-nums',
-          size === 'xs' && 'text-xs',
-          size === 'sm' && 'text-sm',
-          size === 'md' && 'text-base',
-          size === 'lg' && 'text-lg',
-          size === 'xl' && 'text-xl'
-        )}
-      >
-        {Prefix}
-        <p>{finalFormattedValue}</p>
-        {Suffix}
-      </Flex>
+      <div data-slot="description-statistic" className={cn(descriptionStatisticVariants({ size, trend }), className)}>
+        {Prefix && <span data-slot="description-statistic-prefix">{Prefix}</span>}
+        <p data-slot="description-statistic-value">{finalFormattedValue}</p>
+        {Suffix && <span data-slot="description-statistic-suffix">{Suffix}</span>}
+      </div>
     );
   }
 );

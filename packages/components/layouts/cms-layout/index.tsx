@@ -1,4 +1,6 @@
-import { memo, useMemo } from 'react';
+'use client';
+
+import { memo } from 'react';
 
 import { LogOutIcon } from 'lucide-react';
 
@@ -17,81 +19,78 @@ import {
   CMSLayoutProvider,
 } from './components/sidebar';
 
-const SidebarContentGroupItem: React.FC<{
+type NavItem = {
   id: string;
   label: string;
   icon?: React.ReactNode;
-  activeNavItemId?: string;
   onClick?: () => void;
-}> = memo(({ id, label, icon, activeNavItemId, onClick }) => {
-  return (
-    <SidebarMenuItem key={id}>
-      <SidebarMenuButton isActive={id === activeNavItemId} onClick={onClick}>
-        {icon}
-        {label}
-      </SidebarMenuButton>
-    </SidebarMenuItem>
-  );
-});
+};
+
+type NavGroup = {
+  id: string;
+  label?: string;
+  items: NavItem[];
+};
+
+export type CMSLayoutProps = {
+  i18nText?: string;
+  activeNavItemId?: string;
+  sidebar?: { groupcontent: NavGroup[] };
+  onLogout?: () => void;
+  onChangeToEnLocale?: () => void;
+  onChangeToViLocale?: () => void;
+  logoutLabel?: string;
+  copyright?: string;
+};
+
+const SidebarContentGroupItem = memo<NavItem & { activeNavItemId?: string }>(({ id, label, icon, activeNavItemId, onClick }) => (
+  <SidebarMenuItem>
+    <SidebarMenuButton isActive={id === activeNavItemId} onClick={onClick}>
+      {icon}
+      {label}
+    </SidebarMenuButton>
+  </SidebarMenuItem>
+));
 SidebarContentGroupItem.displayName = 'SidebarContentGroupItem';
 
-const SidebarContentGroup: React.FC<
-  React.PropsWithChildren<{
-    id: string;
-    label?: string;
-  }>
-> = memo(({ id, label, children }) => {
-  return (
-    <SidebarGroup key={id}>
-      <SidebarGroupLabel>{label}</SidebarGroupLabel>
-      <SidebarGroupContent>
-        <SidebarMenu>{children}</SidebarMenu>
-      </SidebarGroupContent>
-    </SidebarGroup>
-  );
-});
+const SidebarContentGroup = memo<React.PropsWithChildren<Omit<NavGroup, 'items'>>>(({ id, label, children }) => (
+  <SidebarGroup>
+    <SidebarGroupLabel>{label}</SidebarGroupLabel>
+    <SidebarGroupContent>
+      <SidebarMenu>{children}</SidebarMenu>
+    </SidebarGroupContent>
+  </SidebarGroup>
+));
 SidebarContentGroup.displayName = 'SidebarContentGroup';
 
-export const CMSLayout: React.FC<
-  React.PropsWithChildren<{
-    i18nText?: string;
-    activeNavItemId?: string;
-    sidebar?: {
-      groupcontent: {
-        id: string;
-        label?: string;
-        items: {
-          id: string;
-          label: string;
-          icon?: React.ReactNode;
-          onClick?: () => void;
-        }[];
-      }[];
-    };
-    onLogout?: () => void;
-    onChangeToEnLocale?: () => void;
-    onChangeToViLocale?: () => void;
-  }>
-> = ({ i18nText, activeNavItemId, sidebar, children, onChangeToEnLocale, onChangeToViLocale, onLogout }) => {
-  const groupcontent = useMemo(() => {
-    return sidebar?.groupcontent || [];
-  }, [sidebar]);
+export const CMSLayout: React.FC<React.PropsWithChildren<CMSLayoutProps>> = ({
+  i18nText,
+  activeNavItemId,
+  sidebar,
+  children,
+  onChangeToEnLocale,
+  onChangeToViLocale,
+  onLogout,
+  logoutLabel = 'Log out',
+  copyright = `Copyright © ${new Date().getFullYear()}, Lunas.`,
+}) => {
+  const groups = sidebar?.groupcontent ?? [];
 
   return (
     <CMSLayoutProvider>
       <CMSLayoutHeader i18nText={i18nText} onChangeToEnLocale={onChangeToEnLocale} onChangeToViLocale={onChangeToViLocale} />
       <CMSLayoutSidebar variant="inset" collapsible="icon">
         <SidebarContent>
-          {groupcontent.map(group => (
+          {groups.map(group => (
             <SidebarContentGroup key={group.id} id={group.id} label={group.label}>
-              {group.items.map(groupItem => (
+              {group.items.map(item => (
                 <SidebarContentGroupItem
-                  key={groupItem.id}
+                  key={item.id}
+                  id={item.id}
                   activeNavItemId={activeNavItemId}
-                  id={groupItem.id}
-                  label={groupItem.label}
-                  icon={groupItem.icon}
-                  onClick={groupItem.onClick}
+                  label={item.label}
+                  icon={item.icon}
+                  onClick={item.onClick}
                 />
               ))}
             </SidebarContentGroup>
@@ -102,11 +101,11 @@ export const CMSLayout: React.FC<
             <SidebarMenuItem>
               <SidebarMenuButton className="border border-border" onClick={onLogout}>
                 <LogOutIcon className="text-text-positive-weak" />
-                Đăng xuất
+                {logoutLabel}
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem className="mt-2 border-t border-t-border">
-              <p className="pt-2 text-center text-muted-foreground text-xs">Copyright © 2025, Lunas.</p>
+              <p className="pt-2 text-center text-xs text-text-positive-subtle">{copyright}</p>
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarFooter>

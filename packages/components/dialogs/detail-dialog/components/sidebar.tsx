@@ -1,4 +1,5 @@
 'use client';
+
 import { createContext, use, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { MenuIcon } from 'lucide-react';
@@ -15,7 +16,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { cva, type VariantProps } from 'class-variance-authority';
 import { Slot as SlotPrimitive } from 'radix-ui';
 
-const SIDEBAR_COOKIE_NAME = 'detai_dialog_sidebar_state';
+const SIDEBAR_COOKIE_NAME = 'detail_dialog_sidebar_state';
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
 const SIDEBAR_WIDTH = '20rem';
 const SIDEBAR_WIDTH_MOBILE = '18rem';
@@ -39,7 +40,6 @@ function useSidebar() {
   if (!context) {
     throw new Error('useSidebar must be used within a SidebarProvider.');
   }
-
   return context;
 }
 
@@ -59,8 +59,6 @@ function SidebarProvider({
   const isMobile = useIsMobile();
   const [openMobile, setOpenMobile] = useState(false);
 
-  // This is the internal state of the sidebar.
-  // We use openProp and setOpenProp for control from outside the component.
   const [_open, _setOpen] = useState(defaultOpen);
   const open = openProp ?? _open;
   const setOpen = useCallback(
@@ -71,20 +69,16 @@ function SidebarProvider({
       } else {
         _setOpen(openState);
       }
-
-      // This sets the cookie to keep the sidebar state.
-      // biome-ignore lint/suspicious/noDocumentCookie: true
+      // biome-ignore lint/suspicious/noDocumentCookie: persists sidebar state across page loads
       document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`;
     },
     [setOpenProp, open]
   );
 
-  // Helper to toggle the sidebar.
   const toggleSidebar = useCallback(() => {
     return isMobile ? setOpenMobile(open => !open) : setOpen(open => !open);
   }, [isMobile, setOpen]);
 
-  // Adds a keyboard shortcut to toggle the sidebar.
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === SIDEBAR_KEYBOARD_SHORTCUT && (event.metaKey || event.ctrlKey)) {
@@ -92,28 +86,14 @@ function SidebarProvider({
         toggleSidebar();
       }
     };
-
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [toggleSidebar]);
 
-  // We add a state so that we can do data-state="expanded" or "collapsed".
-  // This makes it easier to style the sidebar with Tailwind classes.
   const state = open ? 'expanded' : 'collapsed';
 
   const contextValue = useMemo<SidebarContextProps>(
-    () => ({
-      state,
-      isMobile,
-
-      toggleSidebar,
-
-      open,
-      setOpen,
-
-      openMobile,
-      setOpenMobile,
-    }),
+    () => ({ state, isMobile, toggleSidebar, open, setOpen, openMobile, setOpenMobile }),
     [state, isMobile, open, setOpen, openMobile, toggleSidebar]
   );
 
@@ -122,13 +102,7 @@ function SidebarProvider({
       <TooltipProvider delayDuration={0}>
         <div
           data-slot="sidebar-wrapper"
-          style={
-            {
-              '--sidebar-width': SIDEBAR_WIDTH,
-              '--sidebar-width-icon': SIDEBAR_WIDTH_ICON,
-              ...style,
-            } as React.CSSProperties
-          }
+          style={{ '--sidebar-width': SIDEBAR_WIDTH, '--sidebar-width-icon': SIDEBAR_WIDTH_ICON, ...style } as React.CSSProperties}
           className={cn('group/sidebar-wrapper flex h-full min-h-[85dvh] w-full items-start has-data-[variant=inset]:bg-sidebar', className)}
           {...props}
         >
@@ -169,11 +143,7 @@ function Sidebar({
           data-slot="sidebar"
           data-mobile="true"
           className="z-20 hidden w-(--sidebar-width) bg-sidebar p-0 text-sidebar-foreground shadow-nav md:flex [&>button]:hidden"
-          style={
-            {
-              '--sidebar-width': SIDEBAR_WIDTH_MOBILE,
-            } as React.CSSProperties
-          }
+          style={{ '--sidebar-width': SIDEBAR_WIDTH_MOBILE } as React.CSSProperties}
           side={side}
         >
           <SheetHeader className="sr-only">
@@ -195,7 +165,6 @@ function Sidebar({
       data-side={side}
       data-slot="sidebar"
     >
-      {/* This is what handles the sidebar gap on desktop */}
       <div
         data-slot="sidebar-gap"
         className={cn(
@@ -214,7 +183,7 @@ function Sidebar({
           side === 'left'
             ? 'left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]'
             : 'right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]',
-          // Adjust the padding for floating and inset variants.
+          // Adjust padding for floating and inset variants.
           variant === 'floating' || variant === 'inset'
             ? 'p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4))+2px)]'
             : 'group-data-[collapsible=icon]:w-(--sidebar-width-icon)',
@@ -227,9 +196,9 @@ function Sidebar({
           data-slot="sidebar-inner"
           className={cn(
             'flex size-full flex-col shadow-nav',
-            'group-data-[variant=floating]:border-sidebar-border',
             'group-data-[variant=floating]:rounded-lg',
             'group-data-[variant=floating]:border',
+            'group-data-[variant=floating]:border-sidebar-border',
             'group-data-[variant=floating]:shadow-sm'
           )}
         >
@@ -276,19 +245,13 @@ function DetailDialogSidebarRail({ className, ...props }: React.ComponentProps<'
       title="Toggle Sidebar"
       className={cn(
         'absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear sm:flex',
-        'after:absolute',
-        'after:inset-y-0',
-        'after:left-1/2 after:w-0.5',
+        'after:absolute after:inset-y-0 after:left-1/2 after:w-0.5',
         'hover:after:bg-sidebar-border',
-        'group-data-[side=left]:-right-4',
-        'group-data-[side=right]:left-0',
-        'in-data-[side=left]:cursor-w-resize',
-        'in-data-[side=right]:cursor-e-resize',
-        '[[data-side=left][data-state=collapsed]_&]:cursor-e-resize',
-        '[[data-side=right][data-state=collapsed]_&]:cursor-w-resize',
+        'group-data-[side=left]:-right-4 group-data-[side=right]:left-0',
+        'in-data-[side=left]:cursor-w-resize in-data-[side=right]:cursor-e-resize',
+        '[[data-side=left][data-state=collapsed]_&]:cursor-e-resize [[data-side=right][data-state=collapsed]_&]:cursor-w-resize',
         'hover:group-data-[collapsible=offcanvas]:bg-sidebar',
-        'group-data-[collapsible=offcanvas]:translate-x-0',
-        'group-data-[collapsible=offcanvas]:after:left-full',
+        'group-data-[collapsible=offcanvas]:translate-x-0 group-data-[collapsible=offcanvas]:after:left-full',
         '[[data-side=left][data-collapsible=offcanvas]_&]:-right-2',
         '[[data-side=right][data-collapsible=offcanvas]_&]:-left-2',
         className
@@ -304,10 +267,8 @@ function SidebarInset({ className, ...props }: React.ComponentProps<'main'>) {
       data-slot="sidebar-inset"
       className={cn(
         'relative flex w-full flex-1 flex-col bg-background',
-        'md:peer-data-[variant=inset]:m-2',
-        'md:peer-data-[variant=inset]:ml-0',
-        'md:peer-data-[variant=inset]:rounded-xl',
-        'md:peer-data-[variant=inset]:shadow-sm',
+        'md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:ml-0',
+        'md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow-sm',
         'md:peer-data-[variant=inset]:peer-data-[state=collapsed]:ml-2',
         className
       )}
@@ -327,7 +288,7 @@ function DetailDialogSidebarFooter({ className, children, ...props }: React.Comp
       <DetailDialogSidebarMenu>
         {open && <DetailDialogSidebarMenuItem>{children}</DetailDialogSidebarMenuItem>}
         <DetailDialogSidebarMenuItem>
-          <p className="pt-2 text-center text-muted-foreground text-xs">Copyright © 2025, Lunas.</p>
+          <p className="pt-2 text-center text-xs text-text-positive-subtle">Copyright © {new Date().getFullYear()}, Lunas.</p>
         </DetailDialogSidebarMenuItem>
       </DetailDialogSidebarMenu>
     </div>
@@ -343,7 +304,7 @@ function DetailDialogSidebarContent({ className, ...props }: React.ComponentProp
     <div
       data-slot="sidebar-content"
       data-sidebar="content"
-      className={cn('flex min-h-0 flex-1 flex-col gap-2 overflow-auto', 'group-data-[collapsible=icon]:overflow-hidden', className)}
+      className={cn('flex min-h-0 flex-1 flex-col gap-2 overflow-auto group-data-[collapsible=icon]:overflow-hidden', className)}
       {...props}
     />
   );
@@ -355,18 +316,14 @@ function DetailDialogSidebarGroup({ className, ...props }: React.ComponentProps<
 
 function DetailDialogSidebarGroupLabel({ className, asChild = false, ...props }: React.ComponentProps<'div'> & { asChild?: boolean }) {
   const Comp = asChild ? SlotPrimitive.Slot : 'div';
-
   return (
     <Comp
       data-slot="sidebar-group-label"
       data-sidebar="group-label"
       className={cn(
-        'flex h-8 shrink-0 items-center rounded-md px-2 font-medium text-sidebar-foreground/70 text-xs outline-hidden ring-sidebar-ring transition-[margin,opacity] duration-200 ease-linear',
-        'focus-visible:ring-2',
-        '[&>svg]:size-4',
-        '[&>svg]:shrink-0',
-        'group-data-[collapsible=icon]:-mt-8',
-        'group-data-[collapsible=icon]:opacity-0',
+        'flex h-8 shrink-0 items-center rounded-md px-2 font-medium text-sidebar-foreground/70 text-xs outline-hidden ring-sidebar-ring transition-[margin,opacity,color] duration-200 ease-linear focus-visible:ring-2',
+        '[&>svg]:size-4 [&>svg]:shrink-0',
+        'group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0',
         className
       )}
       {...props}
@@ -376,21 +333,17 @@ function DetailDialogSidebarGroupLabel({ className, asChild = false, ...props }:
 
 function DetailDialogSidebarGroupAction({ className, asChild = false, ...props }: React.ComponentProps<'button'> & { asChild?: boolean }) {
   const Comp = asChild ? SlotPrimitive.Slot : 'button';
-
   return (
     <Comp
       data-slot="sidebar-group-action"
       data-sidebar="group-action"
       className={cn(
-        'absolute top-3.5 right-3 flex aspect-square w-5 items-center justify-center rounded-md p-0 text-sidebar-foreground outline-hidden ring-sidebar-ring transition-transform',
+        'absolute top-3.5 right-3 flex aspect-square w-5 items-center justify-center rounded-md p-0 text-sidebar-foreground outline-hidden ring-sidebar-ring transition-[background-color,color,transform]',
         'hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
         'focus-visible:ring-2',
-        '[&>svg]:size-4',
-        '[&>svg]:shrink-0',
+        '[&>svg]:size-4 [&>svg]:shrink-0',
         // Increases the hit area of the button on mobile.
-        'after:absolute',
-        'after:-inset-2',
-        'md:after:hidden',
+        'after:absolute after:-inset-2 md:after:hidden',
         'group-data-[collapsible=icon]:hidden',
         className
       )}
@@ -418,31 +371,21 @@ const sidebarMenuButtonVariants = cva(
     'flex w-full items-center gap-2',
     'overflow-hidden rounded-md p-2 outline-hidden',
     'truncate text-left font-normal',
-    'transition-[color,width,height,padding]',
-    'hover:bg-sidebar-accent',
-    'hover:text-sidebar-accent-foreground',
-    'active:bg-sidebar-accent',
-    'active:text-sidebar-accent-foreground',
-    'disabled:pointer-events-none',
-    'disabled:opacity-50',
+    'transition-[color,background-color,width,height,padding]',
+    'active:bg-sidebar-accent active:text-sidebar-accent-foreground',
+    'disabled:pointer-events-none disabled:opacity-50',
     'group-has-data-[sidebar=menu-action]/menu-item:pr-8',
-    'aria-disabled:pointer-events-none',
-    'aria-disabled:opacity-50',
-    'data-[active=true]:bg-sidebar-primary-muted',
-    'data-[active=true]:font-normal',
-    'data-[active=true]:text-sidebar-primary',
-    'data-[state=open]:hover:bg-sidebar-accent',
-    'data-[state=open]:hover:text-sidebar-accent-foreground',
-    'group-data-[collapsible=icon]:size-8!',
-    'group-data-[collapsible=icon]:p-2!',
-    '[&>svg]:size-4',
-    '[&>svg]:shrink-0',
+    'aria-disabled:pointer-events-none aria-disabled:opacity-50',
+    'data-[active=true]:bg-sidebar-primary-muted data-[active=true]:font-normal data-[active=true]:text-sidebar-primary',
+    'data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground',
+    'group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2!',
+    '[&>svg]:size-4 [&>svg]:shrink-0',
     '[&>span:last-child]:truncate',
   ],
   {
     variants: {
       variant: {
-        default: 'hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground/80',
+        default: 'hover:bg-sidebar-accent/60 hover:text-sidebar-accent-foreground',
         outline:
           'bg-background shadow-[0_0_0_1px_hsl(var(--sidebar-border))] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:shadow-[0_0_0_1px_hsl(var(--sidebar-accent))]',
       },
@@ -486,14 +429,10 @@ function DetailDialogSidebarMenuButton({
     />
   );
 
-  if (!tooltip) {
-    return button;
-  }
+  if (!tooltip) return button;
 
   if (typeof tooltip === 'string') {
-    tooltip = {
-      children: tooltip,
-    };
+    tooltip = { children: tooltip };
   }
 
   return (
@@ -514,19 +453,18 @@ function DetailDialogSidebarMenuAction({
   showOnHover?: boolean;
 }) {
   const Comp = asChild ? SlotPrimitive.Slot : 'button';
-
   return (
     <Comp
       data-slot="sidebar-menu-action"
       data-sidebar="menu-action"
       className={cn(
+        'absolute top-1.5 right-1 flex aspect-square w-5 items-center justify-center rounded-md p-0 outline-hidden',
         'text-sidebar-foreground ring-sidebar-ring',
-        'hover:bg-sidebar-accent',
-        'hover:text-sidebar-accent-foreground',
-        'absolute top-1.5 right-1 flex aspect-square w-5 items-center justify-center rounded-md p-0 outline-hidden transition-transform peer-hover/menu-button:text-sidebar-accent-foreground',
+        'transition-[background-color,color,opacity]',
+        'hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
         'focus-visible:ring-2',
-        '[&>svg]:size-4',
-        '[&>svg]:shrink-0',
+        'peer-hover/menu-button:text-sidebar-accent-foreground',
+        '[&>svg]:size-4 [&>svg]:shrink-0',
         // Increases the hit area of the button on mobile.
         'after:absolute after:-inset-2 md:after:hidden',
         'peer-data-[size=sm]/menu-button:top-1',
@@ -534,7 +472,7 @@ function DetailDialogSidebarMenuAction({
         'peer-data-[size=lg]/menu-button:top-2.5',
         'group-data-[collapsible=icon]:hidden',
         showOnHover && 'peer-data-[active=true]/menu-button:text-sidebar-accent-foreground',
-        showOnHover && '$group-focus-within/menu-item:opacity-100',
+        showOnHover && 'group-focus-within/menu-item:opacity-100',
         showOnHover && 'group-hover/menu-item:opacity-100',
         showOnHover && 'data-[state=open]:opacity-100 md:opacity-0',
         className
@@ -550,9 +488,8 @@ function DetailDialogSidebarMenuBadge({ className, ...props }: React.ComponentPr
       data-slot="sidebar-menu-badge"
       data-sidebar="menu-badge"
       className={cn(
-        'pointer-events-none absolute right-1 flex h-5 min-w-5 select-none items-center justify-center rounded-md px-1 font-medium text-sidebar-foreground text-xs tabular-nums',
-        'peer-hover/menu-button:text-sidebar-accent-foreground',
-        'peer-data-[active=true]/menu-button:text-sidebar-accent-foreground',
+        'pointer-events-none absolute right-1 flex h-5 min-w-5 select-none items-center justify-center rounded-md px-1 font-medium text-sidebar-foreground text-xs tabular-nums transition-colors',
+        'peer-hover/menu-button:text-sidebar-accent-foreground peer-data-[active=true]/menu-button:text-sidebar-accent-foreground',
         'peer-data-[size=sm]/menu-button:top-1',
         'peer-data-[size=default]/menu-button:top-1.5',
         'peer-data-[size=lg]/menu-button:top-2.5',
@@ -564,29 +501,15 @@ function DetailDialogSidebarMenuBadge({ className, ...props }: React.ComponentPr
   );
 }
 
-function DetailDialogSidebarMenuSkeleton({
-  className,
-  showIcon = false,
-  ...props
-}: React.ComponentProps<'div'> & {
-  showIcon?: boolean;
-}) {
-  // Random width between 50 to 90%.
-  const width = useMemo(() => {
-    return `${Math.floor(Math.random() * 40) + 50}%`;
-  }, []);
-
+function DetailDialogSidebarMenuSkeleton({ className, showIcon = false, ...props }: React.ComponentProps<'div'> & { showIcon?: boolean }) {
+  const width = useMemo(() => `${Math.floor(Math.random() * 40) + 50}%`, []);
   return (
     <div data-slot="sidebar-menu-skeleton" data-sidebar="menu-skeleton" className={cn('flex h-8 items-center gap-2 rounded-md px-2', className)} {...props}>
       {showIcon && <Skeleton className="size-4 rounded-md" data-sidebar="menu-skeleton-icon" />}
       <Skeleton
         className="h-4 max-w-(--skeleton-width) flex-1"
         data-sidebar="menu-skeleton-text"
-        style={
-          {
-            '--skeleton-width': width,
-          } as React.CSSProperties
-        }
+        style={{ '--skeleton-width': width } as React.CSSProperties}
       />
     </div>
   );
@@ -598,7 +521,7 @@ function DetailDialogSidebarMenuSub({ className, ...props }: React.ComponentProp
       data-slot="sidebar-menu-sub"
       data-sidebar="menu-sub"
       className={cn(
-        'mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-sidebar-border border-l px-2.5 py-0.5',
+        'mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-l border-sidebar-border px-2.5 py-0.5',
         'group-data-[collapsible=icon]:hidden',
         className
       )}
@@ -623,7 +546,6 @@ function DetailDialogSidebarMenuSubButton({
   isActive?: boolean;
 }) {
   const Comp = asChild ? SlotPrimitive.Slot : 'a';
-
   return (
     <Comp
       data-slot="sidebar-menu-sub-button"
@@ -633,22 +555,16 @@ function DetailDialogSidebarMenuSubButton({
       className={cn(
         'text-sidebar-foreground ring-sidebar-ring',
         'flex h-7 min-w-0 -translate-x-px items-center gap-2 overflow-hidden rounded-md px-2 outline-hidden',
-        'hover:bg-sidebar-accent',
-        'hover:text-sidebar-accent-foreground',
-        'active:bg-sidebar-accent',
-        'active:text-sidebar-accent-foreground',
+        'transition-[background-color,color]',
+        'hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
+        'active:bg-sidebar-accent active:text-sidebar-accent-foreground',
         'focus-visible:ring-2',
-        'disabled:pointer-events-none',
-        'disabled:opacity-50',
-        'aria-disabled:pointer-events-none',
-        'aria-disabled:opacity-50',
-        '[&>span:last-child]:truncate',
-        '[&>svg]:size-4',
-        '[&>svg]:shrink-0',
-        '[&>svg]:text-sidebar-accent-foreground',
-        'data-[active=true]:bg-sidebar-accent',
-        'data-[active=true]:text-sidebar-accent-foreground',
+        'disabled:pointer-events-none disabled:opacity-50',
+        'aria-disabled:pointer-events-none aria-disabled:opacity-50',
+        'data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground',
         'group-data-[collapsible=icon]:hidden',
+        '[&>span:last-child]:truncate',
+        '[&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:text-sidebar-accent-foreground',
         size === 'sm' && 'text-xs',
         size === 'md' && 'text-sm',
         className

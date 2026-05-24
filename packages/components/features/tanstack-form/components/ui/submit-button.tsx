@@ -1,23 +1,24 @@
-import { Loader2 } from 'lucide-react';
+'use client';
+
+import { cn } from '@customafk/react-toolkit/utils';
+
+import { Button } from '@/components/ui/button';
 
 export const SubmitButton: React.FC<
   React.ComponentProps<'button'> & {
     isSubmitting?: boolean;
     submitText?: string;
   }
-> = ({ isSubmitting, submitText = 'Submit', ...props }) => {
+> = ({ isSubmitting, submitText = 'Submit', disabled, className, onClick }) => {
   return (
-    <button
-      {...props}
+    <Button
       type="button"
-      data-loading={isSubmitting ? 'true' : undefined}
-      className="relative min-h-9.5 min-w-40 cursor-pointer rounded-sm border border-primary-strong bg-primary px-4 py-2 font-semibold text-sm text-text-negative shadow-card outline-none transition-all hover:opacity-90 focus:border-transparent focus:ring-3 focus:ring-primary/80 focus:ring-offset-2 focus:drop-shadow-none disabled:pointer-events-none disabled:opacity-60 disabled:drop-shadow-none data-[loading=true]:pointer-events-none data-[loading=true]:opacity-80"
+      isLoading={isSubmitting}
+      disabled={disabled || isSubmitting}
+      className={cn('min-w-40', className)}
+      onClick={onClick as React.MouseEventHandler<HTMLButtonElement>}
     >
-      {isSubmitting ? (
-        <Loader2 size={16} strokeWidth={3} className="absolute top-1/2 left-1/2 z-10 -translate-x-1/2 -translate-y-1/2 animate-spin" />
-      ) : (
-        submitText
-      )}
-    </button>
+      {submitText}
+    </Button>
   );
 };

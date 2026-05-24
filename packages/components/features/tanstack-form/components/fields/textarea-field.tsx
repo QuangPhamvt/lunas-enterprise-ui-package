@@ -1,3 +1,5 @@
+'use client';
+
 import { memo, useCallback, useId, useMemo } from 'react';
 
 import { useStore } from '@tanstack/react-form';
@@ -11,7 +13,18 @@ import { Textarea } from '@/components/ui/textarea';
 
 import type { TanStackFormTextAreaFieldSchema } from '../../schema';
 import { useTanStackFieldContext } from '../../tanstack-form';
-import { Field, FieldContent, FieldContentMain, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldNote, FieldSeparator } from '../ui/field';
+import {
+  Field,
+  FieldContent,
+  FieldContentMain,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldNote,
+  FieldSeparator,
+  FieldTooltip,
+} from '../ui/field';
 
 type Props = Pick<
   z.input<typeof TanStackFormTextAreaFieldSchema>,
@@ -27,7 +40,7 @@ export const TextareaField: React.FC<Props> = memo(
     description,
     placeholder,
 
-    // tooltip,
+    tooltip,
     helperText,
     counter = false,
     orientation = 'responsive',
@@ -51,13 +64,10 @@ export const TextareaField: React.FC<Props> = memo(
     }, [_count, counter, maxLength]);
 
     const _invalid = state.meta.isDirty && state.meta.isTouched && !state.meta.isValid;
-
-    const _isEmpty = required ? state.value === null : false;
-
+    const _isEmpty = required && state.value === null;
     const _errors = state.meta.errors;
 
     const _isNearLimit = maxLength && _count >= maxLength * 0.8;
-
     const _isAtLimit = maxLength && _count >= maxLength;
 
     const onChange = useCallback<React.ChangeEventHandler<HTMLTextAreaElement>>(
@@ -74,10 +84,8 @@ export const TextareaField: React.FC<Props> = memo(
         <Field orientation={orientation} data-invalid={_invalid}>
           <FieldContent>
             <FieldLabel aria-required={_isEmpty} htmlFor={id}>
-              <p>
-                {label}
-                {required && <span className="text-danger-strong"> *</span>}
-              </p>
+              {label}
+              {tooltip && <FieldTooltip tooltip={tooltip} />}
             </FieldLabel>
             <FieldDescription>{description}</FieldDescription>
           </FieldContent>
@@ -125,3 +133,4 @@ export const TextareaField: React.FC<Props> = memo(
     );
   }
 );
+TextareaField.displayName = 'TextareaField';

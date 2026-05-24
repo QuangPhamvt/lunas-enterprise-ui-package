@@ -1,3 +1,5 @@
+'use client';
+
 import { useStore } from '@tanstack/react-form';
 
 import type z from 'zod';
@@ -6,25 +8,40 @@ import { cn } from '@customafk/react-toolkit/utils';
 
 import type { TanStackFormRadioGroupFieldSchema } from '../../schema';
 import { useTanStackFieldContext } from '../../tanstack-form';
-import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, FieldLabel, FieldNote, FieldSeparator, FieldTitle } from '../ui/field';
+import {
+  Field,
+  FieldContent,
+  FieldContentMain,
+  FieldDescription,
+  FieldGroup,
+  FieldLabel,
+  FieldNote,
+  FieldSeparator,
+  FieldTitle,
+  FieldTooltip,
+} from '../ui/field';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
-type Props = Pick<z.input<typeof TanStackFormRadioGroupFieldSchema>, 'label' | 'description' | 'options' | 'orientation' | 'helperText'>;
+type Props = Pick<z.input<typeof TanStackFormRadioGroupFieldSchema>, 'label' | 'description' | 'options' | 'orientation' | 'helperText' | 'tooltip'>;
 
-export const RadioGroupField: React.FC<Props> = ({ label, description, orientation, options, helperText }) => {
+export const RadioGroupField: React.FC<Props> = ({ label, description, orientation, options, tooltip, helperText }) => {
   const field = useTanStackFieldContext<string | null>();
   const isSubmitting = useStore(field.form.store, ({ isSubmitting }) => isSubmitting);
+
   return (
     <FieldGroup className="px-4">
       <Field orientation={orientation} className="flex-col gap-2">
         <FieldContent>
-          <FieldLabel>{label}</FieldLabel>
+          <FieldLabel>
+            {label}
+            {tooltip && <FieldTooltip tooltip={tooltip} />}
+          </FieldLabel>
           <FieldDescription>{description}</FieldDescription>
           <FieldNote isShow={!!helperText}>{helperText}</FieldNote>
         </FieldContent>
 
         <FieldContentMain>
-          <RadioGroup defaultValue={field.state.value ?? undefined} className="w-full" onValueChange={field.handleChange}>
+          <RadioGroup value={field.state.value ?? ''} className="w-full" onValueChange={field.handleChange}>
             {options.map(option => (
               <FieldLabel
                 key={option.value}
@@ -35,12 +52,12 @@ export const RadioGroupField: React.FC<Props> = ({ label, description, orientati
                   field.state.value === option.value && isSubmitting && 'border-border-strong!'
                 )}
               >
-                <Field orientation="horizontal" className="justify-between rounded p-2!">
-                  <FieldContent className="gap-1!">
+                <Field orientation="horizontal" className="items-start gap-3 rounded p-2!">
+                  <RadioGroupItem value={option.value} className="mt-0.5 shrink-0" />
+                  <FieldContent className="gap-0.5!">
                     <FieldTitle>{option.label}</FieldTitle>
                     <FieldDescription className="text-xs">{option.description}</FieldDescription>
                   </FieldContent>
-                  <RadioGroupItem value={option.value} />
                 </Field>
               </FieldLabel>
             ))}

@@ -1,4 +1,6 @@
-import { useCallback, useMemo } from 'react';
+'use client';
+
+import { useCallback } from 'react';
 
 import { useStore } from '@tanstack/react-form';
 
@@ -18,8 +20,9 @@ import {
   FieldLabel,
   FieldNote,
   FieldSeparator,
-} from '@/components/features/tanstack-form/components/ui/field';
-import { useTanStackFieldContext } from '@/components/features/tanstack-form/tanstack-form';
+  FieldTooltip,
+} from '../ui/field';
+import { useTanStackFieldContext } from '../../tanstack-form';
 
 import type { TanStackFormEmailFieldSchema } from '../../schema';
 
@@ -27,24 +30,28 @@ type Props = Pick<
   z.input<typeof TanStackFormEmailFieldSchema>,
   'label' | 'description' | 'placeholder' | 'orientation' | 'tooltip' | 'helperText' | 'showErrorMessage'
 > & {
+  required?: boolean;
   maxLength?: number;
 };
+
 export const EmailField: React.FC<Props> = ({
   label,
   description,
   placeholder,
+  tooltip,
   helperText,
   orientation = 'responsive',
   showErrorMessage = true,
+  required = false,
   maxLength,
 }) => {
   const { form, name, state, handleBlur, handleChange } = useTanStackFieldContext<string | null>();
 
   const isSubmitting = useStore(form.store, ({ isSubmitting }) => isSubmitting);
 
-  const _invalid = useMemo(() => {
-    return state.meta.isDirty && state.meta.isTouched && !state.meta.isValid;
-  }, [state.meta.isDirty, state.meta.isTouched, state.meta.isValid]);
+  const _invalid = state.meta.isDirty && state.meta.isTouched && !state.meta.isValid;
+  const _isEmpty = required && state.value === null;
+  const _showClear = !isSubmitting && !!state.value;
 
   const onChange = useCallback<React.ChangeEventHandler<HTMLInputElement>>(
     ({ target: { value } }) => {
@@ -64,7 +71,10 @@ export const EmailField: React.FC<Props> = ({
     <FieldGroup className="gap-y-4 px-4">
       <Field data-invalid={_invalid} orientation={orientation}>
         <FieldContent>
-          <FieldLabel htmlFor={name}>{label}</FieldLabel>
+          <FieldLabel htmlFor={name} aria-required={_isEmpty}>
+            {label}
+            {tooltip && <FieldTooltip tooltip={tooltip} />}
+          </FieldLabel>
           <FieldDescription>{description}</FieldDescription>
         </FieldContent>
         <FieldContentMain>
@@ -75,7 +85,7 @@ export const EmailField: React.FC<Props> = ({
             aria-invalid={_invalid}
             autoComplete="email"
             placeholder={placeholder}
-            className={cn('pl-9', isSubmitting && 'pointer-events-none bg-muted-muted opacity-60')}
+            className={cn('pl-9', _showClear && 'pr-9', isSubmitting && 'pointer-events-none bg-muted-muted opacity-60')}
             onBlur={handleBlur}
             onChange={onChange}
           />
@@ -83,14 +93,16 @@ export const EmailField: React.FC<Props> = ({
             <AtSignIcon size={14} />
           </div>
 
-          <button
-            type="button"
-            aria-label="Clear"
-            className="absolute inset-e-0 inset-y-0 top-3 flex h-fit w-8 cursor-pointer items-center justify-center rounded-e-md text-text-positive-weak outline-none transition-[color,box-shadow] hover:text-text-positive focus:text-text-positive-strong"
-            onClick={onClear}
-          >
-            <XIcon size={14} aria-hidden="true" />
-          </button>
+          {_showClear && (
+            <button
+              type="button"
+              aria-label="Clear"
+              className="absolute inset-e-0 inset-y-0 top-3 flex h-fit w-8 cursor-pointer items-center justify-center rounded-e-md text-text-positive-weak outline-none transition-[color,box-shadow] hover:text-text-positive focus:text-text-positive-strong"
+              onClick={onClear}
+            >
+              <XIcon size={14} aria-hidden="true" />
+            </button>
+          )}
 
           <div className="mt-1 flex w-full items-start justify-start">
             {showErrorMessage && state.meta.isDirty && <FieldError errors={state.meta.errors} />}

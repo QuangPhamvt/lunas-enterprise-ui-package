@@ -22,8 +22,8 @@ function Label({ className, children, ...props }: React.ComponentProps<typeof La
       )}
       {...props}
     >
-      {children}
-      <Badge label="Required" color="danger" size="sm" className="hidden" />
+      <span className="flex items-center gap-1">{children}</span>
+      <Badge label="Required" color="danger" size="xs" className="hidden shrink-0" />
     </LabelPrimitive.Root>
   );
 }

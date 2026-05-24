@@ -1,3 +1,5 @@
+'use client';
+
 import { useMemo } from 'react';
 
 import { CalendarDaysIcon } from 'lucide-react';
@@ -10,7 +12,7 @@ import { Button } from '@/components/ui/button';
 
 import type { TanStackFormDateFieldSchema } from '../../schema';
 import { useTanStackFieldContext } from '../../tanstack-form';
-import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, FieldLabel, FieldNote, FieldSeparator } from '../ui/field';
+import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, FieldLabel, FieldNote, FieldSeparator, FieldTooltip } from '../ui/field';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 
@@ -23,7 +25,17 @@ type Props = Pick<
   maxDate?: Date;
 };
 
-export const DateField: React.FC<Props> = ({ label, description, placeholder, orientation = 'responsive', helperText, minDate, maxDate, required }) => {
+export const DateField: React.FC<Props> = ({
+  label,
+  description,
+  placeholder,
+  orientation = 'responsive',
+  tooltip,
+  helperText,
+  minDate,
+  maxDate,
+  required,
+}) => {
   const field = useTanStackFieldContext<Date | null>();
 
   const _isEmpty = useMemo(() => {
@@ -41,6 +53,7 @@ export const DateField: React.FC<Props> = ({ label, description, placeholder, or
         <FieldContent>
           <FieldLabel htmlFor={field.name} aria-required={_isEmpty}>
             {label}
+            {tooltip && <FieldTooltip tooltip={tooltip} />}
           </FieldLabel>
           <FieldDescription>{description}</FieldDescription>
         </FieldContent>

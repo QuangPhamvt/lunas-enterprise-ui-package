@@ -1,8 +1,13 @@
+'use client';
+
 import { memo, useMemo } from 'react';
+
+import { HelpCircleIcon, InfoIcon } from 'lucide-react';
 
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { Separator } from '@/components/ui/separator';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 import { cva, type VariantProps } from 'class-variance-authority';
 import { Label } from './label';
@@ -73,7 +78,7 @@ const FieldGroup = memo(({ className, ...props }: React.ComponentProps<'div'>) =
       data-slot="field-group"
       className={cn(
         'group/field-group @container/field-group',
-        'flex flex-col gap-7',
+        'flex flex-col gap-7 pt-4',
         'data-[slot=checkbox-group]:gap-3 *:data-[slot=field-group]:gap-4',
         className
       )}
@@ -96,13 +101,14 @@ FieldContent.displayName = 'FieldContent';
 const FieldContentMain = memo(({ className, ...props }: React.ComponentProps<'div'>) => {
   return <div data-slot="field-content-main" className={cn('relative', className)} {...props} />;
 });
+FieldContentMain.displayName = 'FieldContentMain';
 
 const FieldLabel = memo(({ className, ...props }: React.ComponentProps<typeof Label>) => {
   return (
     <Label
       data-slot="field-label"
       className={cn(
-        'group/field-label peer/field-label flex h-6 gap-1 font-medium leading-snug',
+        'group/field-label peer/field-label min-h-6 gap-1 font-medium leading-snug',
         'has-[>[data-slot=field]]:w-full',
         'has-[>[data-slot=field]]:flex-col',
         'has-[>[data-slot=field]]:rounded-md',
@@ -144,17 +150,44 @@ const FieldDescription = memo(({ className, ...props }: React.ComponentProps<'p'
 });
 FieldDescription.displayName = 'FieldDescription';
 
-const FieldNote = memo(({ isShow = true, className, ...props }: React.ComponentProps<'div'> & { isShow?: boolean }) => {
+const FieldNote = memo(({ isShow = true, className, children, ...props }: React.ComponentProps<'div'> & { isShow?: boolean }) => {
   if (isShow === false) return null;
   return (
     <div
       data-slot="field-note"
-      className={cn('text-wrap rounded border border-primary-muted bg-primary-bg-subtle p-2 text-text-positive-weak text-xs', className)}
+      className={cn(
+        'flex items-start gap-1.5 rounded border border-primary-muted/60 bg-primary-bg-subtle/80 px-2.5 py-2 text-text-positive-weak text-xs',
+        className
+      )}
       {...props}
-    />
+    >
+      <InfoIcon size={12} className="mt-0.5 shrink-0 text-primary/70" />
+      <span>{children}</span>
+    </div>
   );
 });
 FieldNote.displayName = 'FieldNote';
+
+const FieldTooltip = memo(({ tooltip }: { tooltip: string }) => {
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <button
+          type="button"
+          tabIndex={-1}
+          className="inline-flex cursor-default items-center text-text-positive-weak/70 hover:text-text-positive focus:outline-none"
+        >
+          <HelpCircleIcon size={13} aria-hidden="true" />
+          <span className="sr-only">More information</span>
+        </button>
+      </TooltipTrigger>
+      <TooltipContent side="top" className="max-w-xs text-balance">
+        {tooltip}
+      </TooltipContent>
+    </Tooltip>
+  );
+});
+FieldTooltip.displayName = 'FieldTooltip';
 
 const FieldSeparator = memo(({ children, className, ...props }: React.PropsWithChildren<React.ComponentProps<'div'>>) => {
   return (
@@ -196,7 +229,7 @@ const FieldError = memo(
       if (errors?.length === 1 && errors[0]?.message) {
         return (
           <div className="flex flex-row items-center justify-start gap-x-0.5">
-            <p>{errors[0]?.code === 'invalid_type' ? 'Không đúng định dạng' : errors[0].message}</p>
+            <p>{errors[0]?.code === 'invalid_type' ? 'Invalid format' : errors[0].message}</p>
           </div>
         );
       }
@@ -217,7 +250,7 @@ const FieldError = memo(
     }
 
     return (
-      <div role="alert" data-slot="field-error" className={cn('w-full font-semibold text-danger-strong text-xs', className)} {...props}>
+      <div role="alert" data-slot="field-error" className={cn('w-full font-medium text-danger-strong text-xs', className)} {...props}>
         {content}
       </div>
     );
@@ -238,4 +271,5 @@ export {
   FieldContent,
   FieldContentMain,
   FieldTitle,
+  FieldTooltip,
 };

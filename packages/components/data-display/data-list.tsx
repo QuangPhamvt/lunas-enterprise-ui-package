@@ -1,13 +1,16 @@
-import { Flex } from '@/components/layouts/flex';
+'use client';
+
+import { cn } from '@customafk/react-toolkit/utils';
 
 type DataListProps = {
-  title?: string;
+  className?: string;
 };
-export const DataList: React.FC<React.PropsWithChildren<DataListProps>> = ({ children }) => {
+
+export const DataList: React.FC<React.PropsWithChildren<DataListProps>> = ({ children, className }) => {
   return (
-    <Flex vertical padding="none" gap="md" width="full">
+    <div data-slot="data-list" className={cn('flex w-full flex-col gap-4', className)}>
       {children}
-    </Flex>
+    </div>
   );
 };
 
@@ -15,15 +18,18 @@ type DataListItemProps = {
   label: string;
   value: string | number | React.ReactNode;
   minLabelWidth?: string;
+  className?: string;
 };
 
-export const DataListItem: React.FC<React.PropsWithChildren<DataListItemProps>> = ({ label, value, minLabelWidth = '120px' }) => {
+export const DataListItem: React.FC<DataListItemProps> = ({ label, value, minLabelWidth = '120px', className }) => {
   return (
-    <Flex align="center" justify="start" width="full" padding="none" gap="md" className="flex-col items-start gap-1 md:flex-row md:items-center md:gap-4">
-      <div style={{ minWidth: minLabelWidth }} className="text-muted-foreground text-sm">
+    <div data-slot="data-list-item" className={cn('flex w-full flex-col items-start gap-1 md:flex-row md:items-center md:gap-4', className)}>
+      <span data-slot="data-list-label" style={{ minWidth: minLabelWidth }} className="text-sm text-text-positive-weak">
         {label}
-      </div>
-      <div className="text-secondary-foreground text-sm">{value}</div>
-    </Flex>
+      </span>
+      <span data-slot="data-list-value" className="text-sm text-text-positive">
+        {value}
+      </span>
+    </div>
   );
 };

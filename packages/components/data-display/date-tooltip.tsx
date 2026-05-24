@@ -1,21 +1,24 @@
+'use client';
+
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 import { DateDisplay } from './date';
 
-type Props = {
+type DateTooltipProps = {
   date: Date | string | number;
 };
-export const DateTooltip: React.FC<Props> = ({ date }) => {
+
+export const DateTooltip: React.FC<DateTooltipProps> = ({ date }) => {
   return (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Badge className="h-fit">
-            <DateDisplay date={date} format="medium" className="font-normal text-white text-xs" />
+          <Badge data-slot="date-tooltip-trigger" className="h-fit">
+            <DateDisplay date={date} format="medium" className="text-xs font-normal text-text-negative" />
           </Badge>
         </TooltipTrigger>
-        <TooltipContent>
+        <TooltipContent data-slot="date-tooltip-content">
           <DateDisplay date={date} format="full" showTime className="font-[Inter]! font-medium" />
         </TooltipContent>
       </Tooltip>

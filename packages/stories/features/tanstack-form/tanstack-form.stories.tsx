@@ -274,6 +274,289 @@ export const PopoverForm: Story = {
   },
 };
 
+export const SelectAndCombobox: Story = {
+  render: () => {
+    const { AppField, TanStackContainerForm, TanStackSectionForm } = useTanStackForm({
+      defaultValues: {
+        country: null as string | null,
+        language: null as string | null,
+      },
+    });
+    return (
+      <div className="size-full bg-muted-bg-subtle p-4">
+        <TanStackContainerForm>
+          <TanStackSectionForm title="Selection Fields">
+            <AppField
+              name="country"
+              children={({ ComboboxField }) => (
+                <ComboboxField
+                  label="Country"
+                  description="Search and select your country."
+                  placeholder="Search country…"
+                  orientation="responsive"
+                  tooltip="Used to determine your regional settings and tax information."
+                  options={[
+                    { label: 'Australia', value: 'au' },
+                    { label: 'Canada', value: 'ca' },
+                    { label: 'France', value: 'fr' },
+                    { label: 'Germany', value: 'de' },
+                    { label: 'Japan', value: 'jp' },
+                    { label: 'United Kingdom', value: 'gb' },
+                    { label: 'United States', value: 'us' },
+                    { label: 'Vietnam', value: 'vn' },
+                  ]}
+                />
+              )}
+            />
+            <AppField
+              name="language"
+              children={({ SelectField }) => (
+                <SelectField
+                  label="Preferred Language"
+                  description="Select the language for the interface."
+                  placeholder="Choose a language"
+                  orientation="responsive"
+                  tooltip="Changing the language will update all UI text and date formats."
+                  options={[
+                    { label: 'English', value: 'en' },
+                    { label: 'French', value: 'fr' },
+                    { label: 'German', value: 'de' },
+                    { label: 'Japanese', value: 'ja' },
+                    { label: 'Portuguese', value: 'pt' },
+                    { label: 'Spanish', value: 'es' },
+                    { label: 'Vietnamese', value: 'vi' },
+                  ]}
+                />
+              )}
+            />
+          </TanStackSectionForm>
+        </TanStackContainerForm>
+      </div>
+    );
+  },
+};
+
+export const AllFieldsWithTooltips: Story = {
+  render: () => {
+    const schema = z.object({
+      name: z.string().min(2, 'Name must be at least 2 characters').nullable(),
+      email: z.string().email('Enter a valid email').nullable(),
+      password: z.string().min(8, 'Minimum 8 characters').nullable(),
+      bio: z.string().max(200, 'Max 200 characters').nullable(),
+      age: z.number().min(18, 'Must be 18 or older').nullable(),
+      country: z.string().nullable(),
+      language: z.string().nullable(),
+      birthdate: z.date().nullable(),
+      notifications: z.boolean(),
+      role: z.string().nullable(),
+      permissions: z.string().array(),
+    });
+
+    const { AppField, AppForm, TanStackContainerForm, TanStackSectionForm, TanStackCardForm, TanStackActionsForm, TanStackTitleField } = useTanStackForm({
+      defaultValues: {
+        name: null,
+        email: null,
+        password: null,
+        bio: null,
+        age: null,
+        country: null,
+        language: null,
+        birthdate: null,
+        notifications: false,
+        role: null,
+        permissions: [] as string[],
+      } as z.output<typeof schema>,
+      validators: { onChange: schema },
+      onSubmit: ({ value }) => {
+        console.log('Submitted:', value);
+      },
+    });
+
+    return (
+      <div className="size-full bg-muted-bg-subtle p-4">
+        <AppForm>
+          <TanStackContainerForm>
+            <TanStackSectionForm title="Account Information">
+              <TanStackTitleField title="Personal Details" description="Fill in your personal information to complete your profile." />
+              <AppField
+                name="name"
+                children={({ TextField }) => (
+                  <TextField
+                    label="Full Name"
+                    placeholder="John Doe"
+                    orientation="responsive"
+                    required
+                    showClearButton
+                    showErrorMessage
+                    tooltip="Enter your legal name as it appears on official documents."
+                  />
+                )}
+              />
+              <AppField
+                name="email"
+                children={({ EmailField }) => (
+                  <EmailField
+                    label="Email Address"
+                    placeholder="you@example.com"
+                    orientation="responsive"
+                    required
+                    showErrorMessage
+                    tooltip="Used for login and account notifications. Cannot be changed after registration."
+                  />
+                )}
+              />
+              <AppField
+                name="password"
+                children={({ PasswordField }) => (
+                  <PasswordField
+                    label="Password"
+                    placeholder="Create a strong password"
+                    orientation="responsive"
+                    showErrorMessage
+                    helperText="Minimum 8 characters. Include uppercase, lowercase, and a number."
+                    tooltip="Your password is hashed with bcrypt and never stored in plain text."
+                  />
+                )}
+              />
+              <AppField
+                name="bio"
+                children={({ TextareaField }) => (
+                  <TextareaField
+                    label="Bio"
+                    placeholder="Tell us a little about yourself…"
+                    orientation="responsive"
+                    counter
+                    maxLength={200}
+                    showErrorMessage
+                    tooltip="This will appear on your public profile page."
+                  />
+                )}
+              />
+              <AppField
+                name="age"
+                children={({ NumberField }) => (
+                  <NumberField
+                    label="Age"
+                    placeholder="Enter your age"
+                    orientation="responsive"
+                    required
+                    showErrorMessage
+                    tooltip="You must be at least 18 years old to use this service."
+                  />
+                )}
+              />
+            </TanStackSectionForm>
+
+            <TanStackSectionForm title="Regional Settings">
+              <AppField
+                name="country"
+                children={({ ComboboxField }) => (
+                  <ComboboxField
+                    label="Country"
+                    description="Your country of residence."
+                    placeholder="Search country…"
+                    orientation="responsive"
+                    tooltip="Determines your tax region and available payment methods."
+                    options={[
+                      { label: 'Australia', value: 'au' },
+                      { label: 'Canada', value: 'ca' },
+                      { label: 'France', value: 'fr' },
+                      { label: 'Germany', value: 'de' },
+                      { label: 'Japan', value: 'jp' },
+                      { label: 'United Kingdom', value: 'gb' },
+                      { label: 'United States', value: 'us' },
+                      { label: 'Vietnam', value: 'vn' },
+                    ]}
+                  />
+                )}
+              />
+              <AppField
+                name="language"
+                children={({ SelectField }) => (
+                  <SelectField
+                    label="Preferred Language"
+                    description="Interface language."
+                    placeholder="Select language"
+                    orientation="responsive"
+                    tooltip="Affects date formats, number separators, and UI text."
+                    options={[
+                      { label: 'English', value: 'en' },
+                      { label: 'French', value: 'fr' },
+                      { label: 'German', value: 'de' },
+                      { label: 'Japanese', value: 'ja' },
+                      { label: 'Vietnamese', value: 'vi' },
+                    ]}
+                  />
+                )}
+              />
+              <AppField
+                name="birthdate"
+                children={({ DateField }) => (
+                  <DateField
+                    label="Date of Birth"
+                    placeholder="Select your birthdate"
+                    orientation="responsive"
+                    tooltip="Required for age verification. Not shown publicly."
+                    maxDate={new Date()}
+                  />
+                )}
+              />
+            </TanStackSectionForm>
+
+            <TanStackSectionForm title="Preferences">
+              <AppField
+                name="notifications"
+                children={({ SwitchField }) => (
+                  <SwitchField
+                    label="Email Notifications"
+                    description="Receive updates about your account activity."
+                    helperText="You can update this preference at any time in your settings."
+                  />
+                )}
+              />
+              <AppField
+                name="role"
+                children={({ RadioGroupField }) => (
+                  <RadioGroupField
+                    label="Account Role"
+                    description="Select the role that best describes your use case."
+                    orientation="responsive"
+                    tooltip="Your role determines which features and data you can access."
+                    options={[
+                      { label: 'Viewer', value: 'viewer', description: 'Read-only access to shared resources.' },
+                      { label: 'Editor', value: 'editor', description: 'Create and edit content.' },
+                      { label: 'Admin', value: 'admin', description: 'Full access including user management.' },
+                    ]}
+                  />
+                )}
+              />
+              <AppField
+                name="permissions"
+                children={({ CheckboxField }) => (
+                  <CheckboxField
+                    label="Permissions"
+                    description="Select the permissions to grant."
+                    orientation="responsive"
+                    tooltip="Permissions are applied immediately upon saving."
+                    options={[
+                      { label: 'Read data', value: 'read' },
+                      { label: 'Write data', value: 'write' },
+                      { label: 'Export reports', value: 'export' },
+                      { label: 'Manage users', value: 'users' },
+                    ]}
+                  />
+                )}
+              />
+            </TanStackSectionForm>
+
+            <TanStackActionsForm type="create" />
+          </TanStackContainerForm>
+        </AppForm>
+      </div>
+    );
+  },
+};
+
 export const AdminLoginForm: Story = {
   render: () => {
     const schema = z.object({

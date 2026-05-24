@@ -1,3 +1,5 @@
+'use client';
+
 import { Paragraph } from '../typography/paragraph';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 
@@ -5,10 +7,10 @@ type NameDisplayProps = {
   name: string;
 };
 
-export const NameDisplay: React.FC<React.PropsWithChildren<NameDisplayProps>> = ({ name }) => {
+export const NameDisplay: React.FC<NameDisplayProps> = ({ name }) => {
   return (
     <Tooltip>
-      <TooltipTrigger>
+      <TooltipTrigger data-slot="name-display">
         <Paragraph variant="sm" className="line-clamp-2 w-full truncate text-wrap pb-px text-start">
           {name}
         </Paragraph>

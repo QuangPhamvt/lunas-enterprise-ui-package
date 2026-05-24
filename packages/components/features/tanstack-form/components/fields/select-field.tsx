@@ -1,11 +1,22 @@
-import { useMemo } from 'react';
+'use client';
 
 import { PackagePlusIcon } from 'lucide-react';
 import type z from 'zod';
 
 import type { TanStackFormSelectFieldSchema } from '../../schema';
 import { useTanStackFieldContext } from '../../tanstack-form';
-import { Field, FieldContent, FieldContentMain, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldNote, FieldSeparator } from '../ui/field';
+import {
+  Field,
+  FieldContent,
+  FieldContentMain,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldNote,
+  FieldSeparator,
+  FieldTooltip,
+} from '../ui/field';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 type Props = Pick<
@@ -22,36 +33,29 @@ export const SelectField: React.FC<Props> = ({
 
   orientation = 'responsive',
 
+  tooltip,
   options,
   helperText,
   required = false,
 }) => {
   const field = useTanStackFieldContext<string | null>();
 
-  const _isInvalid = useMemo(() => {
-    return field.state.meta.isTouched && !field.state.meta.isValid;
-  }, [field.state.meta.isTouched, field.state.meta.isValid]);
-
-  const _isEmpty = useMemo(() => {
-    if (required) return field.state.value === null;
-    return false;
-  }, [required, field.state.value]);
-
-  const _errors = useMemo(() => {
-    return field.state.meta.errors;
-  }, [field.state.meta.errors]);
+  const _isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
+  const _isEmpty = required && field.state.value === null;
+  const _errors = field.state.meta.errors;
 
   return (
     <FieldGroup className="gap-y-4 px-4">
-      <Field orientation={orientation} data-invalid={field.state.meta.isTouched && !field.state.meta.isValid}>
+      <Field orientation={orientation} data-invalid={_isInvalid}>
         <FieldContent>
           <FieldLabel htmlFor={field.name} aria-required={_isEmpty}>
             {label}
+            {tooltip && <FieldTooltip tooltip={tooltip} />}
           </FieldLabel>
           <FieldDescription>{description}</FieldDescription>
         </FieldContent>
         <FieldContentMain className="flex flex-col">
-          <Select defaultValue={field.state.value || undefined} onValueChange={field.handleChange}>
+          <Select value={field.state.value ?? ''} onValueChange={field.handleChange}>
             <SelectTrigger aria-invalid={_isInvalid ? 'true' : undefined} onBlur={field.handleBlur}>
               <SelectValue placeholder={placeholder} />
             </SelectTrigger>

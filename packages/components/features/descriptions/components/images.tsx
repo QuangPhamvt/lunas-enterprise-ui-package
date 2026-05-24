@@ -1,31 +1,30 @@
+'use client';
+
 import { Image } from '@/components/ui/image';
 
 import { DescriptionEmpty } from './empty';
 
+type ImageItem = { id: string; src: string; alt: string };
+
 export const DescriptionImages: React.FC<{
-  images?:
-    | Array<{
-        id: string;
-        src: string;
-        alt: string;
-      }>
-    | null
-    | undefined;
+  images?: Array<ImageItem> | null | undefined;
 }> = ({ images }) => {
-  if (!images || !images.length) return <DescriptionEmpty />;
-  if (images.length === 1)
-    return (
-      <div className="flex flex-wrap gap-4">
-        <div key={images[0].id} className="group relative size-42 rounded-sm border border-border shadow-xs">
-          <Image src={images[0].src} alt={images[0].alt} width="100%" height="100%" />
-        </div>
-      </div>
-    );
+  if (!images?.length) return <DescriptionEmpty />;
+
+  const isSingle = images.length === 1;
+
   return (
-    <div className="flex flex-wrap gap-4">
+    <div data-slot="description-images" className="flex flex-wrap gap-4">
       {images.map(image => (
-        <div key={image.id} className="group relative size-16 rounded-lg border border-border shadow-xs">
-          <Image src={image.src} alt={image.alt} width="100%" height="100%" />
+        <div
+          key={image.id}
+          className={
+            isSingle
+              ? 'group relative size-42 overflow-hidden rounded-sm border border-border shadow-xs transition-shadow hover:shadow-card'
+              : 'group relative size-16 overflow-hidden rounded-lg border border-border shadow-xs transition-shadow hover:shadow-card'
+          }
+        >
+          <Image src={image.src} alt={image.alt} width="100%" height="100%" className="transition-transform duration-200 group-hover:scale-105" />
         </div>
       ))}
     </div>

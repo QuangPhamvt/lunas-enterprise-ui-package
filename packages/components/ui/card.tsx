@@ -1,3 +1,5 @@
+'use client';
+
 import { cn } from '@customafk/react-toolkit/utils';
 import { headingVariants } from '../typography/heading';
 import { paragraphVariants } from '../typography/paragraph';
@@ -6,7 +8,15 @@ function Card({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="card"
-      className={cn('flex flex-col gap-6 rounded-lg border border-border bg-card py-6 text-text-positive shadow-card ring-4 ring-border-weak', className)}
+      className={cn(
+        'flex flex-col gap-6 rounded-lg border border-border bg-card py-6 text-text-positive shadow-card',
+        'transition-[box-shadow,opacity] duration-150 ease-in-out',
+        'data-[interactive=true]:cursor-pointer',
+        'data-[interactive=true]:hover:shadow-dropdown',
+        'data-[interactive=true]:focus-visible:outline-none data-[interactive=true]:focus-visible:ring-2 data-[interactive=true]:focus-visible:ring-ring data-[interactive=true]:focus-visible:ring-offset-2',
+        'data-[interactive=true]:active:opacity-90',
+        className
+      )}
       {...props}
     />
   );

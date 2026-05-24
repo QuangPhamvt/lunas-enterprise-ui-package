@@ -54,7 +54,7 @@ function Alert({ className, variant, children, icon, dismissible, onDismiss, ...
           type="button"
           onClick={onDismiss}
           aria-label="Close alert"
-          className="absolute top-2 right-2 size-6 rounded-md p-1 opacity-70 transition-opacity hover:opacity-100"
+          className="absolute top-2 right-2 size-6 rounded-md p-1 opacity-70 transition-opacity duration-100 hover:opacity-100"
           data-slot="alert-close"
         >
           <X size={16} />
