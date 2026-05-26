@@ -11,9 +11,6 @@
     letter-spacing: -0.015625rem;
     overflow-wrap: break-word;
     hyphens: auto;
-
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
   }
   /* Custom scrollbar styling. Thanks @pranathiperii. */
   ::-webkit-scrollbar-track {
