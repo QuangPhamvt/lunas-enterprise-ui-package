@@ -148,7 +148,7 @@ export const UITableStatisticDisplay = memo(
       <Flex
         padding="none"
         className={cn(
-          'font-number text-lg text-secondary-foreground tabular-nums',
+          'font-number text-lg text-text-positive tabular-nums',
           size === 'xs' && 'text-xs',
           size === 'sm' && 'text-sm',
           size === 'md' && 'text-base',
