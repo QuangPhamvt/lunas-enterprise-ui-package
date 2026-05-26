@@ -8,7 +8,7 @@ import { ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
 import { useUITableBodyContext, useUITableContext } from '../hooks/use-context';
 import { UITableBody, UITableEmptyDisplay, UITableHead, UITableHeadRow, UITableInnerTable, UITableInnerWrapper, UITableLoadMore, UITableRow } from './common';
 
-export const UITableContainer: React.FC<React.PropsWithChildren> = () => {
+export const UITableContainer: React.FC = () => {
   const { table, isEmpty, isFetching, fetchMoreData } = useUITableContext();
   const { rowSelectionState } = useUITableBodyContext();
 
@@ -16,22 +16,24 @@ export const UITableContainer: React.FC<React.PropsWithChildren> = () => {
 
   const { rows } = table.getRowModel();
 
-  // Important: Keep the row virtualizer in the lowest component possible to avoid unnecessary re-renders.
+  // Keep the row virtualizer in the lowest component possible to avoid unnecessary re-renders.
   const rowVirtualizer = useVirtualizer<HTMLDivElement, HTMLTableRowElement>({
-    count: rows.length + 1,
-    estimateSize: () => 40, // estimated row height
+    // Only add the extra load-more slot when pagination is active; otherwise the
+    // virtualizer allocates a phantom 40 px gap at the bottom of every table.
+    count: rows.length + (fetchMoreData ? 1 : 0),
+    estimateSize: () => 40,
     getScrollElement: () => tableContainerRef.current,
-    //measure dynamic row height, except in firefox because it measures table border height incorrectly
+    // Measure dynamic row height, except in Firefox which measures table border height incorrectly.
     measureElement:
       typeof window !== 'undefined' && navigator.userAgent.indexOf('Firefox') === -1 ? element => element?.getBoundingClientRect().height : undefined,
-    overscan: 2, // Render additional rows beyond viewport for smoother scrolling
+    overscan: 2,
   });
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: rowVirtualizer getTotalSize
   const tableBodyHeight = useMemo(() => {
     const totalSize = rowVirtualizer.getTotalSize();
-    const containerHeight = tableContainerRef.current?.clientHeight || 0;
-    return totalSize < containerHeight ? `${containerHeight}px` : `${totalSize}px`;
+    const containerHeight = tableContainerRef.current?.clientHeight ?? 0;
+    return `${Math.max(totalSize, containerHeight)}px`;
   }, [rowVirtualizer.getTotalSize()]);
 
   return (
@@ -51,20 +53,21 @@ export const UITableContainer: React.FC<React.PropsWithChildren> = () => {
             <UITableBody height={tableBodyHeight}>
               {rowVirtualizer.getVirtualItems().map(virtualRow => {
                 const row = rows[virtualRow.index];
-                const isSelected = Object.entries(rowSelectionState).some(([k, v]) => k === `${row?.id}` && v);
+
+                // Load-more sentinel: row is undefined when index === rows.length.
+                // Guard isSelected here to avoid matching rowSelectionState["undefined"].
                 if (!row) {
                   return (
-                    <UITableLoadMore
-                      key={virtualRow.index}
-                      virtualRowIndex={virtualRow.index}
-                      virtualRowStart={virtualRow.start}
-                      fetchMoreData={fetchMoreData}
-                    />
+                    <UITableLoadMore key={virtualRow.key} virtualRowIndex={virtualRow.index} virtualRowStart={virtualRow.start} fetchMoreData={fetchMoreData} />
                   );
                 }
+
+                // O(1) lookup; TanStack row ids are already strings.
+                const isSelected = rowSelectionState[row.id] === true;
+
                 return (
                   <UITableRow
-                    key={virtualRow.index}
+                    key={virtualRow.key}
                     ref={rowVirtualizer.measureElement}
                     row={row}
                     isSelected={isSelected}

@@ -1,3 +1,4 @@
+'use client';
 /**
  * @file common.tsx
  * Low-level, memoised building blocks that compose into a full UITable.
@@ -90,6 +91,7 @@ export const UITableHeadCellOption = memo<TUITableHeadCellOption>(({ isPinned, o
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button
+          type="button"
           className={cn(
             'absolute right-2 z-10 p-0.5 opacity-0 bg-card',
             'cursor-pointer rounded-full transition-all',
@@ -307,74 +309,79 @@ export const UITableInnerTable = memo<TUITableInnerTable>(({ children, ...props 
 
     const headers = table.getFlatHeaders();
 
+    let rafId: number | undefined;
     const observer = new ResizeObserver(entries => {
-      requestAnimationFrame(() => {
-        const tableElement = entries[0].target;
-        if (tableElement instanceof HTMLTableElement) {
-          const tableEntry = entries[0];
-          if (!tableEntry) return;
-          const tableContentRectWidth = tableEntry.contentRect.width;
+      // Cancel any pending frame before scheduling a new one — debounces rapid resize events.
+      if (rafId !== undefined) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        const entry = entries[0];
+        if (!entry) return;
+        const tableElement = entry.target;
+        if (!(tableElement instanceof HTMLTableElement)) return;
+        const tableContentRectWidth = entry.contentRect.width;
 
-          const { left: leftColumnPinning = [], right: rightColumnPinning = [] } = table.getState().columnPinning;
+        const { left: leftColumnPinning = [], right: rightColumnPinning = [] } = table.getState().columnPinning;
 
-          // --- 1. DUYỆT 1 LẦN DUYẾT ĐỂ LẤY TẤT CẢ THÔNG SỐ ---
-          let pinnedWidth: number = 0;
-          let flexibleColumnsCount: number = 0;
-          let fixedSizeTotal: number = 0;
-          const columnSpecs = headers.map(header => {
-            const { id } = header;
-            const isSpecial = id === 'select' || id === 'actions';
-            const isPinned = leftColumnPinning.includes(id) || rightColumnPinning.includes(id);
-            const size = header.getSize();
-            const maxSize = header.column.columnDef.maxSize;
+        // --- 1. DUYỆT 1 LẦN DUYẾT ĐỂ LẤY TẤT CẢ THÔNG SỐ ---
+        let pinnedWidth: number = 0;
+        let flexibleColumnsCount: number = 0;
+        let fixedSizeTotal: number = 0;
+        const columnSpecs = headers.map(header => {
+          const { id } = header;
+          const isSpecial = id === 'select' || id === 'actions';
+          const isPinned = leftColumnPinning.includes(id) || rightColumnPinning.includes(id);
+          const size = header.getSize();
+          const maxSize = header.column.columnDef.maxSize;
 
-            // Tính toán chiều rộng cố định (pinned hoặc special)
-            if (isSpecial) {
-              const width = id === 'select' ? SELECT_WIDTH : ACTION_WIDTH;
-              pinnedWidth += width;
-              return { id, isFlex: false, width };
+          // Tính toán chiều rộng cố định (pinned hoặc special)
+          if (isSpecial) {
+            const width = id === 'select' ? SELECT_WIDTH : ACTION_WIDTH;
+            pinnedWidth += width;
+            return { id, isFlex: false, width };
+          }
+
+          if (isPinned) {
+            pinnedWidth += size;
+            return { id, isFlex: false, width: size };
+          }
+
+          // Kiểm tra nếu cột có size cụ thể (khác mặc định 150)
+          if (header.column.columnDef.size || size !== 150) {
+            fixedSizeTotal += size;
+            return { id, isFlex: false, width: size };
+          }
+
+          // Cột có thể co giãn
+          flexibleColumnsCount++;
+          return { id, isFlex: true, maxSize };
+        });
+
+        // --- 2. TÍNH TOÁN CHIỀU RỘNG CHIA ĐỀU (AVENGER WIDTH) ---
+        const remainingWidth = tableContentRectWidth - pinnedWidth - fixedSizeTotal;
+        const rawFlexWidth = flexibleColumnsCount > 0 ? Math.max(0, Math.floor(remainingWidth / flexibleColumnsCount)) : 0;
+
+        // --- 3. ÁP DỤNG STYLE TRONG MỘT LẦN DUYỆT ---
+        columnSpecs.forEach(col => {
+          if (col.isFlex) {
+            // Nếu có maxSize, đảm bảo không vượt quá
+            const finalWidth = col.maxSize ? Math.min(rawFlexWidth, col.maxSize) : rawFlexWidth;
+            tableElement.style.setProperty(`--header-${col.id}-size`, `${finalWidth}`);
+            tableElement.style.setProperty(`--col-${col.id}-size`, `${finalWidth}`);
+            if (col.maxSize) {
+              tableElement.style.setProperty(`--col-${col.id}-maxSize`, `${col.maxSize}`);
             }
-
-            if (isPinned) {
-              pinnedWidth += size;
-              return { id, isFlex: false, width: size };
-            }
-
-            // Kiểm tra nếu cột có size cụ thể (khác mặc định 150)
-            if (header.column.columnDef.size || size !== 150) {
-              fixedSizeTotal += size;
-              return { id, isFlex: false, width: size };
-            }
-
-            // Cột có thể co giãn
-            flexibleColumnsCount++;
-            return { id, isFlex: true, maxSize };
-          });
-
-          // --- 2. TÍNH TOÁN CHIỀU RỘNG CHIA ĐỀU (AVENGER WIDTH) ---
-          const remainingWidth = tableContentRectWidth - pinnedWidth - fixedSizeTotal;
-          const rawFlexWidth = flexibleColumnsCount > 0 ? Math.max(0, Math.floor(remainingWidth / flexibleColumnsCount)) : 0;
-
-          // --- 3. ÁP DỤNG STYLE TRONG MỘT LẦN DUYỆT ---
-          columnSpecs.forEach(col => {
-            if (col.isFlex) {
-              // Nếu có maxSize, đảm bảo không vượt quá
-              const finalWidth = col.maxSize ? Math.min(rawFlexWidth, col.maxSize) : rawFlexWidth;
-              tableElement.style.setProperty(`--header-${col.id}-size`, `${finalWidth}`);
-              tableElement.style.setProperty(`--col-${col.id}-size`, `${finalWidth}`);
-              if (col.maxSize) {
-                tableElement.style.setProperty(`--col-${col.id}-maxSize`, `${col.maxSize}`);
-              }
-            } else {
-              tableElement.style.setProperty(`--header-${col.id}-size`, `${col.width}`);
-              tableElement.style.setProperty(`--col-${col.id}-size`, `${col.width}`);
-            }
-          });
-        }
+          } else {
+            tableElement.style.setProperty(`--header-${col.id}-size`, `${col.width}`);
+            tableElement.style.setProperty(`--col-${col.id}-size`, `${col.width}`);
+          }
+        });
       });
     });
     observer.observe(tableRef.current);
-    return () => observer.disconnect();
+    return () => {
+      if (rafId !== undefined) cancelAnimationFrame(rafId);
+      observer.disconnect();
+    };
   }, [table.getState().columnSizingInfo, table.getState().columnSizing, table.getState().columnPinning]);
 
   return (
@@ -888,7 +895,7 @@ UITableCellActions.displayName = 'UITableCellActions';
 export const UITableCell = memo<TUITableCell>(
   ({ isPinned = false, isFirstCell = false, isLastCell = false, colId, position = 'start', column, getContext, ...props }) => {
     const { innerTableId, table } = useUITableInnerTableContext();
-    const tableRef = useRef<Element>(document.querySelector(`table[id="${innerTableId}"]`));
+    const tableRef = useRef<HTMLTableElement | null>(null);
     const cellRef = useRef<HTMLDivElement>(null);
 
     const left = useMemo(() => {
@@ -918,14 +925,16 @@ export const UITableCell = memo<TUITableCell>(
     }, [column, getContext]);
 
     useEffect(() => {
+      tableRef.current = document.querySelector(`table[id="${innerTableId}"]`);
+    }, [innerTableId]);
+
+    useEffect(() => {
       if (!cellRef.current) return;
 
-      // Đo kích thước thực tế của nội dung bên trong
       const width = cellRef.current.scrollWidth;
       const currentSize = column?.getSize();
 
-      // Nếu cell này dài hơn size hiện tại của cột, cập nhật lại size cho column
-      if (!!currentSize && width > currentSize) {
+      if (currentSize != null && width > currentSize) {
         if (tableRef.current instanceof HTMLTableElement && typeof colId === 'string' && !!(column?.columnDef.meta as AnyEntity)?.['fitContent']) {
           table.setColumnSizing(old => ({
             ...old,
@@ -933,7 +942,7 @@ export const UITableCell = memo<TUITableCell>(
           }));
         }
       }
-    }, [colId, column, table]); // Chạy lại khi data trong cell thay đổi
+    }, [colId, column, table]);
 
     return (
       <td
@@ -1021,7 +1030,7 @@ UITableFooter.displayName = 'UITableFooter';
 export const UITableLoadMore = memo<TUITableLoadMore>(({ virtualRowIndex, virtualRowStart, fetchMoreData }) => {
   const { innerWrapperId } = useUITableInnerWrapperContext();
 
-  const tableWrapperRef = useRef<Element | null>(document.querySelector(`div[id="${innerWrapperId}"]`));
+  const tableWrapperRef = useRef<Element | null>(null);
   const rowRef = useRef<HTMLTableRowElement>(null);
 
   const [fetchingState, setFetchingState] = useState<'idle' | 'fetching' | 'error'>('idle');
@@ -1042,16 +1051,16 @@ export const UITableLoadMore = memo<TUITableLoadMore>(({ virtualRowIndex, virtua
   }, [fetchMoreData]);
 
   useEffect(() => {
+    tableWrapperRef.current = document.querySelector(`div[id="${innerWrapperId}"]`);
     if (!tableWrapperRef.current) return;
 
     const observer = new ResizeObserver(entries => {
-      // Access width from contentRect
       setWidth(entries[0].contentRect.width);
     });
 
     observer.observe(tableWrapperRef.current);
-    return () => observer.disconnect(); // Cleanup on unmount
-  }, []);
+    return () => observer.disconnect();
+  }, [innerWrapperId]);
 
   if (!fetchMoreData) return null;
 
