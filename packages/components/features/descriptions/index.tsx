@@ -98,7 +98,10 @@ export const DescriptionHeader: React.FC<{
   className?: string;
 }> = ({ title, description, extra, className }) => {
   return (
-    <div data-slot="description-header" className={cn('flex items-start justify-between gap-4 border-b border-b-border px-4 py-3', className)}>
+    <div
+      data-slot="description-header"
+      className={cn('sticky top-0 z-10 flex items-start justify-between gap-4 border-b border-b-border bg-card px-4 py-3', className)}
+    >
       <div className="flex flex-col gap-0.5">
         <p className="text-sm font-semibold text-text-positive">{title}</p>
         {description && <p className="text-xs text-text-positive-weak">{description}</p>}
@@ -133,8 +136,33 @@ export const DescriptionSection: React.FC<{
   );
 };
 
+const DescriptionLoadingSkeleton: React.FC<{ rows: number }> = ({ rows }) => (
+  <div data-slot="description-loading" className="animate-pulse">
+    <div className="flex items-center justify-between border-b border-b-border px-4 py-3">
+      <div className="flex flex-col gap-1.5">
+        <div className="h-3.5 w-36 rounded bg-border" />
+        <div className="h-2.5 w-24 rounded bg-border-weak" />
+      </div>
+      <div className="h-5 w-16 rounded bg-border-weak" />
+    </div>
+    {Array.from({ length: rows }).map((_, i) => (
+      <div key={i} style={{ display: 'grid', gridTemplateColumns: 'repeat(12, minmax(0, 1fr))' }} className="grid border-b border-b-border last:border-b-0">
+        <div style={{ gridColumn: 'span 3 / span 3' }} className="flex items-center border-r border-r-border bg-secondary-muted py-3 pl-4 pr-2">
+          <div className="h-3 w-20 rounded bg-border" />
+        </div>
+        <div style={{ gridColumn: 'span 9 / span 9' }} className="flex items-center py-3 pl-4 pr-2">
+          <div className="h-3 w-28 rounded bg-border-weak" />
+        </div>
+      </div>
+    ))}
+  </div>
+);
+
 /**
  * Root container for a description block — a bordered, rounded card that groups {@link DescriptionHeader}, {@link DescriptionSection}, and {@link DescriptionItem} elements.
+ *
+ * Set `nested` when embedding one `Description` inside another (removes the outer card shadow/ring and constrains sizing).
+ * Set `loading` to replace content with animated skeleton rows while data is being fetched.
  *
  * @example
  * import { Description, DescriptionHeader, DescriptionItem } from '@customafk/lunas-ui/features/descriptions';
@@ -149,14 +177,26 @@ export const Description: React.FC<
   React.PropsWithChildren<{
     /** Additional CSS class names applied to the root wrapper element. */
     className?: string;
+    /** Strips the outer card shadow/ring and adapts sizing for embedding inside another Description. */
+    nested?: boolean;
+    /** Replaces children with animated skeleton rows while data is loading. */
+    loading?: boolean;
+    /** Number of skeleton rows shown when `loading` is true. @default 4 */
+    loadingRows?: number;
   }>
-> = ({ children, className }) => {
+> = ({ children, className, nested = false, loading = false, loadingRows = 4 }) => {
   return (
     <div
       data-slot="description"
-      className={cn('relative flex size-full flex-col overflow-hidden rounded-lg border border-border bg-card shadow-card ring-1 ring-border-weak', className)}
+      className={cn(
+        'relative flex flex-col bg-card',
+        nested
+          ? 'w-full overflow-hidden rounded-md border border-border'
+          : 'size-full overflow-y-auto rounded-lg border border-border shadow-card ring-1 ring-border-weak',
+        className
+      )}
     >
-      {children}
+      {loading ? <DescriptionLoadingSkeleton rows={loadingRows} /> : children}
     </div>
   );
 };

@@ -139,10 +139,7 @@ export const DetailDialog: React.FC<React.PropsWithChildren<DetailDialogProps>> 
                       <div className="loader" />
                     </Flex>
                   ) : (
-                    <section
-                      data-slot="detail-dialog-body"
-                      className="relative inset-shadow-sm flex flex-1 snap-y flex-col gap-0 overflow-y-auto bg-muted-bg-subtle"
-                    >
+                    <section data-slot="detail-dialog-body" className="relative inset-shadow-sm flex flex-1 snap-y flex-col gap-0 overflow-y-auto bg-card">
                       {children}
                     </section>
                   )}

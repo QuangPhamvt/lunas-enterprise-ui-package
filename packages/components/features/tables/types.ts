@@ -210,6 +210,14 @@ export type TUITableColumn<TData extends RowData<TData>> = Pick<
   };
 };
 
+/** A single cell in a CSV export row. */
+export type CsvCell = {
+  /** Column header label for this cell. */
+  label: string;
+  /** Cell value — numbers render right-aligned in spreadsheet editors. */
+  value: string | number | boolean | null | undefined;
+};
+
 /**
  * Value shape of the root `TableContext` consumed by toolbar and body
  * components via `useUITableContext`.
@@ -232,6 +240,11 @@ export type TTableContext<TData extends RowData<TData>> = {
 
   /** Callback that loads the next page; forwarded to `UITableLoadMore`. */
   fetchMoreData?: () => void | Promise<void>;
+
+  /** CSV export rows; each row is an ordered array of `{ label, value }` cells. */
+  csvData?: CsvCell[][];
+  /** File name (without `.csv`) for the downloaded file. Defaults to the table title. */
+  csvFileName?: string;
 };
 
 /** Context value provided by `UITableInnerWrapperProvider`. */
@@ -359,4 +372,9 @@ export type TableProviderProps<
   onRowSelection?: (rowSelection: RowSelectionState) => void;
   /** Called with the updated column-pinning state after each pin/unpin action. */
   onColumnPinning?: (columnPinning: ColumnPinningState) => void;
+
+  /** CSV export rows; each row is an ordered array of `{ label, value }` cells. */
+  csvData?: CsvCell[][];
+  /** File name (without `.csv`) for the downloaded file. Defaults to the table title. */
+  csvFileName?: string;
 };

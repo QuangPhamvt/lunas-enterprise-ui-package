@@ -18,7 +18,7 @@ import { Slot as SlotPrimitive } from 'radix-ui';
 
 const SIDEBAR_COOKIE_NAME = 'detail_dialog_sidebar_state';
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
-const SIDEBAR_WIDTH = '20rem';
+const SIDEBAR_WIDTH = '18rem';
 const SIDEBAR_WIDTH_MOBILE = '18rem';
 const SIDEBAR_WIDTH_ICON = '3rem';
 const SIDEBAR_KEYBOARD_SHORTCUT = 'p';
