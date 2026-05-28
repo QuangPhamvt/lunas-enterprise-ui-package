@@ -4,6 +4,8 @@
  * an action button group (create / refresh / download), and the outer
  * toolbar shell that displays the table title.
  */
+import { useCallback } from 'react';
+
 import { ArrowRightIcon, CirclePlus, DownloadIcon, RefreshCwIcon, SearchIcon } from 'lucide-react';
 
 import { useDebounceCallback } from '@customafk/react-toolkit/hooks/useDebounceCallback';
@@ -11,6 +13,7 @@ import { useDebounceCallback } from '@customafk/react-toolkit/hooks/useDebounceC
 import { Input } from '@/components/ui/input';
 
 import { useUITableContext } from '../../hooks/use-context';
+import { downloadCsv } from '../../utils/csv';
 
 /**
  * Debounced search input rendered inside the table toolbar.
@@ -49,11 +52,11 @@ export const UITableTooltipFilter: React.FC<
           debouncedSearch(e.target.value ?? '');
         }}
       />
-      <div className="pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 text-text-positive-weak peer-disabled:opacity-50">
+      <div className="pointer-events-none absolute inset-y-0 inset-s-0 flex items-center justify-center ps-3 text-text-positive-weak peer-disabled:opacity-50">
         <SearchIcon size={16} />
       </div>
       <button
-        className="absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-md text-text-positive-weak outline-none transition-[color,box-shadow] hover:text-text-positive focus:z-10 focus-visible:border focus-visible:border-primary-strong focus-visible:ring-[3px] focus-visible:ring-primary-weak disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
+        className="absolute inset-y-0 inset-e-0 flex h-full w-9 items-center justify-center rounded-e-md text-text-positive-weak outline-none transition-[color,box-shadow] hover:text-text-positive focus:z-10 focus-visible:border focus-visible:border-primary-strong focus-visible:ring-[3px] focus-visible:ring-primary-weak disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
         aria-label="Submit search"
         type="submit"
       >
@@ -98,6 +101,21 @@ export const UITableTooltipActions: React.FC<{
   onRefresh?: () => void;
   onDownload?: () => void;
 }> = ({ onCreate, onDownload, onRefresh }) => {
+  const { table, csvData, csvFileName, title } = useUITableContext();
+
+  const handleDownload = useCallback(() => {
+    if (onDownload) {
+      onDownload();
+      return;
+    }
+    if (!csvData || csvData.length === 0) return;
+    const selectedRows = table.getSelectedRowModel().flatRows;
+    const rows = selectedRows.length > 0 ? selectedRows.map(row => csvData[row.index]).filter(Boolean) : csvData;
+    downloadCsv(rows, csvFileName || title);
+  }, [onDownload, csvData, csvFileName, table, title]);
+
+  const isDownloadEnabled = !!(onDownload || (csvData && csvData.length > 0));
+
   return (
     <div className="flex [&>*:not(:first-child)]:rounded-l-none [&>*:not(:first-child)]:border-l-0 [&>*:not(:last-child)]:rounded-r-none">
       <ActionButton
@@ -121,9 +139,9 @@ export const UITableTooltipActions: React.FC<{
         <RefreshCwIcon />
       </ActionButton>
       <ActionButton
-        disabled={!onDownload}
+        disabled={!isDownloadEnabled}
         onClick={e => {
-          onDownload?.();
+          handleDownload();
           e.stopPropagation();
           e.preventDefault();
         }}

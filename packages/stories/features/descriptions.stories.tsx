@@ -248,6 +248,91 @@ export const WithActionSlot: Story = {
   ),
 };
 
+export const Nested: Story = {
+  render: () => (
+    <Description>
+      <DescriptionHeader title="Order #ORD-20240001" description="Order with nested line-item breakdown" />
+      <DescriptionItem label="Status">
+        <DescriptionStatus label="Pending" color="warning" />
+      </DescriptionItem>
+      <DescriptionItem label="Customer">
+        <DescriptionUser uuid="abc-123" username="Nguyen Van A" email="nguyenvana@example.com" />
+      </DescriptionItem>
+      <DescriptionItem label="Line Items" orientation="vertical">
+        <Description nested>
+          <DescriptionHeader title="Products" />
+          <DescriptionItem label="Product A">
+            <DescriptionStatistic value={150000} prefix="₫" />
+          </DescriptionItem>
+          <DescriptionItem label="Product B">
+            <DescriptionStatistic value={250000} prefix="₫" />
+          </DescriptionItem>
+          <DescriptionItem label="Product C">
+            <DescriptionStatistic value={100000} prefix="₫" />
+          </DescriptionItem>
+        </Description>
+      </DescriptionItem>
+      <DescriptionItem label="Total">
+        <DescriptionStatistic value={500000} prefix="₫" trend="up" />
+      </DescriptionItem>
+    </Description>
+  ),
+};
+
+export const Loading: Story = {
+  render: () => (
+    <div className="flex flex-col gap-6">
+      <Description loading />
+      <Description loading loadingRows={6} />
+      <Description loading loadingRows={2} />
+    </div>
+  ),
+};
+
+export const ScrollWithStickyHeader: Story = {
+  render: () => (
+    <div style={{ height: 320 }}>
+      <Description>
+        <DescriptionHeader
+          title="User Information"
+          description="Header stays fixed as you scroll"
+          extra={<DescriptionBadge label="Active" color="success" />}
+        />
+        <DescriptionItem label="Full Name">
+          <DescriptionName name="Nguyen Van A" />
+        </DescriptionItem>
+        <DescriptionItem label="Email">
+          <DescriptionCopy value="nguyenvana@example.com" />
+        </DescriptionItem>
+        <DescriptionItem label="Phone">
+          <DescriptionNumberPhone value="+84987654321" />
+        </DescriptionItem>
+        <DescriptionItem label="Status">
+          <DescriptionStatus label="Active" color="success" />
+        </DescriptionItem>
+        <DescriptionItem label="Joined">
+          <DescriptionDate date={new Date('2023-06-15')} />
+        </DescriptionItem>
+        <DescriptionItem label="API Key">
+          <DescriptionCopy value="sk-live-abcdefghijklmnopqrstuvwxyz1234567890" />
+        </DescriptionItem>
+        <DescriptionItem label="Tags">
+          <DescriptionTagList tags={['Admin', 'Verified', 'Premium']} />
+        </DescriptionItem>
+        <DescriptionItem label="Notes" orientation="vertical">
+          <DescriptionLongText content="This account has been manually verified by the support team following a KYC review completed on 2024-01-15. All documents are on file and the account is in good standing." />
+        </DescriptionItem>
+        <DescriptionItem label="Boolean">
+          <DescriptionBoolean value={true} trueLabel="Enabled" falseLabel="Disabled" />
+        </DescriptionItem>
+        <DescriptionItem label="Link">
+          <DescriptionLink href="https://example.com" label="Profile page" />
+        </DescriptionItem>
+      </Description>
+    </div>
+  ),
+};
+
 export const EmptyStates: Story = {
   render: () => (
     <Description>

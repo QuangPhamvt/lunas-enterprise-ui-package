@@ -156,6 +156,8 @@ export const UITableProvider = <
   onColumnPinning,
 
   fetchMoreData,
+  csvData,
+  csvFileName,
   children,
 }: React.PropsWithChildren<TableProviderProps<TData, TKey, TColumns>>) => {
   const innerWrapperId = useId();
@@ -244,6 +246,9 @@ export const UITableProvider = <
       totalRows,
 
       fetchMoreData,
+
+      csvData,
+      csvFileName,
     }),
     [
       title,
@@ -258,6 +263,9 @@ export const UITableProvider = <
       fetchMoreData,
       table.getState().columnPinning,
       table.getState().expanded,
+
+      csvData,
+      csvFileName,
     ]
   );
 

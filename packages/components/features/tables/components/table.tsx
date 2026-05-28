@@ -3,12 +3,12 @@ import { useMemo, useRef } from 'react';
 
 import { useVirtualizer } from '@tanstack/react-virtual';
 
-import { ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
 
 import { useUITableBodyContext, useUITableContext } from '../hooks/use-context';
 import { UITableBody, UITableEmptyDisplay, UITableHead, UITableHeadRow, UITableInnerTable, UITableInnerWrapper, UITableLoadMore, UITableRow } from './common';
 
-export const UITableContainer: React.FC = () => {
+export const UITableContainer: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { table, isEmpty, isFetching, fetchMoreData } = useUITableContext();
   const { rowSelectionState } = useUITableBodyContext();
 
@@ -56,7 +56,7 @@ export const UITableContainer: React.FC = () => {
 
                 // Load-more sentinel: row is undefined when index === rows.length.
                 // Guard isSelected here to avoid matching rowSelectionState["undefined"].
-                if (!row) {
+                if (!row && fetchMoreData) {
                   return (
                     <UITableLoadMore key={virtualRow.key} virtualRowIndex={virtualRow.index} virtualRowStart={virtualRow.start} fetchMoreData={fetchMoreData} />
                   );
@@ -81,6 +81,12 @@ export const UITableContainer: React.FC = () => {
           <UITableEmptyDisplay isEmpty={isEmpty} isFetching={isFetching} />
         </UITableInnerWrapper>
       </ResizablePanel>
+      {children && (
+        <>
+          <ResizableHandle withHandle />
+          {children}
+        </>
+      )}
     </ResizablePanelGroup>
   );
 };
