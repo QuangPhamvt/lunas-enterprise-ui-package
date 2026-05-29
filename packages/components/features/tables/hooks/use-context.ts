@@ -1,7 +1,15 @@
 import { createContext, use } from 'react';
 
 import type { AnyEntity } from '@/types';
-import type { TTableBodyContext, TTableContext, TTableHeadRowContext, TTableInnerTableContext, TTableInnerWrapperContext, TTableRowContext } from '../types';
+import type {
+  TTableBodyContext,
+  TTableContext,
+  TTableFilterContext,
+  TTableHeadRowContext,
+  TTableInnerTableContext,
+  TTableInnerWrapperContext,
+  TTableRowContext,
+} from '../types';
 
 export const TableInnerWrapperContext = createContext<TTableInnerWrapperContext | null>(null);
 
@@ -61,4 +69,14 @@ export const useUITableContext = () => {
     throw new Error('useTableContext must be used within a TableProvider');
   }
   return context;
+};
+
+export const TableFilterContext = createContext<TTableFilterContext | null>(null);
+
+export const useUITableFilterContext = () => {
+  const ctx = use(TableFilterContext);
+  if (!ctx) {
+    throw new Error('useUITableFilterContext must be used within a UITableProvider');
+  }
+  return ctx;
 };

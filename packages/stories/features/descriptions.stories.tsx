@@ -1,4 +1,4 @@
-import { Description, DescriptionHeader, DescriptionItem, DescriptionSection } from '@/components/features/descriptions';
+import { Description, DescriptionGroup, DescriptionHeader, DescriptionItem, DescriptionSection } from '@/components/features/descriptions';
 import {
   DescriptionBadge,
   DescriptionBoolean,
@@ -329,6 +329,63 @@ export const ScrollWithStickyHeader: Story = {
           <DescriptionLink href="https://example.com" label="Profile page" />
         </DescriptionItem>
       </Description>
+    </div>
+  ),
+};
+
+export const GroupWithStickyHeaders: Story = {
+  render: () => (
+    <div style={{ height: 400 }}>
+      <DescriptionGroup>
+        <Description>
+          <DescriptionHeader title="Personal Info" description="Basic identity details" />
+          <DescriptionItem label="Full Name">
+            <DescriptionName name="Nguyen Van A" />
+          </DescriptionItem>
+          <DescriptionItem label="Date of Birth">
+            <DescriptionDate date={new Date('1992-04-18')} />
+          </DescriptionItem>
+          <DescriptionItem label="Gender">
+            <DescriptionBoolean value={true} trueLabel="Male" falseLabel="Female" />
+          </DescriptionItem>
+          <DescriptionItem label="Notes" orientation="vertical">
+            <DescriptionLongText content="Customer has been verified manually by the KYC team. All identity documents are on file and have passed the review process." />
+          </DescriptionItem>
+        </Description>
+        <Description>
+          <DescriptionHeader title="Contact" description="Communication channels" />
+          <DescriptionItem label="Email">
+            <DescriptionCopy value="nguyenvana@example.com" />
+          </DescriptionItem>
+          <DescriptionItem label="Phone">
+            <DescriptionNumberPhone value="+84987654321" />
+          </DescriptionItem>
+          <DescriptionItem label="Profile">
+            <DescriptionLink href="https://example.com/u/nguyenvana" label="View profile" />
+          </DescriptionItem>
+          <DescriptionItem label="Tags">
+            <DescriptionTagList tags={['Admin', 'Verified', 'Premium', 'KYC-passed']} />
+          </DescriptionItem>
+        </Description>
+        <Description>
+          <DescriptionHeader title="Account" description="System and subscription details" extra={<DescriptionBadge label="Active" color="success" />} />
+          <DescriptionItem label="Status">
+            <DescriptionStatus label="Active" color="success" />
+          </DescriptionItem>
+          <DescriptionItem label="Joined">
+            <DescriptionDate date={new Date('2023-06-15')} />
+          </DescriptionItem>
+          <DescriptionItem label="API Key">
+            <DescriptionCopy value="sk-live-abcdefghijklmnopqrstuvwxyz1234567890" />
+          </DescriptionItem>
+          <DescriptionItem label="Plan">
+            <DescriptionBadge label="Enterprise" color="primary" />
+          </DescriptionItem>
+          <DescriptionItem label="Usage">
+            <DescriptionStatistic value={4500000} prefix="₫" trend="up" />
+          </DescriptionItem>
+        </Description>
+      </DescriptionGroup>
     </div>
   ),
 };

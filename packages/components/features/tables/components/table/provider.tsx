@@ -15,22 +15,43 @@ import type { AnyEntity } from '@/types';
 import {
   TableBodyContext,
   TableContext,
+  TableFilterContext,
   TableHeadRowContext,
   TableInnerTableContext,
   TableInnerWrapperContext,
   TableRowContext,
 } from '../../hooks/use-context';
 import type {
+  ActiveFilter,
+  FilterDefinition,
+  FilterType,
+  FilterValue,
   RowData,
   TableProviderProps,
   TTableBodyContext,
   TTableContext,
+  TTableFilterContext,
   TTableHeadRowContext,
   TTableInnerTableContext,
   TTableInnerWrapperContext,
   TTableRowContext,
   TUITableColumn,
 } from '../../types';
+
+function createDefaultFilterValue(type: FilterType): FilterValue {
+  switch (type) {
+    case 'tag':
+      return { type: 'tag', values: [] };
+    case 'date-range':
+      return { type: 'date-range' };
+    case 'number':
+      return { type: 'number', operator: 'eq' };
+    case 'text':
+      return { type: 'text', operator: 'contains', value: '' };
+    case 'boolean':
+      return { type: 'boolean', value: null };
+  }
+}
 
 /**
  * Provides the inner-wrapper DOM element id to all descendants via
@@ -158,6 +179,10 @@ export const UITableProvider = <
   fetchMoreData,
   csvData,
   csvFileName,
+
+  filterDefinitions = [],
+  onFilterChange,
+
   children,
 }: React.PropsWithChildren<TableProviderProps<TData, TKey, TColumns>>) => {
   const innerWrapperId = useId();
@@ -169,6 +194,7 @@ export const UITableProvider = <
     left: ['select', ...leftPinnedColumns] as unknown as string[],
   });
   const [expanded, setExpanded] = useState<ExpandedState>({});
+  const [activeFilters, setActiveFilters] = useState<ActiveFilter[]>([]);
 
   const handleRowSelectionChange = useCallback<React.Dispatch<React.SetStateAction<RowSelectionState>>>(
     newRowSelection => {
@@ -185,6 +211,57 @@ export const UITableProvider = <
       onColumnPinning?.(newColumnPinning instanceof Function ? newColumnPinning(columnPinning) : newColumnPinning);
     },
     [columnPinning, onColumnPinning]
+  );
+
+  const addFilter = useCallback(
+    (definitionId: string) => {
+      const def = (filterDefinitions as FilterDefinition[]).find(d => d.id === definitionId);
+      if (!def) return;
+      const newFilter: ActiveFilter = {
+        id: `${definitionId}-${crypto.randomUUID()}`,
+        definitionId,
+        value: createDefaultFilterValue(def.type),
+      };
+      setActiveFilters(prev => {
+        const next = [...prev, newFilter];
+        onFilterChange?.(next);
+        return next;
+      });
+    },
+    [filterDefinitions, onFilterChange]
+  );
+
+  const removeFilter = useCallback(
+    (filterId: string) => {
+      setActiveFilters(prev => {
+        const next = prev.filter(f => f.id !== filterId);
+        onFilterChange?.(next);
+        return next;
+      });
+    },
+    [onFilterChange]
+  );
+
+  const updateFilter = useCallback(
+    (filterId: string, value: FilterValue) => {
+      setActiveFilters(prev => {
+        const next = prev.map(f => (f.id === filterId ? { ...f, value } : f));
+        onFilterChange?.(next);
+        return next;
+      });
+    },
+    [onFilterChange]
+  );
+
+  const filterContextValue = useMemo<TTableFilterContext>(
+    () => ({
+      filterDefinitions: filterDefinitions as FilterDefinition[],
+      activeFilters,
+      addFilter,
+      removeFilter,
+      updateFilter,
+    }),
+    [filterDefinitions, activeFilters, addFilter, removeFilter, updateFilter]
   );
 
   const table = useReactTable<TData>({
@@ -303,31 +380,33 @@ export const UITableProvider = <
   }, [table.getTotalSize()]);
 
   return (
-    <TableContext.Provider value={value as TTableContext<TData>}>
-      <UITableInnerWrapperProvider innerWrapperId={innerWrapperId}>
-        <UITableInnerTableProvider table={table} innerTableId={innerTableId} totalSize={totalSize}>
-          <UITableHeadRowProvider
-            isAllRowsSelected={isAllRowsSelected}
-            columnPinningState={columnPinningState}
-            leftPinnedHeaders={leftPinnedHeaders}
-            rightPinnedHeaders={rightPinnedHeaders}
-            onToggleAllRowsSelected={table.toggleAllRowsSelected}
-          >
-            <UITableBodyProvider isFetching={isFetching} isEmpty={isEmpty} rowSelectionState={rowSelectionState}>
-              <UITableRowProvider
-                keyOfClickRow={keyOfClickRow}
-                isAllRowsSelected={isAllRowsSelected}
-                columnPinningState={columnPinningState}
-                leftPinnedHeaders={leftPinnedHeaders}
-                rightPinnedHeaders={rightPinnedHeaders}
-                onClickRow={onClickRow}
-              >
-                {children}
-              </UITableRowProvider>
-            </UITableBodyProvider>
-          </UITableHeadRowProvider>
-        </UITableInnerTableProvider>
-      </UITableInnerWrapperProvider>
-    </TableContext.Provider>
+    <TableFilterContext.Provider value={filterContextValue}>
+      <TableContext.Provider value={value as TTableContext<TData>}>
+        <UITableInnerWrapperProvider innerWrapperId={innerWrapperId}>
+          <UITableInnerTableProvider table={table} innerTableId={innerTableId} totalSize={totalSize}>
+            <UITableHeadRowProvider
+              isAllRowsSelected={isAllRowsSelected}
+              columnPinningState={columnPinningState}
+              leftPinnedHeaders={leftPinnedHeaders}
+              rightPinnedHeaders={rightPinnedHeaders}
+              onToggleAllRowsSelected={table.toggleAllRowsSelected}
+            >
+              <UITableBodyProvider isFetching={isFetching} isEmpty={isEmpty} rowSelectionState={rowSelectionState}>
+                <UITableRowProvider
+                  keyOfClickRow={keyOfClickRow}
+                  isAllRowsSelected={isAllRowsSelected}
+                  columnPinningState={columnPinningState}
+                  leftPinnedHeaders={leftPinnedHeaders}
+                  rightPinnedHeaders={rightPinnedHeaders}
+                  onClickRow={onClickRow}
+                >
+                  {children}
+                </UITableRowProvider>
+              </UITableBodyProvider>
+            </UITableHeadRowProvider>
+          </UITableInnerTableProvider>
+        </UITableInnerWrapperProvider>
+      </TableContext.Provider>
+    </TableFilterContext.Provider>
   );
 };
