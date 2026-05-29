@@ -1,8 +1,12 @@
 'use client';
 
+import { createContext, useContext } from 'react';
+
 import { cn } from '@customafk/react-toolkit/utils';
 
 export * from './components';
+
+const DescriptionGroupContext = createContext(false);
 
 /**
  * A single labeled row within a {@link Description} container, supporting both horizontal (side-by-side label/value) and vertical (stacked) layouts.
@@ -185,18 +189,59 @@ export const Description: React.FC<
     loadingRows?: number;
   }>
 > = ({ children, className, nested = false, loading = false, loadingRows = 4 }) => {
+  const inGroup = useContext(DescriptionGroupContext);
+
   return (
     <div
       data-slot="description"
       className={cn(
         'relative flex flex-col bg-card',
-        nested
-          ? 'w-full overflow-hidden rounded-md border border-border'
-          : 'size-full overflow-y-auto rounded-lg border border-border shadow-card ring-1 ring-border-weak',
+        inGroup
+          ? 'border-b border-b-border last:border-b-0'
+          : nested
+            ? 'w-full overflow-hidden rounded-md border border-border'
+            : 'size-full overflow-y-auto rounded-lg border border-border shadow-card ring-1 ring-border-weak',
         className
       )}
     >
       {loading ? <DescriptionLoadingSkeleton rows={loadingRows} /> : children}
     </div>
+  );
+};
+
+/**
+ * A scrollable container that groups multiple {@link Description} blocks and makes each
+ * {@link DescriptionHeader} sticky. As you scroll, the next section header stacks above
+ * (pushes out) the previous one — standard CSS sticky behaviour within a single scroll context.
+ *
+ * @example
+ * import { DescriptionGroup, Description, DescriptionHeader, DescriptionItem } from '@customafk/lunas-ui/features/descriptions';
+ *
+ * <DescriptionGroup>
+ *   <Description>
+ *     <DescriptionHeader title="Personal info" />
+ *     <DescriptionItem label="Name">John Doe</DescriptionItem>
+ *   </Description>
+ *   <Description>
+ *     <DescriptionHeader title="Contact" />
+ *     <DescriptionItem label="Email">john@example.com</DescriptionItem>
+ *   </Description>
+ * </DescriptionGroup>
+ */
+export const DescriptionGroup: React.FC<
+  React.PropsWithChildren<{
+    /** Additional CSS class names applied to the group wrapper. */
+    className?: string;
+  }>
+> = ({ children, className }) => {
+  return (
+    <DescriptionGroupContext.Provider value={true}>
+      <div
+        data-slot="description-group"
+        className={cn('relative size-full overflow-y-auto rounded-lg border border-border bg-card shadow-card ring-1 ring-border-weak', className)}
+      >
+        {children}
+      </div>
+    </DescriptionGroupContext.Provider>
   );
 };

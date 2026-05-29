@@ -6,7 +6,7 @@ import type { RowSelectionState } from '@tanstack/react-table';
 
 import { sleep } from '@customafk/react-toolkit/utils/sleep';
 
-import type { CsvCell, TUITableColumn } from '@/components/features/tables';
+import type { ActiveFilter, CsvCell, FilterDefinition, TUITableColumn } from '@/components/features/tables';
 import {
   UITableBooleanDisplay,
   UITableContainer,
@@ -124,10 +124,14 @@ export const WithFilterPanel: Story = {
     totalRows: MockDataTables.length,
     leftPinnedColumns: ['column_1'],
     rightPinnedColumns: ['column_13'],
+    filterDefinitions: [
+      { id: 'column_2', label: 'Column 2', type: 'text' },
+      { id: 'column_4', label: 'Column 4', type: 'number' },
+    ],
   },
   render: ({ children: _children, ...args }) => (
     <div className="h-[calc(100vh-4rem)] w-full">
-      <UITableProvider {...args}>
+      <UITableProvider {...args} onFilterChange={filters => console.log('filters:', filters)}>
         <UITableWrapper>
           <UITableTooltip>
             <UITableTooltipFilter onSearch={value => console.log('search:', value)} />
@@ -314,4 +318,101 @@ export const Minimal: Story = {
       </UITableProvider>
     </div>
   ),
+};
+
+// ─── With Advanced Filters ────────────────────────────────────────────────────
+
+/**
+ * All five filter types — Tag, Date Range, Number, Text, Boolean — wired to
+ * the Users dataset.  Use the "Filters" tab in the side panel to add filters.
+ * Active filter state is reflected in the debug panel below the table.
+ */
+
+const USER_FILTER_DEFINITIONS: FilterDefinition[] = [
+  {
+    id: 'status',
+    label: 'Status',
+    type: 'tag',
+    options: [
+      { label: 'Active', value: 'active' },
+      { label: 'Inactive', value: 'inactive' },
+      { label: 'Pending', value: 'pending' },
+      { label: 'Invited', value: 'invited' },
+    ],
+  },
+  {
+    id: 'role',
+    label: 'Role',
+    type: 'tag',
+    options: [
+      { label: 'Admin', value: 'admin' },
+      { label: 'Developer', value: 'developer' },
+      { label: 'Designer', value: 'designer' },
+      { label: 'Manager', value: 'manager' },
+    ],
+  },
+  { id: 'name', label: 'Name', type: 'text' },
+  { id: 'salary', label: 'Salary', type: 'number' },
+  { id: 'active', label: 'Is Active', type: 'boolean' },
+  { id: 'joined', label: 'Joined Date', type: 'date-range' },
+];
+
+export const WithAdvancedFilters: Story = {
+  name: 'With Advanced Filters',
+  render: () => {
+    const [activeFilters, setActiveFilters] = useState<ActiveFilter[]>([]);
+
+    return (
+      <div className="flex h-[calc(100vh-4rem)] w-full flex-col gap-2">
+        {/* Active filter debug panel */}
+        <div className="shrink-0 rounded-md border border-border bg-card px-4 py-2.5">
+          <div className="flex items-center gap-3">
+            <span className="text-sm font-medium text-text-positive text-nowrap shrink-0">Active filters</span>
+            {activeFilters.length === 0 ? (
+              <span className="text-xs text-text-positive-muted">None — open the Filters tab and click Add Filter</span>
+            ) : (
+              <div className="flex flex-wrap gap-2 w-full">
+                {activeFilters.map(f => {
+                  const def = USER_FILTER_DEFINITIONS.find(d => d.id === f.definitionId);
+                  return (
+                    <span
+                      key={f.id}
+                      className="inline-flex flex-1 items-center gap-1 rounded-full bg-primary-bg-subtle px-2.5 py-0.5 text-xs font-medium text-primary-intense"
+                    >
+                      {def?.label ?? f.definitionId}
+                      <span className="text-primary-weak">·</span>
+                      <span className="font-normal opacity-75 flex-1">{JSON.stringify(f.value)}</span>
+                    </span>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Table */}
+        <div className="min-h-0 flex-1">
+          <UITableProvider<TUser>
+            title="Users"
+            columns={UserColumns}
+            data={UserData}
+            totalRows={UserData.length}
+            leftPinnedColumns={['name']}
+            filterDefinitions={USER_FILTER_DEFINITIONS}
+            onFilterChange={setActiveFilters}
+          >
+            <UITableWrapper>
+              <UITableTooltip>
+                <UITableTooltipFilter onSearch={v => console.log('search:', v)} />
+                <UITableTooltipActions />
+              </UITableTooltip>
+              <UITableContainer>
+                <UITableFilter />
+              </UITableContainer>
+            </UITableWrapper>
+          </UITableProvider>
+        </div>
+      </div>
+    );
+  },
 };

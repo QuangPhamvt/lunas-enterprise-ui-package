@@ -83,7 +83,7 @@ export const UITableContainer: React.FC<React.PropsWithChildren> = ({ children }
       </ResizablePanel>
       {children && (
         <>
-          <ResizableHandle withHandle />
+          <ResizableHandle />
           {children}
         </>
       )}
