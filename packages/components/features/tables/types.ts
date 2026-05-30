@@ -34,6 +34,10 @@ export type TUITableEmptyDisplay = {
   isFetching?: boolean;
   /** When `true` (and `isFetching` is `false`) the "No data available" illustration is shown. */
   isEmpty?: boolean;
+  /** When `true` a "Refetching data..." message is shown below the spinner to indicate a background refresh. */
+  isRefetching?: boolean;
+  /** CSS height of the overlay container. Defaults to `384px` (`min-h-96`) when omitted. */
+  height?: React.CSSProperties['height'];
 };
 
 /** Props for `UITableWrapper` — all native `<div>` attributes are forwarded. */
@@ -235,11 +239,20 @@ export type TTableContext<TData extends RowData<TData>> = {
   /** `true` while a background refetch is running (data is already present). */
   isRefetching?: boolean;
 
+  /** `true` while any data fetch is in-flight; deprecated in favor of `isFetching` and `isRefetching`. */
+  isLoading?: boolean;
+
+  /** The rows currently visible when loading data */
+  loadingDisplayRow?: number;
+
   /** Total number of rows in the remote dataset, used for virtual scroll height. */
   totalRows?: number;
 
   /** Callback that loads the next page; forwarded to `UITableLoadMore`. */
   fetchMoreData?: () => void | Promise<void>;
+
+  /** CSS height of the `UITableEmptyDisplay` overlay. Defaults to `384px` when omitted. */
+  emptyDisplayHeight?: React.CSSProperties['height'];
 
   /** CSV export rows; each row is an ordered array of `{ label, value }` cells. */
   csvData?: CsvCell[][];
@@ -286,6 +299,8 @@ export type TTableHeadRowContext = {
 export type TTableBodyContext = {
   /** `true` while data is loading; causes `UITableBody` to render `null`. */
   isFetching: boolean;
+  /** `true` while a background refetch is running; passed to `UITableEmptyDisplay`. */
+  isRefetching: boolean;
   /** `true` when there are no rows after a successful fetch. */
   isEmpty: boolean;
   /** The current `Record<rowId, boolean>` row-selection map from TanStack state. */
@@ -352,6 +367,12 @@ export type TableProviderProps<
   /** Pass `true` while a background refetch is running (stale data remains visible). */
   isRefetching?: boolean;
 
+  /** Pass `true` while any data fetch is in-flight; deprecated in favor of `isFetching` and `isRefetching`. */
+  isLoading?: boolean; // deprecated in favor of isFetching
+
+  /** The rows currently visible when loading data */
+  loadingDisplayRow?: number;
+
   /** The current page / slice of row data. */
   data: TData[];
   /** Typed column definitions; use `TUITableColumn<TData>` for full type safety. */
@@ -377,6 +398,9 @@ export type TableProviderProps<
   onRowSelection?: (rowSelection: RowSelectionState) => void;
   /** Called with the updated column-pinning state after each pin/unpin action. */
   onColumnPinning?: (columnPinning: ColumnPinningState) => void;
+
+  /** CSS height of the `UITableEmptyDisplay` overlay. Defaults to `384px` when omitted. */
+  emptyDisplayHeight?: React.CSSProperties['height'];
 
   /** CSV export rows; each row is an ordered array of `{ label, value }` cells. */
   csvData?: CsvCell[][];

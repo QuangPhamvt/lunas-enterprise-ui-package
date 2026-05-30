@@ -61,6 +61,7 @@ export const Default: Story = {
     totalRows: MockDataTables.length + 2,
     isFetching: false,
     isRefetching: false,
+    isLoading: false,
     fetchMoreData: async () => {
       await sleep(2000);
       console.log('Fetch more data...');
@@ -83,6 +84,8 @@ export const Loading: Story = {
     columns: MockDataColumns,
     data: [],
     isFetching: true,
+    isRefetching: true,
+    loadingDisplayRow: 5,
   },
   render: ({ children: _children, ...args }) => <TableShell {...args} />,
 };
@@ -109,6 +112,7 @@ export const Refetching: Story = {
     totalRows: MockDataTables.length,
     isFetching: false,
     isRefetching: true,
+    loadingDisplayRow: 5,
   },
   render: ({ children: _children, ...args }) => <TableShell {...args} />,
 };

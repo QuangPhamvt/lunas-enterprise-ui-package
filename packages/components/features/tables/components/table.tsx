@@ -7,9 +7,10 @@ import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/componen
 
 import { useUITableBodyContext, useUITableContext } from '../hooks/use-context';
 import { UITableBody, UITableEmptyDisplay, UITableHead, UITableHeadRow, UITableInnerTable, UITableInnerWrapper, UITableLoadMore, UITableRow } from './common';
+import { UITableLoadingDisplay } from './commons/empty-display';
 
 export const UITableContainer: React.FC<React.PropsWithChildren> = ({ children }) => {
-  const { table, isEmpty, isFetching, fetchMoreData } = useUITableContext();
+  const { table, isEmpty, isFetching, fetchMoreData, emptyDisplayHeight } = useUITableContext();
   const { rowSelectionState } = useUITableBodyContext();
 
   const tableContainerRef = useRef<HTMLDivElement | null>(null);
@@ -77,8 +78,9 @@ export const UITableContainer: React.FC<React.PropsWithChildren> = ({ children }
                 );
               })}
             </UITableBody>
+            <UITableLoadingDisplay />
           </UITableInnerTable>
-          <UITableEmptyDisplay isEmpty={isEmpty} isFetching={isFetching} />
+          <UITableEmptyDisplay />
         </UITableInnerWrapper>
       </ResizablePanel>
       {children && (
