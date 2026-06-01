@@ -10,6 +10,7 @@
 @import "../styles/theme.css";
 @import "../styles/loader.css";
 @import "../styles/typography.css";
+@import "../styles/text-editor.css";
 
 :root {
   --header-height: 3rem;

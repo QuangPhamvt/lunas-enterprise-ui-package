@@ -94,8 +94,8 @@ UITableHeadRowProvider.displayName = 'UITableHeadRowProvider';
  * Provides loading/empty state and the current row-selection map to the table
  * body layer via `TableBodyContext`.
  */
-const UITableBodyProvider = memo<React.PropsWithChildren<TTableBodyContext>>(({ isFetching, isEmpty, rowSelectionState, children }) => {
-  const value = useMemo<TTableBodyContext>(() => ({ isFetching, isEmpty, rowSelectionState }), [isFetching, isEmpty, rowSelectionState]);
+const UITableBodyProvider = memo<React.PropsWithChildren<TTableBodyContext>>(({ isFetching, isRefetching, isEmpty, rowSelectionState, children }) => {
+  const value = useMemo<TTableBodyContext>(() => ({ isFetching, isRefetching, isEmpty, rowSelectionState }), [isFetching, isEmpty, rowSelectionState]);
   return <TableBodyContext.Provider value={value}>{children}</TableBodyContext.Provider>;
 });
 UITableBodyProvider.displayName = 'UITableBodyProvider';
@@ -163,6 +163,8 @@ export const UITableProvider = <
 
   isFetching = false,
   isRefetching = false,
+  isLoading = false,
+  loadingDisplayRow = 3,
 
   data,
   columns,
@@ -177,6 +179,7 @@ export const UITableProvider = <
   onColumnPinning,
 
   fetchMoreData,
+  emptyDisplayHeight,
   csvData,
   csvFileName,
 
@@ -307,8 +310,8 @@ export const UITableProvider = <
   }, [table.getRowModel().rows, table.getState().columnPinning]);
 
   const isEmpty = useMemo<boolean>(() => {
-    return !isFetching && rows.length === 0;
-  }, [rows, isFetching]);
+    return !isFetching && !isRefetching && rows.length === 0;
+  }, [rows, isFetching, isRefetching]);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: table get state
   const value = useMemo<TTableContext<TData>>(
@@ -319,10 +322,13 @@ export const UITableProvider = <
       isEmpty,
       isFetching,
       isRefetching,
+      isLoading,
+      loadingDisplayRow,
 
       totalRows,
 
       fetchMoreData,
+      emptyDisplayHeight,
 
       csvData,
       csvFileName,
@@ -334,10 +340,13 @@ export const UITableProvider = <
       isEmpty,
       isRefetching,
       isFetching,
+      isLoading,
+      loadingDisplayRow,
 
       totalRows,
 
       fetchMoreData,
+      emptyDisplayHeight,
       table.getState().columnPinning,
       table.getState().expanded,
 
@@ -391,7 +400,7 @@ export const UITableProvider = <
               rightPinnedHeaders={rightPinnedHeaders}
               onToggleAllRowsSelected={table.toggleAllRowsSelected}
             >
-              <UITableBodyProvider isFetching={isFetching} isEmpty={isEmpty} rowSelectionState={rowSelectionState}>
+              <UITableBodyProvider isFetching={isFetching} isRefetching={isRefetching} isEmpty={isEmpty} rowSelectionState={rowSelectionState}>
                 <UITableRowProvider
                   keyOfClickRow={keyOfClickRow}
                   isAllRowsSelected={isAllRowsSelected}

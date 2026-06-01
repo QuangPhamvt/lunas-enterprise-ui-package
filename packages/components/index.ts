@@ -37,6 +37,8 @@ export * from './features/descriptions/components';
 export { SearchModal } from './features/search-modal/index';
 export * from './features/tables/index';
 export * from './features/tanstack-form/index';
+export { TextEditor, TextEditorToolbar } from './features/text-editor/index';
+export type { TextEditorProps, TextEditorToolbarProps } from './features/text-editor/index';
 
 // ─── Layouts ──────────────────────────────────────────────────────────────────
 export * from './layouts/cms-layout/index';
