@@ -311,7 +311,7 @@ export const UITableProvider = <
 
   const isEmpty = useMemo<boolean>(() => {
     return !isFetching && !isRefetching && rows.length === 0;
-  }, [rows.length, isFetching, isRefetching]);
+  }, [rows, isFetching, isRefetching]);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: table get state
   const value = useMemo<TTableContext<TData>>(

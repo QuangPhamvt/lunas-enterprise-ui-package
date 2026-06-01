@@ -20,8 +20,8 @@ import { PINNED_COLUMN_Z_INDEX, SELECT_WIDTH } from '../../constants';
 import type { AnyEntity } from '@/types';
 
 export const UITableLoadingDisplay = memo<TUITableEmptyDisplay>(() => {
-  const { table, isEmpty, loadingDisplayRow = 3 } = useUITableContext();
-  if (isEmpty) return null;
+  const { table, isFetching, isRefetching, loadingDisplayRow = 3 } = useUITableContext();
+  if (!isFetching && !isRefetching) return null;
   return (
     <tbody className={cn(tableBodyVariants(), 'pointer-events-none')}>
       {Array.from({ length: loadingDisplayRow }).map((_, index) => (

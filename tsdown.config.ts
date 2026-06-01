@@ -30,6 +30,7 @@ export default defineConfig([
       './packages/components/features/search-modal/index.tsx',
       './packages/components/features/tables/index.tsx',
       './packages/components/features/tanstack-form/index.tsx',
+      './packages/components/features/text-editor/index.tsx',
 
       './packages/components/layouts/cms-layout/index.tsx',
       './packages/components/layouts/payment-layout/index.tsx',
