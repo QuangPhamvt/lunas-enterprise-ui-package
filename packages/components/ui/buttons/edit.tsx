@@ -4,7 +4,7 @@ import { Button } from '../button';
 
 type Props = {
   /** Callback invoked when the button is clicked. */
-  onClick?: () => void;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
 };
 
 /**

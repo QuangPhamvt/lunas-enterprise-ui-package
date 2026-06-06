@@ -10,7 +10,7 @@ import { UITableBody, UITableEmptyDisplay, UITableHead, UITableHeadRow, UITableI
 import { UITableLoadingDisplay } from './commons/empty-display';
 
 export const UITableContainer: React.FC<React.PropsWithChildren> = ({ children }) => {
-  const { table, isEmpty, isFetching, fetchMoreData, emptyDisplayHeight } = useUITableContext();
+  const { table, fetchMoreData } = useUITableContext();
   const { rowSelectionState } = useUITableBodyContext();
 
   const tableContainerRef = useRef<HTMLDivElement | null>(null);

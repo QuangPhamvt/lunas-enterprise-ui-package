@@ -15,6 +15,16 @@ import {
   SidebarProvider,
 } from './components/sidebar';
 
+export type PaymentLayoutUser = {
+  uuid?: string;
+  /** Display name shown in the header and dropdown. */
+  fullname: string;
+  /** Email address shown in the user dropdown. */
+  email: string;
+  /** Optional avatar image URL; falls back to initials when omitted. */
+  avatar?: string;
+};
+
 /**
  * Full-page payment application shell with a collapsible inset sidebar and a fixed header.
  *
@@ -36,6 +46,9 @@ import {
  *       },
  *     ],
  *   }}
+ *   user={{ fullname: 'Nguyen Van A', email: 'a@example.com' }}
+ *   onLogin={() => setLoginOpen(true)}
+ *   onLogout={() => authService.logout()}
  * >
  *   <TransactionsPage />
  * </PaymentLayout>
@@ -64,16 +77,21 @@ export const PaymentLayout: React.FC<
         }[];
       }[];
     };
-    /** Reserved for a future logout action (currently unused in the rendered output). */
+    /** Authenticated user; when provided the header shows user info and a logout option, otherwise a login button. */
+    user?: PaymentLayoutUser | null;
+    /** Called when the login button in the header is clicked (only shown when `user` is absent). */
+    onLogin?: () => void;
+    /** Called when the logout item in the user dropdown is clicked. */
     onLogout?: () => void;
   }>
-> = ({ activeNavItemId, sidebar, children }) => {
+> = ({ activeNavItemId, sidebar, user, onLogin, onLogout, children }) => {
   const groupcontent = useMemo(() => {
     return sidebar?.groupcontent || [];
   }, [sidebar]);
+
   return (
     <SidebarProvider>
-      <PaymentLayoutHeader />
+      <PaymentLayoutHeader user={user} onLogin={onLogin} onLogout={onLogout} />
 
       <Sidebar variant="inset" collapsible="icon">
         <SidebarContent>
@@ -108,19 +126,6 @@ export const PaymentLayout: React.FC<
         </SidebarContent>
         <SidebarFooter>
           <SidebarMenu>
-            {/*<SidebarMenuItem>
-              <SidebarMenuButton
-                className="border border-border"
-                onClick={event => {
-                  onLogout?.();
-                  event.preventDefault();
-                  event.stopPropagation();
-                }}
-              >
-                <LogOutIcon className="text-text-positive-weak" />
-                Đăng xuất
-              </SidebarMenuButton>
-            </SidebarMenuItem>*/}
             <SidebarMenuItem className="mt-2 border-t border-t-border">
               <p className="pt-2 text-center text-muted-foreground text-xs">Copyright © 2025, Lunas.</p>
             </SidebarMenuItem>

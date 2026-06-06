@@ -52,6 +52,12 @@ export { FeatureFixing } from './pages/FeatureFixing';
 export { NotAuthorized } from './pages/NotAuthorized';
 export { NotFound } from './pages/NotFound';
 export type { NotFoundProps } from './pages/NotFound';
+export { LoginPage } from './pages/LoginPage';
+export type { LoginPageProps } from './pages/LoginPage';
+export { RegisterPage } from './pages/RegisterPage';
+export type { RegisterPageProps } from './pages/RegisterPage';
+export { VerifyEmailPage } from './pages/VerifyEmailPage';
+export type { VerifyEmailPageProps } from './pages/VerifyEmailPage';
 
 // ─── Systems ──────────────────────────────────────────────────────────────────
 export * from './systems/google';

@@ -415,7 +415,7 @@ export type TableProviderProps<
 
 // ============ Filter system ============
 
-export type FilterType = 'tag' | 'date-range' | 'number' | 'text' | 'boolean';
+export type FilterType = 'tag' | 'single-tag' | 'date-range' | 'number' | 'text' | 'boolean';
 
 /** A selectable option for tag/enum filters. */
 export type FilterOption = { label: string; value: string };
@@ -432,6 +432,8 @@ export type FilterDefinition = {
 };
 
 export type TagFilterValue = { type: 'tag'; values: string[] };
+
+export type SingleTagFilterValue = { type: 'single-tag'; value: string | null };
 
 export type DateRangeFilterValue = {
   type: 'date-range';
@@ -455,7 +457,7 @@ export type TextFilterValue = {
 
 export type BooleanFilterValue = { type: 'boolean'; value: boolean | null };
 
-export type FilterValue = TagFilterValue | DateRangeFilterValue | NumberFilterValue | TextFilterValue | BooleanFilterValue;
+export type FilterValue = TagFilterValue | SingleTagFilterValue | DateRangeFilterValue | NumberFilterValue | TextFilterValue | BooleanFilterValue;
 
 /** An active (added) filter instance with its current value. */
 export type ActiveFilter = {

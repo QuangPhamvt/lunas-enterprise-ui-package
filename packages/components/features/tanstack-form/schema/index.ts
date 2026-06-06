@@ -5,6 +5,7 @@ import {
   TanStackFormNumberFieldSchema,
   TanStackFormPasswordFieldSchema,
   TanStackFormTextAreaFieldSchema,
+  TanStackFormTextEditorFieldSchema,
   TanStackFormTextFieldSchema,
 } from './input-field.schema';
 import {
@@ -31,6 +32,7 @@ export const TanStackFormSectionSchema = z.object({
       // Input Fields
       TanStackFormTextFieldSchema,
       TanStackFormTextAreaFieldSchema,
+      TanStackFormTextEditorFieldSchema,
       TanStackFormNumberFieldSchema,
       TanStackFormEmailFieldSchema,
       TanStackFormPasswordFieldSchema,
