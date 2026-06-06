@@ -1,6 +1,10 @@
 import { createFormHook, createFormHookContexts } from '@tanstack/react-form';
 
-import { SimpleArrayField } from './components/atoms/simple-array-field';
+import { ArrayCol, ArrayHeaderRow, SimpleArrayField } from './components/atoms/simple-array-field';
+import { SimpleBooleanField } from './components/atoms/simple-boolean-field';
+import { SimpleComboboxField } from './components/atoms/simple-combobox-field';
+import { SimpleDateField } from './components/atoms/simple-date-field';
+import { SimpleRadioGroupField } from './components/atoms/simple-radio-group-field';
 import { SimpleEmailField } from './components/atoms/simple-email-field';
 import { SimpleNumberField } from './components/atoms/simple-number-field';
 import { SimplePasswordField } from './components/atoms/simple-password-field';
@@ -117,6 +121,10 @@ const {
     SimpleNumberField,
     SimpleSelectField,
     SimpleArrayField,
+    SimpleBooleanField,
+    SimpleComboboxField,
+    SimpleDateField,
+    SimpleRadioGroupField,
 
     FieldGroup,
     Field,
@@ -137,6 +145,9 @@ const {
 
     TanStackActionsForm,
     TanStackActionSubmit,
+
+    ArrayCol,
+    ArrayHeaderRow,
   },
 });
 

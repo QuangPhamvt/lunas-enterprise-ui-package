@@ -52,7 +52,7 @@ export const UITableCell = memo<TUITableCell>(
       const currentSize = column?.getSize();
 
       if (currentSize != null && width > currentSize) {
-        if (tableRef.current instanceof HTMLTableElement && typeof colId === 'string' && !!(column?.columnDef.meta as AnyEntity)?.['fitContent']) {
+        if (tableRef.current instanceof HTMLTableElement && typeof colId === 'string' && (column?.columnDef.meta as AnyEntity)?.['fitContent']) {
           table.setColumnSizing(old => ({
             ...old,
             [colId]: width + 32,

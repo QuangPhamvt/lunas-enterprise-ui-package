@@ -15,7 +15,7 @@ import { useTanStackFieldContext } from '../../tanstack-form';
 import { FieldError } from '../ui/field';
 
 type Props = {
-  label: string;
+  label?: string;
   placeholder?: string;
   required?: boolean;
   maxLength?: number;
@@ -41,10 +41,12 @@ export const SimpleEmailField: React.FC<Props> = ({ label, placeholder, required
 
   return (
     <div className="flex flex-col gap-1.5">
-      <Label htmlFor={id}>
-        {label}
-        {required && <span className="text-danger-strong">*</span>}
-      </Label>
+      {label && (
+        <Label htmlFor={id}>
+          {label}
+          {required && <span className="text-danger-strong">*</span>}
+        </Label>
+      )}
       <div className="relative">
         <Input
           id={id}

@@ -68,6 +68,43 @@ export const Default: Story = {
   },
 };
 
+export const Mobile: Story = {
+  render: () => {
+    const { AppField, TanStackContainerForm, TanStackSectionForm } = useTanStackForm({
+      defaultValues: {
+        value: '',
+      },
+    });
+    return (
+      <TanStackContainerForm>
+        <TanStackSectionForm title="Select Field — Mobile Drawer">
+          <AppField
+            name="value"
+            children={({ SelectField }) => (
+              <SelectField
+                label="Select Field"
+                description="On mobile this opens a bottom drawer."
+                placeholder="Select an option"
+                orientation="responsive"
+                options={[
+                  { label: 'Option 1', value: 'option_1' },
+                  { label: 'Option 2', value: 'option_2' },
+                  { label: 'Option 3', value: 'option_3' },
+                  { label: 'Option 4', value: 'option_4' },
+                  { label: 'Option 5', value: 'option_5' },
+                ]}
+              />
+            )}
+          />
+        </TanStackSectionForm>
+      </TanStackContainerForm>
+    );
+  },
+  parameters: {
+    viewport: { defaultViewport: 'iphonex' },
+  },
+};
+
 export const Submitting: Story = {
   render: () => {
     const { AppField, TanStackContainerForm, TanStackSectionForm } = useTanStackForm({
