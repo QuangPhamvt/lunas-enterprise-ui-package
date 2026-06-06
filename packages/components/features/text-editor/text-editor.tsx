@@ -42,9 +42,6 @@ function TextEditor({
       onChange?.(e.getHTML());
     },
   });
-  console.log('editor', editor);
-  console.log('editor', editor.isActive('heading', { level: 1 }));
-  console.log('editor', editor.isActive('paragraph'));
 
   // Sync controlled value into the editor without re-triggering onChange
   useEffect(() => {

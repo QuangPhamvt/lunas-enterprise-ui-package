@@ -42,6 +42,8 @@ function createDefaultFilterValue(type: FilterType): FilterValue {
   switch (type) {
     case 'tag':
       return { type: 'tag', values: [] };
+    case 'single-tag':
+      return { type: 'single-tag', value: null };
     case 'date-range':
       return { type: 'date-range' };
     case 'number':

@@ -327,7 +327,7 @@ export const Minimal: Story = {
 // ─── With Advanced Filters ────────────────────────────────────────────────────
 
 /**
- * All five filter types — Tag, Date Range, Number, Text, Boolean — wired to
+ * All six filter types — Tag, Single Tag, Date Range, Number, Text, Boolean — wired to
  * the Users dataset.  Use the "Filters" tab in the side panel to add filters.
  * Active filter state is reflected in the debug panel below the table.
  */
@@ -348,6 +348,17 @@ const USER_FILTER_DEFINITIONS: FilterDefinition[] = [
     id: 'role',
     label: 'Role',
     type: 'tag',
+    options: [
+      { label: 'Admin', value: 'admin' },
+      { label: 'Developer', value: 'developer' },
+      { label: 'Designer', value: 'designer' },
+      { label: 'Manager', value: 'manager' },
+    ],
+  },
+  {
+    id: 'primary_role',
+    label: 'Primary Role',
+    type: 'single-tag',
     options: [
       { label: 'Admin', value: 'admin' },
       { label: 'Developer', value: 'developer' },

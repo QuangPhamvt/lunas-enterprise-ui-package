@@ -7,7 +7,7 @@
  */
 import { Activity, useState } from 'react';
 
-import { CalendarIcon, Columns4Icon, HashIcon, ListFilterIcon, ListFilterPlus, TagIcon, ToggleLeftIcon, Trash2Icon, TypeIcon, XIcon } from 'lucide-react';
+import { CalendarIcon, HashIcon, ListFilterIcon, ListFilterPlus, TagIcon, ToggleLeftIcon, Trash2Icon, TypeIcon } from 'lucide-react';
 
 import { cn } from '@customafk/react-toolkit/utils';
 
@@ -20,7 +20,7 @@ import { ResizablePanel } from '@/components/ui/resizable';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
 
-import { useUITableContext, useUITableFilterContext } from '../../hooks/use-context';
+import { useUITableFilterContext } from '../../hooks/use-context';
 import type {
   ActiveFilter,
   BooleanFilterValue,
@@ -29,6 +29,7 @@ import type {
   FilterType,
   FilterValue,
   NumberFilterValue,
+  SingleTagFilterValue,
   TagFilterValue,
   TextFilterValue,
 } from '../../types';
@@ -38,6 +39,7 @@ import { Label } from '@/components/ui/label';
 
 const TYPE_ICONS: Record<FilterType, React.ReactNode> = {
   tag: <TagIcon size={14} />,
+  'single-tag': <TagIcon size={14} />,
   'date-range': <CalendarIcon size={14} />,
   number: <HashIcon size={14} />,
   text: <TypeIcon size={14} />,
@@ -67,6 +69,10 @@ const TEXT_OPERATORS: { value: TextFilterValue['operator']; label: string }[] = 
 
 function formatFilterValue(value: FilterValue, def: FilterDefinition): string {
   switch (value.type) {
+    case 'single-tag': {
+      if (!value.value) return 'Unset';
+      return def.options?.find(o => o.value === value.value)?.label ?? value.value;
+    }
     case 'tag': {
       if (!value.values.length) return 'Unset';
       return value.values.map(v => def.options?.find(o => o.value === v)?.label ?? v).join(', ');
@@ -122,6 +128,36 @@ const TagFilterEditor: React.FC<{
             onCheckedChange={checked => {
               const next = checked ? [...value.values, option.value] : value.values.filter(v => v !== option.value);
               onChange({ type: 'tag', values: next });
+            }}
+          />
+          <span className="text-sm">{option.label}</span>
+        </Label>
+      ))
+    )}
+  </div>
+);
+
+const SingleTagFilterEditor: React.FC<{
+  value: SingleTagFilterValue;
+  definition: FilterDefinition;
+  onChange: (v: SingleTagFilterValue) => void;
+}> = ({ value, definition, onChange }) => (
+  <div className="flex flex-col gap-1 p-3">
+    {(definition.options ?? []).length === 0 ? (
+      <p className="text-xs text-text-positive-muted">No options defined</p>
+    ) : (
+      definition.options!.map(option => (
+        <Label
+          key={option.value}
+          className={cn(
+            'flex items-center gap-2 bg-secondary-bg-subtle hover:bg-secondary-muted px-4 py-2 rounded transition-colors',
+            value.value === option.value && 'bg-primary-muted hover:bg-primary-subtle'
+          )}
+        >
+          <Checkbox
+            checked={value.value === option.value}
+            onCheckedChange={checked => {
+              onChange({ type: 'single-tag', value: checked ? option.value : null });
             }}
           />
           <span className="text-sm">{option.label}</span>
@@ -237,6 +273,8 @@ function FilterEditor({ value, definition, onChange }: { value: FilterValue; def
   switch (value.type) {
     case 'tag':
       return <TagFilterEditor value={value} definition={definition} onChange={onChange} />;
+    case 'single-tag':
+      return <SingleTagFilterEditor value={value} definition={definition} onChange={onChange} />;
     case 'date-range':
       return <DateRangeFilterEditor value={value} onChange={onChange} />;
     case 'number':
@@ -288,16 +326,16 @@ const FilterItem: React.FC<{
 
 // ── column visibility row ──────────────────────────────────────────────────────
 
-const ColumnVisibility: React.FC<{
-  checked: boolean;
-  title: string;
-  onCheckedChange?: (checked: boolean) => void;
-}> = ({ checked, title, onCheckedChange }) => (
-  <div className="flex h-fit items-center gap-2">
-    <Checkbox checked={checked} onCheckedChange={onCheckedChange} />
-    <p className="text-sm">{title}</p>
-  </div>
-);
+// const ColumnVisibility: React.FC<{
+//   checked: boolean;
+//   title: string;
+//   onCheckedChange?: (checked: boolean) => void;
+// }> = ({ checked, title, onCheckedChange }) => (
+//   <Label>
+//     <Checkbox checked={checked} onCheckedChange={onCheckedChange} />
+//     <p className="text-sm">{title}</p>
+//   </Label>
+// );
 
 // ── main component ─────────────────────────────────────────────────────────────
 
@@ -330,7 +368,7 @@ const ColumnVisibility: React.FC<{
  * ```
  */
 export const UITableFilter = () => {
-  const { table } = useUITableContext();
+  // const { table } = useUITableContext();
   const { filterDefinitions, activeFilters, addFilter, removeFilter, updateFilter } = useUITableFilterContext();
 
   const [tab, setTab] = useState<'columns' | 'filters' | null>(null);
@@ -342,7 +380,7 @@ export const UITableFilter = () => {
       <div className="relative z-20 flex size-full bg-muted-bg-subtle">
         <div className="min-w-0 flex-1 overflow-hidden">
           {/* Columns tab */}
-          <Activity mode={tab === 'columns' ? 'visible' : 'hidden'}>
+          {/*<Activity mode={tab === 'columns' ? 'visible' : 'hidden'}>
             <div className="flex size-full flex-col gap-2 p-4">
               <p className="px-2 font-medium">Columns Visibility</p>
               <Separator />
@@ -360,7 +398,7 @@ export const UITableFilter = () => {
                 })}
               </div>
             </div>
-          </Activity>
+          </Activity>*/}
 
           {/* Filters tab */}
           <Activity mode={tab === 'filters' ? 'visible' : 'hidden'}>
@@ -410,7 +448,7 @@ export const UITableFilter = () => {
 
         {/* Vertical tab strip */}
         <div className="flex h-full flex-col border-l border-border bg-muted-bg-subtle text-sm">
-          <button
+          {/*<button
             type="button"
             className={cn('flex h-32 cursor-pointer flex-col items-center gap-y-2 p-2 py-4', tab === 'columns' && 'bg-card')}
             onClick={() => setTab(tab === 'columns' ? null : 'columns')}
@@ -418,7 +456,7 @@ export const UITableFilter = () => {
             <Columns4Icon size={18} />
             <span className="text-nowrap [writing-mode:vertical-lr]">Columns</span>
           </button>
-          <Separator />
+          <Separator />*/}
           <button
             type="button"
             className={cn('relative flex h-32 cursor-pointer flex-col items-center gap-y-2 p-2 py-4', tab === 'filters' && 'bg-card')}

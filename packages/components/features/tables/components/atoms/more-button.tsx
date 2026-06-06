@@ -42,6 +42,7 @@ export const UITableMoreButton: React.FC<{
               className="px-3"
               onSelect={e => {
                 item.onClick(item.id);
+                e.preventDefault();
                 e.stopPropagation();
               }}
             >

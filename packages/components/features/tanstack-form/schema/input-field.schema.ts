@@ -170,3 +170,25 @@ export const TanStackFormPasswordFieldSchema = z.object({
   showClearButton: z.boolean().optional(),
   ...uiHelpersSchema.shape,
 });
+
+export const TanStackFormTextEditorFieldSchema = z.object({
+  id: z.string().nonempty(),
+  type: z.literal('text-editor-field'),
+
+  // Identifiers in form data
+  ...nameSchema.shape,
+
+  // UI
+  ...uiSchema.shape,
+
+  // UI Helpers
+  tooltip: z.string().optional(),
+  helperText: z.string().optional(),
+  showErrorMessage: z.boolean().optional(),
+
+  rules: z
+    .object({
+      required: z.boolean().optional(),
+    })
+    .optional(),
+});

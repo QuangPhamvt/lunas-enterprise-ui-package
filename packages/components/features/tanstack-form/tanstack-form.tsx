@@ -1,5 +1,12 @@
 import { createFormHook, createFormHookContexts } from '@tanstack/react-form';
 
+import { SimpleArrayField } from './components/atoms/simple-array-field';
+import { SimpleEmailField } from './components/atoms/simple-email-field';
+import { SimpleNumberField } from './components/atoms/simple-number-field';
+import { SimplePasswordField } from './components/atoms/simple-password-field';
+import { SimpleSelectField } from './components/atoms/simple-select-field';
+import { SimpleTextareaField } from './components/atoms/simple-textarea-field';
+import { SimpleTextField } from './components/atoms/simple-text-field';
 import { CheckboxField } from './components/fields/checkbox-field';
 import { ComboboxField } from './components/fields/combobox-field';
 import { DateField } from './components/fields/date-field';
@@ -11,6 +18,7 @@ import { SelectField } from './components/fields/select-field';
 import { SwitchField } from './components/fields/switch-field';
 import { TextField } from './components/fields/text-field';
 import { TextareaField } from './components/fields/textarea-field';
+import { TextEditorField } from './components/fields/text-editor-field';
 import { TanStackActionSubmit } from './components/forms/action-submit';
 import { TanStackActionsForm } from './components/forms/actions-form';
 import { TanStackCardForm } from './components/forms/card-form';
@@ -90,6 +98,7 @@ const {
   fieldComponents: {
     TextField,
     TextareaField,
+    TextEditorField,
     NumberField,
     EmailField,
     PasswordField,
@@ -100,6 +109,14 @@ const {
     SwitchField,
     RadioGroupField,
     CheckboxField,
+
+    SimpleTextField,
+    SimpleEmailField,
+    SimplePasswordField,
+    SimpleTextareaField,
+    SimpleNumberField,
+    SimpleSelectField,
+    SimpleArrayField,
 
     FieldGroup,
     Field,
