@@ -181,7 +181,7 @@ export const FormDialog: Story = {
           Open Form Dialog
         </Button>
         <AppForm>
-          <TanStackDialogForm title="Form Dialog Title" open={open} onOpenChange={setOpen}>
+          <TanStackDialogForm title="Form Dialog Title" width="100%" maxWidth="1200px" open={open} onOpenChange={setOpen}>
             <AppField
               name="textField"
               children={({ TextField }) => {

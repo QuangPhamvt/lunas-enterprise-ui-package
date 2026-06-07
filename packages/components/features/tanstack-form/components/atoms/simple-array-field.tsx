@@ -54,6 +54,39 @@ export function ArrayCol({ width, className, children }: ArrayColProps) {
   );
 }
 
+// ─── ArrayHeaderRow ────────────────────────────────────────────────────────
+
+type ArrayHeaderRowProps = {
+  className?: string;
+  children: React.ReactNode;
+};
+
+/**
+ * Styled header row for a `SimpleArrayField` table. Place it directly above
+ * `<SimpleArrayField>` and use `<ArrayCol>` children with text labels to align
+ * headers with their columns. A spacer matching the delete-button width is
+ * appended automatically.
+ *
+ * @example
+ * <ArrayHeaderRow>
+ *   <ArrayCol>Name</ArrayCol>
+ *   <ArrayCol width={96}>Price</ArrayCol>
+ *   <ArrayCol width={80}>Qty</ArrayCol>
+ * </ArrayHeaderRow>
+ * <SimpleArrayField defaultRow={...}>
+ *   {i => (...)}
+ * </SimpleArrayField>
+ */
+export function ArrayHeaderRow({ className, children }: ArrayHeaderRowProps) {
+  return (
+    <div data-slot="array-header-row" className={cn('mb-1 flex items-center gap-2 px-1 text-xs font-medium text-text-positive-weak', className)}>
+      {children}
+      {/* spacer matching the delete icon button width */}
+      <div className="min-w-8 w-8 shrink-0" />
+    </div>
+  );
+}
+
 // ─── SimpleArrayField ──────────────────────────────────────────────────────
 
 type Props<T> = {
@@ -118,19 +151,14 @@ export function SimpleArrayField<T>({ defaultRow, children, addLabel = 'Add row'
         // biome-ignore lint/suspicious/noArrayIndexKey: index is the stable identity for form rows
         <div key={i} className="flex items-start gap-2">
           {children(i)}
-          <button
-            type="button"
-            title="Remove row"
-            className="mt-auto mb-0.5 flex size-7 shrink-0 items-center justify-center rounded text-muted transition-colors hover:text-danger-strong"
-            onClick={() => removeRow(i)}
-          >
+          <Button type="button" size="icon" variant="ghost" color="danger" className="min-w-8" onClick={() => removeRow(i)}>
             <Trash2Icon size={14} />
-          </button>
+          </Button>
         </div>
       ))}
 
       <div>
-        <Button type="button" variant="ghost" color="muted" size="sm" className="gap-1.5" onClick={addRow}>
+        <Button type="button" variant="outline" color="muted" size="xs" onClick={addRow}>
           <PlusIcon size={13} />
           {addLabel}
         </Button>

@@ -88,6 +88,35 @@ export const WithTooltip: Story = {
   },
 };
 
+export const Mobile: Story = {
+  render: () => {
+    const { AppField, TanStackContainerForm, TanStackSectionForm } = useTanStackForm({
+      defaultValues: { value: null as string | null },
+    });
+    return (
+      <TanStackContainerForm>
+        <TanStackSectionForm title="Combobox Field — Mobile Drawer">
+          <AppField
+            name="value"
+            children={({ ComboboxField }) => (
+              <ComboboxField
+                label="Country"
+                description="On mobile this opens a bottom drawer with search."
+                placeholder="Search country…"
+                orientation="responsive"
+                options={COUNTRIES}
+              />
+            )}
+          />
+        </TanStackSectionForm>
+      </TanStackContainerForm>
+    );
+  },
+  parameters: {
+    viewport: { defaultViewport: 'iphonex' },
+  },
+};
+
 export const WithValidation: Story = {
   render: () => {
     const { AppField, TanStackContainerForm, TanStackSectionForm } = useTanStackForm({

@@ -1,5 +1,6 @@
 import type z from 'zod';
 
+import { Input } from '@/components/ui/input';
 import { useTanStackForm } from '@/components/features/tanstack-form';
 import {
   Field,
@@ -12,7 +13,6 @@ import {
   FieldSeparator,
   FieldSet,
 } from '@/components/features/tanstack-form/components/ui/field';
-import { Input } from '@/components/ui/input';
 import type { TanStackFormTextFieldSchema } from '@/components/features/tanstack-form/schema';
 
 import { useFormBuilderFieldContext } from '../form-buidler-form';

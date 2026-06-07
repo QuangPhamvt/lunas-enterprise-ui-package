@@ -11,7 +11,7 @@ import { useTanStackFieldContext } from '../../tanstack-form';
 import { FieldError } from '../ui/field';
 
 type Props = {
-  label: string;
+  label?: string;
   placeholder?: string;
   required?: boolean;
   unit?: string;
@@ -37,10 +37,12 @@ export const SimpleNumberField: React.FC<Props> = ({ label, placeholder, require
 
   return (
     <div className="flex flex-col gap-1.5">
-      <Label htmlFor={id}>
-        {label}
-        {required && <span className="text-danger-strong">*</span>}
-      </Label>
+      {label && (
+        <Label htmlFor={id}>
+          {label}
+          {required && <span className="text-danger-strong">*</span>}
+        </Label>
+      )}
       <NumberInput
         id={id}
         value={state.value}

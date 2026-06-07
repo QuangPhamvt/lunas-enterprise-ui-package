@@ -98,7 +98,6 @@ export default defineConfig([
       './packages/components/ui/select.tsx',
       './packages/components/ui/separator.tsx',
       './packages/components/ui/sheet.tsx',
-      './packages/components/ui/sidebar.tsx',
       './packages/components/ui/skeleton.tsx',
       './packages/components/ui/slider.tsx',
       './packages/components/ui/sonner.tsx',

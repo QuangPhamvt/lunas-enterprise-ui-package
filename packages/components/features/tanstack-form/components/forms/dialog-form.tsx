@@ -2,12 +2,14 @@
 
 import { useCallback } from 'react';
 
+import { cn } from '@customafk/react-toolkit/utils';
+
+import { Dialog, DialogContent, DialogOverlay, DialogPortal, DialogTitle } from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
 
 import { useTanStackFormContext } from '../../tanstack-form';
 import { CancelButton } from '../ui/cancel-button';
 import { SubmitButton } from '../ui/submit-button';
-import { Dialog, DialogContent, DialogOverlay, DialogPortal, DialogTitle } from '@/components/ui/dialog';
 
 /**
  * Renders a modal dialog that wraps a TanStack Form with a title, scrollable content area, and built-in submit/cancel actions.
@@ -18,6 +20,7 @@ import { Dialog, DialogContent, DialogOverlay, DialogPortal, DialogTitle } from 
  * <TanStackDialogForm
  *   title="Create User"
  *   submitText="Create"
+ *   className="max-w-lg"
  *   open={isOpen}
  *   onOpenChange={setIsOpen}
  * >
@@ -31,12 +34,18 @@ export const TanStackDialogForm: React.FC<
     title: string;
     /** Custom label for the submit button. Defaults to the `SubmitButton` component's built-in label when omitted. */
     submitText?: string;
+    /** Optional fixed width for the dialog content area, as a pixel number (e.g. `600`) or any CSS string (e.g. `'50%'`, `'40rem'`). Omit to let the dialog size itself based on content. */
+    width?: number | string;
+    /** Optional fixed max-width for the dialog content area, as a pixel number (e.g. `600`) or any CSS string (e.g. `'50%'`, `'40rem'`). Omit to let the dialog size itself based on content and viewport. */
+    maxWidth?: number | string;
+    /** Optional additional class name(s) to apply to the dialog content container. */
+    className?: string;
     /** Controlled open state of the dialog. */
     open?: boolean;
     /** Callback fired when the dialog open state changes; the form is reset on close. */
     onOpenChange?: (open: boolean) => void;
   }>
-> = ({ title, submitText, open, onOpenChange, children }) => {
+> = ({ title, submitText, width, maxWidth, className, open, onOpenChange, children }) => {
   const form = useTanStackFormContext();
 
   const handleOpenChange = useCallback(
@@ -51,9 +60,26 @@ export const TanStackDialogForm: React.FC<
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogPortal data-slot="dialog-portal">
         <DialogOverlay />
-        <DialogContent className="flex size-full max-h-dvh max-w-dvw flex-col gap-0 overflow-y-auto p-0 shadow-dialog sm:h-auto sm:max-h-[85dvh] sm:max-w-2xl sm:rounded-md">
+        <DialogContent
+          style={
+            {
+              '--width': width,
+              '--max-width': maxWidth,
+            } as React.CSSProperties
+          }
+          className={cn(
+            'flex size-full max-h-dvh max-w-dvw flex-col gap-0 overflow-y-auto rounded-none p-0 shadow-dialog sm:h-auto sm:max-h-[85dvh] sm:max-w-5xl sm:rounded-md',
+            width && `sm:w-(--width)`,
+            maxWidth && `sm:max-w-(--max-width)`,
+            className
+          )}
+          onOpenAutoFocus={event => {
+            // Prevents focus from shifting to the content when the dialog opens, which can cause layout shift if the content includes autofocusable elements.
+            event.preventDefault();
+          }}
+        >
           <div data-slot="dialog-header" className="flex items-center justify-center gap-2 px-6 py-5 text-center sm:text-left">
-            <DialogTitle data-slot="dialog-title" className="text-lg font-semibold tracking-tight">
+            <DialogTitle data-slot="dialog-title" className="font-semibold text-lg tracking-tight">
               {title}
             </DialogTitle>
           </div>

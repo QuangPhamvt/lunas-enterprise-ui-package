@@ -1,6 +1,9 @@
 import { useMemo } from 'react';
 
+import { cn } from '@customafk/react-toolkit/utils';
+
 import { PaymentLayoutHeader } from './components/header';
+import { MobileBottomNav } from './components/mobile-bottom-nav';
 import {
   Sidebar,
   SidebarContent,
@@ -27,6 +30,7 @@ export type PaymentLayoutUser = {
 
 /**
  * Full-page payment application shell with a collapsible inset sidebar and a fixed header.
+ * On mobile, the sidebar is replaced by a bottom navigation bar (up to 5 items).
  *
  * @example
  * ```tsx
@@ -79,65 +83,75 @@ export const PaymentLayout: React.FC<
     };
     /** Authenticated user; when provided the header shows user info and a logout option, otherwise a login button. */
     user?: PaymentLayoutUser | null;
+    /** When false the sidebar and bottom nav are hidden entirely (e.g. unauthenticated state). Defaults to true. */
+    isLogin?: boolean;
     /** Called when the login button in the header is clicked (only shown when `user` is absent). */
     onLogin?: () => void;
     /** Called when the logout item in the user dropdown is clicked. */
     onLogout?: () => void;
   }>
-> = ({ activeNavItemId, sidebar, user, onLogin, onLogout, children }) => {
+> = ({ activeNavItemId, sidebar, user, isLogin = true, onLogin, onLogout, children }) => {
   const groupcontent = useMemo(() => {
     return sidebar?.groupcontent || [];
   }, [sidebar]);
 
+  const flatNavItems = useMemo(() => {
+    return groupcontent.flatMap(group => group.items);
+  }, [groupcontent]);
+
   return (
     <SidebarProvider>
-      <PaymentLayoutHeader user={user} onLogin={onLogin} onLogout={onLogout} />
+      <PaymentLayoutHeader user={user} isLogin={isLogin} onLogin={onLogin} onLogout={onLogout} />
 
-      <Sidebar variant="inset" collapsible="icon">
-        <SidebarContent>
-          {groupcontent.map(group => {
-            return (
-              <SidebarGroup key={group.id}>
-                <SidebarGroupLabel>{group.label}</SidebarGroupLabel>
-                <SidebarGroupContent>
-                  <SidebarMenu>
-                    {group.items.map(item => {
-                      return (
-                        <SidebarMenuItem key={item.id}>
-                          <SidebarMenuButton
-                            isActive={item.id === activeNavItemId}
-                            onClick={event => {
-                              item.onClick?.();
-                              event.preventDefault();
-                              event.stopPropagation();
-                            }}
-                          >
-                            {item.icon}
-                            {item.label}
-                          </SidebarMenuButton>
-                        </SidebarMenuItem>
-                      );
-                    })}
-                  </SidebarMenu>
-                </SidebarGroupContent>
-              </SidebarGroup>
-            );
-          })}
-        </SidebarContent>
-        <SidebarFooter>
-          <SidebarMenu>
-            <SidebarMenuItem className="mt-2 border-t border-t-border">
-              <p className="pt-2 text-center text-muted-foreground text-xs">Copyright © 2025, Lunas.</p>
-            </SidebarMenuItem>
-          </SidebarMenu>
-        </SidebarFooter>
-      </Sidebar>
+      {isLogin && (
+        <Sidebar variant="inset" collapsible="icon">
+          <SidebarContent>
+            {groupcontent.map(group => {
+              return (
+                <SidebarGroup key={group.id}>
+                  <SidebarGroupLabel>{group.label}</SidebarGroupLabel>
+                  <SidebarGroupContent>
+                    <SidebarMenu>
+                      {group.items.map(item => {
+                        return (
+                          <SidebarMenuItem key={item.id}>
+                            <SidebarMenuButton
+                              isActive={item.id === activeNavItemId}
+                              onClick={event => {
+                                item.onClick?.();
+                                event.preventDefault();
+                                event.stopPropagation();
+                              }}
+                            >
+                              {item.icon}
+                              {item.label}
+                            </SidebarMenuButton>
+                          </SidebarMenuItem>
+                        );
+                      })}
+                    </SidebarMenu>
+                  </SidebarGroupContent>
+                </SidebarGroup>
+              );
+            })}
+          </SidebarContent>
+          <SidebarFooter>
+            <SidebarMenu>
+              <SidebarMenuItem className="mt-2 border-t border-t-border">
+                <p className="pt-2 text-center text-muted-foreground text-xs">Copyright © 2025, Lunas.</p>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarFooter>
+        </Sidebar>
+      )}
 
       <SidebarInset>
         <section className="relative size-full">
-          <div className="absolute inset-0">{children}</div>
+          <div className={cn('absolute inset-0 overflow-y-auto', isLogin && 'pb-16 md:pb-0')}>{children}</div>
         </section>
       </SidebarInset>
+
+      {isLogin && <MobileBottomNav items={flatNavItems} activeNavItemId={activeNavItemId} />}
     </SidebarProvider>
   );
 };

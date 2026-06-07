@@ -1,3 +1,4 @@
+/** biome-ignore-all assist/source/organizeImports: This file is intentionally organized by category for better readability and maintainability. */
 // ─── Cards ───────────────────────────────────────────────────────────────────
 export { GridProductCard } from './cards/grid-product-card';
 export { ProductCard } from './cards/product-card';
@@ -149,7 +150,6 @@ export {
 } from './ui/select';
 export * from './ui/separator';
 export * from './ui/sheet';
-export * from './ui/sidebar';
 export * from './ui/skeleton';
 export * from './ui/slider';
 export * from './ui/sonner';
