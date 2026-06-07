@@ -2,15 +2,16 @@
 
 import { useMemo, useState } from 'react';
 
-import { cn } from '@customafk/react-toolkit/utils';
 import { useIsMobile } from '@customafk/react-toolkit/hooks/useMobile';
+import { cn } from '@customafk/react-toolkit/utils';
 
 import { Button } from '@/components/ui/button';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
-import { Field, FieldContent, FieldContentMain, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldSeparator, FieldTooltip } from '../ui/field';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+
 import { useTanStackFieldContext } from '../../tanstack-form';
+import { Field, FieldContent, FieldContentMain, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldSeparator, FieldTooltip } from '../ui/field';
 
 /**
  * Props for the ComboboxField component.
@@ -106,7 +107,7 @@ export const ComboboxField: React.FC<ComboboxFieldProps> = ({ label, description
           ))}
         </CommandGroup>
       </CommandList>
-      <CommandEmpty className='min-h-30 flex items-center justify-center text-sm text-text-positive-weak'>Không tìm thấy kết quả nào phù hợp.</CommandEmpty>
+      <CommandEmpty className="flex min-h-30 items-center justify-center text-sm text-text-positive-weak">Không tìm thấy kết quả nào phù hợp.</CommandEmpty>
     </Command>
   );
 

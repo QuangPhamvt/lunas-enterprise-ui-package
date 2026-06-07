@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { ResizablePanel } from '@/components/ui/resizable';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -33,7 +34,6 @@ import type {
   TagFilterValue,
   TextFilterValue,
 } from '../../types';
-import { Label } from '@/components/ui/label';
 
 // ── icons per filter type ──────────────────────────────────────────────────────
 
@@ -173,11 +173,11 @@ const DateRangeFilterEditor: React.FC<{
 }> = ({ value, onChange }) => (
   <div className="flex flex-col gap-3 p-3">
     <div className="flex flex-col gap-1">
-      <span className="text-xs text-text-positive-muted">From</span>
+      <span className="text-text-positive-muted text-xs">From</span>
       <Input type="date" size="md" value={value.from ?? ''} onValueChange={v => onChange({ ...value, from: v || undefined })} />
     </div>
     <div className="flex flex-col gap-1">
-      <span className="text-xs text-text-positive-muted">To</span>
+      <span className="text-text-positive-muted text-xs">To</span>
       <Input type="date" size="md" value={value.to ?? ''} onValueChange={v => onChange({ ...value, to: v || undefined })} />
     </div>
   </div>

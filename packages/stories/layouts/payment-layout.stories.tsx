@@ -113,8 +113,10 @@ const DemoContent = () => (
             key={txn.id}
             className={`grid grid-cols-[1fr_auto] gap-x-4 gap-y-0.5 px-4 py-3 text-sm sm:grid-cols-[1fr_1fr_auto_auto_auto] sm:items-center ${i !== recentTransactions.length - 1 ? 'border-border border-b' : ''}`}
           >
-            <span className="font-mono text-xs text-muted-foreground">{txn.id}</span>
-            <span className={`row-start-1 justify-self-end rounded-full px-2 py-0.5 text-xs font-medium sm:row-auto sm:justify-self-auto ${statusColor[txn.status]}`}>
+            <span className="font-mono text-muted-foreground text-xs">{txn.id}</span>
+            <span
+              className={`row-start-1 justify-self-end rounded-full px-2 py-0.5 font-medium text-xs sm:row-auto sm:justify-self-auto ${statusColor[txn.status]}`}
+            >
               {txn.status}
             </span>
             <span className="col-span-1 font-medium text-foreground sm:col-auto">{txn.customer}</span>

@@ -147,9 +147,7 @@ export const PaymentLayout: React.FC<
 
       <SidebarInset>
         <section className="relative size-full">
-          <div className={cn('absolute inset-0 overflow-y-auto', isLogin && 'pb-16 md:pb-0')}>
-            {children}
-          </div>
+          <div className={cn('absolute inset-0 overflow-y-auto', isLogin && 'pb-16 md:pb-0')}>{children}</div>
         </section>
       </SidebarInset>
 

@@ -3,9 +3,9 @@
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { Dialog as DialogPrimitive } from 'radix-ui';
-import { CloseButton } from './buttons/close';
 import { headingVariants } from '../typography/heading';
 import { paragraphVariants } from '../typography/paragraph';
+import { CloseButton } from './buttons/close';
 
 /**
  * Accessible modal dialog built on Radix UI's Dialog primitives with animated overlay, close button, and responsive sizing.
@@ -61,8 +61,8 @@ function DialogOverlay({ className, ...props }: React.ComponentProps<typeof Dial
       data-slot="dialog-overlay"
       className={cn(
         'fixed inset-0 z-50 bg-black/50',
-        'data-[state=open]:animate-in data-[state=open]:fade-in-0',
-        'data-[state=closed]:animate-out data-[state=closed]:fade-out-0',
+        'data-[state=open]:fade-in-0 data-[state=open]:animate-in',
+        'data-[state=closed]:fade-out-0 data-[state=closed]:animate-out',
         className
       )}
       {...props}
@@ -94,10 +94,14 @@ function DialogContent({
           'grid w-full max-w-[calc(100%-2rem)] bg-background',
           'max-h-[85dvh] gap-4 rounded-2xl p-6 shadow-dialog outline-none duration-200',
           'sm:max-w-lg',
-          'data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-80',
-          'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-80',
+          'data-[state=open]:fade-in-0 data-[state=open]:zoom-in-80 data-[state=open]:animate-in',
+          'data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-80 data-[state=closed]:animate-out',
           className
         )}
+        onOpenAutoFocus={event => {
+          // Prevents focus from shifting to the content when the dialog opens, which can cause layout shift if the content includes autofocusable elements.
+          event.preventDefault();
+        }}
         {...props}
       >
         {children}

@@ -24,10 +24,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ items, activeN
   const visibleItems = items.slice(0, 5);
 
   return (
-    <nav
-      data-slot="mobile-bottom-nav"
-      className="fixed inset-x-0 bottom-0 z-20 flex h-16 items-stretch border-t border-border bg-card md:hidden"
-    >
+    <nav data-slot="mobile-bottom-nav" className="fixed inset-x-0 bottom-0 z-20 flex h-16 items-stretch border-border border-t bg-card md:hidden">
       {visibleItems.map(item => (
         <button
           key={item.id}
@@ -38,7 +35,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ items, activeN
             'flex flex-1 flex-col items-center justify-center gap-0.5',
             'text-muted-foreground transition-colors',
             'data-[active=true]:text-sidebar-primary',
-            '[&>svg]:size-5 [&>svg]:shrink-0',
+            '[&>svg]:size-5 [&>svg]:shrink-0'
           )}
         >
           {item.icon}
