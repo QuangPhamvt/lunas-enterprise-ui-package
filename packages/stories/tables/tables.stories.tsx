@@ -6,14 +6,16 @@ import type { RowSelectionState } from '@tanstack/react-table';
 
 import { sleep } from '@customafk/react-toolkit/utils/sleep';
 
-import type { ActiveFilter, CsvCell, FilterDefinition, TUITableColumn } from '@/components/features/tables';
+import type { ActiveFilter, CsvCell, FilterDefinition, SummaryItem, TUITableColumn } from '@/components/features/tables';
 import {
+  UITableAnalysisPanel,
   UITableBooleanDisplay,
   UITableContainer,
   UITableCurrencyDisplay,
   UITableFilter,
   UITableProvider,
   UITableStatusDisplay,
+  UITableSummaryBar,
   UITableTooltip,
   UITableTooltipActions,
   UITableTooltipFilter,
@@ -21,7 +23,7 @@ import {
 } from '@/components/features/tables';
 
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { MockDataColumns, MockDataTables, type TMockDataTable } from './mock-data';
+import { generateMockCsvData, MockDataColumns, MockDataFilterDefinitions, MockDataTables, type TMockDataTable } from './mock-data';
 
 const meta: Meta<typeof UITableProvider<TMockDataTable>> = {
   tags: ['autodocs'],
@@ -51,29 +53,70 @@ const TableShell = (args: React.ComponentProps<typeof UITableProvider<TMockDataT
   </div>
 );
 
-// ─── Default ─────────────────────────────────────────────────────────────────
+// ─── Default — Full Feature Demo ─────────────────────────────────────────────
 
 export const Default: Story = {
-  args: {
-    title: 'Mock Data Table',
-    columns: MockDataColumns,
-    data: MockDataTables,
-    totalRows: MockDataTables.length + 2,
-    isFetching: false,
-    isRefetching: false,
-    isLoading: false,
-    fetchMoreData: async () => {
-      await sleep(2000);
-      console.log('Fetch more data...');
-    },
-    leftPinnedColumns: ['column_1'],
-    rightPinnedColumns: ['column_13', 'column_11'],
-    keyOfClickRow: 'column_12',
-    onClickRow: (rowIndex, rowId) => {
-      console.log('Clicked row:', rowIndex, 'Row ID:', rowId);
-    },
+  name: 'Full Feature Demo',
+  render: () => {
+    const totalSalary = MockDataTables.reduce((sum, u) => sum + u.salary, 0);
+    const activeCount = MockDataTables.filter(u => u.active).length;
+
+    const summary: SummaryItem[] = [
+      { label: 'Tổng nhân viên', value: MockDataTables.length, description: 'Tất cả' },
+      {
+        label: 'Đang hoạt động',
+        value: activeCount,
+        trend: 'up',
+        description: `${Math.round((activeCount / MockDataTables.length) * 100)}% tổng số`,
+      },
+      { label: 'Tổng lương', value: totalSalary, suffix: ' ₫', precision: 0, trend: 'neutral' },
+      {
+        label: 'Lương trung bình',
+        value: Math.round(totalSalary / MockDataTables.length),
+        suffix: ' ₫',
+        precision: 0,
+        description: 'Mỗi nhân viên',
+      },
+    ];
+
+    return (
+      <div className="h-[calc(100vh-4rem)] w-full">
+        <UITableProvider<TMockDataTable>
+          title="Nhân viên"
+          columns={MockDataColumns}
+          data={MockDataTables}
+          totalRows={MockDataTables.length + 10}
+          leftPinnedColumns={['name']}
+          rightPinnedColumns={['salary']}
+          summary={summary}
+          showAnalysisPanel
+          csvData={generateMockCsvData(MockDataTables)}
+          csvFileName="employees-export"
+          filterDefinitions={MockDataFilterDefinitions}
+          onRowSelection={sel => console.log('selection:', sel)}
+          onFilterChange={filters => console.log('filters:', filters)}
+          keyOfClickRow="name"
+          onClickRow={(idx, id) => console.log('clicked row:', idx, id)}
+          fetchMoreData={async () => {
+            await sleep(2000);
+            console.log('Fetch more data...');
+          }}
+        >
+          <UITableWrapper>
+            <UITableSummaryBar />
+            <UITableTooltip>
+              <UITableTooltipFilter onSearch={v => console.log('search:', v)} />
+              <UITableTooltipActions />
+            </UITableTooltip>
+            <UITableContainer>
+              <UITableFilter />
+            </UITableContainer>
+            <UITableAnalysisPanel />
+          </UITableWrapper>
+        </UITableProvider>
+      </div>
+    );
   },
-  render: ({ children: _children, ...args }) => <TableShell {...args} />,
 };
 
 // ─── Loading ─────────────────────────────────────────────────────────────────
@@ -126,12 +169,9 @@ export const WithFilterPanel: Story = {
     columns: MockDataColumns,
     data: MockDataTables,
     totalRows: MockDataTables.length,
-    leftPinnedColumns: ['column_1'],
-    rightPinnedColumns: ['column_13'],
-    filterDefinitions: [
-      { id: 'column_2', label: 'Column 2', type: 'text' },
-      { id: 'column_4', label: 'Column 4', type: 'number' },
-    ],
+    leftPinnedColumns: ['name'],
+    rightPinnedColumns: ['salary'],
+    filterDefinitions: MockDataFilterDefinitions,
   },
   render: ({ children: _children, ...args }) => (
     <div className="h-[calc(100vh-4rem)] w-full">
@@ -159,7 +199,7 @@ export const RowSelectionTracking: Story = {
     columns: MockDataColumns,
     data: MockDataTables,
     totalRows: MockDataTables.length,
-    leftPinnedColumns: ['column_1'],
+    leftPinnedColumns: ['name'],
   },
   render: ({ children: _children, ...args }) => {
     const [selected, setSelected] = useState<RowSelectionState>({});
@@ -427,6 +467,170 @@ export const WithAdvancedFilters: Story = {
             </UITableWrapper>
           </UITableProvider>
         </div>
+      </div>
+    );
+  },
+};
+
+// ─── Columns with aggregation config ─────────────────────────────────────────
+
+const UserColumnsWithAggregation: TUITableColumn<TUser>[] = [
+  { accessorKey: 'select', size: 60 },
+  {
+    id: 'name',
+    accessorKey: 'name',
+    header: 'Name',
+    cell: ({ getValue }) => <span className="font-medium">{getValue<string>()}</span>,
+    size: 200,
+    meta: { aggregation: { type: 'count', label: 'Headcount' } },
+  },
+  {
+    id: 'email',
+    accessorKey: 'email',
+    header: 'Email',
+    cell: ({ getValue }) => <span className="text-text-positive-weak">{getValue<string>()}</span>,
+    size: 240,
+  },
+  {
+    id: 'role',
+    accessorKey: 'role',
+    header: 'Role',
+    cell: ({ getValue }) => <span className="capitalize">{getValue<string>()}</span>,
+    size: 140,
+  },
+  {
+    id: 'status',
+    accessorKey: 'status',
+    header: 'Status',
+    cell: ({ getValue }) => (
+      <UITableStatusDisplay value={getValue<string>()} colorMap={{ active: 'success', inactive: 'danger', pending: 'warning', invited: 'info' }} />
+    ),
+    size: 120,
+  },
+  {
+    id: 'salary',
+    accessorKey: 'salary',
+    header: 'Salary',
+    cell: ({ getValue }) => <UITableCurrencyDisplay value={getValue<number>()} currency="USD" />,
+    size: 160,
+    meta: {
+      position: 'end',
+      aggregation: { type: 'sum', prefix: '$', precision: 0, label: 'Total Payroll' },
+    },
+  },
+  {
+    id: 'active',
+    accessorKey: 'active',
+    header: 'Active',
+    cell: ({ getValue }) => <UITableBooleanDisplay value={getValue<boolean>()} />,
+    size: 80,
+    meta: { position: 'center' },
+  },
+];
+
+// ─── With Summary Cards ───────────────────────────────────────────────────────
+
+export const WithSummaryCards: Story = {
+  name: 'With Summary Cards',
+  render: () => {
+    const totalSalary = UserData.reduce((sum, u) => sum + u.salary, 0);
+    const activeCount = UserData.filter(u => u.active).length;
+    const avgSalary = Math.round(totalSalary / UserData.length);
+
+    const summary: SummaryItem[] = [
+      { label: 'Total Employees', value: UserData.length, description: 'All time' },
+      { label: 'Active', value: activeCount, trend: 'up', description: `${Math.round((activeCount / UserData.length) * 100)}% of total` },
+      { label: 'Total Payroll', value: totalSalary, prefix: '$', precision: 0, trend: 'neutral' },
+      { label: 'Avg. Salary', value: avgSalary, prefix: '$', precision: 0, description: 'Per employee' },
+    ];
+
+    return (
+      <div className="h-[calc(100vh-4rem)] w-full">
+        <UITableProvider<TUser>
+          title="Team Overview"
+          columns={UserColumnsWithAggregation}
+          data={UserData}
+          totalRows={UserData.length}
+          leftPinnedColumns={['name']}
+          summary={summary}
+        >
+          <UITableWrapper>
+            <UITableSummaryBar />
+            <UITableTooltip>
+              <UITableTooltipFilter onSearch={v => console.log('search:', v)} />
+              <UITableTooltipActions />
+            </UITableTooltip>
+            <UITableContainer />
+          </UITableWrapper>
+        </UITableProvider>
+      </div>
+    );
+  },
+};
+
+// ─── With Footer Aggregations ─────────────────────────────────────────────────
+
+export const WithFooterAggregations: Story = {
+  name: 'With Footer Aggregations',
+  render: () => (
+    <div className="h-[calc(100vh-4rem)] w-full">
+      <UITableProvider<TUser>
+        title="Salary Summary"
+        columns={UserColumnsWithAggregation}
+        data={UserData}
+        totalRows={UserData.length}
+        leftPinnedColumns={['name']}
+        onRowSelection={sel => console.log('selection:', sel)}
+      >
+        <UITableWrapper>
+          <UITableTooltip>
+            <UITableTooltipFilter onSearch={v => console.log('search:', v)} />
+            <UITableTooltipActions />
+          </UITableTooltip>
+          <UITableContainer />
+        </UITableWrapper>
+      </UITableProvider>
+    </div>
+  ),
+};
+
+// ─── With Summary & Analysis Panel ───────────────────────────────────────────
+
+export const WithSummaryAndAnalysis: Story = {
+  name: 'With Summary & Analysis Panel',
+  render: () => {
+    const totalSalary = UserData.reduce((sum, u) => sum + u.salary, 0);
+    const activeCount = UserData.filter(u => u.active).length;
+
+    const summary: SummaryItem[] = [
+      { label: 'Total Employees', value: UserData.length },
+      { label: 'Active', value: activeCount, trend: 'up' },
+      { label: 'Total Payroll', value: totalSalary, prefix: '$', precision: 0 },
+      { label: 'Avg. Salary', value: Math.round(totalSalary / UserData.length), prefix: '$', precision: 0 },
+    ];
+
+    return (
+      <div className="h-[calc(100vh-4rem)] w-full">
+        <UITableProvider<TUser>
+          title="Team Analytics"
+          columns={UserColumnsWithAggregation}
+          data={UserData}
+          totalRows={UserData.length}
+          leftPinnedColumns={['name']}
+          summary={summary}
+          showAnalysisPanel
+          onRowSelection={sel => console.log('selection:', sel)}
+        >
+          <UITableWrapper>
+            <UITableSummaryBar />
+            <UITableTooltip>
+              <UITableTooltipFilter onSearch={v => console.log('search:', v)} />
+              <UITableTooltipActions />
+            </UITableTooltip>
+            <UITableContainer />
+            <UITableAnalysisPanel />
+          </UITableWrapper>
+        </UITableProvider>
       </div>
     );
   },

@@ -61,17 +61,21 @@ export const UITableInnerTable = memo<TUITableInnerTable>(({ children, ...props 
         const remainingWidth = tableContentRectWidth - pinnedWidth - fixedSizeTotal;
         const rawFlexWidth = flexibleColumnsCount > 0 ? Math.max(0, Math.floor(remainingWidth / flexibleColumnsCount)) : 0;
 
+        const scrollHost = tableElement.closest<HTMLElement>('[data-slot="table-scroll-host"]');
+
         columnSpecs.forEach(col => {
           if (col.isFlex) {
             const finalWidth = col.maxSize ? Math.min(rawFlexWidth, col.maxSize) : rawFlexWidth;
             tableElement.style.setProperty(`--header-${col.id}-size`, `${finalWidth}`);
             tableElement.style.setProperty(`--col-${col.id}-size`, `${finalWidth}`);
+            scrollHost?.style.setProperty(`--col-${col.id}-size`, `${finalWidth}`);
             if (col.maxSize) {
               tableElement.style.setProperty(`--col-${col.id}-maxSize`, `${col.maxSize}`);
             }
           } else {
             tableElement.style.setProperty(`--header-${col.id}-size`, `${col.width}`);
             tableElement.style.setProperty(`--col-${col.id}-size`, `${col.width}`);
+            scrollHost?.style.setProperty(`--col-${col.id}-size`, `${col.width}`);
           }
         });
       });

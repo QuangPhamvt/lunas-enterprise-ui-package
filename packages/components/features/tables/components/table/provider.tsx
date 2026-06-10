@@ -13,6 +13,7 @@ import { getCoreRowModel, getExpandedRowModel, getGroupedRowModel, useReactTable
 
 import type { AnyEntity } from '@/types';
 import {
+  TableAnalysisContext,
   TableBodyContext,
   TableContext,
   TableFilterContext,
@@ -28,6 +29,7 @@ import type {
   FilterValue,
   RowData,
   TableProviderProps,
+  TTableAnalysisContext,
   TTableBodyContext,
   TTableContext,
   TTableFilterContext,
@@ -188,10 +190,15 @@ export const UITableProvider = <
   filterDefinitions = [],
   onFilterChange,
 
+  summary = [],
+  showAnalysisPanel = false,
+
   children,
 }: React.PropsWithChildren<TableProviderProps<TData, TKey, TColumns>>) => {
   const innerWrapperId = useId();
   const innerTableId = useId();
+
+  const [isAnalysisPanelOpen, setIsAnalysisPanelOpen] = useState(false);
 
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const [columnPinning, setColumnPinning] = useState<ColumnPinningState>({
@@ -334,6 +341,9 @@ export const UITableProvider = <
 
       csvData,
       csvFileName,
+
+      summary,
+      showAnalysisPanel,
     }),
     [
       title,
@@ -354,6 +364,9 @@ export const UITableProvider = <
 
       csvData,
       csvFileName,
+
+      summary,
+      showAnalysisPanel,
     ]
   );
 
@@ -390,34 +403,43 @@ export const UITableProvider = <
     return table.getTotalSize();
   }, [table.getTotalSize()]);
 
+  const toggleAnalysisPanel = useCallback(() => setIsAnalysisPanelOpen(prev => !prev), []);
+
+  const analysisContextValue = useMemo<TTableAnalysisContext>(
+    () => ({ isOpen: isAnalysisPanelOpen, toggle: toggleAnalysisPanel }),
+    [isAnalysisPanelOpen, toggleAnalysisPanel]
+  );
+
   return (
-    <TableFilterContext.Provider value={filterContextValue}>
-      <TableContext.Provider value={value as TTableContext<TData>}>
-        <UITableInnerWrapperProvider innerWrapperId={innerWrapperId}>
-          <UITableInnerTableProvider table={table} innerTableId={innerTableId} totalSize={totalSize}>
-            <UITableHeadRowProvider
-              isAllRowsSelected={isAllRowsSelected}
-              columnPinningState={columnPinningState}
-              leftPinnedHeaders={leftPinnedHeaders}
-              rightPinnedHeaders={rightPinnedHeaders}
-              onToggleAllRowsSelected={table.toggleAllRowsSelected}
-            >
-              <UITableBodyProvider isFetching={isFetching} isRefetching={isRefetching} isEmpty={isEmpty} rowSelectionState={rowSelectionState}>
-                <UITableRowProvider
-                  keyOfClickRow={keyOfClickRow}
-                  isAllRowsSelected={isAllRowsSelected}
-                  columnPinningState={columnPinningState}
-                  leftPinnedHeaders={leftPinnedHeaders}
-                  rightPinnedHeaders={rightPinnedHeaders}
-                  onClickRow={onClickRow}
-                >
-                  {children}
-                </UITableRowProvider>
-              </UITableBodyProvider>
-            </UITableHeadRowProvider>
-          </UITableInnerTableProvider>
-        </UITableInnerWrapperProvider>
-      </TableContext.Provider>
-    </TableFilterContext.Provider>
+    <TableAnalysisContext.Provider value={analysisContextValue}>
+      <TableFilterContext.Provider value={filterContextValue}>
+        <TableContext.Provider value={value as TTableContext<TData>}>
+          <UITableInnerWrapperProvider innerWrapperId={innerWrapperId}>
+            <UITableInnerTableProvider table={table} innerTableId={innerTableId} totalSize={totalSize}>
+              <UITableHeadRowProvider
+                isAllRowsSelected={isAllRowsSelected}
+                columnPinningState={columnPinningState}
+                leftPinnedHeaders={leftPinnedHeaders}
+                rightPinnedHeaders={rightPinnedHeaders}
+                onToggleAllRowsSelected={table.toggleAllRowsSelected}
+              >
+                <UITableBodyProvider isFetching={isFetching} isRefetching={isRefetching} isEmpty={isEmpty} rowSelectionState={rowSelectionState}>
+                  <UITableRowProvider
+                    keyOfClickRow={keyOfClickRow}
+                    isAllRowsSelected={isAllRowsSelected}
+                    columnPinningState={columnPinningState}
+                    leftPinnedHeaders={leftPinnedHeaders}
+                    rightPinnedHeaders={rightPinnedHeaders}
+                    onClickRow={onClickRow}
+                  >
+                    {children}
+                  </UITableRowProvider>
+                </UITableBodyProvider>
+              </UITableHeadRowProvider>
+            </UITableInnerTableProvider>
+          </UITableInnerWrapperProvider>
+        </TableContext.Provider>
+      </TableFilterContext.Provider>
+    </TableAnalysisContext.Provider>
   );
 };

@@ -8,9 +8,9 @@ import { tableFooterVariants } from '../table.variants';
 
 export const UITableFooter = memo<TUITableFooter>(({ className, children, ...props }) => {
   return (
-    <tfoot slot="table-footer" className={cn(tableFooterVariants(), className)} {...props}>
+    <div slot="table-footer" className={cn(tableFooterVariants(), className)} {...props}>
       {children}
-    </tfoot>
+    </div>
   );
 });
 UITableFooter.displayName = 'UITableFooter';

@@ -4,6 +4,7 @@ export { UITableCellActions } from './cell-actions';
 export { UITableCellSelect } from './cell-select';
 export { UITableEmptyDisplay } from './empty-display';
 export { UITableFooter } from './footer';
+export { UITableFooterRow } from './footer-row';
 export { UITableHead } from './head';
 export { UITableHeadCell } from './head-cell';
 export { UITableHeadCellOption } from './head-cell-option';

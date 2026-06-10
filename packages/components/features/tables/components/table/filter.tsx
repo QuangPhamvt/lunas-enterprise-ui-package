@@ -49,20 +49,20 @@ const TYPE_ICONS: Record<FilterType, React.ReactNode> = {
 // ── operator options ───────────────────────────────────────────────────────────
 
 const NUMBER_OPERATORS: { value: NumberFilterValue['operator']; label: string }[] = [
-  { value: 'eq', label: 'Equals (=)' },
-  { value: 'ne', label: 'not equals (≠)' },
-  { value: 'gt', label: 'greater than (>)' },
-  { value: 'gte', label: 'At least (≥)' },
-  { value: 'lt', label: 'less than (<)' },
-  { value: 'lte', label: 'at most (≤)' },
-  { value: 'between', label: 'Between' },
+  { value: 'eq', label: 'Bằng (=)' },
+  { value: 'ne', label: 'Không bằng (≠)' },
+  { value: 'gt', label: 'Lớn hơn (>)' },
+  { value: 'gte', label: 'Ít nhất (≥)' },
+  { value: 'lt', label: 'Nhỏ hơn (<)' },
+  { value: 'lte', label: 'Nhiều nhất (≤)' },
+  { value: 'between', label: 'Trong khoảng' },
 ];
 
 const TEXT_OPERATORS: { value: TextFilterValue['operator']; label: string }[] = [
-  { value: 'contains', label: 'Contains' },
-  { value: 'equals', label: 'Equals' },
-  { value: 'starts-with', label: 'Starts with' },
-  { value: 'ends-with', label: 'Ends with' },
+  { value: 'contains', label: 'Chứa' },
+  { value: 'equals', label: 'Bằng' },
+  { value: 'starts-with', label: 'Bắt đầu bằng' },
+  { value: 'ends-with', label: 'Kết thúc bằng' },
 ];
 
 // ── summary label ──────────────────────────────────────────────────────────────
@@ -70,37 +70,37 @@ const TEXT_OPERATORS: { value: TextFilterValue['operator']; label: string }[] = 
 function formatFilterValue(value: FilterValue, def: FilterDefinition): string {
   switch (value.type) {
     case 'single-tag': {
-      if (!value.value) return 'Unset';
+      if (!value.value) return 'Chưa đặt';
       return def.options?.find(o => o.value === value.value)?.label ?? value.value;
     }
     case 'tag': {
-      if (!value.values.length) return 'Unset';
+      if (!value.values.length) return 'Chưa đặt';
       return value.values.map(v => def.options?.find(o => o.value === v)?.label ?? v).join(', ');
     }
     case 'date-range': {
-      if (!value.from && !value.to) return 'Unknow date';
+      if (!value.from && !value.to) return 'Ngày không xác định';
       if (value.from && value.to) return `${value.from} → ${value.to}`;
-      if (value.from) return `from ${value.from}`;
-      return `until ${value.to}`;
+      if (value.from) return `từ ${value.from}`;
+      return `đến ${value.to}`;
     }
     case 'number': {
-      const op = { eq: '=', ne: '≠', gt: '>', gte: '≥', lt: '<', lte: '≤', between: 'between' }[value.operator];
+      const op = { eq: '=', ne: '≠', gt: '>', gte: '≥', lt: '<', lte: '≤', between: 'trong khoảng' }[value.operator];
       if (value.value === undefined) return op;
       if (value.operator === 'between') return `${op} ${value.value} – ${value.valueTo ?? '?'}`;
       return `${op} ${value.value}`;
     }
     case 'text': {
       const op = {
-        contains: 'contains',
-        equals: 'is',
-        'starts-with': 'starts with',
-        'ends-with': 'ends with',
+        contains: 'chứa',
+        equals: 'là',
+        'starts-with': 'bắt đầu bằng',
+        'ends-with': 'kết thúc bằng',
       }[value.operator];
       return value.value ? `${op} "${value.value}"` : op;
     }
     case 'boolean':
-      if (value.value === null) return 'Unknow';
-      return value.value ? 'Yes' : 'No';
+      if (value.value === null) return 'Không xác định';
+      return value.value ? 'Có' : 'Không';
   }
 }
 
@@ -113,7 +113,7 @@ const TagFilterEditor: React.FC<{
 }> = ({ value, definition, onChange }) => (
   <div className="flex flex-col gap-1 p-3">
     {(definition.options ?? []).length === 0 ? (
-      <p className="text-xs text-text-positive-muted">No options defined</p>
+      <p className="text-xs text-text-positive-muted">Không có tùy chọn</p>
     ) : (
       definition.options!.map(option => (
         <Label
@@ -144,7 +144,7 @@ const SingleTagFilterEditor: React.FC<{
 }> = ({ value, definition, onChange }) => (
   <div className="flex flex-col gap-1 p-3">
     {(definition.options ?? []).length === 0 ? (
-      <p className="text-xs text-text-positive-muted">No options defined</p>
+      <p className="text-xs text-text-positive-muted">Không có tùy chọn</p>
     ) : (
       definition.options!.map(option => (
         <Label
@@ -173,11 +173,11 @@ const DateRangeFilterEditor: React.FC<{
 }> = ({ value, onChange }) => (
   <div className="flex flex-col gap-3 p-3">
     <div className="flex flex-col gap-1">
-      <span className="text-text-positive-muted text-xs">From</span>
+      <span className="text-text-positive-muted text-xs">Từ ngày</span>
       <Input type="date" size="md" value={value.from ?? ''} onValueChange={v => onChange({ ...value, from: v || undefined })} />
     </div>
     <div className="flex flex-col gap-1">
-      <span className="text-text-positive-muted text-xs">To</span>
+      <span className="text-text-positive-muted text-xs">Đến ngày</span>
       <Input type="date" size="md" value={value.to ?? ''} onValueChange={v => onChange({ ...value, to: v || undefined })} />
     </div>
   </div>
@@ -203,7 +203,7 @@ const NumberFilterEditor: React.FC<{
     <Input
       type="number"
       size="md"
-      placeholder="Value"
+      placeholder="Giá trị"
       value={value.value ?? ''}
       onValueChange={v => onChange({ ...value, value: v ? Number(v) : undefined })}
     />
@@ -211,7 +211,7 @@ const NumberFilterEditor: React.FC<{
       <Input
         type="number"
         size="md"
-        placeholder="To value"
+        placeholder="Đến giá trị"
         value={value.valueTo ?? ''}
         onValueChange={v => onChange({ ...value, valueTo: v ? Number(v) : undefined })}
       />
@@ -236,14 +236,14 @@ const TextFilterEditor: React.FC<{
         ))}
       </SelectContent>
     </Select>
-    <Input type="text" size="md" placeholder="Enter text..." value={value.value} onValueChange={v => onChange({ ...value, value: v })} />
+    <Input type="text" size="md" placeholder="Nhập văn bản..." value={value.value} onValueChange={v => onChange({ ...value, value: v })} />
   </div>
 );
 
 const BOOLEAN_OPTIONS = [
-  { label: 'Yes', value: true as boolean | null },
-  { label: 'No', value: false as boolean | null },
-  { label: 'Unknow', value: null as boolean | null },
+  { label: 'Có', value: true as boolean | null },
+  { label: 'Không', value: false as boolean | null },
+  { label: 'Không xác định', value: null as boolean | null },
 ];
 
 const BooleanFilterEditor: React.FC<{
@@ -404,12 +404,12 @@ export const UITableFilter = () => {
           <Activity mode={tab === 'filters' ? 'visible' : 'hidden'}>
             <div className="flex size-full flex-col gap-2 p-4">
               <div className="flex items-center justify-between gap-2">
-                <p className="font-medium">Filters</p>
+                <p className="font-medium">Bộ lọc</p>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="outline" color="muted" disabled={availableDefinitions.length === 0}>
                       <ListFilterPlus size={13} />
-                      Add Filter
+                      Thêm bộ lọc
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
@@ -424,7 +424,7 @@ export const UITableFilter = () => {
               </div>
               <Separator />
               {activeFilters.length === 0 ? (
-                <p className="py-6 text-center text-xs text-text-positive-muted">No active filters</p>
+                <p className="py-6 text-center text-xs text-text-positive-muted">Không có bộ lọc nào</p>
               ) : (
                 <div className="flex flex-col gap-2 pt-1">
                   {activeFilters.map(filter => {
@@ -468,7 +468,7 @@ export const UITableFilter = () => {
                 {activeFilters.length}
               </span>
             )}
-            <span className="text-nowrap [writing-mode:vertical-lr]">Filters</span>
+            <span className="text-nowrap [writing-mode:vertical-lr]">Bộ lọc</span>
           </button>
           <Separator />
         </div>

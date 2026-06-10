@@ -41,7 +41,7 @@ export const UITableHeadCellOption = memo<TUITableHeadCellOption>(({ isPinned, o
         <DropdownMenuGroup className="*:data-[slot=dropdown-menu-item]:rounded-xs *:data-[slot=dropdown-menu-item]:p-2">
           <Activity mode={isPinned ? 'visible' : 'hidden'}>
             <DropdownMenuItem onClick={handleUnpin}>
-              {!!isPinned && 'Unpin'}
+              {!!isPinned && 'Bỏ ghim'}
               <DropdownMenuShortcut>
                 <PinOffIcon className="size-4" />
               </DropdownMenuShortcut>
@@ -49,13 +49,13 @@ export const UITableHeadCellOption = memo<TUITableHeadCellOption>(({ isPinned, o
           </Activity>
           <Activity mode={!isPinned ? 'visible' : 'hidden'}>
             <DropdownMenuItem onClick={handleLeftPin}>
-              {isPinned ? 'Unpin' : 'Pin to Left'}
+              {isPinned ? 'Bỏ ghim' : 'Ghim trái'}
               <DropdownMenuShortcut>
                 <MoveLeftIcon className="size-4" />
               </DropdownMenuShortcut>
             </DropdownMenuItem>
             <DropdownMenuItem onClick={handleRightPin}>
-              {isPinned ? 'Unpin' : 'Pin to Right'}
+              {isPinned ? 'Bỏ ghim' : 'Ghim phải'}
               <DropdownMenuShortcut>
                 <MoveRightIcon className="size-4" />
               </DropdownMenuShortcut>
