@@ -57,9 +57,9 @@ export const UITableLoadMore = memo<TUITableLoadMore>(({ virtualRowIndex, virtua
           {fetchingState === 'idle' && <ChevronDown className="size-4" />}
           {fetchingState === 'fetching' && <Spinner className="size-4 animate-spin" />}
           {fetchingState === 'error' && <AlertTriangle className="size-4 text-danger" />}
-          {fetchingState === 'idle' && 'Load More'}
-          {fetchingState === 'fetching' && 'Loading...'}
-          {fetchingState === 'error' && 'Error! Retry?'}
+          {fetchingState === 'idle' && 'Tải thêm'}
+          {fetchingState === 'fetching' && 'Đang tải...'}
+          {fetchingState === 'error' && 'Lỗi! Thử lại?'}
         </button>
       </td>
     </tr>

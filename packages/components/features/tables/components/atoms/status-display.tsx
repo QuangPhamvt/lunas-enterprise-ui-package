@@ -40,7 +40,7 @@ export const UITableStatusDisplay: React.FC<Props> = ({ value, colorMap, default
   const label = value.charAt(0).toUpperCase() + value.slice(1).replace(/_/g, ' ');
 
   return (
-    <Badge variant={variant} color={color} className="min-w-16 justify-center capitalize">
+    <Badge variant={variant} color={color} size="sm" className="min-w-16 justify-center capitalize">
       {label}
     </Badge>
   );

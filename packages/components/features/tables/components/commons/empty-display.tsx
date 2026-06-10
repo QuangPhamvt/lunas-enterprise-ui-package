@@ -115,7 +115,7 @@ export const UITableEmptyDisplay = memo<TUITableEmptyDisplay>(() => {
         <div className={tableEmptyDisplayVariants()} style={{ minHeight: emptyDisplayHeight ?? '24rem' }}>
           <div className="flex flex-col items-center gap-1">
             <BoxIcon strokeWidth={1} size={48} />
-            <p>No data available</p>
+            <p>Không có dữ liệu</p>
           </div>
         </div>
       )}

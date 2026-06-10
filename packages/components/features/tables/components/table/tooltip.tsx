@@ -6,13 +6,14 @@
  */
 import { useCallback } from 'react';
 
-import { ArrowRightIcon, CirclePlus, DownloadIcon, RefreshCwIcon, SearchIcon } from 'lucide-react';
+import { ArrowRightIcon, BarChart2Icon, CirclePlus, DownloadIcon, RefreshCwIcon, SearchIcon } from 'lucide-react';
 
 import { useDebounceCallback } from '@customafk/react-toolkit/hooks/useDebounceCallback';
+import { cn } from '@customafk/react-toolkit/utils';
 
 import { Input } from '@/components/ui/input';
 
-import { useUITableContext } from '../../hooks/use-context';
+import { useUITableAnalysisContext, useUITableContext } from '../../hooks/use-context';
 import { downloadCsv } from '../../utils/csv';
 
 /**
@@ -45,7 +46,7 @@ export const UITableTooltipFilter: React.FC<
         {...props}
         size="lg"
         type="search"
-        placeholder="Search records..."
+        placeholder="Tìm kiếm..."
         className="flex-1 ps-9 pe-9"
         onChange={e => {
           onChange?.(e);
@@ -66,13 +67,17 @@ export const UITableTooltipFilter: React.FC<
   );
 };
 
-const ActionButton: React.FC<React.PropsWithChildren<React.ComponentProps<'button'>>> = ({ children, disabled, onClick }) => {
+const ActionButton: React.FC<React.PropsWithChildren<React.ComponentProps<'button'>>> = ({ children, disabled, onClick, className, ...props }) => {
   return (
     <button
       type="button"
       disabled={disabled}
-      className="flex cursor-pointer items-center gap-x-1 rounded-sm border border-border bg-background p-2.5 text-sm text-text-positive-weak outline-none transition-all hover:shadow-card focus:border-border-emphasis focus:bg-muted-muted active:border-border-emphasis active:bg-muted-muted active:text-text-positive disabled:pointer-events-none disabled:cursor-default disabled:opacity-60 [&_svg]:size-3.5"
+      className={cn(
+        'flex cursor-pointer items-center gap-x-1 rounded-sm border border-border bg-background p-2.5 text-sm text-text-positive-weak outline-none transition-all hover:shadow-card focus:border-border-emphasis focus:bg-muted-muted active:border-border-emphasis active:bg-muted-muted active:text-text-positive disabled:pointer-events-none disabled:cursor-default disabled:opacity-60 [&_svg]:size-3.5',
+        className
+      )}
       onClick={onClick}
+      {...props}
     >
       {children}
     </button>
@@ -101,7 +106,8 @@ export const UITableTooltipActions: React.FC<{
   onRefresh?: () => void;
   onDownload?: () => void;
 }> = ({ onCreate, onDownload, onRefresh }) => {
-  const { table, csvData, csvFileName, title } = useUITableContext();
+  const { table, csvData, csvFileName, title, showAnalysisPanel } = useUITableContext();
+  const { isOpen: isAnalysisOpen, toggle: toggleAnalysis } = useUITableAnalysisContext();
 
   const handleDownload = useCallback(() => {
     if (onDownload) {
@@ -148,6 +154,19 @@ export const UITableTooltipActions: React.FC<{
       >
         <DownloadIcon />
       </ActionButton>
+      {showAnalysisPanel && (
+        <ActionButton
+          onClick={e => {
+            toggleAnalysis();
+            e.stopPropagation();
+            e.preventDefault();
+          }}
+          aria-pressed={isAnalysisOpen}
+          className={isAnalysisOpen ? 'bg-muted-muted text-text-positive' : undefined}
+        >
+          <BarChart2Icon />
+        </ActionButton>
+      )}
     </div>
   );
 };

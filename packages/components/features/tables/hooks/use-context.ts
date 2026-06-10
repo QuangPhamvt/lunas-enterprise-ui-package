@@ -2,6 +2,7 @@ import { createContext, use } from 'react';
 
 import type { AnyEntity } from '@/types';
 import type {
+  TTableAnalysisContext,
   TTableBodyContext,
   TTableContext,
   TTableFilterContext,
@@ -77,6 +78,16 @@ export const useUITableFilterContext = () => {
   const ctx = use(TableFilterContext);
   if (!ctx) {
     throw new Error('useUITableFilterContext must be used within a UITableProvider');
+  }
+  return ctx;
+};
+
+export const TableAnalysisContext = createContext<TTableAnalysisContext | null>(null);
+
+export const useUITableAnalysisContext = () => {
+  const ctx = use(TableAnalysisContext);
+  if (!ctx) {
+    throw new Error('useUITableAnalysisContext must be used within a UITableProvider');
   }
   return ctx;
 };
