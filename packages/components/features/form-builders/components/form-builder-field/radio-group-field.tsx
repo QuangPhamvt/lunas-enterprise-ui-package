@@ -238,7 +238,7 @@ const FieldType: React.FC = () => {
               }}
             />
             <Button type="button" color="muted" variant="outline" onClick={() => form.reset()}>
-              Cancel
+              Hủy bỏ
             </Button>
           </Field>
         </FieldGroup>

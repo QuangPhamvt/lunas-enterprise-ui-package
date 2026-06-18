@@ -1,4 +1,3 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,6 +10,8 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   title: 'Components/AlertDialog',

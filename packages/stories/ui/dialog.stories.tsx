@@ -47,7 +47,7 @@ export const Default: Story = {
             <DialogFooter>
               <DialogClose asChild>
                 <Button variant="outline" color="muted">
-                  Cancel
+                  Hủy bỏ
                 </Button>
               </DialogClose>
               <Button type="submit">Save changes</Button>

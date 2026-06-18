@@ -22,7 +22,7 @@ export const CancelButton: React.FC<React.ComponentProps<'button'>> = ({ disable
       className={cn('min-w-40', className)}
       onClick={onClick as React.MouseEventHandler<HTMLButtonElement>}
     >
-      {children ?? 'Cancel'}
+      {children ?? 'Huỷ'}
     </Button>
   );
 };
