@@ -2,7 +2,7 @@
 
 import { useCallback } from 'react';
 
-import { useStore } from '@tanstack/react-form';
+import { useSelector } from '@tanstack/react-store';
 
 import { AtSignIcon, XIcon } from 'lucide-react';
 import type z from 'zod';
@@ -69,7 +69,7 @@ export const EmailField: React.FC<Props> = ({
 }) => {
   const { form, name, state, handleBlur, handleChange } = useTanStackFieldContext<string | null>();
 
-  const isSubmitting = useStore(form.store, ({ isSubmitting }) => isSubmitting);
+  const isSubmitting = useSelector(form.store, ({ isSubmitting }) => isSubmitting);
 
   const _invalid = state.meta.isDirty && state.meta.isTouched && !state.meta.isValid;
   const _isEmpty = required && state.value === null;

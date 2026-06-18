@@ -1,6 +1,6 @@
 'use client';
 
-import { useStore } from '@tanstack/react-form';
+import { useSelector } from '@tanstack/react-store';
 
 import type z from 'zod';
 
@@ -26,7 +26,7 @@ type Props = Pick<z.input<typeof TanStackFormRadioGroupFieldSchema>, 'label' | '
 
 export const RadioGroupField: React.FC<Props> = ({ label, description, orientation, options, tooltip, helperText }) => {
   const field = useTanStackFieldContext<string | null>();
-  const isSubmitting = useStore(field.form.store, ({ isSubmitting }) => isSubmitting);
+  const isSubmitting = useSelector(field.form.store, ({ isSubmitting }) => isSubmitting);
 
   return (
     <FieldGroup className="px-4">

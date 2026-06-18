@@ -2,7 +2,7 @@
 
 import { useId } from 'react';
 
-import { useStore } from '@tanstack/react-form';
+import { useSelector } from '@tanstack/react-store';
 import { CalendarDaysIcon } from 'lucide-react';
 
 import { format } from '@customafk/react-toolkit/date-fns';
@@ -29,7 +29,7 @@ export const SimpleDateField: React.FC<Props> = ({ label, placeholder, required,
   const id = useId();
   const { form, name, state, handleBlur, handleChange } = useTanStackFieldContext<Date | null>();
 
-  const isSubmitting = useStore(form.store, ({ isSubmitting }) => isSubmitting);
+  const isSubmitting = useSelector(form.store, ({ isSubmitting }) => isSubmitting);
 
   const _invalid = state.meta.isTouched && !state.meta.isValid;
   const isDisabled = disabled || isSubmitting;

@@ -146,3 +146,320 @@ export const Submitting: Story = {
     );
   },
 };
+
+const COUNTRY_OPTIONS = [
+  { label: 'Vietnam', value: 'vn' },
+  { label: 'Japan', value: 'jp' },
+  { label: 'United States', value: 'us' },
+  { label: 'United Kingdom', value: 'gb' },
+  { label: 'Germany', value: 'de' },
+  { label: 'France', value: 'fr' },
+  { label: 'Australia', value: 'au' },
+  { label: 'Canada', value: 'ca' },
+];
+
+const ROLE_OPTIONS = [
+  { label: 'Viewer', value: 'viewer' },
+  { label: 'Editor', value: 'editor' },
+  { label: 'Admin', value: 'admin' },
+  { label: 'Owner', value: 'owner' },
+];
+
+export const Clearable: Story = {
+  render: () => {
+    const { AppField, TanStackContainerForm, TanStackSectionForm } = useTanStackForm({
+      defaultValues: {
+        country: 'vn' as string | null,
+        role: null as string | null,
+      },
+    });
+    return (
+      <TanStackContainerForm>
+        <TanStackSectionForm title="Select Field - Clearable">
+          <AppField
+            name="country"
+            children={({ SelectField }) => (
+              <SelectField
+                label="Country"
+                description="Pre-selected. Use the × button to clear the value."
+                placeholder="Select a country"
+                orientation="responsive"
+                clearable
+                showErrorMessage
+                options={COUNTRY_OPTIONS}
+              />
+            )}
+          />
+          <AppField
+            name="role"
+            children={({ SelectField }) => (
+              <SelectField
+                label="Role"
+                description="Empty. Select a value then clear it."
+                placeholder="Select a role"
+                orientation="responsive"
+                clearable
+                showErrorMessage
+                options={ROLE_OPTIONS}
+              />
+            )}
+          />
+        </TanStackSectionForm>
+      </TanStackContainerForm>
+    );
+  },
+};
+
+export const Disabled: Story = {
+  render: () => {
+    const { AppField, TanStackContainerForm, TanStackSectionForm } = useTanStackForm({
+      defaultValues: {
+        country: 'jp' as string | null,
+        role: null as string | null,
+      },
+    });
+    return (
+      <TanStackContainerForm>
+        <TanStackSectionForm title="Select Field - Disabled">
+          <AppField
+            name="country"
+            children={({ SelectField }) => (
+              <SelectField
+                label="Country (pre-selected + disabled)"
+                description="Has a value but cannot be changed or cleared."
+                placeholder="Select a country"
+                orientation="responsive"
+                disabled
+                clearable
+                options={COUNTRY_OPTIONS}
+              />
+            )}
+          />
+          <AppField
+            name="role"
+            children={({ SelectField }) => (
+              <SelectField
+                label="Role (empty + disabled)"
+                description="Cannot be opened while disabled."
+                placeholder="Select a role"
+                orientation="responsive"
+                disabled
+                options={ROLE_OPTIONS}
+              />
+            )}
+          />
+        </TanStackSectionForm>
+      </TanStackContainerForm>
+    );
+  },
+};
+
+export const BlurValidation: Story = {
+  render: () => {
+    const schema = z.object({
+      country: z.string({ required_error: 'Please select a country' }).nullable(),
+      role: z.string({ required_error: 'Please select a role' }).nullable(),
+    });
+    const { AppField, TanStackContainerForm, TanStackSectionForm } = useTanStackForm({
+      defaultValues: {
+        country: null as string | null,
+        role: null as string | null,
+      },
+      validators: { onChange: schema },
+    });
+    return (
+      <TanStackContainerForm>
+        <TanStackSectionForm title="Select Field - Blur Validation">
+          <AppField
+            name="country"
+            children={({ SelectField }) => (
+              <SelectField
+                label="Country"
+                description="Open the dropdown, then close without selecting — error appears on blur."
+                placeholder="Select a country"
+                orientation="responsive"
+                showErrorMessage
+                required
+                options={COUNTRY_OPTIONS}
+              />
+            )}
+          />
+          <AppField
+            name="role"
+            children={({ SelectField }) => (
+              <SelectField
+                label="Role"
+                description="Select a value then clear it — error reappears."
+                placeholder="Select a role"
+                orientation="responsive"
+                clearable
+                showErrorMessage
+                required
+                options={ROLE_OPTIONS}
+              />
+            )}
+          />
+        </TanStackSectionForm>
+      </TanStackContainerForm>
+    );
+  },
+};
+
+export const EmptyOptions: Story = {
+  render: () => {
+    const { AppField, TanStackContainerForm, TanStackSectionForm } = useTanStackForm({
+      defaultValues: { value: null as string | null },
+    });
+    return (
+      <TanStackContainerForm>
+        <TanStackSectionForm title="Select Field - Empty Options">
+          <AppField
+            name="value"
+            children={({ SelectField }) => (
+              <SelectField
+                label="Category"
+                description="No options have been loaded yet — shows the empty state."
+                placeholder="Select a category"
+                orientation="responsive"
+                showErrorMessage
+                options={[]}
+              />
+            )}
+          />
+        </TanStackSectionForm>
+      </TanStackContainerForm>
+    );
+  },
+};
+
+export const Orientations: Story = {
+  render: () => {
+    const { AppField, TanStackContainerForm, TanStackSectionForm } = useTanStackForm({
+      defaultValues: {
+        horizontal: null as string | null,
+        vertical: null as string | null,
+        responsive: null as string | null,
+      },
+    });
+    return (
+      <TanStackContainerForm>
+        <TanStackSectionForm title="Select Field - Orientations">
+          <AppField
+            name="horizontal"
+            children={({ SelectField }) => (
+              <SelectField
+                label="Horizontal"
+                description="Label sits to the left."
+                placeholder="Select…"
+                orientation="horizontal"
+                options={ROLE_OPTIONS}
+              />
+            )}
+          />
+          <AppField
+            name="vertical"
+            children={({ SelectField }) => (
+              <SelectField
+                label="Vertical"
+                description="Label sits above."
+                placeholder="Select…"
+                orientation="vertical"
+                options={ROLE_OPTIONS}
+              />
+            )}
+          />
+          <AppField
+            name="responsive"
+            children={({ SelectField }) => (
+              <SelectField
+                label="Responsive"
+                description="Switches layout by breakpoint."
+                placeholder="Select…"
+                orientation="responsive"
+                options={ROLE_OPTIONS}
+              />
+            )}
+          />
+        </TanStackSectionForm>
+      </TanStackContainerForm>
+    );
+  },
+};
+
+export const KitchenSink: Story = {
+  render: () => {
+    const schema = z.object({
+      country: z.string().nullable(),
+      role: z.string().nullable(),
+      locked: z.string().nullable(),
+    });
+    const { AppField, AppForm, TanStackContainerForm, TanStackSectionForm, TanStackActionsForm } = useTanStackForm({
+      defaultValues: {
+        country: null as string | null,
+        role: 'editor' as string | null,
+        locked: 'admin' as string | null,
+      } as z.output<typeof schema>,
+      validators: { onChange: schema },
+      onSubmit: ({ value }) => console.log('Submitted:', value),
+    });
+    return (
+      <div className="size-full bg-muted-bg-subtle p-4">
+        <AppForm>
+          <TanStackContainerForm>
+            <TanStackSectionForm title="Kitchen Sink — all SelectField features">
+              <AppField
+                name="country"
+                children={({ SelectField }) => (
+                  <SelectField
+                    label="Country"
+                    description="Required. Validates on blur."
+                    placeholder="Select a country"
+                    orientation="responsive"
+                    required
+                    showErrorMessage
+                    tooltip="Determines your regional settings and tax information."
+                    helperText="You can change this later in your profile."
+                    options={COUNTRY_OPTIONS}
+                  />
+                )}
+              />
+              <AppField
+                name="role"
+                children={({ SelectField }) => (
+                  <SelectField
+                    label="Role"
+                    description="Pre-selected. Clearable — use the × button."
+                    placeholder="Select a role"
+                    orientation="responsive"
+                    clearable
+                    showErrorMessage
+                    tooltip="Controls what actions you can perform."
+                    options={ROLE_OPTIONS}
+                  />
+                )}
+              />
+              <AppField
+                name="locked"
+                children={({ SelectField }) => (
+                  <SelectField
+                    label="Plan (read-only)"
+                    description="disabled prop — cannot be changed."
+                    placeholder="Select a plan"
+                    orientation="responsive"
+                    disabled
+                    options={[
+                      { label: 'Free', value: 'free' },
+                      { label: 'Pro', value: 'pro' },
+                      { label: 'Admin', value: 'admin' },
+                    ]}
+                  />
+                )}
+              />
+            </TanStackSectionForm>
+            <TanStackActionsForm type="update" />
+          </TanStackContainerForm>
+        </AppForm>
+      </div>
+    );
+  },
+};

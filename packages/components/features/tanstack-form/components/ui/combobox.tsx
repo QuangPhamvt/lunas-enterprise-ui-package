@@ -109,7 +109,7 @@ const ComboboxContent: React.FC<React.ComponentProps<typeof PopoverPrimitive.Con
  * <ComboboxValue>{selectedLabel}</ComboboxValue>
  */
 const ComboboxValue: React.FC<React.ComponentProps<'div'>> = ({ children }) => {
-  return <div>asdasd</div>;
+  return <div>{children}</div>;
 };
 
 /**

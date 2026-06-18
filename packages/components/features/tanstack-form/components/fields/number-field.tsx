@@ -2,7 +2,7 @@
 
 import { useCallback } from 'react';
 
-import { useStore } from '@tanstack/react-form';
+import { useSelector } from '@tanstack/react-store';
 
 import { BanIcon, Loader2Icon } from 'lucide-react';
 import type z from 'zod';
@@ -77,7 +77,7 @@ export const NumberField: React.FC<NumberFieldProps> = ({
 }) => {
   const field = useTanStackFieldContext<number | null>();
 
-  const isSubmitting = useStore(field.form.store, ({ isSubmitting }) => isSubmitting);
+  const isSubmitting = useSelector(field.form.store, ({ isSubmitting }) => isSubmitting);
 
   const _errors = field.state.meta.errors;
   const _isEmpty = required ? field.state.value === null : false;

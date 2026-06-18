@@ -1,6 +1,6 @@
 'use client';
 
-import { useStore } from '@tanstack/react-form';
+import { useSelector } from '@tanstack/react-store';
 
 import type z from 'zod';
 
@@ -36,7 +36,7 @@ type Props = Pick<z.input<typeof TanStackFormCheckboxGroupFieldSchema>, 'label' 
  */
 export const CheckboxField: React.FC<Props> = ({ label, description, options, tooltip, helperText, orientation }) => {
   const field = useTanStackFieldContext<string[] | null>();
-  const isSubmitting = useStore(field.form.store, ({ isSubmitting }) => isSubmitting);
+  const isSubmitting = useSelector(field.form.store, ({ isSubmitting }) => isSubmitting);
 
   return (
     <FieldGroup className="gap-y-4 px-4">

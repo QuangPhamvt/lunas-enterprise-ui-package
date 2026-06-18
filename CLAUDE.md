@@ -77,6 +77,8 @@ Project-specific skills live in `.claude/skills/<name>/SKILL.md` and can be invo
 | Tech Stack | `/tech-stack` | Full peer + dev dependency table with concrete library usage examples |
 | Optimization Targets | `/optimization-targets` | 8 refactor targets — sidebar duplication, memory leak, suppressed lint rules, large files, dead code |
 | React Pattern | `/react-pattern` | Coding rules: file structure, context, state, effects, styling, props, refs, Radix, performance |
+| TanStack Form | `/tanstack-form` | Complete TanStack Form v1 API guide: hooks, field components, form containers, validation, array fields, composition |
+| TanStack Form Agents | `/tanstack-form-agents` | Full upstream TanStack Form API reference for agents: FormApi, FieldApi, Zod validation, Form Composition (withForm/withFieldGroup), listeners, array fields, SSR |
 
 ## MCP
 

@@ -132,6 +132,7 @@ function SelectContent({ className, children, position = 'popper', ...props }: R
           'bg-white',
           'w-(--radix-select-trigger-width)',
           'origin-(--radix-select-content-transform-origin)',
+          'max-h-[min(20rem,var(--radix-select-content-available-height))]',
 
           'data-[state=open]:animate-in',
           'data-[state=open]:fade-in',

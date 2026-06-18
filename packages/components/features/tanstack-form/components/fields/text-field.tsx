@@ -1,8 +1,8 @@
 'use client';
 
-import { useCallback, useId, useMemo, useRef } from 'react';
+import { memo, useCallback, useId, useMemo, useRef } from 'react';
 
-import { useStore } from '@tanstack/react-form';
+import { useSelector } from '@tanstack/react-store';
 
 import { BanIcon, Loader2Icon, XIcon } from 'lucide-react';
 import type z from 'zod';
@@ -26,39 +26,16 @@ import { useTanStackFieldContext } from '../../tanstack-form';
 
 import type { TanStackFormTextFieldSchema } from '../../schema';
 
-/**
- * Props for the TextField component, derived from the TanStack Form text field schema.
- */
 type Props = Pick<
   z.input<typeof TanStackFormTextFieldSchema>,
   'label' | 'description' | 'placeholder' | 'orientation' | 'counter' | 'tooltip' | 'helperText' | 'showClearButton' | 'showErrorMessage'
 > & {
-  /** Marks the field as required; triggers an empty-state indicator when the value is null. */
   required?: boolean;
-  /** Maximum number of characters allowed; enforced when `counter` is true. */
   maxLength?: number;
+  disabled?: boolean;
 };
 
-/**
- * A TanStack Form-connected single-line text input field with optional character counter,
- * clear button, error display, and submission-state feedback.
- *
- * @example
- * import { TextField } from '@customafk/lunas-ui/features/tanstack-form';
- *
- * <form.Field name="username">
- *   {() => (
- *     <TextField
- *       label="Username"
- *       placeholder="Enter username"
- *       counter
- *       maxLength={50}
- *       showClearButton
- *     />
- *   )}
- * </form.Field>
- */
-export const TextField: React.FC<Props> = ({
+export const TextField = memo<Props>(({
   label,
   description,
   placeholder,
@@ -71,15 +48,18 @@ export const TextField: React.FC<Props> = ({
   showErrorMessage = true,
 
   required = false,
+  disabled = false,
   maxLength,
 }) => {
   const id = useId();
+  const errorId = useId();
   const inputRef = useRef<HTMLInputElement>(null);
   const { form, name, state, handleBlur, handleChange } = useTanStackFieldContext<string | null>();
 
-  const isSubmitting = useStore(form.store, ({ isSubmitting }) => isSubmitting);
+  const isSubmitting = useSelector(form.store, ({ isSubmitting }) => isSubmitting);
+  const isDisabled = disabled || isSubmitting;
 
-  const _showClearButton = showClearButton && !isSubmitting && !!state.value;
+  const _showClearButton = showClearButton && !isDisabled && !!state.value;
 
   const _count = state.value ? state.value.length : 0;
 
@@ -90,26 +70,32 @@ export const TextField: React.FC<Props> = ({
     return `${_count} ${unit}`;
   }, [_count, counter, maxLength]);
 
-  const _invalid = state.meta.isDirty && state.meta.isTouched && !state.meta.isValid;
+  const _touched = state.meta.isDirty || state.meta.isTouched;
+  const _invalid = _touched && !state.meta.isValid;
   const _isEmpty = required && state.value === null;
+  const _hasErrors = !!state.meta.errors.length;
 
   const _isNearLimit = maxLength && _count >= maxLength * 0.8;
   const _isAtLimit = maxLength && _count >= maxLength;
 
   const onChange = useCallback<React.ChangeEventHandler<HTMLInputElement>>(
     ({ target: { value } }) => {
-      if (isSubmitting) return;
+      if (isDisabled) return;
       if (counter && maxLength && value.length > maxLength) return;
       handleChange(value || null);
     },
-    [isSubmitting, counter, maxLength, handleChange]
+    [isDisabled, counter, maxLength, handleChange]
   );
 
   const onClear = useCallback(() => {
-    if (isSubmitting) return;
+    if (isDisabled) return;
     handleChange(null);
     inputRef.current?.focus();
-  }, [isSubmitting, handleChange]);
+  }, [isDisabled, handleChange]);
+
+  const onKeyDown = useCallback<React.KeyboardEventHandler<HTMLInputElement>>((e) => {
+    if (e.key === 'Enter') e.preventDefault();
+  }, []);
 
   return (
     <FieldGroup className="gap-y-4 px-4">
@@ -128,19 +114,22 @@ export const TextField: React.FC<Props> = ({
             name={name}
             value={state.value ?? ''}
             aria-invalid={_invalid}
+            aria-describedby={errorId}
             autoComplete="off"
             placeholder={placeholder}
             autoCapitalize="none"
             autoCorrect="off"
-            className={cn('pr-6', isSubmitting && 'pointer-events-none bg-muted-muted opacity-60')}
+            disabled={isDisabled}
+            className={cn('pr-6', isDisabled && 'pointer-events-none bg-muted-muted opacity-60')}
             onBlur={handleBlur}
             onChange={onChange}
+            onKeyDown={onKeyDown}
           />
           {_showClearButton && (
             <button
               type="button"
               aria-label="Clear"
-              className="absolute inset-e-0 inset-y-0 top-3 flex h-fit w-8 cursor-pointer items-center justify-center rounded-e-md text-text-positive-weak outline-none transition-[color,box-shadow] hover:text-text-positive focus:text-text-positive-intense [&>svg]:size-3.5"
+              className="absolute inset-e-1 top-2.5 flex size-4 cursor-pointer items-center justify-center rounded-md text-text-positive-weak outline-none transition-[color,transform] hover:text-text-positive focus-visible:text-primary-strong focus-visible:[&>svg]:scale-125 [&>svg]:size-3.5 [&>svg]:transition-transform"
               onClick={onClear}
             >
               <XIcon aria-hidden="true" />
@@ -151,13 +140,13 @@ export const TextField: React.FC<Props> = ({
               <Loader2Icon size={14} className="animate-spin text-primary-strong" />
             </div>
           )}
-          {!_showClearButton && state.meta.isDirty && showErrorMessage && !!state.meta.errors.length && (
+          {!_showClearButton && _touched && showErrorMessage && _hasErrors && (
             <div className="absolute inset-e-2 inset-y-0 top-2.5 text-danger-strong">
               <BanIcon aria-hidden="true" size={14} />
             </div>
           )}
           <div className="my-1 flex w-full items-start justify-between gap-x-2">
-            {state.meta.isDirty && showErrorMessage ? <FieldError className="flex-1" errors={state.meta.errors} /> : <div />}
+            {_touched && showErrorMessage ? <FieldError id={errorId} className="flex-1" errors={state.meta.errors} /> : <div />}
             {!!counter && (
               <p
                 className={cn(
@@ -175,4 +164,6 @@ export const TextField: React.FC<Props> = ({
       <FieldSeparator />
     </FieldGroup>
   );
-};
+});
+
+TextField.displayName = 'TextField';

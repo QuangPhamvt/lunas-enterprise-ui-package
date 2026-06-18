@@ -350,24 +350,15 @@ FieldSeparator.displayName = 'FieldSeparator';
  * Props for {@link FieldError}.
  */
 type FieldErrorProps = React.ComponentProps<'div'> & {
-  /**
-   * Array of validation error objects, typically sourced from a form library's field-level error state.
-   * Each entry may carry an optional `code` (e.g. `'invalid_type'`) and a human-readable `message`.
-   * Rendered automatically when `children` is omitted.
-   */
   errors?: Array<{ code?: string; message?: string } | undefined>;
+  requiredMessage?: string;
 };
 
-/**
- * ARIA-live error region that renders field validation messages from either an explicit `errors` array or arbitrary `children`.
- *
- * @example
- * import { FieldError } from '@customafk/lunas-ui/features/tanstack-form';
- *
- * <FieldError errors={field.state.meta.errors} />
- */
-const FieldError = memo(({ className, children, errors, ...props }: FieldErrorProps) => {
+const FieldError = memo(({ className, children, errors, requiredMessage = 'Trường này là bắt buộc', ...props }: FieldErrorProps) => {
   const content = useMemo(() => {
+    const resolve = (error: { code?: string; message?: string }) =>
+      error.code === 'invalid_type' ? requiredMessage : error.message;
+
     if (children) {
       return children;
     }
@@ -379,7 +370,7 @@ const FieldError = memo(({ className, children, errors, ...props }: FieldErrorPr
     if (errors?.length === 1 && errors[0]?.message) {
       return (
         <div className="flex flex-row items-center justify-start gap-x-0.5">
-          <p>{errors[0]?.code === 'invalid_type' ? 'Invalid format' : errors[0].message}</p>
+          <p>{resolve(errors[0])}</p>
         </div>
       );
     }
@@ -389,11 +380,11 @@ const FieldError = memo(({ className, children, errors, ...props }: FieldErrorPr
         {errors.map(error => {
           if (typeof error === 'string') return <li key={error}>{error}</li>;
           if (!error?.message) return null;
-          return <li key={error.message}>{error.message}</li>;
+          return <li key={error.code ?? error.message}>{resolve(error)}</li>;
         })}
       </ul>
     );
-  }, [children, errors]);
+  }, [children, errors, requiredMessage]);
 
   if (!content) {
     return null;

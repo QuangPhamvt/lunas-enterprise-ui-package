@@ -2,7 +2,7 @@
 
 import { useCallback, useId, useState } from 'react';
 
-import { useStore } from '@tanstack/react-form';
+import { useSelector } from '@tanstack/react-store';
 
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
 import type z from 'zod';
@@ -61,7 +61,7 @@ export const PasswordField: React.FC<Props> = ({
   const id = useId();
   const { form, name, state, handleBlur, handleChange } = useTanStackFieldContext<string | null>();
 
-  const isSubmitting = useStore(form.store, ({ isSubmitting }) => isSubmitting);
+  const isSubmitting = useSelector(form.store, ({ isSubmitting }) => isSubmitting);
 
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
