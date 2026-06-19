@@ -573,16 +573,10 @@ export const CardForm: Story = {
             });
             return (
               <AppForm>
-                <TanStackCardForm
-                  title={item.title}
-                  description={item.description}
-                  onDelete={() => setItems(prev => prev.filter(i => i.id !== item.id))}
-                >
+                <TanStackCardForm title={item.title} description={item.description} onDelete={() => setItems(prev => prev.filter(i => i.id !== item.id))}>
                   <AppField
                     name="notes"
-                    children={({ TextareaField }) => (
-                      <TextareaField label="Notes" placeholder="Add notes…" orientation="responsive" showErrorMessage />
-                    )}
+                    children={({ TextareaField }) => <TextareaField label="Notes" placeholder="Add notes…" orientation="responsive" showErrorMessage />}
                   />
                   <div className="flex justify-end px-4">
                     <TanStackActionSubmit label="Save" />
@@ -634,18 +628,14 @@ export const SectionForm: Story = {
               />
               <AppField
                 name="email"
-                children={({ EmailField }) => (
-                  <EmailField label="Email" placeholder="john@example.com" orientation="responsive" showErrorMessage required />
-                )}
+                children={({ EmailField }) => <EmailField label="Email" placeholder="john@example.com" orientation="responsive" showErrorMessage required />}
               />
             </TanStackSectionForm>
 
             <TanStackSectionForm title="Work Information">
               <AppField
                 name="company"
-                children={({ TextField }) => (
-                  <TextField label="Company" placeholder="Acme Corp" orientation="responsive" showClearButton showErrorMessage />
-                )}
+                children={({ TextField }) => <TextField label="Company" placeholder="Acme Corp" orientation="responsive" showClearButton showErrorMessage />}
               />
               <AppField
                 name="department"

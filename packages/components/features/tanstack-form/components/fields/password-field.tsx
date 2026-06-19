@@ -5,11 +5,9 @@ import { useCallback, useId, useState } from 'react';
 import { useSelector } from '@tanstack/react-store';
 
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
-import type z from 'zod';
 
 import { Input } from '@/components/ui/input';
 
-import type { TanStackFormPasswordFieldSchema } from '../../schema';
 import { useTanStackFieldContext } from '../../tanstack-form';
 import {
   Field,
@@ -24,13 +22,7 @@ import {
   FieldTooltip,
 } from '../ui/field';
 
-/**
- * Props for the PasswordField component, derived from the TanStack Form password field schema.
- */
-type Props = Pick<
-  z.input<typeof TanStackFormPasswordFieldSchema>,
-  'label' | 'description' | 'placeholder' | 'orientation' | 'tooltip' | 'helperText' | 'showErrorMessage'
->;
+import type { PasswordFieldProps as Props } from '../../types';
 
 /**
  * A TanStack Form-connected password input field with a show/hide toggle button

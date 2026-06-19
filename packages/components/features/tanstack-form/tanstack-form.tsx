@@ -33,7 +33,21 @@ import { TanStackPopoverForm } from './components/forms/popover-form';
 import { TanStackSectionForm } from './components/forms/section-form';
 import { TanStackTitleField } from './components/forms/title-field';
 import { CancelButton } from './components/ui/cancel-button';
-import { Field, FieldContent, FieldContentMain, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldLegend, FieldNote, FieldSeparator, FieldSet, FieldTitle, FieldTooltip } from './components/ui/field';
+import {
+  Field,
+  FieldContent,
+  FieldContentMain,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldLegend,
+  FieldNote,
+  FieldSeparator,
+  FieldSet,
+  FieldTitle,
+  FieldTooltip,
+} from './components/ui/field';
 import { SubmitButton } from './components/ui/submit-button';
 
 const { fieldContext, formContext, useFieldContext: useTanStackFieldContext, useFormContext: useTanStackFormContext } = createFormHookContexts();
@@ -160,7 +174,6 @@ export {
   withTanStackFieldGroup,
   useTanStackFieldContext,
   useTanStackFormContext,
-
   // Form containers
   TanStackDialogForm,
   TanStackPopoverForm,
@@ -169,17 +182,14 @@ export {
   TanStackCardForm,
   TanStackFieldGroup,
   TanStackTitleField,
-
   // Form actions
   TanStackActionsForm,
   TanStackActionSubmit,
   SubmitButton,
   CancelButton,
-
   // Array helpers
   ArrayCol,
   ArrayHeaderRow,
-
   // Rich field components
   TextField,
   TextareaField,
@@ -193,7 +203,6 @@ export {
   SwitchField,
   RadioGroupField,
   CheckboxField,
-
   // Simple (minimal) field components
   SimpleTextField,
   SimpleEmailField,
@@ -206,7 +215,6 @@ export {
   SimpleComboboxField,
   SimpleDateField,
   SimpleRadioGroupField,
-
   // Field UI primitives
   FieldSet,
   FieldLegend,

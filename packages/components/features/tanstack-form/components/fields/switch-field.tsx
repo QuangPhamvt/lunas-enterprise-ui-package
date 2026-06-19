@@ -1,16 +1,10 @@
 'use client';
 
-import type z from 'zod';
-
-import type { TanStackFormSwitchFieldSchema } from '../../schema';
 import { useTanStackFieldContext } from '../../tanstack-form';
 import { Field, FieldContent, FieldDescription, FieldGroup, FieldNote, FieldSeparator, FieldTitle } from '../ui/field';
 import { Switch } from '../ui/switch';
 
-/**
- * Props for the SwitchField component, derived from the TanStack Form switch field schema.
- */
-type Props = Pick<z.input<typeof TanStackFormSwitchFieldSchema>, 'label' | 'description' | 'helperText'>;
+import type { SwitchFieldProps as Props } from '../../types';
 
 /**
  * A TanStack Form-connected boolean toggle field rendered as a labelled switch,

@@ -356,8 +356,7 @@ type FieldErrorProps = React.ComponentProps<'div'> & {
 
 const FieldError = memo(({ className, children, errors, requiredMessage = 'Trường này là bắt buộc', ...props }: FieldErrorProps) => {
   const content = useMemo(() => {
-    const resolve = (error: { code?: string; message?: string }) =>
-      error.code === 'invalid_type' ? requiredMessage : error.message;
+    const resolve = (error: { code?: string; message?: string }) => (error.code === 'invalid_type' ? requiredMessage : error.message);
 
     if (children) {
       return children;

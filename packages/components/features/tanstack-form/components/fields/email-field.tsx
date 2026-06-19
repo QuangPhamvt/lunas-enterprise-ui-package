@@ -5,7 +5,6 @@ import { useCallback } from 'react';
 import { useSelector } from '@tanstack/react-store';
 
 import { AtSignIcon, XIcon } from 'lucide-react';
-import type z from 'zod';
 
 import { cn } from '@customafk/react-toolkit/utils';
 
@@ -24,20 +23,7 @@ import {
 } from '../ui/field';
 import { useTanStackFieldContext } from '../../tanstack-form';
 
-import type { TanStackFormEmailFieldSchema } from '../../schema';
-
-/**
- * Props for the EmailField component, derived from the TanStack Form email field schema.
- */
-type Props = Pick<
-  z.input<typeof TanStackFormEmailFieldSchema>,
-  'label' | 'description' | 'placeholder' | 'orientation' | 'tooltip' | 'helperText' | 'showErrorMessage'
-> & {
-  /** Marks the field as required; triggers an empty-state indicator when the value is null. */
-  required?: boolean;
-  /** Maximum number of characters the user may enter. */
-  maxLength?: number;
-};
+import type { EmailFieldProps as Props } from '../../types';
 
 /**
  * A TanStack Form-connected email input field with an at-sign prefix icon,

@@ -347,25 +347,13 @@ export const Orientations: Story = {
           <AppField
             name="horizontal"
             children={({ SelectField }) => (
-              <SelectField
-                label="Horizontal"
-                description="Label sits to the left."
-                placeholder="Select…"
-                orientation="horizontal"
-                options={ROLE_OPTIONS}
-              />
+              <SelectField label="Horizontal" description="Label sits to the left." placeholder="Select…" orientation="horizontal" options={ROLE_OPTIONS} />
             )}
           />
           <AppField
             name="vertical"
             children={({ SelectField }) => (
-              <SelectField
-                label="Vertical"
-                description="Label sits above."
-                placeholder="Select…"
-                orientation="vertical"
-                options={ROLE_OPTIONS}
-              />
+              <SelectField label="Vertical" description="Label sits above." placeholder="Select…" orientation="vertical" options={ROLE_OPTIONS} />
             )}
           />
           <AppField

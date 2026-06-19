@@ -163,8 +163,13 @@ export const WithCounter: Story = {
     const { AppField, TanStackContainerForm, TanStackSectionForm } = useTanStackForm({
       defaultValues: {
         fresh: null as string | null,
-        nearLimit: 'Almost at the character limit — keep typing to see the warning colour change as you approach the maximum allowed length for this field.' as string | null,
-        atLimit: 'Exactly at the two-hundred character limit. No more characters can be entered past this point because the field enforces a hard maximum length cap.' as string | null,
+        nearLimit: 'Almost at the character limit — keep typing to see the warning colour change as you approach the maximum allowed length for this field.' as
+          | string
+          | null,
+        atLimit:
+          'Exactly at the two-hundred character limit. No more characters can be entered past this point because the field enforces a hard maximum length cap.' as
+            | string
+            | null,
       },
     });
     return (
@@ -173,14 +178,7 @@ export const WithCounter: Story = {
           <AppField
             name="fresh"
             children={({ TextareaField }) => (
-              <TextareaField
-                label="Empty (0 / 200)"
-                placeholder="Start typing…"
-                orientation="responsive"
-                counter
-                maxLength={maxLength}
-                showErrorMessage
-              />
+              <TextareaField label="Empty (0 / 200)" placeholder="Start typing…" orientation="responsive" counter maxLength={maxLength} showErrorMessage />
             )}
           />
           <AppField
@@ -218,11 +216,7 @@ export const WithCounter: Story = {
 export const BlurValidation: Story = {
   render: () => {
     const schema = z.object({
-      bio: z
-        .string()
-        .min(20, 'At least 20 characters')
-        .max(500, 'Max 500 characters')
-        .nullable(),
+      bio: z.string().min(20, 'At least 20 characters').max(500, 'Max 500 characters').nullable(),
     });
     const { AppField, TanStackContainerForm, TanStackSectionForm } = useTanStackForm({
       defaultValues: { bio: null as string | null },
@@ -267,25 +261,13 @@ export const Orientations: Story = {
           <AppField
             name="horizontal"
             children={({ TextareaField }) => (
-              <TextareaField
-                label="Horizontal"
-                description="Label sits to the left."
-                placeholder="Enter text"
-                orientation="horizontal"
-                showErrorMessage
-              />
+              <TextareaField label="Horizontal" description="Label sits to the left." placeholder="Enter text" orientation="horizontal" showErrorMessage />
             )}
           />
           <AppField
             name="vertical"
             children={({ TextareaField }) => (
-              <TextareaField
-                label="Vertical"
-                description="Label sits above."
-                placeholder="Enter text"
-                orientation="vertical"
-                showErrorMessage
-              />
+              <TextareaField label="Vertical" description="Label sits above." placeholder="Enter text" orientation="vertical" showErrorMessage />
             )}
           />
           <AppField

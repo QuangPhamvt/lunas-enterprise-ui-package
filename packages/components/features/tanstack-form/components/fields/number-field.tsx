@@ -5,13 +5,11 @@ import { useCallback } from 'react';
 import { useSelector } from '@tanstack/react-store';
 
 import { BanIcon, Loader2Icon } from 'lucide-react';
-import type z from 'zod';
 
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { NumberInput } from '@/components/ui/inputs/number-input';
 
-import type { TanStackFormNumberFieldSchema } from '../../schema';
 import { useTanStackFieldContext } from '../../tanstack-form';
 import {
   Field,
@@ -26,18 +24,7 @@ import {
   FieldTooltip,
 } from '../ui/field';
 
-/**
- * Props for the NumberField component, derived from the TanStack Form number field schema.
- */
-type NumberFieldProps = Pick<
-  z.input<typeof TanStackFormNumberFieldSchema>,
-  'label' | 'description' | 'placeholder' | 'orientation' | 'tooltip' | 'helperText' | 'rounding' | 'decimalPlaces' | 'percision' | 'unit' | 'showErrorMessage'
-> & {
-  /** Marks the field as required; triggers an empty-state indicator when the value is null. */
-  required?: boolean;
-  /** When true, the input accepts negative numbers. */
-  allowNegative?: boolean;
-};
+import type { NumberFieldProps } from '../../types';
 
 /**
  * A TanStack Form-connected numeric input field supporting rounding rules,
