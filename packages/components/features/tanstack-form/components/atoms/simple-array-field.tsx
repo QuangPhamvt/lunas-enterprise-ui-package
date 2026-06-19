@@ -130,7 +130,7 @@ type Props<T> = {
  *   </AppField>
  * </AppForm>
  */
-export function SimpleArrayField<T>({ defaultRow, children, addLabel = 'Add row', className }: Props<T>) {
+export function SimpleArrayField<T>({ defaultRow, children, addLabel = 'Thêm hàng', className }: Props<T>) {
   const field = useTanStackFieldContext<T[]>();
   const rows = field.state.value ?? [];
 

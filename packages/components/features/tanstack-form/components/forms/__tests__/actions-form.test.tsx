@@ -23,9 +23,9 @@ function ActionsFormHarness({ type = 'create' as 'create' | 'update' }) {
 
 describe('TanStackActionsForm', () => {
   describe('type="create"', () => {
-    it('renders the "Add New" submit button', () => {
+    it('renders the "Thêm mới" submit button', () => {
       render(<ActionsFormHarness type="create" />);
-      expect(screen.getByRole('button', { name: /Add New/ })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /Thêm mới/ })).toBeInTheDocument();
     });
 
     it('renders the cancel button', () => {
@@ -33,9 +33,9 @@ describe('TanStackActionsForm', () => {
       expect(screen.getByRole('button', { name: /Hủy bỏ/ })).toBeInTheDocument();
     });
 
-    it('"Add New" button is disabled when form is pristine', () => {
+    it('"Thêm mới" button is disabled when form is pristine', () => {
       render(<ActionsFormHarness type="create" />);
-      expect(screen.getByRole('button', { name: /Add New/ })).toBeDisabled();
+      expect(screen.getByRole('button', { name: /Thêm mới/ })).toBeDisabled();
     });
 
     it('cancel button is disabled when form is pristine', () => {
@@ -45,19 +45,19 @@ describe('TanStackActionsForm', () => {
   });
 
   describe('type="update"', () => {
-    it('renders the "Update" submit button', () => {
+    it('renders the "Cập nhật" submit button', () => {
       render(<ActionsFormHarness type="update" />);
-      expect(screen.getByRole('button', { name: /Update/ })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /Cập nhật/ })).toBeInTheDocument();
     });
 
-    it('does not render "Add New" for type="update"', () => {
+    it('does not render "Thêm mới" for type="update"', () => {
       render(<ActionsFormHarness type="update" />);
-      expect(screen.queryByRole('button', { name: /Add New/ })).not.toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: /Thêm mới/ })).not.toBeInTheDocument();
     });
 
-    it('"Update" button is disabled when form is pristine', () => {
+    it('"Cập nhật" button is disabled when form is pristine', () => {
       render(<ActionsFormHarness type="update" />);
-      expect(screen.getByRole('button', { name: /Update/ })).toBeDisabled();
+      expect(screen.getByRole('button', { name: /Cập nhật/ })).toBeDisabled();
     });
   });
 });

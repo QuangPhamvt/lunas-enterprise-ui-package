@@ -37,7 +37,7 @@ export const TanStackActionSubmit: React.FC<{
       children={({ disabled, isSubmitting }) => {
         return (
           <Button type="button" size="md" disabled={disabled} isLoading={isSubmitting} className={cn('min-h-8 min-w-32', className)} onClick={onSubmit}>
-            {label ?? 'Submit'}
+            {label ?? 'Xác nhận'}
           </Button>
         );
       }}

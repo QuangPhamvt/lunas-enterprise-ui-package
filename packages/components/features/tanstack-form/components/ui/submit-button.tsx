@@ -27,7 +27,7 @@ type SubmitButtonProps = React.ComponentProps<'button'> & {
  *
  * <SubmitButton isSubmitting={form.state.isSubmitting} submitText="Save changes" />
  */
-export const SubmitButton: React.FC<SubmitButtonProps> = ({ isSubmitting, submitText = 'Submit', disabled, className, onClick }) => {
+export const SubmitButton: React.FC<SubmitButtonProps> = ({ isSubmitting, submitText = 'Xác nhận', disabled, className, onClick }) => {
   return (
     <Button
       type="button"

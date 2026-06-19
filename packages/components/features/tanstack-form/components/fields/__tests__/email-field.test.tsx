@@ -67,20 +67,20 @@ describe('EmailField', () => {
       const user = userEvent.setup();
       render(<EmailFieldHarness />);
       await user.type(screen.getByRole('textbox'), 'a@b.com');
-      expect(screen.getByRole('button', { name: 'Clear' })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Xóa' })).toBeInTheDocument();
     });
 
     it('clears the value when the clear button is clicked', async () => {
       const user = userEvent.setup();
       render(<EmailFieldHarness />);
       await user.type(screen.getByRole('textbox'), 'a@b.com');
-      await user.click(screen.getByRole('button', { name: 'Clear' }));
+      await user.click(screen.getByRole('button', { name: 'Xóa' }));
       expect(screen.getByRole('textbox')).toHaveValue('');
     });
 
     it('does not show a clear button when the field is empty', () => {
       render(<EmailFieldHarness />);
-      expect(screen.queryByRole('button', { name: 'Clear' })).not.toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: 'Xóa' })).not.toBeInTheDocument();
     });
   });
 });

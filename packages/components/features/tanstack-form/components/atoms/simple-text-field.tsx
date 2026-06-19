@@ -10,13 +10,7 @@ import { Label } from '@/components/ui/label';
 import { useTanStackFieldContext } from '../../tanstack-form';
 import { FieldError } from '../ui/field';
 
-type Props = {
-  label?: string;
-  placeholder?: string;
-  required?: boolean;
-  maxLength?: number;
-  disabled?: boolean;
-};
+import type { SimpleTextFieldProps as Props } from '../../types';
 
 export const SimpleTextField: React.FC<Props> = ({ label, placeholder, required, maxLength, disabled }) => {
   const id = useId();

@@ -3,7 +3,6 @@
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { Label as LabelPrimitive } from 'radix-ui';
-import { Badge } from './badge';
 
 /**
  * Form field label that automatically renders a "Required" badge when the field is marked aria-required.
@@ -31,7 +30,12 @@ function Label({ className, children, ...props }: React.ComponentProps<typeof La
       {...props}
     >
       <span className="flex items-center gap-1">{children}</span>
-      <Badge label="Required" color="danger" size="xs" className="hidden shrink-0" />
+      <span
+        data-slot="required-indicator"
+        className="hidden shrink-0 rounded-lg bg-danger-strong px-1.5 py-1 font-semibold text-[11px] leading-none text-white"
+      >
+        Bắt buộc
+      </span>
     </LabelPrimitive.Root>
   );
 }

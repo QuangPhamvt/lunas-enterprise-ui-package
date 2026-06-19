@@ -39,9 +39,9 @@ export const SimpleComboboxField: React.FC<Props> = ({ label, placeholder, requi
 
   const commandList = (
     <Command>
-      <CommandInput placeholder={placeholder ?? 'Search…'} />
+      <CommandInput placeholder={placeholder ?? 'Tìm kiếm…'} />
       <CommandList>
-        <CommandEmpty>No results found.</CommandEmpty>
+        <CommandEmpty>Không tìm thấy kết quả.</CommandEmpty>
         <CommandGroup>
           {options.map(option => (
             <CommandItem
@@ -90,7 +90,7 @@ export const SimpleComboboxField: React.FC<Props> = ({ label, placeholder, requi
         <Drawer open={drawerOpen} onOpenChange={setDrawerOpen} direction="bottom">
           <DrawerContent>
             <DrawerHeader>
-              <DrawerTitle>{label ?? placeholder ?? 'Search…'}</DrawerTitle>
+              <DrawerTitle>{label ?? placeholder ?? 'Tìm kiếm…'}</DrawerTitle>
             </DrawerHeader>
             <div className="overflow-y-auto pb-safe-bottom">{commandList}</div>
           </DrawerContent>

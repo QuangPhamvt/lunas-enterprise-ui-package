@@ -104,7 +104,7 @@ export const EmailField: React.FC<Props> = ({
           {_showClear && (
             <button
               type="button"
-              aria-label="Clear"
+              aria-label="Xóa"
               className="absolute inset-e-0 inset-y-0 top-3 flex h-fit w-8 cursor-pointer items-center justify-center rounded-e-md text-text-positive-weak outline-none transition-[color,box-shadow] hover:text-text-positive focus:text-text-positive-strong"
               onClick={onClear}
             >

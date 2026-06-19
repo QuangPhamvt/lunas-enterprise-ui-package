@@ -92,7 +92,7 @@ export const ComboboxField = memo<ComboboxFieldProps>(
 
     const commandList = (
       <Command className="border-none">
-        <CommandInput placeholder={placeholder ?? 'Search…'} />
+        <CommandInput placeholder={placeholder ?? 'Tìm kiếm…'} />
         <CommandList>
           <CommandEmpty className="flex min-h-30 items-center justify-center text-sm text-text-positive-weak">Không tìm thấy kết quả nào phù hợp.</CommandEmpty>
           <CommandGroup className="max-h-60 overflow-y-auto">
@@ -165,7 +165,7 @@ export const ComboboxField = memo<ComboboxFieldProps>(
                 {_showClear && (
                   <button
                     type="button"
-                    aria-label="Clear selection"
+                    aria-label="Xóa lựa chọn"
                     className="absolute right-2 top-1/2 -translate-y-1/2 flex size-4 cursor-pointer items-center justify-center rounded-md text-text-positive-weak outline-none transition-[color,transform] hover:text-text-positive focus-visible:text-primary-strong focus-visible:[&>svg]:scale-125 [&>svg]:size-3.5 [&>svg]:transition-transform"
                     onClick={onClear}
                   >

@@ -54,9 +54,8 @@ export const TextareaField = memo<Props>(
 
     const _countText = useMemo(() => {
       if (!counter) return '';
-      const unit = `character${[0, 1].includes(_count) ? '' : 's'}`;
-      if (counter && maxLength) return `${_count} / ${maxLength} character${!_count ? '' : 's'}`;
-      return `${_count} ${unit}`;
+      if (counter && maxLength) return `${_count} / ${maxLength} ký tự`;
+      return `${_count} ký tự`;
     }, [_count, counter, maxLength]);
 
     const _touched = state.meta.isDirty || state.meta.isTouched;
@@ -113,7 +112,7 @@ export const TextareaField = memo<Props>(
             {_showCopy && (
               <button
                 type="button"
-                aria-label="Copy"
+                aria-label="Sao chép"
                 className="absolute inset-e-1 top-2 flex size-4 cursor-pointer items-center justify-center rounded-md outline-none transition-[color,transform] focus-visible:[&>svg]:scale-125 [&>svg]:size-3.5 [&>svg]:transition-transform"
                 onClick={onCopy}
               >

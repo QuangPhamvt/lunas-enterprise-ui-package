@@ -125,11 +125,11 @@ const ComboboxActions: React.FC<React.ComponentProps<'div'>> = ({ children, ...p
     <div className="flex items-center justify-between px-3 pt-1.5 pb-1 text-text-positive-weak text-xs" {...props}>
       <button type="button" className="flex cursor-pointer items-center outline-none hover:text-text-positive [&>svg]:size-3">
         <XIcon />
-        Clear
+        Xóa
       </button>
       <button type="button" className="flex cursor-pointer items-center outline-none hover:text-text-positive [&>svg]:size-3">
         <PlusIcon />
-        Add Item
+        Thêm mục
       </button>
     </div>
   );
@@ -187,7 +187,7 @@ const ComboboxEmpty: React.FC<React.ComponentProps<'div'>> = ({ ...props }) => {
     <Command.Empty data-slot="combobox-empty" {...props} className="p-1 pt-0">
       <div className="flex h-40 items-center justify-center space-x-2 rounded border border-border bg-muted-muted px-6 text-sm text-text-positive-weak">
         <PackageSearchIcon size={32} strokeWidth={1} />
-        <p>No results found.</p>
+        <p>Không tìm thấy kết quả.</p>
       </div>
     </Command.Empty>
   );

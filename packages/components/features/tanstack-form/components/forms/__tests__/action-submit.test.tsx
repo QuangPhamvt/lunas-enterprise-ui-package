@@ -23,9 +23,9 @@ function ActionSubmitHarness({ label, className }: { label?: string; className?:
 
 describe('TanStackActionSubmit', () => {
   describe('label', () => {
-    it('renders "Submit" as the default label', () => {
+    it('renders "Xác nhận" as the default label', () => {
       render(<ActionSubmitHarness />);
-      expect(screen.getByRole('button', { name: /Submit/ })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /Xác nhận/ })).toBeInTheDocument();
     });
 
     it('renders a custom label when provided', () => {
@@ -37,7 +37,7 @@ describe('TanStackActionSubmit', () => {
   describe('disabled state', () => {
     it('is disabled when the form is pristine', () => {
       render(<ActionSubmitHarness />);
-      expect(screen.getByRole('button', { name: /Submit/ })).toBeDisabled();
+      expect(screen.getByRole('button', { name: /Xác nhận/ })).toBeDisabled();
     });
   });
 });

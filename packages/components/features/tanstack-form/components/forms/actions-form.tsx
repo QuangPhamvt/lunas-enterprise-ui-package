@@ -63,7 +63,7 @@ export const TanStackActionsForm: React.FC<
                 }}
               >
                 <PlusIcon />
-                Add New
+                Thêm mới
               </Button>
             );
           }}
@@ -90,7 +90,7 @@ export const TanStackActionsForm: React.FC<
                 }}
               >
                 <ArrowDownToLine />
-                Update
+                Cập nhật
               </Button>
             );
           }}

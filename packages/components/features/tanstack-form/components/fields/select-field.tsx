@@ -102,7 +102,7 @@ export const SelectField = memo<Props>(
                 <Drawer open={drawerOpen} onOpenChange={setDrawerOpen} direction="bottom">
                   <DrawerContent>
                     <DrawerHeader>
-                      <DrawerTitle>{label ?? placeholder ?? 'Select an option'}</DrawerTitle>
+                      <DrawerTitle>{label ?? placeholder ?? 'Chọn một tùy chọn'}</DrawerTitle>
                     </DrawerHeader>
                     <div className="flex flex-col overflow-y-auto pb-safe-bottom">
                       {_showClear && (
@@ -113,7 +113,7 @@ export const SelectField = memo<Props>(
                             onClick={onClear}
                           >
                             <XIcon size={14} />
-                            Clear selection
+                            Xóa lựa chọn
                           </button>
                         </DrawerClose>
                       )}
@@ -139,7 +139,7 @@ export const SelectField = memo<Props>(
                       ) : (
                         <div className="flex items-center justify-center gap-x-2 px-4 py-8 text-center text-sm text-text-positive-weak">
                           <PackagePlusIcon strokeWidth={1} />
-                          No options available
+                          Không có tùy chọn
                         </div>
                       )}
                     </div>
@@ -171,7 +171,7 @@ export const SelectField = memo<Props>(
                 {_showClear && (
                   <button
                     type="button"
-                    aria-label="Clear selection"
+                    aria-label="Xóa lựa chọn"
                     className="absolute right-7 top-1/2 -translate-y-1/2 flex size-4 cursor-pointer items-center justify-center rounded-md text-text-positive-weak outline-none transition-[color,transform] hover:text-text-positive focus-visible:text-primary-strong focus-visible:[&>svg]:scale-125 [&>svg]:size-3.5 [&>svg]:transition-transform"
                     onClick={onClear}
                   >

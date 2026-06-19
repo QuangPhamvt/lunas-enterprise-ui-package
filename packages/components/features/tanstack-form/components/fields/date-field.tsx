@@ -102,7 +102,7 @@ export const DateField: React.FC<Props> = ({
                       field.handleChange(endOfToday());
                     }}
                   >
-                    Today
+                    Hôm nay
                   </Button>
 
                   <Button
@@ -113,7 +113,7 @@ export const DateField: React.FC<Props> = ({
                       field.handleChange(endOfTomorrow());
                     }}
                   >
-                    Tomorrow
+                    Ngày mai
                   </Button>
 
                   <Button
@@ -124,7 +124,7 @@ export const DateField: React.FC<Props> = ({
                       field.handleChange(endOfYesterday());
                     }}
                   >
-                    Yesterday
+                    Hôm qua
                   </Button>
 
                   <Button
@@ -135,7 +135,7 @@ export const DateField: React.FC<Props> = ({
                       field.handleChange(subDays(endOfToday(), 3));
                     }}
                   >
-                    Last 3 Days
+                    3 ngày qua
                   </Button>
 
                   <Button
@@ -146,7 +146,7 @@ export const DateField: React.FC<Props> = ({
                       field.handleChange(subDays(endOfToday(), 7));
                     }}
                   >
-                    Last 7 Days
+                    7 ngày qua
                   </Button>
 
                   <Button
@@ -157,7 +157,7 @@ export const DateField: React.FC<Props> = ({
                       field.handleChange(subDays(endOfToday(), 30));
                     }}
                   >
-                    Last 30 Days
+                    30 ngày qua
                   </Button>
 
                   <Button
@@ -168,7 +168,7 @@ export const DateField: React.FC<Props> = ({
                       field.handleChange(startOfMonth(endOfToday()));
                     }}
                   >
-                    This Month
+                    Tháng này
                   </Button>
 
                   <Button
@@ -179,7 +179,7 @@ export const DateField: React.FC<Props> = ({
                       field.handleChange(lastDayOfMonth(endOfToday()));
                     }}
                   >
-                    Last Month
+                    Tháng trước
                   </Button>
                 </div>
                 <div className="flex flex-1 flex-col">

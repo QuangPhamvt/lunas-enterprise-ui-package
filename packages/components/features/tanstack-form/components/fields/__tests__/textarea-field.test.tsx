@@ -80,19 +80,19 @@ describe('TextareaField', () => {
       const user = userEvent.setup();
       render(<TextareaFieldHarness counter />);
       await user.type(screen.getByRole('textbox'), 'hi');
-      expect(screen.getByText(/2 characters/)).toBeInTheDocument();
+      expect(screen.getByText(/2 ký tự/)).toBeInTheDocument();
     });
 
     it('shows count/limit when counter and maxLength are set', async () => {
       const user = userEvent.setup();
       render(<TextareaFieldHarness counter maxLength={100} />);
       await user.type(screen.getByRole('textbox'), 'hello');
-      expect(screen.getByText('5 / 100 characters')).toBeInTheDocument();
+      expect(screen.getByText('5 / 100 ký tự')).toBeInTheDocument();
     });
 
     it('does not show counter when counter is false', () => {
       render(<TextareaFieldHarness defaultValue="some text" />);
-      expect(screen.queryByText(/characters/)).not.toBeInTheDocument();
+      expect(screen.queryByText(/ký tự/)).not.toBeInTheDocument();
     });
   });
 

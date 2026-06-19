@@ -96,7 +96,7 @@ export const PasswordField: React.FC<Props> = ({
             className="absolute inset-e-0 inset-y-0 flex size-9 items-center justify-center rounded-e-md text-muted outline-none transition-[color,box-shadow] focus:z-10 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
             type="button"
             onClick={toggleVisibility}
-            aria-label={isVisible ? 'Hide password' : 'Show password'}
+            aria-label={isVisible ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
             aria-pressed={isVisible}
             aria-controls={id}
           >

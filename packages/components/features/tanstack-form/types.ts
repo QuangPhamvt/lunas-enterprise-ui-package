@@ -71,6 +71,20 @@ export type TextFieldProps = {
   disabled?: boolean;
 };
 
+/** Props for {@link SimpleTextField} — a minimal single-line text input without decoration. */
+export type SimpleTextFieldProps = {
+  /** Field label rendered above the input. Omit to render label-less. */
+  label?: string;
+  /** Input placeholder shown when the value is empty. */
+  placeholder?: string;
+  /** When `true`, appends a required asterisk to the label. */
+  required?: boolean;
+  /** Maximum number of characters the user may enter. */
+  maxLength?: number;
+  /** When `true`, disables the input. Also disabled automatically while the form is submitting. */
+  disabled?: boolean;
+};
+
 /** Props for {@link TextareaField} — a multi-line text input. */
 export type TextareaFieldProps = {
   /** Field label displayed above or beside the textarea. */

@@ -64,7 +64,7 @@ export const SimplePasswordField: React.FC<Props> = ({ label, placeholder, requi
         <button
           type="button"
           tabIndex={-1}
-          aria-label={isVisible ? 'Hide password' : 'Show password'}
+          aria-label={isVisible ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
           aria-pressed={isVisible}
           aria-controls={id}
           className="absolute inset-y-0 right-0 flex size-9 items-center justify-center text-muted outline-none transition-colors hover:text-text-positive focus-visible:text-text-positive disabled:pointer-events-none disabled:opacity-50"

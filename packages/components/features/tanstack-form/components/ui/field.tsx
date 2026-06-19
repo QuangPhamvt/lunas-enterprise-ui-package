@@ -17,7 +17,9 @@ const fieldVariants = cva('group/field flex w-full gap-2 data-[invalid=true]:tex
     orientation: {
       vertical: ['flex-col *:w-full [&>.sr-only]:w-auto'],
       horizontal: [
-        'flex-row items-center',
+        'flex-row items-center gap-4',
+        '*:data-[slot=field-content]:basis-1/2',
+        '*:data-[slot=field-content-main]:flex-1',
         '*:data-[slot=field-label]:flex-auto',
         'has-[>[data-slot=field-content]]:items-start',
         'has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px',
@@ -308,7 +310,7 @@ const FieldTooltip = memo(({ tooltip }: FieldTooltipProps) => {
           className="inline-flex cursor-default items-center text-text-positive-weak/70 hover:text-text-positive focus:outline-none"
         >
           <HelpCircleIcon size={13} aria-hidden="true" />
-          <span className="sr-only">More information</span>
+          <span className="sr-only">Thêm thông tin</span>
         </button>
       </TooltipTrigger>
       <TooltipContent side="top" className="max-w-xs text-balance">

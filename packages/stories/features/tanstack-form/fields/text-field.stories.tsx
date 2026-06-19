@@ -1,8 +1,11 @@
+'use client';
+
 import z from 'zod';
 
 import { useTanStackForm } from '@/components/features/tanstack-form';
 
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 
 const meta = {
   tags: ['autodocs'],
@@ -50,6 +53,28 @@ export const Default: Story = {
       </TanStackContainerForm>
     );
   },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const input = canvas.getByRole('textbox');
+
+    // starts empty, counter shows 0 / 50 ký tự
+    await expect(input).toHaveValue('');
+    await expect(canvas.getByText('0 / 50 ký tự')).toBeInTheDocument();
+
+    // clear button hidden while empty
+    await expect(canvas.queryByRole('button', { name: 'Xóa' })).not.toBeInTheDocument();
+
+    // typing updates the value and counter
+    await userEvent.type(input, 'Hello');
+    await expect(input).toHaveValue('Hello');
+    await expect(canvas.getByText('5 / 50 ký tự')).toBeInTheDocument();
+
+    // clear button appears after typing
+    const clearBtn = canvas.getByRole('button', { name: 'Xóa' });
+    await userEvent.click(clearBtn);
+    await expect(input).toHaveValue('');
+    await expect(canvas.queryByRole('button', { name: 'Xóa' })).not.toBeInTheDocument();
+  },
 };
 
 export const Submitting: Story = {
@@ -89,6 +114,16 @@ export const Submitting: Story = {
       </TanStackContainerForm>
     );
   },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const input = canvas.getByRole('textbox');
+
+    // input is disabled while form is submitting
+    await expect(input).toBeDisabled();
+
+    // clear button is not rendered when disabled
+    await expect(canvas.queryByRole('button', { name: 'Xóa' })).not.toBeInTheDocument();
+  },
 };
 
 export const Disabled: Story = {
@@ -117,6 +152,16 @@ export const Disabled: Story = {
       </TanStackContainerForm>
     );
   },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const input = canvas.getByRole('textbox');
+
+    await expect(input).toBeDisabled();
+    await expect(input).toHaveValue('Prefilled but locked');
+
+    // clear button not rendered when disabled
+    await expect(canvas.queryByRole('button', { name: 'Xóa' })).not.toBeInTheDocument();
+  },
 };
 
 export const WithCounter: Story = {
@@ -125,8 +170,10 @@ export const WithCounter: Story = {
     const { AppField, TanStackContainerForm, TanStackSectionForm } = useTanStackForm({
       defaultValues: {
         fresh: null as string | null,
-        nearLimit: 'Almost at the character limit' as string | null,
-        atLimit: 'Exactly at the character limi' as string | null,
+        // 24 chars — exactly 80%, hits warning threshold
+        nearLimit: 'At the character limit!!' as string | null,
+        // 30 chars — exactly at the limit, hits danger threshold
+        atLimit: 'Exactly at the character limi!' as string | null,
       },
     });
     return (
@@ -178,6 +225,27 @@ export const WithCounter: Story = {
       </TanStackContainerForm>
     );
   },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // fresh field starts at 0 / 30
+    await expect(canvas.getByText('0 / 30 ký tự')).toBeInTheDocument();
+
+    // nearLimit: 24 chars = 80% of 30 → warning color
+    const nearCounter = canvas.getByText('24 / 30 ký tự');
+    await expect(nearCounter).toBeInTheDocument();
+    await expect(nearCounter).toHaveClass('text-warning-strong');
+
+    // atLimit: 30 chars = 100% → danger color
+    const atCounter = canvas.getByText('30 / 30 ký tự');
+    await expect(atCounter).toBeInTheDocument();
+    await expect(atCounter).toHaveClass('text-danger-strong');
+
+    // typing into fresh field updates counter
+    const inputs = canvas.getAllByRole('textbox');
+    await userEvent.type(inputs[0], 'Hi');
+    await expect(canvas.getByText('2 / 30 ký tự')).toBeInTheDocument();
+  },
 };
 
 export const BlurValidation: Story = {
@@ -213,6 +281,25 @@ export const BlurValidation: Story = {
           />
         </TanStackSectionForm>
       </TanStackContainerForm>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const input = canvas.getByRole('textbox');
+
+    // no errors before any interaction (field not dirty/touched → FieldError not mounted)
+    await expect(canvas.queryByRole('alert')).not.toBeInTheDocument();
+
+    // type an invalid value — isDirty becomes true immediately, error shows
+    await userEvent.type(input, 'Invalid User!');
+    await waitFor(() => expect(canvas.getByRole('alert')).toBeInTheDocument());
+    await expect(canvas.getByRole('alert')).toHaveTextContent('Only lowercase letters');
+
+    // fix the value → error text clears (container stays in DOM but is empty)
+    await userEvent.clear(input);
+    await userEvent.type(input, 'valid_user');
+    await waitFor(() =>
+      expect(canvas.getByRole('alert')).not.toHaveTextContent('Only lowercase letters')
     );
   },
 };
@@ -271,6 +358,19 @@ export const Orientations: Story = {
         </TanStackSectionForm>
       </TanStackContainerForm>
     );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // all three inputs render and accept input
+    const inputs = canvas.getAllByRole('textbox');
+    await expect(inputs).toHaveLength(3);
+
+    // each is enabled and empty
+    for (const input of inputs) {
+      await expect(input).not.toBeDisabled();
+      await expect(input).toHaveValue('');
+    }
   },
 };
 
@@ -374,5 +474,21 @@ export const KitchenSink: Story = {
         </AppForm>
       </div>
     );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // username — type a valid value, clear button appears
+    const usernameInput = canvas.getByPlaceholderText('john_doe');
+    await userEvent.type(usernameInput, 'john_doe');
+    await expect(usernameInput).toHaveValue('john_doe');
+    await expect(canvas.getAllByRole('button', { name: 'Xóa' })[0]).toBeInTheDocument();
+
+    // bio — counter starts at 0 / 100
+    await expect(canvas.getByText('0 / 100 ký tự')).toBeInTheDocument();
+
+    // locked field is disabled with its prefilled value
+    const lockedInput = canvas.getByDisplayValue('Cannot edit this');
+    await expect(lockedInput).toBeDisabled();
   },
 };
