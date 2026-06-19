@@ -27,7 +27,7 @@ export const Default: Story = {
             <Button>Submit</Button>
             <DrawerClose>
               <Button variant="outline" color="muted" className="w-full">
-                Cancel
+                Hủy bỏ
               </Button>
             </DrawerClose>
           </DrawerFooter>

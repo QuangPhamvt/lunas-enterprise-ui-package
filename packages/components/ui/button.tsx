@@ -1,7 +1,7 @@
 'use client';
 
 import { Loader2Icon } from 'lucide-react';
-import { Slot } from '@radix-ui/react-slot';
+import { Slot, Slottable } from '@radix-ui/react-slot';
 import { cn } from '@customafk/react-toolkit/utils';
 import { type ButtonVariantProps, buttonLoadingVariant, buttonVariants } from './button.variants';
 
@@ -191,7 +191,11 @@ function Button({
           <span className="sr-only">Loading</span>
         </div>
       )}
-      <div className={cn('inline-flex items-center justify-center gap-x-1', isLoading && 'invisible pointer-events-none', innerClassName)}>{children}</div>
+      {asChild ? (
+        <Slottable>{children}</Slottable>
+      ) : (
+        <div className={cn('inline-flex items-center justify-center gap-x-1', isLoading && 'invisible pointer-events-none', innerClassName)}>{children}</div>
+      )}
     </Comp>
   );
 }

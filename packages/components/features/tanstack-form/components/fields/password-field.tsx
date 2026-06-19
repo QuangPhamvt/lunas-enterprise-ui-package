@@ -2,14 +2,12 @@
 
 import { useCallback, useId, useState } from 'react';
 
-import { useStore } from '@tanstack/react-form';
+import { useSelector } from '@tanstack/react-store';
 
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
-import type z from 'zod';
 
 import { Input } from '@/components/ui/input';
 
-import type { TanStackFormPasswordFieldSchema } from '../../schema';
 import { useTanStackFieldContext } from '../../tanstack-form';
 import {
   Field,
@@ -24,13 +22,7 @@ import {
   FieldTooltip,
 } from '../ui/field';
 
-/**
- * Props for the PasswordField component, derived from the TanStack Form password field schema.
- */
-type Props = Pick<
-  z.input<typeof TanStackFormPasswordFieldSchema>,
-  'label' | 'description' | 'placeholder' | 'orientation' | 'tooltip' | 'helperText' | 'showErrorMessage'
->;
+import type { PasswordFieldProps as Props } from '../../types';
 
 /**
  * A TanStack Form-connected password input field with a show/hide toggle button
@@ -61,7 +53,7 @@ export const PasswordField: React.FC<Props> = ({
   const id = useId();
   const { form, name, state, handleBlur, handleChange } = useTanStackFieldContext<string | null>();
 
-  const isSubmitting = useStore(form.store, ({ isSubmitting }) => isSubmitting);
+  const isSubmitting = useSelector(form.store, ({ isSubmitting }) => isSubmitting);
 
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
@@ -104,7 +96,7 @@ export const PasswordField: React.FC<Props> = ({
             className="absolute inset-e-0 inset-y-0 flex size-9 items-center justify-center rounded-e-md text-muted outline-none transition-[color,box-shadow] focus:z-10 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
             type="button"
             onClick={toggleVisibility}
-            aria-label={isVisible ? 'Hide password' : 'Show password'}
+            aria-label={isVisible ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
             aria-pressed={isVisible}
             aria-controls={id}
           >

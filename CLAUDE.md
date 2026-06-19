@@ -23,9 +23,9 @@ npm run lint:fix        # Biome lint + fix (scoped to packages/)
 npm run format:fix      # Biome format + write
 npm run storybook       # dev server at :6006
 npm run build-storybook # static Storybook build
+npm test                # unit tests (vitest + jsdom)
+npm run test:storybook  # component tests in real browser (Playwright/Chromium)
 ```
-
-There is no `test` script. `vitest` is installed; if tests are added: `npx vitest run`.
 
 ## Architecture
 
@@ -58,6 +58,18 @@ When adding a new public component, update both files plus add a Storybook story
 
 `@/*` resolves to `packages/*` in both TypeScript and Vite config.
 
+## Testing
+
+**All tests live in Storybook stories as `play` functions — never in separate `*.test.tsx` files.**
+
+- Add a `play` function to each story that covers a meaningful interaction or state
+- Import test utilities from `storybook/test` (not `@storybook/test`): `expect`, `userEvent`, `waitFor`, `within`
+- Query inputs by `getByPlaceholderText` or `getByDisplayValue` — avoid `getByLabelText` (label DOM wraps children in extra spans that break exact-text matching)
+- Error containers (`role="alert"`) stay in the DOM after errors clear; assert `.not.toHaveTextContent(msg)` rather than `.not.toBeInTheDocument()`
+- Run before committing: `npm run test:storybook`
+
+The `/tanstack-form` skill has a full "Storybook Component Tests" section with patterns, gotchas, and a worked example.
+
 ## Coding conventions
 
 - Named exports only — no default exports unless the file already uses one
@@ -77,6 +89,8 @@ Project-specific skills live in `.claude/skills/<name>/SKILL.md` and can be invo
 | Tech Stack | `/tech-stack` | Full peer + dev dependency table with concrete library usage examples |
 | Optimization Targets | `/optimization-targets` | 8 refactor targets — sidebar duplication, memory leak, suppressed lint rules, large files, dead code |
 | React Pattern | `/react-pattern` | Coding rules: file structure, context, state, effects, styling, props, refs, Radix, performance |
+| TanStack Form | `/tanstack-form` | Complete TanStack Form v1 API guide: hooks, field components, form containers, validation, array fields, composition |
+| TanStack Form Agents | `/tanstack-form-agents` | Full upstream TanStack Form API reference for agents: FormApi, FieldApi, Zod validation, Form Composition (withForm/withFieldGroup), listeners, array fields, SSR |
 
 ## MCP
 

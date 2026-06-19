@@ -2,7 +2,7 @@
 
 import { useCallback, useId } from 'react';
 
-import { useStore } from '@tanstack/react-form';
+import { useSelector } from '@tanstack/react-store';
 
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -10,19 +10,13 @@ import { Label } from '@/components/ui/label';
 import { useTanStackFieldContext } from '../../tanstack-form';
 import { FieldError } from '../ui/field';
 
-type Props = {
-  label?: string;
-  placeholder?: string;
-  required?: boolean;
-  maxLength?: number;
-  disabled?: boolean;
-};
+import type { SimpleTextFieldProps as Props } from '../../types';
 
 export const SimpleTextField: React.FC<Props> = ({ label, placeholder, required, maxLength, disabled }) => {
   const id = useId();
   const { form, name, state, handleBlur, handleChange } = useTanStackFieldContext<string | null>();
 
-  const isSubmitting = useStore(form.store, ({ isSubmitting }) => isSubmitting);
+  const isSubmitting = useSelector(form.store, ({ isSubmitting }) => isSubmitting);
 
   const _invalid = state.meta.isTouched && !state.meta.isValid;
 

@@ -2,7 +2,7 @@
 
 import { useCallback, useId, useState } from 'react';
 
-import { useStore } from '@tanstack/react-form';
+import { useSelector } from '@tanstack/react-store';
 
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
 
@@ -23,7 +23,7 @@ export const SimplePasswordField: React.FC<Props> = ({ label, placeholder, requi
   const id = useId();
   const { form, name, state, handleBlur, handleChange } = useTanStackFieldContext<string | null>();
 
-  const isSubmitting = useStore(form.store, ({ isSubmitting }) => isSubmitting);
+  const isSubmitting = useSelector(form.store, ({ isSubmitting }) => isSubmitting);
 
   const [isVisible, setIsVisible] = useState(false);
 
@@ -64,7 +64,7 @@ export const SimplePasswordField: React.FC<Props> = ({ label, placeholder, requi
         <button
           type="button"
           tabIndex={-1}
-          aria-label={isVisible ? 'Hide password' : 'Show password'}
+          aria-label={isVisible ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
           aria-pressed={isVisible}
           aria-controls={id}
           className="absolute inset-y-0 right-0 flex size-9 items-center justify-center text-muted outline-none transition-colors hover:text-text-positive focus-visible:text-text-positive disabled:pointer-events-none disabled:opacity-50"

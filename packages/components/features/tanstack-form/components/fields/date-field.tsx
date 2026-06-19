@@ -3,33 +3,18 @@
 import { useMemo } from 'react';
 
 import { CalendarDaysIcon } from 'lucide-react';
-import type z from 'zod';
 
 import { endOfToday, endOfTomorrow, endOfYesterday, format, lastDayOfMonth, startOfMonth, subDays } from '@customafk/react-toolkit/date-fns';
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { Button } from '@/components/ui/button';
 
-import type { TanStackFormDateFieldSchema } from '../../schema';
 import { useTanStackFieldContext } from '../../tanstack-form';
 import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, FieldLabel, FieldNote, FieldSeparator, FieldTooltip } from '../ui/field';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 
-/**
- * Props for the DateField component, derived from the TanStack Form date field schema.
- */
-type Props = Pick<
-  z.input<typeof TanStackFormDateFieldSchema>,
-  'label' | 'description' | 'placeholder' | 'tooltip' | 'helperText' | 'orientation' | 'showErrorMessage'
-> & {
-  /** Marks the field as required; triggers an empty-state indicator when the value is null. */
-  required?: boolean;
-  /** Earliest selectable date; days before this are hidden in the calendar. */
-  minDate?: Date;
-  /** Latest selectable date; days after this are hidden in the calendar. */
-  maxDate?: Date;
-};
+import type { DateFieldProps as Props } from '../../types';
 
 /**
  * A TanStack Form-connected date picker field combining a calendar popover with
@@ -117,7 +102,7 @@ export const DateField: React.FC<Props> = ({
                       field.handleChange(endOfToday());
                     }}
                   >
-                    Today
+                    Hôm nay
                   </Button>
 
                   <Button
@@ -128,7 +113,7 @@ export const DateField: React.FC<Props> = ({
                       field.handleChange(endOfTomorrow());
                     }}
                   >
-                    Tomorrow
+                    Ngày mai
                   </Button>
 
                   <Button
@@ -139,7 +124,7 @@ export const DateField: React.FC<Props> = ({
                       field.handleChange(endOfYesterday());
                     }}
                   >
-                    Yesterday
+                    Hôm qua
                   </Button>
 
                   <Button
@@ -150,7 +135,7 @@ export const DateField: React.FC<Props> = ({
                       field.handleChange(subDays(endOfToday(), 3));
                     }}
                   >
-                    Last 3 Days
+                    3 ngày qua
                   </Button>
 
                   <Button
@@ -161,7 +146,7 @@ export const DateField: React.FC<Props> = ({
                       field.handleChange(subDays(endOfToday(), 7));
                     }}
                   >
-                    Last 7 Days
+                    7 ngày qua
                   </Button>
 
                   <Button
@@ -172,7 +157,7 @@ export const DateField: React.FC<Props> = ({
                       field.handleChange(subDays(endOfToday(), 30));
                     }}
                   >
-                    Last 30 Days
+                    30 ngày qua
                   </Button>
 
                   <Button
@@ -183,7 +168,7 @@ export const DateField: React.FC<Props> = ({
                       field.handleChange(startOfMonth(endOfToday()));
                     }}
                   >
-                    This Month
+                    Tháng này
                   </Button>
 
                   <Button
@@ -194,7 +179,7 @@ export const DateField: React.FC<Props> = ({
                       field.handleChange(lastDayOfMonth(endOfToday()));
                     }}
                   >
-                    Last Month
+                    Tháng trước
                   </Button>
                 </div>
                 <div className="flex flex-1 flex-col">

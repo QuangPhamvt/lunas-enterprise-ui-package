@@ -2,10 +2,9 @@
 
 import { useCallback } from 'react';
 
-import { useStore } from '@tanstack/react-form';
+import { useSelector } from '@tanstack/react-store';
 
 import { AtSignIcon, XIcon } from 'lucide-react';
-import type z from 'zod';
 
 import { cn } from '@customafk/react-toolkit/utils';
 
@@ -24,20 +23,7 @@ import {
 } from '../ui/field';
 import { useTanStackFieldContext } from '../../tanstack-form';
 
-import type { TanStackFormEmailFieldSchema } from '../../schema';
-
-/**
- * Props for the EmailField component, derived from the TanStack Form email field schema.
- */
-type Props = Pick<
-  z.input<typeof TanStackFormEmailFieldSchema>,
-  'label' | 'description' | 'placeholder' | 'orientation' | 'tooltip' | 'helperText' | 'showErrorMessage'
-> & {
-  /** Marks the field as required; triggers an empty-state indicator when the value is null. */
-  required?: boolean;
-  /** Maximum number of characters the user may enter. */
-  maxLength?: number;
-};
+import type { EmailFieldProps as Props } from '../../types';
 
 /**
  * A TanStack Form-connected email input field with an at-sign prefix icon,
@@ -69,7 +55,7 @@ export const EmailField: React.FC<Props> = ({
 }) => {
   const { form, name, state, handleBlur, handleChange } = useTanStackFieldContext<string | null>();
 
-  const isSubmitting = useStore(form.store, ({ isSubmitting }) => isSubmitting);
+  const isSubmitting = useSelector(form.store, ({ isSubmitting }) => isSubmitting);
 
   const _invalid = state.meta.isDirty && state.meta.isTouched && !state.meta.isValid;
   const _isEmpty = required && state.value === null;
@@ -118,7 +104,7 @@ export const EmailField: React.FC<Props> = ({
           {_showClear && (
             <button
               type="button"
-              aria-label="Clear"
+              aria-label="Xóa"
               className="absolute inset-e-0 inset-y-0 top-3 flex h-fit w-8 cursor-pointer items-center justify-center rounded-e-md text-text-positive-weak outline-none transition-[color,box-shadow] hover:text-text-positive focus:text-text-positive-strong"
               onClick={onClear}
             >

@@ -557,6 +557,118 @@ export const AllFieldsWithTooltips: Story = {
   },
 };
 
+export const CardForm: Story = {
+  render: () => {
+    const [items, setItems] = useState([
+      { id: 1, title: 'API Integration', description: 'Connect to the external payment API.' },
+      { id: 2, title: 'User Management', description: 'Configure user roles and permissions.' },
+    ]);
+
+    return (
+      <div className="size-full bg-muted-bg-subtle p-4 flex flex-col gap-4">
+        {items.map(item => {
+          const InnerCard = () => {
+            const { AppForm, AppField, TanStackCardForm, TanStackActionSubmit } = useTanStackForm({
+              defaultValues: { notes: '' },
+            });
+            return (
+              <AppForm>
+                <TanStackCardForm title={item.title} description={item.description} onDelete={() => setItems(prev => prev.filter(i => i.id !== item.id))}>
+                  <AppField
+                    name="notes"
+                    children={({ TextareaField }) => <TextareaField label="Notes" placeholder="Add notes…" orientation="responsive" showErrorMessage />}
+                  />
+                  <div className="flex justify-end px-4">
+                    <TanStackActionSubmit label="Save" />
+                  </div>
+                </TanStackCardForm>
+              </AppForm>
+            );
+          };
+          return <InnerCard key={item.id} />;
+        })}
+      </div>
+    );
+  },
+};
+
+export const SectionForm: Story = {
+  render: () => {
+    const { AppForm, AppField, TanStackContainerForm, TanStackSectionForm, TanStackTitleField, TanStackActionsForm } = useTanStackForm({
+      defaultValues: {
+        firstName: '',
+        lastName: '',
+        email: '',
+        company: '',
+        department: '',
+        role: null as string | null,
+      },
+      onSubmit: ({ value }) => {
+        console.log('Submitted:', value);
+      },
+    });
+
+    return (
+      <div className="size-full bg-muted-bg-subtle p-4">
+        <AppForm>
+          <TanStackContainerForm>
+            <TanStackSectionForm title="Personal Information">
+              <TanStackTitleField title="Your Details" description="Fill in your personal information." />
+              <AppField
+                name="firstName"
+                children={({ TextField }) => (
+                  <TextField label="First Name" placeholder="John" orientation="responsive" showClearButton showErrorMessage required />
+                )}
+              />
+              <AppField
+                name="lastName"
+                children={({ TextField }) => (
+                  <TextField label="Last Name" placeholder="Doe" orientation="responsive" showClearButton showErrorMessage required />
+                )}
+              />
+              <AppField
+                name="email"
+                children={({ EmailField }) => <EmailField label="Email" placeholder="john@example.com" orientation="responsive" showErrorMessage required />}
+              />
+            </TanStackSectionForm>
+
+            <TanStackSectionForm title="Work Information">
+              <AppField
+                name="company"
+                children={({ TextField }) => <TextField label="Company" placeholder="Acme Corp" orientation="responsive" showClearButton showErrorMessage />}
+              />
+              <AppField
+                name="department"
+                children={({ TextField }) => (
+                  <TextField label="Department" placeholder="Engineering" orientation="responsive" showClearButton showErrorMessage />
+                )}
+              />
+              <AppField
+                name="role"
+                children={({ SelectField }) => (
+                  <SelectField
+                    label="Role"
+                    placeholder="Select a role"
+                    orientation="responsive"
+                    options={[
+                      { label: 'Individual Contributor', value: 'ic' },
+                      { label: 'Team Lead', value: 'lead' },
+                      { label: 'Manager', value: 'manager' },
+                      { label: 'Director', value: 'director' },
+                    ]}
+                  />
+                )}
+              />
+            </TanStackSectionForm>
+
+            <TanStackActionsForm type="create" />
+          </TanStackContainerForm>
+        </AppForm>
+      </div>
+    );
+  },
+};
+
 export const AdminLoginForm: Story = {
   render: () => {
     const schema = z.object({

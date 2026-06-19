@@ -37,7 +37,7 @@ export const TanStackActionsForm: React.FC<
         children={({ disabled }) => {
           return (
             <Button color="muted" variant="outline" type="button" size="md" disabled={disabled} className="h-full min-w-32" onClick={() => form.reset()}>
-              Cancel
+              Hủy bỏ
             </Button>
           );
         }}
@@ -63,7 +63,7 @@ export const TanStackActionsForm: React.FC<
                 }}
               >
                 <PlusIcon />
-                Add New
+                Thêm mới
               </Button>
             );
           }}
@@ -90,7 +90,7 @@ export const TanStackActionsForm: React.FC<
                 }}
               >
                 <ArrowDownToLine />
-                Update
+                Cập nhật
               </Button>
             );
           }}

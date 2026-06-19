@@ -2,27 +2,19 @@
 
 import { memo, useCallback } from 'react';
 
-import { useStore } from '@tanstack/react-form';
-
-import type z from 'zod';
+import { useSelector } from '@tanstack/react-store';
 
 import { TextEditor } from '@/components/features/text-editor';
 
-import type { TanStackFormTextEditorFieldSchema } from '../../schema';
 import { useTanStackFieldContext } from '../../tanstack-form';
 import { Field, FieldContent, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldNote, FieldSeparator, FieldTooltip } from '../ui/field';
 
-type Props = Pick<
-  z.input<typeof TanStackFormTextEditorFieldSchema>,
-  'label' | 'description' | 'placeholder' | 'tooltip' | 'helperText' | 'showErrorMessage'
-> & {
-  required?: boolean;
-};
+import type { TextEditorFieldProps as Props } from '../../types';
 
 export const TextEditorField: React.FC<Props> = memo(({ label, description, placeholder, tooltip, helperText, showErrorMessage = true, required = false }) => {
   const { form, state, handleChange } = useTanStackFieldContext<string | null>();
 
-  const isSubmitting = useStore(form.store, ({ isSubmitting }) => isSubmitting);
+  const isSubmitting = useSelector(form.store, ({ isSubmitting }) => isSubmitting);
 
   const _invalid = state.meta.isDirty && state.meta.isTouched && !state.meta.isValid;
   const _isEmpty = required && state.value === null;

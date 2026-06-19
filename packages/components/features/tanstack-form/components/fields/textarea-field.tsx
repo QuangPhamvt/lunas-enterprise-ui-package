@@ -1,17 +1,15 @@
 'use client';
 
-import { memo, useCallback, useId, useMemo } from 'react';
+import { memo, useCallback, useId, useMemo, useState } from 'react';
 
-import { useStore } from '@tanstack/react-form';
+import { useSelector } from '@tanstack/react-store';
 
-import { BanIcon, Loader2Icon } from 'lucide-react';
-import type z from 'zod';
+import { BanIcon, CheckIcon, CopyIcon, Loader2Icon } from 'lucide-react';
 
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { Textarea } from '@/components/ui/textarea';
 
-import type { TanStackFormTextAreaFieldSchema } from '../../schema';
 import { useTanStackFieldContext } from '../../tanstack-form';
 import {
   Field,
@@ -26,39 +24,9 @@ import {
   FieldTooltip,
 } from '../ui/field';
 
-/**
- * Props for the TextareaField component, derived from the TanStack Form textarea field schema.
- */
-type Props = Pick<
-  z.input<typeof TanStackFormTextAreaFieldSchema>,
-  'label' | 'description' | 'placeholder' | 'counter' | 'tooltip' | 'helperText' | 'orientation' | 'showErrorMessage'
-> & {
-  /** Marks the field as required; triggers an empty-state indicator when the value is null. */
-  required?: boolean;
-  /** Maximum number of characters allowed; enforced when `counter` is true. */
-  maxLength?: number;
-};
+import type { TextareaFieldProps as Props } from '../../types';
 
-/**
- * A TanStack Form-connected multi-line textarea field with optional character counter,
- * error display, and submission-state feedback. Wrapped in `React.memo` to prevent
- * unnecessary re-renders.
- *
- * @example
- * import { TextareaField } from '@customafk/lunas-ui/features/tanstack-form';
- *
- * <form.Field name="bio">
- *   {() => (
- *     <TextareaField
- *       label="Bio"
- *       placeholder="Tell us about yourself…"
- *       counter
- *       maxLength={200}
- *     />
- *   )}
- * </form.Field>
- */
-export const TextareaField: React.FC<Props> = memo(
+export const TextareaField = memo<Props>(
   ({
     label,
     description,
@@ -71,37 +39,49 @@ export const TextareaField: React.FC<Props> = memo(
     showErrorMessage = true,
 
     required = false,
+    disabled = false,
     maxLength,
   }) => {
     const id = useId();
+    const errorId = useId();
+    const [copied, setCopied] = useState(false);
     const { form, state, name, handleBlur, handleChange } = useTanStackFieldContext<string | null>();
 
-    const isSubmitting = useStore(form.store, ({ isSubmitting }) => isSubmitting);
+    const isSubmitting = useSelector(form.store, ({ isSubmitting }) => isSubmitting);
+    const isDisabled = disabled || isSubmitting;
 
     const _count = state.value ? state.value.length : 0;
 
     const _countText = useMemo(() => {
       if (!counter) return '';
-      const unit = `character${[0, 1].includes(_count) ? '' : 's'}`;
-      if (counter && maxLength) return `${_count} / ${maxLength} character${!_count ? '' : 's'}`;
-      return `${_count} ${unit}`;
+      if (counter && maxLength) return `${_count} / ${maxLength} ký tự`;
+      return `${_count} ký tự`;
     }, [_count, counter, maxLength]);
 
-    const _invalid = state.meta.isDirty && state.meta.isTouched && !state.meta.isValid;
+    const _touched = state.meta.isDirty || state.meta.isTouched;
+    const _invalid = _touched && !state.meta.isValid;
     const _isEmpty = required && state.value === null;
-    const _errors = state.meta.errors;
+    const _hasErrors = !!state.meta.errors.length;
+    const _showCopy = !!state.value && !isDisabled;
 
     const _isNearLimit = maxLength && _count >= maxLength * 0.8;
     const _isAtLimit = maxLength && _count >= maxLength;
 
     const onChange = useCallback<React.ChangeEventHandler<HTMLTextAreaElement>>(
       ({ target: { value } }) => {
-        if (isSubmitting) return;
+        if (isDisabled) return;
         if (counter && maxLength && value.length > maxLength) return;
         handleChange(value || null);
       },
-      [isSubmitting, counter, maxLength, handleChange]
+      [isDisabled, counter, maxLength, handleChange]
     );
+
+    const onCopy = useCallback(async () => {
+      if (!state.value) return;
+      await navigator.clipboard.writeText(state.value);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    }, [state.value]);
 
     return (
       <FieldGroup className="gap-y-4 px-4">
@@ -117,27 +97,47 @@ export const TextareaField: React.FC<Props> = memo(
             <Textarea
               id={id}
               name={name}
-              value={state.value === null ? '' : state.value}
+              value={state.value ?? ''}
               aria-invalid={_invalid}
+              aria-describedby={errorId}
               autoCapitalize="none"
               autoComplete="off"
+              autoCorrect="off"
               placeholder={placeholder}
-              className={cn(isSubmitting && 'pointer-events-none bg-muted-muted opacity-60')}
+              disabled={isDisabled}
+              className={cn(isDisabled && 'pointer-events-none bg-muted-muted opacity-60')}
               onChange={onChange}
               onBlur={handleBlur}
             />
+            {_showCopy && (
+              <button
+                type="button"
+                aria-label="Sao chép"
+                className="absolute inset-e-1 top-2 flex size-4 cursor-pointer items-center justify-center rounded-md outline-none transition-[color,transform] focus-visible:[&>svg]:scale-125 [&>svg]:size-3.5 [&>svg]:transition-transform"
+                onClick={onCopy}
+              >
+                {copied ? (
+                  <CheckIcon aria-hidden="true" className="text-success-strong" />
+                ) : (
+                  <CopyIcon
+                    aria-hidden="true"
+                    className="text-text-positive-weak transition-colors hover:text-text-positive focus-visible:text-primary-strong"
+                  />
+                )}
+              </button>
+            )}
             {isSubmitting && (
               <div className="absolute inset-e-2 inset-y-0 top-2.5 text-muted-weak">
                 <Loader2Icon size={14} className="animate-spin text-primary-strong" />
               </div>
             )}
-            {state.meta.isDirty && showErrorMessage && !!_errors.length && (
+            {!_showCopy && _touched && showErrorMessage && _hasErrors && (
               <div className="absolute inset-e-2 inset-y-0 top-2.5 text-danger-strong">
                 <BanIcon size={14} />
               </div>
             )}
             <div className="my-1 flex w-full items-start justify-between gap-x-2">
-              {state.meta.isDirty && showErrorMessage ? <FieldError className="flex-1" errors={state.meta.errors} /> : <div />}
+              {_touched && showErrorMessage ? <FieldError id={errorId} className="flex-1" errors={state.meta.errors} /> : <div />}
               {!!counter && (
                 <p
                   className={cn(
@@ -157,4 +157,5 @@ export const TextareaField: React.FC<Props> = memo(
     );
   }
 );
+
 TextareaField.displayName = 'TextareaField';

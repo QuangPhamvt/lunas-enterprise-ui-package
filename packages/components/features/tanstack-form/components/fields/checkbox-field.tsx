@@ -1,18 +1,12 @@
 'use client';
 
-import { useStore } from '@tanstack/react-form';
+import { useSelector } from '@tanstack/react-store';
 
-import type z from 'zod';
-
-import type { TanStackFormCheckboxGroupFieldSchema } from '../../schema';
 import { useTanStackFieldContext } from '../../tanstack-form';
 import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, FieldLabel, FieldNote, FieldSeparator, FieldTooltip } from '../ui/field';
 import { Checkbox } from '@/components/ui/checkbox';
 
-/**
- * Props for the CheckboxField component, derived from the TanStack Form checkbox group field schema.
- */
-type Props = Pick<z.input<typeof TanStackFormCheckboxGroupFieldSchema>, 'label' | 'description' | 'orientation' | 'options' | 'helperText' | 'tooltip'>;
+import type { CheckboxFieldProps as Props } from '../../types';
 
 /**
  * A TanStack Form-connected checkbox group field that manages an array of selected string values,
@@ -36,7 +30,7 @@ type Props = Pick<z.input<typeof TanStackFormCheckboxGroupFieldSchema>, 'label' 
  */
 export const CheckboxField: React.FC<Props> = ({ label, description, options, tooltip, helperText, orientation }) => {
   const field = useTanStackFieldContext<string[] | null>();
-  const isSubmitting = useStore(field.form.store, ({ isSubmitting }) => isSubmitting);
+  const isSubmitting = useSelector(field.form.store, ({ isSubmitting }) => isSubmitting);
 
   return (
     <FieldGroup className="gap-y-4 px-4">

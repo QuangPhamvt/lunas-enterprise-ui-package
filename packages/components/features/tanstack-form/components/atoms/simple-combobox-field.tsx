@@ -2,7 +2,7 @@
 
 import { useId, useState } from 'react';
 
-import { useStore } from '@tanstack/react-form';
+import { useSelector } from '@tanstack/react-store';
 
 import { useIsMobile } from '@customafk/react-toolkit/hooks/useMobile';
 import { cn } from '@customafk/react-toolkit/utils';
@@ -28,7 +28,7 @@ export const SimpleComboboxField: React.FC<Props> = ({ label, placeholder, requi
   const id = useId();
   const { form, name, state, handleBlur, handleChange } = useTanStackFieldContext<string | null>();
 
-  const isSubmitting = useStore(form.store, ({ isSubmitting }) => isSubmitting);
+  const isSubmitting = useSelector(form.store, ({ isSubmitting }) => isSubmitting);
   const isMobile = useIsMobile();
   const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -39,9 +39,9 @@ export const SimpleComboboxField: React.FC<Props> = ({ label, placeholder, requi
 
   const commandList = (
     <Command>
-      <CommandInput placeholder={placeholder ?? 'Search…'} />
+      <CommandInput placeholder={placeholder ?? 'Tìm kiếm…'} />
       <CommandList>
-        <CommandEmpty>No results found.</CommandEmpty>
+        <CommandEmpty>Không tìm thấy kết quả.</CommandEmpty>
         <CommandGroup>
           {options.map(option => (
             <CommandItem
@@ -90,7 +90,7 @@ export const SimpleComboboxField: React.FC<Props> = ({ label, placeholder, requi
         <Drawer open={drawerOpen} onOpenChange={setDrawerOpen} direction="bottom">
           <DrawerContent>
             <DrawerHeader>
-              <DrawerTitle>{label ?? placeholder ?? 'Search…'}</DrawerTitle>
+              <DrawerTitle>{label ?? placeholder ?? 'Tìm kiếm…'}</DrawerTitle>
             </DrawerHeader>
             <div className="overflow-y-auto pb-safe-bottom">{commandList}</div>
           </DrawerContent>
