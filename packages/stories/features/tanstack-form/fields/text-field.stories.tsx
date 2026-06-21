@@ -298,9 +298,7 @@ export const BlurValidation: Story = {
     // fix the value → error text clears (container stays in DOM but is empty)
     await userEvent.clear(input);
     await userEvent.type(input, 'valid_user');
-    await waitFor(() =>
-      expect(canvas.getByRole('alert')).not.toHaveTextContent('Only lowercase letters')
-    );
+    await waitFor(() => expect(canvas.getByRole('alert')).not.toHaveTextContent('Only lowercase letters'));
   },
 };
 

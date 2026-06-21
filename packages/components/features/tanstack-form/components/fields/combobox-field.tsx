@@ -6,12 +6,14 @@ import { useSelector } from '@tanstack/react-store';
 
 import { XIcon } from 'lucide-react';
 
+import { Dialog as RadixDialog } from 'radix-ui';
+
 import { useIsMobile } from '@customafk/react-toolkit/hooks/useMobile';
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { Button } from '@/components/ui/button';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
-import { Drawer, DrawerClose, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
+import { Dialog, DialogClose, DialogOverlay, DialogPortal } from '@/components/ui/dialog';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 import { useTanStackFieldContext } from '../../tanstack-form';
@@ -47,7 +49,8 @@ export const ComboboxField = memo<ComboboxFieldProps>(
     const errorId = useId();
     const field = useTanStackFieldContext<string | null>();
     const isMobile = useIsMobile();
-    const [drawerOpen, setDrawerOpen] = useState(false);
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [popoverOpen, setPopoverOpen] = useState(false);
 
     const isSubmitting = useSelector(field.form.store, ({ isSubmitting }) => isSubmitting);
     const isDisabled = disabled || isSubmitting;
@@ -78,7 +81,8 @@ export const ComboboxField = memo<ComboboxFieldProps>(
           'focus-visible:outline-1 focus-visible:outline-primary-strong focus-visible:ring-4 focus-visible:ring-primary-weak',
           'data-[state=open]:text-text-positive-muted data-[state=open]:outline-1 data-[state=open]:outline-primary-strong data-[state=open]:ring-4 data-[state=open]:ring-primary-weak',
           _showClear && 'pr-8',
-          !field.state.value && 'text-text-positive-muted'
+          !field.state.value && 'text-text-positive-muted',
+          _invalid && 'outline-danger bg-danger-bg-subtle ring-4 ring-danger-weak'
         )}
         onClick={onClick}
       >
@@ -90,21 +94,14 @@ export const ComboboxField = memo<ComboboxFieldProps>(
       </Button>
     );
 
-    const commandList = (
+    const renderCommandList = (onSelect: (value: string) => void) => (
       <Command className="border-none">
         <CommandInput placeholder={placeholder ?? 'Tìm kiếm…'} />
         <CommandList>
           <CommandEmpty className="flex min-h-30 items-center justify-center text-sm text-text-positive-weak">Không tìm thấy kết quả nào phù hợp.</CommandEmpty>
           <CommandGroup className="max-h-60 overflow-y-auto">
             {options.map(({ value, label: optLabel }) => (
-              <CommandItem
-                key={value}
-                value={optLabel}
-                onSelect={() => {
-                  field.handleChange(value);
-                  setDrawerOpen(false);
-                }}
-              >
+              <CommandItem key={value} value={optLabel} onSelect={() => onSelect(value)}>
                 {optLabel}
               </CommandItem>
             ))}
@@ -129,35 +126,80 @@ export const ComboboxField = memo<ComboboxFieldProps>(
               <div className="relative">
                 {isMobile ? (
                   <>
-                    {triggerButton(() => setDrawerOpen(true))}
-                    <Drawer open={drawerOpen} onOpenChange={setDrawerOpen} direction="bottom">
-                      <DrawerContent>
-                        <DrawerHeader>
-                          <DrawerTitle>{label}</DrawerTitle>
-                        </DrawerHeader>
-                        <div className="overflow-y-auto pb-safe-bottom">
-                          {_showClear && (
-                            <DrawerClose asChild>
+                    {triggerButton(() => setDialogOpen(true))}
+                    <Dialog
+                      open={dialogOpen}
+                      onOpenChange={open => {
+                        setDialogOpen(open);
+                        if (!open) field.handleBlur();
+                      }}
+                    >
+                      <DialogPortal>
+                        <DialogOverlay />
+                        <RadixDialog.Content
+                          onOpenAutoFocus={e => e.preventDefault()}
+                          className={cn(
+                            'fixed inset-x-0 bottom-0 z-50',
+                            'flex flex-col bg-background rounded-t-2xl outline-none',
+                            'max-h-[80dvh] shadow-[0_-4px_24px_rgba(0,0,0,0.08)]',
+                            'data-[state=open]:animate-in data-[state=open]:slide-in-from-bottom data-[state=open]:fade-in-0',
+                            'data-[state=closed]:animate-out data-[state=closed]:slide-out-to-bottom data-[state=closed]:fade-out-0',
+                            'duration-300'
+                          )}
+                        >
+                          <div className="flex items-center justify-between px-4 py-3 border-b border-border shrink-0">
+                            <span className="font-semibold text-sm text-text-positive">{label}</span>
+                            <DialogClose asChild>
                               <button
                                 type="button"
-                                className="flex w-full items-center gap-x-2 px-4 py-3 text-left text-sm text-danger-strong transition-colors hover:bg-danger-bg-subtle"
-                                onClick={onClear}
+                                aria-label="Đóng"
+                                className="flex size-7 items-center justify-center rounded-md text-text-positive-weak transition-colors hover:bg-muted-muted hover:text-text-positive"
                               >
-                                <XIcon size={14} />
-                                Clear selection
+                                <XIcon size={16} />
                               </button>
-                            </DrawerClose>
-                          )}
-                          {commandList}
-                        </div>
-                      </DrawerContent>
-                    </Drawer>
+                            </DialogClose>
+                          </div>
+
+                          <div className="flex flex-col overflow-y-auto">
+                            {_showClear && (
+                              <DialogClose asChild>
+                                <button
+                                  type="button"
+                                  className="flex w-full items-center gap-x-2 px-4 py-3 text-left text-sm text-danger-strong transition-colors hover:bg-danger-bg-subtle"
+                                  onClick={onClear}
+                                >
+                                  <XIcon size={14} />
+                                  Xóa lựa chọn
+                                </button>
+                              </DialogClose>
+                            )}
+                            {renderCommandList(value => {
+                              field.handleChange(value);
+                              setDialogOpen(false);
+                              field.handleBlur();
+                            })}
+                          </div>
+
+                          <div className="shrink-0 h-safe-bottom" />
+                        </RadixDialog.Content>
+                      </DialogPortal>
+                    </Dialog>
                   </>
                 ) : (
-                  <Popover>
+                  <Popover
+                    open={popoverOpen}
+                    onOpenChange={open => {
+                      setPopoverOpen(open);
+                      if (!open) field.handleBlur();
+                    }}
+                  >
                     <PopoverTrigger asChild>{triggerButton()}</PopoverTrigger>
-                    <PopoverContent align="end" side="bottom" className="flex w-fit rounded p-0" onBlur={field.handleBlur}>
-                      {commandList}
+                    <PopoverContent align="end" side="bottom" className="flex w-fit rounded p-0">
+                      {renderCommandList(value => {
+                        field.handleChange(value);
+                        setPopoverOpen(false);
+                        field.handleBlur();
+                      })}
                     </PopoverContent>
                   </Popover>
                 )}

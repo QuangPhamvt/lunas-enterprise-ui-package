@@ -1,6 +1,6 @@
 'use client';
 
-import { memo, useCallback, useId, useMemo, useState } from 'react';
+import { memo, useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 
 import { useSelector } from '@tanstack/react-store';
 
@@ -45,18 +45,22 @@ export const TextareaField = memo<Props>(
     const id = useId();
     const errorId = useId();
     const [copied, setCopied] = useState(false);
+    const copyTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
     const { form, state, name, handleBlur, handleChange } = useTanStackFieldContext<string | null>();
 
     const isSubmitting = useSelector(form.store, ({ isSubmitting }) => isSubmitting);
     const isDisabled = disabled || isSubmitting;
 
-    const _count = state.value ? state.value.length : 0;
+    const _count = state.value?.length ?? 0;
 
     const _countText = useMemo(() => {
       if (!counter) return '';
-      if (counter && maxLength) return `${_count} / ${maxLength} ký tự`;
-      return `${_count} ký tự`;
+      return maxLength ? `${_count} / ${maxLength} ký tự` : `${_count} ký tự`;
     }, [_count, counter, maxLength]);
+
+    const _isNearLimit = !!maxLength && _count >= maxLength * 0.8;
+    const _isAtLimit = !!maxLength && _count >= maxLength;
 
     const _touched = state.meta.isDirty || state.meta.isTouched;
     const _invalid = _touched && !state.meta.isValid;
@@ -64,8 +68,14 @@ export const TextareaField = memo<Props>(
     const _hasErrors = !!state.meta.errors.length;
     const _showCopy = !!state.value && !isDisabled;
 
-    const _isNearLimit = maxLength && _count >= maxLength * 0.8;
-    const _isAtLimit = maxLength && _count >= maxLength;
+    const _counterClass = useMemo(
+      () =>
+        cn(
+          'h-4 flex-0 text-nowrap text-end text-xs tabular-nums transition-colors',
+          _isAtLimit ? 'font-medium text-danger-strong' : _isNearLimit ? 'text-warning-strong' : 'text-text-positive-weak'
+        ),
+      [_isAtLimit, _isNearLimit]
+    );
 
     const onChange = useCallback<React.ChangeEventHandler<HTMLTextAreaElement>>(
       ({ target: { value } }) => {
@@ -79,9 +89,16 @@ export const TextareaField = memo<Props>(
     const onCopy = useCallback(async () => {
       if (!state.value) return;
       await navigator.clipboard.writeText(state.value);
+      if (copyTimeoutRef.current !== null) clearTimeout(copyTimeoutRef.current);
       setCopied(true);
-      setTimeout(() => setCopied(false), 1500);
+      copyTimeoutRef.current = setTimeout(() => setCopied(false), 1500);
     }, [state.value]);
+
+    useEffect(() => {
+      return () => {
+        if (copyTimeoutRef.current !== null) clearTimeout(copyTimeoutRef.current);
+      };
+    }, []);
 
     return (
       <FieldGroup className="gap-y-4 px-4">
@@ -138,16 +155,7 @@ export const TextareaField = memo<Props>(
             )}
             <div className="my-1 flex w-full items-start justify-between gap-x-2">
               {_touched && showErrorMessage ? <FieldError id={errorId} className="flex-1" errors={state.meta.errors} /> : <div />}
-              {!!counter && (
-                <p
-                  className={cn(
-                    'h-4 flex-0 text-nowrap text-end text-xs tabular-nums transition-colors',
-                    _isAtLimit ? 'font-medium text-danger-strong' : _isNearLimit ? 'text-warning-strong' : 'text-text-positive-weak'
-                  )}
-                >
-                  {_countText}
-                </p>
-              )}
+              {!!counter && <p className={_counterClass}>{_countText}</p>}
             </div>
             <FieldNote isShow={!!helperText}>{helperText}</FieldNote>
           </FieldContentMain>

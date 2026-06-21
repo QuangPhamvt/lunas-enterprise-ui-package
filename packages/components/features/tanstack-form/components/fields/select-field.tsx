@@ -9,7 +9,9 @@ import { ChevronDownIcon, PackagePlusIcon, XIcon } from 'lucide-react';
 import { useIsMobile } from '@customafk/react-toolkit/hooks/useMobile';
 import { cn } from '@customafk/react-toolkit/utils';
 
-import { Drawer, DrawerClose, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
+import { Dialog as RadixDialog } from 'radix-ui';
+
+import { Dialog, DialogClose, DialogOverlay, DialogPortal } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 import { useTanStackFieldContext } from '../../tanstack-form';
@@ -45,7 +47,7 @@ export const SelectField = memo<Props>(
     const errorId = useId();
     const field = useTanStackFieldContext<string | null>();
     const isMobile = useIsMobile();
-    const [drawerOpen, setDrawerOpen] = useState(false);
+    const [dialogOpen, setDialogOpen] = useState(false);
 
     const isSubmitting = useSelector(field.form.store, ({ isSubmitting }) => isSubmitting);
     const isDisabled = disabled || isSubmitting;
@@ -83,12 +85,12 @@ export const SelectField = memo<Props>(
                   aria-invalid={_invalid ? 'true' : undefined}
                   aria-describedby={errorId}
                   onBlur={field.handleBlur}
-                  onClick={() => setDrawerOpen(true)}
+                  onClick={() => setDialogOpen(true)}
                   className={cn(
                     'flex w-full items-center justify-between',
                     'outline-1 outline-border -outline-offset-1',
                     'gap-2 rounded bg-transparent px-3 py-2',
-                    'rounded shadow-input transition-all cursor-pointer whitespace-nowrap text-sm',
+                    'shadow-input transition-all cursor-pointer whitespace-nowrap text-sm',
                     'focus-visible:outline-primary-strong focus-visible:ring-4 focus-visible:ring-primary-weak',
                     'disabled:cursor-not-allowed disabled:opacity-50',
                     _invalid && 'outline-danger bg-danger-bg-subtle ring-danger-weak',
@@ -99,52 +101,83 @@ export const SelectField = memo<Props>(
                   <ChevronDownIcon size={16} className="shrink-0 opacity-50" />
                 </button>
 
-                <Drawer open={drawerOpen} onOpenChange={setDrawerOpen} direction="bottom">
-                  <DrawerContent>
-                    <DrawerHeader>
-                      <DrawerTitle>{label ?? placeholder ?? 'Chọn một tùy chọn'}</DrawerTitle>
-                    </DrawerHeader>
-                    <div className="flex flex-col overflow-y-auto pb-safe-bottom">
-                      {_showClear && (
-                        <DrawerClose asChild>
+                <Dialog
+                  open={dialogOpen}
+                  onOpenChange={open => {
+                    setDialogOpen(open);
+                    if (!open) field.handleBlur();
+                  }}
+                >
+                  <DialogPortal>
+                    <DialogOverlay />
+                    <RadixDialog.Content
+                      onOpenAutoFocus={e => e.preventDefault()}
+                      className={cn(
+                        'fixed inset-x-0 bottom-0 z-50',
+                        'flex flex-col bg-background rounded-t-2xl outline-none',
+                        'max-h-[80dvh] shadow-[0_-4px_24px_rgba(0,0,0,0.08)]',
+                        'data-[state=open]:animate-in data-[state=open]:slide-in-from-bottom data-[state=open]:fade-in-0',
+                        'data-[state=closed]:animate-out data-[state=closed]:slide-out-to-bottom data-[state=closed]:fade-out-0',
+                        'duration-300'
+                      )}
+                    >
+                      <div className="flex items-center justify-between px-4 py-3 border-b border-border shrink-0">
+                        <span className="font-semibold text-sm text-text-positive">{label ?? placeholder ?? 'Chọn một tùy chọn'}</span>
+                        <DialogClose asChild>
                           <button
                             type="button"
-                            className="flex w-full items-center gap-x-2 px-4 py-3 text-left text-sm text-danger-strong transition-colors hover:bg-danger-bg-subtle"
-                            onClick={onClear}
+                            aria-label="Đóng"
+                            className="flex size-7 items-center justify-center rounded-md text-text-positive-weak transition-colors hover:bg-muted-muted hover:text-text-positive"
                           >
-                            <XIcon size={14} />
-                            Xóa lựa chọn
+                            <XIcon size={16} />
                           </button>
-                        </DrawerClose>
-                      )}
-                      {options.length > 0 ? (
-                        options.map(option => (
-                          <DrawerClose key={option.value} asChild>
+                        </DialogClose>
+                      </div>
+
+                      <div className="flex flex-col overflow-y-auto">
+                        {_showClear && (
+                          <DialogClose asChild>
                             <button
                               type="button"
-                              className={cn(
-                                'flex w-full items-center px-4 py-3 text-left text-sm transition-colors',
-                                'hover:bg-muted-muted active:bg-muted-muted',
-                                field.state.value === option.value && 'bg-primary-bg-subtle font-medium text-primary'
-                              )}
-                              onClick={() => {
-                                field.handleChange(option.value);
-                                setDrawerOpen(false);
-                              }}
+                              className="flex w-full items-center gap-x-2 px-4 py-3 text-left text-sm text-danger-strong transition-colors hover:bg-danger-bg-subtle"
+                              onClick={onClear}
                             >
-                              {option.label}
+                              <XIcon size={14} />
+                              Xóa lựa chọn
                             </button>
-                          </DrawerClose>
-                        ))
-                      ) : (
-                        <div className="flex items-center justify-center gap-x-2 px-4 py-8 text-center text-sm text-text-positive-weak">
-                          <PackagePlusIcon strokeWidth={1} />
-                          Không có tùy chọn
-                        </div>
-                      )}
-                    </div>
-                  </DrawerContent>
-                </Drawer>
+                          </DialogClose>
+                        )}
+                        {options.length > 0 ? (
+                          options.map(option => (
+                            <DialogClose key={option.value} asChild>
+                              <button
+                                type="button"
+                                className={cn(
+                                  'flex w-full items-center px-4 py-3 text-left text-sm transition-colors',
+                                  'hover:bg-muted-muted active:bg-muted-muted',
+                                  field.state.value === option.value && 'bg-primary-bg-subtle font-medium text-primary'
+                                )}
+                                onClick={() => {
+                                  field.handleChange(option.value);
+                                  field.handleBlur();
+                                }}
+                              >
+                                {option.label}
+                              </button>
+                            </DialogClose>
+                          ))
+                        ) : (
+                          <div className="flex items-center justify-center gap-x-2 px-4 py-8 text-center text-sm text-text-positive-weak">
+                            <PackagePlusIcon strokeWidth={1} />
+                            Không có tùy chọn
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="shrink-0 h-safe-bottom" />
+                    </RadixDialog.Content>
+                  </DialogPortal>
+                </Dialog>
               </>
             ) : (
               <div className="relative">

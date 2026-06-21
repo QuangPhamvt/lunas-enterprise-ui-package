@@ -36,15 +36,7 @@ function SimpleTextFieldHarness({
     <AppField
       name="testField"
       validators={validators as any}
-      children={field => (
-        <field.SimpleTextField
-          label={label}
-          placeholder={placeholder}
-          required={required}
-          maxLength={maxLength}
-          disabled={disabled}
-        />
-      )}
+      children={field => <field.SimpleTextField label={label} placeholder={placeholder} required={required} maxLength={maxLength} disabled={disabled} />}
     />
   );
 }
@@ -119,21 +111,13 @@ describe('SimpleTextField', () => {
 
   describe('validation', () => {
     it('does not show error before the field is touched', () => {
-      render(
-        <SimpleTextFieldHarness
-          validators={{ onChange: ({ value }) => (!value ? 'Required' : undefined) }}
-        />
-      );
+      render(<SimpleTextFieldHarness validators={{ onChange: ({ value }) => (!value ? 'Required' : undefined) }} />);
       expect(screen.queryByRole('alert')).not.toBeInTheDocument();
     });
 
     it('shows error after field is touched with invalid value', async () => {
       const user = userEvent.setup();
-      render(
-        <SimpleTextFieldHarness
-          validators={{ onBlur: ({ value }) => (!value ? 'Required' : undefined) }}
-        />
-      );
+      render(<SimpleTextFieldHarness validators={{ onBlur: ({ value }) => (!value ? 'Required' : undefined) }} />);
       const input = screen.getByRole('textbox');
       await user.click(input);
       await user.tab();

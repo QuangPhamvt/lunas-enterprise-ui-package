@@ -68,9 +68,7 @@ function TextFieldWithFormHarness({ onSubmit }: { onSubmit: React.FormEventHandl
   const { AppField } = useTanStackForm({ defaultValues: { testField: 'hello' } });
   return (
     <form onSubmit={onSubmit}>
-      <AppField name="testField">
-        {field => <field.TextField label="Test" />}
-      </AppField>
+      <AppField name="testField">{field => <field.TextField label="Test" />}</AppField>
     </form>
   );
 }
@@ -182,9 +180,7 @@ describe('TextField', () => {
       const user = userEvent.setup();
       render(
         // onBlur fires when focus leaves — onChange alone won't trigger without a value change
-        <TextFieldHarness
-          validators={{ onBlur: ({ value }) => (!value ? 'Bắt buộc điền' : undefined) }}
-        />
+        <TextFieldHarness validators={{ onBlur: ({ value }) => (!value ? 'Bắt buộc điền' : undefined) }} />
       );
       await user.click(screen.getByRole('textbox'));
       await user.tab();
@@ -193,11 +189,7 @@ describe('TextField', () => {
 
     it('clears the error after the user enters a valid value', async () => {
       const user = userEvent.setup();
-      render(
-        <TextFieldHarness
-          validators={{ onChange: ({ value }) => (!value ? 'Bắt buộc điền' : undefined) }}
-        />
-      );
+      render(<TextFieldHarness validators={{ onChange: ({ value }) => (!value ? 'Bắt buộc điền' : undefined) }} />);
       const input = screen.getByRole('textbox');
       // Type then clear to trigger onChange with null → error
       await user.type(input, 'a');
@@ -211,12 +203,7 @@ describe('TextField', () => {
 
     it('hides error when showErrorMessage is false even after touching', async () => {
       const user = userEvent.setup();
-      render(
-        <TextFieldHarness
-          showErrorMessage={false}
-          validators={{ onChange: ({ value }) => (!value ? 'Required' : undefined) }}
-        />
-      );
+      render(<TextFieldHarness showErrorMessage={false} validators={{ onChange: ({ value }) => (!value ? 'Required' : undefined) }} />);
       const input = screen.getByRole('textbox');
       await user.click(input);
       await user.tab();

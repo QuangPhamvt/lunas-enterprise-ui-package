@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   tags: ['autodocs'],
-  title: 'Components/Buttons/Close',
+  title: 'Components/Button/Close',
 } satisfies Meta;
 
 export default meta;

@@ -8,6 +8,7 @@
 
 @import "../styles/base.css";
 @import "../styles/theme.css";
+@import "../styles/spacing.css";
 @import "../styles/loader.css";
 @import "../styles/typography.css";
 @import "../styles/text-editor.css";
@@ -181,6 +182,34 @@
   --container-8xl: 96rem; /* 1536px */
   --container-9xl: 128rem; /* 2048px */
   --container-10xl: 160rem;
+
+  /* Spacing system — layout / section / component scales.
+   * Values are responsive CSS variables defined in styles/spacing.css.
+   * Use these as Tailwind utilities: gap-layout-md, p-section-lg, px-component-sm, etc. */
+
+  /* Layout — page-level: section gaps, page gutters */
+  --spacing-layout-xl: var(--spacing-layout-xl);
+  --spacing-layout-lg: var(--spacing-layout-lg);
+  --spacing-layout-md: var(--spacing-layout-md);
+  --spacing-layout-sm: var(--spacing-layout-sm);
+  --spacing-layout-xs: var(--spacing-layout-xs);
+  --spacing-layout-none: var(--spacing-layout-none);
+
+  /* Section — section-level: header-to-body, card stacks, grouped rows */
+  --spacing-section-xl: var(--spacing-section-xl);
+  --spacing-section-lg: var(--spacing-section-lg);
+  --spacing-section-md: var(--spacing-section-md);
+  --spacing-section-sm: var(--spacing-section-sm);
+  --spacing-section-xs: var(--spacing-section-xs);
+  --spacing-section-none: var(--spacing-section-none);
+
+  /* Component — internal: button/chip/input padding and gaps */
+  --spacing-component-xl: var(--spacing-component-xl);
+  --spacing-component-lg: var(--spacing-component-lg);
+  --spacing-component-md: var(--spacing-component-md);
+  --spacing-component-sm: var(--spacing-component-sm);
+  --spacing-component-xs: var(--spacing-component-xs);
+  --spacing-component-none: var(--spacing-component-none);
 }
 
 @layer base {

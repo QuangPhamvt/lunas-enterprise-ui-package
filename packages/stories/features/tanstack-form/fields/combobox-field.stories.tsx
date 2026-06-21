@@ -3,6 +3,7 @@ import z from 'zod';
 import { useTanStackForm } from '@/components/features/tanstack-form';
 
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 
 const meta = {
   tags: ['autodocs'],
@@ -59,6 +60,24 @@ export const Default: Story = {
       </TanStackContainerForm>
     );
   },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // Open the combobox popover
+    const trigger = canvas.getByRole('button', { name: /search country/i });
+    await userEvent.click(trigger);
+
+    // Type to filter options
+    const searchInput = await waitFor(() => within(document.body).getByPlaceholderText(/search country/i));
+    await userEvent.type(searchInput, 'viet');
+
+    // Select Vietnam
+    const option = await waitFor(() => within(document.body).getByRole('option', { name: 'Vietnam' }));
+    await userEvent.click(option);
+
+    // Trigger now shows selected label
+    await waitFor(() => expect(canvas.getByRole('button', { name: /vietnam/i })).toBeInTheDocument());
+  },
 };
 
 export const WithTooltip: Story = {
@@ -88,20 +107,20 @@ export const WithTooltip: Story = {
   },
 };
 
-export const Mobile: Story = {
+export const MobileDialog: Story = {
   render: () => {
     const { AppField, TanStackContainerForm, TanStackSectionForm } = useTanStackForm({
       defaultValues: { value: null as string | null },
     });
     return (
       <TanStackContainerForm>
-        <TanStackSectionForm title="Combobox Field — Mobile Drawer">
+        <TanStackSectionForm title="Combobox Field — Mobile Dialog">
           <AppField
             name="value"
             children={({ ComboboxField }) => (
               <ComboboxField
                 label="Country"
-                description="On mobile this opens a bottom drawer with search."
+                description="On mobile this opens a bottom dialog with search."
                 placeholder="Search country…"
                 orientation="responsive"
                 options={COUNTRIES}
@@ -141,6 +160,7 @@ export const WithValidation: Story = {
                 description="Select United States to see the validation error."
                 placeholder="Search country…"
                 orientation="responsive"
+                showErrorMessage
                 options={COUNTRIES}
               />
             )}
@@ -148,6 +168,20 @@ export const WithValidation: Story = {
         </TanStackSectionForm>
       </TanStackContainerForm>
     );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    const trigger = canvas.getByRole('button', { name: /search country/i });
+    await userEvent.click(trigger);
+
+    const searchInput = await waitFor(() => within(document.body).getByPlaceholderText(/search country/i));
+    await userEvent.type(searchInput, 'united states');
+
+    const option = await waitFor(() => within(document.body).getByRole('option', { name: 'United States' }));
+    await userEvent.click(option);
+
+    await waitFor(() => expect(canvas.getByRole('alert')).toHaveTextContent('US is not available in this region.'));
   },
 };
 
@@ -201,6 +235,36 @@ export const Clearable: Story = {
       </TanStackContainerForm>
     );
   },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // Country is pre-selected (Vietnam) — clear it
+    const [countryClear] = canvas.getAllByRole('button', { name: /xóa lựa chọn/i });
+    await userEvent.click(countryClear);
+
+    await waitFor(() => expect(canvas.getByRole('button', { name: /search country/i })).toBeInTheDocument());
+
+    // Re-select Japan via the combobox
+    await userEvent.click(canvas.getByRole('button', { name: /search country/i }));
+    const searchInput = await waitFor(() => within(document.body).getByPlaceholderText(/search country/i));
+    await userEvent.type(searchInput, 'japan');
+    await userEvent.click(await waitFor(() => within(document.body).getByRole('option', { name: 'Japan' })));
+
+    await waitFor(() => expect(canvas.getByRole('button', { name: /japan/i })).toBeInTheDocument());
+
+    // Select a language then clear it
+    await userEvent.click(canvas.getByRole('button', { name: /search language/i }));
+    const langInput = await waitFor(() => within(document.body).getByPlaceholderText(/search language/i));
+    await userEvent.type(langInput, 'english');
+    await userEvent.click(await waitFor(() => within(document.body).getByRole('option', { name: 'English' })));
+
+    await waitFor(() => expect(canvas.getByRole('button', { name: /english/i })).toBeInTheDocument());
+
+    const [, langClear] = canvas.getAllByRole('button', { name: /xóa lựa chọn/i });
+    await userEvent.click(langClear);
+
+    await waitFor(() => expect(canvas.getByRole('button', { name: /search language/i })).toBeInTheDocument());
+  },
 };
 
 export const Disabled: Story = {
@@ -245,6 +309,16 @@ export const Disabled: Story = {
       </TanStackContainerForm>
     );
   },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    const disabledTriggers = canvas.getAllByRole('button').filter(b => b.hasAttribute('disabled'));
+    expect(disabledTriggers).toHaveLength(2);
+    disabledTriggers.forEach(btn => expect(btn).toBeDisabled());
+
+    // No popover/listbox should be open
+    expect(within(document.body).queryByRole('listbox')).not.toBeInTheDocument();
+  },
 };
 
 export const EmptyOptions: Story = {
@@ -272,20 +346,30 @@ export const EmptyOptions: Story = {
       </TanStackContainerForm>
     );
   },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await userEvent.click(canvas.getByRole('button', { name: /search category/i }));
+
+    await waitFor(() => expect(within(document.body).getByText(/không tìm thấy kết quả nào phù hợp/i)).toBeInTheDocument());
+  },
 };
 
 export const BlurValidation: Story = {
   render: () => {
     const schema = z.object({
-      country: z.string({ required_error: 'Please select a country' }).nullable(),
+      country: z
+        .string()
+        .nullable()
+        .refine(v => v !== null, 'Please select a country'),
       shipping: z
         .string()
-        .refine(v => v !== 'us', { message: 'US is not available in this region.' })
-        .nullable(),
+        .nullable()
+        .refine(v => v !== 'us', { message: 'US is not available in this region.' }),
     });
     const { AppField, TanStackContainerForm, TanStackSectionForm } = useTanStackForm({
       defaultValues: {
-        country: null as string | null,
+        country: 'vn' as string | null,
         shipping: null as string | null,
       },
       validators: { onChange: schema },
@@ -298,9 +382,10 @@ export const BlurValidation: Story = {
             children={({ ComboboxField }) => (
               <ComboboxField
                 label="Country"
-                description="Open, then close without selecting — error appears on blur."
+                description="Pre-selected. Clear it to see the required-field error."
                 placeholder="Search country…"
                 orientation="responsive"
+                clearable
                 required
                 showErrorMessage
                 options={COUNTRIES}
@@ -324,6 +409,40 @@ export const BlurValidation: Story = {
         </TanStackSectionForm>
       </TanStackContainerForm>
     );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // Country pre-selected (Vietnam) — no errors initially (not yet touched)
+    expect(canvas.queryByRole('alert')).not.toBeInTheDocument();
+
+    // Clear country → onChange fires with null → required error shows
+    const [countryClear] = canvas.getAllByRole('button', { name: /xóa lựa chọn/i });
+    await userEvent.click(countryClear);
+
+    await waitFor(() => expect(canvas.getAllByRole('alert')[0]).toHaveTextContent('Please select a country'));
+
+    // After clearing, both fields show "Search country…" — country is [0], shipping is [1]
+    const [countryTrigger] = canvas.getAllByRole('button', { name: /search country/i });
+    await userEvent.click(countryTrigger);
+    const countryInput = await waitFor(() => within(document.body).getByPlaceholderText(/search country/i));
+    await userEvent.type(countryInput, 'vietnam');
+    await userEvent.click(await waitFor(() => within(document.body).getByRole('option', { name: 'Vietnam' })));
+
+    // Country now shows "Vietnam" — error clears
+    await waitFor(() => expect(canvas.getAllByRole('alert')[0]).not.toHaveTextContent('Please select a country'));
+
+    // Now only the shipping trigger matches "Search country…"
+    const shippingTrigger = canvas.getByRole('button', { name: /search country/i });
+    await userEvent.click(shippingTrigger);
+    const shippingInput = await waitFor(() => within(document.body).getByPlaceholderText(/search country/i));
+    await userEvent.type(shippingInput, 'united states');
+    await userEvent.click(await waitFor(() => within(document.body).getByRole('option', { name: 'United States' })));
+
+    await waitFor(() => {
+      const alerts = canvas.getAllByRole('alert');
+      expect(alerts[alerts.length - 1]).toHaveTextContent('US is not available in this region.');
+    });
   },
 };
 

@@ -170,7 +170,7 @@ export type NumberFieldProps = {
   /** Number of decimal places displayed and enforced. */
   decimalPlaces?: number;
   /** Maximum number of significant digits (precision). */
-  percision?: number;
+  precision?: number;
   /** Unit label appended to the right of the input (e.g. `'kg'`, `'%'`). */
   unit?: string;
   /** When `false`, suppresses inline validation error messages. Defaults to `true`. */
@@ -179,6 +179,8 @@ export type NumberFieldProps = {
   required?: boolean;
   /** When `true`, the input accepts negative numbers. Defaults to `false`. */
   allowNegative?: boolean;
+  /** When `true`, disables the input. Also disabled automatically while the form is submitting. */
+  disabled?: boolean;
 };
 
 /** Props for {@link PasswordField} — a text input with a show/hide password toggle. */
@@ -311,6 +313,8 @@ export type DateFieldProps = {
   showErrorMessage?: boolean;
   /** Marks the field as required; highlights the label when the value is `null`. */
   required?: boolean;
+  /** When `true`, disables the date picker. Also disabled automatically while the form is submitting. */
+  disabled?: boolean;
   /** Earliest selectable date; days before this are hidden in the calendar. */
   minDate?: Date;
   /** Latest selectable date; days after this are hidden in the calendar. */
