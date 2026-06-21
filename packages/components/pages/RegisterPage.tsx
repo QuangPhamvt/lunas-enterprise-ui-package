@@ -201,6 +201,9 @@ export const RegisterPage = ({
           <Button type="submit" isLoading={isLoading} className="w-full">
             Đăng ký
           </Button>
+          <Button type="button" variant="outline" className="w-full" disabled={isLoading} onClick={() => onOpenChange(false)}>
+            Đóng hộp thoại
+          </Button>
         </form>
 
         {onLogin && (

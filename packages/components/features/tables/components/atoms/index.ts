@@ -33,6 +33,7 @@
  * ];
  * ```
  */
+export * from './avatar-name-display';
 export * from './badge-display';
 export * from './boolean-display';
 export * from './currency-display';

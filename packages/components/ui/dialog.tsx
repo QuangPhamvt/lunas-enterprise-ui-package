@@ -92,7 +92,7 @@ function DialogContent({
         className={cn(
           'fixed top-1/2 left-1/2 z-50 -translate-x-1/2 -translate-y-1/2',
           'grid w-full max-w-[calc(100%-2rem)] bg-background',
-          'max-h-[85dvh] gap-4 rounded-2xl p-6 shadow-dialog outline-none duration-200',
+          'max-h-[85dvh] gap-4 rounded-2xl p-6 shadow-dialog outline-none duration-400',
           'sm:max-w-lg',
           'data-[state=open]:fade-in-0 data-[state=open]:zoom-in-80 data-[state=open]:animate-in',
           'data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-80 data-[state=closed]:animate-out',

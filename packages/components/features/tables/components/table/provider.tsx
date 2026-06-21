@@ -193,6 +193,9 @@ export const UITableProvider = <
   summary = [],
   showAnalysisPanel = false,
 
+  description,
+  headerActions,
+
   children,
 }: React.PropsWithChildren<TableProviderProps<TData, TKey, TColumns>>) => {
   const innerWrapperId = useId();
@@ -344,6 +347,9 @@ export const UITableProvider = <
 
       summary,
       showAnalysisPanel,
+
+      description,
+      headerActions,
     }),
     [
       title,
@@ -367,6 +373,9 @@ export const UITableProvider = <
 
       summary,
       showAnalysisPanel,
+
+      description,
+      headerActions,
     ]
   );
 

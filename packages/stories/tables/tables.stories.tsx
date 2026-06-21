@@ -9,6 +9,7 @@ import { sleep } from '@customafk/react-toolkit/utils/sleep';
 import type { ActiveFilter, CsvCell, FilterDefinition, SummaryItem, TUITableColumn } from '@/components/features/tables';
 import {
   UITableAnalysisPanel,
+  UITableAvatarNameDisplay,
   UITableBooleanDisplay,
   UITableContainer,
   UITableCurrencyDisplay,
@@ -21,6 +22,8 @@ import {
   UITableTooltipFilter,
   UITableWrapper,
 } from '@/components/features/tables';
+
+import { Button } from '@/components/ui/button';
 
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { generateMockCsvData, MockDataColumns, MockDataFilterDefinitions, MockDataTables, type TMockDataTable } from './mock-data';
@@ -83,6 +86,7 @@ export const Default: Story = {
       <div className="h-[calc(100vh-4rem)] w-full">
         <UITableProvider<TMockDataTable>
           title="Nhân viên"
+          description="Danh sách nhân viên trong công ty"
           columns={MockDataColumns}
           data={MockDataTables}
           totalRows={MockDataTables.length + 10}
@@ -96,18 +100,18 @@ export const Default: Story = {
           onRowSelection={sel => console.log('selection:', sel)}
           onFilterChange={filters => console.log('filters:', filters)}
           keyOfClickRow="name"
-          onClickRow={(idx, id) => console.log('clicked row:', idx, id)}
+          // onClickRow={(idx, id) => console.log('clicked row:', idx, id)}
           fetchMoreData={async () => {
             await sleep(2000);
             console.log('Fetch more data...');
           }}
         >
           <UITableWrapper>
-            <UITableSummaryBar />
             <UITableTooltip>
               <UITableTooltipFilter onSearch={v => console.log('search:', v)} />
               <UITableTooltipActions />
             </UITableTooltip>
+            <UITableSummaryBar />
             <UITableContainer>
               <UITableFilter />
             </UITableContainer>
@@ -592,6 +596,215 @@ export const WithFooterAggregations: Story = {
       </UITableProvider>
     </div>
   ),
+};
+
+// ─── Team Members ────────────────────────────────────────────────────────────
+
+type TTeamMember = {
+  id: string;
+  name: string;
+  avatarUrl?: string;
+  role: string;
+  department: string;
+  contactNumber: string;
+  status: 'Active' | 'Pending' | 'Offline';
+  joinedDate: string;
+  workflow: number;
+};
+
+const TeamMemberColumns: TUITableColumn<TTeamMember>[] = [
+  { accessorKey: 'select', size: 60 },
+  { accessorKey: 'id', header: 'ID', size: 100 },
+  {
+    id: 'name',
+    accessorKey: 'name',
+    header: 'Members Name',
+    size: 200,
+    cell: ({ row }) => <UITableAvatarNameDisplay name={row.original.name} uuid={row.original.id} avatarUrl={row.original.avatarUrl} />,
+  },
+  { accessorKey: 'role', header: 'Role', size: 120 },
+  { accessorKey: 'department', header: 'Department', size: 140 },
+  { accessorKey: 'contactNumber', header: 'Contact Number', size: 160 },
+  {
+    id: 'status',
+    accessorKey: 'status',
+    header: 'Status',
+    size: 120,
+    cell: ({ getValue }) => <UITableStatusDisplay value={getValue<string>()} colorMap={{ Active: 'success', Pending: 'warning', Offline: 'muted' }} />,
+  },
+  {
+    id: 'joinedDate',
+    accessorKey: 'joinedDate',
+    header: 'Joined Date',
+    size: 140,
+    cell: ({ getValue }) => <span className="text-text-positive-weak text-sm">{getValue<string>()}</span>,
+  },
+  {
+    id: 'workflow',
+    accessorKey: 'workflow',
+    header: 'Workflow',
+    size: 100,
+    meta: { position: 'center' },
+    cell: ({ getValue }) => {
+      const pct = getValue<number>();
+      const color = pct >= 61 ? 'text-success' : pct >= 31 ? 'text-warning' : 'text-danger';
+      return <span className={`font-medium text-sm ${color}`}>{pct}%</span>;
+    },
+  },
+];
+
+const TeamMemberData: TTeamMember[] = [
+  {
+    id: 'MBR-008',
+    name: 'Alexander Montgomery',
+    role: 'Editor',
+    department: 'Marketing',
+    contactNumber: '+1 (202) 555-0143',
+    status: 'Active',
+    joinedDate: '01 Jan, 2026',
+    workflow: 33,
+  },
+  {
+    id: 'MBR-001',
+    name: 'Nathaniel Richardson',
+    role: 'Owner',
+    department: 'Engineering',
+    contactNumber: '+1 (303) 555-0198',
+    status: 'Active',
+    joinedDate: '01 Dec, 2025',
+    workflow: 24,
+  },
+  {
+    id: 'MBR-012',
+    name: 'Theodore Whitmore',
+    role: 'Editor',
+    department: 'Design',
+    contactNumber: '+1 (415) 555-0127',
+    status: 'Pending',
+    joinedDate: '30 Nov, 2025',
+    workflow: 0,
+  },
+  {
+    id: 'MBR-007',
+    name: 'Edward Kensington',
+    role: 'Admin',
+    department: 'Marketing',
+    contactNumber: '+1 (646) 555-0175',
+    status: 'Active',
+    joinedDate: '01 Oct, 2025',
+    workflow: 10,
+  },
+  {
+    id: 'MBR-015',
+    name: 'Benjamin Calloway',
+    role: 'Devops',
+    department: 'Engineering',
+    contactNumber: '+1 (212) 555-0169',
+    status: 'Offline',
+    joinedDate: '25 May, 2025',
+    workflow: 25,
+  },
+  {
+    id: 'MBR-005',
+    name: 'Oliver Remington',
+    role: 'Viewer',
+    department: 'Design',
+    contactNumber: '+1 (305) 555-0136',
+    status: 'Active',
+    joinedDate: '20 May, 2025',
+    workflow: 40,
+  },
+  {
+    id: 'MBR-009',
+    name: 'Dominic Harrington',
+    role: 'Devops',
+    department: 'Engineering',
+    contactNumber: '+1 (617) 555-0164',
+    status: 'Pending',
+    joinedDate: '01 May, 2025',
+    workflow: 0,
+  },
+  {
+    id: 'MBR-006',
+    name: 'William Prescott',
+    role: 'Admin',
+    department: 'Finance',
+    contactNumber: '+1 (408) 555-0152',
+    status: 'Active',
+    joinedDate: '01 Jul, 2025',
+    workflow: 9,
+  },
+  {
+    id: 'MBR-003',
+    name: 'Jameson Wallington',
+    role: 'Billing',
+    department: 'Finance',
+    contactNumber: '+1 (503) 555-0119',
+    status: 'Active',
+    joinedDate: '30 Jun, 2025',
+    workflow: 23,
+  },
+  {
+    id: 'MBR-010',
+    name: 'Sebastian Vanderbilt',
+    role: 'Viewer',
+    department: 'Sales',
+    contactNumber: '+1 (702) 555-0148',
+    status: 'Offline',
+    joinedDate: '02 Jun, 2025',
+    workflow: 32,
+  },
+];
+
+export const TeamMembers: Story = {
+  name: 'Team Members',
+  render: () => {
+    const activeCount = TeamMemberData.filter(m => m.status === 'Active').length;
+    const pendingCount = TeamMemberData.filter(m => m.status === 'Pending').length;
+
+    const summary: SummaryItem[] = [
+      { label: 'Total Member', value: 35, description: 'All members' },
+      { label: 'Active Now', value: activeCount, trend: 'up' },
+      { label: 'Pending Invites', value: pendingCount, trend: 'neutral' },
+      { label: 'Seats Used', value: '35 / 50', trend: 'neutral' },
+    ];
+
+    const headerActions = (
+      <>
+        <Button variant="outline" size="sm">
+          27 April, 2026
+        </Button>
+        <Button variant="outline" size="sm">
+          Team Settings
+        </Button>
+        <Button size="sm">+ Invite Member</Button>
+      </>
+    );
+
+    return (
+      <div className="h-[calc(100vh-4rem)] w-full">
+        <UITableProvider<TTeamMember>
+          title="Team Members"
+          description="Manage who has access to your workspace."
+          columns={TeamMemberColumns}
+          data={TeamMemberData}
+          totalRows={TeamMemberData.length}
+          summary={summary}
+          headerActions={headerActions}
+          onRowSelection={sel => console.log('selection:', sel)}
+        >
+          <UITableWrapper>
+            <UITableSummaryBar />
+            <UITableTooltip>
+              <UITableTooltipFilter onSearch={v => console.log('search:', v)} />
+              <UITableTooltipActions />
+            </UITableTooltip>
+            <UITableContainer />
+          </UITableWrapper>
+        </UITableProvider>
+      </div>
+    );
+  },
 };
 
 // ─── With Summary & Analysis Panel ───────────────────────────────────────────

@@ -15,12 +15,7 @@ export const DescriptionDate: React.FC<DescriptionDateProps> = ({ date }) => {
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <DateDisplay
-            data-slot="description-date"
-            date={date}
-            format="medium"
-            className="cursor-help underline decoration-dashed decoration-border-strong underline-offset-2"
-          />
+          <DateDisplay data-slot="description-date" date={date} format="medium" className="cursor-help" />
         </TooltipTrigger>
         <TooltipContent>
           <DateDisplay date={date} format="full" showTime className="text-xs font-medium" />

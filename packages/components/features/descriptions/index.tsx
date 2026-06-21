@@ -104,11 +104,11 @@ export const DescriptionHeader: React.FC<{
   return (
     <div
       data-slot="description-header"
-      className={cn('sticky top-0 z-10 flex items-start justify-between gap-4 border-b border-b-border bg-card px-4 py-3', className)}
+      className={cn('sticky top-0 z-10 flex items-center justify-between gap-4 border-b border-b-border bg-card px-4 py-3', className)}
     >
       <div className="flex flex-col gap-0.5">
         <p className="text-sm font-semibold text-text-positive">{title}</p>
-        {description && <p className="text-xs text-text-positive-weak">{description}</p>}
+        {description && <p className="text-xs text-text-positive-muted">{description}</p>}
       </div>
       {extra && <div className="shrink-0">{extra}</div>}
     </div>
@@ -133,9 +133,9 @@ export const DescriptionSection: React.FC<{
   className?: string;
 }> = ({ title, className }) => {
   return (
-    <div data-slot="description-section" className={cn('flex items-center gap-3 border-b border-b-border bg-secondary-muted px-4 py-2', className)}>
-      {title && <p className="text-xs font-semibold uppercase tracking-wide text-text-positive-muted">{title}</p>}
-      <div className="h-px flex-1 bg-border-weak" />
+    <div data-slot="description-section" className={cn('flex items-center gap-3 border-b border-b-border px-4 py-2.5', className)}>
+      {title && <p className="shrink-0 text-xs font-semibold uppercase tracking-widest text-text-positive-muted">{title}</p>}
+      <div className="h-px flex-1 bg-border" />
     </div>
   );
 };
