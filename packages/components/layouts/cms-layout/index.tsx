@@ -4,7 +4,7 @@ import { memo } from 'react';
 
 import { LogOutIcon } from 'lucide-react';
 
-import { CMSLayoutHeader } from './components/header';
+import { CMSLayoutHeader, type CMSLayoutUser } from './components/header';
 import {
   CMSLayoutSidebar,
   SidebarContent,
@@ -39,6 +39,8 @@ type NavGroup = {
   items: NavItem[];
 };
 
+export type { CMSLayoutUser };
+
 export type CMSLayoutProps = {
   /** Text label used by the header for language-toggle or i18n display. */
   i18nText?: string;
@@ -62,6 +64,8 @@ export type CMSLayoutProps = {
    * @default `Copyright © <current year>, Lunas.`
    */
   copyright?: string;
+  /** Authenticated user shown in the header avatar dropdown. Omit to hide the user menu. */
+  user?: CMSLayoutUser;
 };
 
 const SidebarContentGroupItem = memo<NavItem & { activeNavItemId?: string }>(({ id, label, icon, activeNavItemId, onClick }) => (
@@ -121,12 +125,20 @@ export const CMSLayout: React.FC<React.PropsWithChildren<CMSLayoutProps>> = ({
   onLogout,
   logoutLabel = 'Log out',
   copyright = `Copyright © ${new Date().getFullYear()}, Lunas.`,
+  user,
 }) => {
   const groups = sidebar?.groupcontent ?? [];
 
   return (
     <CMSLayoutProvider>
-      <CMSLayoutHeader i18nText={i18nText} onChangeToEnLocale={onChangeToEnLocale} onChangeToViLocale={onChangeToViLocale} />
+      <CMSLayoutHeader
+        i18nText={i18nText}
+        onChangeToEnLocale={onChangeToEnLocale}
+        onChangeToViLocale={onChangeToViLocale}
+        user={user}
+        onLogout={onLogout}
+        logoutLabel={logoutLabel}
+      />
       <CMSLayoutSidebar variant="inset" collapsible="icon">
         <SidebarContent>
           {groups.map(group => (

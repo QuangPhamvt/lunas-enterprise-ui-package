@@ -6,19 +6,8 @@ import { useVirtualizer } from '@tanstack/react-virtual';
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
 
 import { useUITableBodyContext, useUITableContext } from '../hooks/use-context';
-import {
-  UITableBody,
-  UITableEmptyDisplay,
-  UITableFooter,
-  UITableHead,
-  UITableHeadRow,
-  UITableInnerTable,
-  UITableInnerWrapper,
-  UITableLoadMore,
-  UITableRow,
-} from './common';
+import { UITableBody, UITableEmptyDisplay, UITableHead, UITableHeadRow, UITableInnerTable, UITableInnerWrapper, UITableLoadMore, UITableRow } from './common';
 import { UITableLoadingDisplay } from './commons/empty-display';
-import { UITableFooterRow } from './commons/footer-row';
 
 export const UITableContainer: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { table, fetchMoreData } = useUITableContext();
@@ -91,9 +80,6 @@ export const UITableContainer: React.FC<React.PropsWithChildren> = ({ children }
           </UITableInnerTable>
           <UITableEmptyDisplay />
         </UITableInnerWrapper>
-        <UITableFooter>
-          <UITableFooterRow />
-        </UITableFooter>
       </ResizablePanel>
       {children && (
         <>

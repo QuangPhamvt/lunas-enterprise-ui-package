@@ -72,7 +72,7 @@ export const Image: React.FC<Props> = ({ src, alt, width, height, maxRetries = 3
   if (hasError) {
     return (
       <div style={{ width, height }} className={cn('@container relative inline-block', className)}>
-        <div className="flex size-full flex-col items-center justify-center gap-y-2 rounded-md bg-danger-muted shadow-card">
+        <div className="flex size-full flex-col items-center justify-center gap-y-2 rounded bg-danger-muted shadow-card">
           <AlertCircleIcon className="@max-[52px]:size-6 size-8 text-danger" />
           <span className="@max-[96px]:sr-only text-center text-danger-weak text-xs">Image failed to load</span>
         </div>
@@ -81,7 +81,7 @@ export const Image: React.FC<Props> = ({ src, alt, width, height, maxRetries = 3
   }
 
   return (
-    <div style={{ width, height }} className={cn('relative flex items-center justify-center overflow-hidden rounded-md', className)} onClick={onClick}>
+    <div style={{ width, height }} className={cn('relative flex items-center justify-center overflow-hidden rounded', className)} onClick={onClick}>
       {!isLoaded && <Skeleton className="absolute inset-0 flex size-full animate-pulse items-center justify-center" />}
       <img src={currentSrc} className="absolute inset-0 z-0 size-full scale-110 object-cover blur-xl brightness-60" />
       <img

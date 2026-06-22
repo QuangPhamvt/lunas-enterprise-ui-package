@@ -3,6 +3,7 @@ import z from 'zod';
 import { useTanStackForm } from '@/components/features/tanstack-form';
 
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 
 const meta = {
   tags: ['autodocs'],
@@ -66,26 +67,39 @@ export const Default: Story = {
       </TanStackContainerForm>
     );
   },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    const trigger = canvas.getByRole('combobox');
+    await userEvent.click(trigger);
+
+    const listbox = await waitFor(() => within(document.body).getByRole('listbox'));
+    const option3 = within(listbox).getByText('Option 3');
+    await userEvent.click(option3);
+
+    await waitFor(() => expect(trigger).toHaveTextContent('Option 3'));
+  },
 };
 
-export const Mobile: Story = {
+export const MobileDialog: Story = {
   render: () => {
     const { AppField, TanStackContainerForm, TanStackSectionForm } = useTanStackForm({
       defaultValues: {
-        value: '',
+        value: null as string | null,
       },
     });
     return (
       <TanStackContainerForm>
-        <TanStackSectionForm title="Select Field — Mobile Drawer">
+        <TanStackSectionForm title="Select Field — Mobile Dialog">
           <AppField
             name="value"
             children={({ SelectField }) => (
               <SelectField
                 label="Select Field"
-                description="On mobile this opens a bottom drawer."
+                description="On mobile this opens a centered dialog."
                 placeholder="Select an option"
                 orientation="responsive"
+                clearable
                 options={[
                   { label: 'Option 1', value: 'option_1' },
                   { label: 'Option 2', value: 'option_2' },
@@ -208,6 +222,27 @@ export const Clearable: Story = {
       </TanStackContainerForm>
     );
   },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // Country is pre-selected — clear button should be visible; click it
+    const clearBtn = canvas.getByRole('button', { name: /xóa lựa chọn/i });
+    await userEvent.click(clearBtn);
+
+    // After clearing, the trigger should show the placeholder
+    await waitFor(() => expect(canvas.getAllByText('Select a country')[0]).toBeInTheDocument());
+
+    // Select a role, then clear it
+    const [, roleTrigger] = canvas.getAllByRole('combobox');
+    await userEvent.click(roleTrigger);
+    const listbox = await waitFor(() => within(document.body).getByRole('listbox'));
+    await userEvent.click(within(listbox).getByText('Editor'));
+
+    await waitFor(() => {
+      const clearBtns = canvas.getAllByRole('button', { name: /xóa lựa chọn/i });
+      expect(clearBtns.length).toBeGreaterThan(0);
+    });
+  },
 };
 
 export const Disabled: Story = {
@@ -257,12 +292,18 @@ export const Disabled: Story = {
 export const BlurValidation: Story = {
   render: () => {
     const schema = z.object({
-      country: z.string({ required_error: 'Please select a country' }).nullable(),
-      role: z.string({ required_error: 'Please select a role' }).nullable(),
+      country: z
+        .string()
+        .nullable()
+        .refine(v => v !== null, 'Please select a country'),
+      role: z
+        .string()
+        .nullable()
+        .refine(v => v !== null, 'Please select a role'),
     });
     const { AppField, TanStackContainerForm, TanStackSectionForm } = useTanStackForm({
       defaultValues: {
-        country: null as string | null,
+        country: 'vn' as string | null,
         role: null as string | null,
       },
       validators: { onChange: schema },
@@ -275,9 +316,10 @@ export const BlurValidation: Story = {
             children={({ SelectField }) => (
               <SelectField
                 label="Country"
-                description="Open the dropdown, then close without selecting — error appears on blur."
+                description="Pre-selected. Clear it to see the validation error appear."
                 placeholder="Select a country"
                 orientation="responsive"
+                clearable
                 showErrorMessage
                 required
                 options={COUNTRY_OPTIONS}
@@ -289,7 +331,7 @@ export const BlurValidation: Story = {
             children={({ SelectField }) => (
               <SelectField
                 label="Role"
-                description="Select a value then clear it — error reappears."
+                description="Select a value then clear it — validation error reappears."
                 placeholder="Select a role"
                 orientation="responsive"
                 clearable
@@ -302,6 +344,49 @@ export const BlurValidation: Story = {
         </TanStackSectionForm>
       </TanStackContainerForm>
     );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // Country is pre-selected — no error initially (not yet touched)
+    expect(canvas.queryByRole('alert')).not.toBeInTheDocument();
+
+    // Clear country → onChange fires with null → refine fails → error shows
+    const [countryClear] = canvas.getAllByRole('button', { name: /xóa lựa chọn/i });
+    await userEvent.click(countryClear);
+
+    await waitFor(() => {
+      const alerts = canvas.getAllByRole('alert');
+      expect(alerts[0]).toHaveTextContent('Please select a country');
+    });
+
+    // Re-select country → error clears
+    const [countryTrigger] = canvas.getAllByRole('combobox');
+    await userEvent.click(countryTrigger);
+    const listbox1 = await waitFor(() => within(document.body).getByRole('listbox'));
+    await userEvent.click(within(listbox1).getByText('Vietnam'));
+
+    await waitFor(() => expect(canvas.getAllByRole('alert')[0]).not.toHaveTextContent('Please select a country'));
+
+    // Select a role then clear it — error appears for role
+    const [, roleTrigger] = canvas.getAllByRole('combobox');
+    await userEvent.click(roleTrigger);
+    const listbox2 = await waitFor(() => within(document.body).getByRole('listbox'));
+    await userEvent.click(within(listbox2).getByText('Admin'));
+
+    await waitFor(() => {
+      const alerts = canvas.getAllByRole('alert');
+      expect(alerts.length).toBeGreaterThanOrEqual(1);
+      expect(alerts[alerts.length - 1]).not.toHaveTextContent('Please select a role');
+    });
+
+    const [, roleClear] = canvas.getAllByRole('button', { name: /xóa lựa chọn/i });
+    await userEvent.click(roleClear);
+
+    await waitFor(() => {
+      const alerts = canvas.getAllByRole('alert');
+      expect(alerts[alerts.length - 1]).toHaveTextContent('Please select a role');
+    });
   },
 };
 

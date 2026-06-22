@@ -1,6 +1,6 @@
 'use client';
 
-import { useSelector } from '@tanstack/react-store';
+import { useStore } from '@tanstack/react-form';
 
 import { cn } from '@customafk/react-toolkit/utils';
 
@@ -23,7 +23,7 @@ import type { RadioGroupFieldProps as Props } from '../../types';
 
 export const RadioGroupField: React.FC<Props> = ({ label, description, orientation, options, tooltip, helperText }) => {
   const field = useTanStackFieldContext<string | null>();
-  const isSubmitting = useSelector(field.form.store, ({ isSubmitting }) => isSubmitting);
+  const isSubmitting = useStore(field.form.store, ({ isSubmitting }) => isSubmitting);
 
   return (
     <FieldGroup className="px-4">

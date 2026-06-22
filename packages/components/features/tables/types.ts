@@ -313,6 +313,11 @@ export type TTableContext<TData extends RowData<TData>> = {
   summary?: SummaryItem[];
   /** When `true`, a toggle button appears in `UITableTooltipActions` to open `UITableAnalysisPanel`. */
   showAnalysisPanel?: boolean;
+
+  /** Optional subtitle rendered below the title in `UITableTooltip`. */
+  description?: string;
+  /** Optional React node rendered on the right side of the `UITableTooltip` header row (e.g. action buttons). */
+  headerActions?: React.ReactNode;
 };
 
 /** Context value provided by `UITableInnerWrapperProvider`. */
@@ -466,6 +471,11 @@ export type TableProviderProps<
   summary?: SummaryItem[];
   /** When `true`, a toggle button appears in `UITableTooltipActions` to open `UITableAnalysisPanel`. */
   showAnalysisPanel?: boolean;
+
+  /** Optional subtitle rendered below the title in `UITableTooltip`. */
+  description?: string;
+  /** Optional React node rendered on the right side of the `UITableTooltip` header row (e.g. action buttons). */
+  headerActions?: React.ReactNode;
 };
 
 // ============ Filter system ============

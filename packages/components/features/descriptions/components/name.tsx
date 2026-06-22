@@ -12,11 +12,7 @@ export const DescriptionName: React.FC<{
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <Paragraph
-          data-slot="description-name"
-          variant="sm"
-          className="line-clamp-2 w-full cursor-pointer truncate underline decoration-dashed decoration-border-strong underline-offset-2"
-        >
+        <Paragraph data-slot="description-name" variant="sm" className="line-clamp-2 w-full cursor-pointer truncate hover:text-text-positive transition-colors">
           {name}
         </Paragraph>
       </TooltipTrigger>

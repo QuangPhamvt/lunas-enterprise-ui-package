@@ -193,10 +193,16 @@ export const UITableTooltipActions: React.FC<{
  * ```
  */
 export const UITableTooltip: React.FC<React.PropsWithChildren> = ({ children }) => {
-  const { title } = useUITableContext();
+  const { title, description, headerActions } = useUITableContext();
   return (
-    <div data-slot="table-tooltip" className="relative m-0 flex w-full flex-0 flex-col flex-wrap items-start space-y-2 p-0 px-2 text-sm">
-      <h3 className="font-semibold text-base text-text-positive">{title}</h3>
+    <div data-slot="table-tooltip" className="relative flex w-full flex-col gap-2 px-2 py-0 text-sm">
+      <div className="flex w-full items-start justify-between gap-4">
+        <div className="flex flex-col gap-0.5">
+          <h3 className="font-semibold text-base text-text-positive">{title}</h3>
+          {description && <p className="text-sm text-muted-foreground">{description}</p>}
+        </div>
+        {headerActions && <div className="flex items-center gap-2 shrink-0">{headerActions}</div>}
+      </div>
       <div className="flex w-full flex-1 justify-between gap-x-2">{children}</div>
     </div>
   );

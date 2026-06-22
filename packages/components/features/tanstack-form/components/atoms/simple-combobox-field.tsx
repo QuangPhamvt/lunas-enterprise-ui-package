@@ -2,7 +2,7 @@
 
 import { useId, useState } from 'react';
 
-import { useSelector } from '@tanstack/react-store';
+import { useStore } from '@tanstack/react-form';
 
 import { useIsMobile } from '@customafk/react-toolkit/hooks/useMobile';
 import { cn } from '@customafk/react-toolkit/utils';
@@ -26,9 +26,9 @@ type Props = {
 
 export const SimpleComboboxField: React.FC<Props> = ({ label, placeholder, required, disabled, options }) => {
   const id = useId();
-  const { form, name, state, handleBlur, handleChange } = useTanStackFieldContext<string | null>();
+  const { form, state, handleBlur, handleChange } = useTanStackFieldContext<string | null>();
 
-  const isSubmitting = useSelector(form.store, ({ isSubmitting }) => isSubmitting);
+  const isSubmitting = useStore(form.store, ({ isSubmitting }) => isSubmitting);
   const isMobile = useIsMobile();
   const [drawerOpen, setDrawerOpen] = useState(false);
 

@@ -2,7 +2,7 @@
 
 import { useCallback, useId } from 'react';
 
-import { useSelector } from '@tanstack/react-store';
+import { useStore } from '@tanstack/react-form';
 
 import { Label } from '@/components/ui/label';
 import { NumberInput } from '@/components/ui/inputs/number-input';
@@ -23,7 +23,7 @@ export const SimpleNumberField: React.FC<Props> = ({ label, placeholder, require
   const id = useId();
   const { form, state, handleBlur, handleChange } = useTanStackFieldContext<number | null>();
 
-  const isSubmitting = useSelector(form.store, ({ isSubmitting }) => isSubmitting);
+  const isSubmitting = useStore(form.store, ({ isSubmitting }) => isSubmitting);
 
   const _invalid = state.meta.isTouched && !state.meta.isValid;
 

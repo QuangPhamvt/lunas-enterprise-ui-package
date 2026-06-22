@@ -1,6 +1,8 @@
 import z from 'zod';
 
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
+
 import { useTanStackForm } from '@/components/features/tanstack-form';
 
 const meta = {
@@ -28,25 +30,42 @@ export const Default: Story = {
         <TanStackSectionForm title="Text Field">
           <AppField
             name="value"
-            children={({ TextareaField }) => {
-              return (
-                <TextareaField
-                  label="Text Field"
-                  description="This is a text field. It can be used to input text data. It supports validation, error messages, and helper text. The counter can be enabled to show the number of characters entered. The clear button allows users to quickly clear the input. The orientation can be set to responsive, horizontal, or vertical."
-                  placeholder="Enter some text"
-                  orientation="responsive"
-                  helperText="Helper text for additional info."
-                  required
-                  counter
-                  maxLength={50}
-                  showErrorMessage={true}
-                />
-              );
-            }}
+            children={({ TextareaField }) => (
+              <TextareaField
+                label="Text Field"
+                description="This is a text field. It can be used to input text data. It supports validation, error messages, and helper text. The counter can be enabled to show the number of characters entered. The clear button allows users to quickly clear the input. The orientation can be set to responsive, horizontal, or vertical."
+                placeholder="Enter some text"
+                orientation="responsive"
+                helperText="Helper text for additional info."
+                required
+                counter
+                maxLength={50}
+                showErrorMessage={true}
+              />
+            )}
           />
         </TanStackSectionForm>
       </TanStackContainerForm>
     );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const textarea = canvas.getByRole('textbox');
+
+    // starts empty, counter at 0 / 50
+    await expect(textarea).toHaveValue('');
+    await expect(canvas.getByText('0 / 50 ký tự')).toBeInTheDocument();
+
+    // no errors before interaction
+    await expect(canvas.queryByRole('alert')).not.toBeInTheDocument();
+
+    // typing updates value and counter
+    await userEvent.type(textarea, 'Hello');
+    await expect(textarea).toHaveValue('Hello');
+    await expect(canvas.getByText('5 / 50 ký tự')).toBeInTheDocument();
+
+    // 5 chars satisfies min(5) — FieldError mounts (field dirty) but has no error text
+    await expect(canvas.getByRole('alert')).not.toHaveTextContent('Minimum 5 characters');
   },
 };
 
@@ -70,22 +89,30 @@ export const Submitting: Story = {
         <TanStackSectionForm title="Text Field - Submitting">
           <AppField
             name="value"
-            children={({ TextareaField }) => {
-              return (
-                <TextareaField
-                  label="Text Field"
-                  description="This is a text field."
-                  placeholder="Enter some text"
-                  maxLength={50}
-                  orientation="responsive"
-                  showErrorMessage={true}
-                />
-              );
-            }}
+            children={({ TextareaField }) => (
+              <TextareaField
+                label="Text Field"
+                description="This is a text field."
+                placeholder="Enter some text"
+                maxLength={50}
+                orientation="responsive"
+                showErrorMessage={true}
+              />
+            )}
           />
         </TanStackSectionForm>
       </TanStackContainerForm>
     );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const textarea = canvas.getByRole('textbox');
+
+    // disabled while form is submitting
+    await expect(textarea).toBeDisabled();
+
+    // copy button not rendered when disabled
+    await expect(canvas.queryByRole('button', { name: 'Sao chép' })).not.toBeInTheDocument();
   },
 };
 
@@ -127,6 +154,24 @@ export const CopyButton: Story = {
       </TanStackContainerForm>
     );
   },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const textareas = canvas.getAllByRole('textbox');
+
+    // pre-filled field has exactly one copy button
+    await expect(canvas.getAllByRole('button', { name: 'Sao chép' })).toHaveLength(1);
+
+    // empty field has no copy button
+    await expect(textareas[1]).toHaveValue('');
+
+    // typing into the empty field makes the copy button appear
+    await userEvent.type(textareas[1], 'some text');
+    await expect(canvas.getAllByRole('button', { name: 'Sao chép' })).toHaveLength(2);
+
+    // clearing the second textarea removes its copy button
+    await userEvent.clear(textareas[1]);
+    await expect(canvas.getAllByRole('button', { name: 'Sao chép' })).toHaveLength(1);
+  },
 };
 
 export const Disabled: Story = {
@@ -155,6 +200,19 @@ export const Disabled: Story = {
       </TanStackContainerForm>
     );
   },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const textarea = canvas.getByRole('textbox');
+
+    await expect(textarea).toBeDisabled();
+    await expect(textarea).toHaveValue('This content is locked and cannot be edited.');
+
+    // copy button hidden when disabled even though field has value
+    await expect(canvas.queryByRole('button', { name: 'Sao chép' })).not.toBeInTheDocument();
+
+    // value is unchanged — no interaction can modify a disabled field
+    await expect(textarea).toHaveValue('This content is locked and cannot be edited.');
+  },
 };
 
 export const WithCounter: Story = {
@@ -163,11 +221,14 @@ export const WithCounter: Story = {
     const { AppField, TanStackContainerForm, TanStackSectionForm } = useTanStackForm({
       defaultValues: {
         fresh: null as string | null,
-        nearLimit: 'Almost at the character limit — keep typing to see the warning colour change as you approach the maximum allowed length for this field.' as
-          | string
-          | null,
+        // 165 chars = 82.5 % of 200 → triggers warning colour (threshold ≥ 80 %)
+        nearLimit:
+          'Near the character limit. Keep typing to see the warning colour appear. You are approaching the maximum length allowed for this text input field here. More text now!' as
+            | string
+            | null,
+        // 200 chars = 100 % of 200 → triggers danger colour and blocks further input
         atLimit:
-          'Exactly at the two-hundred character limit. No more characters can be entered past this point because the field enforces a hard maximum length cap.' as
+          'Near the character limit. Keep typing to see the warning colour appear. You are approaching the maximum length allowed for this text input field here. More text now! This is now at exactly 200 chars!!' as
             | string
             | null,
       },
@@ -211,6 +272,31 @@ export const WithCounter: Story = {
       </TanStackContainerForm>
     );
   },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // fresh field starts at 0
+    await expect(canvas.getByText('0 / 200 ký tự')).toBeInTheDocument();
+
+    // near-limit field: 165 chars = 82.5 % → warning colour
+    const nearCounter = canvas.getByText('165 / 200 ký tự');
+    await expect(nearCounter).toHaveClass('text-warning-strong');
+
+    // at-limit field: 200 chars = 100 % → danger colour
+    const atCounter = canvas.getByText('200 / 200 ký tự');
+    await expect(atCounter).toHaveClass('text-danger-strong');
+
+    // typing into the fresh field updates its counter
+    const textareas = canvas.getAllByRole('textbox');
+    await userEvent.type(textareas[0], 'Hello');
+    await expect(canvas.getByText('5 / 200 ký tự')).toBeInTheDocument();
+
+    // at-limit field blocks additional input
+    const atLimitTextarea = textareas[2];
+    const valueBefore = (atLimitTextarea as HTMLTextAreaElement).value;
+    await userEvent.type(atLimitTextarea, 'X');
+    await expect(atLimitTextarea).toHaveValue(valueBefore);
+  },
 };
 
 export const BlurValidation: Story = {
@@ -243,6 +329,23 @@ export const BlurValidation: Story = {
         </TanStackSectionForm>
       </TanStackContainerForm>
     );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const textarea = canvas.getByRole('textbox');
+
+    // no errors before any interaction
+    await expect(canvas.queryByRole('alert')).not.toBeInTheDocument();
+
+    // type something too short — isDirty triggers validation
+    await userEvent.type(textarea, 'Too short');
+    await waitFor(() => expect(canvas.getByRole('alert')).toBeInTheDocument());
+    await expect(canvas.getByRole('alert')).toHaveTextContent('At least 20 characters');
+
+    // fix the value — error text clears (alert container stays in DOM)
+    await userEvent.clear(textarea);
+    await userEvent.type(textarea, 'This is definitely long enough to pass');
+    await waitFor(() => expect(canvas.getByRole('alert')).not.toHaveTextContent('At least 20 characters'));
   },
 };
 
@@ -285,6 +388,25 @@ export const Orientations: Story = {
         </TanStackSectionForm>
       </TanStackContainerForm>
     );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const textareas = canvas.getAllByRole('textbox');
+
+    // all three orientations render an enabled, empty textarea
+    await expect(textareas).toHaveLength(3);
+    for (const textarea of textareas) {
+      await expect(textarea).not.toBeDisabled();
+      await expect(textarea).toHaveValue('');
+    }
+
+    // each textarea accepts input independently
+    await userEvent.type(textareas[0], 'horizontal');
+    await userEvent.type(textareas[1], 'vertical');
+    await userEvent.type(textareas[2], 'responsive');
+    await expect(textareas[0]).toHaveValue('horizontal');
+    await expect(textareas[1]).toHaveValue('vertical');
+    await expect(textareas[2]).toHaveValue('responsive');
   },
 };
 
@@ -356,5 +478,26 @@ export const KitchenSink: Story = {
         </AppForm>
       </div>
     );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    // description — type too short, error appears
+    const descriptionTextarea = canvas.getByPlaceholderText('Enter at least 10 characters…');
+    await userEvent.type(descriptionTextarea, 'Short');
+    await waitFor(() => expect(canvas.getByRole('alert')).toBeInTheDocument());
+    await expect(canvas.getByRole('alert')).toHaveTextContent('At least 10 characters');
+
+    // fix description — error clears
+    await userEvent.type(descriptionTextarea, ' enough now');
+    await waitFor(() => expect(canvas.getByRole('alert')).not.toHaveTextContent('At least 10 characters'));
+
+    // notes — pre-filled value shows copy button; description also has content now (2 total)
+    await expect(canvas.getAllByRole('button', { name: 'Sao chép' })).toHaveLength(2);
+    await expect(canvas.getByText(/\/ 300 ký tự/)).toBeInTheDocument();
+
+    // locked field is disabled; copy button hidden despite having a value
+    const lockedTextarea = canvas.getByDisplayValue('Read-only content — disabled prop is set.');
+    await expect(lockedTextarea).toBeDisabled();
   },
 };

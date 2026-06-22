@@ -1,0 +1,186 @@
+/**
+ * spacing.css — Three-scale responsive spacing system
+ *
+ * ─────────────────────────────────────────────────────────────
+ * THE THREE SCALES
+ * ─────────────────────────────────────────────────────────────
+ *
+ * Pick the scale based on what sits on either side of the gap:
+ *
+ *   layout    — gaps between large page regions (sections, page gutters,
+ *               hero-to-content, sidebar-to-main). The things on either
+ *               side are full-width zones.
+ *
+ *   section   — gaps inside a section (header-to-body, card stacks,
+ *               grouped rows, list items). The things on either side are
+ *               content blocks within a zone.
+ *
+ *   component — internal padding and gaps of a single UI component
+ *               (button, chip, input, badge, tag). The things on either
+ *               side are parts of one atomic element.
+ *
+ * Rule of thumb: the bigger the things on either side, the higher the
+ * scale. A gap between two full sections is `layout`. A gap between two
+ * lines of text inside a card is `component`.
+ *
+ * ─────────────────────────────────────────────────────────────
+ * BREAKPOINTS (mobile-first)
+ * ─────────────────────────────────────────────────────────────
+ *
+ *   mobile   — default (no media query), < 768px
+ *   tablet   — @media (min-width: 768px)   → Tailwind `md:`
+ *   desktop  — @media (min-width: 1024px)  → Tailwind `lg:`
+ *
+ * ─────────────────────────────────────────────────────────────
+ * NAMING CONVENTION
+ * ─────────────────────────────────────────────────────────────
+ *
+ *   --spacing-{scale}-{size}
+ *
+ *   Scales : layout | section | component
+ *   Sizes  : xl | lg | md | sm | xs | none
+ *
+ * ─────────────────────────────────────────────────────────────
+ * HOW TO USE
+ * ─────────────────────────────────────────────────────────────
+ *
+ * In CSS / inline styles:
+ *
+ *   gap: var(--spacing-layout-md);
+ *   padding: var(--spacing-section-lg);
+ *   padding-inline: var(--spacing-component-sm);
+ *
+ * In Tailwind (via arbitrary value):
+ *
+ *   class="gap-[var(--spacing-layout-md)]"
+ *   class="p-[var(--spacing-section-lg)]"
+ *
+ * The CSS variable automatically resolves to the correct pixel value
+ * for the current viewport, so no responsive prefix is needed.
+ *
+ * ─────────────────────────────────────────────────────────────
+ * IMPORT ORDER (for consumers)
+ * ─────────────────────────────────────────────────────────────
+ *
+ *   @import 'styles/base.css';
+ *   @import 'styles/theme.css';
+ *   @import 'styles/spacing.css';   ← here
+ *   @import 'styles/typography.css'; (optional)
+ */
+
+/* ─────────────────────────────────────────────────────────────
+   BASE VALUES — mobile (< 768px)
+   ───────────────────────────────────────────────────────────── */
+:root {
+  /* ── Layout scale ──────────────────────────────────────────
+   * Page-level spacing: gaps between sections, page gutters.
+   * Use when spacing two full-width page regions apart.
+   *
+   * Token              Mobile   Tablet   Desktop
+   * --spacing-layout-xl   48px    64px    128px
+   * --spacing-layout-lg   32px    48px     96px
+   * --spacing-layout-md   16px    32px     64px
+   * --spacing-layout-sm   12px    24px     48px
+   * --spacing-layout-xs    8px    16px     32px
+   * --spacing-layout-none   0       0        0
+   */
+  --spacing-layout-xl: 48px;
+  --spacing-layout-lg: 32px;
+  --spacing-layout-md: 16px;
+  --spacing-layout-sm: 12px;
+  --spacing-layout-xs: 8px;
+  --spacing-layout-none: 0;
+
+  /* ── Section scale ─────────────────────────────────────────
+   * Section-level spacing: header-to-body, card stacks,
+   * grouped rows, list items within a section.
+   *
+   * Token                Mobile   Tablet   Desktop
+   * --spacing-section-xl   20px    32px     48px
+   * --spacing-section-lg   16px    20px     32px
+   * --spacing-section-md   12px    16px     24px
+   * --spacing-section-sm   12px    16px     16px
+   * --spacing-section-xs    8px    12px     12px
+   * --spacing-section-none   0       0        0
+   */
+  --spacing-section-xl: 20px;
+  --spacing-section-lg: 16px;
+  --spacing-section-md: 12px;
+  --spacing-section-sm: 12px;
+  --spacing-section-xs: 8px;
+  --spacing-section-none: 0;
+
+  /* ── Component scale ───────────────────────────────────────
+   * Component-internal spacing: padding and gaps inside a
+   * single UI element (button, chip, input, badge).
+   *
+   * Token                  Mobile   Tablet   Desktop
+   * --spacing-component-xl   12px    16px     24px
+   * --spacing-component-lg   12px    16px     16px
+   * --spacing-component-md    8px    12px     12px
+   * --spacing-component-sm    8px    FLAT     FLAT   ← same at all sizes
+   * --spacing-component-xs    4px    FLAT     FLAT   ← same at all sizes
+   * --spacing-component-none   0       0        0
+   *
+   * Note: component-sm and component-xs are intentionally flat.
+   * Tight internal spacing reads the same across all viewports.
+   */
+  --spacing-component-xl: 12px;
+  --spacing-component-lg: 12px;
+  --spacing-component-md: 8px;
+  --spacing-component-sm: 8px;
+  --spacing-component-xs: 4px;
+  --spacing-component-none: 0;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   TABLET — 768px+ (Tailwind `md:`)
+   ───────────────────────────────────────────────────────────── */
+@media (min-width: 768px) {
+  :root {
+    /* Layout */
+    --spacing-layout-xl: 64px;
+    --spacing-layout-lg: 48px;
+    --spacing-layout-md: 32px;
+    --spacing-layout-sm: 24px;
+    --spacing-layout-xs: 16px;
+
+    /* Section */
+    --spacing-section-xl: 32px;
+    --spacing-section-lg: 20px;
+    --spacing-section-md: 16px;
+    --spacing-section-sm: 16px;
+    --spacing-section-xs: 12px;
+
+    /* Component (xl / lg / md scale up; sm and xs stay flat) */
+    --spacing-component-xl: 16px;
+    --spacing-component-lg: 16px;
+    --spacing-component-md: 12px;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   DESKTOP — 1024px+ (Tailwind `lg:`)
+   ───────────────────────────────────────────────────────────── */
+@media (min-width: 1024px) {
+  :root {
+    /* Layout */
+    --spacing-layout-xl: 128px;
+    --spacing-layout-lg: 96px;
+    --spacing-layout-md: 64px;
+    --spacing-layout-sm: 48px;
+    --spacing-layout-xs: 32px;
+
+    /* Section */
+    --spacing-section-xl: 48px;
+    --spacing-section-lg: 32px;
+    --spacing-section-md: 24px;
+    --spacing-section-sm: 16px;
+    --spacing-section-xs: 12px;
+
+    /* Component (xl / lg / md scale up; sm and xs stay flat) */
+    --spacing-component-xl: 24px;
+    --spacing-component-lg: 16px;
+    --spacing-component-md: 12px;
+  }
+}

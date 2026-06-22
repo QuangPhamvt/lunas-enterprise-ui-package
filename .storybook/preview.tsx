@@ -15,11 +15,6 @@ const withStrictMode = (Story: React.FC) => {
   )
 }
 
-const withCardBackground = (Story: React.FC) => (
-  <div className="size-full text-text-positive p-4 border border-border">
-    <Story />
-  </div>
-)
 
 const preview: Preview = {
   tags: ['autodocs'],
@@ -50,7 +45,6 @@ const preview: Preview = {
   },
   initialGlobals: {},
   decorators: [
-    withCardBackground,
     withStrictMode,
     withThemeByClassName({
       themes: {

@@ -18,14 +18,20 @@ export const UITableRow = memo<TUITableRow>(({ row, isSelected, virtualRowIndex,
   const firstRightPinnedHeaderId = useMemo(() => rightPinnedHeaders?.[0]?.id, [rightPinnedHeaders]);
   const lastLeftPinnedHeaderId = useMemo(() => leftPinnedHeaders?.[leftPinnedHeaders.length - 1]?.id, [leftPinnedHeaders]);
 
+  const hasSelectColumn = useMemo(() => row.getVisibleCells().some(c => c.column.id === 'select'), [row]);
+
   const handleClick = useCallback<React.MouseEventHandler<HTMLTableRowElement>>(
     e => {
-      const value = keyOfClickRow ? row.original?.[keyOfClickRow] : undefined;
-      onClickRow?.(virtualRowIndex, typeof value === 'string' || typeof value === 'number' ? value : undefined);
+      if (onClickRow) {
+        const value = keyOfClickRow ? row.original?.[keyOfClickRow] : undefined;
+        onClickRow(virtualRowIndex, typeof value === 'string' || typeof value === 'number' ? value : undefined);
+      } else if (hasSelectColumn) {
+        row.toggleSelected();
+      }
       e.preventDefault();
       e.stopPropagation();
     },
-    [keyOfClickRow, onClickRow, row, virtualRowIndex]
+    [keyOfClickRow, onClickRow, row, virtualRowIndex, hasSelectColumn]
   );
 
   return (

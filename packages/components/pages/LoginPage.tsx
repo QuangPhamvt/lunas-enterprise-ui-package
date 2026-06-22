@@ -154,6 +154,9 @@ export const LoginPage = ({
           <Button type="submit" isLoading={isLoading} className="w-full">
             Đăng nhập
           </Button>
+          <Button type="button" variant="outline" className="w-full" disabled={isLoading} onClick={() => onOpenChange(false)}>
+            Đóng hộp thoại
+          </Button>
         </form>
 
         {onRegister && (

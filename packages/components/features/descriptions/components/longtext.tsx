@@ -13,7 +13,7 @@ export const DescriptionLongText: React.FC<{ content: string | null | undefined 
         <Paragraph
           data-slot="description-longtext"
           variant="sm"
-          className="line-clamp-2 cursor-pointer whitespace-pre-line break-all text-start text-sm underline decoration-dashed decoration-border-strong underline-offset-2"
+          className="line-clamp-2 cursor-pointer whitespace-pre-line break-all text-start text-sm hover:text-text-positive transition-colors"
         >
           {content}
         </Paragraph>

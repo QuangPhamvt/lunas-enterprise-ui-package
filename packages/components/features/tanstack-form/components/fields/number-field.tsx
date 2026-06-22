@@ -1,8 +1,8 @@
 'use client';
 
-import { useCallback } from 'react';
+import { memo, useCallback, useId } from 'react';
 
-import { useSelector } from '@tanstack/react-store';
+import { useStore } from '@tanstack/react-form';
 
 import { BanIcon, Loader2Icon } from 'lucide-react';
 
@@ -45,83 +45,94 @@ import type { NumberFieldProps } from '../../types';
  *   )}
  * </form.Field>
  */
-export const NumberField: React.FC<NumberFieldProps> = ({
-  label,
-  description,
-  placeholder,
+export const NumberField = memo<NumberFieldProps>(
+  ({
+    label,
+    description,
+    placeholder,
+    tooltip,
+    helperText,
+    orientation = 'responsive',
+    showErrorMessage = true,
+    rounding,
+    decimalPlaces,
+    precision,
+    unit,
+    required = false,
+    disabled = false,
+    allowNegative,
+  }) => {
+    const id = useId();
+    const errorId = useId();
 
-  tooltip,
-  helperText,
-  orientation = 'responsive',
-  showErrorMessage = true,
-  rounding,
-  decimalPlaces,
-  percision,
-  unit,
+    const field = useTanStackFieldContext<number | null>();
 
-  required,
-  allowNegative,
-}) => {
-  const field = useTanStackFieldContext<number | null>();
+    const isSubmitting = useStore(field.form.store, ({ isSubmitting }) => isSubmitting);
+    const isDisabled = disabled || isSubmitting;
 
-  const isSubmitting = useSelector(field.form.store, ({ isSubmitting }) => isSubmitting);
+    const _touched = field.state.meta.isDirty || field.state.meta.isTouched;
+    const _invalid = _touched && !field.state.meta.isValid;
+    const _isEmpty = required && field.state.value === null;
+    const _hasErrors = !!field.state.meta.errors.length;
 
-  const _errors = field.state.meta.errors;
-  const _isEmpty = required ? field.state.value === null : false;
+    const onValueChange = useCallback(
+      (value: number | null) => {
+        if (isDisabled) return;
+        field.handleChange(value);
+      },
+      [isDisabled, field.handleChange]
+    );
 
-  const onValueChange = useCallback(
-    (value: number | null) => {
-      if (isSubmitting) return;
-      field.handleChange(value);
-    },
-    [isSubmitting, field.handleChange]
-  );
+    return (
+      <FieldGroup className="gap-y-4 px-4">
+        <Field orientation={orientation} data-invalid={_invalid}>
+          <FieldContent>
+            <FieldLabel htmlFor={id} aria-required={_isEmpty}>
+              {label}
+              {tooltip && <FieldTooltip tooltip={tooltip} />}
+            </FieldLabel>
+            <FieldDescription>{description}</FieldDescription>
+          </FieldContent>
 
-  return (
-    <FieldGroup className="gap-y-4 px-4">
-      <Field orientation={orientation} data-invalid={field.state.meta.isTouched && !field.state.meta.isValid}>
-        <FieldContent>
-          <FieldLabel htmlFor={field.name} aria-required={_isEmpty}>
-            {label}
-            {tooltip && <FieldTooltip tooltip={tooltip} />}
-          </FieldLabel>
-          <FieldDescription>{description}</FieldDescription>
-        </FieldContent>
-
-        <FieldContentMain>
-          <div className="relative w-full">
-            <NumberInput
-              id={field.name}
-              value={field.state.value}
-              aria-invalid={field.state.meta.isTouched && !field.state.meta.isValid && field.state.meta.isDirty}
-              placeholder={placeholder}
-              roundingRule={rounding}
-              numberAfterDecimalPoint={decimalPlaces}
-              precision={percision}
-              unitText={unit}
-              allowNegative={allowNegative}
-              className={cn(isSubmitting && 'pointer-events-none bg-muted-muted opacity-60')}
-              onBlur={field.handleBlur}
-              onValueChange={onValueChange}
-            />
-            {isSubmitting && (
-              <div className="absolute inset-s-2 inset-y-0 top-2.5 text-muted-weak [&>svg]:size-3.5">
-                <Loader2Icon className="animate-spin text-primary-strong" />
+          <FieldContentMain>
+            <div className="relative w-full">
+              <NumberInput
+                id={id}
+                value={field.state.value}
+                aria-invalid={_invalid}
+                aria-describedby={errorId}
+                placeholder={placeholder}
+                disabled={isDisabled}
+                roundingRule={rounding}
+                numberAfterDecimalPoint={decimalPlaces}
+                precision={precision}
+                unitText={unit}
+                allowNegative={allowNegative}
+                className={cn(isDisabled && 'pointer-events-none opacity-60')}
+                onBlur={field.handleBlur}
+                onValueChange={onValueChange}
+              />
+              {isSubmitting && (
+                <div className="pointer-events-none absolute inset-s-2 inset-y-0 top-2.5 [&>svg]:size-3.5">
+                  <Loader2Icon className="animate-spin text-primary-strong" />
+                </div>
+              )}
+              {!isSubmitting && _touched && showErrorMessage && _hasErrors && (
+                <div className="pointer-events-none absolute inset-s-2 inset-y-0 top-2.75 text-danger-strong [&>svg]:size-3.5">
+                  <BanIcon />
+                </div>
+              )}
+              <div className="mt-1 flex w-full items-start justify-between gap-x-2">
+                {_touched && showErrorMessage ? <FieldError id={errorId} className="flex-1" errors={field.state.meta.errors} /> : <div />}
               </div>
-            )}
-            {field.state.meta.isDirty && showErrorMessage && !!_errors.length && (
-              <div className="absolute inset-s-2 inset-y-0 top-2.75 text-danger-strong [&>svg]:size-3.5">
-                <BanIcon />
-              </div>
-            )}
-            <div className="mt-1 flex w-full flex-col items-end justify-end">
-              {field.state.meta.isDirty && showErrorMessage && <FieldError errors={_errors} />}
             </div>
-          </div>
-          <FieldNote isShow={!!helperText}>{helperText}</FieldNote>
-        </FieldContentMain>
-      </Field>
-      <FieldSeparator />
-    </FieldGroup>
-  );
-};
+            <FieldNote isShow={!!helperText}>{helperText}</FieldNote>
+          </FieldContentMain>
+        </Field>
+        <FieldSeparator />
+      </FieldGroup>
+    );
+  }
+);
+
+NumberField.displayName = 'NumberField';

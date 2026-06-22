@@ -2,7 +2,7 @@
 
 import { useCallback, useId } from 'react';
 
-import { useSelector } from '@tanstack/react-store';
+import { useStore } from '@tanstack/react-form';
 
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
@@ -22,7 +22,7 @@ export const SimpleBooleanField: React.FC<Props> = ({ label, required, disabled,
   const id = useId();
   const { form, name, state, handleBlur, handleChange } = useTanStackFieldContext<boolean | null>();
 
-  const isSubmitting = useSelector(form.store, ({ isSubmitting }) => isSubmitting);
+  const isSubmitting = useStore(form.store, ({ isSubmitting }) => isSubmitting);
 
   const _invalid = state.meta.isTouched && !state.meta.isValid;
   const checked = state.value ?? false;

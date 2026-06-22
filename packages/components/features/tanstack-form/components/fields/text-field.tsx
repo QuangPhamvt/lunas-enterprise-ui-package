@@ -2,7 +2,7 @@
 
 import { memo, useCallback, useId, useRef } from 'react';
 
-import { useSelector } from '@tanstack/react-store';
+import { useStore } from '@tanstack/react-form';
 
 import { BanIcon, Loader2Icon, XIcon } from 'lucide-react';
 
@@ -128,7 +128,7 @@ export const TextField = memo<Props>(
     const inputRef = useRef<HTMLInputElement>(null);
     const { form, name, state, handleBlur, handleChange } = useTanStackFieldContext<string | null>();
 
-    const isSubmitting = useSelector(form.store, ({ isSubmitting }) => isSubmitting);
+    const isSubmitting = useStore(form.store, ({ isSubmitting }) => isSubmitting);
     const isDisabled = disabled || isSubmitting;
 
     const _touched = state.meta.isDirty || state.meta.isTouched;

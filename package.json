@@ -1,6 +1,6 @@
 {
   "name": "@customafk/lunas-ui",
-  "version": "0.2.37",
+  "version": "0.2.58",
   "description": "UI library for Lunas Enterprise",
   "type": "module",
   "author": {
@@ -148,6 +148,10 @@
       "require": "./dist/pages/FeatureFixing.cjs",
       "import": "./dist/pages/FeatureFixing.mjs"
     },
+    "./pages/LoginPage": {
+      "require": "./dist/pages/LoginPage.cjs",
+      "import": "./dist/pages/LoginPage.mjs"
+    },
     "./pages/NotAuthorized": {
       "require": "./dist/pages/NotAuthorized.cjs",
       "import": "./dist/pages/NotAuthorized.mjs"
@@ -155,10 +159,6 @@
     "./pages/NotFound": {
       "require": "./dist/pages/NotFound.cjs",
       "import": "./dist/pages/NotFound.mjs"
-    },
-    "./pages/LoginPage": {
-      "require": "./dist/pages/LoginPage.cjs",
-      "import": "./dist/pages/LoginPage.mjs"
     },
     "./pages/RegisterPage": {
       "require": "./dist/pages/RegisterPage.cjs",
@@ -500,7 +500,7 @@
     "@vitest/coverage-v8": "^4.1.9",
     "jsdom": "^26.1.0",
     "playwright": "^1.61.0",
-    "tsdown": "^0.18.0",
+    "tsdown": "^0.22.3",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.30.1",
     "unplugin-lightningcss": "^0.4.2",
