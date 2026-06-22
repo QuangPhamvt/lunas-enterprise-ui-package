@@ -2,7 +2,7 @@
 
 import { memo, useId, useState } from 'react';
 
-import { useSelector } from '@tanstack/react-store';
+import { useStore } from '@tanstack/react-form';
 
 import { XIcon } from 'lucide-react';
 
@@ -52,7 +52,7 @@ export const ComboboxField = memo<ComboboxFieldProps>(
     const [dialogOpen, setDialogOpen] = useState(false);
     const [popoverOpen, setPopoverOpen] = useState(false);
 
-    const isSubmitting = useSelector(field.form.store, ({ isSubmitting }) => isSubmitting);
+    const isSubmitting = useStore(field.form.store, ({ isSubmitting }) => isSubmitting);
     const isDisabled = disabled || isSubmitting;
 
     const _touched = field.state.meta.isDirty || field.state.meta.isTouched;

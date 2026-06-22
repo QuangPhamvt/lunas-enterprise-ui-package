@@ -2,7 +2,7 @@
 
 import { useCallback, useId, useState } from 'react';
 
-import { useSelector } from '@tanstack/react-store';
+import { useStore } from '@tanstack/react-form';
 
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
 
@@ -23,7 +23,7 @@ export const SimplePasswordField: React.FC<Props> = ({ label, placeholder, requi
   const id = useId();
   const { form, name, state, handleBlur, handleChange } = useTanStackFieldContext<string | null>();
 
-  const isSubmitting = useSelector(form.store, ({ isSubmitting }) => isSubmitting);
+  const isSubmitting = useStore(form.store, ({ isSubmitting }) => isSubmitting);
 
   const [isVisible, setIsVisible] = useState(false);
 

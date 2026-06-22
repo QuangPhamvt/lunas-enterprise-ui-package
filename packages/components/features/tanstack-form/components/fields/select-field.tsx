@@ -2,7 +2,7 @@
 
 import { memo, useId, useState } from 'react';
 
-import { useSelector } from '@tanstack/react-store';
+import { useStore } from '@tanstack/react-form';
 
 import { ChevronDownIcon, PackagePlusIcon, XIcon } from 'lucide-react';
 
@@ -49,7 +49,7 @@ export const SelectField = memo<Props>(
     const isMobile = useIsMobile();
     const [dialogOpen, setDialogOpen] = useState(false);
 
-    const isSubmitting = useSelector(field.form.store, ({ isSubmitting }) => isSubmitting);
+    const isSubmitting = useStore(field.form.store, ({ isSubmitting }) => isSubmitting);
     const isDisabled = disabled || isSubmitting;
 
     const _touched = field.state.meta.isDirty || field.state.meta.isTouched;

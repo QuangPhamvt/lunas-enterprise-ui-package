@@ -2,7 +2,7 @@
 
 import { memo, useId, useState } from 'react';
 
-import { useSelector } from '@tanstack/react-store';
+import { useStore } from '@tanstack/react-form';
 
 import { CalendarDaysIcon } from 'lucide-react';
 
@@ -47,7 +47,7 @@ export const DateField = memo<Props>(
     const field = useTanStackFieldContext<Date | null>();
     const [popoverOpen, setPopoverOpen] = useState(false);
 
-    const isSubmitting = useSelector(field.form.store, ({ isSubmitting }) => isSubmitting);
+    const isSubmitting = useStore(field.form.store, ({ isSubmitting }) => isSubmitting);
     const isDisabled = disabled || isSubmitting;
 
     const _touched = field.state.meta.isDirty || field.state.meta.isTouched;

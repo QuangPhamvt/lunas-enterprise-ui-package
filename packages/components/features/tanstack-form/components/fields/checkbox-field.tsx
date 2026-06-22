@@ -1,6 +1,6 @@
 'use client';
 
-import { useSelector } from '@tanstack/react-store';
+import { useStore } from '@tanstack/react-form';
 
 import { useTanStackFieldContext } from '../../tanstack-form';
 import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, FieldLabel, FieldNote, FieldSeparator, FieldTooltip } from '../ui/field';
@@ -30,7 +30,7 @@ import type { CheckboxFieldProps as Props } from '../../types';
  */
 export const CheckboxField: React.FC<Props> = ({ label, description, options, tooltip, helperText, orientation }) => {
   const field = useTanStackFieldContext<string[] | null>();
-  const isSubmitting = useSelector(field.form.store, ({ isSubmitting }) => isSubmitting);
+  const isSubmitting = useStore(field.form.store, ({ isSubmitting }) => isSubmitting);
 
   return (
     <FieldGroup className="gap-y-4 px-4">

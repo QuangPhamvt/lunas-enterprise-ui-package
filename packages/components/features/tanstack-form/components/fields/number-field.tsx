@@ -2,7 +2,7 @@
 
 import { memo, useCallback, useId } from 'react';
 
-import { useSelector } from '@tanstack/react-store';
+import { useStore } from '@tanstack/react-form';
 
 import { BanIcon, Loader2Icon } from 'lucide-react';
 
@@ -67,7 +67,7 @@ export const NumberField = memo<NumberFieldProps>(
 
     const field = useTanStackFieldContext<number | null>();
 
-    const isSubmitting = useSelector(field.form.store, ({ isSubmitting }) => isSubmitting);
+    const isSubmitting = useStore(field.form.store, ({ isSubmitting }) => isSubmitting);
     const isDisabled = disabled || isSubmitting;
 
     const _touched = field.state.meta.isDirty || field.state.meta.isTouched;

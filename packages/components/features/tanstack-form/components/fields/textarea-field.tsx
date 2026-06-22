@@ -2,7 +2,7 @@
 
 import { memo, useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 
-import { useSelector } from '@tanstack/react-store';
+import { useStore } from '@tanstack/react-form';
 
 import { BanIcon, CheckIcon, CopyIcon, Loader2Icon } from 'lucide-react';
 
@@ -45,11 +45,11 @@ export const TextareaField = memo<Props>(
     const id = useId();
     const errorId = useId();
     const [copied, setCopied] = useState(false);
-    const copyTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const copyTimeoutRef = useRef<number | null>(null);
 
     const { form, state, name, handleBlur, handleChange } = useTanStackFieldContext<string | null>();
 
-    const isSubmitting = useSelector(form.store, ({ isSubmitting }) => isSubmitting);
+    const isSubmitting = useStore(form.store, ({ isSubmitting }) => isSubmitting);
     const isDisabled = disabled || isSubmitting;
 
     const _count = state.value?.length ?? 0;
@@ -89,14 +89,14 @@ export const TextareaField = memo<Props>(
     const onCopy = useCallback(async () => {
       if (!state.value) return;
       await navigator.clipboard.writeText(state.value);
-      if (copyTimeoutRef.current !== null) clearTimeout(copyTimeoutRef.current);
+      if (copyTimeoutRef.current !== null) window.clearTimeout(copyTimeoutRef.current);
       setCopied(true);
-      copyTimeoutRef.current = setTimeout(() => setCopied(false), 1500);
+      copyTimeoutRef.current = window.setTimeout(() => setCopied(false), 1500);
     }, [state.value]);
 
     useEffect(() => {
       return () => {
-        if (copyTimeoutRef.current !== null) clearTimeout(copyTimeoutRef.current);
+        if (copyTimeoutRef.current !== null) window.clearTimeout(copyTimeoutRef.current);
       };
     }, []);
 

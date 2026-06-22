@@ -2,7 +2,7 @@
 
 import { memo, useCallback } from 'react';
 
-import { useSelector } from '@tanstack/react-store';
+import { useStore } from '@tanstack/react-form';
 
 import { TextEditor } from '@/components/features/text-editor';
 
@@ -14,7 +14,7 @@ import type { TextEditorFieldProps as Props } from '../../types';
 export const TextEditorField: React.FC<Props> = memo(({ label, description, placeholder, tooltip, helperText, showErrorMessage = true, required = false }) => {
   const { form, state, handleChange } = useTanStackFieldContext<string | null>();
 
-  const isSubmitting = useSelector(form.store, ({ isSubmitting }) => isSubmitting);
+  const isSubmitting = useStore(form.store, ({ isSubmitting }) => isSubmitting);
 
   const _invalid = state.meta.isDirty && state.meta.isTouched && !state.meta.isValid;
   const _isEmpty = required && state.value === null;
