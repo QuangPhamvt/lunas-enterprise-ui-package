@@ -1,9 +1,7 @@
 'use client';
-import { memo, useCallback, useEffect, useRef, useState } from 'react';
+import { memo, useCallback, useEffect, useState } from 'react';
 
 import { AlertTriangle, ChevronDown } from 'lucide-react';
-
-import { cn } from '@customafk/react-toolkit/utils';
 
 import { Spinner } from '@/components/ui/spinner';
 
@@ -11,11 +9,8 @@ import { useUITableInnerWrapperContext } from '../../hooks/use-context';
 import type { TUITableLoadMore } from '../../types';
 import { tableLoadMoreButtonVariants } from '../table.variants';
 
-export const UITableLoadMore = memo<TUITableLoadMore>(({ virtualRowIndex, virtualRowStart, fetchMoreData }) => {
+export const UITableLoadMore = memo<TUITableLoadMore>(({ fetchMoreData }) => {
   const { innerWrapperId } = useUITableInnerWrapperContext();
-
-  const tableWrapperRef = useRef<Element | null>(null);
-  const rowRef = useRef<HTMLTableRowElement>(null);
 
   const [fetchingState, setFetchingState] = useState<'idle' | 'fetching' | 'error'>('idle');
   const [width, setWidth] = useState<number>(0);
@@ -32,21 +27,19 @@ export const UITableLoadMore = memo<TUITableLoadMore>(({ virtualRowIndex, virtua
   }, [fetchMoreData]);
 
   useEffect(() => {
-    tableWrapperRef.current = document.querySelector(`div[id="${innerWrapperId}"]`);
-    if (!tableWrapperRef.current) return;
-
+    const el = document.querySelector(`div[id="${innerWrapperId}"]`);
+    if (!el) return;
     const observer = new ResizeObserver(entries => {
       setWidth(entries[0].contentRect.width);
     });
-
-    observer.observe(tableWrapperRef.current);
+    observer.observe(el);
     return () => observer.disconnect();
   }, [innerWrapperId]);
 
   if (!fetchMoreData) return null;
 
   return (
-    <tr ref={rowRef} data-index={virtualRowIndex} style={{ transform: `translateY(${virtualRowStart}px)`, width }} className="sticky! left-0 h-10">
+    <tr className="sticky! left-0 h-10" style={{ width }}>
       <td className="absolute left-0 flex w-full items-center justify-center text-xs">
         <button
           type="button"

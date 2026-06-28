@@ -10,7 +10,7 @@ import { UITableCell } from './cell';
 import { UITableCellActions } from './cell-actions';
 import { UITableCellSelect } from './cell-select';
 
-export const UITableRow = memo<TUITableRow>(({ row, isSelected, virtualRowIndex, virtualRowStart, children, ...props }) => {
+export const UITableRow = memo<TUITableRow>(({ row, isSelected, rowIndex, children, ...props }) => {
   const { keyOfClickRow, isAllRowsSelected, columnPinningState, leftPinnedHeaders, rightPinnedHeaders, onClickRow } = useUITableRowContext();
 
   const pinnedLeftColumns = useMemo(() => columnPinningState.left ?? [], [columnPinningState]);
@@ -24,25 +24,18 @@ export const UITableRow = memo<TUITableRow>(({ row, isSelected, virtualRowIndex,
     e => {
       if (onClickRow) {
         const value = keyOfClickRow ? row.original?.[keyOfClickRow] : undefined;
-        onClickRow(virtualRowIndex, typeof value === 'string' || typeof value === 'number' ? value : undefined);
+        onClickRow(rowIndex, typeof value === 'string' || typeof value === 'number' ? value : undefined);
       } else if (hasSelectColumn) {
         row.toggleSelected();
       }
       e.preventDefault();
       e.stopPropagation();
     },
-    [keyOfClickRow, onClickRow, row, virtualRowIndex, hasSelectColumn]
+    [keyOfClickRow, onClickRow, row, rowIndex, hasSelectColumn]
   );
 
   return (
-    <tr
-      slot="table-row"
-      data-index={virtualRowIndex}
-      style={{ transform: `translateY(${virtualRowStart}px)` }}
-      className={tableRowVariants()}
-      onClick={handleClick}
-      {...props}
-    >
+    <tr slot="table-row" data-index={rowIndex} className={tableRowVariants()} onClick={handleClick} {...props}>
       {row.getVisibleCells().map((cell, index) => {
         const isPinnedLeft = pinnedLeftColumns.includes(cell.column.id);
         const isPinnedRight = pinnedRightColumns.includes(cell.column.id);
@@ -52,9 +45,8 @@ export const UITableRow = memo<TUITableRow>(({ row, isSelected, virtualRowIndex,
             <UITableCellActions
               key={`${cell.id}-${index}`}
               data-col={cell.column.id}
-              data-cell={virtualRowIndex}
+              data-cell={rowIndex}
               data-selected={isSelected || undefined}
-              virtualRowIndex={virtualRowIndex}
               column={cell.column}
               getContext={cell.getContext}
             />
@@ -65,7 +57,7 @@ export const UITableRow = memo<TUITableRow>(({ row, isSelected, virtualRowIndex,
             <UITableCellSelect
               key={`${cell.id}-${index}`}
               data-col={cell.column.id}
-              data-cell={virtualRowIndex}
+              data-cell={rowIndex}
               data-selected={isSelected || undefined}
               isPinned={isPinned}
               isSelected={isAllRowsSelected || isSelected}
@@ -77,7 +69,7 @@ export const UITableRow = memo<TUITableRow>(({ row, isSelected, virtualRowIndex,
           <UITableCell
             key={`${cell.id}-${index}`}
             data-col={cell.column.id}
-            data-cell={virtualRowIndex}
+            data-cell={rowIndex}
             data-selected={isSelected || undefined}
             isPinned={isPinned}
             isFirstCell={cell.column.id === firstRightPinnedHeaderId}

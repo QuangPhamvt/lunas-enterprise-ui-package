@@ -10,7 +10,6 @@ import type {
   RowSelectionState,
   Table,
 } from '@tanstack/react-table';
-import type { VirtualItem, Virtualizer } from '@tanstack/react-virtual';
 
 import type { AnyEntity } from '@/types';
 
@@ -114,28 +113,24 @@ export type TUITableHeadCell = React.PropsWithChildren<
   }
 >;
 
-/** Props for `UITableBody` — the virtual-scroll `<tbody>` container. */
+/** Props for `UITableBody` — the `<tbody>` container. */
 export type TUITableBody = React.PropsWithChildren<
   React.ComponentProps<'tbody'> & {
     /** When `true` the body renders `null` (loading state is handled by `UITableEmptyDisplay`). */
     isFetching?: boolean;
     /** When `true` the body renders `null` (empty state is handled by `UITableEmptyDisplay`). */
     isEmpty?: boolean;
-    /** CSS string for the total virtual height of all rows, e.g. `"4200px"`. */
-    height: string;
   }
 >;
 
-/** Props for `UITableRow` — a single virtualised data `<tr>`. */
+/** Props for `UITableRow` — a single data `<tr>`. */
 export type TUITableRow = React.ComponentProps<'tr'> & {
   /** The TanStack `Row` object whose visible cells are iterated. */
   row: Row<AnyEntity>;
   /** Whether this row is currently selected (drives `data-selected` attribute). */
   isSelected?: boolean;
-  /** Zero-based virtual row index used for `data-index` and passed to `onClickRow`. */
-  virtualRowIndex: number;
-  /** Pixel offset from the top of the scroll container for the CSS `translateY`. */
-  virtualRowStart: number;
+  /** Zero-based row index passed to `onClickRow`. */
+  rowIndex: number;
 };
 
 /** Props for `UITableCellSelect` — the per-row selection checkbox `<td>`. */
@@ -150,8 +145,6 @@ export type TUITableCellSelect = React.ComponentProps<'td'> & {
 
 /** Props for `UITableCellActions` — the sticky right-edge actions `<td>`. */
 export type TUITableCellActions = React.ComponentProps<'td'> & {
-  /** Virtual row index forwarded to the cell renderer via `data-cell`. */
-  virtualRowIndex: number;
   /** TanStack `Column` whose `columnDef.cell` is rendered inside the `<td>`. */
   column?: Column<unknown, unknown>;
   /** Returns the `CellContext` passed to `flexRender`. */
@@ -184,10 +177,6 @@ export type TUITableFooter = React.PropsWithChildren<React.ComponentProps<'div'>
 /** Props for `UITableLoadMore` — the append-row "load more" trigger. */
 export type TUITableLoadMore = React.PropsWithChildren<
   React.ComponentProps<'tr'> & {
-    /** Virtual index of this synthetic row (appended after the last data row). */
-    virtualRowIndex: number;
-    /** Pixel offset used for the CSS `translateY` to position the row correctly. */
-    virtualRowStart: number;
     /**
      * Async callback that fetches the next page of data.
      * When omitted the component renders `null`.
@@ -376,14 +365,6 @@ export type TTableRowContext<TData extends RowData<TData> = RowData<AnyEntity>, 
   leftPinnedHeaders?: Header<TData, unknown>[];
   /** Right-pinned headers used to determine border separator placement. */
   rightPinnedHeaders?: Header<TData, unknown>[];
-};
-
-/** Context value for the virtualiser, shared between the body and the load-more row. */
-export type TTableVirtualizerContext = {
-  /** The TanStack Virtual `Virtualizer` instance driving row windowing. */
-  rowVirtualizer: Virtualizer<HTMLDivElement, HTMLTableRowElement>;
-  /** The currently visible `VirtualItem` slice (index + start offset for each row). */
-  virtualItems: VirtualItem[];
 };
 
 /**

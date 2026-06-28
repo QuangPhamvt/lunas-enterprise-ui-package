@@ -18,7 +18,7 @@ export const tableInnerWrapperVariants = cva(['relative w-full flex-1 min-h-0 ov
 export const tableInnerTableVariants = cva(['grid w-full table-fixed caption-bottom border-collapse border-spacing-0 flex-col content-start']);
 
 export const tableHeadVariants = cva([
-  'sticky top-0 z-20 h-9 w-full',
+  'sticky top-0 z-40 h-9 w-full',
   'grid select-none bg-white',
   'border-b border-b-border shadow',
   'font-medium text-[13px] text-text-positive-weak',
@@ -70,8 +70,6 @@ export const tableHeadCellVariants = cva(['group flex'], {
 
 export const tableBodyVariants = cva([
   'relative w-full',
-  'grid',
-  '[&_tr]:absolute',
   '[&_tr]:flex',
   '[&_tr]:flex-none',
   '[&_tr]:w-full',
@@ -112,7 +110,7 @@ export const tableCellSelectVariants = cva(['group-hover:bg-muted-muted!'], {
   },
 });
 
-export const tableCellActionsVariants = cva(['sticky border-r-0! inset-y-0 right-0 z-50 flex items-center pr-4 group-hover:bg-muted-muted!']);
+export const tableCellActionsVariants = cva(['sticky border-r-0! inset-y-0 right-0 z-30 flex items-center pr-4 group-hover:bg-muted-muted!']);
 
 export const tableCellVariants = cva(['group-hover:bg-muted-muted!'], {
   variants: {
