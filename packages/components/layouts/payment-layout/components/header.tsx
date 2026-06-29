@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-import { LogOutIcon, MenuIcon, ShoppingCartIcon, UserRoundIcon } from 'lucide-react';
+import { LogOutIcon, MenuIcon, UserRoundIcon } from 'lucide-react';
 
 import { cn } from '@customafk/react-toolkit/utils';
 
@@ -19,6 +19,7 @@ import type { PaymentLayoutUser } from '../index';
 import { useSidebar } from './sidebar';
 import { Flex } from '../../flex';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { LunasLogo } from '@/components/features/logo';
 import { Paragraph } from '@/components/typography/paragraph';
 import { colorHashLight } from '@customafk/react-toolkit/color-hash';
 
@@ -64,7 +65,8 @@ export const PaymentLayoutHeader: React.FC<{
   isLogin?: boolean;
   onLogin?: () => void;
   onLogout?: () => void;
-}> = ({ user, isLogin = true, onLogin, onLogout }) => {
+  logo?: React.ReactNode;
+}> = ({ user, isLogin = true, onLogin, onLogout, logo }) => {
   const { toggleSidebar } = useSidebar();
 
   const handleToggleSidebar = useCallback(
@@ -121,15 +123,7 @@ export const PaymentLayoutHeader: React.FC<{
         </Button>
       )}
 
-      <div className="flex flex-1 gap-x-2 sm:ml-2.5">
-        <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-          <ShoppingCartIcon size={20} />
-        </div>
-        <div className="grid flex-1 text-left text-sm leading-tight">
-          <span className="truncate font-medium">Lunas Payment</span>
-          <span className="truncate text-xs">Quản lý đơn hàng</span>
-        </div>
-      </div>
+      <div className="flex flex-1 items-center sm:ml-2.5">{logo ?? <LunasLogo variant="horizontal" size="xs" />}</div>
 
       {user ? (
         <DropdownMenu>

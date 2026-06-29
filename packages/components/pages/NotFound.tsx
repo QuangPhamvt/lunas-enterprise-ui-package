@@ -1,6 +1,9 @@
+'use client';
+
 import { Button } from '../ui/button';
 import { cn } from '@customafk/react-toolkit/utils';
 import { FileQuestion } from 'lucide-react';
+import { LunasLogo } from '../features/logo';
 
 export interface NotFoundProps {
   /** Main heading shown beneath the file-question icon. Defaults to `'Không tìm thấy trang'`. */
@@ -42,6 +45,7 @@ export const NotFound = ({
 }: NotFoundProps) => {
   return (
     <div className={cn('flex flex-col items-center justify-center min-h-[50vh] gap-4 sm:gap-6 py-8 sm:py-10 px-4 text-center w-full', className)}>
+      <LunasLogo variant="stacked" size="sm" />
       <div className="flex flex-col items-center gap-2">
         <FileQuestion className={cn('size-16 sm:size-24 text-primary', iconClassName)} />
         <div className="text-4xl sm:text-6xl font-bold text-primary">404</div>

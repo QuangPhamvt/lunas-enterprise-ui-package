@@ -2,12 +2,13 @@
 
 import { useCallback } from 'react';
 
-import { EarthIcon, LogOutIcon, MenuIcon, ShoppingCartIcon, UserRoundIcon } from 'lucide-react';
+import { EarthIcon, LogOutIcon, MenuIcon, UserRoundIcon } from 'lucide-react';
 
 import { colorHashLight } from '@customafk/react-toolkit/color-hash';
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { LunasLogo } from '@/components/features/logo';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -38,7 +39,8 @@ export const CMSLayoutHeader: React.FC<{
   user?: CMSLayoutUser;
   onLogout?: () => void;
   logoutLabel?: string;
-}> = ({ i18nText, onChangeToEnLocale, onChangeToViLocale, user, onLogout, logoutLabel = 'Log out' }) => {
+  logo?: React.ReactNode;
+}> = ({ i18nText, onChangeToEnLocale, onChangeToViLocale, user, onLogout, logoutLabel = 'Log out', logo }) => {
   const { toggleSidebar } = useSidebar();
 
   const handleToggleSidebar = useCallback(
@@ -95,15 +97,7 @@ export const CMSLayoutHeader: React.FC<{
         <span className="sr-only">Toggle Sidebar</span>
       </Button>
 
-      <div className="flex flex-1 gap-x-2 sm:ml-2.5">
-        <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-          <ShoppingCartIcon size={20} />
-        </div>
-        <div className="grid flex-1 text-left text-sm leading-tight">
-          <span className="truncate font-medium">Lunas Enterprise</span>
-          <span className="truncate text-xs">Established 2025</span>
-        </div>
-      </div>
+      <div className="flex flex-1 items-center sm:ml-2.5">{logo ?? <LunasLogo variant="horizontal" size="xs" />}</div>
 
       <div className="flex items-center gap-1">
         {user && (

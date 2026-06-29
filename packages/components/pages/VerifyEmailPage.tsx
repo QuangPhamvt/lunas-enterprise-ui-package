@@ -5,6 +5,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { Alert, AlertDescription } from '../ui/alert';
 import { Button } from '../ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '../ui/dialog';
+import { LunasLogo } from '../features/logo';
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from '../ui/input-otp';
 
 export interface VerifyEmailPageProps {
@@ -105,14 +106,17 @@ export const VerifyEmailPage = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-sm:data-[state=open]:slide-in-from-bottom max-sm:data-[state=open]:zoom-in-100 max-sm:data-[state=closed]:slide-out-to-bottom max-sm:data-[state=closed]:zoom-out-100 max-sm:top-auto max-sm:right-0 max-sm:bottom-0 max-sm:left-0 max-sm:max-w-full max-sm:translate-x-0 max-sm:translate-y-0 max-sm:rounded-b-none sm:max-w-sm">
         <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
-          <DialogDescription>
-            {subtitle ?? (
-              <>
-                Nhập mã OTP đã được gửi tới <span className="font-medium text-foreground">{email}</span>. Mã có hiệu lực trong 10 phút.
-              </>
-            )}
-          </DialogDescription>
+          <LunasLogo variant="horizontal" size="sm" className="mx-auto" />
+          <div className="flex flex-col gap-0.5">
+            <DialogTitle>{title}</DialogTitle>
+            <DialogDescription>
+              {subtitle ?? (
+                <>
+                  Nhập mã OTP đã được gửi tới <span className="font-medium text-foreground">{email}</span>. Mã có hiệu lực trong 10 phút.
+                </>
+              )}
+            </DialogDescription>
+          </div>
         </DialogHeader>
 
         <div className="flex flex-col items-center gap-4">
