@@ -1,6 +1,9 @@
+'use client';
+
 import { Button } from '../ui/button';
 import { cn } from '@customafk/react-toolkit/utils';
 import { Wrench } from 'lucide-react';
+import { LunasLogo } from '../features/logo';
 
 export interface FeatureFixingProps {
   /** Main heading shown beneath the wrench icon. Defaults to `'Tính năng đang bảo trì'`. */
@@ -42,6 +45,7 @@ export const FeatureFixing = ({
 }: FeatureFixingProps) => {
   return (
     <div className={cn('flex flex-col items-center justify-center min-h-[50vh] gap-4 sm:gap-6 py-8 sm:py-10 px-4 text-center w-full', className)}>
+      <LunasLogo variant="stacked" size="sm" />
       <div className="flex flex-col items-center gap-2">
         <Wrench className={cn('size-16 sm:size-24 text-orange-500', iconClassName)} />
         <div className="text-3xl sm:text-5xl font-bold text-orange-500">{/* This text indicates the feature is being fixed */}</div>

@@ -169,8 +169,6 @@ export {
   // Form actions
   TanStackActionsForm,
   TanStackActionSubmit,
-  SubmitButton,
-  CancelButton,
   // Array helpers
   ArrayCol,
   ArrayHeaderRow,
@@ -200,17 +198,11 @@ export {
   SimpleDateField,
   SimpleRadioGroupField,
   // Field UI primitives
-  FieldSet,
-  FieldLegend,
   FieldGroup,
   Field,
   FieldContent,
   FieldContentMain,
   FieldLabel,
-  FieldTitle,
-  FieldDescription,
-  FieldNote,
-  FieldTooltip,
   FieldSeparator,
   FieldError,
 };

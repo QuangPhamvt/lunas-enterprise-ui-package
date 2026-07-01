@@ -2,12 +2,13 @@
 
 import { useCallback } from 'react';
 
-import { CalendarIcon, CatIcon, XIcon } from 'lucide-react';
+import { CalendarIcon, XIcon } from 'lucide-react';
 
 import { cn } from '@customafk/react-toolkit/utils';
 import { Dialog as DialogPrimitive } from 'radix-ui';
 
 import { DateDisplay } from '@/components/data-display/date';
+import { LunasLogo } from '@/components/features/logo';
 import { Flex } from '@/components/layouts/flex';
 import { Title } from '@/components/typography/title';
 
@@ -103,9 +104,7 @@ export const DetailDialog: React.FC<React.PropsWithChildren<DetailDialogProps>> 
                   <DetailDialogSidebarMenu>
                     <DetailDialogSidebarMenuItem>
                       <DetailDialogSidebarMenuButton size="lg" tabIndex={-1}>
-                        <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                          <CatIcon size={16} />
-                        </div>
+                        <LunasLogo variant="icon" iconStyle="solid" size="md" className="size-8 min-w-8 min-h-8" />
                         <div className="grid flex-1 text-left text-sm leading-tight">
                           <span className="truncate font-medium">{sidebar?.title || 'Detail Dialog'}</span>
                           <span className="truncate text-xs">Lunas Enterprise</span>

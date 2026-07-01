@@ -7,11 +7,11 @@ import { useUITableBodyContext } from '../../hooks/use-context';
 import type { TUITableBody } from '../../types';
 import { tableBodyVariants } from '../table.variants';
 
-export const UITableBody = memo<TUITableBody>(({ height, className, children, ...props }) => {
+export const UITableBody = memo<TUITableBody>(({ className, children, ...props }) => {
   const { isFetching, isRefetching, isEmpty } = useUITableBodyContext();
   if (isEmpty || isFetching || isRefetching) return null;
   return (
-    <tbody slot="table-body" style={{ height }} className={cn(tableBodyVariants(), className)} {...props}>
+    <tbody slot="table-body" className={cn(tableBodyVariants(), className)} {...props}>
       {children}
     </tbody>
   );

@@ -2,12 +2,13 @@
 
 import { createContext, memo, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
-import { MenuIcon, PanelLeftIcon, ShoppingCartIcon } from 'lucide-react';
+import { MenuIcon, PanelLeftIcon } from 'lucide-react';
 
 import { useIsMobile } from '@customafk/react-toolkit/hooks/useMobile';
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { Button } from '@/components/ui/button';
+import { LunasLogo } from '@/components/features/logo';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet';
@@ -175,13 +176,7 @@ const CMSLayoutSidebar = memo(
                   <MenuIcon className="size-6!" />
                   <span className="sr-only">Toggle Sidebar</span>
                 </Button>
-                <div className="ml-2 flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                  <ShoppingCartIcon size={20} />
-                </div>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">Lunas Store</span>
-                  <span className="truncate text-xs">Established 2023</span>
-                </div>
+                <LunasLogo variant="horizontal" size="xs" className="ml-2" />
               </div>
               <div className="flex flex-1 flex-col p-2">{children}</div>
             </div>
@@ -430,19 +425,9 @@ const SidebarMenuButton = memo(
     asChild?: boolean;
     isActive?: boolean;
     tooltip?: string | React.ComponentProps<typeof TooltipContent>;
-    onClick?: () => void;
   } & VariantProps<typeof sidebarMenuButtonVariants>) => {
     const Comp = asChild ? Slot : 'button';
     const { isMobile, state } = useSidebar();
-
-    const handleClick = useCallback<React.MouseEventHandler<HTMLButtonElement>>(
-      event => {
-        props.onClick?.();
-        event.preventDefault();
-        event.stopPropagation();
-      },
-      [props.onClick]
-    );
 
     const button = (
       <Comp
@@ -451,7 +436,6 @@ const SidebarMenuButton = memo(
         data-size={size}
         data-active={isActive}
         className={cn(sidebarMenuButtonVariants({ variant, size }), className)}
-        onClick={handleClick}
         {...props}
       />
     );

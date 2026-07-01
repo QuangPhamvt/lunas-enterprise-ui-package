@@ -18,7 +18,9 @@
  * - `Permalink` — clickable link cell
  * - `PhoneNumber` — formatted telephone number
  * - `ProgressDisplay` — progress bar for 0–100 percentage values
+ * - `EditButton` — inline edit action button
  * - `RemoveButton` — inline delete action button
+ * - `ToggleButton` — on/off switch for toggling row state
  * - `Statistic` — numeric value with optional unit label
  * - `StatusDisplay` — color-coded status badge with configurable map
  * - `User` — user avatar + name combination
@@ -39,6 +41,7 @@ export * from './boolean-display';
 export * from './currency-display';
 export * from './date-display';
 export * from './description-display';
+export * from './edit-button';
 export * from './email-display';
 export * from './list-display';
 export * from './more-button';
@@ -49,4 +52,5 @@ export * from './progress-display';
 export * from './remove-button';
 export * from './statistic';
 export * from './status-display';
+export * from './toggle-button';
 export * from './user';
