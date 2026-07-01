@@ -238,6 +238,8 @@ export type SummaryItem = {
   trend?: 'neutral' | 'up' | 'down';
   /** Secondary description text rendered below the value. */
   description?: string;
+  /** Arbitrary key passed back in `onSummaryItemClick` to identify which filter to apply. */
+  filterKey?: string;
 };
 
 /** Context value provided by the analysis panel toggle state. */
@@ -300,6 +302,8 @@ export type TTableContext<TData extends RowData<TData>> = {
 
   /** KPI stat cards displayed in `UITableSummaryBar` above the toolbar. */
   summary?: SummaryItem[];
+  /** Called when a summary bar card is clicked; receives the clicked `SummaryItem`. */
+  onSummaryItemClick?: (item: SummaryItem) => void;
   /** When `true`, a toggle button appears in `UITableTooltipActions` to open `UITableAnalysisPanel`. */
   showAnalysisPanel?: boolean;
 
@@ -450,6 +454,8 @@ export type TableProviderProps<
 
   /** KPI stat cards displayed in `UITableSummaryBar` above the toolbar. */
   summary?: SummaryItem[];
+  /** Called when a summary bar card is clicked; receives the clicked `SummaryItem`. */
+  onSummaryItemClick?: (item: SummaryItem) => void;
   /** When `true`, a toggle button appears in `UITableTooltipActions` to open `UITableAnalysisPanel`. */
   showAnalysisPanel?: boolean;
 

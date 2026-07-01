@@ -807,6 +807,61 @@ export const TeamMembers: Story = {
   },
 };
 
+// ─── With Many Summary Cards (wrap) ──────────────────────────────────────────
+
+export const WithManySummaryCards: Story = {
+  name: 'With Many Summary Cards (18 items)',
+  render: () => {
+    const totalSalary = UserData.reduce((sum, u) => sum + u.salary, 0);
+    const activeCount = UserData.filter(u => u.active).length;
+    const avgSalary = Math.round(totalSalary / UserData.length);
+
+    const summary: SummaryItem[] = [
+      { label: 'Total Employees', value: UserData.length, description: 'All time' },
+      { label: 'Active', value: activeCount, trend: 'up', description: `${Math.round((activeCount / UserData.length) * 100)}% of total` },
+      { label: 'Inactive', value: UserData.length - activeCount, trend: 'down' },
+      { label: 'Total Payroll', value: totalSalary, prefix: '$', precision: 0, trend: 'neutral' },
+      { label: 'Avg. Salary', value: avgSalary, prefix: '$', precision: 0, description: 'Per employee' },
+      { label: 'Max Salary', value: Math.max(...UserData.map(u => u.salary)), prefix: '$', precision: 0, trend: 'up' },
+      { label: 'Min Salary', value: Math.min(...UserData.map(u => u.salary)), prefix: '$', precision: 0, trend: 'down' },
+      { label: 'Departments', value: new Set(UserData.map(u => u.role)).size, description: 'Unique roles' },
+      { label: 'Unique Roles', value: new Set(UserData.map(u => u.role)).size, description: 'Distinct roles' },
+      { label: 'Active Rate', value: Math.round((activeCount / UserData.length) * 100), suffix: '%', trend: 'up' },
+      { label: 'Inactive Rate', value: Math.round(((UserData.length - activeCount) / UserData.length) * 100), suffix: '%', trend: 'down' },
+      { label: 'Q1 Payroll', value: Math.round(totalSalary * 0.25), prefix: '$', precision: 0 },
+      { label: 'Q2 Payroll', value: Math.round(totalSalary * 0.27), prefix: '$', precision: 0, trend: 'up' },
+      { label: 'Q3 Payroll', value: Math.round(totalSalary * 0.24), prefix: '$', precision: 0, trend: 'down' },
+      { label: 'Q4 Payroll', value: Math.round(totalSalary * 0.24), prefix: '$', precision: 0 },
+      { label: 'Headcount YoY', value: 12, suffix: '%', trend: 'up', description: 'vs last year' },
+      { label: 'Turnover Rate', value: 8, suffix: '%', trend: 'down', description: 'Last 12 months' },
+      { label: 'Salary Growth', value: 5.4, suffix: '%', precision: 1, trend: 'up', description: 'Annual avg.' },
+    ];
+
+    return (
+      <div className="h-[calc(100vh-4rem)] w-full">
+        <UITableProvider<TUser>
+          title="Full HR Dashboard"
+          columns={UserColumnsWithAggregation}
+          data={UserData}
+          totalRows={UserData.length}
+          leftPinnedColumns={['name']}
+          summary={summary}
+          onSummaryItemClick={item => console.log('summary item clicked:', item)}
+        >
+          <UITableWrapper>
+            <UITableSummaryBar />
+            <UITableTooltip>
+              <UITableTooltipFilter onSearch={v => console.log('search:', v)} />
+              <UITableTooltipActions />
+            </UITableTooltip>
+            <UITableContainer />
+          </UITableWrapper>
+        </UITableProvider>
+      </div>
+    );
+  },
+};
+
 // ─── With Summary & Analysis Panel ───────────────────────────────────────────
 
 export const WithSummaryAndAnalysis: Story = {

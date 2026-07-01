@@ -26,8 +26,18 @@ type NavItem = {
   label: string;
   /** Optional icon element rendered to the left of the label. */
   icon?: React.ReactNode;
-  /** Callback fired when the sidebar button is clicked. */
+  /** Callback fired when the sidebar button is clicked. Use for simple programmatic navigation. */
   onClick?: () => void;
+  /**
+   * Renders the button as a custom element using the Radix Slot (asChild) pattern.
+   * Return a single element (e.g. a TanStack Router `<Link>`) wrapping the icon + label content.
+   *
+   * @example
+   * ```tsx
+   * renderAs: ({ icon, label }) => <Link to="/dashboard">{icon}{label}</Link>
+   * ```
+   */
+  renderAs?: (content: { icon?: React.ReactNode; label: string }) => React.ReactElement;
 };
 
 type NavGroup = {
@@ -68,12 +78,18 @@ export type CMSLayoutProps = {
   user?: CMSLayoutUser;
 };
 
-const SidebarContentGroupItem = memo<NavItem & { activeNavItemId?: string }>(({ id, label, icon, activeNavItemId, onClick }) => (
+const SidebarContentGroupItem = memo<NavItem & { activeNavItemId?: string }>(({ id, label, icon, activeNavItemId, onClick, renderAs }) => (
   <SidebarMenuItem>
-    <SidebarMenuButton isActive={id === activeNavItemId} onClick={onClick}>
-      {icon}
-      {label}
-    </SidebarMenuButton>
+    {renderAs ? (
+      <SidebarMenuButton asChild isActive={id === activeNavItemId}>
+        {renderAs({ icon, label })}
+      </SidebarMenuButton>
+    ) : (
+      <SidebarMenuButton isActive={id === activeNavItemId} onClick={onClick}>
+        {icon}
+        {label}
+      </SidebarMenuButton>
+    )}
   </SidebarMenuItem>
 ));
 SidebarContentGroupItem.displayName = 'SidebarContentGroupItem';
@@ -104,7 +120,15 @@ SidebarContentGroup.displayName = 'SidebarContentGroup';
  *         id: 'main',
  *         label: 'Main',
  *         items: [
- *           { id: 'dashboard', label: 'Dashboard', icon: <LayoutDashboardIcon />, onClick: () => router.push('/') },
+ *           {
+ *             id: 'dashboard',
+ *             label: 'Dashboard',
+ *             icon: <LayoutDashboardIcon />,
+ *             // Option A — TanStack Router Link (asChild/Slot pattern):
+ *             renderAs: ({ icon, label }) => <Link to="/">{icon}{label}</Link>,
+ *             // Option B — simple click handler:
+ *             // onClick: () => router.navigate({ to: '/' }),
+ *           },
  *         ],
  *       },
  *     ],
@@ -150,6 +174,7 @@ export const CMSLayout: React.FC<React.PropsWithChildren<CMSLayoutProps>> = ({
                   activeNavItemId={activeNavItemId}
                   label={item.label}
                   icon={item.icon}
+                  renderAs={item.renderAs}
                   onClick={item.onClick}
                 />
               ))}

@@ -191,6 +191,7 @@ export const UITableProvider = <
   onFilterChange,
 
   summary = [],
+  onSummaryItemClick,
   showAnalysisPanel = false,
 
   description,
@@ -346,6 +347,7 @@ export const UITableProvider = <
       csvFileName,
 
       summary,
+      onSummaryItemClick,
       showAnalysisPanel,
 
       description,
@@ -372,6 +374,7 @@ export const UITableProvider = <
       csvFileName,
 
       summary,
+      onSummaryItemClick,
       showAnalysisPanel,
 
       description,
