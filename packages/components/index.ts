@@ -28,6 +28,7 @@ export { LoadingDialog } from './dialogs/loading-dialog';
 export type { LoadingDialogProps } from './dialogs/loading-dialog';
 
 // ─── Features ─────────────────────────────────────────────────────────────────
+export * from './features/charts/index';
 export {
   Description,
   DescriptionHeader,
@@ -101,6 +102,7 @@ export {
   CardTitle,
 } from './ui/card';
 export * from './ui/carousel';
+export * from './ui/chart';
 export * from './ui/checkbox';
 export * from './ui/collapsible';
 export * from './ui/command';
