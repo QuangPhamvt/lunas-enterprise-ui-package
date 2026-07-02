@@ -26,6 +26,7 @@ export default defineConfig([
       './packages/components/dialogs/error-dialog.tsx',
       './packages/components/dialogs/loading-dialog.tsx',
 
+      './packages/components/features/charts/index.tsx',
       './packages/components/features/descriptions/index.tsx',
       './packages/components/features/logo/index.tsx',
       './packages/components/features/search-modal/index.tsx',
@@ -70,6 +71,7 @@ export default defineConfig([
       './packages/components/ui/calendar.tsx',
       './packages/components/ui/card.tsx',
       './packages/components/ui/carousel.tsx',
+      './packages/components/ui/chart.tsx',
       './packages/components/ui/checkbox.tsx',
       './packages/components/ui/collapsible.tsx',
       './packages/components/ui/command.tsx',

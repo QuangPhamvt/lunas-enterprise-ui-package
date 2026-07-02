@@ -1,0 +1,189 @@
+import { Canvas, Meta } from '@storybook/addon-docs/blocks';
+
+import * as ActivityHeatmapChartStories from './activity-heatmap-chart.stories';
+import * as CandlestickChartStories from './candlestick-chart.stories';
+import * as ConversionFunnelChartStories from './conversion-funnel-chart.stories';
+import * as CorrelationScatterChartStories from './correlation-scatter-chart.stories';
+import * as DonutChartStories from './donut-chart.stories';
+import * as GainLossBarChartStories from './gain-loss-bar-chart.stories';
+import * as IndexedPerformanceLineChartStories from './indexed-performance-line-chart.stories';
+import * as MetricRadarChartStories from './metric-radar-chart.stories';
+import * as MirroredBarChartStories from './mirrored-bar-chart.stories';
+import * as OrdersBarChartStories from './orders-bar-chart.stories';
+import * as PortfolioAllocationTreemapStories from './portfolio-allocation-treemap.stories';
+import * as PriceRangeAreaChartStories from './price-range-area-chart.stories';
+import * as RevenueAreaChartStories from './revenue-area-chart.stories';
+import * as RevenueOrdersComposedChartStories from './revenue-orders-composed-chart.stories';
+import * as SalesTargetRadialChartStories from './sales-target-radial-chart.stories';
+import * as SankeyFlowChartStories from './sankey-flow-chart.stories';
+import * as SparklineChartStories from './sparkline-chart.stories';
+import * as StackedAreaChartStories from './stacked-area-chart.stories';
+import * as TopProductsBarChartStories from './top-products-bar-chart.stories';
+import * as VolumeBarChartStories from './volume-bar-chart.stories';
+import * as WaterfallChartStories from './waterfall-chart.stories';
+
+<Meta title="Features/Charts/Docs" />
+
+# Charts
+
+Prebuilt [Recharts](https://recharts.org) v3 dashboard charts, built on the `@customafk/lunas-ui/ui/chart`
+primitives (`ChartContainer`, `ChartTooltipContent`, `ChartLegendContent`, `ChartConfig`). Import from
+`@customafk/lunas-ui/features/charts`. Requires the `recharts` peer dependency.
+
+Every chart accepts `className`, `animate` (default `true`; set `false` for deterministic tests and
+snapshots), and `height` (a fixed px height; omitted falls back to an `aspect-video` ratio). Colors
+default to the `--chart-1`..`--chart-8` theme tokens, cycled via `getChartColor(index)`; up/down series
+(candles, volume, gain/loss) use `--success`/`--danger` via `getDirectionColor`. Formatter props
+(`valueFormatter`, `dateFormatter`) default to the helpers in `utils.ts`.
+
+## Trends & revenue
+
+### RevenueAreaChart
+
+A gradient area trend, optionally with a previous-period comparison series.
+
+<Canvas of={RevenueAreaChartStories.WithComparison} />
+
+### RevenueOrdersComposedChart
+
+Correlating two metrics on dual axes (e.g. revenue bars vs. order-count line).
+
+<Canvas of={RevenueOrdersComposedChartStories.Default} />
+
+### SparklineChart
+
+A tiny, axis-less trend for KPI cards — pairs with the `Statistic` component.
+
+<Canvas of={SparklineChartStories.KpiCard} />
+
+### SalesTargetRadialChart
+
+Progress toward a single target as a radial gauge with a center figure.
+
+<Canvas of={SalesTargetRadialChartStories.Default} />
+
+## Rankings & breakdown
+
+### OrdersBarChart
+
+Volume per period, single series or stacked by status.
+
+<Canvas of={OrdersBarChartStories.StackedByStatus} />
+
+### TopProductsBarChart
+
+A horizontal ranking (top products, top customers).
+
+<Canvas of={TopProductsBarChartStories.Default} />
+
+### DonutChart
+
+A category breakdown with a center total — a handful of segments.
+
+<Canvas of={DonutChartStories.CategorySales} />
+
+### ConversionFunnelChart
+
+A step-down funnel with per-stage conversion rates.
+
+<Canvas of={ConversionFunnelChartStories.Default} />
+
+## Finance & stock
+
+### CandlestickChart
+
+OHLC candles with high-low wicks — the standard stock price chart. Recharts has no native candlestick
+type, so bodies and wicks are drawn against the chart's computed axis scales.
+
+<Canvas of={CandlestickChartStories.Default} />
+
+### VolumeBarChart
+
+Trading volume colored by day direction, paired under a `CandlestickChart` on a shared time axis.
+
+<Canvas of={VolumeBarChartStories.Default} />
+
+### PriceRangeAreaChart
+
+A shaded high-low trading-range band with the close price drawn on top.
+
+<Canvas of={PriceRangeAreaChartStories.Default} />
+
+### PortfolioAllocationTreemap
+
+Holdings/asset allocation sized by weight — clearer than a donut once there are more than a handful of
+positions.
+
+<Canvas of={PortfolioAllocationTreemapStories.Default} />
+
+### IndexedPerformanceLineChart
+
+Multiple instruments normalized to a common base (default 100) so relative performance is directly
+comparable regardless of price scale.
+
+<Canvas of={IndexedPerformanceLineChartStories.Default} />
+
+### GainLossBarChart
+
+Diverging bars (up green / down red) from a zero baseline for period returns.
+
+<Canvas of={GainLossBarChartStories.Default} />
+
+### SankeyFlowChart
+
+A Sankey flow diagram — revenue/cost breakdowns, budget allocation — where band width is
+proportional to the flow value between named nodes. Built on recharts' native `Sankey` chart;
+links accept plain node names instead of raw indices.
+
+<Canvas of={SankeyFlowChartStories.Default} />
+
+## General analytics
+
+### WaterfallChart
+
+An incremental bridge chart between totals (starting balance → steps → ending balance) — profit
+bridges, cash-flow bridges.
+
+<Canvas of={WaterfallChartStories.Default} />
+
+### StackedAreaChart
+
+Cumulative composition over time — every series stacks to show the total alongside each
+category's contribution (unlike `RevenueAreaChart`'s single comparison overlay).
+
+<Canvas of={StackedAreaChartStories.Default} />
+
+### MetricRadarChart
+
+Multi-dimension comparison across one or more entities — performance reviews, feature
+comparisons, skill matrices.
+
+<Canvas of={MetricRadarChartStories.Default} />
+
+### CorrelationScatterChart
+
+Correlation between two metrics, optionally sized by a third (`showBubbleSize`).
+
+<Canvas of={CorrelationScatterChartStories.Default} />
+
+### ActivityHeatmapChart
+
+A GitHub-style calendar heatmap for daily activity/usage intensity, laid out as a
+week-by-weekday grid.
+
+<Canvas of={ActivityHeatmapChartStories.Default} />
+
+### MirroredBarChart
+
+A two-sided horizontal bar comparison (population-pyramid style) — this period vs. last, before
+vs. after — mirrored around a shared zero baseline.
+
+<Canvas of={MirroredBarChartStories.Default} />
+
+## Shared conventions
+
+- Every chart accepts `className`, `animate`, and `height` (see above).
+- Dark mode is handled by `ChartConfig`'s `{ light, dark }` theme shape plus `ChartStyle`, not by a
+  `.dark` block in `theme.css`.
+- Formatter props default to the helpers in `utils.ts` (`formatCurrency`, `formatCompactNumber`,
+  `formatPercent`, `formatSignedPercent`, `toDateLabel`).
