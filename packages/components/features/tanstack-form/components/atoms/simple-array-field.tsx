@@ -8,7 +8,7 @@ import { cn } from '@customafk/react-toolkit/utils';
 
 import { Button } from '@/components/ui/button';
 
-import { useTanStackFieldContext } from '../../tanstack-form';
+import { useTanStackFieldContext } from '../form-context';
 
 // ─── ArrayCol ──────────────────────────────────────────────────────────────
 
@@ -89,7 +89,7 @@ export function ArrayHeaderRow({ className, children }: ArrayHeaderRowProps) {
 
 // ─── SimpleArrayField ──────────────────────────────────────────────────────
 
-type Props<T> = {
+export type SimpleArrayFieldProps<T> = {
   /**
    * Shape of a brand-new empty row appended when the user clicks "Add row".
    */
@@ -130,7 +130,7 @@ type Props<T> = {
  *   </AppField>
  * </AppForm>
  */
-export function SimpleArrayField<T>({ defaultRow, children, addLabel = 'Thêm hàng', className }: Props<T>) {
+export function SimpleArrayField<T>({ defaultRow, children, addLabel = 'Thêm hàng', className }: SimpleArrayFieldProps<T>) {
   const field = useTanStackFieldContext<T[]>();
   const rows = field.state.value ?? [];
 

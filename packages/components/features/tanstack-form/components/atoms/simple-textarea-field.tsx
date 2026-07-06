@@ -7,7 +7,7 @@ import { useStore } from '@tanstack/react-form';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 
-import { useTanStackFieldContext } from '../../tanstack-form';
+import { useTanStackFieldContext } from '../form-context';
 import { FieldError } from '../ui/field';
 
 type Props = {

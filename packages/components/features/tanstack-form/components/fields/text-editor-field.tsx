@@ -6,7 +6,7 @@ import { useStore } from '@tanstack/react-form';
 
 import { TextEditor } from '@/components/features/text-editor';
 
-import { useTanStackFieldContext } from '../../tanstack-form';
+import { useTanStackFieldContext } from '../form-context';
 import { Field, FieldContent, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldNote, FieldSeparator, FieldTooltip } from '../ui/field';
 
 import type { TextEditorFieldProps as Props } from '../../types';

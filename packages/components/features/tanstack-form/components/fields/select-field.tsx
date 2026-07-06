@@ -14,7 +14,7 @@ import { Dialog as RadixDialog } from 'radix-ui';
 import { Dialog, DialogClose, DialogOverlay, DialogPortal } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-import { useTanStackFieldContext } from '../../tanstack-form';
+import { useTanStackFieldContext } from '../form-context';
 import {
   Field,
   FieldContent,

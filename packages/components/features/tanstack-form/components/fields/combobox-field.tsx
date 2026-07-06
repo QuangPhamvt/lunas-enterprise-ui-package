@@ -16,7 +16,7 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 import { Dialog, DialogClose, DialogOverlay, DialogPortal } from '@/components/ui/dialog';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
-import { useTanStackFieldContext } from '../../tanstack-form';
+import { useTanStackFieldContext } from '../form-context';
 import {
   Field,
   FieldContent,

@@ -4,7 +4,7 @@ import { cn } from '@customafk/react-toolkit/utils';
 
 import { Button } from '@/components/ui/button';
 
-import { useTanStackFormContext } from '../../tanstack-form';
+import { useTanStackFormContext } from '../form-context';
 
 /**
  * Renders a submit button wired to the current TanStack Form context, automatically handling loading and disabled states.

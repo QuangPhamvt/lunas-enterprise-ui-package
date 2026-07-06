@@ -8,7 +8,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 
-import { useTanStackFieldContext } from '../../tanstack-form';
+import { useTanStackFieldContext } from '../form-context';
 import { FieldError } from '../ui/field';
 
 type Props = {

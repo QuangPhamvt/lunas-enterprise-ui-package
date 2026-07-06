@@ -48,7 +48,7 @@ export const Default: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const input = canvas.getByRole('textbox');
+    const input = await canvas.findByRole('textbox');
 
     // starts empty — no error before interaction
     await expect(input).toHaveValue('');
@@ -107,7 +107,7 @@ export const Submitting: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const input = canvas.getByRole('textbox');
+    const input = await canvas.findByRole('textbox');
 
     // input is disabled while form is submitting
     await expect(input).toBeDisabled();
@@ -151,7 +151,7 @@ export const WithUnit: Story = {
     const canvas = within(canvasElement);
 
     // all unit labels are rendered
-    await expect(canvas.getByText('kg')).toBeInTheDocument();
+    await expect(await canvas.findByText('kg')).toBeInTheDocument();
     await expect(canvas.getByText('%')).toBeInTheDocument();
     await expect(canvas.getByText('USD')).toBeInTheDocument();
 
@@ -214,7 +214,7 @@ export const AllowNegative: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const inputs = canvas.getAllByRole('textbox');
+    const inputs = await canvas.findAllByRole('textbox');
 
     // negative numbers are accepted
     await userEvent.type(inputs[0], '-5');
@@ -289,7 +289,7 @@ export const WithDecimalPlaces: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const inputs = canvas.getAllByRole('textbox');
+    const inputs = await canvas.findAllByRole('textbox');
 
     // all three inputs render enabled and empty
     await expect(inputs).toHaveLength(3);
@@ -347,7 +347,7 @@ export const Disabled: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const inputs = canvas.getAllByRole('textbox');
+    const inputs = await canvas.findAllByRole('textbox');
 
     // both inputs are disabled
     for (const input of inputs) {
@@ -395,7 +395,7 @@ export const ValidationError: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const input = canvas.getByRole('textbox');
+    const input = await canvas.findByRole('textbox');
 
     // no error before interaction
     await expect(canvas.queryByRole('alert')).not.toBeInTheDocument();
@@ -452,7 +452,7 @@ export const Orientations: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const inputs = canvas.getAllByRole('textbox');
+    const inputs = await canvas.findAllByRole('textbox');
 
     // all three orientations render enabled, empty inputs
     await expect(inputs).toHaveLength(3);
@@ -569,7 +569,7 @@ export const KitchenSink: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const inputs = canvas.getAllByRole('textbox');
+    const inputs = await canvas.findAllByRole('textbox');
 
     // discount field is pre-filled; others start empty
     await expect(inputs[2]).toHaveValue('10');

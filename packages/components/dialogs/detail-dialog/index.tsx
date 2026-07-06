@@ -5,13 +5,13 @@ import { useCallback } from 'react';
 import { CalendarIcon, XIcon } from 'lucide-react';
 
 import { cn } from '@customafk/react-toolkit/utils';
-import { Dialog as DialogPrimitive } from 'radix-ui';
 
-import { DateDisplay } from '@/components/data-display/date';
 import { LunasLogo } from '@/components/features/logo';
+
+import { Dialog as DialogPrimitive } from 'radix-ui';
+import { DateDisplay } from '@/components/data-display/date';
 import { Flex } from '@/components/layouts/flex';
 import { Title } from '@/components/typography/title';
-
 import {
   DetailDialogSidebarContent,
   DetailDialogSidebarFooter,
@@ -22,7 +22,7 @@ import {
   DetailDialogSidebarTrigger,
   Sidebar,
   SidebarProvider,
-} from './components/sidebar';
+} from './components/sidebar-core';
 
 type DetailDialogSidebar = {
   /** Title shown in the collapsible sidebar header. Defaults to `'Detail Dialog'`. */

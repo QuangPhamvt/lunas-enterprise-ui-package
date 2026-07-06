@@ -8,7 +8,7 @@ import { EyeIcon, EyeOffIcon } from 'lucide-react';
 
 import { Input } from '@/components/ui/input';
 
-import { useTanStackFieldContext } from '../../tanstack-form';
+import { useTanStackFieldContext } from '../form-context';
 import {
   Field,
   FieldContent,

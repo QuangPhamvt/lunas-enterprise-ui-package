@@ -35,7 +35,7 @@ export const Default: Story = {
     const canvas = within(canvasElement);
 
     // Trigger shows placeholder initially
-    const trigger = canvas.getByRole('button', { name: /select a date/i });
+    const trigger = await canvas.findByRole('button', { name: /select a date/i });
     await userEvent.click(trigger);
 
     // Click the "Hôm nay" preset — popover should close
@@ -73,7 +73,7 @@ export const Submitting: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const trigger = canvas.getByRole('button');
+    const trigger = await canvas.findByRole('button');
     expect(trigger).toBeDisabled();
   },
 };
@@ -119,7 +119,7 @@ export const Disabled: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const triggers = canvas.getAllByRole('button');
+    const triggers = await canvas.findAllByRole('button');
     triggers.forEach(btn => expect(btn).toBeDisabled());
     expect(within(document.body).queryByRole('listbox')).not.toBeInTheDocument();
   },
@@ -165,7 +165,7 @@ export const Validation: Story = {
     expect(canvas.queryByRole('alert')).not.toBeInTheDocument();
 
     // Open then close without selecting → blur fires → error appears
-    const trigger = canvas.getByRole('button', { name: /select a date/i });
+    const trigger = await canvas.findByRole('button', { name: /select a date/i });
     await userEvent.click(trigger);
     await userEvent.keyboard('{Escape}');
 
@@ -211,7 +211,7 @@ export const WithConstraints: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    await userEvent.click(canvas.getByRole('button', { name: /select a date/i }));
+    await userEvent.click(await canvas.findByRole('button', { name: /select a date/i }));
 
     // Calendar should be visible
     await waitFor(() => expect(within(document.body).getByRole('grid')).toBeInTheDocument());

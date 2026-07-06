@@ -55,7 +55,7 @@ export const Default: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const input = canvas.getByRole('textbox');
+    const input = await canvas.findByRole('textbox');
 
     // starts empty, counter shows 0 / 50 ký tự
     await expect(input).toHaveValue('');
@@ -116,7 +116,7 @@ export const Submitting: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const input = canvas.getByRole('textbox');
+    const input = await canvas.findByRole('textbox');
 
     // input is disabled while form is submitting
     await expect(input).toBeDisabled();
@@ -154,7 +154,7 @@ export const Disabled: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const input = canvas.getByRole('textbox');
+    const input = await canvas.findByRole('textbox');
 
     await expect(input).toBeDisabled();
     await expect(input).toHaveValue('Prefilled but locked');
@@ -229,7 +229,7 @@ export const WithCounter: Story = {
     const canvas = within(canvasElement);
 
     // fresh field starts at 0 / 30
-    await expect(canvas.getByText('0 / 30 ký tự')).toBeInTheDocument();
+    await expect(await canvas.findByText('0 / 30 ký tự')).toBeInTheDocument();
 
     // nearLimit: 24 chars = 80% of 30 → warning color
     const nearCounter = canvas.getByText('24 / 30 ký tự');
@@ -285,7 +285,7 @@ export const BlurValidation: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const input = canvas.getByRole('textbox');
+    const input = await canvas.findByRole('textbox');
 
     // no errors before any interaction (field not dirty/touched → FieldError not mounted)
     await expect(canvas.queryByRole('alert')).not.toBeInTheDocument();
@@ -361,7 +361,7 @@ export const Orientations: Story = {
     const canvas = within(canvasElement);
 
     // all three inputs render and accept input
-    const inputs = canvas.getAllByRole('textbox');
+    const inputs = await canvas.findAllByRole('textbox');
     await expect(inputs).toHaveLength(3);
 
     // each is enabled and empty
@@ -477,7 +477,7 @@ export const KitchenSink: Story = {
     const canvas = within(canvasElement);
 
     // username — type a valid value, clear button appears
-    const usernameInput = canvas.getByPlaceholderText('john_doe');
+    const usernameInput = await canvas.findByPlaceholderText('john_doe');
     await userEvent.type(usernameInput, 'john_doe');
     await expect(usernameInput).toHaveValue('john_doe');
     await expect(canvas.getAllByRole('button', { name: 'Xóa' })[0]).toBeInTheDocument();

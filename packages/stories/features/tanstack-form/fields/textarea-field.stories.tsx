@@ -50,7 +50,7 @@ export const Default: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const textarea = canvas.getByRole('textbox');
+    const textarea = await canvas.findByRole('textbox');
 
     // starts empty, counter at 0 / 50
     await expect(textarea).toHaveValue('');
@@ -106,7 +106,7 @@ export const Submitting: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const textarea = canvas.getByRole('textbox');
+    const textarea = await canvas.findByRole('textbox');
 
     // disabled while form is submitting
     await expect(textarea).toBeDisabled();
@@ -156,7 +156,7 @@ export const CopyButton: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const textareas = canvas.getAllByRole('textbox');
+    const textareas = await canvas.findAllByRole('textbox');
 
     // pre-filled field has exactly one copy button
     await expect(canvas.getAllByRole('button', { name: 'Sao chép' })).toHaveLength(1);
@@ -202,7 +202,7 @@ export const Disabled: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const textarea = canvas.getByRole('textbox');
+    const textarea = await canvas.findByRole('textbox');
 
     await expect(textarea).toBeDisabled();
     await expect(textarea).toHaveValue('This content is locked and cannot be edited.');
@@ -276,7 +276,7 @@ export const WithCounter: Story = {
     const canvas = within(canvasElement);
 
     // fresh field starts at 0
-    await expect(canvas.getByText('0 / 200 ký tự')).toBeInTheDocument();
+    await expect(await canvas.findByText('0 / 200 ký tự')).toBeInTheDocument();
 
     // near-limit field: 165 chars = 82.5 % → warning colour
     const nearCounter = canvas.getByText('165 / 200 ký tự');
@@ -332,7 +332,7 @@ export const BlurValidation: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const textarea = canvas.getByRole('textbox');
+    const textarea = await canvas.findByRole('textbox');
 
     // no errors before any interaction
     await expect(canvas.queryByRole('alert')).not.toBeInTheDocument();
@@ -391,7 +391,7 @@ export const Orientations: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const textareas = canvas.getAllByRole('textbox');
+    const textareas = await canvas.findAllByRole('textbox');
 
     // all three orientations render an enabled, empty textarea
     await expect(textareas).toHaveLength(3);
@@ -483,7 +483,7 @@ export const KitchenSink: Story = {
     const canvas = within(canvasElement);
 
     // description — type too short, error appears
-    const descriptionTextarea = canvas.getByPlaceholderText('Enter at least 10 characters…');
+    const descriptionTextarea = await canvas.findByPlaceholderText('Enter at least 10 characters…');
     await userEvent.type(descriptionTextarea, 'Short');
     await waitFor(() => expect(canvas.getByRole('alert')).toBeInTheDocument());
     await expect(canvas.getByRole('alert')).toHaveTextContent('At least 10 characters');

@@ -64,7 +64,7 @@ export const Default: Story = {
     const canvas = within(canvasElement);
 
     // Open the combobox popover
-    const trigger = canvas.getByRole('button', { name: /search country/i });
+    const trigger = await canvas.findByRole('button', { name: /search country/i });
     await userEvent.click(trigger);
 
     // Type to filter options

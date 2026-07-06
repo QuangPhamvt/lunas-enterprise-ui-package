@@ -6,6 +6,7 @@ import type { RowSelectionState } from '@tanstack/react-table';
 
 import { sleep } from '@customafk/react-toolkit/utils/sleep';
 
+import { Button } from '@/components/ui/button';
 import type { ActiveFilter, CsvCell, FilterDefinition, SummaryItem, TUITableColumn } from '@/components/features/tables';
 import {
   UITableAnalysisPanel,
@@ -22,8 +23,6 @@ import {
   UITableTooltipFilter,
   UITableWrapper,
 } from '@/components/features/tables';
-
-import { Button } from '@/components/ui/button';
 
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { generateMockCsvData, MockDataColumns, MockDataFilterDefinitions, MockDataTables, type TMockDataTable } from './mock-data';

@@ -99,7 +99,7 @@ UITableHeadRowProvider.displayName = 'UITableHeadRowProvider';
  * body layer via `TableBodyContext`.
  */
 const UITableBodyProvider = memo<React.PropsWithChildren<TTableBodyContext>>(({ isFetching, isRefetching, isEmpty, rowSelectionState, children }) => {
-  const value = useMemo<TTableBodyContext>(() => ({ isFetching, isRefetching, isEmpty, rowSelectionState }), [isFetching, isEmpty, rowSelectionState]);
+  const value = useMemo<TTableBodyContext>(() => ({ isFetching, isRefetching, isEmpty, rowSelectionState }), [isFetching, isRefetching, isEmpty, rowSelectionState]);
   return <TableBodyContext.Provider value={value}>{children}</TableBodyContext.Provider>;
 });
 UITableBodyProvider.displayName = 'UITableBodyProvider';
