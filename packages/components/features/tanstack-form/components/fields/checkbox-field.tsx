@@ -2,7 +2,7 @@
 
 import { useStore } from '@tanstack/react-form';
 
-import { useTanStackFieldContext } from '../../tanstack-form';
+import { useTanStackFieldContext } from '../form-context';
 import { Field, FieldContent, FieldContentMain, FieldDescription, FieldGroup, FieldLabel, FieldNote, FieldSeparator, FieldTooltip } from '../ui/field';
 import { Checkbox } from '@/components/ui/checkbox';
 

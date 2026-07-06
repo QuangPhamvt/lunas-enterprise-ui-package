@@ -3,7 +3,7 @@
 import { useId, useState } from 'react';
 
 import { Eye, EyeOff } from 'lucide-react';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 
 import { Alert, AlertDescription } from '../ui/alert';
 import { Button } from '../ui/button';

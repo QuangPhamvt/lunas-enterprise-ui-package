@@ -49,7 +49,7 @@ const badgeVariants = cva(
       { variant: 'solid', color: 'accent', className: 'bg-accent text-text-negative' },
       { variant: 'solid', color: 'info', className: 'bg-info text-info-foreground' },
       { variant: 'solid', color: 'success', className: 'bg-success text-success-foreground' },
-      { variant: 'solid', color: 'warning', className: 'bg-warning text-warning-foreground' },
+      { variant: 'solid', color: 'warning', className: 'bg-warning text-text-negative' },
       { variant: 'solid', color: 'danger', className: 'bg-danger text-danger-foreground' },
       // soft
       { variant: 'soft', color: 'primary', className: 'bg-primary-bg-subtle text-primary-intense' },

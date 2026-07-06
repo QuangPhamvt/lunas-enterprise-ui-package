@@ -70,7 +70,7 @@ export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    const trigger = canvas.getByRole('combobox');
+    const trigger = await canvas.findByRole('combobox');
     await userEvent.click(trigger);
 
     const listbox = await waitFor(() => within(document.body).getByRole('listbox'));
@@ -226,7 +226,7 @@ export const Clearable: Story = {
     const canvas = within(canvasElement);
 
     // Country is pre-selected — clear button should be visible; click it
-    const clearBtn = canvas.getByRole('button', { name: /xóa lựa chọn/i });
+    const clearBtn = await canvas.findByRole('button', { name: /xóa lựa chọn/i });
     await userEvent.click(clearBtn);
 
     // After clearing, the trigger should show the placeholder
@@ -349,6 +349,7 @@ export const BlurValidation: Story = {
     const canvas = within(canvasElement);
 
     // Country is pre-selected — no error initially (not yet touched)
+    await canvas.findAllByRole('combobox');
     expect(canvas.queryByRole('alert')).not.toBeInTheDocument();
 
     // Clear country → onChange fires with null → refine fails → error shows

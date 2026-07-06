@@ -2,7 +2,7 @@ import { ArrowDownToLine, PlusIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 
-import { useTanStackFormContext } from '../../tanstack-form';
+import { useTanStackFormContext } from '../form-context';
 
 /**
  * Renders a form action bar with a Cancel button and a context-aware submit button (Add New or Update) driven by TanStack Form state.

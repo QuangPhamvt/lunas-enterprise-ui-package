@@ -7,7 +7,7 @@ import { cn } from '@customafk/react-toolkit/utils';
 import { Dialog, DialogContent, DialogOverlay, DialogPortal, DialogTitle } from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
 
-import { useTanStackFormContext } from '../../tanstack-form';
+import { useTanStackFormContext } from '../form-context';
 import { CancelButton } from '../ui/cancel-button';
 import { SubmitButton } from '../ui/submit-button';
 
@@ -75,6 +75,10 @@ export const TanStackDialogForm: React.FC<
           )}
           onOpenAutoFocus={event => {
             // Prevents focus from shifting to the content when the dialog opens, which can cause layout shift if the content includes autofocusable elements.
+            event.preventDefault();
+          }}
+          onInteractOutside={event => {
+            // Prevents the dialog from closing when clicking outside, since the form may have unsaved changes.
             event.preventDefault();
           }}
         >

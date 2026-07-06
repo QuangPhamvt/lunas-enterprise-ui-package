@@ -10,7 +10,7 @@ import { cn } from '@customafk/react-toolkit/utils';
 
 import { NumberInput } from '@/components/ui/inputs/number-input';
 
-import { useTanStackFieldContext } from '../../tanstack-form';
+import { useTanStackFieldContext } from '../form-context';
 import {
   Field,
   FieldContent,

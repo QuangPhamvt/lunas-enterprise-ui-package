@@ -5,7 +5,7 @@ import { cn } from '@customafk/react-toolkit/utils';
 import { CloseButton } from '@/components/ui/buttons/close';
 
 import { Dialog as DialogPrimitive } from 'radix-ui';
-import { useTanStackFormContext } from '../../tanstack-form';
+import { useTanStackFormContext } from '../form-context';
 import { CancelButton } from '../ui/cancel-button';
 import { SubmitButton } from '../ui/submit-button';
 

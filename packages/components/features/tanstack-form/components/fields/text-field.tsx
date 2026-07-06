@@ -21,7 +21,7 @@ import {
   FieldSeparator,
   FieldTooltip,
 } from '@/components/features/tanstack-form/components/ui/field';
-import { useTanStackFieldContext } from '../../tanstack-form';
+import { useTanStackFieldContext } from '../form-context';
 
 import type { TextFieldProps as Props } from '../../types';
 

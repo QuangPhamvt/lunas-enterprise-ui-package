@@ -20,8 +20,8 @@ export const DescriptionImages: React.FC<{
           key={image.id}
           className={
             isSingle
-              ? 'group relative size-42 overflow-hidden rounded-sm border border-border shadow-xs transition-shadow hover:shadow-card'
-              : 'group relative size-16 overflow-hidden rounded-lg border border-border shadow-xs transition-shadow hover:shadow-card'
+              ? 'group relative size-42 overflow-hidden rounded border border-border shadow-xs transition-shadow hover:shadow-card'
+              : 'group relative size-20 overflow-hidden rounded border border-border shadow-xs transition-shadow hover:shadow-card'
           }
         >
           <Image src={image.src} alt={image.alt} width="100%" height="100%" className="transition-transform duration-200 group-hover:scale-105" />
