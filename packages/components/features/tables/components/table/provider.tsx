@@ -6,7 +6,7 @@
  * only the subtree that consumes a particular slice of state re-renders when that
  * slice changes.
  */
-import { memo, useCallback, useId, useMemo, useState } from 'react';
+import { memo, useCallback, useId, useMemo, useRef, useState } from 'react';
 
 import type { ColumnDef, ColumnPinningState, ExpandedState, RowSelectionState } from '@tanstack/react-table';
 import { getCoreRowModel, getExpandedRowModel, getGroupedRowModel, useReactTable } from '@tanstack/react-table';
@@ -21,6 +21,7 @@ import {
   TableInnerTableContext,
   TableInnerWrapperContext,
   TableRowContext,
+  TableSummaryContext,
 } from '../../hooks/use-context';
 import type {
   ActiveFilter,
@@ -37,6 +38,7 @@ import type {
   TTableInnerTableContext,
   TTableInnerWrapperContext,
   TTableRowContext,
+  TTableSummaryContext,
   TUITableColumn,
 } from '../../types';
 
@@ -73,8 +75,8 @@ UITableInnerWrapperProvider.displayName = 'UITableInnerWrapperProvider';
  * the pre-computed `totalSize` (sum of all column widths) to descendants via
  * `TableInnerTableContext`.
  */
-const UITableInnerTableProvider = memo<React.PropsWithChildren<TTableInnerTableContext>>(({ table, innerTableId, totalSize, children }) => {
-  const value = useMemo<TTableInnerTableContext>(() => ({ table, innerTableId, totalSize }), [table, innerTableId, totalSize]);
+const UITableInnerTableProvider = memo<React.PropsWithChildren<TTableInnerTableContext>>(({ table, innerTableId, totalSize, tableRef, children }) => {
+  const value = useMemo<TTableInnerTableContext>(() => ({ table, innerTableId, totalSize, tableRef }), [table, innerTableId, totalSize, tableRef]);
   return <TableInnerTableContext.Provider value={value}>{children}</TableInnerTableContext.Provider>;
 });
 UITableInnerTableProvider.displayName = 'UITableInnerTableProvider';
@@ -99,7 +101,10 @@ UITableHeadRowProvider.displayName = 'UITableHeadRowProvider';
  * body layer via `TableBodyContext`.
  */
 const UITableBodyProvider = memo<React.PropsWithChildren<TTableBodyContext>>(({ isFetching, isRefetching, isEmpty, rowSelectionState, children }) => {
-  const value = useMemo<TTableBodyContext>(() => ({ isFetching, isRefetching, isEmpty, rowSelectionState }), [isFetching, isRefetching, isEmpty, rowSelectionState]);
+  const value = useMemo<TTableBodyContext>(
+    () => ({ isFetching, isRefetching, isEmpty, rowSelectionState }),
+    [isFetching, isRefetching, isEmpty, rowSelectionState]
+  );
   return <TableBodyContext.Provider value={value}>{children}</TableBodyContext.Provider>;
 });
 UITableBodyProvider.displayName = 'UITableBodyProvider';
@@ -201,8 +206,10 @@ export const UITableProvider = <
 }: React.PropsWithChildren<TableProviderProps<TData, TKey, TColumns>>) => {
   const innerWrapperId = useId();
   const innerTableId = useId();
+  const tableRef = useRef<HTMLTableElement | null>(null);
 
   const [isAnalysisPanelOpen, setIsAnalysisPanelOpen] = useState(false);
+  const [isSummaryBarOpen, setIsSummaryBarOpen] = useState(true);
 
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const [columnPinning, setColumnPinning] = useState<ColumnPinningState>({
@@ -422,36 +429,45 @@ export const UITableProvider = <
     [isAnalysisPanelOpen, toggleAnalysisPanel]
   );
 
+  const toggleSummaryBar = useCallback(() => setIsSummaryBarOpen(prev => !prev), []);
+
+  const summaryContextValue = useMemo<TTableSummaryContext>(
+    () => ({ isOpen: isSummaryBarOpen, toggle: toggleSummaryBar }),
+    [isSummaryBarOpen, toggleSummaryBar]
+  );
+
   return (
     <TableAnalysisContext.Provider value={analysisContextValue}>
-      <TableFilterContext.Provider value={filterContextValue}>
-        <TableContext.Provider value={value as TTableContext<TData>}>
-          <UITableInnerWrapperProvider innerWrapperId={innerWrapperId}>
-            <UITableInnerTableProvider table={table} innerTableId={innerTableId} totalSize={totalSize}>
-              <UITableHeadRowProvider
-                isAllRowsSelected={isAllRowsSelected}
-                columnPinningState={columnPinningState}
-                leftPinnedHeaders={leftPinnedHeaders}
-                rightPinnedHeaders={rightPinnedHeaders}
-                onToggleAllRowsSelected={table.toggleAllRowsSelected}
-              >
-                <UITableBodyProvider isFetching={isFetching} isRefetching={isRefetching} isEmpty={isEmpty} rowSelectionState={rowSelectionState}>
-                  <UITableRowProvider
-                    keyOfClickRow={keyOfClickRow}
-                    isAllRowsSelected={isAllRowsSelected}
-                    columnPinningState={columnPinningState}
-                    leftPinnedHeaders={leftPinnedHeaders}
-                    rightPinnedHeaders={rightPinnedHeaders}
-                    onClickRow={onClickRow}
-                  >
-                    {children}
-                  </UITableRowProvider>
-                </UITableBodyProvider>
-              </UITableHeadRowProvider>
-            </UITableInnerTableProvider>
-          </UITableInnerWrapperProvider>
-        </TableContext.Provider>
-      </TableFilterContext.Provider>
+      <TableSummaryContext.Provider value={summaryContextValue}>
+        <TableFilterContext.Provider value={filterContextValue}>
+          <TableContext.Provider value={value as TTableContext<TData>}>
+            <UITableInnerWrapperProvider innerWrapperId={innerWrapperId}>
+              <UITableInnerTableProvider table={table} innerTableId={innerTableId} totalSize={totalSize} tableRef={tableRef}>
+                <UITableHeadRowProvider
+                  isAllRowsSelected={isAllRowsSelected}
+                  columnPinningState={columnPinningState}
+                  leftPinnedHeaders={leftPinnedHeaders}
+                  rightPinnedHeaders={rightPinnedHeaders}
+                  onToggleAllRowsSelected={table.toggleAllRowsSelected}
+                >
+                  <UITableBodyProvider isFetching={isFetching} isRefetching={isRefetching} isEmpty={isEmpty} rowSelectionState={rowSelectionState}>
+                    <UITableRowProvider
+                      keyOfClickRow={keyOfClickRow}
+                      isAllRowsSelected={isAllRowsSelected}
+                      columnPinningState={columnPinningState}
+                      leftPinnedHeaders={leftPinnedHeaders}
+                      rightPinnedHeaders={rightPinnedHeaders}
+                      onClickRow={onClickRow}
+                    >
+                      {children}
+                    </UITableRowProvider>
+                  </UITableBodyProvider>
+                </UITableHeadRowProvider>
+              </UITableInnerTableProvider>
+            </UITableInnerWrapperProvider>
+          </TableContext.Provider>
+        </TableFilterContext.Provider>
+      </TableSummaryContext.Provider>
     </TableAnalysisContext.Provider>
   );
 };

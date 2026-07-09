@@ -7,33 +7,9 @@ import { Statistic } from '@/components/data-display/statistic';
 import type { AnyEntity } from '@/types';
 import { SELECT_WIDTH } from '../../constants';
 import { useUITableBodyContext, useUITableContext } from '../../hooks/use-context';
-import type { ColumnAggregation, ColumnAggregationType } from '../../types';
+import type { ColumnAggregation } from '../../types';
+import { computeAggregation, extractNumericValues } from '../../utils/aggregation';
 import { tableFooterCellVariants, tableFooterRowVariants } from '../table.variants';
-
-function computeAggregation(rowCount: number, values: number[], type: ColumnAggregationType): number {
-  switch (type) {
-    case 'count':
-      return rowCount;
-    case 'sum':
-      return values.reduce((a, b) => a + b, 0);
-    case 'avg':
-      return values.length === 0 ? 0 : values.reduce((a, b) => a + b, 0) / values.length;
-    case 'min':
-      return values.length === 0 ? 0 : Math.min(...values);
-    case 'max':
-      return values.length === 0 ? 0 : Math.max(...values);
-  }
-}
-
-function extractNumericValues(rows: { getValue: (id: string) => unknown }[], colId: string): number[] {
-  return rows
-    .map(r => {
-      const v = r.getValue(colId);
-      const n = typeof v === 'string' ? Number(v) : typeof v === 'number' ? v : NaN;
-      return n;
-    })
-    .filter(n => !Number.isNaN(n));
-}
 
 export const UITableFooterRow = memo(() => {
   const { table } = useUITableContext();

@@ -73,6 +73,8 @@ export type TUITableHeadCellOption = {
 export type TUITableHeadCellSelect = React.ComponentProps<'th'> & {
   /** Whether the column is pinned to a side (the select cell is always sticky). */
   isPinned?: ColumnPinningPosition;
+  /** Whether this is the last left-pinned column; renders a trailing edge shadow so users can see it's pinned over scrollable content. */
+  isLastCell?: boolean;
   /** Reflects `table.getIsAllRowsSelected()` to set the checkbox state. */
   isAllRowsSelected?: boolean;
   /** Calls `table.toggleAllRowsSelected` when the checkbox value changes. */
@@ -137,6 +139,8 @@ export type TUITableRow = React.ComponentProps<'tr'> & {
 export type TUITableCellSelect = React.ComponentProps<'td'> & {
   /** Pinning position; the select cell is always rendered sticky regardless. */
   isPinned?: ColumnPinningPosition;
+  /** Whether this is the last left-pinned column; renders a trailing edge shadow so users can see it's pinned over scrollable content. */
+  isLastCell?: boolean;
   /** Whether the checkbox should appear checked. */
   isSelected?: boolean;
   /** Calls `row.toggleSelected` when the checkbox value changes. */
@@ -250,6 +254,14 @@ export type TTableAnalysisContext = {
   toggle: () => void;
 };
 
+/** Context value provided by the summary bar visibility toggle state. */
+export type TTableSummaryContext = {
+  /** Whether `UITableSummaryBar` is currently visible. */
+  isOpen: boolean;
+  /** Toggles the summary bar's visibility. */
+  toggle: () => void;
+};
+
 /** A single cell in a CSV export row. */
 export type CsvCell = {
   /** Column header label for this cell. */
@@ -327,6 +339,8 @@ export type TTableInnerTableContext = {
   innerTableId: string;
   /** Pre-computed sum of all column sizes used as the `<table>` `minWidth`. */
   totalSize: number;
+  /** Ref attached to the inner `<table>` DOM element, shared with descendants that need direct DOM access. */
+  tableRef: React.RefObject<HTMLTableElement | null>;
 };
 
 /** Context value provided by `UITableHeadRowProvider`. */

@@ -6,7 +6,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   tags: ['autodocs'],
-  title: 'UI Tables/Atoms/Toggle Button',
+  title: 'Features/UI Tables/Atoms/Toggle Button',
   component: UITableToggleButton,
   parameters: { layout: 'centered' },
 } satisfies Meta<typeof UITableToggleButton>;

@@ -3,16 +3,16 @@ import { memo, useEffect, useMemo, useRef } from 'react';
 
 import { flexRender } from '@tanstack/react-table';
 
-import type { AnyEntity } from '@/types';
+import { cn } from '@customafk/react-toolkit/utils';
 
+import type { AnyEntity } from '@/types';
 import { useUITableInnerTableContext } from '../../hooks/use-context';
 import type { TUITableCell } from '../../types';
 import { tableCellInnerVariants, tableCellVariants } from '../table.variants';
 
 export const UITableCell = memo<TUITableCell>(
-  ({ isPinned = false, isFirstCell = false, isLastCell = false, colId, position = 'start', column, getContext, ...props }) => {
-    const { innerTableId, table } = useUITableInnerTableContext();
-    const tableRef = useRef<HTMLTableElement | null>(null);
+  ({ isPinned = false, isFirstCell = false, isLastCell = false, colId, position = 'start', column, getContext, className, ...props }) => {
+    const { table, tableRef } = useUITableInnerTableContext();
     const cellRef = useRef<HTMLDivElement>(null);
 
     const left = useMemo(() => {
@@ -41,10 +41,7 @@ export const UITableCell = memo<TUITableCell>(
       return flexRender(column?.columnDef.cell, getContext());
     }, [column, getContext]);
 
-    useEffect(() => {
-      tableRef.current = document.querySelector(`table[id="${innerTableId}"]`);
-    }, [innerTableId]);
-
+    // biome-ignore lint/correctness/useExhaustiveDependencies: tableRef is a stable ref object; its `.current` is read for a one-off DOM check, not a reactive value
     useEffect(() => {
       if (!cellRef.current) return;
 
@@ -68,7 +65,7 @@ export const UITableCell = memo<TUITableCell>(
         data-lastcell={isLastCell || undefined}
         data-firstcell={isFirstCell || undefined}
         style={{ left, right, width, minWidth: minSize, maxWidth: maxSize }}
-        className={tableCellVariants({ isPinned: isPinned || undefined, isLastCell, isFirstCell })}
+        className={cn(tableCellVariants({ isPinned: isPinned || undefined, isLastCell, isFirstCell }), className)}
         {...props}
       >
         <div ref={cellRef} slot="table-body-cell-inner" className={tableCellInnerVariants({ position })}>

@@ -4,8 +4,7 @@ import { memo } from 'react';
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { Statistic } from '@/components/data-display/statistic';
-
-import { useUITableContext } from '../../hooks/use-context';
+import { useUITableContext, useUITableSummaryContext } from '../../hooks/use-context';
 import type { SummaryItem } from '../../types';
 
 const trendAccent: Record<NonNullable<SummaryItem['trend']>, string> = {
@@ -16,8 +15,9 @@ const trendAccent: Record<NonNullable<SummaryItem['trend']>, string> = {
 
 export const UITableSummaryBar = memo(() => {
   const { summary, onSummaryItemClick } = useUITableContext();
+  const { isOpen } = useUITableSummaryContext();
 
-  if (!summary || summary.length === 0) return null;
+  if (!isOpen || !summary || summary.length === 0) return null;
 
   return (
     <div data-slot="table-summary-bar" className="w-full overflow-x-auto px-2 pb-1">

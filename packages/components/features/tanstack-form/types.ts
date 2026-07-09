@@ -251,6 +251,8 @@ export type ComboboxFieldProps = {
   clearable?: boolean;
   /** When `false`, suppresses inline validation error messages. Defaults to `true`. */
   showErrorMessage?: boolean;
+  /** When `true`, forces the combobox to open in a modal dialog instead of a popover. Defaults to `false`. */
+  modal?: boolean;
 };
 
 /** Props for {@link RadioGroupField} — a list of mutually exclusive radio buttons. */

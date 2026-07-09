@@ -29,7 +29,7 @@ import { generateMockCsvData, MockDataColumns, MockDataFilterDefinitions, MockDa
 
 const meta: Meta<typeof UITableProvider<TMockDataTable>> = {
   tags: ['autodocs'],
-  title: 'UI Tables',
+  title: 'Features/UI Tables',
   component: UITableProvider,
   subcomponents: {
     UITableTooltip,

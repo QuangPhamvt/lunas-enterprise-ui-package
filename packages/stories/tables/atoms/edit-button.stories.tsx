@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   tags: ['autodocs'],
-  title: 'UI Tables/Atoms/Edit Button',
+  title: 'Features/UI Tables/Atoms/Edit Button',
   component: UITableEditButton,
   parameters: { layout: 'centered' },
 } satisfies Meta<typeof UITableEditButton>;

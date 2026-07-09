@@ -7,7 +7,10 @@ import { Separator } from '../ui/separator';
  */
 const SectionHeader: React.FC<React.PropsWithChildren> = ({ children }) => {
   return (
-    <header data-slot="section-header" className="flex items-center px-4 py-3 font-semibold text-base text-text-positive tracking-tight">
+    <header
+      data-slot="section-header"
+      className="flex items-center px-4 py-3 font-semibold text-base text-text-positive tracking-tight gap-x-2 [&>svg]:size-5 [&>svg]:min-w-5"
+    >
       {children}
     </header>
   );
@@ -39,11 +42,15 @@ export const TanStackSectionForm: React.FC<
   React.PropsWithChildren<{
     /** Heading text displayed in the section header bar. */
     title: string;
+    icon?: React.ReactNode;
   }>
-> = ({ title, children }) => {
+> = ({ title, icon: Icon, children }) => {
   return (
     <section data-slot="section-form" className="flex flex-col rounded-md bg-background shadow-card ring-1 ring-border">
-      <SectionHeader>{title}</SectionHeader>
+      <SectionHeader>
+        {Icon}
+        {title}
+      </SectionHeader>
       <Separator />
       <SectionMain>{children}</SectionMain>
     </section>

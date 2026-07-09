@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   tags: ['autodocs'],
-  title: 'UI Tables/Atoms/Badge Display',
+  title: 'Features/UI Tables/Atoms/Badge Display',
   component: UITableBadgeDisplay,
 } satisfies Meta<typeof UITableBadgeDisplay>;
 

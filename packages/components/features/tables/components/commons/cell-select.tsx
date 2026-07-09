@@ -9,7 +9,7 @@ import { PINNED_COLUMN_Z_INDEX, SELECT_WIDTH } from '../../constants';
 import type { TUITableCellSelect } from '../../types';
 import { tableCellSelectVariants } from '../table.variants';
 
-export const UITableCellSelect = memo<TUITableCellSelect>(({ isPinned, isSelected = false, className, onToggleRowSelected, ...props }) => {
+export const UITableCellSelect = memo<TUITableCellSelect>(({ isPinned, isLastCell, isSelected = false, className, onToggleRowSelected, ...props }) => {
   const handleToggleRowSelected = useCallback(
     (value: boolean | 'indeterminate') => {
       onToggleRowSelected?.(!!value);
@@ -21,7 +21,7 @@ export const UITableCellSelect = memo<TUITableCellSelect>(({ isPinned, isSelecte
       slot="table-body-cell"
       data-pinned={true}
       style={{ left: 0, zIndex: PINNED_COLUMN_Z_INDEX, width: SELECT_WIDTH, maxWidth: SELECT_WIDTH }}
-      className={cn(tableCellSelectVariants({ isPinned }), className)}
+      className={cn(tableCellSelectVariants({ isPinned, isLastCell }), className)}
       {...props}
     >
       <div

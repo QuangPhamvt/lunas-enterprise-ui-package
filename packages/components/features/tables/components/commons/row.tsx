@@ -2,7 +2,6 @@
 import { memo, useCallback, useMemo } from 'react';
 
 import type { AnyEntity } from '@/types';
-
 import { useUITableRowContext } from '../../hooks/use-context';
 import type { TUITableRow } from '../../types';
 import { tableRowVariants } from '../table.variants';
@@ -60,6 +59,7 @@ export const UITableRow = memo<TUITableRow>(({ row, isSelected, rowIndex, childr
               data-cell={rowIndex}
               data-selected={isSelected || undefined}
               isPinned={isPinned}
+              isLastCell={cell.column.id === lastLeftPinnedHeaderId}
               isSelected={isAllRowsSelected || isSelected}
               onToggleRowSelected={cell.row.toggleSelected}
             />

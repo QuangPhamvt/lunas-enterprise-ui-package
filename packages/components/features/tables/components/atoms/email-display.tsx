@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { CheckIcon, CopyIcon, MailIcon } from 'lucide-react';
 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+
 import { UITableEmpty } from './empty';
 
 /** Props for the {@link UITableEmailDisplay} component. */
@@ -28,6 +29,13 @@ type Props = {
  */
 export const UITableEmailDisplay: React.FC<Props> = ({ email, linkable = true }) => {
   const [copied, setCopied] = useState(false);
+  const copiedTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (copiedTimeoutRef.current) clearTimeout(copiedTimeoutRef.current);
+    };
+  }, []);
 
   if (!email) return <UITableEmpty />;
 
@@ -36,7 +44,7 @@ export const UITableEmailDisplay: React.FC<Props> = ({ email, linkable = true })
     e.preventDefault();
     navigator.clipboard.writeText(email).then(() => {
       setCopied(true);
-      setTimeout(() => setCopied(false), 1500);
+      copiedTimeoutRef.current = setTimeout(() => setCopied(false), 1500);
     });
   };
 

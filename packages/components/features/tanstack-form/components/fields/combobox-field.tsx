@@ -45,6 +45,7 @@ export const ComboboxField = memo<ComboboxFieldProps>(
     disabled = false,
     clearable = false,
     showErrorMessage = true,
+    modal,
   }) => {
     const errorId = useId();
     const field = useTanStackFieldContext<string | null>();
@@ -188,6 +189,7 @@ export const ComboboxField = memo<ComboboxFieldProps>(
                 ) : (
                   <Popover
                     open={popoverOpen}
+                    modal={modal}
                     onOpenChange={open => {
                       setPopoverOpen(open);
                       if (!open) field.handleBlur();

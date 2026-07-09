@@ -6,14 +6,14 @@
  */
 import { useCallback } from 'react';
 
-import { ArrowRightIcon, BarChart2Icon, CirclePlus, DownloadIcon, RefreshCwIcon, SearchIcon } from 'lucide-react';
+import { ArrowRightIcon, BarChart2Icon, CirclePlus, DownloadIcon, LayoutDashboardIcon, RefreshCwIcon, SearchIcon } from 'lucide-react';
 
 import { useDebounceCallback } from '@customafk/react-toolkit/hooks/useDebounceCallback';
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { Input } from '@/components/ui/input';
 
-import { useUITableAnalysisContext, useUITableContext } from '../../hooks/use-context';
+import { useUITableAnalysisContext, useUITableContext, useUITableSummaryContext } from '../../hooks/use-context';
 import { downloadCsv } from '../../utils/csv';
 
 /**
@@ -90,6 +90,9 @@ const ActionButton: React.FC<React.PropsWithChildren<React.ComponentProps<'butto
  *
  * Each button is disabled automatically when the corresponding handler prop is
  * omitted, so only the actions relevant to a given table need to be provided.
+ * A toggle for `UITableSummaryBar` appears automatically when `summary` is
+ * non-empty, and a toggle for `UITableAnalysisPanel` appears when
+ * `showAnalysisPanel` is `true` (both set on `UITableProvider`).
  *
  * @example
  * ```tsx
@@ -106,8 +109,9 @@ export const UITableTooltipActions: React.FC<{
   onRefresh?: () => void;
   onDownload?: () => void;
 }> = ({ onCreate, onDownload, onRefresh }) => {
-  const { table, csvData, csvFileName, title, showAnalysisPanel } = useUITableContext();
+  const { table, csvData, csvFileName, title, showAnalysisPanel, summary } = useUITableContext();
   const { isOpen: isAnalysisOpen, toggle: toggleAnalysis } = useUITableAnalysisContext();
+  const { isOpen: isSummaryOpen, toggle: toggleSummary } = useUITableSummaryContext();
 
   const handleDownload = useCallback(() => {
     if (onDownload) {
@@ -154,6 +158,20 @@ export const UITableTooltipActions: React.FC<{
       >
         <DownloadIcon />
       </ActionButton>
+      {summary && summary.length > 0 && (
+        <ActionButton
+          onClick={e => {
+            toggleSummary();
+            e.stopPropagation();
+            e.preventDefault();
+          }}
+          aria-pressed={isSummaryOpen}
+          aria-label={isSummaryOpen ? 'Ẩn tổng quan' : 'Hiện tổng quan'}
+          className={isSummaryOpen ? 'bg-muted-muted text-text-positive' : undefined}
+        >
+          <LayoutDashboardIcon />
+        </ActionButton>
+      )}
       {showAnalysisPanel && (
         <ActionButton
           onClick={e => {
@@ -207,4 +225,4 @@ export const UITableTooltip: React.FC<React.PropsWithChildren> = ({ children }) 
     </div>
   );
 };
-UITableTooltip.displayName = 'TableTooltip';
+UITableTooltip.displayName = 'UITableTooltip';

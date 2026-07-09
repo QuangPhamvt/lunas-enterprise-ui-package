@@ -79,13 +79,13 @@ export const DetailDialog: React.FC<React.PropsWithChildren<DetailDialogProps>> 
       <DialogPrimitive.Portal data-slot="detail-dialog-portal">
         <DialogPrimitive.Overlay
           data-slot="detail-dialog-overlay"
-          className="fixed inset-0 z-50 bg-black/50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
+          className="data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/50 data-[state=closed]:animate-out data-[state=open]:animate-in"
         />
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <DialogPrimitive.Content
             data-slot="dialog-content"
             className={cn(
-              'data-[state=open]:animate-in data-[state=closed]:animate-out',
+              'data-[state=closed]:animate-out data-[state=open]:animate-in',
               'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
               'data-[state=closed]:zoom-out-80 data-[state=open]:zoom-in-80',
               'relative z-50 grid',
@@ -104,7 +104,7 @@ export const DetailDialog: React.FC<React.PropsWithChildren<DetailDialogProps>> 
                   <DetailDialogSidebarMenu>
                     <DetailDialogSidebarMenuItem>
                       <DetailDialogSidebarMenuButton size="lg" tabIndex={-1}>
-                        <LunasLogo variant="icon" iconStyle="solid" size="md" className="size-8 min-w-8 min-h-8" />
+                        <LunasLogo variant="icon" iconStyle="solid" size="md" className="size-8 min-h-8 min-w-8" />
                         <div className="grid flex-1 text-left text-sm leading-tight">
                           <span className="truncate font-medium">{sidebar?.title || 'Detail Dialog'}</span>
                           <span className="truncate text-xs">Lunas Enterprise</span>
@@ -119,7 +119,7 @@ export const DetailDialog: React.FC<React.PropsWithChildren<DetailDialogProps>> 
 
               <main data-slot="detail-dialog-main" className="relative h-full flex-1">
                 <Flex padding="none" gap="none" vertical align="stretch" className="absolute inset-0 size-full">
-                  <header className="flex w-full flex-0 items-start gap-x-2.5 border-b border-border-weak bg-card py-2.5 pr-12 pl-2">
+                  <header className="flex w-full flex-0 items-start gap-x-2.5 border-border-weak border-b bg-card py-2.5 pr-12 pl-2">
                     <DetailDialogSidebarTrigger />
                     <Flex vertical align="start" padding="none" width="null" wrap={false} className="flex-1 gap-0">
                       <Title level={5} className="line-clamp-1 truncate text-wrap">
