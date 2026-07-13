@@ -1,3 +1,5 @@
+import { cn } from '@customafk/react-toolkit/utils';
+
 /**
  * Wraps a set of TanStack form sections in a vertically-stacked flex container.
  *
@@ -10,9 +12,9 @@
  *   </TanStackSectionForm>
  * </TanStackContainerForm>
  */
-export const TanStackContainerForm: React.FC<React.PropsWithChildren> = ({ children }) => {
+export const TanStackContainerForm: React.FC<React.PropsWithChildren<{ className?: string }>> = ({ children, className }) => {
   return (
-    <div data-slot="section-form" className="flex flex-col space-y-4">
+    <div data-slot="section-form" className={cn('flex flex-col space-y-4', className)}>
       {children}
     </div>
   );

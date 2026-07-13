@@ -1,5 +1,6 @@
 'use client';
 
+import { cn } from '@customafk/react-toolkit/utils';
 import { Separator } from '../ui/separator';
 
 /**
@@ -43,10 +44,11 @@ export const TanStackSectionForm: React.FC<
     /** Heading text displayed in the section header bar. */
     title: string;
     icon?: React.ReactNode;
+    className?: string;
   }>
-> = ({ title, icon: Icon, children }) => {
+> = ({ title, icon: Icon, className, children }) => {
   return (
-    <section data-slot="section-form" className="flex flex-col rounded-md bg-background shadow-card ring-1 ring-border">
+    <section data-slot="section-form" className={cn('flex flex-col rounded-md bg-background shadow-card ring-1 ring-border', className)}>
       <SectionHeader>
         {Icon}
         {title}

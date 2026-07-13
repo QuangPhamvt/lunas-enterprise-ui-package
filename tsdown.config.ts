@@ -105,6 +105,7 @@ export default defineConfig([
       './packages/components/ui/slider.tsx',
       './packages/components/ui/sonner.tsx',
       './packages/components/ui/spinner.tsx',
+      './packages/components/ui/status.tsx',
       './packages/components/ui/switch.tsx',
       './packages/components/ui/table.tsx',
       './packages/components/ui/tabs.tsx',

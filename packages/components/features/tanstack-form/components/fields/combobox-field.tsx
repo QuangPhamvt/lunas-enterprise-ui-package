@@ -60,6 +60,7 @@ export const ComboboxField = memo<ComboboxFieldProps>(
     const _invalid = _touched && !field.state.meta.isValid;
     const _isEmpty = required && field.state.value === null;
     const _showClear = clearable && !!field.state.value && !isDisabled;
+    const _hasErrors = field.state.meta.errors.length > 0;
 
     const selectedLabel = options.find(({ value }) => value === field.state.value)?.label;
 
@@ -218,7 +219,7 @@ export const ComboboxField = memo<ComboboxFieldProps>(
                 )}
               </div>
 
-              {_touched && showErrorMessage && <FieldError id={errorId} className="mt-1" errors={field.state.meta.errors} />}
+              {_touched && showErrorMessage && _hasErrors && <FieldError id={errorId} className="mt-1" errors={field.state.meta.errors} />}
               <FieldNote isShow={!!helperText}>{helperText}</FieldNote>
             </div>
           </FieldContentMain>

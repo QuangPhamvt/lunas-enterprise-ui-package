@@ -37,14 +37,22 @@ export const DescriptionItem: React.FC<
     orientation?: 'horizontal' | 'vertical';
     /** Optional node rendered in the top-right corner of the label area (e.g. an edit action). */
     action?: React.ReactNode;
+    /**
+     * Horizontal alignment of the label text within its column.
+     * @default 'start'
+     */
+    labelAlign?: 'start' | 'end';
   }>
-> = ({ label, labelColSpan = 3, orientation = 'horizontal', action, children }) => {
+> = ({ label, labelColSpan = 3, orientation = 'horizontal', action, labelAlign = 'start', children }) => {
   if (orientation === 'vertical') {
     return (
       <div data-slot="description-item" className="flex flex-col border-b border-b-border last:border-b-0">
         <div
           data-slot="description-item-label"
-          className="flex items-center justify-between border-b border-b-border bg-secondary-muted py-2 pr-2 pl-4 text-sm font-medium text-text-positive-weak"
+          className={cn(
+            'flex items-center border-b border-b-border bg-secondary-muted py-2 pr-2 pl-4 font-medium text-sm text-text-positive-weak',
+            labelAlign === 'end' ? 'justify-end' : 'justify-between'
+          )}
         >
           <span>{label}</span>
           {action && <div className="shrink-0">{action}</div>}
@@ -65,7 +73,10 @@ export const DescriptionItem: React.FC<
       <div
         data-slot="description-item-label"
         style={{ gridColumn: `span ${labelColSpan} / span ${labelColSpan}` }}
-        className="flex min-w-full items-center justify-between overflow-x-hidden text-wrap break-all border-r border-r-border bg-secondary-muted py-3 pr-2 pl-4 text-sm font-medium text-text-positive-weak tabular-nums"
+        className={cn(
+          'flex min-w-full items-center overflow-x-hidden text-wrap break-all border-r border-r-border bg-secondary-muted py-3 pr-2 pl-4 font-medium text-sm text-text-positive-weak tabular-nums',
+          labelAlign === 'end' ? 'justify-end' : 'justify-between'
+        )}
       >
         <span>{label}</span>
         {action && <div className="shrink-0 pr-1">{action}</div>}
