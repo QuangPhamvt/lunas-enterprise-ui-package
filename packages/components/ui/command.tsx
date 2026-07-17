@@ -132,6 +132,7 @@ function CommandGroup({ className, ...props }: React.ComponentProps<typeof Comma
         '**:[[cmdk-group-heading]]:py-1.5',
         '**:[[cmdk-group-heading]]:text-xs',
         '**:[[cmdk-group-heading]]:font-medium',
+        '**:[[cmdk-group-items]]:space-y-1',
         className
       )}
       {...props}
@@ -150,10 +151,10 @@ function CommandItem({ className, ...props }: React.ComponentProps<typeof Comman
     <CommandPrimitive.Item
       data-slot="command-item"
       className={cn(
-        'relative flex cursor-pointer select-none items-center gap-2 rounded-md p-2.5 text-sm outline-hidden transition-all duration-300',
+        'relative flex cursor-pointer select-none items-center gap-2 rounded p-2.5 text-sm outline-hidden transition-all duration-300',
         'active:ring-border',
         'active:opacity-60',
-        'active:ring-4',
+        // 'active:ring-4',
         'data-[selected=true]:bg-muted-muted',
         'data-[selected=true]:text-text-positive-strong',
         'data-[disabled=true]:opacity-50',

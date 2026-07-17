@@ -74,6 +74,7 @@ export default defineConfig([
       './packages/components/ui/chart.tsx',
       './packages/components/ui/checkbox.tsx',
       './packages/components/ui/collapsible.tsx',
+      './packages/components/ui/combobox.tsx',
       './packages/components/ui/command.tsx',
       './packages/components/ui/context-menu.tsx',
       './packages/components/ui/dialog.tsx',

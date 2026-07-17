@@ -1,6 +1,6 @@
 {
   "name": "@customafk/lunas-ui",
-  "version": "0.2.73",
+  "version": "0.2.75",
   "description": "UI library for Lunas Enterprise",
   "type": "module",
   "author": {
@@ -264,6 +264,10 @@
       "require": "./dist/ui/collapsible.cjs",
       "import": "./dist/ui/collapsible.mjs"
     },
+    "./ui/combobox": {
+      "require": "./dist/ui/combobox.cjs",
+      "import": "./dist/ui/combobox.mjs"
+    },
     "./ui/command": {
       "require": "./dist/ui/command.cjs",
       "import": "./dist/ui/command.mjs"
@@ -475,7 +479,7 @@
     "lucide-react": "^0.545.0",
     "nanoid": "^5.1.6",
     "next-themes": "^0.4.6",
-    "radix-ui": "^1.6.0",
+    "radix-ui": "^1.6.2",
     "react": "^19.2.0",
     "react-country-flag": "^3.1.0",
     "react-day-picker": "^9.9.0",
