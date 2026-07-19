@@ -4,41 +4,32 @@ import { createContext, use, useCallback, useEffect, useMemo, useState } from 'r
 
 import { MenuIcon } from 'lucide-react';
 
-import { useIsMobile } from '@customafk/react-toolkit/hooks/useMobile';
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 import { cva, type VariantProps } from 'class-variance-authority';
 import { Slot as SlotPrimitive } from 'radix-ui';
 
-const SIDEBAR_COOKIE_NAME = 'detail_dialog_sidebar_state';
-const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
-const SIDEBAR_WIDTH = '18rem';
-const SIDEBAR_WIDTH_MOBILE = '18rem';
-const SIDEBAR_WIDTH_ICON = '3rem';
-const SIDEBAR_KEYBOARD_SHORTCUT = 'p';
+export const SIDEBAR_COOKIE_NAME = 'detail_dialog_sidebar_state';
+export const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
+export const SIDEBAR_WIDTH = '18rem';
+export const SIDEBAR_WIDTH_ICON = '3rem';
+export const SIDEBAR_KEYBOARD_SHORTCUT = 'p';
 
-type SidebarContextProps = {
+export type SidebarContextProps = {
   /** Current visual state of the sidebar. */
   state: 'expanded' | 'collapsed';
-  /** Whether the sidebar is open on desktop. */
+  /** Whether the sidebar is open. */
   open: boolean;
-  /** Setter for the desktop open state. */
+  /** Setter for the open state. */
   setOpen: (open: boolean) => void;
-  /** Whether the sidebar sheet is open on mobile. */
-  openMobile: boolean;
-  /** Setter for the mobile open state. */
-  setOpenMobile: (open: boolean) => void;
-  /** `true` when the viewport is considered mobile-sized. */
-  isMobile: boolean;
   /** Toggles the sidebar between expanded and collapsed. */
   toggleSidebar: () => void;
 };
 
-const SidebarContext = createContext<SidebarContextProps | null>(null);
+export const SidebarContext = createContext<SidebarContextProps | null>(null);
 
 /**
  * Reads the current sidebar open/collapsed state and toggle handler from context.
@@ -53,14 +44,67 @@ function useSidebar() {
 }
 
 /**
- * Context provider that manages sidebar open/collapsed state and persists it via a cookie.
+ * Sidebar open/collapsed state, cookie-persisted, with a keyboard shortcut to toggle. Shared by
+ * `SidebarProvider` (below, generic/standalone) and `DetailDialogProvider` (`../components/provider`,
+ * DetailDialog's own layout shell) so the state logic lives in exactly one place.
+ */
+function useSidebarState({
+  defaultOpen = true,
+  open: openProp,
+  onOpenChange: setOpenProp,
+}: {
+  defaultOpen?: boolean;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+}): SidebarContextProps {
+  const [_open, _setOpen] = useState<boolean>(defaultOpen);
+  const open = openProp ?? _open;
+  const setOpen = useCallback(
+    (value: boolean | ((value: boolean) => boolean)) => {
+      const openState = typeof value === 'function' ? value(open) : value;
+      if (setOpenProp) {
+        setOpenProp(openState);
+      } else {
+        _setOpen(openState);
+      }
+      // biome-ignore lint/suspicious/noDocumentCookie: persists sidebar state across page loads
+      document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`;
+    },
+    [setOpenProp, open]
+  );
+
+  const toggleSidebar = useCallback(() => {
+    setOpen(open => !open);
+  }, [setOpen]);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === SIDEBAR_KEYBOARD_SHORTCUT && (event.metaKey || event.ctrlKey)) {
+        event.preventDefault();
+        toggleSidebar();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [toggleSidebar]);
+
+  const state = open ? 'expanded' : 'collapsed';
+
+  return useMemo<SidebarContextProps>(() => ({ state, toggleSidebar, open, setOpen }), [state, open, setOpen, toggleSidebar]);
+}
+
+/**
+ * Generic, standalone-reusable context provider for `Sidebar` — a plain 2-column grid (sidebar |
+ * content). For `DetailDialog`'s own header/content grid shell, use `DetailDialogProvider`
+ * (`../components/provider`) instead.
  *
  * @example
  * ```tsx
- * import { SidebarProvider } from '@customafk/lunas-ui/dialogs/detail-dialog/components/sidebar';
+ * import { SidebarProvider, Sidebar } from '@customafk/lunas-ui/dialogs/detail-dialog/components/sidebar';
  *
  * <SidebarProvider defaultOpen={true}>
- *   <Sidebar collapsible="icon">{...}</Sidebar>
+ *   <Sidebar>{...}</Sidebar>
+ *   <main>{...}</main>
  * </SidebarProvider>
  * ```
  */
@@ -80,46 +124,7 @@ function SidebarProvider({
   /** Callback fired when the open state changes in controlled mode. */
   onOpenChange?: (open: boolean) => void;
 }) {
-  const isMobile = useIsMobile();
-  const [openMobile, setOpenMobile] = useState(false);
-
-  const [_open, _setOpen] = useState(defaultOpen);
-  const open = openProp ?? _open;
-  const setOpen = useCallback(
-    (value: boolean | ((value: boolean) => boolean)) => {
-      const openState = typeof value === 'function' ? value(open) : value;
-      if (setOpenProp) {
-        setOpenProp(openState);
-      } else {
-        _setOpen(openState);
-      }
-      // biome-ignore lint/suspicious/noDocumentCookie: persists sidebar state across page loads
-      document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`;
-    },
-    [setOpenProp, open]
-  );
-
-  const toggleSidebar = useCallback(() => {
-    return isMobile ? setOpenMobile(open => !open) : setOpen(open => !open);
-  }, [isMobile, setOpen]);
-
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === SIDEBAR_KEYBOARD_SHORTCUT && (event.metaKey || event.ctrlKey)) {
-        event.preventDefault();
-        toggleSidebar();
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [toggleSidebar]);
-
-  const state = open ? 'expanded' : 'collapsed';
-
-  const contextValue = useMemo<SidebarContextProps>(
-    () => ({ state, isMobile, toggleSidebar, open, setOpen, openMobile, setOpenMobile }),
-    [state, isMobile, open, setOpen, openMobile, toggleSidebar]
-  );
+  const contextValue = useSidebarState({ defaultOpen, open: openProp, onOpenChange: setOpenProp });
 
   return (
     <SidebarContext.Provider value={contextValue}>
@@ -127,7 +132,7 @@ function SidebarProvider({
         <div
           data-slot="sidebar-wrapper"
           style={{ '--sidebar-width': SIDEBAR_WIDTH, '--sidebar-width-icon': SIDEBAR_WIDTH_ICON, ...style } as React.CSSProperties}
-          className={cn('group/sidebar-wrapper flex h-full min-h-[85dvh] w-full items-start has-data-[variant=inset]:bg-sidebar', className)}
+          className={cn('group/sidebar-wrapper grid h-full min-h-[85dvh] w-full grid-cols-[auto_1fr]', className)}
           {...props}
         >
           {children}
@@ -138,69 +143,33 @@ function SidebarProvider({
 }
 
 /**
- * Responsive sidebar container that supports desktop icon-collapse and a mobile Sheet overlay.
+ * Sidebar container that collapses to an icon strip. Always rendered inline, regardless of viewport size.
  *
  * @example
  * ```tsx
  * import { Sidebar } from '@customafk/lunas-ui/dialogs/detail-dialog/components/sidebar';
  *
- * <Sidebar collapsible="icon" side="left">
+ * <Sidebar side="left">
  *   {children}
  * </Sidebar>
  * ```
  */
 function Sidebar({
   side = 'left',
-  variant = 'sidebar',
-  collapsible = 'offcanvas',
   className,
   children,
   ...props
 }: React.ComponentProps<'div'> & {
   /** Which edge the sidebar is anchored to. Defaults to `'left'`. */
   side?: 'left' | 'right';
-  /** Visual style variant of the sidebar. Defaults to `'sidebar'`. */
-  variant?: 'sidebar' | 'floating' | 'inset';
-  /** Collapse behaviour — slides off-canvas, shrinks to icon strip, or stays fixed. Defaults to `'offcanvas'`. */
-  collapsible?: 'offcanvas' | 'icon' | 'none';
 }) {
-  const { state, isMobile, openMobile, setOpenMobile } = useSidebar();
-
-  if (collapsible === 'none') {
-    return (
-      <div data-slot="sidebar" className={cn('flex h-full w-(--sidebar-width) flex-col bg-sidebar text-sidebar-foreground', className)} {...props}>
-        {children}
-      </div>
-    );
-  }
-
-  if (isMobile) {
-    return (
-      <Sheet open={openMobile} onOpenChange={setOpenMobile} {...props}>
-        <SheetContent
-          data-sidebar="sidebar"
-          data-slot="sidebar"
-          data-mobile="true"
-          className="z-20 hidden w-(--sidebar-width) bg-sidebar p-0 text-sidebar-foreground shadow-nav md:flex [&>button]:hidden"
-          style={{ '--sidebar-width': SIDEBAR_WIDTH_MOBILE } as React.CSSProperties}
-          side={side}
-        >
-          <SheetHeader className="sr-only">
-            <SheetTitle>Sidebar</SheetTitle>
-            <SheetDescription>Displays the mobile sidebar.</SheetDescription>
-          </SheetHeader>
-          <div className="flex h-full w-full flex-col">{children}</div>
-        </SheetContent>
-      </Sheet>
-    );
-  }
+  const { state } = useSidebar();
 
   return (
     <div
-      className="group peer hidden text-sidebar-foreground md:block"
+      className="group peer block text-sidebar-foreground"
       data-state={state}
-      data-collapsible={state === 'collapsed' ? collapsible : ''}
-      data-variant={variant}
+      data-collapsible={state === 'collapsed' ? 'icon' : ''}
       data-side={side}
       data-slot="sidebar"
     >
@@ -208,39 +177,21 @@ function Sidebar({
         data-slot="sidebar-gap"
         className={cn(
           'relative w-(--sidebar-width) bg-transparent transition-[width] duration-200 ease-linear',
-          'group-data-[collapsible=offcanvas]:w-0',
           'group-data-[side=right]:rotate-180',
-          variant === 'floating' || variant === 'inset'
-            ? 'group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4)))]'
-            : 'group-data-[collapsible=icon]:w-(--sidebar-width-icon)'
+          'group-data-[collapsible=icon]:w-(--sidebar-width-icon)'
         )}
       />
       <div
         data-slot="sidebar-container"
         className={cn(
-          'absolute inset-y-0 z-20 hidden w-(--sidebar-width) shadow-nav transition-[left,right,width] duration-200 ease-linear md:flex',
-          side === 'left'
-            ? 'left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]'
-            : 'right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]',
-          // Adjust padding for floating and inset variants.
-          variant === 'floating' || variant === 'inset'
-            ? 'p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4))+2px)]'
-            : 'group-data-[collapsible=icon]:w-(--sidebar-width-icon)',
+          'absolute inset-y-0 z-20 flex w-(--sidebar-width) shadow-nav transition-[left,right,width] duration-200 ease-linear',
+          'group-data-[collapsible=icon]:w-(--sidebar-width-icon)',
+          side === 'left' ? 'left-0' : 'right-0',
           className
         )}
         {...props}
       >
-        <div
-          data-sidebar="sidebar"
-          data-slot="sidebar-inner"
-          className={cn(
-            'flex size-full flex-col shadow-nav',
-            'group-data-[variant=floating]:rounded-lg',
-            'group-data-[variant=floating]:border',
-            'group-data-[variant=floating]:border-sidebar-border',
-            'group-data-[variant=floating]:shadow-sm'
-          )}
-        >
+        <div data-sidebar="sidebar" data-slot="sidebar-inner" className="grid size-full grid-rows-[auto_minmax(0,1fr)_auto] shadow-nav">
           {children}
         </div>
       </div>
@@ -291,9 +242,11 @@ function DetailDialogSidebarFooter({ className, children, ...props }: React.Comp
     <div data-slot="sidebar-footer" data-sidebar="footer" className={cn('flex flex-col gap-2 p-2', className)} {...props}>
       <DetailDialogSidebarMenu>
         {open && <DetailDialogSidebarMenuItem>{children}</DetailDialogSidebarMenuItem>}
-        <DetailDialogSidebarMenuItem>
-          <p className="pt-2 text-center text-xs text-text-positive-subtle">Copyright © {new Date().getFullYear()}, Lunas.</p>
-        </DetailDialogSidebarMenuItem>
+        {open && (
+          <DetailDialogSidebarMenuItem>
+            <p className="pt-2 text-center text-text-positive-subtle text-xs">Copyright © {new Date().getFullYear()}, Lunas.</p>
+          </DetailDialogSidebarMenuItem>
+        )}
       </DetailDialogSidebarMenu>
     </div>
   );
@@ -409,4 +362,6 @@ export {
   SidebarProvider,
   // biome-ignore lint/style/useComponentExportOnlyModules: true
   useSidebar,
+  // biome-ignore lint/style/useComponentExportOnlyModules: true
+  useSidebarState,
 };

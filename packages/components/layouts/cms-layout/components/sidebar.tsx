@@ -199,7 +199,7 @@ const CMSLayoutSidebar = memo(
           className={cn(
             'bg-transparent',
             'transition-[width] duration-200 ease-linear',
-            'h-(--header-height) sm:h-[calc(var(--header-height)+0.5rem)]',
+            'h-(--header-height) sm:h-(--header-height)',
             'w-(--sidebar-width)',
             'group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4)))]'
           )}
@@ -209,7 +209,7 @@ const CMSLayoutSidebar = memo(
           className={cn(
             'hidden md:flex shadow-nav',
             'fixed left-0 inset-y-0 p-2',
-            'top-[calc(var(--header-height)+0.5rem)] z-10',
+            'top-(--header-height) z-10',
             'w-(--sidebar-width)',
             'transition-all duration-200 ease-linear',
             'group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4)))]',
@@ -277,7 +277,7 @@ function SidebarRail({ className, ...props }: React.ComponentProps<'button'>) {
 const CMSLayoutMain = memo(({ className, children, ...props }: React.ComponentProps<'main'>) => {
   return (
     <main data-slot="sidebar-inset" className={cn('relative flex w-full flex-1 flex-col', className)} {...props}>
-      <div className="h-(--header-height) sm:h-[calc(var(--header-height)+0.5rem)]" />
+      <div className="h-(--header-height) sm:h-(--header-height)" />
       <div className="relative flex-1 size-full overflow-auto">{children}</div>
     </main>
   );

@@ -78,7 +78,7 @@ export const CMSLayoutHeader: React.FC<{
       className={cn(
         'bg-card',
         'h-(--header-height)',
-        'sm:h-[calc(var(--header-height)+0.5rem)] sm:px-4 sm:pr-6',
+        'sm:h-(--header-height) sm:px-4 sm:pr-6',
         'absolute inset-x-0 top-0 z-20 gap-2 px-2 pr-4.5',
         'flex items-center shadow-nav',
         'transition-[height] ease-linear'
