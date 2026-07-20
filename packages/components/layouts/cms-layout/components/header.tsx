@@ -8,7 +8,6 @@ import { colorHashLight } from '@customafk/react-toolkit/color-hash';
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { LunasLogo } from '@/components/features/logo';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -18,6 +17,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { LunasLogo } from '@/components/features/logo';
 
 import { useSidebar } from './sidebar';
 
@@ -79,7 +79,7 @@ export const CMSLayoutHeader: React.FC<{
         'bg-card',
         'h-(--header-height)',
         'sm:h-(--header-height) sm:px-4 sm:pr-6',
-        'absolute inset-x-0 top-0 z-20 gap-2 px-2 pr-4.5',
+        'col-span-2 row-start-1 z-20 gap-2 px-2 pr-4.5',
         'flex items-center shadow-nav',
         'transition-[height] ease-linear'
       )}

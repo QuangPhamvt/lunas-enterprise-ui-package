@@ -1,6 +1,7 @@
 import { LayoutDashboardIcon, PackageIcon, SettingsIcon, UsersIcon } from 'lucide-react';
 
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, within } from 'storybook/test';
 import { CMSLayout } from '@/components/layouts/cms-layout';
 
 const meta = {
@@ -54,6 +55,51 @@ export const WithUser: Story = {
       <div className="p-6 text-sm text-muted-foreground">Main content goes here</div>
     </CMSLayout>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    const wrapper = canvasElement.querySelector<HTMLElement>('[data-slot="layout-wrapper"]');
+    expect(wrapper).not.toBeNull();
+    const wrapperStyle = getComputedStyle(wrapper as HTMLElement);
+    expect(wrapperStyle.display).toBe('grid');
+    expect(wrapperStyle.gridTemplateRows).toMatch(/^\S+ \S+$/);
+    expect(wrapperStyle.minWidth).toBe('1056px');
+    expect(wrapperStyle.minHeight).toBe('640px');
+
+    const scrollContainer = canvasElement.querySelector<HTMLElement>('[data-slot="layout-scroll-container"]');
+    expect(scrollContainer).not.toBeNull();
+    expect(getComputedStyle(scrollContainer as HTMLElement).overflow).toBe('auto');
+
+    const header = canvasElement.querySelector<HTMLElement>('[data-slot="cms-layout-header"]');
+    expect(getComputedStyle(header as HTMLElement).gridRowStart).toBe('1');
+    expect(getComputedStyle(header as HTMLElement).gridColumnEnd).toBe('span 2');
+
+    const sidebar = canvasElement.querySelector<HTMLElement>('[data-slot="sidebar"]');
+    expect(getComputedStyle(sidebar as HTMLElement).gridColumnStart).toBe('1');
+    expect(getComputedStyle(sidebar as HTMLElement).gridRowStart).toBe('2');
+    expect(sidebar).toHaveAttribute('data-state', 'expanded');
+
+    // Regression guard: the sidebar's absolutely-positioned visible box must be contained by
+    // its own grid item (position: relative), not escape to the full-height wrapper and get
+    // tucked underneath the header.
+    expect(getComputedStyle(sidebar as HTMLElement).position).toBe('relative');
+    const sidebarContainer = canvasElement.querySelector<HTMLElement>('[data-slot="sidebar-container"]');
+    expect(getComputedStyle(sidebarContainer as HTMLElement).position).toBe('absolute');
+    const headerBottom = (header as HTMLElement).getBoundingClientRect().bottom;
+    const sidebarContainerTop = (sidebarContainer as HTMLElement).getBoundingClientRect().top;
+    expect(sidebarContainerTop).toBeGreaterThanOrEqual(headerBottom);
+
+    const main = canvasElement.querySelector<HTMLElement>('[data-slot="sidebar-inset"]');
+    expect(getComputedStyle(main as HTMLElement).gridColumnStart).toBe('2');
+    expect(getComputedStyle(main as HTMLElement).gridRowStart).toBe('2');
+
+    const trigger = canvas.getByRole('button', { name: /toggle sidebar/i });
+    await userEvent.click(trigger);
+    expect(sidebar).toHaveAttribute('data-state', 'collapsed');
+
+    await userEvent.click(trigger);
+    expect(sidebar).toHaveAttribute('data-state', 'expanded');
+  },
 };
 
 /** Header with a custom avatar image URL. */
