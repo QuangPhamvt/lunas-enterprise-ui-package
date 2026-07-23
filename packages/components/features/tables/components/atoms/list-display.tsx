@@ -1,6 +1,7 @@
 'use client';
 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+
 import { UITableEmpty } from './empty';
 
 /** Props for the {@link UITableListDisplay} component. */
@@ -34,7 +35,10 @@ export const UITableListDisplay: React.FC<Props> = ({ items, maxVisible = 3 }) =
   return (
     <div className="flex flex-wrap gap-1">
       {visible.map((item, i) => (
-        <span key={i} className="inline-flex items-center rounded-full border border-border bg-muted-weak px-2 py-0.5 text-text-positive text-xs">
+        <span
+          key={`item-${i.toString()}`}
+          className="weak inline-flex items-center rounded border border-border bg-white px-2 py-0.5 text-text-positive text-xs"
+        >
           {item}
         </span>
       ))}
@@ -49,7 +53,10 @@ export const UITableListDisplay: React.FC<Props> = ({ items, maxVisible = 3 }) =
             </TooltipTrigger>
             <TooltipContent align="start" className="flex max-w-64 flex-wrap gap-1 p-2">
               {overflow.map((item, i) => (
-                <span key={i} className="inline-flex items-center rounded-full border border-border px-2 py-0.5 text-text-negative text-xs">
+                <span
+                  key={`item-${i.toString()}`}
+                  className="inline-flex items-center rounded-full border border-border px-2 py-0.5 text-text-negative text-xs"
+                >
                   {item}
                 </span>
               ))}

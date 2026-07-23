@@ -94,7 +94,7 @@ export const UITableStatisticDisplay = memo(
           processedNum = applyRounding(num, precision, roundingMode);
         }
 
-        return processedNum.toLocaleString('en-US', formatOptions);
+        return processedNum.toLocaleString('vi-VN', formatOptions);
       },
       [roundingMode, formatOptions, precision]
     );
