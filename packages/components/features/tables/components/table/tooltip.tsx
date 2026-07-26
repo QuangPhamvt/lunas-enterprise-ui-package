@@ -6,7 +6,7 @@
  */
 import { useCallback } from 'react';
 
-import { ArrowRightIcon, BarChart2Icon, CirclePlus, DownloadIcon, LayoutDashboardIcon, RefreshCwIcon, SearchIcon } from 'lucide-react';
+import { ArrowRightIcon, BarChart2Icon, CirclePlus, CopyPlusIcon, DownloadIcon, LayoutDashboardIcon, RefreshCwIcon, SearchIcon } from 'lucide-react';
 
 import { useDebounceCallback } from '@customafk/react-toolkit/hooks/useDebounceCallback';
 import { cn } from '@customafk/react-toolkit/utils';
@@ -93,6 +93,8 @@ const ActionButton: React.FC<React.PropsWithChildren<React.ComponentProps<'butto
  * A toggle for `UITableSummaryBar` appears automatically when `summary` is
  * non-empty, and a toggle for `UITableAnalysisPanel` appears when
  * `showAnalysisPanel` is `true` (both set on `UITableProvider`).
+ * `onCreateMultiple` renders a separate "bulk create" button next to the
+ * single-item create button; omit it to hide the button entirely.
  *
  * @example
  * ```tsx
@@ -100,15 +102,17 @@ const ActionButton: React.FC<React.PropsWithChildren<React.ComponentProps<'butto
  *
  * <UITableTooltipActions
  *   onCreate={() => setOpenCreate(true)}
+ *   onCreateMultiple={() => setOpenBulkCreate(true)}
  *   onRefresh={() => refetch()}
  * />
  * ```
  */
 export const UITableTooltipActions: React.FC<{
   onCreate?: () => void;
+  onCreateMultiple?: () => void;
   onRefresh?: () => void;
   onDownload?: () => void;
-}> = ({ onCreate, onDownload, onRefresh }) => {
+}> = ({ onCreate, onCreateMultiple, onDownload, onRefresh }) => {
   const { table, csvData, csvFileName, title, showAnalysisPanel, summary } = useUITableContext();
   const { isOpen: isAnalysisOpen, toggle: toggleAnalysis } = useUITableAnalysisContext();
   const { isOpen: isSummaryOpen, toggle: toggleSummary } = useUITableSummaryContext();
@@ -130,6 +134,7 @@ export const UITableTooltipActions: React.FC<{
     <div className="flex [&>*:not(:first-child)]:rounded-l-none [&>*:not(:first-child)]:border-l-0 [&>*:not(:last-child)]:rounded-r-none">
       <ActionButton
         disabled={!onCreate}
+        aria-label="Tạo mới"
         onClick={e => {
           onCreate?.();
           e.stopPropagation();
@@ -139,7 +144,19 @@ export const UITableTooltipActions: React.FC<{
         <CirclePlus />
       </ActionButton>
       <ActionButton
+        disabled={!onCreateMultiple}
+        aria-label="Tạo nhiều"
+        onClick={e => {
+          onCreateMultiple?.();
+          e.stopPropagation();
+          e.preventDefault();
+        }}
+      >
+        <CopyPlusIcon />
+      </ActionButton>
+      <ActionButton
         disabled={!onRefresh}
+        aria-label="Làm mới"
         onClick={e => {
           onRefresh?.();
           e.stopPropagation();
@@ -150,6 +167,7 @@ export const UITableTooltipActions: React.FC<{
       </ActionButton>
       <ActionButton
         disabled={!isDownloadEnabled}
+        aria-label="Tải xuống"
         onClick={e => {
           handleDownload();
           e.stopPropagation();
@@ -217,9 +235,9 @@ export const UITableTooltip: React.FC<React.PropsWithChildren> = ({ children }) 
       <div className="flex w-full items-start justify-between gap-4">
         <div className="flex flex-col gap-0.5">
           <h3 className="font-semibold text-base text-text-positive">{title}</h3>
-          {description && <p className="text-sm text-muted-foreground">{description}</p>}
+          {!!description && <p className="text-muted-foreground text-sm">{description}</p>}
         </div>
-        {headerActions && <div className="flex items-center gap-2 shrink-0">{headerActions}</div>}
+        {!!headerActions && <div className="flex shrink-0 items-center gap-2">{headerActions}</div>}
       </div>
       <div className="flex w-full flex-1 justify-between gap-x-2">{children}</div>
     </div>

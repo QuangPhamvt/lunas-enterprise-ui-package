@@ -1,6 +1,6 @@
 {
   "name": "@customafk/lunas-ui",
-  "version": "0.2.78",
+  "version": "0.2.80",
   "description": "UI library for Lunas Enterprise",
   "type": "module",
   "author": {
@@ -111,6 +111,10 @@
     "./features/descriptions": {
       "require": "./dist/features/descriptions/index.cjs",
       "import": "./dist/features/descriptions/index.mjs"
+    },
+    "./features/file-icons": {
+      "require": "./dist/features/file-icons/index.cjs",
+      "import": "./dist/features/file-icons/index.mjs"
     },
     "./features/logo": {
       "require": "./dist/features/logo/index.cjs",

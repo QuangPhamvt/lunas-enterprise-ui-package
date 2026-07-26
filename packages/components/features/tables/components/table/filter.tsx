@@ -144,13 +144,13 @@ const SingleTagFilterEditor: React.FC<{
 }> = ({ value, definition, onChange }) => (
   <div className="flex flex-col gap-1 p-3">
     {(definition.options ?? []).length === 0 ? (
-      <p className="text-xs text-text-positive-muted">Không có tùy chọn</p>
+      <p className="text-text-positive-muted text-xs">Không có tùy chọn</p>
     ) : (
-      definition.options!.map(option => (
+      definition.options?.map(option => (
         <Label
           key={option.value}
           className={cn(
-            'flex items-center gap-2 bg-secondary-bg-subtle hover:bg-secondary-muted px-4 py-2 rounded transition-colors',
+            'flex items-center gap-2 rounded bg-secondary-bg-subtle px-4 py-2 transition-colors hover:bg-secondary-muted',
             value.value === option.value && 'bg-primary-muted hover:bg-primary-subtle'
           )}
         >
@@ -301,15 +301,15 @@ const FilterItem: React.FC<{
           type="button"
           variant="outline"
           color="muted"
-          className="flex-1 bg-white max-w-[calc(100%-32px)] justify-start"
+          className="max-w-[calc(100%-32px)] flex-1 justify-start bg-white"
           innerClassName="flex truncate gap-1.5"
         >
-          <span className="shrink-0 text-text-positive font-medium">{definition.label}</span>
-          <span className="truncate text-xs text-text-positive-weak">{formatFilterValue(filter.value, definition)}</span>
+          <span className="shrink-0 font-medium text-text-positive">{definition.label}</span>
+          <span className="truncate text-text-positive-weak text-xs">{formatFilterValue(filter.value, definition)}</span>
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-64 p-0" align="start" side="bottom">
-        <div className="border-b border-border px-3 py-2">
+        <div className="border-border border-b px-3 py-2">
           <div className="flex items-center gap-1.5">
             <span className="text-text-positive-muted">{TYPE_ICONS[definition.type]}</span>
             <p className="font-medium">{definition.label}</p>
@@ -424,7 +424,7 @@ export const UITableFilter = () => {
               </div>
               <Separator />
               {activeFilters.length === 0 ? (
-                <p className="py-6 text-center text-xs text-text-positive-muted">Không có bộ lọc nào</p>
+                <p className="py-6 text-center text-text-positive-muted text-xs">Không có bộ lọc nào</p>
               ) : (
                 <div className="flex flex-col gap-2 pt-1">
                   {activeFilters.map(filter => {
@@ -447,7 +447,7 @@ export const UITableFilter = () => {
         </div>
 
         {/* Vertical tab strip */}
-        <div className="flex h-full flex-col border-l border-border bg-muted-bg-subtle text-sm">
+        <div className="flex h-full flex-col border-border border-l bg-muted-bg-subtle text-sm">
           {/*<button
             type="button"
             className={cn('flex h-32 cursor-pointer flex-col items-center gap-y-2 p-2 py-4', tab === 'columns' && 'bg-card')}
@@ -464,7 +464,7 @@ export const UITableFilter = () => {
           >
             <ListFilterIcon size={18} />
             {activeFilters.length > 0 && (
-              <span className="absolute top-2 right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] leading-none text-primary-foreground">
+              <span className="absolute top-2 right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] text-primary-foreground leading-none">
                 {activeFilters.length}
               </span>
             )}

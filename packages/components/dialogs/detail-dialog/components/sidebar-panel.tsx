@@ -21,9 +21,11 @@ export type DetailDialogSidebarPanelProps = {
   content?: React.ReactNode;
   /** Arbitrary content rendered at the bottom of the sidebar footer. */
   footer?: React.ReactNode;
+  /** Width of the sidebar when expanded. Accepts any valid CSS width (e.g. `'18rem'`, `'320px'`). Defaults to `18rem`. */
+  width?: string;
 };
 
-export function DetailDialogSidebarPanel({ title, sidebarTitle, content, footer }: DetailDialogSidebarPanelProps) {
+export function DetailDialogSidebarPanel({ title: _, sidebarTitle, content, footer }: DetailDialogSidebarPanelProps) {
   return (
     <div className="col-start-1 row-span-2 row-start-1">
       <Sidebar>

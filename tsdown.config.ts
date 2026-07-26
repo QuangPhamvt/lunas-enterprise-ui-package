@@ -28,6 +28,7 @@ export default defineConfig([
 
       './packages/components/features/charts/index.tsx',
       './packages/components/features/descriptions/index.tsx',
+      './packages/components/features/file-icons/index.tsx',
       './packages/components/features/logo/index.tsx',
       './packages/components/features/search-modal/index.tsx',
       './packages/components/features/tables/index.tsx',

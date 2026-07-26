@@ -34,7 +34,7 @@ export type DetailDialogProps = {
  *   open={open}
  *   title="Order #1234"
  *   createdAt="2024-01-15T09:00:00Z"
- *   sidebar={{ title: 'Navigation', content: <nav>...</nav> }}
+ *   sidebar={{ title: 'Navigation', content: <nav>...</nav>, width: '22rem' }}
  *   onOpenChange={setOpen}
  * >
  *   <p>Detail content goes here.</p>
@@ -53,7 +53,7 @@ export const DetailDialog: React.FC<React.PropsWithChildren<DetailDialogProps>> 
 }) => {
   return (
     <DetailDialogWrapper open={open} onOpenChange={onOpenChange}>
-      <DetailDialogProvider>
+      <DetailDialogProvider sidebarWidth={sidebar?.width}>
         <DetailDialogSidebarPanel title={sidebar?.title} content={sidebar?.content} footer={sidebar?.footer} />
         <DetailDialogHeader title={title} createdAt={createdAt} headerComponent={headerComponent} />
         <DetailDialogContent isLoading={isLoading}>{children}</DetailDialogContent>

@@ -17,6 +17,7 @@ export function DetailDialogProvider({
   defaultOpen = true,
   open: openProp,
   onOpenChange: setOpenProp,
+  sidebarWidth,
   className,
   style,
   children,
@@ -28,6 +29,8 @@ export function DetailDialogProvider({
   open?: boolean;
   /** Callback fired when the open state changes in controlled mode. */
   onOpenChange?: (open: boolean) => void;
+  /** Width of the sidebar when expanded. Accepts any valid CSS width. Defaults to `SIDEBAR_WIDTH` (`'18rem'`). */
+  sidebarWidth?: string;
 }) {
   const contextValue = useSidebarState({ defaultOpen, open: openProp, onOpenChange: setOpenProp });
 
@@ -36,7 +39,7 @@ export function DetailDialogProvider({
       <TooltipProvider delayDuration={0}>
         <div
           data-slot="detail-dialog-wrapper"
-          style={{ '--sidebar-width': SIDEBAR_WIDTH, '--sidebar-width-icon': SIDEBAR_WIDTH_ICON, ...style } as React.CSSProperties}
+          style={{ '--sidebar-width': sidebarWidth ?? SIDEBAR_WIDTH, '--sidebar-width-icon': SIDEBAR_WIDTH_ICON, ...style } as React.CSSProperties}
           className={cn('group/sidebar-wrapper size-full min-h-[85dvh]', 'grid grid-cols-[auto_1fr] grid-rows-[auto_1fr]', className)}
           {...props}
         >
