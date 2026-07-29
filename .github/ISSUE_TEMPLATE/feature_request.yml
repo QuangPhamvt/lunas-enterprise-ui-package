@@ -1,0 +1,77 @@
+name: Feature request
+description: New or changed component / capability in the library
+title: "feat: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        See the `/contribution-workflow` skill for story-point sizing guidance before estimating.
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What should this component/feature do, and why?
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance criteria
+      placeholder: |
+        - [ ]
+        - [ ]
+    validations:
+      required: true
+  - type: dropdown
+    id: layer
+    attributes:
+      label: Affected layer
+      options:
+        - "ui/ (primitive)"
+        - "features/"
+        - "cards/"
+        - "dialogs/"
+        - "layouts/"
+        - "data-display/"
+        - "typography/"
+        - "pages/"
+        - "systems/"
+        - "New layer"
+    validations:
+      required: false
+  - type: textarea
+    id: api-sketch
+    attributes:
+      label: API sketch (props, variants)
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      options:
+        - "P0 - Critical (blocking, drop everything)"
+        - "P1 - High (this cycle)"
+        - "P2 - Medium (normal backlog)"
+        - "P3 - Low (nice to have)"
+      default: 2
+    validations:
+      required: true
+  - type: dropdown
+    id: story-points
+    attributes:
+      label: Effort estimate (story points)
+      description: Fibonacci scale — see `/contribution-workflow` for sizing guidance
+      options:
+        - "1 - trivial (< half a day)"
+        - "2 - small (~half a day)"
+        - "3 - small-medium (~1 day)"
+        - "5 - medium (~2-3 days)"
+        - "8 - large (~1 week)"
+        - "13 - very large (should be split)"
+        - "21 - too big (must be split before starting)"
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context

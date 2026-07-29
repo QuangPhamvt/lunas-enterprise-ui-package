@@ -32,7 +32,7 @@ const badgeVariants = cva(
       },
       pill: {
         true: 'rounded-full',
-        false: 'rounded-sm',
+        false: 'rounded',
       },
     },
     defaultVariants: {

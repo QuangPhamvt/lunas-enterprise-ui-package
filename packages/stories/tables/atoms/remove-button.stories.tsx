@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   tags: ['autodocs'],
-  title: 'UI Tables/Atoms/Remove Button',
+  title: 'Features/UI Tables/Atoms/Remove Button',
   component: UITableRemoveButton,
 } satisfies Meta<typeof UITableRemoveButton>;
 

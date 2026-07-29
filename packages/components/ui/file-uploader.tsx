@@ -1,14 +1,27 @@
 'use client';
 import { useCallback, useEffect } from 'react';
-import Dropzone, { type DropzoneProps, type FileRejection } from 'react-dropzone';
+
+import { Image, Trash2, Upload } from 'lucide-react';
+import { toast } from 'sonner';
+
 import { useControllableState } from '@customafk/react-toolkit/hooks/useControllableState';
 import { cn, formatBytes } from '@customafk/react-toolkit/utils';
 
-import { FileText, Image, Trash2, Upload } from 'lucide-react';
-import { toast } from 'sonner';
-
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
+import {
+  AudioFileIcon,
+  CsvFileIcon,
+  ExcelFileIcon,
+  type FileIconProps,
+  PdfFileIcon,
+  UnknownFileIcon,
+  VideoFileIcon,
+  WordFileIcon,
+  ZipFileIcon,
+} from '@/components/features/file-icons';
+
+import Dropzone, { type DropzoneProps, type FileRejection } from 'react-dropzone';
 
 /**
  * Props for the FileUploader component.
@@ -192,7 +205,7 @@ export function FileUploader(props: FileUploaderProps) {
     onValueChange?.(newFiles);
   }
 
-  // Revoke preview url when component unmounts
+  // biome-ignore lint/correctness/useExhaustiveDependencies: We only want to run this effect on unmount, so we don't need to include any dependencies.
   useEffect(() => {
     return () => {
       if (!files) return;
@@ -202,7 +215,6 @@ export function FileUploader(props: FileUploaderProps) {
         }
       });
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const isDisabled = disabled || (files?.length ?? 0) >= maxFileCount;
@@ -233,18 +245,18 @@ export function FileUploader(props: FileUploaderProps) {
             {isDragActive ? (
               <div className="flex flex-col items-center justify-center gap-4 sm:px-5">
                 <div className="rounded-full border border-dashed p-3">
-                  <Upload className="text-text-positive-muted size-7" aria-hidden="true" />
+                  <Upload className="size-7 text-text-positive-muted" aria-hidden="true" />
                 </div>
-                <p className="text-text-positive-muted font-medium">Drop the files here</p>
+                <p className="font-medium text-text-positive-muted">Drop the files here</p>
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center gap-4 sm:px-5">
                 <div className="rounded-full border border-dashed p-3">
                   <Upload size={iconSize || 24} className="text-muted-foreground" aria-hidden="true" />
                 </div>
-                {showText && (
+                {!!showText && (
                   <div className="flex flex-col gap-px">
-                    <p className="text-text-positive-weak text-xs font-medium">Drag {`'n'`} drop files here, or click to select files</p>
+                    <p className="font-medium text-text-positive-weak text-xs">Drag {`'n'`} drop files here, or click to select files</p>
                     <p className="text-text-positive-muted text-xs">
                       You can upload
                       {maxFileCount > 1
@@ -262,12 +274,12 @@ export function FileUploader(props: FileUploaderProps) {
       {files?.length ? (
         <div className="h-fit w-full overflow-y-auto">
           <div className="flex items-center justify-between px-3 py-2.5">
-            <div className="text-text-positive-weak flex items-center gap-1">
+            <div className="flex items-center gap-1 text-text-positive-weak">
               <Image size={16} aria-hidden="true" />
               <p className="text-sm">Ảnh đã tải lên ({files.length})</p>
             </div>
             <button
-              className="hover:text-text-positive text-text-positive-muted flex cursor-pointer items-center gap-1 transition-colors duration-200"
+              className="flex cursor-pointer items-center gap-1 text-text-positive-muted transition-colors duration-200 hover:text-text-positive"
               onClick={() => {
                 if (!files) return;
                 files.forEach(file => {
@@ -284,7 +296,7 @@ export function FileUploader(props: FileUploaderProps) {
           </div>
           <div className="flex flex-col gap-2.5">
             {files?.map((file, index) => (
-              <FileCard key={index} file={file} onRemove={() => onRemove(index)} progress={progresses?.[file.name]} />
+              <FileCard key={`${index.toString()}`} file={file} onRemove={() => onRemove(index)} progress={progresses?.[file.name]} />
             ))}
           </div>
         </div>
@@ -301,20 +313,20 @@ interface FileCardProps {
 
 function FileCard({ file, progress, onRemove }: FileCardProps) {
   return (
-    <div className="border-border-weak hover:border-border relative flex items-center gap-4 rounded-md border py-2 pr-3 pl-2 shadow-xs transition-colors">
+    <div className="relative flex items-center gap-4 rounded border border-border-weak py-2 pr-3 pl-2 shadow-xs transition-colors hover:border-border">
       <div className="flex flex-1 gap-2.5">
         {isFileWithPreview(file) ? <FilePreview file={file} /> : null}
         <div className="flex w-full flex-col gap-2">
           <div className="flex flex-col gap-y-0.5">
-            <p className="text-text-positive line-clamp-1 text-sm">{file.name}</p>
+            <p className="line-clamp-1 text-sm text-text-positive">{file.name}</p>
             <p className="text-text-positive-muted text-xs">{formatBytes(file.size)}</p>
           </div>
           {progress ? <Progress value={progress} /> : null}
         </div>
       </div>
       <div className="flex items-center gap-2">
-        <Button type="button" variant="ghost" color="secondary" size="icon" className="size-7" onClick={onRemove}>
-          <Trash2 size={16} className="text-text-positive-muted" aria-hidden="true" />
+        <Button type="button" variant="ghost" color="danger" size="icon" className="size-7" onClick={onRemove}>
+          <Trash2 size={16} aria-hidden="true" />
           <span className="sr-only">Remove file</span>
         </Button>
       </div>
@@ -330,10 +342,31 @@ interface FilePreviewProps {
   file: File & { preview: string };
 }
 
+const MIME_TYPE_ICON_MAP: Record<string, React.FC<FileIconProps>> = {
+  'application/pdf': PdfFileIcon,
+  'text/csv': CsvFileIcon,
+  'application/msword': WordFileIcon,
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document': WordFileIcon,
+  'application/vnd.ms-excel': ExcelFileIcon,
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ExcelFileIcon,
+  'application/zip': ZipFileIcon,
+  'application/x-zip-compressed': ZipFileIcon,
+};
+
 function FilePreview({ file }: FilePreviewProps) {
   if (file.type.startsWith('image/')) {
-    return <img src={file.preview} className="border-border aspect-square size-10 shrink-0 rounded border object-cover object-top shadow-sm" />;
+    return <img src={file.preview} className="aspect-square size-10 shrink-0 rounded border border-border object-cover object-top shadow-sm" />;
   }
 
-  return <FileText className="text-text-positive-muted size-10 border" aria-hidden="true" />;
+  if (file.type.startsWith('audio/')) {
+    return <AudioFileIcon size={40} className="size-10 shrink-0" aria-hidden="true" />;
+  }
+
+  if (file.type.startsWith('video/')) {
+    return <VideoFileIcon size={40} className="size-10 shrink-0" aria-hidden="true" />;
+  }
+
+  const Icon = MIME_TYPE_ICON_MAP[file.type] ?? UnknownFileIcon;
+
+  return <Icon size={40} className="size-10 shrink-0" aria-hidden="true" />;
 }

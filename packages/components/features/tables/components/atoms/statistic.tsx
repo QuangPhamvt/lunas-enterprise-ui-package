@@ -1,3 +1,4 @@
+'use client';
 import { memo, useCallback, useMemo } from 'react';
 
 import { cn } from '@customafk/react-toolkit/utils';
@@ -93,7 +94,7 @@ export const UITableStatisticDisplay = memo(
           processedNum = applyRounding(num, precision, roundingMode);
         }
 
-        return processedNum.toLocaleString('en-US', formatOptions);
+        return processedNum.toLocaleString('vi-VN', formatOptions);
       },
       [roundingMode, formatOptions, precision]
     );

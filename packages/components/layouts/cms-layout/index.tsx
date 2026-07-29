@@ -6,17 +6,17 @@ import { LogOutIcon } from 'lucide-react';
 
 import { CMSLayoutHeader, type CMSLayoutUser } from './components/header';
 import {
+  CMSLayoutMain,
+  CMSLayoutProvider,
   CMSLayoutSidebar,
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
-  CMSLayoutMain,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  CMSLayoutProvider,
 } from './components/sidebar';
 
 type NavItem = {
@@ -163,7 +163,7 @@ export const CMSLayout: React.FC<React.PropsWithChildren<CMSLayoutProps>> = ({
         onLogout={onLogout}
         logoutLabel={logoutLabel}
       />
-      <CMSLayoutSidebar variant="inset" collapsible="icon">
+      <CMSLayoutSidebar>
         <SidebarContent>
           {groups.map(group => (
             <SidebarContentGroup key={group.id} id={group.id} label={group.label}>

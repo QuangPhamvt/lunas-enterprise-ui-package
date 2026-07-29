@@ -53,6 +53,7 @@ export const DateField = memo<Props>(
     const _touched = field.state.meta.isDirty || field.state.meta.isTouched;
     const _isInvalid = _touched && !field.state.meta.isValid;
     const _isEmpty = required && field.state.value === null;
+    const _hasError = _touched && field.state.meta.errors.length > 0;
 
     const handleSelect = (date: Date) => {
       field.handleChange(date);
@@ -147,7 +148,7 @@ export const DateField = memo<Props>(
                 </PopoverContent>
               </Popover>
 
-              {_touched && showErrorMessage && <FieldError id={errorId} className="mt-1" errors={field.state.meta.errors} />}
+              {_touched && showErrorMessage && _hasError && <FieldError id={errorId} className="mt-1" errors={field.state.meta.errors} />}
               <FieldNote isShow={!!helperText}>{helperText}</FieldNote>
             </div>
           </FieldContentMain>

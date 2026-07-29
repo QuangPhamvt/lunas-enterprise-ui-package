@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   tags: ['autodocs'],
-  title: 'UI Tables/Atoms/Currency Display',
+  title: 'Features/UI Tables/Atoms/Currency Display',
   component: UITableCurrencyDisplay,
 } satisfies Meta<typeof UITableCurrencyDisplay>;
 

@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { useTanStackForm } from '@/components/features/tanstack-form';
 
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { TruckIcon } from 'lucide-react';
 
 const meta = {
   tags: ['autodocs'],
@@ -612,7 +613,7 @@ export const SectionForm: Story = {
       <div className="size-full bg-muted-bg-subtle p-4">
         <AppForm>
           <TanStackContainerForm>
-            <TanStackSectionForm title="Personal Information">
+            <TanStackSectionForm title="Personal Information" icon={<TruckIcon />}>
               <TanStackTitleField title="Your Details" description="Fill in your personal information." />
               <AppField
                 name="firstName"

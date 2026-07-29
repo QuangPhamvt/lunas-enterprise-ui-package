@@ -24,8 +24,6 @@ export const UITableMoreButton: React.FC<{
    * handler that receives the item's `id`.
    */
   items?: { id: string; label: string; onClick: (id: string) => void }[];
-  /** Reserved for future use; currently unused by the component. */
-  onClick?: () => void;
 }> = ({ items = [] }) => {
   return (
     <DropdownMenu>

@@ -25,6 +25,7 @@ export const UITableHeadRow = memo<TUITableHeadRow>(({ headerGroup, className, .
             <UITableHeadCellSelect
               key={header.id}
               isPinned={isPinned}
+              isLastCell={header.id === lastLeftPinnedHeaderId}
               isAllRowsSelected={isAllRowsSelected}
               onToggleAllRowsSelected={onToggleAllRowsSelected}
             />

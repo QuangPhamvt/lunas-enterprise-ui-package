@@ -270,7 +270,7 @@ const FieldNote = memo(({ isShow = true, className, children, ...props }: FieldN
     <div
       data-slot="field-note"
       className={cn(
-        'flex items-start gap-1.5 rounded border border-primary-muted/60 bg-primary-bg-subtle/80 px-2.5 py-2 text-text-positive-weak text-xs',
+        'flex items-start gap-1.5 rounded border border-primary-muted/60 bg-primary-bg-subtle/80 px-2.5 py-2 text-text-positive-weak text-xs mt-1',
         className
       )}
       {...props}

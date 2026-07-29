@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   tags: ['autodocs'],
-  title: 'UI Tables/Atoms/More Button',
+  title: 'Features/UI Tables/Atoms/More Button',
   component: UITableMoreButton,
 } satisfies Meta<typeof UITableMoreButton>;
 

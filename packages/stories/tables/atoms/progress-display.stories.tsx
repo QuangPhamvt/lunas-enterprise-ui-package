@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   tags: ['autodocs'],
-  title: 'UI Tables/Atoms/Progress Display',
+  title: 'Features/UI Tables/Atoms/Progress Display',
   component: UITableProgressDisplay,
 } satisfies Meta<typeof UITableProgressDisplay>;
 

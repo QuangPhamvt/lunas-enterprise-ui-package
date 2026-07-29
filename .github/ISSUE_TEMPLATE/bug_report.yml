@@ -1,0 +1,72 @@
+name: Bug report
+description: Something in the component library is broken
+title: "fix: "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What's broken?
+    validations:
+      required: true
+  - type: textarea
+    id: repro-steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: input
+    id: affected-component
+    attributes:
+      label: Affected component(s)
+      description: Which component under `packages/components/`? Link the Storybook story if one exists.
+    validations:
+      required: false
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      options:
+        - "P0 - Critical (blocking, drop everything)"
+        - "P1 - High (this cycle)"
+        - "P2 - Medium (normal backlog)"
+        - "P3 - Low (nice to have)"
+      default: 1
+    validations:
+      required: true
+  - type: dropdown
+    id: story-points
+    attributes:
+      label: Effort estimate (story points)
+      description: Fibonacci scale — see `/contribution-workflow` for sizing guidance
+      options:
+        - "1 - trivial (< half a day)"
+        - "2 - small (~half a day)"
+        - "3 - small-medium (~1 day)"
+        - "5 - medium (~2-3 days)"
+        - "8 - large (~1 week)"
+        - "13 - very large (should be split)"
+        - "21 - too big (must be split before starting)"
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context (screenshots, console errors)

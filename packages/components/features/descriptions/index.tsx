@@ -37,17 +37,25 @@ export const DescriptionItem: React.FC<
     orientation?: 'horizontal' | 'vertical';
     /** Optional node rendered in the top-right corner of the label area (e.g. an edit action). */
     action?: React.ReactNode;
+    /**
+     * Horizontal alignment of the label text within its column.
+     * @default 'start'
+     */
+    labelAlign?: 'start' | 'end';
   }>
-> = ({ label, labelColSpan = 3, orientation = 'horizontal', action, children }) => {
+> = ({ label, labelColSpan = 3, orientation = 'horizontal', action, labelAlign = 'start', children }) => {
   if (orientation === 'vertical') {
     return (
       <div data-slot="description-item" className="flex flex-col border-b border-b-border last:border-b-0">
         <div
           data-slot="description-item-label"
-          className="flex items-center justify-between border-b border-b-border bg-secondary-muted py-2 pr-2 pl-4 text-sm font-medium text-text-positive-weak"
+          className={cn(
+            'flex items-center border-b border-b-border bg-secondary-muted py-2 pr-2 pl-4 font-medium text-sm text-text-positive-weak',
+            labelAlign === 'end' ? 'justify-end' : 'justify-between'
+          )}
         >
           <span>{label}</span>
-          {action && <div className="shrink-0">{action}</div>}
+          {!!action && <div className="shrink-0">{action}</div>}
         </div>
         <div data-slot="description-item-value" className="flex flex-wrap items-center gap-2 py-3 pr-2 pl-4 text-sm text-text-positive">
           {children}
@@ -65,10 +73,13 @@ export const DescriptionItem: React.FC<
       <div
         data-slot="description-item-label"
         style={{ gridColumn: `span ${labelColSpan} / span ${labelColSpan}` }}
-        className="flex min-w-full items-center justify-between overflow-x-hidden text-wrap break-all border-r border-r-border bg-secondary-muted py-3 pr-2 pl-4 text-sm font-medium text-text-positive-weak tabular-nums"
+        className={cn(
+          'flex min-w-full items-center overflow-x-hidden text-wrap break-all border-r border-r-border bg-secondary-muted py-3 pr-2 pl-4 font-medium text-sm text-text-positive-weak tabular-nums',
+          labelAlign === 'end' ? 'justify-end' : 'justify-between'
+        )}
       >
         <span>{label}</span>
-        {action && <div className="shrink-0 pr-1">{action}</div>}
+        {!!action && <div className="shrink-0 pr-1">{action}</div>}
       </div>
       <div
         data-slot="description-item-value"
@@ -107,10 +118,10 @@ export const DescriptionHeader: React.FC<{
       className={cn('sticky top-0 z-10 flex items-center justify-between gap-4 border-b border-b-border bg-card px-4 py-3', className)}
     >
       <div className="flex flex-col gap-0.5">
-        <p className="text-sm font-semibold text-text-positive">{title}</p>
-        {description && <p className="text-xs text-text-positive-muted">{description}</p>}
+        <p className="font-semibold text-sm text-text-positive">{title}</p>
+        {!!description && <p className="text-text-positive-weak text-xs">{description}</p>}
       </div>
-      {extra && <div className="shrink-0">{extra}</div>}
+      {!!extra && <div className="shrink-0">{extra}</div>}
     </div>
   );
 };
@@ -134,7 +145,7 @@ export const DescriptionSection: React.FC<{
 }> = ({ title, className }) => {
   return (
     <div data-slot="description-section" className={cn('flex items-center gap-3 border-b border-b-border px-4 py-2.5', className)}>
-      {title && <p className="shrink-0 text-xs font-semibold uppercase tracking-widest text-text-positive-muted">{title}</p>}
+      {!!title && <p className="shrink-0 font-semibold text-text-positive-weak text-xs uppercase tracking-widest">{title}</p>}
       <div className="h-px flex-1 bg-border" />
     </div>
   );
@@ -150,11 +161,15 @@ const DescriptionLoadingSkeleton: React.FC<{ rows: number }> = ({ rows }) => (
       <div className="h-5 w-16 rounded bg-border-weak" />
     </div>
     {Array.from({ length: rows }).map((_, i) => (
-      <div key={i} style={{ display: 'grid', gridTemplateColumns: 'repeat(12, minmax(0, 1fr))' }} className="grid border-b border-b-border last:border-b-0">
-        <div style={{ gridColumn: 'span 3 / span 3' }} className="flex items-center border-r border-r-border bg-secondary-muted py-3 pl-4 pr-2">
+      <div
+        key={`${i.toLocaleString()}`}
+        style={{ display: 'grid', gridTemplateColumns: 'repeat(12, minmax(0, 1fr))' }}
+        className="grid border-b border-b-border last:border-b-0"
+      >
+        <div style={{ gridColumn: 'span 3 / span 3' }} className="flex items-center border-r border-r-border bg-secondary-muted py-3 pr-2 pl-4">
           <div className="h-3 w-20 rounded bg-border" />
         </div>
-        <div style={{ gridColumn: 'span 9 / span 9' }} className="flex items-center py-3 pl-4 pr-2">
+        <div style={{ gridColumn: 'span 9 / span 9' }} className="flex items-center py-3 pr-2 pl-4">
           <div className="h-3 w-28 rounded bg-border-weak" />
         </div>
       </div>

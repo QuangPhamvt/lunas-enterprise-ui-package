@@ -4,8 +4,7 @@ import { memo } from 'react';
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { Statistic } from '@/components/data-display/statistic';
-
-import { useUITableContext } from '../../hooks/use-context';
+import { useUITableContext, useUITableSummaryContext } from '../../hooks/use-context';
 import type { SummaryItem } from '../../types';
 
 const trendAccent: Record<NonNullable<SummaryItem['trend']>, string> = {
@@ -16,8 +15,9 @@ const trendAccent: Record<NonNullable<SummaryItem['trend']>, string> = {
 
 export const UITableSummaryBar = memo(() => {
   const { summary, onSummaryItemClick } = useUITableContext();
+  const { isOpen } = useUITableSummaryContext();
 
-  if (!summary || summary.length === 0) return null;
+  if (!isOpen || !summary || summary.length === 0) return null;
 
   return (
     <div data-slot="table-summary-bar" className="w-full overflow-x-auto px-2 pb-1">
@@ -49,7 +49,7 @@ export const UITableSummaryBar = memo(() => {
 
               <div className="flex flex-1 flex-col gap-2 px-5 py-4">
                 {/* Label */}
-                <span className="text-[11px] font-semibold uppercase tracking-widest text-text-positive-weak">{item.label}</span>
+                <span className="font-semibold text-[11px] text-text-positive-weak uppercase tracking-widest">{item.label}</span>
 
                 {/* Value */}
                 {item.value !== null && item.value !== undefined ? (
@@ -63,11 +63,11 @@ export const UITableSummaryBar = memo(() => {
                     className="font-bold"
                   />
                 ) : (
-                  <span className="text-xl font-bold tabular-nums text-text-positive-strong">—</span>
+                  <span className="font-bold text-text-positive-strong text-xl tabular-nums">—</span>
                 )}
 
                 {/* Description */}
-                {item.description && <span className="text-xs text-text-positive-weak">{item.description}</span>}
+                {!!item.description && <span className="text-text-positive-weak text-xs">{item.description}</span>}
               </div>
             </div>
           );

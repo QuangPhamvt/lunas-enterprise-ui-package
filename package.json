@@ -1,6 +1,6 @@
 {
   "name": "@customafk/lunas-ui",
-  "version": "0.2.68",
+  "version": "0.2.80",
   "description": "UI library for Lunas Enterprise",
   "type": "module",
   "author": {
@@ -111,6 +111,10 @@
     "./features/descriptions": {
       "require": "./dist/features/descriptions/index.cjs",
       "import": "./dist/features/descriptions/index.mjs"
+    },
+    "./features/file-icons": {
+      "require": "./dist/features/file-icons/index.cjs",
+      "import": "./dist/features/file-icons/index.mjs"
     },
     "./features/logo": {
       "require": "./dist/features/logo/index.cjs",
@@ -264,6 +268,10 @@
       "require": "./dist/ui/collapsible.cjs",
       "import": "./dist/ui/collapsible.mjs"
     },
+    "./ui/combobox": {
+      "require": "./dist/ui/combobox.cjs",
+      "import": "./dist/ui/combobox.mjs"
+    },
     "./ui/command": {
       "require": "./dist/ui/command.cjs",
       "import": "./dist/ui/command.mjs"
@@ -392,6 +400,10 @@
       "require": "./dist/ui/spinner.cjs",
       "import": "./dist/ui/spinner.mjs"
     },
+    "./ui/status": {
+      "require": "./dist/ui/status.cjs",
+      "import": "./dist/ui/status.mjs"
+    },
     "./ui/switch": {
       "require": "./dist/ui/switch.cjs",
       "import": "./dist/ui/switch.mjs"
@@ -471,7 +483,7 @@
     "lucide-react": "^0.545.0",
     "nanoid": "^5.1.6",
     "next-themes": "^0.4.6",
-    "radix-ui": "^1.6.0",
+    "radix-ui": "^1.6.2",
     "react": "^19.2.0",
     "react-country-flag": "^3.1.0",
     "react-day-picker": "^9.9.0",

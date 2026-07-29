@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Contribution workflow
+    url: https://github.com/QuangPhamvt/lunas-enterprise-ui-package/blob/master/CLAUDE.md
+    about: Branch naming, commit convention, and PR flow — see the /contribution-workflow skill

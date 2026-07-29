@@ -25,11 +25,12 @@ import {
 } from '@/components/features/tables';
 
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, fn, userEvent, within } from 'storybook/test';
 import { generateMockCsvData, MockDataColumns, MockDataFilterDefinitions, MockDataTables, type TMockDataTable } from './mock-data';
 
 const meta: Meta<typeof UITableProvider<TMockDataTable>> = {
   tags: ['autodocs'],
-  title: 'UI Tables',
+  title: 'Features/UI Tables',
   component: UITableProvider,
   subcomponents: {
     UITableTooltip,
@@ -344,6 +345,59 @@ export const WithCsvExport: Story = {
       </UITableProvider>
     </div>
   ),
+};
+
+// ─── Toolbar Actions ──────────────────────────────────────────────────────────
+
+const ToolbarActionsDemo: React.FC<{
+  onCreate?: () => void;
+  onCreateMultiple?: () => void;
+  onRefresh?: () => void;
+  onDownload?: () => void;
+}> = ({ onCreate, onCreateMultiple, onRefresh, onDownload }) => (
+  <div className="h-[calc(100vh-4rem)] w-full">
+    <UITableProvider<TUser> title="Users" columns={UserColumns} data={UserData} totalRows={UserData.length}>
+      <UITableWrapper>
+        <UITableTooltip>
+          <UITableTooltipFilter onSearch={v => console.log('search:', v)} />
+          <UITableTooltipActions onCreate={onCreate} onCreateMultiple={onCreateMultiple} onRefresh={onRefresh} onDownload={onDownload} />
+        </UITableTooltip>
+        <UITableContainer />
+      </UITableWrapper>
+    </UITableProvider>
+  </div>
+);
+
+export const ToolbarActions: StoryObj<typeof ToolbarActionsDemo> = {
+  name: 'Toolbar Actions',
+  render: args => <ToolbarActionsDemo {...args} />,
+  args: {
+    onCreate: fn(),
+    onCreateMultiple: fn(),
+    onRefresh: fn(),
+    onDownload: fn(),
+  },
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+
+    const createButton = await canvas.findByRole('button', { name: 'Tạo mới' }, { timeout: 8000 });
+    await expect(createButton).not.toBeDisabled();
+    await userEvent.click(createButton);
+    await expect(args.onCreate).toHaveBeenCalledTimes(1);
+
+    const createMultipleButton = canvas.getByRole('button', { name: 'Tạo nhiều' });
+    await expect(createMultipleButton).not.toBeDisabled();
+    await userEvent.click(createMultipleButton);
+    await expect(args.onCreateMultiple).toHaveBeenCalledTimes(1);
+
+    const refreshButton = canvas.getByRole('button', { name: 'Làm mới' });
+    await userEvent.click(refreshButton);
+    await expect(args.onRefresh).toHaveBeenCalledTimes(1);
+
+    const downloadButton = canvas.getByRole('button', { name: 'Tải xuống' });
+    await userEvent.click(downloadButton);
+    await expect(args.onDownload).toHaveBeenCalledTimes(1);
+  },
 };
 
 // ─── No Toolbar / Minimal ─────────────────────────────────────────────────────

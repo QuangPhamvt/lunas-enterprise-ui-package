@@ -144,7 +144,7 @@ export const TextField = memo<Props>(
     const _countText = counter ? (maxLength ? `${_count} / ${maxLength} ký tự` : `${_count} ký tự`) : null;
 
     // Skip the bottom row entirely when neither error nor counter will render
-    const _showBottomRow = counter || (_touched && showErrorMessage);
+    const _showBottomRow = counter || (_touched && showErrorMessage && _hasErrors);
 
     const onChange = useCallback<React.ChangeEventHandler<HTMLInputElement>>(
       ({ target: { value } }) => {

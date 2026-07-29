@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   tags: ['autodocs'],
-  title: 'UI Tables/Atoms/Date Display',
+  title: 'Features/UI Tables/Atoms/Date Display',
   component: UITableDateDisplay,
 } satisfies Meta<typeof UITableDateDisplay>;
 

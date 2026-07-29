@@ -45,8 +45,8 @@ export const UITableCurrencyDisplay = memo(({ value, currency = 'USD', locale = 
       style: 'currency',
       currency,
       currencyDisplay: display,
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
     }).format(num);
   }, [value, currency, locale, display]);
 

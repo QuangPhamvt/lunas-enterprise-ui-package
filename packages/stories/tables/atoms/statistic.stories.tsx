@@ -4,7 +4,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   tags: ['autodocs'],
-  title: 'UI Tables/Atoms/Statistic Display',
+  title: 'Features/UI Tables/Atoms/Statistic Display',
   component: UITableStatisticDisplay,
 } satisfies Meta<typeof UITableStatisticDisplay>;
 

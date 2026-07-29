@@ -10,6 +10,7 @@ import type {
   TTableInnerTableContext,
   TTableInnerWrapperContext,
   TTableRowContext,
+  TTableSummaryContext,
 } from '../types';
 
 export const TableInnerWrapperContext = createContext<TTableInnerWrapperContext | null>(null);
@@ -88,6 +89,16 @@ export const useUITableAnalysisContext = () => {
   const ctx = use(TableAnalysisContext);
   if (!ctx) {
     throw new Error('useUITableAnalysisContext must be used within a UITableProvider');
+  }
+  return ctx;
+};
+
+export const TableSummaryContext = createContext<TTableSummaryContext | null>(null);
+
+export const useUITableSummaryContext = () => {
+  const ctx = use(TableSummaryContext);
+  if (!ctx) {
+    throw new Error('useUITableSummaryContext must be used within a UITableProvider');
   }
   return ctx;
 };

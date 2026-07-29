@@ -1,5 +1,14 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 
+/**
+ * Strong-colored trailing border marking the last left-pinned column, so users can see it's
+ * pinned over scrollable content. Forced `!important` because `tableRowVariants`' `[&_td]:border-r-border`
+ * descendant selector otherwise outranks a plain utility class set directly on the `<td>`.
+ */
+const PINNED_LEFT_EDGE_BORDER = 'border-r! !border-r-border-strong/30';
+/** Strong-colored leading border marking the first right-pinned column (mirrored). */
+const PINNED_RIGHT_EDGE_BORDER = 'border-l! !border-l-border-strong/30';
+
 export const tableHeadCellOptionTriggerVariants = cva([
   'absolute right-2 z-10 p-0.5 opacity-0 bg-card',
   'cursor-pointer rounded-full transition-all',
@@ -63,8 +72,8 @@ export const tableHeadCellVariants = cva(['group flex'], {
     },
   },
   compoundVariants: [
-    { isPinned: 'left', isLastCell: true, className: 'border-r border-r-border' },
-    { isPinned: 'right', isFirstCell: true, className: 'border-l border-l-border' },
+    { isPinned: 'left', isLastCell: true, className: PINNED_LEFT_EDGE_BORDER },
+    { isPinned: 'right', isFirstCell: true, className: PINNED_RIGHT_EDGE_BORDER },
   ],
 });
 
@@ -104,7 +113,12 @@ export const tableCellSelectVariants = cva(['group-hover:bg-muted-muted!'], {
       right: 'sticky',
       false: 'relative',
     },
+    isLastCell: {
+      true: '',
+      false: '',
+    },
   },
+  compoundVariants: [{ isPinned: 'left', isLastCell: true, className: PINNED_LEFT_EDGE_BORDER }],
   defaultVariants: {
     isPinned: undefined,
   },
@@ -129,8 +143,8 @@ export const tableCellVariants = cva(['group-hover:bg-muted-muted!'], {
     },
   },
   compoundVariants: [
-    { isPinned: 'left', isLastCell: true, className: 'border-r border-r-border' },
-    { isPinned: 'right', isFirstCell: true, className: 'border-l border-l-border' },
+    { isPinned: 'left', isLastCell: true, className: PINNED_LEFT_EDGE_BORDER },
+    { isPinned: 'right', isFirstCell: true, className: PINNED_RIGHT_EDGE_BORDER },
   ],
 });
 

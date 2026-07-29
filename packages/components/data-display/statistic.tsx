@@ -106,7 +106,7 @@ export const Statistic = memo(
         if (typeof precision === 'number' && precision >= 0) {
           processedNum = applyRounding(num, precision);
         }
-        return processedNum.toLocaleString('en-US', formatOptions);
+        return processedNum.toLocaleString('vi-VN', formatOptions);
       },
       [applyRounding, formatOptions, precision]
     );

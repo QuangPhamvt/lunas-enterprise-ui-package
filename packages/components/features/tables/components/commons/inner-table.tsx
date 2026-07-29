@@ -1,5 +1,5 @@
 'use client';
-import { memo, useEffect, useRef } from 'react';
+import { memo, useEffect } from 'react';
 
 import { ACTION_WIDTH, SELECT_WIDTH } from '../../constants';
 import { useUITableInnerTableContext } from '../../hooks/use-context';
@@ -7,8 +7,7 @@ import type { TUITableInnerTable } from '../../types';
 import { tableInnerTableVariants } from '../table.variants';
 
 export const UITableInnerTable = memo<TUITableInnerTable>(({ children, ...props }) => {
-  const { table, innerTableId, totalSize } = useUITableInnerTableContext();
-  const tableRef = useRef<HTMLTableElement>(null);
+  const { table, innerTableId, totalSize, tableRef } = useUITableInnerTableContext();
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: table element.
   useEffect(() => {

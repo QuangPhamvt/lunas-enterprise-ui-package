@@ -28,6 +28,7 @@ export default defineConfig([
 
       './packages/components/features/charts/index.tsx',
       './packages/components/features/descriptions/index.tsx',
+      './packages/components/features/file-icons/index.tsx',
       './packages/components/features/logo/index.tsx',
       './packages/components/features/search-modal/index.tsx',
       './packages/components/features/tables/index.tsx',
@@ -74,6 +75,7 @@ export default defineConfig([
       './packages/components/ui/chart.tsx',
       './packages/components/ui/checkbox.tsx',
       './packages/components/ui/collapsible.tsx',
+      './packages/components/ui/combobox.tsx',
       './packages/components/ui/command.tsx',
       './packages/components/ui/context-menu.tsx',
       './packages/components/ui/dialog.tsx',
@@ -105,6 +107,7 @@ export default defineConfig([
       './packages/components/ui/slider.tsx',
       './packages/components/ui/sonner.tsx',
       './packages/components/ui/spinner.tsx',
+      './packages/components/ui/status.tsx',
       './packages/components/ui/switch.tsx',
       './packages/components/ui/table.tsx',
       './packages/components/ui/tabs.tsx',

@@ -1,9 +1,10 @@
 'use client';
 
 import { memo, useCallback, useMemo } from 'react';
-import { cva, type VariantProps } from 'class-variance-authority';
+
 import { cn } from '@customafk/react-toolkit/utils';
 
+import { cva, type VariantProps } from 'class-variance-authority';
 import { DescriptionEmpty } from './empty';
 
 const applyRounding = (num: number, precisionValue: number, roundingMode?: 'round' | 'floor' | 'ceil') => {
@@ -84,7 +85,7 @@ export const DescriptionStatistic = memo(
         if (typeof precision === 'number' && precision >= 0) {
           processedNum = applyRounding(num, precision, roundingMode);
         }
-        return processedNum.toLocaleString('en-US', formatOptions);
+        return processedNum.toLocaleString('vi-VN', formatOptions);
       },
       [roundingMode, formatOptions, precision]
     );
@@ -115,9 +116,9 @@ export const DescriptionStatistic = memo(
 
     return (
       <div data-slot="description-statistic" className={cn(descriptionStatisticVariants({ size, trend }), className)}>
-        {Prefix && <span data-slot="description-statistic-prefix">{Prefix}</span>}
+        {!!Prefix && <span data-slot="description-statistic-prefix">{Prefix}</span>}
         <p data-slot="description-statistic-value">{finalFormattedValue}</p>
-        {Suffix && <span data-slot="description-statistic-suffix">{Suffix}</span>}
+        {!!Suffix && <span data-slot="description-statistic-suffix">{Suffix}</span>}
       </div>
     );
   }
