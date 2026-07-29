@@ -1,0 +1,55 @@
+name: Chore
+description: Non-user-facing work — refactor, dependency bump, docs, tooling, tests
+title: "chore: "
+labels: ["chore"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: What needs to be done
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why
+      description: e.g. refactor target from `/optimization-targets`, dependency upgrade, missing Storybook `play` coverage
+    validations:
+      required: true
+  - type: input
+    id: affected-layer
+    attributes:
+      label: Affected component(s) / layer
+    validations:
+      required: false
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      options:
+        - "P0 - Critical (blocking, drop everything)"
+        - "P1 - High (this cycle)"
+        - "P2 - Medium (normal backlog)"
+        - "P3 - Low (nice to have)"
+      default: 2
+    validations:
+      required: true
+  - type: dropdown
+    id: story-points
+    attributes:
+      label: Effort estimate (story points)
+      description: Fibonacci scale — see `/contribution-workflow` for sizing guidance
+      options:
+        - "1 - trivial (< half a day)"
+        - "2 - small (~half a day)"
+        - "3 - small-medium (~1 day)"
+        - "5 - medium (~2-3 days)"
+        - "8 - large (~1 week)"
+        - "13 - very large (should be split)"
+        - "21 - too big (must be split before starting)"
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context

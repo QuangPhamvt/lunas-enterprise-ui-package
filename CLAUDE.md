@@ -84,6 +84,7 @@ Project-specific skills live in `.claude/skills/<name>/SKILL.md` and can be invo
 
 | Skill | Invocation | Contents |
 |---|---|---|
+| Contribution Workflow | `/contribution-workflow` | Task-first flow shared with `lunas-cms-v2`/`lunas-enterprise-api`: create/link a GitHub issue before implementing, branch naming, Conventional Commits, PR template. Load before starting any feature/fix/chore |
 | React Mechanics | `/react-mechanics` | State, Context, custom hooks, `useEffect` issues, ref forwarding, prop drilling inventory |
 | Code Architecture | `/code-architecture` | Folder hierarchy, naming conventions, module boundaries, reusability map |
 | Tech Stack | `/tech-stack` | Full peer + dev dependency table with concrete library usage examples |
