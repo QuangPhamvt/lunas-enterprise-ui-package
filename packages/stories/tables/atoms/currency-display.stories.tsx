@@ -68,3 +68,15 @@ export const Empty: Story = {
   },
   render: args => <UITableCurrencyDisplay {...args} />,
 };
+
+export const TrendOverride: Story = {
+  name: 'Trend Override (independent of sign)',
+  args: {
+    value: 9800.5,
+    currency: 'VND',
+    locale: 'vi-VN',
+    trend: 'down',
+    size: 'md',
+  },
+  render: args => <UITableCurrencyDisplay {...args} />,
+};

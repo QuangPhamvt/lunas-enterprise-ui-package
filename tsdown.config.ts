@@ -39,6 +39,7 @@ export default defineConfig([
       './packages/components/layouts/payment-layout/index.tsx',
       './packages/components/layouts/flex.tsx',
       './packages/components/layouts/grid.tsx',
+      './packages/components/layouts/ui-grid.tsx',
 
       './packages/components/pages/FeatureDeveloping.tsx',
       './packages/components/pages/FeatureFixing.tsx',

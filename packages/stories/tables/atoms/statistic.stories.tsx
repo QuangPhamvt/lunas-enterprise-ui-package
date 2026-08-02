@@ -36,3 +36,28 @@ export const Empty: Story = {
   },
   render: args => <UITableStatisticDisplay {...args} />,
 };
+
+export const Colorized: Story = {
+  args: {
+    value: 1234567.89,
+    precision: 2,
+    showTrailingZeros: true,
+    size: 'md',
+    prefix: '$',
+    colorize: true,
+  },
+  render: args => <UITableStatisticDisplay {...args} />,
+};
+
+export const TrendOverride: Story = {
+  name: 'Trend Override (independent of sign)',
+  args: {
+    value: 1234567.89,
+    precision: 2,
+    showTrailingZeros: true,
+    size: 'md',
+    prefix: '$',
+    trend: 'down',
+  },
+  render: args => <UITableStatisticDisplay {...args} />,
+};

@@ -140,10 +140,13 @@ const UITableFilter = lazyField<Record<string, never>>(() => import('./component
 const UITableAnalysisPanel = lazyField<Record<string, never>>(() =>
   import('./components/table/analysis-panel').then(m => ({ default: m.UITableAnalysisPanel }))
 );
+UITableAnalysisPanel.displayName = 'UITableAnalysisPanel';
 const UITableSummaryBar = lazyField<Record<string, never>>(() => import('./components/table/summary-bar').then(m => ({ default: m.UITableSummaryBar })));
+UITableSummaryBar.displayName = 'UITableSummaryBar';
 const UITableTooltip = lazyField<ComponentProps<typeof UITableTooltipType>>(() =>
   import('./components/table/tooltip').then(m => ({ default: m.UITableTooltip }))
 );
+UITableTooltip.displayName = 'UITableTooltip';
 const UITableTooltipFilter = lazyField<ComponentProps<typeof UITableTooltipFilterType>>(() =>
   import('./components/table/tooltip').then(m => ({ default: m.UITableTooltipFilter }))
 );

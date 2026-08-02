@@ -20,7 +20,11 @@ export const tableHeadCellOptionTriggerVariants = cva([
 
 export const tableEmptyDisplayVariants = cva(['sticky left-0 flex flex-1 items-center justify-center bg-transparent text-text-positive-weak opacity-100']);
 
-export const tableWrapperVariants = cva(['relative m-0 flex size-full flex-col flex-nowrap items-start justify-start gap-2']);
+export const tableWrapperVariants = cva([
+  'relative m-0 grid @container/table-wrapper grid-cols-1 size-full min-h-96 min-w-0 justify-items-start content-start gap-2',
+]);
+
+export const tableWrapperRowVariants = cva(['w-full min-w-0 min-h-0']);
 
 export const tableInnerWrapperVariants = cva(['relative w-full flex-1 min-h-0 overflow-auto border-b border-b-border border-l border-l-border']);
 

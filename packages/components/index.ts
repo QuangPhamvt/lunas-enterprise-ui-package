@@ -47,6 +47,7 @@ export * from './layouts/cms-layout/index';
 export * from './layouts/payment-layout/index';
 export { Flex } from './layouts/flex';
 export { Grid } from './layouts/grid';
+export { UIGrid, UIGridItem } from './layouts/ui-grid';
 
 // ─── Pages ────────────────────────────────────────────────────────────────────
 export { FeatureDeveloping } from './pages/FeatureDeveloping';

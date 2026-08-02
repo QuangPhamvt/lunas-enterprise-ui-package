@@ -16,7 +16,7 @@ export const UITableContainer: React.FC<React.PropsWithChildren> = ({ children }
     <ResizablePanelGroup
       direction="horizontal"
       style={{ direction: table.options.columnResizeDirection }}
-      className="relative flex w-full max-w-full flex-1 gap-1 overflow-auto border-t border-t-border border-r border-r-border p-0 text-sm"
+      className="relative flex h-full w-full max-w-full min-h-0 min-w-0 gap-1 overflow-auto border-t border-t-border border-r border-r-border p-0 text-sm"
     >
       <ResizablePanel data-slot="table-scroll-host" className="relative flex flex-col">
         <UITableInnerWrapper>
@@ -47,3 +47,4 @@ export const UITableContainer: React.FC<React.PropsWithChildren> = ({ children }
     </ResizablePanelGroup>
   );
 };
+UITableContainer.displayName = 'UITableContainer';
