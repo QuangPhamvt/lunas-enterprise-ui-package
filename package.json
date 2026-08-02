@@ -104,6 +104,10 @@
       "require": "./dist/dialogs/loading-dialog.cjs",
       "import": "./dist/dialogs/loading-dialog.mjs"
     },
+    "./dialogs/side-panel": {
+      "require": "./dist/dialogs/side-panel.cjs",
+      "import": "./dist/dialogs/side-panel.mjs"
+    },
     "./features/charts": {
       "require": "./dist/features/charts/index.cjs",
       "import": "./dist/features/charts/index.mjs"

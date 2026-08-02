@@ -26,6 +26,8 @@ export { ErrorDialog } from './dialogs/error-dialog';
 export type { ErrorDialogProps } from './dialogs/error-dialog';
 export { LoadingDialog } from './dialogs/loading-dialog';
 export type { LoadingDialogProps } from './dialogs/loading-dialog';
+export { SidePanel } from './dialogs/side-panel';
+export type { SidePanelProps } from './dialogs/side-panel';
 
 // ─── Features ─────────────────────────────────────────────────────────────────
 export * from './features/charts/index';

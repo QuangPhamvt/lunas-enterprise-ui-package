@@ -117,7 +117,7 @@ function DialogContent({
 
 /** Layout wrapper for the dialog title and description, stacked vertically with left alignment on wider screens. */
 function DialogHeader({ className, ...props }: React.ComponentProps<'div'>) {
-  return <div data-slot="dialog-header" className={cn('flex flex-col gap-2 text-center sm:text-left', className)} {...props} />;
+  return <div data-slot="dialog-header" className={cn('flex flex-col gap-1 text-center sm:text-left', className)} {...props} />;
 }
 
 /** Layout wrapper for dialog action buttons, stacked on mobile and right-aligned in a row on wider screens. */
@@ -132,7 +132,13 @@ function DialogTitle({ className, ...props }: React.ComponentProps<typeof Dialog
 
 /** Muted supporting text that describes the dialog's purpose; read by screen readers alongside the title. */
 function DialogDescription({ className, ...props }: React.ComponentProps<typeof DialogPrimitive.Description>) {
-  return <DialogPrimitive.Description data-slot="dialog-description" className={cn(paragraphVariants({ variant: 'muted' }), className)} {...props} />;
+  return (
+    <DialogPrimitive.Description
+      data-slot="dialog-description"
+      className={cn(paragraphVariants({ variant: 'muted' }), 'not-first:mt-0 md:text-sm', className)}
+      {...props}
+    />
+  );
 }
 
 export { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogOverlay, DialogPortal, DialogTitle, DialogTrigger };

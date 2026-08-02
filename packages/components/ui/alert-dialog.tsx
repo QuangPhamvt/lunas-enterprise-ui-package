@@ -100,7 +100,7 @@ function AlertDialogContent({ className, ...props }: React.ComponentProps<typeof
 
 /** Layout wrapper for the alert dialog title and description. */
 function AlertDialogHeader({ className, ...props }: React.ComponentProps<'div'>) {
-  return <div data-slot="alert-dialog-header" className={cn('flex flex-col gap-2 text-center sm:text-left', className)} {...props} />;
+  return <div data-slot="alert-dialog-header" className={cn('flex flex-col gap-1 text-center sm:text-left', className)} {...props} />;
 }
 
 /** Layout wrapper for the cancel and action buttons at the bottom of the alert dialog. */
@@ -118,7 +118,7 @@ function AlertDialogDescription({ className, ...props }: React.ComponentProps<ty
   return (
     <AlertDialogPrimitive.Description
       data-slot="alert-dialog-description"
-      className={cn(paragraphVariants({ variant: 'muted' }), 'not-first:mt-0', className)}
+      className={cn(paragraphVariants({ variant: 'muted' }), 'not-first:mt-0 md:text-sm', className)}
       {...props}
     />
   );

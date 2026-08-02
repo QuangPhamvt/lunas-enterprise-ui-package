@@ -25,6 +25,7 @@ export default defineConfig([
       './packages/components/dialogs/confirm-dialog.tsx',
       './packages/components/dialogs/error-dialog.tsx',
       './packages/components/dialogs/loading-dialog.tsx',
+      './packages/components/dialogs/side-panel.tsx',
 
       './packages/components/features/charts/index.tsx',
       './packages/components/features/descriptions/index.tsx',
