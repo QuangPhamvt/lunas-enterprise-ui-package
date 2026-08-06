@@ -33,9 +33,20 @@ export type { SidePanelProps } from './dialogs/side-panel';
 export * from './features/charts/index';
 export {
   Description,
+  DescriptionCollapsibleSection,
+  DescriptionGroup,
   DescriptionHeader,
   DescriptionItem,
+  DescriptionRow,
+  DescriptionSearch,
   DescriptionSection,
+} from './features/descriptions/index';
+export type {
+  TDescriptionLabelColSpan,
+  TDescriptionLabelSpan,
+  TDescriptionRowColumns,
+  TDescriptionRowColumnsConfig,
+  TDescriptionSize,
 } from './features/descriptions/index';
 export * from './features/descriptions/components';
 export { SearchModal } from './features/search-modal/index';

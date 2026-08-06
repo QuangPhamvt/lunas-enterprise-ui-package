@@ -141,10 +141,13 @@ type Props = {
    * @default 'center'
    */
   align?: 'start' | 'center' | 'end' | 'baseline' | 'stretch';
-} & VariantProps<typeof flexVariants>;
+} & VariantProps<typeof flexVariants> &
+  Omit<React.ComponentPropsWithoutRef<'div'>, 'className'>;
 
 /**
  * A flexible, variant-driven flex container built on CVA and TailwindCSS.
+ *
+ * Any other `div` attribute (`data-slot`, `id`, `role`, `onClick`, ...) is forwarded to the root element.
  *
  * @example
  * ```tsx
@@ -163,9 +166,10 @@ type Props = {
  * </Flex>
  * ```
  */
-export const Flex = memo(({ vertical, wrap, width, margin, padding, gap, justify, align, className, children }: React.PropsWithChildren<Props>) => {
+export const Flex = memo(({ vertical, wrap, width, margin, padding, gap, justify, align, className, children, ...rest }: React.PropsWithChildren<Props>) => {
   return (
     <div
+      {...rest}
       className={cn(
         flexVariants({
           vertical,

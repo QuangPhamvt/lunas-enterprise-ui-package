@@ -178,7 +178,8 @@ type UIGridProps = React.PropsWithChildren<{
    * @default 'md'
    */
   gap?: keyof typeof GAP_CLASS;
-}>;
+}> &
+  Omit<React.ComponentPropsWithoutRef<'div'>, 'className'>;
 
 /**
  * A 12-column CSS Grid container with a named `@container` context, so both its
@@ -195,14 +196,14 @@ type UIGridProps = React.PropsWithChildren<{
  * </UIGrid>
  * ```
  */
-export const UIGrid = memo(({ cols = 12, gap = 'md', className, children }: UIGridProps) => {
+export const UIGrid = memo(({ cols = 12, gap = 'md', className, children, ...rest }: UIGridProps) => {
   // A container-query subject can never be the same element that establishes the
   // container — `@container/ui-grid` must live on an ancestor of whatever reads
   // `@sm/ui-grid:` etc., so the responsive `cols` classes need their own inner
   // element, separate from the one that declares the named container.
   return (
     <div data-slot="ui-grid" className="@container/ui-grid w-full">
-      <div data-slot="ui-grid-columns" className={cn('grid w-full', resolveGridColsClasses(cols), GAP_CLASS[gap], className)}>
+      <div data-slot="ui-grid-columns" {...rest} className={cn('grid w-full', resolveGridColsClasses(cols), GAP_CLASS[gap], className)}>
         {children}
       </div>
     </div>
@@ -354,7 +355,8 @@ type UIGridItemProps = React.PropsWithChildren<{
    * @default null
    */
   fallback?: React.ReactNode;
-}>;
+}> &
+  Omit<React.ComponentPropsWithoutRef<'div'>, 'className'>;
 
 /**
  * A single cell inside a `UIGrid`. Spans `12` of the grid's columns by default
@@ -371,10 +373,10 @@ type UIGridItemProps = React.PropsWithChildren<{
  * </UIGrid>
  * ```
  */
-export const UIGridItem = memo(({ span = 12, className, children, suspense = true, fallback = null }: UIGridItemProps) => {
+export const UIGridItem = memo(({ span = 12, className, children, suspense = true, fallback = null, ...rest }: UIGridItemProps) => {
   const content = suspense ? <Suspense fallback={fallback}>{children}</Suspense> : children;
   return (
-    <div data-slot="ui-grid-item" className={cn(resolveItemSpanClasses(span), className)}>
+    <div data-slot="ui-grid-item" {...rest} className={cn(resolveItemSpanClasses(span), className)}>
       {content}
     </div>
   );

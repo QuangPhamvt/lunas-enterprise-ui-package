@@ -1,7 +1,7 @@
 'use client';
 
-import { Badge } from '@/components/ui/badge';
 import type { BadgeProps } from '@/components/ui/badge';
+import { Badge } from '@/components/ui/badge';
 
 import { DescriptionEmpty } from './empty';
 

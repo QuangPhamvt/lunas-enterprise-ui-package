@@ -1,8 +1,8 @@
 'use client';
 
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { Paragraph } from '@/components/typography/paragraph';
 
+import { Paragraph } from '@/components/typography/paragraph';
 import { DescriptionEmpty } from './empty';
 
 export const DescriptionName: React.FC<{

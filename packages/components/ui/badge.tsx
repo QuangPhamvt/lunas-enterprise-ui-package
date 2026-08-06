@@ -98,5 +98,27 @@ function Badge({ className, variant, color, size, pill, ...props }: BadgeProps) 
   return <span className={cn(badgeVariants({ variant, color, pill, size }), className)} {...props} />;
 }
 
+/**
+ * Dot indicator fill color, keyed by the same `color` union as `badgeVariants`, so the palette
+ * has a single home instead of being re-declared by each consumer that pairs a status dot with a Badge.
+ */
+export const badgeDotVariants = cva('inline-block size-1.5 shrink-0 rounded-full', {
+  variants: {
+    color: {
+      primary: 'bg-primary',
+      secondary: 'bg-secondary',
+      muted: 'bg-muted',
+      accent: 'bg-accent',
+      info: 'bg-info',
+      success: 'bg-success',
+      warning: 'bg-warning',
+      danger: 'bg-danger',
+    },
+  },
+  defaultVariants: {
+    color: 'primary',
+  },
+});
+
 // eslint-disable-next-line react-refresh/only-export-components
 export { Badge, badgeVariants };

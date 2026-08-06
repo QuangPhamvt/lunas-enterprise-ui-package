@@ -50,8 +50,18 @@ export type DescriptionStatisticProps = VariantProps<typeof descriptionStatistic
   showTrailingZeros?: boolean;
   value: number | string | null | undefined;
   className?: string;
+  /**
+   * Renders `DescriptionEmpty` for a literal `0` value, same as any other unset/invalid input.
+   * Set to `false` to display a genuine `0` amount instead.
+   * @default true
+   */
+  emptyOnZero?: boolean;
 };
 
+/**
+ * The value-cell to use for numbers inside a `DescriptionItem` — prefer this over the standalone
+ * `Statistic` (`data-display/statistic`) so empty/invalid values consistently fall back to `DescriptionEmpty`.
+ */
 export const DescriptionStatistic = memo(
   ({
     decimalSeparator = '.',
@@ -65,6 +75,7 @@ export const DescriptionStatistic = memo(
     trend = 'neutral',
     value = 0,
     className,
+    emptyOnZero = true,
   }: DescriptionStatisticProps) => {
     const formatOptions = useMemo((): Intl.NumberFormatOptions => {
       const options: Intl.NumberFormatOptions = {};
@@ -110,7 +121,7 @@ export const DescriptionStatistic = memo(
       return processedValue.replace(/,/g, groupSeparator).replace(/\./g, decimalSeparator);
     }, [processedValue, decimalSeparator, groupSeparator]);
 
-    if (finalFormattedValue === '0' || finalFormattedValue === 'N/A' || !finalFormattedValue) {
+    if ((emptyOnZero && finalFormattedValue === '0') || finalFormattedValue === 'N/A' || !finalFormattedValue) {
       return <DescriptionEmpty />;
     }
 

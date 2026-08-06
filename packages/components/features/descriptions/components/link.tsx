@@ -1,6 +1,7 @@
 'use client';
 
 import { ExternalLinkIcon, LinkIcon } from 'lucide-react';
+
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { DescriptionEmpty } from './empty';
