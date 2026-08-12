@@ -8,7 +8,7 @@ export const textEditorVariants = cva(['flex flex-col overflow-hidden rounded-md
     },
     size: {
       sm: 'text-xs [&_.ProseMirror]:min-h-24 [&_.ProseMirror]:px-2.5 [&_.ProseMirror]:py-1.5',
-      md: '',
+      md: 'text-sm',
       lg: 'text-base [&_.ProseMirror]:min-h-56 [&_.ProseMirror]:px-4 [&_.ProseMirror]:py-3',
     },
   },

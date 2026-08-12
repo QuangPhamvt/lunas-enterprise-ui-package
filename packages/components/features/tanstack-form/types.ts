@@ -1,3 +1,5 @@
+import type { TextEditorProps } from '@/components/features/text-editor';
+
 // ─── Shared primitives ────────────────────────────────────────────────────────
 
 /** Layout axis for a field's label–input arrangement. */
@@ -112,7 +114,22 @@ export type TextareaFieldProps = {
 };
 
 /** Props for {@link TextEditorField} — a rich-text (WYSIWYG) editor field. */
-export type TextEditorFieldProps = {
+export type TextEditorFieldProps = Pick<
+  TextEditorProps,
+  | 'maxLength'
+  | 'showCharacterCount'
+  | 'enableLink'
+  | 'enableBubbleMenu'
+  | 'enableTaskList'
+  | 'enableHighlight'
+  | 'enableColor'
+  | 'enableImage'
+  | 'enableTable'
+  | 'enableSlashCommand'
+  | 'onImageUpload'
+  | 'variant'
+  | 'size'
+> & {
   /** Field label displayed above the editor. */
   label: string;
   /** Secondary text rendered below the label. */

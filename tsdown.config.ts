@@ -46,7 +46,7 @@ export default defineConfig([
       './packages/components/pages/FeatureFixing.tsx',
       './packages/components/pages/NotAuthorized.tsx',
       './packages/components/pages/NotFound.tsx',
-      './packages/components/pages/LoginPage.tsx',
+      './packages/components/pages/LoginPage/index.tsx',
       './packages/components/pages/RegisterPage.tsx',
       './packages/components/pages/VerifyEmailPage.tsx',
 

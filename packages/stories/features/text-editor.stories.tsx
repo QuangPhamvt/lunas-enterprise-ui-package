@@ -4,6 +4,16 @@ import { useForm } from 'react-hook-form';
 import { TextEditor } from '@/components/features/text-editor';
 
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import {
+  CODE_HIGHLIGHT_CONTENT,
+  DEEP_WORK_ARTICLE_CONTENT,
+  LONG_ARTICLE_CONTENT,
+  mockImageUpload,
+  NESTED_LIST_CONTENT,
+  RICH_CONTENT,
+  TABLE_CONTENT,
+  TASK_CONTENT,
+} from './text-editor.mock-data';
 
 const meta = {
   title: 'Features/TextEditor',
@@ -39,31 +49,6 @@ export const Controlled: Story = {
     );
   },
 };
-
-const RICH_CONTENT = `
-<h1>Document Title</h1>
-<p>This is a paragraph with <strong>bold</strong>, <em>italic</em>, <u>underline</u>, and <s>strikethrough</s> text.</p>
-<h2>Heading 2</h2>
-<p>You can write <code>inline code</code> or switch to a full code block:</p>
-<pre><code>const greeting = 'Hello, World!';
-console.log(greeting);</code></pre>
-<h3>Heading 3 — Lists</h3>
-<ul>
-  <li>Bullet item one</li>
-  <li>Bullet item two</li>
-  <li>Bullet item three</li>
-</ul>
-<ol>
-  <li>First ordered item</li>
-  <li>Second ordered item</li>
-  <li>Third ordered item</li>
-</ol>
-<blockquote>
-  <p>This is a blockquote. Great for callouts or citations.</p>
-</blockquote>
-<hr>
-<p style="text-align: center">Centered paragraph below the rule.</p>
-`.trim();
 
 export const RichContent: Story = {
   render: () => (
@@ -133,12 +118,19 @@ export const WithBubbleMenu: Story = {
   ),
 };
 
-const TASK_CONTENT = `<ul data-type="taskList"><li data-type="taskItem" data-checked="true"><label><input type="checkbox" checked="checked"></label><div><p>Design the new editor API</p></div></li><li data-type="taskItem" data-checked="false"><label><input type="checkbox"></label><div><p>Implement link extension</p></div></li><li data-type="taskItem" data-checked="false"><label><input type="checkbox"></label><div><p>Write Storybook stories</p></div></li><li data-type="taskItem" data-checked="false"><label><input type="checkbox"></label><div><p>Add character count footer</p></div></li></ul>`;
-
 export const WithTaskList: Story = {
   render: () => (
     <div className="w-full max-w-2xl">
       <TextEditor enableTaskList defaultValue={TASK_CONTENT} placeholder="Click the checklist button in the toolbar to create task items..." />
+    </div>
+  ),
+};
+
+/** Nested bullet lists get a distinct marker per depth, and nested ordered lists chain the parent's number (1.1, 1.1.2…) instead of restarting at a/b/c. */
+export const WithNestedLists: Story = {
+  render: () => (
+    <div className="w-full max-w-2xl">
+      <TextEditor defaultValue={NESTED_LIST_CONTENT} placeholder="Press Tab at the start of a list item to nest it, Shift+Tab to un-nest..." />
     </div>
   ),
 };
@@ -190,10 +182,14 @@ export const AllFeatures: Story = {
         enableTaskList
         enableHighlight
         enableColor
+        enableImage
+        enableTable
+        enableSlashCommand
+        onImageUpload={mockImageUpload}
         showCharacterCount
         maxLength={5000}
         defaultValue={RICH_CONTENT}
-        placeholder="All features enabled — links, bubble menu, task list, highlight, color, character count..."
+        placeholder="All features enabled — try / for quick commands, links, images, tables, highlight, color..."
       />
     </div>
   ),
@@ -262,12 +258,140 @@ export const DocEditor: Story = {
           enableTaskList
           enableHighlight
           enableColor
+          enableImage
+          enableTable
+          enableSlashCommand
+          onImageUpload={mockImageUpload}
           showCharacterCount
           editorClassName="flex-1 overflow-y-auto min-h-[60vh]"
-          placeholder="Start writing your document..."
+          placeholder="Start writing your document... try typing / for quick commands"
           defaultValue={RICH_CONTENT}
         />
       </div>
     </div>
+  ),
+};
+
+export const WithImage: Story = {
+  render: () => (
+    <div className="w-full max-w-2xl">
+      <TextEditor
+        enableImage
+        onImageUpload={mockImageUpload}
+        placeholder="Click the image button, drop a file, or paste an image..."
+        defaultValue="<p>Use the image button in the toolbar, or drag-and-drop / paste an image directly into the editor.</p>"
+      />
+    </div>
+  ),
+};
+
+export const WithTable: Story = {
+  render: () => (
+    <div className="w-full max-w-2xl">
+      <TextEditor enableTable defaultValue={TABLE_CONTENT} placeholder="Insert a table from the toolbar..." />
+    </div>
+  ),
+};
+
+export const WithCodeHighlight: Story = {
+  render: () => (
+    <div className="w-full max-w-2xl">
+      <TextEditor defaultValue={CODE_HIGHLIGHT_CONTENT} placeholder="Type ``` or use the code block button..." />
+    </div>
+  ),
+};
+
+export const WithSlashCommand: Story = {
+  render: () => (
+    <div className="w-full max-w-2xl">
+      <TextEditor
+        enableSlashCommand
+        enableTaskList
+        enableTable
+        enableImage
+        onImageUpload={mockImageUpload}
+        placeholder="Type / on an empty line to open the quick-insert menu..."
+      />
+    </div>
+  ),
+};
+
+/**
+ * A realistic, long-form blog post exercising every feature at once — multiple heading
+ * levels, long paragraphs, lists, a task list, a table, two syntax-highlighted code blocks,
+ * two images, links, highlight/color, and horizontal rules. Long enough to require real
+ * scrolling, which is what actually exercises the sticky toolbar and the debounced
+ * `onChange` path under sustained typing/editing — a single short paragraph never triggers
+ * either.
+ */
+export const LongArticle: Story = {
+  parameters: { layout: 'fullscreen' },
+  render: () => (
+    <div className="flex min-h-screen flex-col bg-muted-muted/40 p-8">
+      <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col">
+        <p className="mb-4 text-text-positive-weak text-xs">
+          Bài viết dài, đủ mọi tính năng cùng lúc — cuộn xuống để kiểm tra sticky toolbar và cảm nhận gõ có bị lag không.
+        </p>
+        <TextEditor
+          variant="outline"
+          size="lg"
+          enableLink
+          enableBubbleMenu
+          enableTaskList
+          enableHighlight
+          enableColor
+          enableImage
+          enableTable
+          enableSlashCommand
+          onImageUpload={mockImageUpload}
+          showCharacterCount
+          editorClassName="flex-1 overflow-y-auto"
+          placeholder="Start writing..."
+          defaultValue={LONG_ARTICLE_CONTENT}
+        />
+      </div>
+    </div>
+  ),
+};
+
+/**
+ * A different, prose-heavy ~2500-word article (no editor chrome at all — `readOnly` hides
+ * the toolbar) rendered as a "published post" reader view: byline header above, article body
+ * at a comfortable reading width. Deliberately a different topic/content from `LongArticle`
+ * so this reads as a genuine article rather than the same fixture reused. The article's own
+ * `<h1>` is the page title — no separate title element is rendered above it.
+ */
+export const ReadOnlyArticle: Story = {
+  parameters: { layout: 'fullscreen' },
+  render: () => (
+    <article className="min-h-screen bg-background px-8 py-12">
+      <div className="mx-auto w-full max-w-3xl">
+        <p className="mb-2 font-medium text-primary text-xs uppercase tracking-wide">Năng suất làm việc</p>
+        <div className="mb-8 flex items-center gap-2 text-text-positive-weak text-sm">
+          <span>Đội ngũ Vận hành</span>
+          <span aria-hidden="true">·</span>
+          <time dateTime="2026-08-07">7 tháng 8, 2026</time>
+          <span aria-hidden="true">·</span>
+          <span>12 phút đọc</span>
+        </div>
+        {/* Every extension present in `DEEP_WORK_ARTICLE_CONTENT` must stay enabled here too —
+        `readOnly` only disables editing, it doesn't change which node/mark types Tiptap's
+        schema accepts; anything unregistered (link, highlight, task list, table, image)
+        would otherwise be silently dropped when the stored HTML is parsed back in. */}
+        <TextEditor
+          readOnly
+          variant="ghost"
+          size="lg"
+          enableLink
+          enableTaskList
+          enableHighlight
+          enableColor
+          enableImage
+          enableTable
+          defaultValue={DEEP_WORK_ARTICLE_CONTENT}
+          className="border-0"
+        />
+      </div>
+    </article>
   ),
 };

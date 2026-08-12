@@ -1,7 +1,8 @@
 import z from 'zod';
 
-import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useTanStackForm } from '@/components/features/tanstack-form';
+
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
   tags: ['autodocs'],
@@ -63,6 +64,40 @@ export const WithHelperText: Story = {
                 placeholder="Begin your article here..."
                 helperText="Supports bold, italic, underline, headings, lists, and text alignment."
                 tooltip="Use the toolbar to format your content."
+              />
+            )}
+          />
+        </TanStackSectionForm>
+      </TanStackContainerForm>
+    );
+  },
+};
+
+export const WithRichFeatures: Story = {
+  render: () => {
+    const { AppField, TanStackContainerForm, TanStackSectionForm } = useTanStackForm({
+      defaultValues: {
+        content: '',
+      },
+    });
+    return (
+      <TanStackContainerForm>
+        <TanStackSectionForm title="Text Editor Field — Rich Features">
+          <AppField
+            name="content"
+            children={({ TextEditorField }) => (
+              <TextEditorField
+                label="Blog Content"
+                description="Feature flags (link, table, image, highlight, color, max length…) now flow through the form field wrapper."
+                placeholder="Write your post..."
+                enableLink
+                enableHighlight
+                enableColor
+                enableTable
+                enableSlashCommand
+                showCharacterCount
+                maxLength={5000}
+                size="lg"
               />
             )}
           />

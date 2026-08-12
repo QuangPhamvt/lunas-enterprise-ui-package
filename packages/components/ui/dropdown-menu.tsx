@@ -53,7 +53,7 @@ function DropdownMenuContent({ className, sideOffset = 4, align = 'start', ...pr
           'bg-popover text-text-positive',
           'z-50 min-w-32',
           'overflow-y-auto overflow-x-hidden',
-          'rounded-md p-1.5 shadow-dropdown',
+          'rounded py-1.5 px-0.5 shadow-dropdown',
           'max-h-(--radix-dropdown-menu-content-available-height)',
           'origin-(--radix-dropdown-menu-content-transform-origin)',
           'data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
@@ -96,8 +96,8 @@ function DropdownMenuItem({
       data-inset={inset}
       data-variant={variant}
       className={cn(
-        'relative flex cursor-pointer select-none items-center gap-2 rounded-md px-2 py-2.5 text-sm outline-hidden transition-colors',
-        'focus:bg-muted-muted focus:text-text-positive-strong',
+        'relative flex cursor-pointer select-none items-center gap-2 rounded px-2 py-2.5 text-sm outline-hidden transition-colors',
+        'focus:bg-muted-weak/30 focus:text-text-positive-strong',
         'data-inset:pl-8',
         'data-disabled:pointer-events-none data-disabled:opacity-50',
         'data-[variant=destructive]:text-danger',
