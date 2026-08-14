@@ -68,7 +68,10 @@ export const LoginPage = ({
   useEffect(() => {
     if (!open) {
       setStep('form');
+      setEmail('');
+      setPassword('');
       setOtp('');
+      setShowPassword(false);
       setFieldErrors({});
       setMethod('password');
     }

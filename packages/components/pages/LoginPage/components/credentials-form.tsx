@@ -26,7 +26,7 @@ export interface CredentialsFormProps {
   onForgotPassword?: () => void;
   onRegister?: () => void;
   onClose: () => void;
-  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  onSubmit: (e: React.SubmitEvent<HTMLFormElement>) => void;
 }
 
 export const CredentialsForm = memo(function CredentialsForm({
