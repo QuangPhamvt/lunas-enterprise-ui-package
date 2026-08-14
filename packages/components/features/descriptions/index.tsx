@@ -50,7 +50,7 @@ export const DescriptionItem: React.FC<
         <div
           data-slot="description-item-label"
           className={cn(
-            'flex items-center border-b border-b-border bg-secondary-muted py-2 pr-2 pl-4 font-medium text-sm text-text-positive-weak',
+            'flex items-center border-b border-b-border bg-secondary-weak py-2 pr-2 pl-4 font-medium text-sm text-text-positive-weak',
             labelAlign === 'end' ? 'justify-end' : 'justify-between'
           )}
         >
@@ -74,7 +74,7 @@ export const DescriptionItem: React.FC<
         data-slot="description-item-label"
         style={{ gridColumn: `span ${labelColSpan} / span ${labelColSpan}` }}
         className={cn(
-          'flex min-w-full items-center overflow-x-hidden text-wrap break-all border-r border-r-border bg-secondary-muted py-3 pr-2 pl-4 font-medium text-sm text-text-positive-weak tabular-nums',
+          'flex min-w-full items-center overflow-x-hidden text-wrap break-all border-r border-r-border bg-secondary-weak py-3 pr-2 pl-4 font-medium text-sm text-text-negative tabular-nums',
           labelAlign === 'end' ? 'justify-end' : 'justify-between'
         )}
       >

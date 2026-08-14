@@ -22,7 +22,7 @@ export const tableEmptyDisplayVariants = cva(['sticky left-0 flex flex-1 items-c
 
 export const tableWrapperVariants = cva(['relative m-0 flex size-full flex-col flex-nowrap items-start justify-start gap-2']);
 
-export const tableInnerWrapperVariants = cva(['relative w-full flex-1 min-h-0 overflow-auto border-b border-b-border border-l border-l-border']);
+export const tableInnerWrapperVariants = cva(['relative w-full flex-1 min-h-0 overflow-auto border-b border-b-border']);
 
 export const tableInnerTableVariants = cva(['grid w-full table-fixed caption-bottom border-collapse border-spacing-0 flex-col content-start']);
 
@@ -38,10 +38,7 @@ export const tableHeadVariants = cva([
   '[&_th]:transition-all',
   '[&_th]:duration-300',
   '[&_th]:whitespace-nowrap',
-  '[&_th]:border-border',
-  '[&_th]:border-r',
-  '[&_th]:first:border-l-0',
-  '[&_tr_th:not([data-pinned=false])]:bg-card',
+  '[&_tr_th:not([data-pinned=false])]:bg-secondary-bg-subtle',
 ]);
 
 export const tableHeadRowVariants = cva(['flex']);
@@ -93,7 +90,6 @@ export const tableBodyVariants = cva([
   '[&_td]:px-4',
   '[&_td]:py-2.5',
   '[&_td]:align-middle',
-  '[&_td]:border-border',
   '[&_td]:data-[selected=true]:bg-muted-muted!',
   '[&_td]:data-[selected=true]:hover:bg-muted-muted!',
   '[&_td>div]:inline-flex',
@@ -101,12 +97,12 @@ export const tableBodyVariants = cva([
   '[&_td>div]:w-full',
   '[&_td:not([data-pinned=false])]:z-20',
   '[&_td:not([data-pinned=false])]:sticky',
-  '[&_td:not([data-pinned=false])]:bg-muted-bg-subtle',
+  '[&_td:not([data-pinned=false])]:bg-secondary-bg-subtle',
 ]);
 
-export const tableRowVariants = cva(['group transition-colors hover:bg-muted-muted hover:[&_td]:bg-muted-muted! [&_td]:border-r [&_td]:border-r-border']);
+export const tableRowVariants = cva(['group transition-colors hover:bg-secondary-bg-subtle hover:[&_td]:bg-secondary-bg-subtle!']);
 
-export const tableCellSelectVariants = cva(['group-hover:bg-muted-muted!'], {
+export const tableCellSelectVariants = cva(['group-hover:bg-secondary-bg-subtle!'], {
   variants: {
     isPinned: {
       left: 'sticky',
@@ -124,9 +120,9 @@ export const tableCellSelectVariants = cva(['group-hover:bg-muted-muted!'], {
   },
 });
 
-export const tableCellActionsVariants = cva(['sticky border-r-0! inset-y-0 right-0 z-30 flex items-center pr-4 group-hover:bg-muted-muted!']);
+export const tableCellActionsVariants = cva(['sticky border-r-0! inset-y-0 right-0 z-30 flex items-center pr-4 group-hover:bg-secondary-bg-subtle!']);
 
-export const tableCellVariants = cva(['group-hover:bg-muted-muted!'], {
+export const tableCellVariants = cva(['group-hover:bg-secondary-bg-subtle!'], {
   variants: {
     isPinned: {
       left: '',
@@ -165,15 +161,15 @@ export const tableFooterVariants = cva(['shrink-0 flex w-full justify-center bor
 
 export const tableFooterRowVariants = cva(['flex w-full', 'text-[13px] font-medium text-text-positive-weak']);
 
-export const tableFooterCellVariants = cva(['flex flex-none items-center overflow-hidden whitespace-nowrap px-4 py-2', 'border-r border-r-border'], {
+export const tableFooterCellVariants = cva(['flex flex-none items-center overflow-hidden whitespace-nowrap px-4 py-2'], {
   variants: {
     isPinned: {
-      left: 'sticky z-20 bg-white',
-      right: 'sticky z-20 bg-white',
+      left: 'sticky z-20 bg-secondary-bg-subtle',
+      right: 'sticky z-20 bg-secondary-bg-subtle',
       false: 'relative',
     },
-    isFirstCell: { true: 'border-l border-l-border', false: '' },
-    isLastCell: { true: 'border-r border-r-border', false: '' },
+    isFirstCell: { true: '', false: '' },
+    isLastCell: { true: '', false: '' },
   },
 });
 

@@ -48,20 +48,20 @@ export const Default: Story = {
           <PaletteBox color="bg-secondary-border-subtle" />
         </PaletteGrid>
 
-        <PaletteGrid title="Muted">
-          <PaletteBox color="bg-muted-muted" />
-          <PaletteBox color="bg-muted-weak" />
-          <PaletteBox color="bg-muted" />
-          <PaletteBox color="bg-muted-strong" />
-          <PaletteBox color="bg-muted-intense" />
-        </PaletteGrid>
-
         <PaletteGrid title="Accent">
           <PaletteBox color="bg-accent-muted" />
           <PaletteBox color="bg-accent-weak" />
           <PaletteBox color="bg-accent" />
           <PaletteBox color="bg-accent-strong" />
           <PaletteBox color="bg-accent-intense" />
+        </PaletteGrid>
+
+        <PaletteGrid title="Muted">
+          <PaletteBox color="bg-muted-muted" />
+          <PaletteBox color="bg-muted-weak" />
+          <PaletteBox color="bg-muted" />
+          <PaletteBox color="bg-muted-strong" />
+          <PaletteBox color="bg-muted-intense" />
         </PaletteGrid>
 
         <PaletteGrid title="Info">
