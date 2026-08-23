@@ -1,8 +1,17 @@
-/* ProseMirror editor content styles */
+/* ProseMirror editor content styles
+   Font sizes/margins below use `em` (not `rem`) so the whole type scale — headings,
+   paragraphs, lists — scales together with the `size` variant (sm/md/lg sets the
+   component's own font-size; `rem` would ignore that and always read the page root). */
 .lunas-text-editor .ProseMirror {
   outline: none;
   min-height: 8rem;
   padding: 0.5rem 0.75rem;
+}
+
+/* First block shouldn't carry its normal top margin — avoids a lopsided gap before the
+   very first heading/paragraph in the document. */
+.lunas-text-editor .ProseMirror > :first-child {
+  margin-top: 0 !important;
 }
 
 /* Placeholder */
@@ -14,46 +23,58 @@
   pointer-events: none;
 }
 
-/* Headings */
+/* Headings — tighter line-height and slight negative tracking at large sizes reads as
+   more "designed", the way editorial/essay typography usually looks; generous margin-top
+   separates sections while margin-bottom stays tight so a heading visually "owns" the
+   paragraph that follows it. */
 .lunas-text-editor .ProseMirror h1 {
-  font-size: 1.875rem;
-  font-weight: 700;
-  line-height: 2.25rem;
+  font-size: 2em;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
   color: var(--text-positive-strong);
-  margin-top: 1.25rem;
-  margin-bottom: 0.5rem;
+  margin-top: 1.6em;
+  margin-bottom: 0.6em;
+  text-wrap: pretty;
 }
 
 .lunas-text-editor .ProseMirror h2 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  line-height: 2rem;
+  font-size: 1.5em;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
   color: var(--text-positive-strong);
-  margin-top: 1rem;
-  margin-bottom: 0.5rem;
+  margin-top: 1.5em;
+  margin-bottom: 0.6em;
+  text-wrap: pretty;
 }
 
 .lunas-text-editor .ProseMirror h3 {
-  font-size: 1.25rem;
+  font-size: 1.25em;
   font-weight: 600;
-  line-height: 1.75rem;
+  line-height: 1.4;
   color: var(--text-positive-strong);
-  margin-top: 0.875rem;
-  margin-bottom: 0.375rem;
+  margin-top: 1.3em;
+  margin-bottom: 0.5em;
+  text-wrap: pretty;
 }
 
-/* Paragraph */
+/* Paragraph — 1.75 line-height and bottom-only margin is the standard "comfortable long-form
+   reading" combination (matches what most editorial/blog typesetting uses); `text-wrap: pretty`
+   avoids single short words getting orphaned onto their own line. */
 .lunas-text-editor .ProseMirror p {
-  margin: 0.25rem 0;
+  font-size: 1em;
+  margin: 0 0 1.15em;
   color: var(--text-positive);
-  line-height: 1.625;
+  line-height: 1.75;
+  text-wrap: pretty;
 }
 
 /* Lists */
 .lunas-text-editor .ProseMirror ul,
 .lunas-text-editor .ProseMirror ol {
-  padding-left: 1.5rem;
-  margin: 0.5rem 0;
+  padding-left: 1.5em;
+  margin: 0 0 1.15em;
   color: var(--text-positive);
 }
 
@@ -61,22 +82,65 @@
   list-style-type: disc;
 }
 
+.lunas-text-editor .ProseMirror ul ul {
+  list-style-type: circle;
+}
+
+.lunas-text-editor .ProseMirror ul ul ul {
+  list-style-type: square;
+}
+
+/* Nested lists sit inside a parent `<li>` — reset that inherited bottom margin so the
+   nested block hugs its parent item instead of adding extra gap before the next sibling. */
+.lunas-text-editor .ProseMirror li > ul,
+.lunas-text-editor .ProseMirror li > ol {
+  margin: 0.4em 0 0;
+}
+
+/* Ordered lists use CSS counters (not `list-style-type`) so nested levels chain the
+   parent's number — 1, 2 → 1.1, 1.2 → 1.1.1, 1.1.2 — instead of restarting at a/b/c. */
 .lunas-text-editor .ProseMirror ol {
-  list-style-type: decimal;
+  list-style: none;
+  counter-reset: list-item;
+  padding-left: 2.25em;
+}
+
+.lunas-text-editor .ProseMirror ol > li {
+  counter-increment: list-item;
+  position: relative;
+}
+
+.lunas-text-editor .ProseMirror ol > li::before {
+  /* `right: 100%` anchors the marker's right edge to the left edge of `li` (its
+     containing block) — the box then auto-sizes to content, so it works at any nesting
+     depth without a fixed width. Non-breaking spaces (regular trailing spaces get
+     trimmed by normal CSS whitespace rules) guarantee a real gap before the item text. */
+  content: counters(list-item, '.') '.\00a0\00a0';
+  position: absolute;
+  right: 100%;
+  color: var(--text-positive-weak);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
 .lunas-text-editor .ProseMirror li {
-  margin: 0.125rem 0;
-  line-height: 1.625;
+  margin: 0.35em 0;
+  line-height: 1.75;
 }
 
 /* Blockquote */
 .lunas-text-editor .ProseMirror blockquote {
   border-left: 3px solid var(--primary-weak);
-  padding-left: 1rem;
-  margin: 0.75rem 0;
+  padding-left: 1.1em;
+  margin: 1.3em 0;
   color: var(--text-positive-weak);
+  font-size: 1.05em;
+  line-height: 1.7;
   font-style: italic;
+}
+
+.lunas-text-editor .ProseMirror blockquote p {
+  margin: 0;
 }
 
 /* Inline code */
@@ -95,10 +159,11 @@
   background-color: var(--muted-intense);
   color: var(--text-negative);
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 0.875rem;
+  font-size: 0.9em;
+  line-height: 1.6;
   border-radius: 0.375rem;
-  padding: 0.75rem 1rem;
-  margin: 0.75rem 0;
+  padding: 0.9em 1.1em;
+  margin: 1.15em 0;
   overflow-x: auto;
 }
 
@@ -114,12 +179,12 @@
 .lunas-text-editor .ProseMirror hr {
   border: none;
   border-top: 1px solid var(--border);
-  margin: 1rem 0;
+  margin: 2em 0;
 }
 
 /* Strong / Bold */
 .lunas-text-editor .ProseMirror strong {
-  font-weight: 600;
+  font-weight: 700;
   color: var(--text-positive-strong);
 }
 
@@ -161,36 +226,138 @@
 .lunas-text-editor .ProseMirror ul[data-type='taskList'] {
   list-style: none;
   padding-left: 0;
-  margin: 0.5rem 0;
+  margin: 0 0 1.15em;
 }
 
 .lunas-text-editor .ProseMirror ul[data-type='taskList'] li {
   display: flex;
   align-items: flex-start;
-  gap: 0.5rem;
-  padding: 0.125rem 0;
+  gap: 0.5em;
+  padding: 0.2em 0;
   margin: 0;
 }
 
 .lunas-text-editor .ProseMirror ul[data-type='taskList'] li > label {
   flex: 0 0 auto;
   user-select: none;
-  margin-top: 0.2rem;
+  margin-top: 0.25em;
 }
 
 .lunas-text-editor .ProseMirror ul[data-type='taskList'] li > label input[type='checkbox'] {
   cursor: pointer;
   accent-color: var(--primary);
-  width: 0.875rem;
-  height: 0.875rem;
+  width: 0.875em;
+  height: 0.875em;
 }
 
 .lunas-text-editor .ProseMirror ul[data-type='taskList'] li > div {
   flex: 1;
-  line-height: 1.625;
+  line-height: 1.75;
 }
 
 .lunas-text-editor .ProseMirror ul[data-type='taskList'] li[data-checked='true'] > div {
   color: var(--text-positive-weak);
   text-decoration: line-through;
+}
+
+/* Image — centering, spacing, selected-state, and the caption link are all handled by
+   `ImageNodeView` (Tailwind classes) since the image is rendered via a React node view,
+   not plain HTML. Nothing to style here. */
+
+/* Table */
+.lunas-text-editor .ProseMirror table {
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 100%;
+  margin: 1.3em 0;
+  font-size: 0.95em;
+  overflow: hidden;
+}
+
+.lunas-text-editor .ProseMirror th,
+.lunas-text-editor .ProseMirror td {
+  border: 1px solid var(--border);
+  padding: 0.6em 0.75em;
+  line-height: 1.5;
+  vertical-align: top;
+  color: var(--text-positive);
+  position: relative;
+}
+
+.lunas-text-editor .ProseMirror th {
+  background-color: var(--muted-muted);
+  color: var(--text-positive-strong);
+  font-weight: 600;
+  text-align: left;
+}
+
+.lunas-text-editor .ProseMirror .selectedCell::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: var(--primary-muted);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.lunas-text-editor .ProseMirror .column-resize-handle {
+  position: absolute;
+  top: 0;
+  bottom: -2px;
+  right: -2px;
+  width: 4px;
+  background-color: var(--primary);
+  pointer-events: none;
+}
+
+/* Code block syntax highlighting (lowlight/highlight.js token classes) */
+.lunas-text-editor .ProseMirror pre .hljs-comment,
+.lunas-text-editor .ProseMirror pre .hljs-quote {
+  color: #5c6370;
+  font-style: italic;
+}
+
+.lunas-text-editor .ProseMirror pre .hljs-keyword,
+.lunas-text-editor .ProseMirror pre .hljs-selector-tag,
+.lunas-text-editor .ProseMirror pre .hljs-tag {
+  color: #c678dd;
+}
+
+.lunas-text-editor .ProseMirror pre .hljs-string,
+.lunas-text-editor .ProseMirror pre .hljs-symbol,
+.lunas-text-editor .ProseMirror pre .hljs-bullet,
+.lunas-text-editor .ProseMirror pre .hljs-addition {
+  color: #98c379;
+}
+
+.lunas-text-editor .ProseMirror pre .hljs-number,
+.lunas-text-editor .ProseMirror pre .hljs-literal {
+  color: #d19a66;
+}
+
+.lunas-text-editor .ProseMirror pre .hljs-title,
+.lunas-text-editor .ProseMirror pre .hljs-title.function_,
+.lunas-text-editor .ProseMirror pre .hljs-built_in {
+  color: #61afef;
+}
+
+.lunas-text-editor .ProseMirror pre .hljs-attr,
+.lunas-text-editor .ProseMirror pre .hljs-attribute,
+.lunas-text-editor .ProseMirror pre .hljs-variable,
+.lunas-text-editor .ProseMirror pre .hljs-params,
+.lunas-text-editor .ProseMirror pre .hljs-name,
+.lunas-text-editor .ProseMirror pre .hljs-deletion {
+  color: #e06c75;
+}
+
+.lunas-text-editor .ProseMirror pre .hljs-meta {
+  color: #56b6c2;
+}
+
+.lunas-text-editor .ProseMirror pre .hljs-emphasis {
+  font-style: italic;
+}
+
+.lunas-text-editor .ProseMirror pre .hljs-strong {
+  font-weight: 700;
 }

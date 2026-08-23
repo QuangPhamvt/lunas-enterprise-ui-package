@@ -46,7 +46,7 @@ export const RadioGroupField: React.FC<Props> = ({ label, description, orientati
                   'h-fit',
                   field.state.value === option.value && 'border-primary-weak! bg-primary-bg-subtle',
                   isSubmitting && 'pointer-events-none bg-muted-muted opacity-60',
-                  field.state.value === option.value && isSubmitting && 'border-border-strong!'
+                  field.state.value === option.value && isSubmitting && 'border-border'
                 )}
               >
                 <Field orientation="horizontal" className="items-start gap-3 rounded p-2!">

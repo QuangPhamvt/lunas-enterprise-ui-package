@@ -1,29 +1,22 @@
 'use client';
 
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { Paragraph } from '@/components/typography/paragraph';
-
+import { ClampedText } from '@/components/data-display/clamped-text';
 import { DescriptionEmpty } from './empty';
 
-export const DescriptionLongText: React.FC<{ content: string | null | undefined | number }> = ({ content }) => {
+/**
+ * Renders free-form text clamped to 2 lines inside a {@link Description} value cell, revealing the
+ * full text and its character count in a tooltip on hover/click. Falls back to {@link DescriptionEmpty}
+ * when `content` is `null` or `undefined`.
+ *
+ * @example
+ * import { DescriptionLongText } from '@customafk/lunas-ui/features/descriptions';
+ *
+ * <DescriptionLongText content="A detailed multi-line note about this record." />
+ */
+export const DescriptionLongText: React.FC<{
+  /** The text or numeric value to display; `null`/`undefined` renders an empty state. */
+  content: string | null | undefined | number;
+}> = ({ content }) => {
   if (content == null) return <DescriptionEmpty />;
-  return (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <Paragraph
-          data-slot="description-longtext"
-          variant="sm"
-          className="line-clamp-2 cursor-pointer whitespace-pre-line break-all text-start text-sm hover:text-text-positive transition-colors"
-        >
-          {content}
-        </Paragraph>
-      </TooltipTrigger>
-      <TooltipContent align="start" className="h-fit min-w-48 max-w-80 pt-4">
-        <div className="flex flex-col gap-y-2">
-          <p className="whitespace-pre-line text-wrap break-keep">{content}</p>
-          <p className="w-full text-end text-text-positive-subtle">{content.toString().length} chars</p>
-        </div>
-      </TooltipContent>
-    </Tooltip>
-  );
+  return <ClampedText content={content} wrap="break" interactive showCharCount slot="description-longtext" />;
 };

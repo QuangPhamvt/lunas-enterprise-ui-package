@@ -79,7 +79,7 @@ export const CMSLayoutHeader: React.FC<{
         'bg-card',
         'h-(--header-height)',
         'sm:h-(--header-height) sm:px-4 sm:pr-6',
-        'col-span-2 row-start-1 z-20 gap-2 px-2 pr-4.5',
+        'z-20 col-span-2 row-start-1 gap-2 px-2 pr-4.5',
         'flex items-center shadow-nav',
         'transition-[height] ease-linear'
       )}

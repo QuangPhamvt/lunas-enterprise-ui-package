@@ -212,18 +212,22 @@ function Sidebar({
 function DetailDialogSidebarTrigger({ className, onClick, ...props }: React.ComponentProps<typeof Button>) {
   const { toggleSidebar } = useSidebar();
 
+  const handleClick = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      onClick?.(event);
+      toggleSidebar();
+    },
+    [onClick, toggleSidebar]
+  );
   return (
     <Button
       data-sidebar="trigger"
       data-slot="sidebar-trigger"
       variant="ghost"
-      color="secondary"
+      color="muted"
       size="icon"
       className={cn('size-10 rounded-full [&_svg]:size-6!', className)}
-      onClick={event => {
-        onClick?.(event);
-        toggleSidebar();
-      }}
+      onClick={handleClick}
       {...props}
     >
       <MenuIcon />
@@ -241,8 +245,8 @@ function DetailDialogSidebarFooter({ className, children, ...props }: React.Comp
   return (
     <div data-slot="sidebar-footer" data-sidebar="footer" className={cn('flex flex-col gap-2 p-2', className)} {...props}>
       <DetailDialogSidebarMenu>
-        {open && <DetailDialogSidebarMenuItem>{children}</DetailDialogSidebarMenuItem>}
-        {open && (
+        {!!open && <DetailDialogSidebarMenuItem>{children}</DetailDialogSidebarMenuItem>}
+        {!!open && (
           <DetailDialogSidebarMenuItem>
             <p className="pt-2 text-center text-text-positive-subtle text-xs">Copyright © {new Date().getFullYear()}, Lunas.</p>
           </DetailDialogSidebarMenuItem>

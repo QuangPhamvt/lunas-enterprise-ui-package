@@ -60,42 +60,43 @@ function SelectTrigger({
       data-slot="select-trigger"
       data-size={size}
       className={cn(
-        'flex w-full items-center justify-between',
-        'outline-1 outline-border -outline-offset-1',
-        'gap-2 rounded bg-transparent px-3 py-2',
-        'rounded shadow-input transition-all',
+        'flex h-9 w-full items-center justify-between',
+        'border border-border outline-none',
+        'gap-2 rounded bg-transparent px-3',
+        'rounded shadow-xs transition-all',
         'cursor-pointer whitespace-nowrap text-sm',
 
         // Text styles
-        'focus-visible:text-text-positive-strong',
-        'focus-visible:outline-primary-strong',
-        'focus-visible:ring-4',
-        'focus-visible:ring-primary-weak',
+        // 'data-[state=closed]:focus:text-text-positive-strong',
+        // 'data-[state=closed]:focus:border-primary-strong',
+        // 'data-[state=closed]:focus:ring-3',
+        // 'data-[state=closed]:focus:ring-primary-muted',
 
         // State styles
-        'data-[state=open]:text-text-positive-muted',
-        'data-[state=open]:outline-primary-strong',
-        'data-[state=open]:ring-4',
-        'data-[state=open]:ring-primary-weak',
+        'data-[state=open]:text-text-positive',
+        'data-[state=open]:border-primary-strong',
+        'data-[state=open]:ring-3',
+        'data-[state=open]:ring-primary-muted',
+        'data-[state=open]:**:data-[slot=select-icon]:rotate-180',
         'disabled:cursor-not-allowed',
-        'disabled:opacity-50',
+        'disabled:opacity-60',
 
         // Invalid state
-        'aria-invalid:bg-danger-bg-subtle',
-        'aria-invalid:outline-danger',
-        'aria-invalid:ring-danger-weak',
-        'aria-invalid:focus:outline-danger-strong',
-        'aria-invalid:focus:ring-4',
-        'aria-invalid:placeholder:text-text-positive-weak',
-        'aria-invalid:data-[state=open]:outline-danger-strong',
-        'aria-invalid:data-[state=open]:ring-danger-weak',
+        // 'aria-invalid:bg-danger-bg-subtle',
+        // 'aria-invalid:outline-danger',
+        // 'aria-invalid:ring-danger-weak',
+        // 'aria-invalid:focus:outline-danger-strong',
+        // 'aria-invalid:focus:ring-4',
+        // 'aria-invalid:placeholder:text-text-positive-weak',
+        // 'aria-invalid:data-[state=open]:outline-danger-strong',
+        // 'aria-invalid:data-[state=open]:ring-danger-weak',
 
         // Placeholder styles
-        'data-placeholder:text-text-positive-muted',
+        'data-placeholder:text-text-positive-muted!',
+        '*:data-[slot=select-value]:truncate',
+        '*:data-[slot=select-value]:text-nowrap',
         '*:data-[slot=select-value]:line-clamp-1',
-        '*:data-[slot=select-value]:flex',
         '*:data-[slot=select-value]:items-center',
-        '*:data-[slot=select-value]:gap-2',
 
         // Readonly state
         'aria-readonly:bg-muted-muted',
@@ -107,15 +108,15 @@ function SelectTrigger({
         // Icon styles
         '[&_svg]:shrink-0',
         '[&_svg]:pointer-events-none',
-        "[&_svg:not([class*='size-'])]:size-4",
-        "[&_svg:not([class*='text-'])]:text-muted-foreground",
+        `[&_svg:not([class*='size-'])]:size-4`,
         className
       )}
       {...props}
+      tabIndex={0}
     >
       {children}
       <SelectPrimitive.Icon asChild>
-        <ChevronDownIcon size={16} opacity={50} />
+        <ChevronDownIcon data-slot="select-icon" size={16} className="text-text-positive-weak transition-all" />
       </SelectPrimitive.Icon>
     </SelectPrimitive.Trigger>
   );
@@ -128,10 +129,9 @@ function SelectContent({ className, children, position = 'popper', ...props }: R
       <SelectPrimitive.Content
         data-slot="select-content"
         className={cn(
-          'relative z-50 max-h-80 min-w-32 overflow-y-auto overflow-x-hidden rounded shadow-dropdown duration-300',
-          'bg-white',
-          'w-(--radix-select-trigger-width)',
+          'relative z-50 max-h-80 min-w-32 overflow-y-auto overflow-x-hidden rounded bg-white shadow-popup',
           'origin-(--radix-select-content-transform-origin)',
+          'w-(--radix-select-trigger-width)',
           'max-h-[min(20rem,var(--radix-select-content-available-height))]',
 
           'data-[state=open]:animate-in',
@@ -180,22 +180,29 @@ function SelectItem({ className, children, ...props }: React.ComponentProps<type
     <SelectPrimitive.Item
       data-slot="select-item"
       className={cn(
-        'relative flex select-none items-center',
-        'gap-2 rounded py-2.5 pr-8 pl-2',
+        'relative flex select-none items-center truncate',
+        'gap-1 rounded-none px-2 py-1.5',
         'w-full',
-        'cursor-pointer outline-none transition-colors',
-        'font-medium text-sm text-text-positive-weak',
+        'cursor-pointer outline-none transition-all',
+        'text-sm text-text-positive',
 
-        'focus:shadow-xs',
-        'focus:bg-muted-muted',
+        'data-highlighted:bg-muted-muted',
+        'data-highlighted:text-text-positive-strong',
 
-        'data-disabled:opacity-50',
+        'data-disabled:opacity-60',
         'data-disabled:pointer-events-none',
+
+        'data-[state=checked]:bg-primary-bg-subtle',
+        'data-[state=checked]:**:data-[slot=select-item-text]:text-primary',
+
+        '**:data-[slot=select-item-text]:grow',
+        '**:data-[slot=select-item-text]:truncate',
+        '**:data-[slot=select-item-text]:line-clamp-1',
 
         '[&_svg]:pointer-events-none',
         '[&_svg]:shrink-0',
-        "[&_svg:not([class*='size-'])]:size-4",
-        "[&_svg:not([class*='text-'])]:text-text-positive-weak",
+        `[&_svg:not([class*='size-'])]:size-4`,
+        `[&_svg:not([class*='text-'])]:text-text-positive-weak`,
 
         '*:[span]:last:flex',
         '*:[span]:last:items-center',
@@ -204,19 +211,17 @@ function SelectItem({ className, children, ...props }: React.ComponentProps<type
       )}
       {...props}
     >
-      <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
-      <span className="absolute right-2 flex size-3.5 items-center justify-center">
-        <SelectPrimitive.ItemIndicator>
-          <CheckIcon size={16} />
-        </SelectPrimitive.ItemIndicator>
-      </span>
+      <SelectPrimitive.ItemText data-slot="select-item-text">{children}</SelectPrimitive.ItemText>
+      <SelectPrimitive.ItemIndicator data-slot="select-item-indicator">
+        <CheckIcon size={16} className="text-primary" />
+      </SelectPrimitive.ItemIndicator>
     </SelectPrimitive.Item>
   );
 }
 
 /** Thin horizontal rule used to visually separate groups of `SelectItem` elements. */
 function SelectSeparator({ className, ...props }: React.ComponentProps<typeof SelectPrimitive.Separator>) {
-  return <SelectPrimitive.Separator data-slot="select-separator" className={cn('-mx-1 pointer-events-none my-1 h-px bg-border-weak', className)} {...props} />;
+  return <SelectPrimitive.Separator data-slot="select-separator" className={cn('pointer-events-none -mx-1 my-1 h-px bg-border', className)} {...props} />;
 }
 
 export { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectSeparator, SelectTrigger, SelectValue };

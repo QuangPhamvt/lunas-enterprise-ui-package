@@ -1,3 +1,5 @@
+import { memo } from 'react';
+
 import { UserRoundIcon } from 'lucide-react';
 
 import { colorHashLight } from '@customafk/react-toolkit/color-hash';
@@ -31,7 +33,7 @@ type Props = {
  *   email="jane@example.com"
  * />
  */
-export const UITableUserDataDisplay: React.FC<Props> = ({ uuid, username, email }) => {
+export const UITableUserDataDisplay: React.FC<Props> = memo(({ uuid, username, email }) => {
   return (
     <Flex wrap={false} gap="sm" padding="none">
       {!uuid && (
@@ -41,7 +43,7 @@ export const UITableUserDataDisplay: React.FC<Props> = ({ uuid, username, email 
           </AvatarFallback>
         </Avatar>
       )}
-      {uuid && (
+      {!!uuid && (
         <Avatar className="size-10 shadow-card">
           <AvatarFallback style={{ backgroundColor: colorHashLight.hex(uuid) }}>
             <UserRoundIcon size={28} className="text-white" />
@@ -56,4 +58,5 @@ export const UITableUserDataDisplay: React.FC<Props> = ({ uuid, username, email 
       </Flex>
     </Flex>
   );
-};
+});
+UITableUserDataDisplay.displayName = 'UITableUserDataDisplay';

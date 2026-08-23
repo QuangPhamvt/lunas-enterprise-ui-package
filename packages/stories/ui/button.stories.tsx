@@ -1,10 +1,12 @@
 'use client';
 
+import { CircleIcon } from 'lucide-react';
+
 import { Button } from '@/components/ui/button';
 import type { ButtonVariantProps } from '@/components/ui/button.variants';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { CircleIcon } from 'lucide-react';
 import { expect, fn, userEvent, within } from 'storybook/test';
 
 const meta = {
@@ -18,6 +20,7 @@ type Story = StoryObj<typeof meta>;
 
 // ─── Visual helpers ────────────────────────────────────────────────────────────
 
+// biome-ignore lint/style/useComponentExportOnlyModules: not
 const ButtonCard = ({ label, children }: { label: string; children: React.ReactNode }) => (
   <Card>
     <CardHeader>
@@ -29,6 +32,7 @@ const ButtonCard = ({ label, children }: { label: string; children: React.ReactN
   </Card>
 );
 
+// biome-ignore lint/style/useComponentExportOnlyModules: not
 const ButtonBox = ({
   variant,
   color,
@@ -50,6 +54,7 @@ const ButtonBox = ({
   </div>
 );
 
+// biome-ignore lint/style/useComponentExportOnlyModules: not
 const ButtonRow = ({
   variant,
   color,
@@ -66,7 +71,7 @@ const ButtonRow = ({
     <ButtonBox variant={variant} color={color} size="lg" />
     <ButtonBox variant={variant} color={color} size="xl" />
     <ButtonBox variant={variant} color={color} size="xl" disabled />
-    {showLoading && <ButtonBox variant={variant} color={color} size="lg" isLoading />}
+    {!!showLoading && <ButtonBox variant={variant} color={color} size="lg" isLoading />}
   </div>
 );
 

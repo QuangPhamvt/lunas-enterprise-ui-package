@@ -32,6 +32,7 @@ const flexVariants = cva(['relative flex', 'text-sm'], {
       none: 'm-0',
     },
     padding: {
+      xs: 'p-1',
       sm: 'p-2',
       md: 'p-4',
       lg: 'p-6',
@@ -113,13 +114,14 @@ type Props = {
   /**
    * Uniform padding applied to the container.
    * - `'none'` — `p-0`
+   * - `'xs'`  — `p-1`
    * - `'sm'`  — `p-2` (default)
    * - `'md'`  — `p-4`
    * - `'lg'`  — `p-6`
    * - `'xl'`  — `p-8`
    * @default 'sm'
    */
-  padding?: 'sm' | 'md' | 'lg' | 'xl' | 'none';
+  padding?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'none';
   /**
    * Gap between child elements.
    * - `'none'` — `gap-0`
@@ -141,10 +143,13 @@ type Props = {
    * @default 'center'
    */
   align?: 'start' | 'center' | 'end' | 'baseline' | 'stretch';
-} & VariantProps<typeof flexVariants>;
+} & VariantProps<typeof flexVariants> &
+  Omit<React.ComponentPropsWithoutRef<'div'>, 'className'>;
 
 /**
  * A flexible, variant-driven flex container built on CVA and TailwindCSS.
+ *
+ * Any other `div` attribute (`data-slot`, `id`, `role`, `onClick`, ...) is forwarded to the root element.
  *
  * @example
  * ```tsx
@@ -163,9 +168,10 @@ type Props = {
  * </Flex>
  * ```
  */
-export const Flex = memo(({ vertical, wrap, width, margin, padding, gap, justify, align, className, children }: React.PropsWithChildren<Props>) => {
+export const Flex = memo(({ vertical, wrap, width, margin, padding, gap, justify, align, className, children, ...rest }: React.PropsWithChildren<Props>) => {
   return (
     <div
+      {...rest}
       className={cn(
         flexVariants({
           vertical,
@@ -176,8 +182,8 @@ export const Flex = memo(({ vertical, wrap, width, margin, padding, gap, justify
           gap,
           justify,
           align,
-          className,
-        })
+        }),
+        className
       )}
     >
       {children}

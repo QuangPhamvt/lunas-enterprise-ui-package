@@ -151,6 +151,8 @@ export function FileUploader(props: FileUploaderProps) {
     onChange: onValueChange,
   });
 
+  const isDisabled = disabled || (files?.length ?? 0) >= maxFileCount;
+
   const onDrop = useCallback(
     (acceptedFiles: File[], rejectedFiles: FileRejection[]) => {
       if (!multiple && maxFileCount === 1 && acceptedFiles.length > 1) {
@@ -193,6 +195,29 @@ export function FileUploader(props: FileUploaderProps) {
     [files, maxFileCount, multiple, onUpload, setFiles]
   );
 
+  const onPaste = useCallback(
+    (event: React.ClipboardEvent<HTMLDivElement>) => {
+      if (isDisabled) return;
+
+      const items = event.clipboardData?.items;
+      if (!items) return;
+
+      const pastedFiles: File[] = [];
+      for (const item of items) {
+        if (item.kind === 'file' && item.type.startsWith('image/')) {
+          const file = item.getAsFile();
+          if (file) pastedFiles.push(file);
+        }
+      }
+
+      if (pastedFiles.length === 0) return;
+
+      event.preventDefault();
+      onDrop(pastedFiles, []);
+    },
+    [isDisabled, onDrop]
+  );
+
   function onRemove(index: number) {
     if (!files) return;
 
@@ -217,8 +242,6 @@ export function FileUploader(props: FileUploaderProps) {
     };
   }, []);
 
-  const isDisabled = disabled || (files?.length ?? 0) >= maxFileCount;
-
   return (
     <div className="relative flex w-full flex-col gap-6">
       <Dropzone onDrop={onDrop} accept={accept} maxSize={maxSize} maxFiles={maxFileCount} multiple={maxFileCount > 1 || multiple} disabled={isDisabled}>
@@ -240,24 +263,27 @@ export function FileUploader(props: FileUploaderProps) {
               className
             )}
             {...dropzoneProps}
+            onPaste={onPaste}
           >
             <input {...getInputProps()} />
             {isDragActive ? (
               <div className="flex flex-col items-center justify-center gap-4 sm:px-5">
                 <div className="rounded-full border border-dashed p-3">
-                  <Upload className="size-7 text-text-positive-muted" aria-hidden="true" />
+                  <Upload className="size-7 text-muted" aria-hidden="true" />
                 </div>
                 <p className="font-medium text-text-positive-muted">Drop the files here</p>
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center gap-4 sm:px-5">
                 <div className="rounded-full border border-dashed p-3">
-                  <Upload size={iconSize || 24} className="text-muted-foreground" aria-hidden="true" />
+                  <Upload size={iconSize || 24} className="text-muted" aria-hidden="true" />
                 </div>
                 {!!showText && (
                   <div className="flex flex-col gap-px">
-                    <p className="font-medium text-text-positive-weak text-xs">Drag {`'n'`} drop files here, or click to select files</p>
-                    <p className="text-text-positive-muted text-xs">
+                    <p className="font-medium text-text-positive text-xs">
+                      Drag {`'n'`} drop files here, click to select, or paste an image (Ctrl+V)
+                    </p>
+                    <p className="text-text-positive-weak text-xs">
                       You can upload
                       {maxFileCount > 1
                         ? ` ${maxFileCount === Infinity ? 'multiple' : maxFileCount}
@@ -278,8 +304,11 @@ export function FileUploader(props: FileUploaderProps) {
               <Image size={16} aria-hidden="true" />
               <p className="text-sm">Ảnh đã tải lên ({files.length})</p>
             </div>
-            <button
-              className="flex cursor-pointer items-center gap-1 text-text-positive-muted transition-colors duration-200 hover:text-text-positive"
+            <Button
+              size='xs'
+              variant='ghost'
+              color='muted'
+              className='text-text-positive'
               onClick={() => {
                 if (!files) return;
                 files.forEach(file => {
@@ -291,8 +320,8 @@ export function FileUploader(props: FileUploaderProps) {
               }}
             >
               <Trash2 size={16} aria-hidden="true" />
-              <p className="text-sm">Xóa tất cả</p>
-            </button>
+              <p className='mt-0.5 text-xs'>Xóa tất cả</p>
+            </Button>
           </div>
           <div className="flex flex-col gap-2.5">
             {files?.map((file, index) => (
@@ -319,7 +348,7 @@ function FileCard({ file, progress, onRemove }: FileCardProps) {
         <div className="flex w-full flex-col gap-2">
           <div className="flex flex-col gap-y-0.5">
             <p className="line-clamp-1 text-sm text-text-positive">{file.name}</p>
-            <p className="text-text-positive-muted text-xs">{formatBytes(file.size)}</p>
+            <p className="text-text-positive-weak text-xs">{formatBytes(file.size)}</p>
           </div>
           {progress ? <Progress value={progress} /> : null}
         </div>
@@ -355,7 +384,7 @@ const MIME_TYPE_ICON_MAP: Record<string, React.FC<FileIconProps>> = {
 
 function FilePreview({ file }: FilePreviewProps) {
   if (file.type.startsWith('image/')) {
-    return <img src={file.preview} className="aspect-square size-10 shrink-0 rounded border border-border object-cover object-top shadow-sm" />;
+    return <img src={file.preview} className="aspect-square size-10 shrink-0 rounded border border-border object-cover object-top" />;
   }
 
   if (file.type.startsWith('audio/')) {

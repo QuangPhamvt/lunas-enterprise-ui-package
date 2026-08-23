@@ -56,8 +56,8 @@ export const UITableFooterRow = memo(() => {
         const isFirstCell = colId === firstRightPinnedId;
         const isLastCell = colId === lastLeftPinnedId;
 
-        const left = isPinned === 'left' ? `${header.column.getStart('left')}px` : undefined;
-        const right = isPinned === 'right' ? `${header.column.getAfter('right')}px` : undefined;
+        const left = isPinned === 'left' ? `calc(var(--col-${colId}-left) * 1px)` : undefined;
+        const right = isPinned === 'right' ? `calc(var(--col-${colId}-right) * 1px)` : undefined;
 
         if (colId === 'select') {
           return (

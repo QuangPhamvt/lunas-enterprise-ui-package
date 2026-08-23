@@ -223,7 +223,7 @@ function DetailDialogSidebarMenuSubButton({
 }
 
 function DetailDialogSidebarSeparator({ className, ...props }: React.ComponentProps<typeof Separator>) {
-  return <Separator data-slot="sidebar-separator" data-sidebar="separator" className={cn('mx-2 w-auto bg-sidebar-border', className)} {...props} />;
+  return <Separator data-slot="sidebar-separator" data-sidebar="separator" className={cn('w-auto bg-sidebar-border', className)} {...props} />;
 }
 
 export {

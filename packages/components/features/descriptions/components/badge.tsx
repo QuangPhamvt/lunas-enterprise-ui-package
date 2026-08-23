@@ -1,7 +1,7 @@
 'use client';
 
-import { Badge } from '@/components/ui/badge';
 import type { BadgeProps } from '@/components/ui/badge';
+import { Badge } from '@/components/ui/badge';
 
 import { DescriptionEmpty } from './empty';
 
@@ -15,7 +15,7 @@ type DescriptionBadgeProps = {
 export const DescriptionBadge: React.FC<DescriptionBadgeProps> = ({ label, color = 'secondary', variant = 'soft', size = 'sm' }) => {
   if (!label) return <DescriptionEmpty />;
   return (
-    <Badge data-slot="description-badge" color={color} variant={variant} size={size}>
+    <Badge data-slot="description-badge" pill={false} color={color} variant={variant} size={size} className="min-w-20">
       {label}
     </Badge>
   );

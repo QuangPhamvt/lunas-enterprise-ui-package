@@ -6,13 +6,15 @@ import { useStore } from '@tanstack/react-form';
 
 import { CalendarDaysIcon } from 'lucide-react';
 
-import { endOfToday, endOfTomorrow, endOfYesterday, format, lastDayOfMonth, startOfMonth, subDays } from '@customafk/react-toolkit/date-fns';
+import { endOfToday, endOfTomorrow, endOfYesterday, lastDayOfMonth, startOfMonth, subDays } from '@customafk/react-toolkit/date-fns';
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
+import { formatVietnameseFullDate } from '@/libs/date';
+import type { DateFieldProps as Props } from '../../types';
 import { useTanStackFieldContext } from '../form-context';
 import {
   Field,
@@ -26,8 +28,6 @@ import {
   FieldSeparator,
   FieldTooltip,
 } from '../ui/field';
-
-import type { DateFieldProps as Props } from '../../types';
 
 export const DateField = memo<Props>(
   ({
@@ -94,10 +94,10 @@ export const DateField = memo<Props>(
                       'focus:outline-1 focus:outline-primary-strong focus:ring-4 focus:ring-primary-weak',
                       'data-[state=open]:outline-1 data-[state=open]:outline-primary-strong data-[state=open]:ring-4 data-[state=open]:ring-primary-weak',
                       field.state.value === null && 'text-text-positive-muted',
-                      _isInvalid && 'outline-danger bg-danger-bg-subtle ring-4 ring-danger-weak'
+                      _isInvalid && 'bg-danger-bg-subtle outline-danger ring-4 ring-danger-weak'
                     )}
                   >
-                    <p>{field.state.value === null ? (placeholder ?? 'Select date') : format(field.state.value, 'PPPP')}</p>
+                    <p>{field.state.value === null ? (placeholder ?? 'Chọn ngày') : formatVietnameseFullDate(field.state.value)}</p>
                     <CalendarDaysIcon strokeWidth={1} />
                   </Button>
                 </PopoverTrigger>
@@ -130,7 +130,7 @@ export const DateField = memo<Props>(
                     </Button>
                   </div>
                   <div className="flex flex-1 flex-col">
-                    <div className="min-w-73 border-b border-b-border p-2">
+                    <div className="border-b border-b-border p-2">
                       <Calendar
                         mode="single"
                         selected={field.state.value ?? undefined}
@@ -148,7 +148,7 @@ export const DateField = memo<Props>(
                 </PopoverContent>
               </Popover>
 
-              {_touched && showErrorMessage && _hasError && <FieldError id={errorId} className="mt-1" errors={field.state.meta.errors} />}
+              {!!_touched && showErrorMessage && _hasError && <FieldError id={errorId} className="mt-1" errors={field.state.meta.errors} />}
               <FieldNote isShow={!!helperText}>{helperText}</FieldNote>
             </div>
           </FieldContentMain>

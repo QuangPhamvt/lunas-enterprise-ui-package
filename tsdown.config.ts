@@ -9,6 +9,7 @@ export default defineConfig([
       './packages/components/cards/product-card.tsx',
       './packages/components/cards/grid-product-card.tsx',
 
+      './packages/components/data-display/clamped-text.tsx',
       './packages/components/data-display/country.tsx',
       './packages/components/data-display/data-list.tsx',
       './packages/components/data-display/date.tsx',
@@ -25,6 +26,7 @@ export default defineConfig([
       './packages/components/dialogs/confirm-dialog.tsx',
       './packages/components/dialogs/error-dialog.tsx',
       './packages/components/dialogs/loading-dialog.tsx',
+      './packages/components/dialogs/side-panel.tsx',
 
       './packages/components/features/charts/index.tsx',
       './packages/components/features/descriptions/index.tsx',
@@ -39,12 +41,13 @@ export default defineConfig([
       './packages/components/layouts/payment-layout/index.tsx',
       './packages/components/layouts/flex.tsx',
       './packages/components/layouts/grid.tsx',
+      './packages/components/layouts/ui-grid.tsx',
 
       './packages/components/pages/FeatureDeveloping.tsx',
       './packages/components/pages/FeatureFixing.tsx',
       './packages/components/pages/NotAuthorized.tsx',
       './packages/components/pages/NotFound.tsx',
-      './packages/components/pages/LoginPage.tsx',
+      './packages/components/pages/LoginPage/index.tsx',
       './packages/components/pages/RegisterPage.tsx',
       './packages/components/pages/VerifyEmailPage.tsx',
 

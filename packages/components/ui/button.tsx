@@ -1,8 +1,10 @@
 'use client';
 
 import { Loader2Icon } from 'lucide-react';
-import { Slot, Slottable } from '@radix-ui/react-slot';
+
 import { cn } from '@customafk/react-toolkit/utils';
+
+import { Slot, Slottable } from '@radix-ui/react-slot';
 import { type ButtonVariantProps, buttonLoadingVariant, buttonVariants } from './button.variants';
 
 /**
@@ -172,7 +174,7 @@ function Button({
     <Comp
       {...(!asChild ? { type, disabled: isDisabled } : undefined)}
       data-slot="button"
-      data-state={isLoading ? 'loading' : undefined}
+      data-state={isLoading ? 'loading' : 'ready'}
       aria-disabled={isDisabled ? true : undefined}
       aria-busy={isLoading ? true : undefined}
       className={cn(
@@ -185,7 +187,7 @@ function Button({
       )}
       {...props}
     >
-      {isLoading && (
+      {!!isLoading && (
         <div className={buttonLoadingVariant({ variant, color })}>
           <Loader2Icon size={16} className="animate-spin" />
           <span className="sr-only">Loading</span>
@@ -194,7 +196,7 @@ function Button({
       {asChild ? (
         <Slottable>{children}</Slottable>
       ) : (
-        <div className={cn('inline-flex items-center justify-center gap-x-1', isLoading && 'invisible pointer-events-none', innerClassName)}>{children}</div>
+        <div className={cn('inline-flex items-center justify-center gap-x-1', isLoading && 'pointer-events-none invisible', innerClassName)}>{children}</div>
       )}
     </Comp>
   );

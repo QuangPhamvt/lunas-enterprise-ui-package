@@ -1,18 +1,21 @@
 'use client';
 
 import type { ComponentPropsWithoutRef } from 'react';
+
 import { cn } from '@customafk/react-toolkit/utils';
+
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const paragraphVariants = cva('not-first:mt-3 max-w-prose whitespace-pre-line text-pretty text-start leading-7 transition-colors', {
+// biome-ignore lint/style/useComponentExportOnlyModules: asdasd
+export const paragraphVariants = cva('not-first:mt-3 max-w-prose whitespace-pre-line text-pretty text-start transition-colors', {
   variants: {
     variant: {
-      lead: 'text-base leading-8 font-medium text-text-positive-strong md:text-lg',
-      lg: 'text-base leading-8 font-normal text-text-positive md:text-lg',
-      p: 'text-sm font-normal text-text-positive md:text-base',
-      sm: 'text-sm leading-6 font-normal text-text-positive',
-      muted: 'text-sm font-normal text-text-positive-weak md:text-base',
-      xs: 'text-xs leading-5 font-normal text-text-positive-weak',
+      lead: 'font-medium text-base text-text-positive leading-6',
+      lg: 'font-normal text-base text-text-positive leading-6',
+      p: 'font-normal text-sm text-text-positive leading-5',
+      sm: 'font-normal text-sm text-text-positive leading-5',
+      muted: 'font-normal text-sm text-text-positive-weak leading-5',
+      xs: 'font-normal text-text-positive-weak text-xs leading-4',
     },
   },
   defaultVariants: {

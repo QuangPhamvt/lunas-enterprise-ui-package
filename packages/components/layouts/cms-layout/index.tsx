@@ -139,63 +139,65 @@ SidebarContentGroup.displayName = 'SidebarContentGroup';
  * </CMSLayout>
  * ```
  */
-export const CMSLayout: React.FC<React.PropsWithChildren<CMSLayoutProps>> = ({
-  i18nText,
-  activeNavItemId,
-  sidebar,
-  children,
-  onChangeToEnLocale,
-  onChangeToViLocale,
-  onLogout,
-  logoutLabel = 'Log out',
-  copyright = `Copyright © ${new Date().getFullYear()}, Lunas.`,
-  user,
-}) => {
-  const groups = sidebar?.groupcontent ?? [];
+export const CMSLayout: React.FC<React.PropsWithChildren<CMSLayoutProps>> = memo(
+  ({
+    i18nText,
+    activeNavItemId,
+    sidebar,
+    children,
+    onChangeToEnLocale,
+    onChangeToViLocale,
+    onLogout,
+    logoutLabel = 'Log out',
+    copyright = `Copyright © ${new Date().getFullYear()}, Lunas.`,
+    user,
+  }) => {
+    const groups = sidebar?.groupcontent ?? [];
 
-  return (
-    <CMSLayoutProvider>
-      <CMSLayoutHeader
-        i18nText={i18nText}
-        onChangeToEnLocale={onChangeToEnLocale}
-        onChangeToViLocale={onChangeToViLocale}
-        user={user}
-        onLogout={onLogout}
-        logoutLabel={logoutLabel}
-      />
-      <CMSLayoutSidebar>
-        <SidebarContent>
-          {groups.map(group => (
-            <SidebarContentGroup key={group.id} id={group.id} label={group.label}>
-              {group.items.map(item => (
-                <SidebarContentGroupItem
-                  key={item.id}
-                  id={item.id}
-                  activeNavItemId={activeNavItemId}
-                  label={item.label}
-                  icon={item.icon}
-                  renderAs={item.renderAs}
-                  onClick={item.onClick}
-                />
-              ))}
-            </SidebarContentGroup>
-          ))}
-        </SidebarContent>
-        <SidebarFooter>
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton className="border border-border" onClick={onLogout}>
-                <LogOutIcon className="text-text-positive-weak" />
-                {logoutLabel}
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem className="mt-2 border-t border-t-border">
-              <p className="pt-2 text-center text-xs text-text-positive-subtle">{copyright}</p>
-            </SidebarMenuItem>
-          </SidebarMenu>
-        </SidebarFooter>
-      </CMSLayoutSidebar>
-      <CMSLayoutMain>{children}</CMSLayoutMain>
-    </CMSLayoutProvider>
-  );
-};
+    return (
+      <CMSLayoutProvider>
+        <CMSLayoutHeader
+          i18nText={i18nText}
+          onChangeToEnLocale={onChangeToEnLocale}
+          onChangeToViLocale={onChangeToViLocale}
+          user={user}
+          onLogout={onLogout}
+          logoutLabel={logoutLabel}
+        />
+        <CMSLayoutSidebar>
+          <SidebarContent>
+            {groups.map(group => (
+              <SidebarContentGroup key={group.id} id={group.id} label={group.label}>
+                {group.items.map(item => (
+                  <SidebarContentGroupItem
+                    key={item.id}
+                    id={item.id}
+                    activeNavItemId={activeNavItemId}
+                    label={item.label}
+                    icon={item.icon}
+                    renderAs={item.renderAs}
+                    onClick={item.onClick}
+                  />
+                ))}
+              </SidebarContentGroup>
+            ))}
+          </SidebarContent>
+          <SidebarFooter>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton className="border border-border" onClick={onLogout}>
+                  <LogOutIcon className="text-text-positive-weak" />
+                  {logoutLabel}
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem className="mt-2 border-t border-t-border">
+                <p className="pt-2 text-center text-text-positive-subtle text-xs">{copyright}</p>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarFooter>
+        </CMSLayoutSidebar>
+        <CMSLayoutMain>{children}</CMSLayoutMain>
+      </CMSLayoutProvider>
+    );
+  }
+);

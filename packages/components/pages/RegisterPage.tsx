@@ -1,14 +1,14 @@
 'use client';
 
-import { useId, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 
 import { Eye, EyeOff } from 'lucide-react';
 import { z } from 'zod/v4';
 
+import { LunasLogo } from '../features/logo';
 import { Alert, AlertDescription } from '../ui/alert';
 import { Button } from '../ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '../ui/dialog';
-import { LunasLogo } from '../features/logo';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 
@@ -91,7 +91,18 @@ export const RegisterPage = ({
     confirmPassword?: string;
   }>({});
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  useEffect(() => {
+    if (!open) {
+      setEmail('');
+      setPassword('');
+      setConfirmPassword('');
+      setShowPassword(false);
+      setShowConfirmPassword(false);
+      setFieldErrors({});
+    }
+  }, [open]);
+
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     const result = registerSchema.safeParse({ email, password, confirmPassword });
     if (!result.success) {

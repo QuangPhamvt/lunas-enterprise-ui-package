@@ -8,6 +8,7 @@ import { cn } from '@customafk/react-toolkit/utils';
 import { Button } from '@/components/ui/button';
 import { buttonVariants } from '@/components/ui/button.variants';
 
+import { vi } from 'date-fns/locale';
 import { type CalendarWeek, type CustomComponents, type DayButton, DayPicker, getDefaultClassNames } from 'react-day-picker';
 
 const CalendarRoot = ({
@@ -51,7 +52,7 @@ const CalendarDayButton = ({ className, day, modifiers, color: _, ...props }: Re
       data-range-end={modifiers.range_end}
       data-range-middle={modifiers.range_middle}
       className={cn(
-        'flex aspect-square size-9 flex-col rounded font-normal text-sm tabular-nums leading-none',
+        'flex aspect-square size-(--cell-size) min-w-0 flex-col rounded font-normal text-sm tabular-nums leading-none',
         'data-[selected-single=true]:bg-primary',
         'data-[selected-single=true]:text-white',
         'data-[range-middle=true]:bg-muted-muted',
@@ -135,8 +136,9 @@ function Calendar({
         className
       )}
       captionLayout={captionLayout}
+      locale={vi}
       formatters={{
-        formatMonthDropdown: date => date.toLocaleString('default', { month: 'short' }),
+        formatMonthDropdown: date => date.toLocaleString('vi', { month: 'short' }),
         ...formatters,
       }}
       classNames={{
@@ -146,12 +148,12 @@ function Calendar({
         nav: cn('flex items-center gap-1 w-full absolute top-0 inset-x-0 justify-between', defaultClassNames.nav),
         button_previous: cn(
           buttonVariants({ variant: 'outline', color: 'muted' }),
-          'size-(--cell-size) aria-disabled:opacity-50 p-0 select-none',
+          'size-(--cell-size) min-w-0 aria-disabled:opacity-50 p-0 select-none',
           defaultClassNames.button_previous
         ),
         button_next: cn(
           buttonVariants({ variant: 'outline', color: 'muted' }),
-          'size-(--cell-size) aria-disabled:opacity-50 p-0 select-none',
+          'size-(--cell-size) min-w-0 aria-disabled:opacity-50 p-0 select-none',
           defaultClassNames.button_next
         ),
         month_caption: cn('flex items-center justify-center h-(--cell-size) w-full px-(--cell-size)', defaultClassNames.month_caption),
@@ -167,14 +169,14 @@ function Calendar({
           captionLayout !== 'label' && 'rounded shadow-xs px-2 flex items-center gap-0.5 text-sm h-8 [&>svg]:text-text-positive [&>svg]:size-3.5',
           defaultClassNames.caption_label
         ),
-        table: 'w-full border-collapse',
+        table: 'border-collapse',
         weekdays: cn('flex', defaultClassNames.weekdays),
-        weekday: cn('text-text-positive rounded flex-1 font-normal text-[0.8rem] select-none', defaultClassNames.weekday),
-        week: cn('flex w-full mt-2', defaultClassNames.week),
+        weekday: cn('size-(--cell-size) shrink-0 text-text-positive rounded font-normal text-[0.8rem] select-none', defaultClassNames.weekday),
+        week: cn('flex mt-2', defaultClassNames.week),
         week_number_header: cn('select-none w-(--cell-size)', defaultClassNames.week_number_header),
         week_number: cn('text-[0.8rem] select-none text-text-positive', defaultClassNames.week_number),
         day: cn(
-          'relative w-full h-full p-0 text-center [&:first-child[data-selected=true]_button]:rounded-l [&:last-child[data-selected=true]_button]:rounded-r group/day aspect-square select-none',
+          'relative size-(--cell-size) shrink-0 p-0 text-center [&:first-child[data-selected=true]_button]:rounded-l [&:last-child[data-selected=true]_button]:rounded-r group/day select-none',
           defaultClassNames.day
         ),
         range_start: cn('rounded-l bg-muted-muted', defaultClassNames.range_start),

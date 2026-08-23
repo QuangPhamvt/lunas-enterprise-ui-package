@@ -58,24 +58,26 @@ function TooltipContent({ className, sideOffset = 0, children, ...props }: React
         data-slot="tooltip-content"
         sideOffset={sideOffset}
         className={cn(
-          'bg-secondary-strong text-text-negative-weak shadow-dropdown outline-none',
+          'bg-muted-strong font-medium text-text-negative-strong shadow-popup outline-none',
+          'z-50 w-fit gap-1',
+          'origin-(--radix-tooltip-content-transform-origin)',
+          'text-balance rounded py-1.5 pr-3 pl-4 text-xs',
           'fade-in-0 zoom-in-95 animate-in',
+
           'data-[state=closed]:animate-out',
           'data-[state=closed]:fade-out-0',
           'data-[state=closed]:zoom-out-95',
+
           'data-[side=bottom]:slide-in-from-top-2',
           'data-[side=left]:slide-in-from-right-2',
           'data-[side=right]:slide-in-from-left-2',
           'data-[side=top]:slide-in-from-bottom-2',
-          'z-50 w-fit',
-          'origin-(--radix-tooltip-content-transform-origin)',
-          'text-balance rounded-sm px-3 py-1.5 text-xs',
           className
         )}
         {...props}
       >
         {children}
-        <TooltipPrimitive.Arrow className="z-50 size-2.5 translate-y-[calc(-50%-2px)] rotate-45 rounded-[2px] bg-secondary-strong fill-secondary-strong" />
+        <TooltipPrimitive.Arrow className="z-50 size-2.5 translate-y-[calc(-50%-2px)] rotate-45 rounded-[2px] bg-muted-strong fill-muted-strong" />
       </TooltipPrimitive.Content>
     </TooltipPrimitive.Portal>
   );

@@ -38,29 +38,33 @@ function Textarea({
       data-slot="textarea"
       className={cn(
         // Base styles
-        'flex min-h-24 w-full bg-transparent px-3 py-2',
-        'rounded shadow-input transition-[color,box-shadow] duration-200',
-        'resize-y text-sm text-text-positive-weak tabular-nums caret-primary',
+        'flex min-h-24 w-full bg-white px-3 py-2 outline-none',
+        'rounded shadow-xs transition-all',
+        'resize-y text-sm text-text-positive tabular-nums caret-primary',
 
         // Border and shadow styles
-        '-outline-offset-1 outline-1 outline-border',
+        'border border-border',
 
         // Placeholder styling
-        'placeholder:text-text-positive-muted',
+        'placeholder:text-text-positive-weak',
 
         // State styles
-        'focus:text-text-positive focus:outline-primary-strong focus:ring-4 focus:ring-primary-weak',
+        'focus:border-primary-strong',
+        'focus:ring-3',
+        'focus:ring-primary-muted',
 
         // Read-only state
-        'read-only:pointer-events-none read-only:bg-muted-muted read-only:placeholder:text-text-positive-weak',
+        'read-only:pointer-events-none read-only:bg-muted-bg-subtle',
 
         // Invalid state
+        'aria-invalid:border-danger',
         'aria-invalid:bg-danger-bg-subtle',
-        'aria-invalid:outline-danger',
-        'aria-invalid:ring-danger-weak',
-        'aria-invalid:focus:outline-danger-strong',
-        'aria-invalid:focus:ring-4',
-        'aria-invalid:placeholder:text-text-positive-weak',
+        'aria-invalid:hover:border-danger-strong',
+        'aria-invalid:focus-visible:border-danger-intense',
+        'aria-invalid:focus-visible:ring-3',
+        'aria-invalid:focus-visible:ring-danger-weak',
+        'aria-invalid:text-danger-strong',
+        'aria-invalid:placeholder:text-danger-weak',
 
         // Disabled state
         'disabled:cursor-not-allowed disabled:opacity-50',

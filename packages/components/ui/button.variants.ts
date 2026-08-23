@@ -13,6 +13,7 @@ export const buttonLoadingVariant = cva(['pointer-events-none absolute inset-0 z
     color: {
       primary: '',
       secondary: '',
+      accent: '',
       muted: '',
       success: '',
       important: '',
@@ -226,20 +227,20 @@ export const buttonLoadingVariant = cva(['pointer-events-none absolute inset-0 z
  */
 export const buttonVariants = cva(
   [
-    'relative cursor-pointer rounded-sm transition-[color,background-color,border-color,box-shadow,opacity] duration-150 ease-in-out',
-    'whitespace-normal',
+    'relative cursor-pointer rounded-sm transition-all ease-in-out',
+    'text-sm leading-6',
+    'min-w-30',
     'inline-flex items-center justify-center',
-    '[&_svg]:pointer-events-none',
-    '[&_svg]:shrink-0',
-    "[&_svg:not([class*='size-'])]:size-4",
+    `[&_svg:not([class*='size-'])]:size-4`,
+    'has-[svg]:pr-4',
     'disabled:pointer-events-none disabled:cursor-default disabled:opacity-60',
     'data-[state=loading]:pointer-events-none data-[state=loading]:cursor-default',
   ],
   {
     variants: {
       variant: {
-        default: 'border border-transparent outline-none shadow-btn',
-        outline: 'border bg-card outline-none',
+        default: 'outline-none',
+        outline: 'border bg-white outline-none',
         soft: 'outline-none outline-0',
         subtle: 'border border-transparent outline-1 -outline-offset-1',
         ghost: 'border border-transparent outline-none',
@@ -248,6 +249,7 @@ export const buttonVariants = cva(
       color: {
         primary: '',
         secondary: '',
+        accent: '',
         muted: '',
         success: '',
         important: '',
@@ -256,13 +258,13 @@ export const buttonVariants = cva(
         danger: '',
       },
       size: {
-        default: 'px-2.5 py-1.5 font-medium text-sm leading-5',
-        xs: 'px-2 py-1 font-medium text-xs leading-4',
-        sm: 'px-2.5 py-1.5 font-medium text-xs leading-4',
-        md: 'px-2.5 py-1.5 font-medium text-sm leading-5',
-        lg: 'px-3 py-2 font-medium text-sm leading-5',
-        xl: 'px-3 py-2 font-medium text-base leading-6',
-        icon: 'size-8',
+        default: 'h-8 px-2.5 font-normal',
+        xs: 'h-6 px-2.5 font-normal',
+        sm: 'h-7 px-2.5 font-normal',
+        md: 'h-8 px-2.5 font-medium',
+        lg: 'h-9 px-2.5 font-medium',
+        xl: 'h-10 px-2.5 font-medium',
+        icon: 'flex size-8 min-w-0 items-center justify-center p-0!',
       },
     },
     defaultVariants: {
@@ -274,42 +276,47 @@ export const buttonVariants = cva(
       {
         variant: 'default',
         color: 'primary',
-        className: 'bg-primary text-primary-foreground hover:bg-primary-strong focus:ring-2 focus:ring-primary focus:ring-offset-2',
+        className: 'bg-primary text-white hover:bg-primary-strong focus:ring-2 focus:ring-primary focus:ring-offset-2',
       },
       {
         variant: 'default',
         color: 'secondary',
-        className: 'bg-secondary text-secondary-foreground hover:bg-secondary-strong focus:ring-2 focus:ring-secondary focus:ring-offset-2',
+        className: 'bg-secondary text-white hover:bg-secondary-strong focus:ring-2 focus:ring-secondary focus:ring-offset-2',
+      },
+      {
+        variant: 'default',
+        color: 'accent',
+        className: 'bg-accent text-white hover:bg-accent-strong focus:ring-2 focus:ring-accent focus:ring-offset-2',
       },
       {
         variant: 'default',
         color: 'muted',
-        className: 'bg-muted text-text-negative hover:opacity-80 focus:ring-2 focus:ring-muted focus:ring-offset-2',
+        className: 'bg-muted text-white hover:bg-muted-strong focus:ring-2 focus:ring-muted focus:ring-offset-2',
       },
       {
         variant: 'default',
         color: 'success',
-        className: 'bg-success text-success-foreground hover:bg-success-strong focus:ring-2 focus:ring-success focus:ring-offset-2',
+        className: 'bg-success text-white hover:bg-success-strong focus:ring-2 focus:ring-success focus:ring-offset-2',
       },
       {
         variant: 'default',
         color: 'important',
-        className: 'bg-important text-text-negative hover:opacity-80 focus:ring-2 focus:ring-important focus:ring-offset-2',
+        className: 'bg-important text-white hover:opacity-80 focus:ring-2 focus:ring-important focus:ring-offset-2',
       },
       {
         variant: 'default',
         color: 'info',
-        className: 'bg-info text-info-foreground hover:bg-info-strong focus:ring-2 focus:ring-info focus:ring-offset-2',
+        className: 'bg-info text-white hover:bg-info-strong focus:ring-2 focus:ring-info focus:ring-offset-2',
       },
       {
         variant: 'default',
         color: 'warning',
-        className: 'bg-warning text-warning-foreground hover:bg-warning-strong focus:ring-2 focus:ring-warning focus:ring-offset-2',
+        className: 'bg-warning text-white hover:bg-warning-strong focus:ring-2 focus:ring-warning focus:ring-offset-2',
       },
       {
         variant: 'default',
         color: 'danger',
-        className: 'bg-danger text-danger-foreground hover:bg-danger-strong focus:ring-2 focus:ring-danger focus:ring-offset-2',
+        className: 'bg-danger text-white hover:bg-danger-strong focus:ring-2 focus:ring-danger focus:ring-offset-2',
       },
       {
         variant: 'outline',
@@ -319,12 +326,17 @@ export const buttonVariants = cva(
       {
         variant: 'outline',
         color: 'secondary',
-        className: 'border-secondary text-secondary hover:bg-secondary-muted focus:border-secondary focus:ring-2 focus:ring-secondary-weak',
+        className: 'border-secondary text-secondary hover:bg-secondary-muted focus:border-secondary-strong focus:ring-2 focus:ring-secondary-weak',
+      },
+      {
+        variant: 'outline',
+        color: 'accent',
+        className: 'border-accent text-accent hover:bg-accent-muted focus:border-accent-strong focus:ring-2 focus:ring-accent-weak',
       },
       {
         variant: 'outline',
         color: 'muted',
-        className: 'border-muted-weak text-muted hover:bg-muted-muted focus:border-muted-weak focus:ring-2 focus:ring-muted-weak',
+        className: 'border-muted text-muted-strong hover:bg-muted-bg-subtle focus:border-muted-intense focus:ring-2 focus:ring-muted-weak',
       },
       {
         variant: 'outline',
@@ -354,7 +366,7 @@ export const buttonVariants = cva(
       {
         variant: 'soft',
         color: 'primary',
-        className: 'bg-primary-bg-subtle text-primary hover:bg-primary-muted hover:text-primary-strong focus:bg-primary-weak',
+        className: 'bg-primary-bg-subtle text-primary hover:bg-primary-muted hover:text-primary-strong focus:bg-primary-weak focus:text-primary-intense',
       },
       {
         variant: 'soft',
@@ -439,12 +451,12 @@ export const buttonVariants = cva(
       {
         variant: 'ghost',
         color: 'secondary',
-        className: 'text-text-positive-weak hover:bg-secondary-bg-subtle focus:bg-secondary-muted',
+        className: 'text-secondary hover:bg-secondary-bg-subtle focus:bg-secondary-muted',
       },
       {
         variant: 'ghost',
         color: 'muted',
-        className: 'text-text-positive-weak hover:bg-muted-bg-subtle focus:bg-muted-muted',
+        className: 'text-muted hover:bg-muted-bg-subtle focus:bg-muted-muted',
       },
       {
         variant: 'ghost',

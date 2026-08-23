@@ -2,10 +2,10 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+import { LunasLogo } from '../features/logo';
 import { Alert, AlertDescription } from '../ui/alert';
 import { Button } from '../ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '../ui/dialog';
-import { LunasLogo } from '../features/logo';
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from '../ui/input-otp';
 
 export interface VerifyEmailPageProps {
@@ -87,6 +87,7 @@ export const VerifyEmailPage = ({
 
   useEffect(() => {
     if (open && resendCooldownSeconds > 0) startCountdown(resendCooldownSeconds);
+    if (!open) setOtp('');
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };

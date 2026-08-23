@@ -6,7 +6,10 @@ export const vietnameseLocale = {
   monthsShort: ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'],
 };
 
-// Vietnamese holidays
+// Vietnamese holidays — fixed solar (dương lịch) dates only; lunar (âm lịch)
+// holidays like Tết Nguyên Đán or Giỗ Tổ Hùng Vương shift every solar year
+// and cannot be represented as a static 'MM-dd' key, so they are intentionally
+// not listed here.
 export const vietnameseHolidays = {
   '01-01': 'Tết Dương lịch',
   '03-08': 'Quốc tế Phụ nữ',

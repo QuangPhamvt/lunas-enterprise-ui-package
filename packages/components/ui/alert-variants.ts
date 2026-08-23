@@ -5,23 +5,22 @@ import { cva, type VariantProps } from 'class-variance-authority';
  */
 export const alertVariants = cva(
   [
-    'relative grid w-full items-start gap-y-0.5 rounded-lg border px-4 py-3 text-sm',
+    'relative grid w-full items-start gap-y-0.5 rounded border py-3 pr-5 pl-4 text-sm',
     'grid-cols-[0_1fr]',
     'has-[>svg]:grid-cols-[24px_1fr] has-[>svg]:gap-x-3',
-    '[&>svg]:size-4 [&>svg]:translate-y-0.5 [&>svg]:text-current',
+    '[&>svg]:size-6 [&>svg]:text-current',
     'transition-colors duration-150',
   ],
   {
     variants: {
       variant: {
-        default: 'bg-card text-text-positive-strong border-border',
-        destructive:
-          'bg-danger-bg-subtle text-danger-intense border-danger-border-subtle [&>svg]:text-danger *:data-[slot=alert-description]:text-danger-strong',
+        default: 'border-border bg-muted-bg-subtle text-text-positive-strong *:data-[slot=alert-description]:text-text-positive-weak',
+        destructive: 'border-danger-border-subtle bg-danger-bg-subtle text-danger-strong *:data-[slot=alert-description]:text-danger [&>svg]:text-danger',
         warning:
-          'bg-warning-bg-subtle text-warning-intense border-warning-border-subtle [&>svg]:text-warning *:data-[slot=alert-description]:text-warning-strong',
+          'border-warning-border-subtle bg-warning-bg-subtle text-warning-intense *:data-[slot=alert-description]:text-warning-strong [&>svg]:text-warning',
         success:
-          'bg-success-bg-subtle text-success-intense border-success-border-subtle [&>svg]:text-success *:data-[slot=alert-description]:text-success-strong',
-        info: 'bg-info-bg-subtle text-info-intense border-info-border-subtle [&>svg]:text-info *:data-[slot=alert-description]:text-info-strong',
+          'border-success-border-subtle bg-success-bg-subtle text-success-intense *:data-[slot=alert-description]:text-success-strong [&>svg]:text-success',
+        info: 'border-info-border-subtle bg-info-bg-subtle text-info-intense *:data-[slot=alert-description]:text-info-strong [&>svg]:text-info',
       },
     },
     defaultVariants: {

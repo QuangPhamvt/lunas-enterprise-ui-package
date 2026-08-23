@@ -52,7 +52,7 @@ export const WithUser: Story = {
   },
   render: args => (
     <CMSLayout {...args}>
-      <div className="p-6 text-sm text-muted-foreground">Main content goes here</div>
+      <div className="p-6 text-sm text-text-positive">Main content goes here</div>
     </CMSLayout>
   ),
   play: async ({ canvasElement }) => {
@@ -117,7 +117,7 @@ export const WithAvatar: Story = {
   },
   render: args => (
     <CMSLayout {...args}>
-      <div className="p-6 text-sm text-muted-foreground">Main content goes here</div>
+      <div className="p-6 text-sm text-text-positive">Main content goes here</div>
     </CMSLayout>
   ),
 };
@@ -134,7 +134,7 @@ export const NoUser: Story = {
   },
   render: args => (
     <CMSLayout {...args}>
-      <div className="p-6 text-sm text-muted-foreground">Main content goes here</div>
+      <div className="p-6 text-sm text-text-positive">Main content goes here</div>
     </CMSLayout>
   ),
 };
@@ -149,7 +149,7 @@ export const UserNameOnly: Story = {
   },
   render: args => (
     <CMSLayout {...args}>
-      <div className="p-6 text-sm text-muted-foreground">Main content goes here</div>
+      <div className="p-6 text-sm text-text-positive">Main content goes here</div>
     </CMSLayout>
   ),
 };

@@ -1,7 +1,6 @@
 'use client';
 
-import { Paragraph } from '../typography/paragraph';
-import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
+import { ClampedText } from './clamped-text';
 
 type NameDisplayProps = {
   /** The full name string to display; shown truncated inline and in full via tooltip. */
@@ -19,16 +18,5 @@ type NameDisplayProps = {
  * ```
  */
 export const NameDisplay: React.FC<NameDisplayProps> = ({ name }) => {
-  return (
-    <Tooltip>
-      <TooltipTrigger data-slot="name-display">
-        <Paragraph variant="sm" className="line-clamp-2 w-full truncate text-wrap pb-px text-start">
-          {name}
-        </Paragraph>
-      </TooltipTrigger>
-      <TooltipContent align="start" className="max-w-80 whitespace-pre-line text-wrap break-keep">
-        {name}
-      </TooltipContent>
-    </Tooltip>
-  );
+  return <ClampedText content={name} wrap="truncate" showCharCount={false} slot="name-display" />;
 };

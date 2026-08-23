@@ -17,7 +17,11 @@ export const UITableRow = memo<TUITableRow>(({ row, isSelected, rowIndex, childr
   const firstRightPinnedHeaderId = useMemo(() => rightPinnedHeaders?.[0]?.id, [rightPinnedHeaders]);
   const lastLeftPinnedHeaderId = useMemo(() => leftPinnedHeaders?.[leftPinnedHeaders.length - 1]?.id, [leftPinnedHeaders]);
 
-  const hasSelectColumn = useMemo(() => row.getVisibleCells().some(c => c.column.id === 'select'), [row]);
+  // Regrouped as [...left-pinned, ...center, ...right-pinned], matching `table.getHeaderGroups()`
+  // so header/body columns stay aligned.
+  const visibleCells = row.getVisibleCells();
+
+  const hasSelectColumn = useMemo(() => visibleCells.some(c => c.column.id === 'select'), [visibleCells]);
 
   const handleClick = useCallback<React.MouseEventHandler<HTMLTableRowElement>>(
     e => {
@@ -35,14 +39,14 @@ export const UITableRow = memo<TUITableRow>(({ row, isSelected, rowIndex, childr
 
   return (
     <tr slot="table-row" data-index={rowIndex} className={tableRowVariants()} onClick={handleClick} {...props}>
-      {row.getVisibleCells().map((cell, index) => {
+      {visibleCells.map((cell, index) => {
         const isPinnedLeft = pinnedLeftColumns.includes(cell.column.id);
         const isPinnedRight = pinnedRightColumns.includes(cell.column.id);
         const isPinned = isPinnedLeft ? 'left' : isPinnedRight ? 'right' : false;
         if (cell.column.id === 'actions') {
           return (
             <UITableCellActions
-              key={`${cell.id}-${index}`}
+              key={`${cell.id}-${index.toLocaleString()}`}
               data-col={cell.column.id}
               data-cell={rowIndex}
               data-selected={isSelected || undefined}
@@ -54,7 +58,7 @@ export const UITableRow = memo<TUITableRow>(({ row, isSelected, rowIndex, childr
         if (cell.column.id === 'select') {
           return (
             <UITableCellSelect
-              key={`${cell.id}-${index}`}
+              key={`${cell.id}-${index.toLocaleString()}`}
               data-col={cell.column.id}
               data-cell={rowIndex}
               data-selected={isSelected || undefined}
@@ -67,7 +71,7 @@ export const UITableRow = memo<TUITableRow>(({ row, isSelected, rowIndex, childr
         }
         return (
           <UITableCell
-            key={`${cell.id}-${index}`}
+            key={`${cell.id}-${index.toLocaleString()}`}
             data-col={cell.column.id}
             data-cell={rowIndex}
             data-selected={isSelected || undefined}

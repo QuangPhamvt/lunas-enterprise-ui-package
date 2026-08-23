@@ -33,7 +33,7 @@ export const UITableHeadRow = memo<TUITableHeadRow>(({ headerGroup, className, .
         }
         return (
           <UITableHeadCell
-            key={`${header.id}-${index}`}
+            key={`${header.id}-${index.toLocaleString()}`}
             isVisible={isVisible}
             isPinned={isPinned}
             isFirstCell={header.id === firstRightPinnedHeaderId}

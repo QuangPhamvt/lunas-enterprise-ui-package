@@ -1,18 +1,21 @@
 'use client';
 
 import type { JSX, ReactNode } from 'react';
+
 import { cn } from '@customafk/react-toolkit/utils';
+
 import { cva } from 'class-variance-authority';
 
-const titleVariants = cva('scroll-m-20 text-start text-balance text-text-positive-strong tracking-tight transition-colors', {
+// biome-ignore lint/style/useComponentExportOnlyModules: more
+export const titleVariants = cva('scroll-m-20 text-balance text-start text-text-positive-strong tracking-tight transition-colors', {
   variants: {
     level: {
-      1: 'text-3xl leading-tight font-bold md:text-4xl',
-      2: 'text-2xl leading-tight font-semibold md:text-3xl',
-      3: 'text-xl leading-snug font-semibold md:text-2xl',
-      4: 'text-lg leading-snug font-semibold md:text-xl',
-      5: 'text-base leading-normal font-semibold md:text-lg',
-      6: 'text-sm leading-normal font-semibold md:text-base',
+      1: 'font-bold text-3xl leading-tight',
+      2: 'font-semibold text-2xl leading-tight',
+      3: 'font-semibold text-xl leading-snug',
+      4: 'font-semibold text-lg leading-snug',
+      5: 'font-semibold text-base leading-normal',
+      6: 'font-semibold text-sm leading-normal',
     },
   },
   defaultVariants: {

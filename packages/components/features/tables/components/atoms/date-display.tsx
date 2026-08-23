@@ -1,8 +1,9 @@
-// import { Badge } from '@/components/ui/badge';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { memo } from 'react';
+
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 import { DateDisplay } from '@/components/data-display/date';
-import { UITableEmpty } from './empty';
+import { UITableEmptyValue } from './empty';
 
 /** Props for the {@link UITableDateDisplay} component. */
 type Props = {
@@ -12,7 +13,7 @@ type Props = {
 
 /**
  * Displays a date as a compact badge in a table cell with a tooltip that shows
- * the full date and time on hover; renders {@link UITableEmpty} when `date` is
+ * the full date and time on hover; renders {@link UITableEmptyValue} when `date` is
  * `null` or `undefined`.
  *
  * @example
@@ -20,20 +21,16 @@ type Props = {
  *
  * <UITableDateDisplay date={new Date('2024-06-15T10:30:00Z')} />
  */
-export const UITableDateDisplay: React.FC<Props> = ({ date }) => {
-  if (typeof date === 'undefined' || date === null) return <UITableEmpty />;
+export const UITableDateDisplay: React.FC<Props> = memo(({ date }) => {
+  if (typeof date === 'undefined' || date === null) return <UITableEmptyValue />;
   return (
-    <TooltipProvider>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          {/*<Badge className="h-fit">*/}
-          <DateDisplay date={date} format="medium" />
-          {/*</Badge>*/}
-        </TooltipTrigger>
-        <TooltipContent className="rounded px-2">
-          <DateDisplay date={date} format="full" showTime className="font-medium text-text-negative text-xs" />
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
+    <Tooltip>
+      <TooltipTrigger>
+        <DateDisplay date={date} format="smart" />
+      </TooltipTrigger>
+      <TooltipContent>
+        <DateDisplay date={date} format="full" showTime className="font-medium text-text-negative text-xs" />
+      </TooltipContent>
+    </Tooltip>
   );
-};
+});

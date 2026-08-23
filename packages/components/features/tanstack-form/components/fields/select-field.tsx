@@ -9,11 +9,11 @@ import { ChevronDownIcon, PackagePlusIcon, XIcon } from 'lucide-react';
 import { useIsMobile } from '@customafk/react-toolkit/hooks/useMobile';
 import { cn } from '@customafk/react-toolkit/utils';
 
-import { Dialog as RadixDialog } from 'radix-ui';
-
 import { Dialog, DialogClose, DialogOverlay, DialogPortal } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
+import { Dialog as RadixDialog } from 'radix-ui';
+import type { SelectFieldProps as Props } from '../../types';
 import { useTanStackFieldContext } from '../form-context';
 import {
   Field,
@@ -27,8 +27,6 @@ import {
   FieldSeparator,
   FieldTooltip,
 } from '../ui/field';
-
-import type { SelectFieldProps as Props } from '../../types';
 
 export const SelectField = memo<Props>(
   ({
@@ -90,10 +88,10 @@ export const SelectField = memo<Props>(
                     'flex w-full items-center justify-between',
                     'outline-1 outline-border -outline-offset-1',
                     'gap-2 rounded bg-transparent px-3 py-2',
-                    'shadow-input transition-all cursor-pointer whitespace-nowrap text-sm',
+                    'cursor-pointer whitespace-nowrap text-sm shadow-input transition-all',
                     'focus-visible:outline-primary-strong focus-visible:ring-4 focus-visible:ring-primary-weak',
                     'disabled:cursor-not-allowed disabled:opacity-50',
-                    _invalid && 'outline-danger bg-danger-bg-subtle ring-danger-weak',
+                    _invalid && 'bg-danger-bg-subtle outline-danger ring-danger-weak',
                     !field.state.value && 'text-text-positive-muted'
                   )}
                 >
@@ -114,14 +112,14 @@ export const SelectField = memo<Props>(
                       onOpenAutoFocus={e => e.preventDefault()}
                       className={cn(
                         'fixed inset-x-0 bottom-0 z-50',
-                        'flex flex-col bg-background rounded-t-2xl outline-none',
+                        'flex flex-col rounded-t-2xl bg-background outline-none',
                         'max-h-[80dvh] shadow-[0_-4px_24px_rgba(0,0,0,0.08)]',
-                        'data-[state=open]:animate-in data-[state=open]:slide-in-from-bottom data-[state=open]:fade-in-0',
-                        'data-[state=closed]:animate-out data-[state=closed]:slide-out-to-bottom data-[state=closed]:fade-out-0',
+                        'data-[state=open]:slide-in-from-bottom data-[state=open]:fade-in-0 data-[state=open]:animate-in',
+                        'data-[state=closed]:slide-out-to-bottom data-[state=closed]:fade-out-0 data-[state=closed]:animate-out',
                         'duration-300'
                       )}
                     >
-                      <div className="flex items-center justify-between px-4 py-3 border-b border-border shrink-0">
+                      <div className="flex shrink-0 items-center justify-between border-border border-b px-4 py-3">
                         <span className="font-semibold text-sm text-text-positive">{label ?? placeholder ?? 'Chọn một tùy chọn'}</span>
                         <DialogClose asChild>
                           <button
@@ -135,11 +133,11 @@ export const SelectField = memo<Props>(
                       </div>
 
                       <div className="flex flex-col overflow-y-auto">
-                        {_showClear && (
+                        {!!_showClear && (
                           <DialogClose asChild>
                             <button
                               type="button"
-                              className="flex w-full items-center gap-x-2 px-4 py-3 text-left text-sm text-danger-strong transition-colors hover:bg-danger-bg-subtle"
+                              className="flex w-full items-center gap-x-2 px-4 py-3 text-left text-danger-strong text-sm transition-colors hover:bg-danger-bg-subtle"
                               onClick={onClear}
                             >
                               <XIcon size={14} />
@@ -174,7 +172,7 @@ export const SelectField = memo<Props>(
                         )}
                       </div>
 
-                      <div className="shrink-0 h-safe-bottom" />
+                      <div className="h-safe-bottom shrink-0" />
                     </RadixDialog.Content>
                   </DialogPortal>
                 </Dialog>
@@ -201,11 +199,11 @@ export const SelectField = memo<Props>(
                   </SelectContent>
                 </Select>
 
-                {_showClear && (
+                {!!_showClear && (
                   <button
                     type="button"
                     aria-label="Xóa lựa chọn"
-                    className="absolute right-7 top-1/2 -translate-y-1/2 flex size-4 cursor-pointer items-center justify-center rounded-md text-text-positive-weak outline-none transition-[color,transform] hover:text-text-positive focus-visible:text-primary-strong focus-visible:[&>svg]:scale-125 [&>svg]:size-3.5 [&>svg]:transition-transform"
+                    className="absolute top-1/2 right-7 flex size-4 -translate-y-1/2 cursor-pointer items-center justify-center rounded-md text-text-positive-weak outline-none transition-[color,transform] hover:text-text-positive focus-visible:text-primary-strong [&>svg]:size-3.5 [&>svg]:transition-transform focus-visible:[&>svg]:scale-125"
                     onClick={onClear}
                   >
                     <XIcon aria-hidden="true" />
@@ -214,7 +212,7 @@ export const SelectField = memo<Props>(
               </div>
             )}
 
-            {_touched && showErrorMessage && <FieldError id={errorId} className="mt-1" errors={field.state.meta.errors} />}
+            {!!_touched && showErrorMessage && <FieldError id={errorId} className="mt-1" errors={field.state.meta.errors} />}
 
             <FieldNote isShow={!!helperText}>{helperText}</FieldNote>
           </FieldContentMain>

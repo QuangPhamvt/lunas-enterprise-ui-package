@@ -5,7 +5,8 @@ import { memo } from 'react';
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { Progress } from '@/components/ui/progress';
-import { UITableEmpty } from './empty';
+
+import { UITableEmptyValue } from './empty';
 
 /** Props for the {@link UITableProgressDisplay} component. */
 type Props = {
@@ -28,7 +29,7 @@ type Props = {
 /**
  * Renders a horizontal progress bar with an optional percentage label for a
  * table cell.  The bar color shifts from red → yellow → green based on
- * configurable thresholds.  Renders {@link UITableEmpty} when `value` is absent.
+ * configurable thresholds.  Renders {@link UITableEmptyValue} when `value` is absent.
  *
  * @example
  * import { UITableProgressDisplay } from '@customafk/lunas-ui/features/tables';
@@ -36,7 +37,7 @@ type Props = {
  * <UITableProgressDisplay value={75} />
  */
 export const UITableProgressDisplay = memo(({ value, showLabel = true, successThreshold = 70, warningThreshold = 40 }: Props) => {
-  if (value === null || value === undefined) return <UITableEmpty />;
+  if (value === null || value === undefined) return <UITableEmptyValue />;
 
   const clamped = Math.min(100, Math.max(0, value));
 
@@ -50,7 +51,7 @@ export const UITableProgressDisplay = memo(({ value, showLabel = true, successTh
   return (
     <div className="flex w-full min-w-24 items-center gap-x-2">
       <Progress value={clamped} className={cn('flex-1', indicatorClass)} />
-      {showLabel && <span className="w-9 shrink-0 text-right font-number text-text-positive-weak text-xs tabular-nums">{clamped}%</span>}
+      {!!showLabel && <span className="w-9 shrink-0 text-right font-number text-text-positive-weak text-xs tabular-nums">{clamped}%</span>}
     </div>
   );
 });

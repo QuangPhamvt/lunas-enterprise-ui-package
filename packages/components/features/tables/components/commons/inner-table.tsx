@@ -7,7 +7,7 @@ import type { TUITableInnerTable } from '../../types';
 import { tableInnerTableVariants } from '../table.variants';
 
 export const UITableInnerTable = memo<TUITableInnerTable>(({ children, ...props }) => {
-  const { table, innerTableId, totalSize, tableRef } = useUITableInnerTableContext();
+  const { table, innerTableId, totalSize, tableRef, columnPinningState } = useUITableInnerTableContext();
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: table element.
   useEffect(() => {
@@ -77,6 +77,27 @@ export const UITableInnerTable = memo<TUITableInnerTable>(({ children, ...props 
             scrollHost?.style.setProperty(`--col-${col.id}-size`, `${col.width}`);
           }
         });
+
+        // Pinned columns are always non-flex, so their real width is already known here.
+        // Compute sticky offsets from these actual widths rather than TanStack's own
+        // `getStart`/`getAfter`, which use `column.getSize()` (defaults to 150px) and drift
+        // from what's actually on screen.
+        const widthById = new Map(columnSpecs.map(col => [col.id, col.isFlex ? Math.min(rawFlexWidth, col.maxSize ?? rawFlexWidth) : col.width]));
+
+        let cumulativeLeft = 0;
+        for (const id of leftColumnPinning) {
+          tableElement.style.setProperty(`--col-${id}-left`, `${cumulativeLeft}`);
+          scrollHost?.style.setProperty(`--col-${id}-left`, `${cumulativeLeft}`);
+          cumulativeLeft += widthById.get(id) ?? 0;
+        }
+
+        let cumulativeRight = 0;
+        for (let i = rightColumnPinning.length - 1; i >= 0; i--) {
+          const id = rightColumnPinning[i];
+          tableElement.style.setProperty(`--col-${id}-right`, `${cumulativeRight}`);
+          scrollHost?.style.setProperty(`--col-${id}-right`, `${cumulativeRight}`);
+          cumulativeRight += widthById.get(id) ?? 0;
+        }
       });
     });
     observer.observe(tableRef.current);
@@ -84,7 +105,7 @@ export const UITableInnerTable = memo<TUITableInnerTable>(({ children, ...props 
       if (rafId !== undefined) cancelAnimationFrame(rafId);
       observer.disconnect();
     };
-  }, [table.getState().columnSizingInfo, table.getState().columnSizing, table.getState().columnPinning]);
+  }, [table.getState().columnSizingInfo, table.getState().columnSizing, columnPinningState]);
 
   return (
     <table id={innerTableId} ref={tableRef} slot="table-inner-table" className={tableInnerTableVariants()} style={{ minWidth: totalSize }} {...props}>

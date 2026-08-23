@@ -6,8 +6,6 @@ import { useStore } from '@tanstack/react-form';
 
 import { XIcon } from 'lucide-react';
 
-import { Dialog as RadixDialog } from 'radix-ui';
-
 import { useIsMobile } from '@customafk/react-toolkit/hooks/useMobile';
 import { cn } from '@customafk/react-toolkit/utils';
 
@@ -16,6 +14,8 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 import { Dialog, DialogClose, DialogOverlay, DialogPortal } from '@/components/ui/dialog';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
+import { Dialog as RadixDialog } from 'radix-ui';
+import type { ComboboxFieldProps } from '../../types';
 import { useTanStackFieldContext } from '../form-context';
 import {
   Field,
@@ -29,8 +29,6 @@ import {
   FieldSeparator,
   FieldTooltip,
 } from '../ui/field';
-
-import type { ComboboxFieldProps } from '../../types';
 
 export const ComboboxField = memo<ComboboxFieldProps>(
   ({

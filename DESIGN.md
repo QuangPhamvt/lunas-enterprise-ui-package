@@ -106,7 +106,6 @@ colors:
   border-strong: "#404040"
   border-intense: "#171717"
   border-subtle: "#FAFAFA"
-  border-subtle-strong: "#D4D4D4"
   border-emphasis: "#D4D4D4"
 
   # Sidebar

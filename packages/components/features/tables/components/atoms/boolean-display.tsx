@@ -1,13 +1,15 @@
+import { memo } from 'react';
+
 import { CheckIcon, XIcon } from 'lucide-react';
 
-import { UITableEmpty } from './empty';
+import { UITableEmptyValue } from './empty';
 
 export const UITableBooleanDisplay: React.FC<{
   value: boolean | null | undefined;
-}> = ({ value }) => {
-  if (value === null || value === undefined) return <UITableEmpty />;
+}> = memo(({ value }) => {
+  if (value === null || value === undefined) return <UITableEmptyValue />;
   if (value === false) {
-    return <XIcon size={14} strokeWidth={2} className="text-danger-strong" />;
+    return <XIcon size={16} strokeWidth={3} className="text-danger-strong" />;
   }
-  return <CheckIcon size={14} strokeWidth={2} className="text-success-strong" />;
-};
+  return <CheckIcon size={16} strokeWidth={3} className="text-success-strong" />;
+});

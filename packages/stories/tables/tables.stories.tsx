@@ -18,9 +18,9 @@ import {
   UITableProvider,
   UITableStatusDisplay,
   UITableSummaryBar,
-  UITableTooltip,
-  UITableTooltipActions,
-  UITableTooltipFilter,
+  UITableToolbar,
+  UITableToolbarActions,
+  UITableToolbarSearch,
   UITableWrapper,
 } from '@/components/features/tables';
 
@@ -33,7 +33,7 @@ const meta: Meta<typeof UITableProvider<TMockDataTable>> = {
   title: 'Features/UI Tables',
   component: UITableProvider,
   subcomponents: {
-    UITableTooltip,
+    UITableToolbar,
   },
 };
 
@@ -46,10 +46,10 @@ const TableShell = (args: React.ComponentProps<typeof UITableProvider<TMockDataT
   <div className="h-[calc(100vh-4rem)] w-full">
     <UITableProvider {...args}>
       <UITableWrapper>
-        <UITableTooltip>
-          <UITableTooltipFilter onSearch={value => console.log('search:', value)} />
-          <UITableTooltipActions />
-        </UITableTooltip>
+        <UITableToolbar>
+          <UITableToolbarSearch onSearch={value => console.log('search:', value)} />
+          <UITableToolbarActions />
+        </UITableToolbar>
         <UITableContainer />
       </UITableWrapper>
     </UITableProvider>
@@ -107,14 +107,12 @@ export const Default: Story = {
           }}
         >
           <UITableWrapper>
-            <UITableTooltip>
-              <UITableTooltipFilter onSearch={v => console.log('search:', v)} />
-              <UITableTooltipActions />
-            </UITableTooltip>
+            <UITableToolbar>
+              <UITableToolbarSearch onSearch={v => console.log('search:', v)} />
+              <UITableToolbarActions />
+            </UITableToolbar>
             <UITableSummaryBar />
-            <UITableContainer>
-              <UITableFilter />
-            </UITableContainer>
+            <UITableContainer sidePanels={[<UITableFilter key="filter" />]} />
             <UITableAnalysisPanel />
           </UITableWrapper>
         </UITableProvider>
@@ -181,13 +179,11 @@ export const WithFilterPanel: Story = {
     <div className="h-[calc(100vh-4rem)] w-full">
       <UITableProvider {...args} onFilterChange={filters => console.log('filters:', filters)}>
         <UITableWrapper>
-          <UITableTooltip>
-            <UITableTooltipFilter onSearch={value => console.log('search:', value)} />
-            <UITableTooltipActions />
-          </UITableTooltip>
-          <UITableContainer>
-            <UITableFilter />
-          </UITableContainer>
+          <UITableToolbar>
+            <UITableToolbarSearch onSearch={value => console.log('search:', value)} />
+            <UITableToolbarActions />
+          </UITableToolbar>
+          <UITableContainer sidePanels={[<UITableFilter key="filter" />]} />
         </UITableWrapper>
       </UITableProvider>
     </div>
@@ -226,10 +222,10 @@ export const RowSelectionTracking: Story = {
         <div className="min-h-0 flex-1">
           <UITableProvider {...args} onRowSelection={setSelected}>
             <UITableWrapper>
-              <UITableTooltip>
-                <UITableTooltipFilter />
-                <UITableTooltipActions />
-              </UITableTooltip>
+              <UITableToolbar>
+                <UITableToolbarSearch />
+                <UITableToolbarActions />
+              </UITableToolbar>
               <UITableContainer />
             </UITableWrapper>
           </UITableProvider>
@@ -336,10 +332,10 @@ export const WithCsvExport: Story = {
         onRowSelection={sel => console.log('selection:', sel)}
       >
         <UITableWrapper>
-          <UITableTooltip>
-            <UITableTooltipFilter onSearch={v => console.log('search:', v)} />
-            <UITableTooltipActions />
-          </UITableTooltip>
+          <UITableToolbar>
+            <UITableToolbarSearch onSearch={v => console.log('search:', v)} />
+            <UITableToolbarActions />
+          </UITableToolbar>
           <UITableContainer />
         </UITableWrapper>
       </UITableProvider>
@@ -358,10 +354,10 @@ const ToolbarActionsDemo: React.FC<{
   <div className="h-[calc(100vh-4rem)] w-full">
     <UITableProvider<TUser> title="Users" columns={UserColumns} data={UserData} totalRows={UserData.length}>
       <UITableWrapper>
-        <UITableTooltip>
-          <UITableTooltipFilter onSearch={v => console.log('search:', v)} />
-          <UITableTooltipActions onCreate={onCreate} onCreateMultiple={onCreateMultiple} onRefresh={onRefresh} onDownload={onDownload} />
-        </UITableTooltip>
+        <UITableToolbar>
+          <UITableToolbarSearch onSearch={v => console.log('search:', v)} />
+          <UITableToolbarActions onCreate={onCreate} onCreateMultiple={onCreateMultiple} onRefresh={onRefresh} onDownload={onDownload} />
+        </UITableToolbar>
         <UITableContainer />
       </UITableWrapper>
     </UITableProvider>
@@ -514,13 +510,11 @@ export const WithAdvancedFilters: Story = {
             onFilterChange={setActiveFilters}
           >
             <UITableWrapper>
-              <UITableTooltip>
-                <UITableTooltipFilter onSearch={v => console.log('search:', v)} />
-                <UITableTooltipActions />
-              </UITableTooltip>
-              <UITableContainer>
-                <UITableFilter />
-              </UITableContainer>
+              <UITableToolbar>
+                <UITableToolbarSearch onSearch={v => console.log('search:', v)} />
+                <UITableToolbarActions />
+              </UITableToolbar>
+              <UITableContainer sidePanels={[<UITableFilter key="filter" />]} />
             </UITableWrapper>
           </UITableProvider>
         </div>
@@ -613,10 +607,10 @@ export const WithSummaryCards: Story = {
         >
           <UITableWrapper>
             <UITableSummaryBar />
-            <UITableTooltip>
-              <UITableTooltipFilter onSearch={v => console.log('search:', v)} />
-              <UITableTooltipActions />
-            </UITableTooltip>
+            <UITableToolbar>
+              <UITableToolbarSearch onSearch={v => console.log('search:', v)} />
+              <UITableToolbarActions />
+            </UITableToolbar>
             <UITableContainer />
           </UITableWrapper>
         </UITableProvider>
@@ -640,10 +634,10 @@ export const WithFooterAggregations: Story = {
         onRowSelection={sel => console.log('selection:', sel)}
       >
         <UITableWrapper>
-          <UITableTooltip>
-            <UITableTooltipFilter onSearch={v => console.log('search:', v)} />
-            <UITableTooltipActions />
-          </UITableTooltip>
+          <UITableToolbar>
+            <UITableToolbarSearch onSearch={v => console.log('search:', v)} />
+            <UITableToolbarActions />
+          </UITableToolbar>
           <UITableContainer />
         </UITableWrapper>
       </UITableProvider>
@@ -848,10 +842,10 @@ export const TeamMembers: Story = {
         >
           <UITableWrapper>
             <UITableSummaryBar />
-            <UITableTooltip>
-              <UITableTooltipFilter onSearch={v => console.log('search:', v)} />
-              <UITableTooltipActions />
-            </UITableTooltip>
+            <UITableToolbar>
+              <UITableToolbarSearch onSearch={v => console.log('search:', v)} />
+              <UITableToolbarActions />
+            </UITableToolbar>
             <UITableContainer />
           </UITableWrapper>
         </UITableProvider>
@@ -903,10 +897,10 @@ export const WithManySummaryCards: Story = {
         >
           <UITableWrapper>
             <UITableSummaryBar />
-            <UITableTooltip>
-              <UITableTooltipFilter onSearch={v => console.log('search:', v)} />
-              <UITableTooltipActions />
-            </UITableTooltip>
+            <UITableToolbar>
+              <UITableToolbarSearch onSearch={v => console.log('search:', v)} />
+              <UITableToolbarActions />
+            </UITableToolbar>
             <UITableContainer />
           </UITableWrapper>
         </UITableProvider>
@@ -944,10 +938,10 @@ export const WithSummaryAndAnalysis: Story = {
         >
           <UITableWrapper>
             <UITableSummaryBar />
-            <UITableTooltip>
-              <UITableTooltipFilter onSearch={v => console.log('search:', v)} />
-              <UITableTooltipActions />
-            </UITableTooltip>
+            <UITableToolbar>
+              <UITableToolbarSearch onSearch={v => console.log('search:', v)} />
+              <UITableToolbarActions />
+            </UITableToolbar>
             <UITableContainer />
             <UITableAnalysisPanel />
           </UITableWrapper>

@@ -1,10 +1,13 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
+
 import { CheckIcon, CopyIcon } from 'lucide-react';
+
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { DescriptionEmpty } from './empty';
+import { useCopyFeedback } from './use-copy-feedback';
 
 type DescriptionCopyProps = {
   value: string | null | undefined;
@@ -12,14 +15,13 @@ type DescriptionCopyProps = {
 };
 
 export const DescriptionCopy: React.FC<DescriptionCopyProps> = ({ value, truncate = true }) => {
-  const [copied, setCopied] = useState(false);
+  const { copied, copy } = useCopyFeedback();
 
-  const handleCopy = useCallback(async () => {
-    if (!value) return;
-    await navigator.clipboard.writeText(value);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1500);
-  }, [value]);
+  const handleCopy = useCallback(() => {
+    if (value) {
+      copy(value);
+    }
+  }, [value, copy]);
 
   if (!value) return <DescriptionEmpty />;
 
@@ -27,14 +29,22 @@ export const DescriptionCopy: React.FC<DescriptionCopyProps> = ({ value, truncat
     <button
       type="button"
       data-slot="description-copy"
+      data-copied={copied}
+      title={copied ? 'Đã sao chép' : 'Sao chép'}
       onClick={handleCopy}
       className={cn(
-        'group inline-flex max-w-full cursor-pointer items-center gap-1.5 rounded-sm border border-border-weak bg-secondary-muted px-2 py-0.5 font-mono text-xs text-text-positive-weak transition-[border-color,color,box-shadow] hover:border-border hover:text-text-positive hover:shadow-xs',
+        'group inline-flex max-w-full cursor-pointer items-center gap-1.5 rounded border border-border bg-muted-bg-subtle px-2 py-0.5',
+        'font-mono text-text-positive-weak text-xs transition-all',
+        'hover:border-border hover:text-text-positive hover:shadow-xs',
         truncate && 'min-w-0'
       )}
     >
       <span className={cn('tabular-nums', truncate && 'truncate')}>{value}</span>
-      {copied ? <CheckIcon size={12} className="shrink-0 text-success" /> : <CopyIcon size={12} className="shrink-0 opacity-50 group-hover:opacity-100" />}
+      {copied ? (
+        <CheckIcon data-slot="description-copy-icon" size={12} className="shrink-0 text-success-strong" />
+      ) : (
+        <CopyIcon data-slot="description-copy-icon" size={12} className="shrink-0 opacity-60 group-hover:opacity-100" />
+      )}
     </button>
   );
 };

@@ -66,7 +66,7 @@ function DrawerContent({ className, children, ...props }: React.ComponentProps<t
       <DrawerPrimitive.Content
         data-slot="drawer-content"
         className={cn(
-          'group/drawer-content bg-background shadow-card fixed z-50 flex h-auto flex-col',
+          'group/drawer-content fixed z-50 flex h-auto flex-col bg-background shadow-card',
 
           'data-[vaul-drawer-direction=top]:inset-x-0',
           'data-[vaul-drawer-direction=top]:top-0',

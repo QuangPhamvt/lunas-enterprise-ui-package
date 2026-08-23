@@ -28,8 +28,6 @@ export const UITableLoadingDisplay = memo<TUITableEmptyDisplay>(() => {
         <tr key={index} data-slot="table-row" data-index={index} className={cn(tableRowVariants(), 'animate-pulse relative!')}>
           {table.getAllColumns().map((column, _index) => {
             const isPinned = column.getIsPinned();
-            const leftAxis = column.getStart('left');
-            const rightAxis = column.getAfter('right');
             if (column.id === 'actions') {
               return (
                 <td
@@ -78,8 +76,8 @@ export const UITableLoadingDisplay = memo<TUITableEmptyDisplay>(() => {
                 data-firstcell={column.id === table.getAllColumns()[0].id || undefined}
                 style={{
                   zIndex: isPinned ? PINNED_COLUMN_Z_INDEX : 0,
-                  left: isPinned === 'left' && typeof leftAxis === 'number' ? `${leftAxis}px` : undefined,
-                  right: isPinned === 'right' && typeof rightAxis === 'number' ? `${rightAxis}px` : undefined,
+                  left: isPinned === 'left' ? `calc(var(--col-${column.id}-left) * 1px)` : undefined,
+                  right: isPinned === 'right' ? `calc(var(--col-${column.id}-right) * 1px)` : undefined,
                   width: `calc(var(--col-${column.id}-size) * 1px)`,
                   minWidth: column.columnDef.minSize ? `calc(var(--col-${column.id}-minSize) * 1px)` : undefined,
                   maxWidth: column.columnDef.maxSize ? `calc(var(--col-${column.id}-maxSize) * 1px)` : undefined,

@@ -54,7 +54,7 @@ export const DetailDialog: React.FC<React.PropsWithChildren<DetailDialogProps>> 
   return (
     <DetailDialogWrapper open={open} onOpenChange={onOpenChange}>
       <DetailDialogProvider sidebarWidth={sidebar?.width}>
-        <DetailDialogSidebarPanel title={sidebar?.title} content={sidebar?.content} footer={sidebar?.footer} />
+        <DetailDialogSidebarPanel sidebarTitle={sidebar?.sidebarTitle} content={sidebar?.content} footer={sidebar?.footer} />
         <DetailDialogHeader title={title} createdAt={createdAt} headerComponent={headerComponent} />
         <DetailDialogContent isLoading={isLoading}>{children}</DetailDialogContent>
       </DetailDialogProvider>

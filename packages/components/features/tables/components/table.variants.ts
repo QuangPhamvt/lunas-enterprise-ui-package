@@ -1,16 +1,17 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 
 /**
- * Strong-colored trailing border marking the last left-pinned column, so users can see it's
- * pinned over scrollable content. Forced `!important` because `tableRowVariants`' `[&_td]:border-r-border`
- * descendant selector otherwise outranks a plain utility class set directly on the `<td>`.
+ * Trailing border so users can see it's
+ * pinned over scrollable content without needing a tinted background. Border forced `!important`
+ * because `tableRowVariants`' `[&_td]:border-r-border` descendant selector otherwise outranks a
+ * plain utility class set directly on the `<td>`.
  */
-const PINNED_LEFT_EDGE_BORDER = 'border-r! !border-r-border-strong/30';
-/** Strong-colored leading border marking the first right-pinned column (mirrored). */
-const PINNED_RIGHT_EDGE_BORDER = 'border-l! !border-l-border-strong/30';
+const PINNED_LEFT_EDGE_BORDER = 'border-r! !border-r-border';
+/** Leading border + drop shadow marking the first right-pinned column (mirrored). */
+const PINNED_RIGHT_EDGE_BORDER = 'border-l! !border-l-border';
 
 export const tableHeadCellOptionTriggerVariants = cva([
-  'absolute right-2 z-10 p-0.5 opacity-0 bg-card',
+  'absolute right-2 z-10 bg-card p-0.5 opacity-0',
   'cursor-pointer rounded-full transition-all',
   'text-text-positive-weak',
   '[&>svg]:size-4',
@@ -20,9 +21,31 @@ export const tableHeadCellOptionTriggerVariants = cva([
 
 export const tableEmptyDisplayVariants = cva(['sticky left-0 flex flex-1 items-center justify-center bg-transparent text-text-positive-weak opacity-100']);
 
-export const tableWrapperVariants = cva(['relative m-0 flex size-full flex-col flex-nowrap items-start justify-start gap-2']);
+export const tableWrapperVariants = cva([
+  '@container/table-wrapper relative m-0 grid size-full min-h-96 min-w-0 grid-cols-1 content-start justify-items-start gap-2',
+]);
 
-export const tableInnerWrapperVariants = cva(['relative w-full flex-1 min-h-0 overflow-auto border-b border-b-border']);
+/**
+ * `shrinkable: true` (only the `container` row) opts into `min-h-0` so its `1fr` grid track can
+ * shrink below content height and let `ResizablePanelGroup`'s own `overflow-auto` take over.
+ * The other rows (toolbar/summaryBar/analysisPanel/extra) keep the grid default `min-height:
+ * auto`, so their `auto` track never shrinks below its content — content that doesn't fit
+ * overflows visibly (or forces the wrapper taller) instead of being silently clipped by the
+ * `overflow-hidden` on inner cards (e.g. the summary bar's stat cards) when space is tight.
+ */
+export const tableWrapperRowVariants = cva(['w-full min-w-0'], {
+  variants: {
+    shrinkable: {
+      true: 'min-h-0',
+      false: '',
+    },
+  },
+  defaultVariants: {
+    shrinkable: false,
+  },
+});
+
+export const tableInnerWrapperVariants = cva(['relative min-h-0 w-full flex-1 overflow-auto']);
 
 export const tableInnerTableVariants = cva(['grid w-full table-fixed caption-bottom border-collapse border-spacing-0 flex-col content-start']);
 
@@ -30,7 +53,7 @@ export const tableHeadVariants = cva([
   'sticky top-0 z-40 h-9 w-full',
   'grid select-none bg-white',
   'border-b border-b-border shadow',
-  'font-medium text-[13px] text-text-positive-weak',
+  'font-normal text-[13px] text-text-positive-weak',
   '[&_tr:not(:last-child)_td]:border-b',
   '[&_th]:inline-flex',
   '[&_th]:bg-card',
@@ -38,12 +61,12 @@ export const tableHeadVariants = cva([
   '[&_th]:transition-all',
   '[&_th]:duration-300',
   '[&_th]:whitespace-nowrap',
-  '[&_tr_th:not([data-pinned=false])]:bg-secondary-bg-subtle',
+  '[&_tr_th:not([data-pinned=false])]:bg-card',
 ]);
 
 export const tableHeadRowVariants = cva(['flex']);
 
-export const tableHeadCellVariants = cva(['group flex'], {
+export const tableHeadCellVariants = cva(['group flex pr-4'], {
   variants: {
     isPinned: {
       left: 'sticky',
@@ -76,11 +99,20 @@ export const tableHeadCellVariants = cva(['group flex'], {
 
 export const tableBodyVariants = cva([
   'relative w-full',
+
+  // Table row variants
   '[&_tr]:flex',
   '[&_tr]:flex-none',
   '[&_tr]:w-full',
-  '[&_tr]:cursor-pointer [&_tr]:focus:outline-none',
-  '[&_tr]:border-b [&_tr]:border-b-border',
+  '[&_tr]:transition-all',
+  '[&_tr]:hover:bg-muted-muted',
+  '[&_tr]:hover:[&_td]:bg-muted-bg-subtle',
+  '[&_tr]:cursor-pointer',
+  '[&_tr]:focus:outline-none',
+  '[&_tr]:border-b',
+  '[&_tr]:border-b-border',
+
+  // Table cell variants
   '[&_td]:z-10',
   '[&_td]:transition-all',
   '[&_td]:flex',
@@ -97,12 +129,12 @@ export const tableBodyVariants = cva([
   '[&_td>div]:w-full',
   '[&_td:not([data-pinned=false])]:z-20',
   '[&_td:not([data-pinned=false])]:sticky',
-  '[&_td:not([data-pinned=false])]:bg-secondary-bg-subtle',
+  '[&_td:not([data-pinned=false])]:bg-card',
 ]);
 
-export const tableRowVariants = cva(['group transition-colors hover:bg-secondary-bg-subtle hover:[&_td]:bg-secondary-bg-subtle!']);
+export const tableRowVariants = cva(['group']);
 
-export const tableCellSelectVariants = cva(['group-hover:bg-secondary-bg-subtle!'], {
+export const tableCellSelectVariants = cva([], {
   variants: {
     isPinned: {
       left: 'sticky',
@@ -120,9 +152,9 @@ export const tableCellSelectVariants = cva(['group-hover:bg-secondary-bg-subtle!
   },
 });
 
-export const tableCellActionsVariants = cva(['sticky border-r-0! inset-y-0 right-0 z-30 flex items-center pr-4 group-hover:bg-secondary-bg-subtle!']);
+export const tableCellActionsVariants = cva(['sticky inset-y-0 right-0 z-30 flex items-center border-r-0! pr-4 group-hover:bg-muted-muted!']);
 
-export const tableCellVariants = cva(['group-hover:bg-secondary-bg-subtle!'], {
+export const tableCellVariants = cva([], {
   variants: {
     isPinned: {
       left: '',
@@ -157,15 +189,15 @@ export const tableCellInnerVariants = cva(['overflow-x-hidden'], {
   },
 });
 
-export const tableFooterVariants = cva(['shrink-0 flex w-full justify-center border-t border-border-weak font-medium']);
+export const tableFooterVariants = cva(['flex w-full shrink-0 justify-center border-border-weak border-t font-medium']);
 
-export const tableFooterRowVariants = cva(['flex w-full', 'text-[13px] font-medium text-text-positive-weak']);
+export const tableFooterRowVariants = cva(['flex w-full', 'font-medium text-[13px] text-text-positive-weak']);
 
 export const tableFooterCellVariants = cva(['flex flex-none items-center overflow-hidden whitespace-nowrap px-4 py-2'], {
   variants: {
     isPinned: {
-      left: 'sticky z-20 bg-secondary-bg-subtle',
-      right: 'sticky z-20 bg-secondary-bg-subtle',
+      left: 'sticky z-20 bg-card',
+      right: 'sticky z-20 bg-card',
       false: 'relative',
     },
     isFirstCell: { true: '', false: '' },

@@ -60,7 +60,7 @@ function LinkDialog({ editor }: LinkDialogProps) {
   return (
     <Popover open={isOpen} onOpenChange={handleOpenChange}>
       <PopoverTrigger asChild>
-        <ToolbarButton isActive={isLinkActive} title="Link (Ctrl+K)" data-slot="toolbar-link-button">
+        <ToolbarButton isActive={isLinkActive} aria-label="Liên kết" title="Link (Ctrl+K)" data-slot="toolbar-link-button">
           <Link2 className="h-3.5 w-3.5" />
         </ToolbarButton>
       </PopoverTrigger>
@@ -73,6 +73,7 @@ function LinkDialog({ editor }: LinkDialogProps) {
             value={url}
             onChange={e => setUrl(e.target.value)}
             onKeyDown={handleKeyDown}
+            aria-label="Đường dẫn liên kết"
             autoFocus
             className={cn(
               'flex-1 rounded border border-border bg-transparent px-2.5 py-1.5 text-sm text-text-positive',

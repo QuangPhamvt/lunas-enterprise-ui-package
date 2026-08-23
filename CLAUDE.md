@@ -66,9 +66,7 @@ When adding a new public component, update both files plus add a Storybook story
 - Import test utilities from `storybook/test` (not `@storybook/test`): `expect`, `userEvent`, `waitFor`, `within`
 - Query inputs by `getByPlaceholderText` or `getByDisplayValue` — avoid `getByLabelText` (label DOM wraps children in extra spans that break exact-text matching)
 - Error containers (`role="alert"`) stay in the DOM after errors clear; assert `.not.toHaveTextContent(msg)` rather than `.not.toBeInTheDocument()`
-- Run before committing: `npm run test:storybook`
-
-The `/tanstack-form` skill has a full "Storybook Component Tests" section with patterns, gotchas, and a worked example.
+- Run before committing: `npm run test:storybook`, or invoke `/storybook-test`
 
 ## Coding conventions
 
@@ -80,18 +78,22 @@ The `/tanstack-form` skill has a full "Storybook Component Tests" section with p
 
 ## Skills
 
-Project-specific skills live in `.claude/skills/<name>/SKILL.md` and can be invoked with `/<name>`:
+All skills live at the workspace root `.claude/skills/<name>/SKILL.md` (no project-scoped skills
+here) and can be invoked with `/<name>`:
 
 | Skill | Invocation | Contents |
 |---|---|---|
 | Contribution Workflow | `/contribution-workflow` | Task-first flow shared with `lunas-cms-v2`/`lunas-enterprise-api`: create/link a GitHub issue before implementing, branch naming, Conventional Commits, PR template. Load before starting any feature/fix/chore |
-| React Mechanics | `/react-mechanics` | State, Context, custom hooks, `useEffect` issues, ref forwarding, prop drilling inventory |
-| Code Architecture | `/code-architecture` | Folder hierarchy, naming conventions, module boundaries, reusability map |
-| Tech Stack | `/tech-stack` | Full peer + dev dependency table with concrete library usage examples |
-| Optimization Targets | `/optimization-targets` | 8 refactor targets — sidebar duplication, memory leak, suppressed lint rules, large files, dead code |
-| React Pattern | `/react-pattern` | Coding rules: file structure, context, state, effects, styling, props, refs, Radix, performance |
-| TanStack Form | `/tanstack-form` | Complete TanStack Form v1 API guide: hooks, field components, form containers, validation, array fields, composition |
-| TanStack Form Agents | `/tanstack-form-agents` | Full upstream TanStack Form API reference for agents: FormApi, FieldApi, Zod validation, Form Composition (withForm/withFieldGroup), listeners, array fields, SSR |
+| React | `/react` | React core API reference: every Hook, built-in component, and top-level API, sourced from react.dev |
+| TanStack Form | `/tanstack-form` | Upstream `@tanstack/react-form` v1 API reference: every guide, hook, component, and core class (FormApi/FieldApi), sourced from tanstack.com/form — not this project's own form-component conventions |
+| Radix UI | `/radix-ui` | Reference for the 25 Radix primitives this project actually wraps (Dialog, Select, Popover, Tabs, etc.): parts, props, `--radix-*` CSS custom properties, accessibility behavior |
+| Recharts | `/recharts` | Reference for the recharts chart types and sub-components this project actually uses (11 chart containers + 22 composable pieces including the series marks — Line, Bar, Pie, etc.) |
+| Tiptap | `/tiptap` | Reference for the Tiptap rich text editor's React integration and the 12 extensions this project actually uses (not collaboration/comments/AI Toolkit or the ~40 unused bundled extensions) |
+| TanStack Table | `/tanstack-table` | Reference for `@tanstack/react-table` v8 scoped to this project's usage (useReactTable, flexRender, core/expanded/grouped row models — not sorting/filtering/pagination) |
+| React Day Picker | `/react-day-picker` | Reference for the `DayPicker` component and its `CustomComponents` override shape, sourced from the installed v9 package's own types |
+| Solid Principles | `/solid-principles` | SOLID design principles translated into React hooks/components |
+| UI New Component | `/ui-new-component` | Scaffold a new component: file, `tsdown` export, `package.json` exports entry, Storybook story |
+| Storybook Test | `/storybook-test` | Start Storybook or run the `play`-function test suite before committing |
 
 ## MCP
 
