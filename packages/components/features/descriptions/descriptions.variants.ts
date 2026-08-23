@@ -19,7 +19,7 @@ export const descriptionVariants = cva('relative flex flex-col bg-white', {
        * wide desktop screens, but ever more slowly, until it stops for good at 1280px (`7xl`) — comfortably
        * wide without stretching edge-to-edge on an ultra-wide monitor.
        */
-      card: 'mx-auto size-full @3xl/description-panel:max-w-3xl @4xl/description-panel:max-w-4xl @5xl/description-panel:max-w-5xl @6xl/description-panel:max-w-6xl @7xl/description-panel:max-w-7xl max-w-full overflow-y-auto rounded',
+      card: 'size-full @3xl/description-panel:max-w-3xl @4xl/description-panel:max-w-4xl @5xl/description-panel:max-w-5xl @6xl/description-panel:max-w-6xl @7xl/description-panel:max-w-7xl max-w-full overflow-y-auto rounded',
       /** Embedded inside another Description's value cell — no shadow/ring, always fills its cell. */
       nested: 'w-full overflow-hidden rounded',
       /** Rendered inside a DescriptionGroup — the group owns the card chrome. */
