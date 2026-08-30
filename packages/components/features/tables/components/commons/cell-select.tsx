@@ -1,5 +1,5 @@
 'use client';
-import { memo, useCallback } from 'react';
+import { memo, useCallback, useId } from 'react';
 
 import { cn } from '@customafk/react-toolkit/utils';
 
@@ -10,11 +10,20 @@ import type { TUITableCellSelect } from '../../types';
 import { tableCellSelectVariants } from '../table.variants';
 
 export const UITableCellSelect = memo<TUITableCellSelect>(({ isPinned, isLastCell, isSelected = false, className, onToggleRowSelected, ...props }) => {
+  const id = useId();
   const handleToggleRowSelected = useCallback(
     (value: boolean | 'indeterminate') => {
       onToggleRowSelected?.(!!value);
     },
     [onToggleRowSelected]
+  );
+  const handleClick = useCallback<React.MouseEventHandler<HTMLDivElement>>(
+    e => {
+      e.preventDefault();
+      e.stopPropagation();
+      onToggleRowSelected?.(!isSelected);
+    },
+    [isSelected, onToggleRowSelected]
   );
   return (
     <td
@@ -24,15 +33,8 @@ export const UITableCellSelect = memo<TUITableCellSelect>(({ isPinned, isLastCel
       className={cn(tableCellSelectVariants({ isPinned, isLastCell }), className)}
       {...props}
     >
-      <div
-        data-slot="table-cell-inner"
-        className="flex! w-full! items-center justify-center bg-transparent text-center align-middle"
-        onClick={e => {
-          e.preventDefault();
-          e.stopPropagation();
-        }}
-      >
-        <Checkbox aria-label="Select Row" checked={isSelected} onCheckedChange={handleToggleRowSelected} />
+      <div data-slot="table-cell-inner" className="flex! w-full! items-center justify-center bg-transparent text-center align-middle" onClick={handleClick}>
+        <Checkbox id={id} aria-label="Select Row" checked={isSelected} onCheckedChange={handleToggleRowSelected} />
       </div>
     </td>
   );

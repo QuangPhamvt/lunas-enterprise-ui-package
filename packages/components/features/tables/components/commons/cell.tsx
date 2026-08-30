@@ -16,14 +16,12 @@ export const UITableCell = memo<TUITableCell>(
     const cellRef = useRef<HTMLDivElement>(null);
 
     const left = useMemo(() => {
-      const axis = column?.getStart('left');
-      return isPinned === 'left' && typeof axis === 'number' ? `${axis}px` : undefined;
-    }, [isPinned, column]);
+      return isPinned === 'left' ? `calc(var(--col-${colId}-left) * 1px)` : undefined;
+    }, [isPinned, colId]);
 
     const right = useMemo(() => {
-      const axis = column?.getAfter('right');
-      return isPinned === 'right' && typeof axis === 'number' ? `${axis}px` : undefined;
-    }, [isPinned, column]);
+      return isPinned === 'right' ? `calc(var(--col-${colId}-right) * 1px)` : undefined;
+    }, [isPinned, colId]);
 
     const width = useMemo(() => {
       return `calc(var(--col-${colId}-size) * 1px)`;

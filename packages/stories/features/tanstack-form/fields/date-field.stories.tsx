@@ -20,11 +20,11 @@ export const Default: Story = {
     });
     return (
       <TanStackContainerForm>
-        <TanStackSectionForm title="Date Field">
+        <TanStackSectionForm title="Trường chọn ngày">
           <AppField
             name="value"
             children={({ DateField }) => (
-              <DateField label="Due Date" description="Pick a date from the calendar or use a preset." placeholder="Select a date" orientation="responsive" />
+              <DateField label="Hạn chót" description="Chọn ngày từ lịch hoặc dùng mốc có sẵn." placeholder="Chọn ngày" orientation="responsive" />
             )}
           />
         </TanStackSectionForm>
@@ -35,7 +35,7 @@ export const Default: Story = {
     const canvas = within(canvasElement);
 
     // Trigger shows placeholder initially
-    const trigger = await canvas.findByRole('button', { name: /select a date/i });
+    const trigger = await canvas.findByRole('button', { name: /chọn ngày/i });
     await userEvent.click(trigger);
 
     // Click the "Hôm nay" preset — popover should close
@@ -43,7 +43,7 @@ export const Default: Story = {
     await userEvent.click(todayBtn);
 
     // Trigger now shows the formatted date (not the placeholder)
-    await waitFor(() => expect(canvas.queryByRole('button', { name: /select a date/i })).not.toBeInTheDocument());
+    await waitFor(() => expect(canvas.queryByRole('button', { name: /^chọn ngày$/i })).not.toBeInTheDocument());
   },
 };
 
@@ -55,16 +55,11 @@ export const Submitting: Story = {
     });
     return (
       <TanStackContainerForm>
-        <TanStackSectionForm title="Date Field — Submitting">
+        <TanStackSectionForm title="Trường chọn ngày — Đang gửi">
           <AppField
             name="value"
             children={({ DateField }) => (
-              <DateField
-                label="Due Date"
-                description="Trigger is disabled while the form is submitting."
-                placeholder="Select a date"
-                orientation="responsive"
-              />
+              <DateField label="Hạn chót" description="Nút bị vô hiệu hoá khi biểu mẫu đang được gửi." placeholder="Chọn ngày" orientation="responsive" />
             )}
           />
         </TanStackSectionForm>
@@ -88,14 +83,14 @@ export const Disabled: Story = {
     });
     return (
       <TanStackContainerForm>
-        <TanStackSectionForm title="Date Field — Disabled">
+        <TanStackSectionForm title="Trường chọn ngày — Vô hiệu hoá">
           <AppField
             name="withValue"
             children={({ DateField }) => (
               <DateField
-                label="Start Date (pre-selected + disabled)"
-                description="Has a value but cannot be changed."
-                placeholder="Select a date"
+                label="Ngày bắt đầu (đã chọn sẵn + vô hiệu hoá)"
+                description="Có giá trị nhưng không thể thay đổi."
+                placeholder="Chọn ngày"
                 orientation="responsive"
                 disabled
               />
@@ -105,9 +100,9 @@ export const Disabled: Story = {
             name="empty"
             children={({ DateField }) => (
               <DateField
-                label="End Date (empty + disabled)"
-                description="Cannot be opened while disabled."
-                placeholder="Select a date"
+                label="Ngày kết thúc (trống + vô hiệu hoá)"
+                description="Không thể mở khi đang vô hiệu hoá."
+                placeholder="Chọn ngày"
                 orientation="responsive"
                 disabled
               />
@@ -131,7 +126,7 @@ export const Validation: Story = {
       value: z
         .date()
         .nullable()
-        .refine(v => v !== null, 'Please select a date'),
+        .refine(v => v !== null, 'Vui lòng chọn ngày'),
     });
     const { AppField, TanStackContainerForm, TanStackSectionForm } = useTanStackForm({
       defaultValues: { value: null as Date | null },
@@ -140,14 +135,14 @@ export const Validation: Story = {
     });
     return (
       <TanStackContainerForm>
-        <TanStackSectionForm title="Date Field — Validation">
+        <TanStackSectionForm title="Trường chọn ngày — Kiểm tra hợp lệ">
           <AppField
             name="value"
             children={({ DateField }) => (
               <DateField
-                label="Due Date"
-                description="Open and close without selecting to see the required-field error."
-                placeholder="Select a date"
+                label="Hạn chót"
+                description="Mở rồi đóng lại mà không chọn để xem lỗi trường bắt buộc."
+                placeholder="Chọn ngày"
                 orientation="responsive"
                 required
                 showErrorMessage
@@ -165,18 +160,18 @@ export const Validation: Story = {
     expect(canvas.queryByRole('alert')).not.toBeInTheDocument();
 
     // Open then close without selecting → blur fires → error appears
-    const trigger = await canvas.findByRole('button', { name: /select a date/i });
+    const trigger = await canvas.findByRole('button', { name: /chọn ngày/i });
     await userEvent.click(trigger);
     await userEvent.keyboard('{Escape}');
 
-    await waitFor(() => expect(canvas.getByRole('alert')).toHaveTextContent('Please select a date'));
+    await waitFor(() => expect(canvas.getByRole('alert')).toHaveTextContent('Vui lòng chọn ngày'));
 
     // Select today → error clears
-    await userEvent.click(canvas.getByRole('button', { name: /select a date/i }));
+    await userEvent.click(canvas.getByRole('button', { name: /chọn ngày/i }));
     const todayBtn = await waitFor(() => within(document.body).getByRole('button', { name: /hôm nay/i }));
     await userEvent.click(todayBtn);
 
-    await waitFor(() => expect(canvas.getByRole('alert')).not.toHaveTextContent('Please select a date'));
+    await waitFor(() => expect(canvas.getByRole('alert')).not.toHaveTextContent('Vui lòng chọn ngày'));
   },
 };
 
@@ -190,14 +185,14 @@ export const WithConstraints: Story = {
     });
     return (
       <TanStackContainerForm>
-        <TanStackSectionForm title="Date Field — With Constraints">
+        <TanStackSectionForm title="Trường chọn ngày — Có giới hạn">
           <AppField
             name="value"
             children={({ DateField }) => (
               <DateField
-                label="Appointment Date"
-                description="Only dates within ±7 days from today are available."
-                placeholder="Select a date"
+                label="Ngày hẹn"
+                description="Chỉ có thể chọn ngày trong khoảng ±7 ngày kể từ hôm nay."
+                placeholder="Chọn ngày"
                 orientation="responsive"
                 minDate={minDate}
                 maxDate={maxDate}
@@ -211,7 +206,7 @@ export const WithConstraints: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    await userEvent.click(await canvas.findByRole('button', { name: /select a date/i }));
+    await userEvent.click(await canvas.findByRole('button', { name: /chọn ngày/i }));
 
     // Calendar should be visible
     await waitFor(() => expect(within(document.body).getByRole('grid')).toBeInTheDocument());
@@ -229,17 +224,17 @@ export const WithTooltip: Story = {
     });
     return (
       <TanStackContainerForm>
-        <TanStackSectionForm title="Date Field — Tooltip & Helper">
+        <TanStackSectionForm title="Trường chọn ngày — Gợi ý & Ghi chú">
           <AppField
             name="value"
             children={({ DateField }) => (
               <DateField
-                label="Contract Expiry"
-                description="Date on which the contract expires."
-                placeholder="Select a date"
+                label="Ngày hết hạn hợp đồng"
+                description="Ngày mà hợp đồng hết hiệu lực."
+                placeholder="Chọn ngày"
                 orientation="responsive"
-                tooltip="This date determines when automatic renewal triggers."
-                helperText="You will receive a reminder 30 days before this date."
+                tooltip="Ngày này quyết định thời điểm tự động gia hạn được kích hoạt."
+                helperText="Bạn sẽ nhận được nhắc nhở 30 ngày trước ngày này."
               />
             )}
           />
@@ -260,18 +255,20 @@ export const Orientations: Story = {
     });
     return (
       <TanStackContainerForm>
-        <TanStackSectionForm title="Date Field — Orientations">
+        <TanStackSectionForm title="Trường chọn ngày — Bố cục">
           <AppField
             name="horizontal"
-            children={({ DateField }) => <DateField label="Horizontal" description="Label sits to the left." placeholder="Select…" orientation="horizontal" />}
+            children={({ DateField }) => <DateField label="Ngang" description="Nhãn nằm bên trái." placeholder="Chọn…" orientation="horizontal" />}
           />
           <AppField
             name="vertical"
-            children={({ DateField }) => <DateField label="Vertical" description="Label sits above." placeholder="Select…" orientation="vertical" />}
+            children={({ DateField }) => <DateField label="Dọc" description="Nhãn nằm phía trên." placeholder="Chọn…" orientation="vertical" />}
           />
           <AppField
             name="responsive"
-            children={({ DateField }) => <DateField label="Responsive" description="Switches by breakpoint." placeholder="Select…" orientation="responsive" />}
+            children={({ DateField }) => (
+              <DateField label="Đáp ứng" description="Chuyển đổi theo kích thước màn hình." placeholder="Chọn…" orientation="responsive" />
+            )}
           />
         </TanStackSectionForm>
       </TanStackContainerForm>
@@ -285,7 +282,7 @@ export const KitchenSink: Story = {
       start: z
         .date()
         .nullable()
-        .refine(v => v !== null, 'Start date is required'),
+        .refine(v => v !== null, 'Ngày bắt đầu là bắt buộc'),
       end: z.date().nullable(),
       locked: z.date().nullable(),
     });
@@ -296,25 +293,25 @@ export const KitchenSink: Story = {
         locked: new Date() as Date | null,
       } as z.output<typeof schema>,
       validators: { onChange: schema },
-      onSubmit: ({ value }) => console.log('Submitted:', value),
+      onSubmit: ({ value }) => console.log('Đã gửi:', value),
     });
     return (
       <div className="size-full bg-muted-bg-subtle p-4">
         <AppForm>
           <TanStackContainerForm>
-            <TanStackSectionForm title="Kitchen Sink — all DateField features">
+            <TanStackSectionForm title="Tổng hợp — toàn bộ tính năng của DateField">
               <AppField
                 name="start"
                 children={({ DateField }) => (
                   <DateField
-                    label="Start Date"
-                    description="Required. Opens to show validation error."
-                    placeholder="Select start date"
+                    label="Ngày bắt đầu"
+                    description="Bắt buộc. Mở ra để xem lỗi kiểm tra hợp lệ."
+                    placeholder="Chọn ngày bắt đầu"
                     orientation="responsive"
                     required
                     showErrorMessage
-                    tooltip="The project officially begins on this date."
-                    helperText="Must be a business day."
+                    tooltip="Dự án chính thức bắt đầu vào ngày này."
+                    helperText="Phải là ngày làm việc."
                   />
                 )}
               />
@@ -322,9 +319,9 @@ export const KitchenSink: Story = {
                 name="end"
                 children={({ DateField }) => (
                   <DateField
-                    label="End Date"
-                    description="Pre-selected. Can be changed."
-                    placeholder="Select end date"
+                    label="Ngày kết thúc"
+                    description="Đã chọn sẵn. Có thể thay đổi."
+                    placeholder="Chọn ngày kết thúc"
                     orientation="responsive"
                     showErrorMessage
                   />
@@ -334,9 +331,9 @@ export const KitchenSink: Story = {
                 name="locked"
                 children={({ DateField }) => (
                   <DateField
-                    label="Review Date (read-only)"
-                    description="disabled prop — cannot be changed."
-                    placeholder="Select date"
+                    label="Ngày rà soát (chỉ đọc)"
+                    description="Thuộc tính disabled — không thể thay đổi."
+                    placeholder="Chọn ngày"
                     orientation="responsive"
                     disabled
                   />

@@ -27,7 +27,7 @@ import type { PasswordField as PasswordFieldType } from './components/fields/pas
 import type { RadioGroupField as RadioGroupFieldType } from './components/fields/radio-group-field';
 import type { SelectField as SelectFieldType } from './components/fields/select-field';
 import type { SwitchField as SwitchFieldType } from './components/fields/switch-field';
-import type { TextEditorField as TextEditorFieldType } from './components/fields/text-editor-field';
+import { TextEditorField } from './components/fields/text-editor-field';
 import type { TextField as TextFieldType } from './components/fields/text-field';
 import type { TextareaField as TextareaFieldType } from './components/fields/textarea-field';
 import { fieldContext, formContext, useTanStackFieldContext, useTanStackFormContext } from './components/form-context';
@@ -76,9 +76,6 @@ function lazyField<P extends object>(loader: () => Promise<{ default: ComponentT
 const TextField = lazyField<ComponentProps<typeof TextFieldType>>(() => import('./components/fields/text-field').then(m => ({ default: m.TextField })));
 const TextareaField = lazyField<ComponentProps<typeof TextareaFieldType>>(() =>
   import('./components/fields/textarea-field').then(m => ({ default: m.TextareaField }))
-);
-const TextEditorField = lazyField<ComponentProps<typeof TextEditorFieldType>>(() =>
-  import('./components/fields/text-editor-field').then(m => ({ default: m.TextEditorField }))
 );
 const NumberField = lazyField<ComponentProps<typeof NumberFieldType>>(() => import('./components/fields/number-field').then(m => ({ default: m.NumberField })));
 const EmailField = lazyField<ComponentProps<typeof EmailFieldType>>(() => import('./components/fields/email-field').then(m => ({ default: m.EmailField })));

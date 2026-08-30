@@ -3,9 +3,9 @@
 import { useId } from 'react';
 
 import { useStore } from '@tanstack/react-form';
+
 import { CalendarDaysIcon } from 'lucide-react';
 
-import { format } from '@customafk/react-toolkit/date-fns';
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { Button } from '@/components/ui/button';
@@ -13,6 +13,7 @@ import { Calendar } from '@/components/ui/calendar';
 import { Label } from '@/components/ui/label';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
+import { formatVietnameseLongDate } from '@/libs/date';
 import { useTanStackFieldContext } from '../form-context';
 import { FieldError } from '../ui/field';
 
@@ -59,7 +60,7 @@ export const SimpleDateField: React.FC<Props> = ({ label, placeholder, required,
               state.value === null && 'text-text-positive-muted'
             )}
           >
-            <span>{state.value ? format(state.value, 'PPP') : (placeholder ?? 'Select date')}</span>
+            <span>{state.value ? formatVietnameseLongDate(state.value) : (placeholder ?? 'Chọn ngày')}</span>
             <CalendarDaysIcon strokeWidth={1} />
           </Button>
         </PopoverTrigger>

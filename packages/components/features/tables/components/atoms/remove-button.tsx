@@ -1,5 +1,5 @@
 'use client';
-import { useCallback } from 'react';
+import { memo, useCallback } from 'react';
 
 import { Trash2Icon } from 'lucide-react';
 
@@ -23,7 +23,7 @@ export const UITableRemoveButton: React.FC<{
   title?: string;
   /** Async-compatible callback invoked when the button is clicked. */
   onClick?: () => void | Promise<void>;
-}> = ({ title, onClick }) => {
+}> = memo(({ title, onClick }) => {
   const handleClick = useCallback<React.MouseEventHandler<HTMLButtonElement>>(
     async e => {
       e.preventDefault();
@@ -44,4 +44,5 @@ export const UITableRemoveButton: React.FC<{
       </TooltipContent>
     </Tooltip>
   );
-};
+});
+UITableRemoveButton.displayName = 'UITableRemoveButton';

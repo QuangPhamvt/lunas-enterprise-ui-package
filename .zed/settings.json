@@ -1,0 +1,17 @@
+{
+  "lsp": {
+    "tailwindcss-language-server": {
+      "settings": {
+        "tailwindCSS": {
+          "experimental": {
+            "configFile": "packages/index.css"
+          },
+          "includeLanguages": {
+            "typescript": "javascript",
+            "typescriptreact": "javascript"
+          }
+        }
+      }
+    },
+  }
+}

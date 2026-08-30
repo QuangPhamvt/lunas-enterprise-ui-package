@@ -1,7 +1,11 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Pacifico&display=swap")
+/*@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Pacifico&display=swap")
   layer(base);
 @import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap")
   layer(base);
+  */
+@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap")
+  layer(base);
+@import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 
 @import "tailwindcss";
 @import "tw-animate-css";
@@ -16,7 +20,16 @@
 :root {
   --header-height: 3rem;
   --radius: 0.75rem;
+  font-family: var(--font-sans);
 }
+
+/* Reset box-sizing to border-box for all elements and pseudo-elements */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 /* Chỉ áp dụng ghi đè font-size 16px cho các thiết bị iOS */
 @supports (-webkit-touch-callout: none) {
   input,
@@ -29,6 +42,7 @@
 @theme inline {
   /* Typography */
   --font-number: "Lato", sans-serif;
+  --font-sans: "Be Vietnam Pro", sans-serif;
 
   /* Border radius */
   --radius-sm: calc(var(--radius) - 0.25rem);
@@ -113,6 +127,13 @@
   --color-danger-bg-subtle: var(--danger-bg-subtle);
   --color-danger-border-subtle: var(--danger-border-subtle);
 
+  --color-text-brand: var(--text-brand);
+  --color-text-brand-muted: var(--text-brand-muted);
+  --color-text-brand-weak: var(--text-brand-weak);
+  --color-text-brand-strong: var(--text-brand-strong);
+  --color-text-brand-intense: var(--text-brand-intense);
+  --color-text-brand-subtle: var(--text-brand-subtle);
+
   --color-text-positive: var(--text-positive);
   --color-text-positive-muted: var(--text-positive-muted);
   --color-text-positive-weak: var(--text-positive-weak);
@@ -131,8 +152,6 @@
   --color-border-muted: var(--border-muted);
   --color-border-intense: var(--border-intense);
   --color-border-subtle: var(--border-subtle);
-  --color-border-subtle-strong: var(--border-subtle-strong);
-  --color-border-emphasis: var(--border-emphasis);
 
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -169,6 +188,7 @@
   --shadow-card: var(--shadow-card);
   --shadow-dropdown: var(--shadow-dropdown);
   --shadow-dialog: var(--shadow-dialog);
+  --shadow-popup: var(--shadow-popup);
 
   /* Transitions */
   --duration-instant: var(--duration-instant);
@@ -213,6 +233,15 @@
   --spacing-component-sm: var(--spacing-component-sm);
   --spacing-component-xs: var(--spacing-component-xs);
   --spacing-component-none: var(--spacing-component-none);
+
+  /* Shadows */
+  --shadow-2xs: var(--shadow-2xs);
+  --shadow-xs: var(--shadow-xs);
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+  --shadow-xl: var(--shadow-xl);
+  --shadow-2xl: var(--shadow-2xl);
 }
 
 @layer base {

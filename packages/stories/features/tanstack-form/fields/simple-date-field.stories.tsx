@@ -20,9 +20,9 @@ export const Default: Story = {
     return (
       <div className="bg-muted-bg-subtle p-6">
         <TanStackContainerForm>
-          <TanStackSectionForm title="Simple Date Field">
+          <TanStackSectionForm title="Trường chọn ngày đơn giản">
             <div className="px-4 pb-4">
-              <AppField name="date" children={({ SimpleDateField }) => <SimpleDateField label="Date" placeholder="Pick a date" />} />
+              <AppField name="date" children={({ SimpleDateField }) => <SimpleDateField label="Ngày" placeholder="Chọn ngày" />} />
             </div>
           </TanStackSectionForm>
         </TanStackContainerForm>
@@ -42,13 +42,11 @@ export const WithMinMaxDate: Story = {
     return (
       <div className="bg-muted-bg-subtle p-6">
         <TanStackContainerForm>
-          <TanStackSectionForm title="Simple Date Field — Min / Max">
+          <TanStackSectionForm title="Trường chọn ngày đơn giản — Giới hạn Min / Max">
             <div className="px-4 pb-4">
               <AppField
                 name="dueDate"
-                children={({ SimpleDateField }) => (
-                  <SimpleDateField label="Due Date" placeholder="Select due date" required minDate={today} maxDate={maxDate} />
-                )}
+                children={({ SimpleDateField }) => <SimpleDateField label="Hạn chót" placeholder="Chọn hạn chót" required minDate={today} maxDate={maxDate} />}
               />
             </div>
           </TanStackSectionForm>
@@ -64,21 +62,21 @@ export const WithValidationError: Story = {
       defaultValues: { date: null as Date | null },
       validators: {
         onChange: z.object({
-          date: z.date({ required_error: 'Please select a date.' }).nullable(),
+          date: z.date({ error: 'Vui lòng chọn ngày.' }).nullable(),
         }),
       },
     });
     return (
       <div className="bg-muted-bg-subtle p-6">
         <TanStackContainerForm>
-          <TanStackSectionForm title="Simple Date Field — Validation">
+          <TanStackSectionForm title="Trường chọn ngày đơn giản — Kiểm tra hợp lệ">
             <div className="px-4 pb-4">
               <AppField
                 name="date"
                 validators={{
-                  onMount: () => 'Please select a date.',
+                  onMount: () => 'Vui lòng chọn ngày.',
                 }}
-                children={({ SimpleDateField }) => <SimpleDateField label="Date" placeholder="Pick a date" required />}
+                children={({ SimpleDateField }) => <SimpleDateField label="Ngày" placeholder="Chọn ngày" required />}
               />
             </div>
           </TanStackSectionForm>
@@ -96,9 +94,9 @@ export const Disabled: Story = {
     return (
       <div className="bg-muted-bg-subtle p-6">
         <TanStackContainerForm>
-          <TanStackSectionForm title="Simple Date Field — Disabled">
+          <TanStackSectionForm title="Trường chọn ngày đơn giản — Vô hiệu hoá">
             <div className="px-4 pb-4">
-              <AppField name="date" children={({ SimpleDateField }) => <SimpleDateField label="Date" placeholder="Pick a date" disabled />} />
+              <AppField name="date" children={({ SimpleDateField }) => <SimpleDateField label="Ngày" placeholder="Chọn ngày" disabled />} />
             </div>
           </TanStackSectionForm>
         </TanStackContainerForm>

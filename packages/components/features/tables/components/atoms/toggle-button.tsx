@@ -1,5 +1,5 @@
 'use client';
-import { useCallback } from 'react';
+import { memo, useCallback } from 'react';
 
 import { Switch } from '@/components/ui/switch';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
@@ -29,7 +29,7 @@ export const UITableToggleButton: React.FC<{
   disabled?: boolean;
   /** Called with the new boolean value after the user flips the switch. */
   onCheckedChange?: (checked: boolean) => void | Promise<void>;
-}> = ({ checked, titleOn, titleOff, disabled, onCheckedChange }) => {
+}> = memo(({ checked, titleOn, titleOff, disabled, onCheckedChange }) => {
   const handleCheckedChange = useCallback(
     async (value: boolean) => {
       await onCheckedChange?.(value);
@@ -41,7 +41,7 @@ export const UITableToggleButton: React.FC<{
     e.stopPropagation();
   }, []);
 
-  const tooltip = checked ? titleOn || 'Turn off' : titleOff || 'Turn on';
+  const tooltip = checked ? titleOn || 'Tắt' : titleOff || 'Bật';
 
   return (
     <Tooltip>
@@ -55,4 +55,5 @@ export const UITableToggleButton: React.FC<{
       </TooltipContent>
     </Tooltip>
   );
-};
+});
+UITableToggleButton.displayName = 'UITableToggleButton';

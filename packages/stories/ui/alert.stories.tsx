@@ -1,6 +1,7 @@
-import { AlertCircleIcon, CheckCircle2Icon, PopcornIcon } from 'lucide-react';
+import { CheckCircle2Icon, PopcornIcon } from 'lucide-react';
 
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const meta = {
@@ -17,17 +18,14 @@ export const Default: Story = {
   render: () => {
     return (
       <div className="grid w-full max-w-xl items-start gap-4">
-        <Alert>
-          <CheckCircle2Icon />
+        <Alert variant="default">
           <AlertTitle>Success! Your changes have been saved</AlertTitle>
           <AlertDescription>This is an alert with icon, title and description.</AlertDescription>
         </Alert>
-        <Alert>
-          <PopcornIcon />
+        <Alert variant="default">
           <AlertTitle>This Alert has a title and an icon. No description.</AlertTitle>
         </Alert>
         <Alert variant="destructive">
-          <AlertCircleIcon />
           <AlertTitle>Unable to process your payment.</AlertTitle>
           <AlertDescription>
             <p>Please verify your billing information and try again.</p>

@@ -1,5 +1,7 @@
 'use client';
 
+import { memo } from 'react';
+
 import { UserRoundIcon } from 'lucide-react';
 
 import { colorHashLight } from '@customafk/react-toolkit/color-hash';
@@ -27,7 +29,7 @@ type Props = {
  *
  * <UITableAvatarNameDisplay name="Jane Smith" uuid="user-42" avatarUrl="/avatars/jane.png" />
  */
-export const UITableAvatarNameDisplay: React.FC<Props> = ({ name, avatarUrl, uuid }) => {
+export const UITableAvatarNameDisplay: React.FC<Props> = memo(({ name, avatarUrl, uuid }) => {
   const bgColor = colorHashLight.hex(uuid ?? name);
   return (
     <div className="flex min-w-0 items-center gap-2">
@@ -37,7 +39,7 @@ export const UITableAvatarNameDisplay: React.FC<Props> = ({ name, avatarUrl, uui
           <UserRoundIcon size={18} className="text-white" />
         </AvatarFallback>
       </Avatar>
-      <span className="truncate text-sm font-medium">{name}</span>
+      <span className="truncate font-medium text-sm">{name}</span>
     </div>
   );
-};
+});

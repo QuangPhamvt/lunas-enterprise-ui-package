@@ -4,11 +4,14 @@
  *
  * Each sub-provider is a memoised wrapper around a single React context so that
  * only the subtree that consumes a particular slice of state re-renders when that
- * slice changes.
+ * slice changes. State ownership for each independent concern (selection, column
+ * pinning, filters, analysis/summary panel toggles) lives in its own hook under
+ * `../../hooks/`, so this file is left to compose them and instantiate the
+ * TanStack `table` instance.
  */
-import { memo, useCallback, useId, useMemo, useRef, useState } from 'react';
+import { useId, useMemo, useRef, useState } from 'react';
 
-import type { ColumnDef, ColumnPinningState, ExpandedState, RowSelectionState } from '@tanstack/react-table';
+import type { ColumnDef, ExpandedState } from '@tanstack/react-table';
 import { getCoreRowModel, getExpandedRowModel, getGroupedRowModel, useReactTable } from '@tanstack/react-table';
 
 import type { AnyEntity } from '@/types';
@@ -23,113 +26,32 @@ import {
   TableRowContext,
   TableSummaryContext,
 } from '../../hooks/use-context';
+import { useTableColumnPinning } from '../../hooks/use-table-column-pinning';
+import { useTableFilters } from '../../hooks/use-table-filters';
+import { useTableAnalysisPanel, useTableSummaryBar } from '../../hooks/use-table-panels';
+import { useTableSelection } from '../../hooks/use-table-selection';
 import type {
-  ActiveFilter,
-  FilterDefinition,
-  FilterType,
-  FilterValue,
   RowData,
   TableProviderProps,
-  TTableAnalysisContext,
   TTableBodyContext,
   TTableContext,
-  TTableFilterContext,
   TTableHeadRowContext,
   TTableInnerTableContext,
   TTableInnerWrapperContext,
   TTableRowContext,
-  TTableSummaryContext,
   TUITableColumn,
 } from '../../types';
+import { createScopedProvider } from './scoped-provider';
 
-function createDefaultFilterValue(type: FilterType): FilterValue {
-  switch (type) {
-    case 'tag':
-      return { type: 'tag', values: [] };
-    case 'single-tag':
-      return { type: 'single-tag', value: null };
-    case 'date-range':
-      return { type: 'date-range' };
-    case 'number':
-      return { type: 'number', operator: 'eq' };
-    case 'text':
-      return { type: 'text', operator: 'contains', value: '' };
-    case 'boolean':
-      return { type: 'boolean', value: null };
-  }
-}
+const UITableInnerWrapperProvider = createScopedProvider<TTableInnerWrapperContext>(TableInnerWrapperContext, 'UITableInnerWrapperProvider');
 
-/**
- * Provides the inner-wrapper DOM element id to all descendants via
- * `TableInnerWrapperContext`, enabling virtual-scroll sentinels to locate the
- * scrollable container without prop-drilling.
- */
-const UITableInnerWrapperProvider = memo<React.PropsWithChildren<TTableInnerWrapperContext>>(({ innerWrapperId, children }) => {
-  const value = useMemo<TTableInnerWrapperContext>(() => ({ innerWrapperId }), [innerWrapperId]);
-  return <TableInnerWrapperContext.Provider value={value}>{children}</TableInnerWrapperContext.Provider>;
-});
-UITableInnerWrapperProvider.displayName = 'UITableInnerWrapperProvider';
+const UITableInnerTableProvider = createScopedProvider<TTableInnerTableContext>(TableInnerTableContext, 'UITableInnerTableProvider');
 
-/**
- * Provides the TanStack `table` instance, the inner `<table>` element id, and
- * the pre-computed `totalSize` (sum of all column widths) to descendants via
- * `TableInnerTableContext`.
- */
-const UITableInnerTableProvider = memo<React.PropsWithChildren<TTableInnerTableContext>>(({ table, innerTableId, totalSize, tableRef, children }) => {
-  const value = useMemo<TTableInnerTableContext>(() => ({ table, innerTableId, totalSize, tableRef }), [table, innerTableId, totalSize, tableRef]);
-  return <TableInnerTableContext.Provider value={value}>{children}</TableInnerTableContext.Provider>;
-});
-UITableInnerTableProvider.displayName = 'UITableInnerTableProvider';
+const UITableHeadRowProvider = createScopedProvider<TTableHeadRowContext>(TableHeadRowContext, 'UITableHeadRowProvider');
 
-/**
- * Provides column-pinning state and the "select all" toggle to the header-row
- * layer via `TableHeadRowContext`, preventing unnecessary re-renders in the body.
- */
-const UITableHeadRowProvider = memo<React.PropsWithChildren<TTableHeadRowContext>>(
-  ({ isAllRowsSelected, columnPinningState, leftPinnedHeaders, rightPinnedHeaders, onToggleAllRowsSelected, children }) => {
-    const value = useMemo<TTableHeadRowContext>(
-      () => ({ isAllRowsSelected, columnPinningState, leftPinnedHeaders, rightPinnedHeaders, onToggleAllRowsSelected }),
-      [isAllRowsSelected, columnPinningState, leftPinnedHeaders, rightPinnedHeaders, onToggleAllRowsSelected]
-    );
-    return <TableHeadRowContext.Provider value={value}>{children}</TableHeadRowContext.Provider>;
-  }
-);
-UITableHeadRowProvider.displayName = 'UITableHeadRowProvider';
+const UITableBodyProvider = createScopedProvider<TTableBodyContext>(TableBodyContext, 'UITableBodyProvider');
 
-/**
- * Provides loading/empty state and the current row-selection map to the table
- * body layer via `TableBodyContext`.
- */
-const UITableBodyProvider = memo<React.PropsWithChildren<TTableBodyContext>>(({ isFetching, isRefetching, isEmpty, rowSelectionState, children }) => {
-  const value = useMemo<TTableBodyContext>(
-    () => ({ isFetching, isRefetching, isEmpty, rowSelectionState }),
-    [isFetching, isRefetching, isEmpty, rowSelectionState]
-  );
-  return <TableBodyContext.Provider value={value}>{children}</TableBodyContext.Provider>;
-});
-UITableBodyProvider.displayName = 'UITableBodyProvider';
-
-/**
- * Provides per-row interaction state — click handler, pinning, and the
- * "select all" flag — to individual row renderers via `TableRowContext`.
- */
-const UITableRowProvider = memo<React.PropsWithChildren<TTableRowContext<AnyEntity, AnyEntity>>>(
-  ({ keyOfClickRow, isAllRowsSelected, columnPinningState, leftPinnedHeaders, rightPinnedHeaders, onClickRow, children }) => {
-    const value = useMemo<TTableRowContext<AnyEntity, AnyEntity>>(
-      () => ({
-        keyOfClickRow,
-        isAllRowsSelected,
-        columnPinningState,
-        leftPinnedHeaders,
-        rightPinnedHeaders,
-        onClickRow,
-      }),
-      [keyOfClickRow, isAllRowsSelected, columnPinningState, leftPinnedHeaders, rightPinnedHeaders, onClickRow]
-    );
-    return <TableRowContext.Provider value={value}>{children}</TableRowContext.Provider>;
-  }
-);
-UITableRowProvider.displayName = 'UITableRowProvider';
+const UITableRowProvider = createScopedProvider<TTableRowContext<AnyEntity, AnyEntity>>(TableRowContext, 'UITableRowProvider');
 
 /**
  * Root context provider for the UITable component family.
@@ -157,7 +79,7 @@ UITableRowProvider.displayName = 'UITableRowProvider';
  *       isFetching={isLoading}
  *       onClickRow={(index, id) => console.log(index, id)}
  *     >
- *       <UITable />
+ *       <UITableContainer />
  *     </UITableProvider>
  *   );
  * }
@@ -208,84 +130,17 @@ export const UITableProvider = <
   const innerTableId = useId();
   const tableRef = useRef<HTMLTableElement | null>(null);
 
-  const [isAnalysisPanelOpen, setIsAnalysisPanelOpen] = useState(false);
-  const [isSummaryBarOpen, setIsSummaryBarOpen] = useState(true);
-
-  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
-  const [columnPinning, setColumnPinning] = useState<ColumnPinningState>({
-    right: rightPinnedColumns as unknown as string[],
-    left: ['select', ...leftPinnedColumns] as unknown as string[],
-  });
   const [expanded, setExpanded] = useState<ExpandedState>({});
-  const [activeFilters, setActiveFilters] = useState<ActiveFilter[]>([]);
 
-  const handleRowSelectionChange = useCallback<React.Dispatch<React.SetStateAction<RowSelectionState>>>(
-    newRowSelection => {
-      setRowSelection(newRowSelection);
-      onRowSelection?.(newRowSelection instanceof Function ? newRowSelection(rowSelection) : newRowSelection);
-      return newRowSelection;
-    },
-    [rowSelection, onRowSelection]
-  );
-
-  const handleColumnPinningChange = useCallback<React.Dispatch<React.SetStateAction<ColumnPinningState>>>(
-    newColumnPinning => {
-      setColumnPinning(newColumnPinning);
-      onColumnPinning?.(newColumnPinning instanceof Function ? newColumnPinning(columnPinning) : newColumnPinning);
-    },
-    [columnPinning, onColumnPinning]
-  );
-
-  const addFilter = useCallback(
-    (definitionId: string) => {
-      const def = (filterDefinitions as FilterDefinition[]).find(d => d.id === definitionId);
-      if (!def) return;
-      const newFilter: ActiveFilter = {
-        id: `${definitionId}-${crypto.randomUUID()}`,
-        definitionId,
-        value: createDefaultFilterValue(def.type),
-      };
-      setActiveFilters(prev => {
-        const next = [...prev, newFilter];
-        onFilterChange?.(next);
-        return next;
-      });
-    },
-    [filterDefinitions, onFilterChange]
-  );
-
-  const removeFilter = useCallback(
-    (filterId: string) => {
-      setActiveFilters(prev => {
-        const next = prev.filter(f => f.id !== filterId);
-        onFilterChange?.(next);
-        return next;
-      });
-    },
-    [onFilterChange]
-  );
-
-  const updateFilter = useCallback(
-    (filterId: string, value: FilterValue) => {
-      setActiveFilters(prev => {
-        const next = prev.map(f => (f.id === filterId ? { ...f, value } : f));
-        onFilterChange?.(next);
-        return next;
-      });
-    },
-    [onFilterChange]
-  );
-
-  const filterContextValue = useMemo<TTableFilterContext>(
-    () => ({
-      filterDefinitions: filterDefinitions as FilterDefinition[],
-      activeFilters,
-      addFilter,
-      removeFilter,
-      updateFilter,
-    }),
-    [filterDefinitions, activeFilters, addFilter, removeFilter, updateFilter]
-  );
+  const { rowSelection, onRowSelectionChange } = useTableSelection(onRowSelection);
+  const { columnPinning, onColumnPinningChange } = useTableColumnPinning({
+    leftPinnedColumns: leftPinnedColumns as unknown as string[],
+    rightPinnedColumns: rightPinnedColumns as unknown as string[],
+    onColumnPinning,
+  });
+  const filterContextValue = useTableFilters({ filterDefinitions, onFilterChange });
+  const analysisContextValue = useTableAnalysisPanel(false);
+  const summaryContextValue = useTableSummaryBar(true);
 
   const table = useReactTable<TData>({
     data: data,
@@ -318,8 +173,8 @@ export const UITableProvider = <
     getGroupedRowModel: getGroupedRowModel(),
     getExpandedRowModel: getExpandedRowModel(),
 
-    onRowSelectionChange: handleRowSelectionChange,
-    onColumnPinningChange: handleColumnPinningChange,
+    onRowSelectionChange,
+    onColumnPinningChange,
     onExpandedChange: setExpanded,
   });
 
@@ -422,27 +277,19 @@ export const UITableProvider = <
     return table.getTotalSize();
   }, [table.getTotalSize()]);
 
-  const toggleAnalysisPanel = useCallback(() => setIsAnalysisPanelOpen(prev => !prev), []);
-
-  const analysisContextValue = useMemo<TTableAnalysisContext>(
-    () => ({ isOpen: isAnalysisPanelOpen, toggle: toggleAnalysisPanel }),
-    [isAnalysisPanelOpen, toggleAnalysisPanel]
-  );
-
-  const toggleSummaryBar = useCallback(() => setIsSummaryBarOpen(prev => !prev), []);
-
-  const summaryContextValue = useMemo<TTableSummaryContext>(
-    () => ({ isOpen: isSummaryBarOpen, toggle: toggleSummaryBar }),
-    [isSummaryBarOpen, toggleSummaryBar]
-  );
-
   return (
     <TableAnalysisContext.Provider value={analysisContextValue}>
       <TableSummaryContext.Provider value={summaryContextValue}>
         <TableFilterContext.Provider value={filterContextValue}>
           <TableContext.Provider value={value as TTableContext<TData>}>
             <UITableInnerWrapperProvider innerWrapperId={innerWrapperId}>
-              <UITableInnerTableProvider table={table} innerTableId={innerTableId} totalSize={totalSize} tableRef={tableRef}>
+              <UITableInnerTableProvider
+                table={table}
+                innerTableId={innerTableId}
+                totalSize={totalSize}
+                tableRef={tableRef}
+                columnPinningState={columnPinningState}
+              >
                 <UITableHeadRowProvider
                   isAllRowsSelected={isAllRowsSelected}
                   columnPinningState={columnPinningState}
@@ -450,7 +297,13 @@ export const UITableProvider = <
                   rightPinnedHeaders={rightPinnedHeaders}
                   onToggleAllRowsSelected={table.toggleAllRowsSelected}
                 >
-                  <UITableBodyProvider isFetching={isFetching} isRefetching={isRefetching} isEmpty={isEmpty} rowSelectionState={rowSelectionState}>
+                  <UITableBodyProvider
+                    isFetching={isFetching}
+                    isRefetching={isRefetching}
+                    isEmpty={isEmpty}
+                    rowSelectionState={rowSelectionState}
+                    columnPinningState={columnPinningState}
+                  >
                     <UITableRowProvider
                       keyOfClickRow={keyOfClickRow}
                       isAllRowsSelected={isAllRowsSelected}

@@ -1,18 +1,24 @@
 'use client';
 
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { Paragraph } from '@/components/typography/paragraph';
 
-export const DescriptionNumberPhone: React.FC<{ value: string }> = ({ value }) => {
+import { Paragraph } from '@/components/typography/paragraph';
+import { formatVietnamesePhone } from '@/libs/phone';
+import { DescriptionEmpty } from './empty';
+
+export const DescriptionNumberPhone: React.FC<{ value?: string | null }> = ({ value }) => {
+  const phone = formatVietnamesePhone(value);
+  if (!phone) return <DescriptionEmpty />;
+
   return (
     <Tooltip>
-      <TooltipTrigger data-slot="description-phone">
-        <Paragraph variant="sm" className="tabular-nums transition-colors">
-          {value.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3')}
+      <TooltipTrigger asChild>
+        <Paragraph data-slot="description-phone" variant="sm" className="cursor-help tabular-nums transition-colors">
+          {phone.national}
         </Paragraph>
       </TooltipTrigger>
       <TooltipContent align="start">
-        <p className="tabular-nums">{value.slice(1).replace(/(\d{2})(\d{3})(\d{4})/, '(00) (+84) ($1) $2-$3')}</p>
+        <p className="tabular-nums">{phone.international}</p>
       </TooltipContent>
     </Tooltip>
   );

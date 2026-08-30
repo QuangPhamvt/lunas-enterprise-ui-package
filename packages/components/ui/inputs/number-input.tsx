@@ -325,8 +325,8 @@ export const NumberInput: React.FC<TProps> = ({
         onFocus={handleFocus}
         onBlur={handleBlur}
       />
-      {unitText && (
-        <span ref={_unitRef} className="-translate-y-1/2 pointer-events-none absolute top-1/2 right-2 text-muted-foreground text-sm">
+      {!!unitText && (
+        <span ref={_unitRef} className="pointer-events-none absolute top-[55%] right-2 -translate-y-1/2 text-text-positive-weak text-xs">
           {unitText}
         </span>
       )}

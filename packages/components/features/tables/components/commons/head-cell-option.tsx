@@ -37,7 +37,7 @@ export const UITableHeadCellOption = memo<TUITableHeadCellOption>(({ isPinned, o
           <EllipsisVerticalIcon />
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-64 p-4">
+      <DropdownMenuContent align="end" className="w-48 p-2">
         <DropdownMenuGroup className="*:data-[slot=dropdown-menu-item]:rounded-xs *:data-[slot=dropdown-menu-item]:p-2">
           <Activity mode={isPinned ? 'visible' : 'hidden'}>
             <DropdownMenuItem onClick={handleUnpin}>

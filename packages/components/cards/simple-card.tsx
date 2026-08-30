@@ -28,9 +28,11 @@ export const SimpleCard = ({ title, description, action, footer, children }: Rea
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{title}</CardTitle>
+        <CardTitle>
+          {title}
+          {action && <CardAction>{action}</CardAction>}
+        </CardTitle>
         <CardDescription>{description}</CardDescription>
-        {action && <CardAction>{action}</CardAction>}
       </CardHeader>
       <CardContent>{children}</CardContent>
       {footer && <CardFooter>{footer}</CardFooter>}

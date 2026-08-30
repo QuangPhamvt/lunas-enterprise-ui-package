@@ -1,9 +1,10 @@
 'use client';
 
 import { useMemo } from 'react';
-import { cn } from '@customafk/react-toolkit/utils';
 
-import { AlertCircle, AlertTriangle, CheckCircle, Info, X } from 'lucide-react';
+import { AlertCircle, AlertTriangle, CheckCircle, Info } from 'lucide-react';
+
+import { cn } from '@customafk/react-toolkit/utils';
 
 import { type AlertVariantProps, alertVariants } from './alert-variants';
 
@@ -52,7 +53,7 @@ function Alert({ className, variant, children, icon, dismissible, onDismiss, ...
         case 'info':
           return <Info />;
         default:
-          return null;
+          return <AlertCircle />;
       }
     }
     return icon;
@@ -62,17 +63,6 @@ function Alert({ className, variant, children, icon, dismissible, onDismiss, ...
     <div data-slot="alert" role="alert" data-variant={variant} className={cn(alertVariants({ variant }), className)} {...props}>
       {defaultIcon}
       {children}
-      {dismissible && (
-        <button
-          type="button"
-          onClick={onDismiss}
-          aria-label="Close alert"
-          className="absolute top-2 right-2 size-6 rounded-md p-1 opacity-70 transition-opacity duration-100 hover:opacity-100"
-          data-slot="alert-close"
-        >
-          <X size={16} />
-        </button>
-      )}
     </div>
   );
 }
@@ -91,7 +81,7 @@ export interface AlertTitleProps extends React.HTMLAttributes<HTMLDivElement> {
  * Renders the bold title line inside an Alert.
  */
 function AlertTitle({ className, ...props }: AlertTitleProps) {
-  return <div data-slot="alert-title" className={cn('col-start-2 line-clamp-1 min-h-4 font-medium tracking-tight', className)} {...props} />;
+  return <div data-slot="alert-title" className={cn('col-start-2 line-clamp-1 min-h-4 font-medium leading-4.5 tracking-tight', className)} {...props} />;
 }
 
 /**
@@ -108,13 +98,7 @@ export interface AlertDescriptionProps extends React.HTMLAttributes<HTMLDivEleme
  * Renders the supporting body text inside an Alert.
  */
 function AlertDescription({ className, ...props }: AlertDescriptionProps) {
-  return (
-    <div
-      data-slot="alert-description"
-      className={cn('text-text-positive-weak col-start-2 grid justify-items-start gap-1 text-sm [&_p]:leading-relaxed', className)}
-      {...props}
-    />
-  );
+  return <div data-slot="alert-description" className={cn('col-start-2 grid justify-items-start gap-1 text-sm [&_p]:leading-relaxed', className)} {...props} />;
 }
 
 export { Alert, AlertDescription, AlertTitle };

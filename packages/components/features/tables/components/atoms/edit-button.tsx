@@ -1,7 +1,7 @@
 'use client';
-import { useCallback } from 'react';
+import { memo, useCallback } from 'react';
 
-import { PencilIcon } from 'lucide-react';
+import { SquarePenIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
@@ -23,7 +23,7 @@ export const UITableEditButton: React.FC<{
   title?: string;
   /** Async-compatible callback invoked when the button is clicked. */
   onClick?: () => void | Promise<void>;
-}> = ({ title, onClick }) => {
+}> = memo(({ title, onClick }) => {
   const handleClick = useCallback<React.MouseEventHandler<HTMLButtonElement>>(
     async e => {
       e.preventDefault();
@@ -35,13 +35,13 @@ export const UITableEditButton: React.FC<{
   return (
     <Tooltip>
       <TooltipTrigger>
-        <Button type="button" variant="ghost" color="secondary" size="icon" onClick={handleClick}>
-          <PencilIcon />
+        <Button type="button" variant="ghost" color="muted" size="icon" onClick={handleClick}>
+          <SquarePenIcon />
         </Button>
       </TooltipTrigger>
       <TooltipContent>
-        <p>{title || 'Edit item'}</p>
+        <p>{title || 'Chỉnh sửa'}</p>
       </TooltipContent>
     </Tooltip>
   );
-};
+});

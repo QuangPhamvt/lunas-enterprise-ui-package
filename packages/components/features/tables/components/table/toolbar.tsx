@@ -1,5 +1,5 @@
 /**
- * @file tooltip.tsx
+ * @file toolbar.tsx
  * Toolbar components rendered above the table: a debounced search input,
  * an action button group (create / refresh / download), and the outer
  * toolbar shell that displays the table title.
@@ -24,15 +24,15 @@ import { downloadCsv } from '../../utils/csv';
  *
  * @example
  * ```tsx
- * import { UITableTooltipFilter } from '@customafk/lunas-ui/features/tables';
+ * import { UITableToolbarSearch } from '@customafk/lunas-ui/features/tables';
  *
- * <UITableTooltipFilter
+ * <UITableToolbarSearch
  *   placeholder="Search users…"
  *   onSearch={value => setQuery(value)}
  * />
  * ```
  */
-export const UITableTooltipFilter: React.FC<
+export const UITableToolbarSearch: React.FC<
   Omit<React.ComponentProps<typeof Input>, 'className'> & {
     onSearch?: (value: string) => void;
   }
@@ -73,7 +73,7 @@ const ActionButton: React.FC<React.PropsWithChildren<React.ComponentProps<'butto
       type="button"
       disabled={disabled}
       className={cn(
-        'flex cursor-pointer items-center gap-x-1 rounded-sm border border-border bg-background p-2.5 text-sm text-text-positive-weak outline-none transition-all hover:shadow-card focus:border-border-emphasis focus:bg-muted-muted active:border-border-emphasis active:bg-muted-muted active:text-text-positive disabled:pointer-events-none disabled:cursor-default disabled:opacity-60 [&_svg]:size-3.5',
+        'flex cursor-pointer items-center gap-x-1 rounded-sm border border-border bg-background p-2.5 text-sm text-text-positive-weak outline-none transition-all hover:shadow-card focus:bg-muted-muted active:bg-muted-muted active:text-text-positive disabled:pointer-events-none disabled:cursor-default disabled:opacity-60 [&_svg]:size-3.5',
         className
       )}
       onClick={onClick}
@@ -98,16 +98,16 @@ const ActionButton: React.FC<React.PropsWithChildren<React.ComponentProps<'butto
  *
  * @example
  * ```tsx
- * import { UITableTooltipActions } from '@customafk/lunas-ui/features/tables';
+ * import { UITableToolbarActions } from '@customafk/lunas-ui/features/tables';
  *
- * <UITableTooltipActions
+ * <UITableToolbarActions
  *   onCreate={() => setOpenCreate(true)}
  *   onCreateMultiple={() => setOpenBulkCreate(true)}
  *   onRefresh={() => refetch()}
  * />
  * ```
  */
-export const UITableTooltipActions: React.FC<{
+export const UITableToolbarActions: React.FC<{
   onCreate?: () => void;
   onCreateMultiple?: () => void;
   onRefresh?: () => void;
@@ -212,35 +212,35 @@ export const UITableTooltipActions: React.FC<{
  *
  * Reads the table `title` from `UITableContext` and renders it as a heading
  * above the `children` slot, which typically contains a
- * `UITableTooltipFilter` and/or `UITableTooltipActions`.
+ * `UITableToolbarSearch` and/or `UITableToolbarActions`.
  *
  * @example
  * ```tsx
  * import {
- *   UITableTooltip,
- *   UITableTooltipFilter,
- *   UITableTooltipActions,
+ *   UITableToolbar,
+ *   UITableToolbarSearch,
+ *   UITableToolbarActions,
  * } from '@customafk/lunas-ui/features/tables';
  *
- * <UITableTooltip>
- *   <UITableTooltipFilter onSearch={setQuery} />
- *   <UITableTooltipActions onCreate={handleCreate} onRefresh={refetch} />
- * </UITableTooltip>
+ * <UITableToolbar>
+ *   <UITableToolbarSearch onSearch={setQuery} />
+ *   <UITableToolbarActions onCreate={handleCreate} onRefresh={refetch} />
+ * </UITableToolbar>
  * ```
  */
-export const UITableTooltip: React.FC<React.PropsWithChildren> = ({ children }) => {
+export const UITableToolbar: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { title, description, headerActions } = useUITableContext();
   return (
-    <div data-slot="table-tooltip" className="relative flex w-full flex-col gap-2 px-2 py-0 text-sm">
-      <div className="flex w-full items-start justify-between gap-4">
-        <div className="flex flex-col gap-0.5">
+    <div data-slot="table-toolbar" className="relative grid w-full grid-cols-1 gap-2 px-2 py-0 text-sm">
+      <div className="grid w-full grid-cols-[1fr_auto] items-start gap-4">
+        <div className="grid grid-cols-1 gap-0.5">
           <h3 className="font-semibold text-base text-text-positive">{title}</h3>
-          {!!description && <p className="text-muted-foreground text-sm">{description}</p>}
+          {!!description && <p className="text-sm text-text-positive-weak">{description}</p>}
         </div>
         {!!headerActions && <div className="flex shrink-0 items-center gap-2">{headerActions}</div>}
       </div>
-      <div className="flex w-full flex-1 justify-between gap-x-2">{children}</div>
+      <div className="grid w-full grid-cols-[1fr_auto] gap-x-2">{children}</div>
     </div>
   );
 };
-UITableTooltip.displayName = 'UITableTooltip';
+UITableToolbar.displayName = 'UITableToolbar';

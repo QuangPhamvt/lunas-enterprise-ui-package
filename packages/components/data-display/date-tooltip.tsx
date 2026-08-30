@@ -26,11 +26,11 @@ export const DateTooltip: React.FC<DateTooltipProps> = ({ date }) => {
       <Tooltip>
         <TooltipTrigger asChild>
           <Badge data-slot="date-tooltip-trigger" className="h-fit">
-            <DateDisplay date={date} format="medium" className="text-xs font-normal text-text-negative" />
+            <DateDisplay date={date} format="medium" className="font-normal text-text-negative text-xs" />
           </Badge>
         </TooltipTrigger>
         <TooltipContent data-slot="date-tooltip-content">
-          <DateDisplay date={date} format="full" showTime className="font-[Inter]! font-medium" />
+          <DateDisplay date={date} format="full" showTime className="font-medium text-text-negative-intense" />
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

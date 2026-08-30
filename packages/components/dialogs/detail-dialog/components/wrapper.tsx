@@ -48,7 +48,7 @@ export function DetailDialogWrapper({ open, onOpenChange, children }: DetailDial
             {children}
 
             <DialogPrimitive.Close data-slot="dialog-close" tabIndex={-1} asChild className="absolute top-3 right-3">
-              <button className="flex cursor-pointer items-center justify-center rounded-full p-2 text-text-positive-weak transition-colors hover:bg-muted-muted hover:text-text-positive active:bg-muted-weak active:text-text-positive-strong disabled:pointer-events-none disabled:opacity-60">
+              <button className="flex cursor-pointer items-center justify-center rounded-full p-2 text-text-positive-weak transition-colors hover:bg-border-weak hover:text-text-positive active:bg-border active:text-text-positive-strong disabled:pointer-events-none disabled:opacity-60">
                 <XIcon size={24} />
               </button>
             </DialogPrimitive.Close>

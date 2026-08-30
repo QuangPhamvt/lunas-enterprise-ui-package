@@ -1,27 +1,22 @@
 'use client';
 
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { Paragraph } from '@/components/typography/paragraph';
-
+import { ClampedText } from '@/components/data-display/clamped-text';
 import { DescriptionEmpty } from './empty';
 
+/**
+ * Renders a name clamped to 2 lines inside a {@link Description} value cell, revealing the full text
+ * and its character count in a tooltip on hover/click. Falls back to {@link DescriptionEmpty} when
+ * `name` is falsy.
+ *
+ * @example
+ * import { DescriptionName } from '@customafk/lunas-ui/features/descriptions';
+ *
+ * <DescriptionName name="Nguyễn Văn An" />
+ */
 export const DescriptionName: React.FC<{
+  /** The name to display; a falsy value renders an empty state. */
   name?: string | null | undefined;
 }> = ({ name }) => {
   if (!name) return <DescriptionEmpty />;
-  return (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <Paragraph data-slot="description-name" variant="sm" className="line-clamp-2 w-full cursor-pointer truncate hover:text-text-positive transition-colors">
-          {name}
-        </Paragraph>
-      </TooltipTrigger>
-      <TooltipContent align="start" className="h-fit min-w-48 max-w-80 pt-4">
-        <div className="flex flex-col gap-y-2">
-          <p className="whitespace-pre-line text-wrap break-keep">{name}</p>
-          <p className="w-full text-end text-text-positive-subtle">{name.length} chars</p>
-        </div>
-      </TooltipContent>
-    </Tooltip>
-  );
+  return <ClampedText content={name} wrap="truncate" interactive showCharCount slot="description-name" />;
 };

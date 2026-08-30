@@ -42,7 +42,7 @@ function TabsTrigger({ className, ...props }: React.ComponentProps<typeof TabsPr
     <TabsPrimitive.Trigger
       data-slot="tabs-trigger"
       className={cn(
-        'text-text-positive-weak',
+        'text-text-positive-weak outline-none',
         'inline-flex h-[calc(100%-1px)] min-w-32 flex-1 cursor-pointer items-center justify-center gap-1.5',
         'rounded-sm',
         'whitespace-nowrap border border-transparent px-2 py-1 font-medium text-sm transition',
@@ -51,11 +51,11 @@ function TabsTrigger({ className, ...props }: React.ComponentProps<typeof TabsPr
         'data-[state=active]:bg-background',
         'disabled:opacity-50',
         'disabled:pointer-events-none',
-        'focus-visible:border-primary',
-        'focus-visible:ring-4',
-        'focus-visible:ring-primary-weak',
-        'focus-visible:outline-1',
-        'focus-visible:outline-primary',
+        // 'focus-visible:border-primary',
+        // 'focus-visible:ring-4',
+        // 'focus-visible:ring-primary-weak',
+        // 'focus-visible:outline-1',
+        // 'focus-visible:outline-primary',
         '[&_svg]:pointer-events-none',
         '[&_svg]:shrink-0',
         "[&_svg:not([class*='size-'])]:size-4",

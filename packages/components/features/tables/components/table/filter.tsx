@@ -5,7 +5,7 @@
  * - "Columns" tab: toggle individual column visibility.
  * - "Filters" tab: "Add Filter" dropdown → active filter chips → per-filter Popover editor.
  */
-import { Activity, useState } from 'react';
+import { Activity, memo, useCallback, useState } from 'react';
 
 import { CalendarIcon, HashIcon, ListFilterIcon, ListFilterPlus, TagIcon, ToggleLeftIcon, Trash2Icon, TypeIcon } from 'lucide-react';
 
@@ -113,13 +113,13 @@ const TagFilterEditor: React.FC<{
 }> = ({ value, definition, onChange }) => (
   <div className="flex flex-col gap-1 p-3">
     {(definition.options ?? []).length === 0 ? (
-      <p className="text-xs text-text-positive-muted">Không có tùy chọn</p>
+      <p className="text-text-positive-muted text-xs">Không có tùy chọn</p>
     ) : (
-      definition.options!.map(option => (
+      definition.options?.map(option => (
         <Label
           key={option.value}
           className={cn(
-            'flex items-center gap-2 bg-secondary-bg-subtle hover:bg-secondary-muted px-4 py-2 rounded transition-colors',
+            'flex items-center gap-2 rounded bg-muted-bg-subtle px-4 py-2 transition-colors hover:bg-muted-muted',
             value.values.includes(option.value) && 'bg-primary-muted hover:bg-primary-subtle'
           )}
         >
@@ -150,8 +150,8 @@ const SingleTagFilterEditor: React.FC<{
         <Label
           key={option.value}
           className={cn(
-            'flex items-center gap-2 rounded bg-secondary-bg-subtle px-4 py-2 transition-colors hover:bg-secondary-muted',
-            value.value === option.value && 'bg-primary-muted hover:bg-primary-subtle'
+            'flex items-center gap-2 rounded bg-muted-bg-subtle px-4 py-2 transition-colors hover:bg-muted-muted',
+            value.value === option.value && 'bg-primary-bg-subtle hover:bg-primary-subtle'
           )}
         >
           <Checkbox
@@ -293,22 +293,22 @@ const FilterItem: React.FC<{
   definition: FilterDefinition;
   onRemove: () => void;
   onUpdate: (value: FilterValue) => void;
-}> = ({ filter, definition, onRemove, onUpdate }) => (
-  <div className="flex items-center gap-1">
+}> = memo(({ filter, definition, onRemove, onUpdate }) => (
+  <div className="flex items-center gap-1.5">
     <Popover>
       <PopoverTrigger asChild>
         <Button
           type="button"
           variant="outline"
           color="muted"
-          className="max-w-[calc(100%-32px)] flex-1 justify-start bg-white"
+          className="max-w-[calc(100%-32px)] flex-1 justify-start rounded bg-white"
           innerClassName="flex truncate gap-1.5"
         >
           <span className="shrink-0 font-medium text-text-positive">{definition.label}</span>
           <span className="truncate text-text-positive-weak text-xs">{formatFilterValue(filter.value, definition)}</span>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-64 p-0" align="start" side="bottom">
+      <PopoverContent className="w-64 rounded p-0" align="start" side="bottom">
         <div className="border-border border-b px-3 py-2">
           <div className="flex items-center gap-1.5">
             <span className="text-text-positive-muted">{TYPE_ICONS[definition.type]}</span>
@@ -318,11 +318,11 @@ const FilterItem: React.FC<{
         <FilterEditor value={filter.value} definition={definition} onChange={onUpdate} />
       </PopoverContent>
     </Popover>
-    <Button type="button" size="icon" variant="soft" color="danger" className="shrink" onClick={onRemove}>
+    <Button type="button" size="icon" variant="ghost" color="danger" className="shrink" onClick={onRemove}>
       <Trash2Icon size={13} />
     </Button>
   </div>
-);
+));
 
 // ── column visibility row ──────────────────────────────────────────────────────
 
@@ -359,15 +359,11 @@ const FilterItem: React.FC<{
  *   ]}
  *   onFilterChange={filters => console.log(filters)}
  * >
- *   <ResizablePanelGroup direction="horizontal">
- *     <ResizablePanel><UITable /></ResizablePanel>
- *     <ResizableHandle />
- *     <UITableFilter />
- *   </ResizablePanelGroup>
+ *   <UITableContainer sidePanels={[<UITableFilter key="filter" />]} />
  * </UITableProvider>
  * ```
  */
-export const UITableFilter = () => {
+export const UITableFilter = memo(() => {
   // const { table } = useUITableContext();
   const { filterDefinitions, activeFilters, addFilter, removeFilter, updateFilter } = useUITableFilterContext();
 
@@ -376,43 +372,22 @@ export const UITableFilter = () => {
   const availableDefinitions = filterDefinitions.filter(def => !activeFilters.some(f => f.definitionId === def.id));
 
   return (
-    <ResizablePanel defaultSize={25} className={cn('bg-card', tab === null ? 'max-w-8!' : 'min-w-64')}>
-      <div className="relative z-20 flex size-full bg-muted-bg-subtle">
+    <ResizablePanel defaultSize={25} className={cn('bg-white', tab === null ? 'max-w-8!' : 'min-w-64')}>
+      <div className="relative z-20 flex size-full bg-white">
         <div className="min-w-0 flex-1 overflow-hidden">
-          {/* Columns tab */}
-          {/*<Activity mode={tab === 'columns' ? 'visible' : 'hidden'}>
-            <div className="flex size-full flex-col gap-2 p-4">
-              <p className="px-2 font-medium">Columns Visibility</p>
-              <Separator />
-              <div className="flex flex-col gap-4 pt-4">
-                {table.getAllColumns().map(column => {
-                  if (['select', 'actions'].includes(column.id)) return null;
-                  return (
-                    <ColumnVisibility
-                      key={column.id}
-                      checked={column.getIsVisible()}
-                      title={String(column.columnDef.header)}
-                      onCheckedChange={value => column.toggleVisibility(!!value)}
-                    />
-                  );
-                })}
-              </div>
-            </div>
-          </Activity>*/}
-
           {/* Filters tab */}
           <Activity mode={tab === 'filters' ? 'visible' : 'hidden'}>
-            <div className="flex size-full flex-col gap-2 p-4">
-              <div className="flex items-center justify-between gap-2">
-                <p className="font-medium">Bộ lọc</p>
+            <div className="flex size-full flex-col gap-2">
+              <div className="flex items-center justify-between gap-2 border-b border-b-border bg-muted-bg-subtle px-4 py-3">
+                <p className="font-medium text-sm">Bộ lọc</p>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="outline" color="muted" disabled={availableDefinitions.length === 0}>
+                    <Button variant="outline" color="muted" disabled={availableDefinitions.length === 0} className="rounded">
                       <ListFilterPlus size={13} />
                       Thêm bộ lọc
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
+                  <DropdownMenuContent align="end" className="min-w-48">
                     {availableDefinitions.map(def => (
                       <DropdownMenuItem key={def.id} className="flex items-center gap-2" onClick={() => addFilter(def.id)}>
                         {TYPE_ICONS[def.type]}
@@ -422,11 +397,10 @@ export const UITableFilter = () => {
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
-              <Separator />
               {activeFilters.length === 0 ? (
                 <p className="py-6 text-center text-text-positive-muted text-xs">Không có bộ lọc nào</p>
               ) : (
-                <div className="flex flex-col gap-2 pt-1">
+                <div className="flex grow flex-col gap-2 overflow-y-auto px-3 pt-1">
                   {activeFilters.map(filter => {
                     const def = filterDefinitions.find(d => d.id === filter.definitionId);
                     if (!def) return null;
@@ -464,7 +438,7 @@ export const UITableFilter = () => {
           >
             <ListFilterIcon size={18} />
             {activeFilters.length > 0 && (
-              <span className="absolute top-2 right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] text-primary-foreground leading-none">
+              <span className="absolute right-1.5 bottom-2 flex size-6 items-center justify-center rounded-full bg-primary font-bold text-[10px] text-primary-foreground leading-none">
                 {activeFilters.length}
               </span>
             )}
@@ -475,4 +449,4 @@ export const UITableFilter = () => {
       </div>
     </ResizablePanel>
   );
-};
+});

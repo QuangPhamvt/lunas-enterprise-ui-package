@@ -1,30 +1,34 @@
 'use client';
 
-import { cva, type VariantProps } from 'class-variance-authority';
 import { useCallback } from 'react';
+
+import { cva, type VariantProps } from 'class-variance-authority';
 
 /** CVA variant definitions for the `Input` component — controls sizing and visual style. */
 export const inputVariants = cva(
   [
-    'w-full rounded font-normal text-text-positive caret-primary transition-all tabular-nums',
-    'placeholder:text-text-positive-muted',
-    'disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50',
-    'read-only:pointer-events-none read-only:bg-muted-muted read-only:placeholder:text-text-positive-weak',
+    'w-full rounded font-normal text-text-positive tabular-nums caret-primary transition-all placeholder:text-text-positive-weak',
+    'disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-60',
+    'read-only:pointer-events-none read-only:bg-muted-bg-subtle',
   ],
   {
     variants: {
       variant: {
         outline: [
-          'outline-1 outline-border -outline-offset-1 bg-transparent shadow-input',
-          'focus-visible:outline-primary-strong',
-          'focus-visible:ring-4',
-          'focus-visible:ring-primary-weak',
-          'aria-invalid:outline-danger',
-          'aria-invalid:ring-danger-weak',
+          'outline-none',
+          'border border-border bg-white shadow-xs',
+          'hover:border-border-strong',
+          'focus:border-primary-strong',
+          'focus:ring-3',
+          'focus:ring-primary-muted',
+          'aria-invalid:border-danger',
           'aria-invalid:bg-danger-bg-subtle',
-          'aria-invalid:focus-visible:outline-danger-strong',
-          'aria-invalid:focus-visible:ring-4',
-          'aria-invalid:placeholder:text-text-positive-weak',
+          'aria-invalid:hover:border-danger-strong',
+          'aria-invalid:focus-visible:border-danger-intense',
+          'aria-invalid:focus-visible:ring-3',
+          'aria-invalid:focus-visible:ring-danger-weak',
+          'aria-invalid:text-danger-strong',
+          'aria-invalid:placeholder:text-danger-weak',
         ],
         ghost: '',
         none: '',
@@ -32,11 +36,11 @@ export const inputVariants = cva(
         subtle: '',
       },
       size: {
-        xs: 'px-2 py-1 text-xs leading-4',
-        sm: 'px-2.5 py-1.5 text-xs leading-4',
-        md: 'px-2.5 py-2 text-sm leading-5',
-        lg: 'px-3 py-2 text-sm leading-5',
-        xl: 'px-3 py-2 text-base leading-6',
+        xs: 'h-7 px-3 text-sm leading-5',
+        sm: 'h-8 px-3 text-sm leading-5',
+        md: 'h-9 px-3 text-sm leading-5',
+        lg: 'h-10 px-3 text-sm leading-5',
+        xl: 'h-11 px-3 text-sm leading-5',
       },
     },
     defaultVariants: {
@@ -85,7 +89,15 @@ function Input({
     },
     [onChange, onValueChange]
   );
-  return <input data-slot="input" className={inputVariants({ variant, size, className })} {...props} onChange={handleChange} />;
+  return (
+    <input
+      data-slot="input"
+      tabIndex={props.readOnly || props.disabled ? -1 : 0}
+      className={inputVariants({ variant, size, className })}
+      {...props}
+      onChange={handleChange}
+    />
+  );
 }
 
 export { Input };

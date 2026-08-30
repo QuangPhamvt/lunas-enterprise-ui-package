@@ -4,7 +4,7 @@ import { memo, useMemo } from 'react';
 
 import { cn } from '@customafk/react-toolkit/utils';
 
-import { UITableEmpty } from './empty';
+import { UITableEmptyValue } from './empty';
 
 /** Props for the {@link UITableCurrencyDisplay} component. */
 type Props = {
@@ -21,22 +21,29 @@ type Props = {
   display?: 'symbol' | 'code' | 'name';
   /** Font-size variant (default: `'md'`). */
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-  /** When `true`, applies a green tint for positive and red tint for negative values. */
+  /** When `true` and `trend` is not set, auto-derives color from the value's sign (negative → red, positive → green, zero → neutral). */
   colorize?: boolean;
+  /**
+   * Explicit color override, independent of the value's numeric sign — e.g. a large
+   * positive expense can still be marked `'down'` (red) to flag it as significant.
+   * Takes precedence over `colorize`'s sign-based auto-detection.
+   */
+  trend?: 'up' | 'down' | 'neutral';
 };
 
 /**
  * Formats a numeric value as a locale-aware currency string in a table cell.
  * Always shows exactly two decimal places and uses the browser's `Intl` API for
- * symbol placement.  Renders {@link UITableEmpty} when the value is absent or
+ * symbol placement.  Renders {@link UITableEmptyValue} when the value is absent or
  * invalid.
  *
  * @example
  * import { UITableCurrencyDisplay } from '@customafk/lunas-ui/features/tables';
  *
  * <UITableCurrencyDisplay value={1234.5} currency="USD" colorize />
+ * <UITableCurrencyDisplay value={9800.5} currency="USD" trend="down" />
  */
-export const UITableCurrencyDisplay = memo(({ value, currency = 'USD', locale = 'en-US', display = 'symbol', size = 'md', colorize = false }: Props) => {
+export const UITableCurrencyDisplay = memo(({ value, currency = 'USD', locale = 'en-US', display = 'symbol', size = 'md', colorize = false, trend }: Props) => {
   const formatted = useMemo(() => {
     const num = typeof value === 'string' ? Number(value.trim()) : value;
     if (num === null || num === undefined || Number.isNaN(num) || !Number.isFinite(num)) return null;
@@ -50,29 +57,36 @@ export const UITableCurrencyDisplay = memo(({ value, currency = 'USD', locale = 
     }).format(num);
   }, [value, currency, locale, display]);
 
-  const isNegative = useMemo(() => {
-    const num = typeof value === 'string' ? Number(value.trim()) : value;
-    return typeof num === 'number' && num < 0;
-  }, [value]);
+  const effectiveTrend = useMemo(() => {
+    if (trend) return trend;
+    if (!colorize) return undefined;
 
-  if (!formatted) return <UITableEmpty />;
+    const num = typeof value === 'string' ? Number(value.trim()) : value;
+    if (typeof num !== 'number' || Number.isNaN(num)) return undefined;
+    if (num < 0) return 'down';
+    if (num > 0) return 'up';
+    return 'neutral';
+  }, [trend, colorize, value]);
+
+  if (!formatted) return <UITableEmptyValue />;
 
   return (
     <p
       className={cn(
-        'font-number tabular-nums',
+        'font-medium font-number tabular-nums',
         size === 'xs' && 'text-xs',
         size === 'sm' && 'text-sm',
         size === 'md' && 'text-base',
         size === 'lg' && 'text-lg',
         size === 'xl' && 'text-xl',
-        !colorize && 'text-text-positive',
-        colorize && isNegative && 'text-danger-strong',
-        colorize && !isNegative && 'text-success-strong'
+        !effectiveTrend && 'text-text-positive',
+        effectiveTrend === 'down' && 'text-danger-strong',
+        effectiveTrend === 'up' && 'text-success-strong',
+        effectiveTrend === 'neutral' && 'text-text-positive'
       )}
     >
       {formatted}
     </p>
   );
 });
-UITableCurrencyDisplay.displayName = 'UITableCurrencyDisplay';
+UITableCurrencyDisplay.displayName = `UITableCurrencyDisplay`;

@@ -47,17 +47,25 @@ function DropdownMenuContent({ className, sideOffset = 4, align = 'start', ...pr
     <DropdownMenuPrimitive.Portal>
       <DropdownMenuPrimitive.Content
         data-slot="dropdown-menu-content"
+        loop
         sideOffset={sideOffset}
         align={align}
         className={cn(
-          'bg-popover text-text-positive',
+          'bg-white text-text-positive',
           'z-50 min-w-32',
           'overflow-y-auto overflow-x-hidden',
-          'rounded-md p-1.5 shadow-dropdown',
+          'rounded px-0.5 py-2 shadow-popup',
           'max-h-(--radix-dropdown-menu-content-available-height)',
           'origin-(--radix-dropdown-menu-content-transform-origin)',
-          'data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
-          'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95',
+
+          'data-[state=open]:fade-in-0',
+          'data-[state=open]:zoom-in-95',
+          'data-[state=open]:animate-in',
+
+          'data-[state=closed]:fade-out-0',
+          'data-[state=closed]:zoom-out-95',
+          'data-[state=closed]:animate-out',
+
           'data-[side=bottom]:slide-in-from-top-2',
           'data-[side=left]:slide-in-from-right-2',
           'data-[side=right]:slide-in-from-left-2',
@@ -96,16 +104,22 @@ function DropdownMenuItem({
       data-inset={inset}
       data-variant={variant}
       className={cn(
-        'relative flex cursor-pointer select-none items-center gap-2 rounded-md px-2 py-2.5 text-sm outline-hidden transition-colors',
-        'focus:bg-muted-muted focus:text-text-positive-strong',
+        'relative flex cursor-pointer select-none items-center gap-2 rounded-none px-2 py-1.5 text-sm outline-hidden transition-all',
+
+        'data-highlighted:bg-muted-muted',
+        'data-highlighted:text-text-positive-strong',
+
         'data-inset:pl-8',
-        'data-disabled:pointer-events-none data-disabled:opacity-50',
+        'data-disabled:pointer-events-none',
+        'data-disabled:opacity-60',
+
         'data-[variant=destructive]:text-danger',
         'data-[variant=destructive]:focus:bg-danger-muted data-[variant=destructive]:focus:text-danger-strong',
         'data-[variant=destructive]:*:[svg]:text-danger!',
+
         '[&_svg]:pointer-events-none [&_svg]:shrink-0',
-        "[&_svg:not([class*='size-'])]:size-4",
-        "[&_svg:not([class*='text-'])]:text-text-positive-weak",
+        `[&_svg:not([class*='size-'])]:size-4`,
+        `[&_svg:not([class*='text-'])]:text-text-positive-weak`,
         className
       )}
       {...props}
@@ -123,7 +137,7 @@ function DropdownMenuCheckboxItem({ className, children, checked, ...props }: Re
         'focus:bg-muted-muted focus:text-text-positive-strong',
         'data-disabled:pointer-events-none data-disabled:opacity-50',
         '[&_svg]:pointer-events-none [&_svg]:shrink-0',
-        "[&_svg:not([class*='size-'])]:size-4",
+        `[&_svg:not([class*='size-'])]:size-4`,
         className
       )}
       checked={checked}
@@ -154,7 +168,7 @@ function DropdownMenuRadioItem({ className, children, ...props }: React.Componen
         'focus:bg-muted-muted focus:text-text-positive-strong',
         'data-disabled:pointer-events-none data-disabled:opacity-50',
         '[&_svg]:pointer-events-none [&_svg]:shrink-0',
-        "[&_svg:not([class*='size-'])]:size-4",
+        `[&_svg:not([class*='size-'])]:size-4`,
         className
       )}
       {...props}
@@ -185,7 +199,7 @@ function DropdownMenuLabel({
     <DropdownMenuPrimitive.Label
       data-slot="dropdown-menu-label"
       data-inset={inset}
-      className={cn('px-2 py-1.5 font-medium text-sm text-text-positive-weak data-inset:pl-8', className)}
+      className={cn('px-2 py-1.5 text-text-positive-weak text-xs data-inset:pl-8', className)}
       {...props}
     />
   );
@@ -193,12 +207,12 @@ function DropdownMenuLabel({
 
 /** Horizontal dividing line between groups of dropdown items. */
 function DropdownMenuSeparator({ className, ...props }: React.ComponentProps<typeof DropdownMenuPrimitive.Separator>) {
-  return <DropdownMenuPrimitive.Separator data-slot="dropdown-menu-separator" className={cn('-mx-1 my-1 h-px bg-border-weak', className)} {...props} />;
+  return <DropdownMenuPrimitive.Separator data-slot="dropdown-menu-separator" className={cn('-mx-1 my-1 h-px bg-border', className)} {...props} />;
 }
 
 /** Displays a keyboard shortcut hint aligned to the right of a menu item. */
 function DropdownMenuShortcut({ className, ...props }: React.ComponentProps<'span'>) {
-  return <span data-slot="dropdown-menu-shortcut" className={cn('ml-auto text-xs text-text-positive-muted tracking-widest', className)} {...props} />;
+  return <span data-slot="dropdown-menu-shortcut" className={cn('ml-auto text-text-positive-weak text-xs tracking-widest', className)} {...props} />;
 }
 
 /** Root container for a nested sub-menu inside a DropdownMenu. */
@@ -229,7 +243,7 @@ function DropdownMenuSubTrigger({
         'data-[state=open]:bg-muted-muted data-[state=open]:text-text-positive-strong',
         'data-inset:pl-8',
         '[&_svg]:pointer-events-none [&_svg]:shrink-0',
-        "[&_svg:not([class*='size-'])]:size-4",
+        `[&_svg:not([class*='size-'])]:size-4`,
         className
       )}
       {...props}
@@ -245,13 +259,14 @@ function DropdownMenuSubContent({ className, ...props }: React.ComponentProps<ty
   return (
     <DropdownMenuPrimitive.SubContent
       data-slot="dropdown-menu-sub-content"
+      loop
       className={cn(
         'bg-popover text-text-positive',
         'z-50 min-w-32',
         'overflow-y-auto overflow-x-hidden',
         'origin-(--radix-dropdown-menu-content-transform-origin) rounded-md p-1.5 shadow-dropdown',
-        'data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
-        'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95',
+        'data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=open]:animate-in',
+        'data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=closed]:animate-out',
         'data-[side=bottom]:slide-in-from-top-2',
         'data-[side=left]:slide-in-from-right-2',
         'data-[side=right]:slide-in-from-left-2',

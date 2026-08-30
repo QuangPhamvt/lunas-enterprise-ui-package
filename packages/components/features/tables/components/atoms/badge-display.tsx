@@ -1,10 +1,12 @@
+import { memo, useCallback } from 'react';
+
 import { XIcon } from 'lucide-react';
 
-import { UITableEmpty } from './empty';
+import { UITableEmptyValue } from './empty';
 
 /**
  * Renders a pill-shaped badge for a table cell that optionally supports a click
- * action and an inline remove button; falls back to {@link UITableEmpty} when
+ * action and an inline remove button; falls back to {@link UITableEmptyValue} when
  * `label` is falsy.
  *
  * @example
@@ -23,42 +25,42 @@ export const UITableBadgeDisplay: React.FC<{
   onClick?: () => void;
   /** When provided, renders a remove (×) button and fires this callback on click. */
   onRemove?: () => void;
-}> = ({ label, onClick, onRemove }) => {
-  if (!label) return <UITableEmpty />;
+}> = memo(({ label, onClick, onRemove }) => {
+  const handleClick = useCallback(
+    (e: React.MouseEvent<HTMLDivElement | HTMLButtonElement>) => {
+      onClick?.();
+      e.stopPropagation();
+      e.preventDefault();
+    },
+    [onClick]
+  );
+
+  const handleRemoveClick = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      onRemove?.();
+      e.stopPropagation();
+      e.preventDefault();
+    },
+    [onRemove]
+  );
+
+  if (!label) return <UITableEmptyValue />;
   if (onRemove) {
     return (
       <div
-        className="flex w-fit gap-x-0.5 rounded-full border border-border py-1 pr-2 pl-3 text-text-positive text-xs shadow-xs"
-        onClick={e => {
-          onClick?.();
-          e.stopPropagation();
-          e.preventDefault();
-        }}
+        className="flex w-fit min-w-20 gap-x-0.5 rounded border border-border bg-white py-1 pr-2 pl-3 text-text-positive text-xs shadow-xs"
+        onClick={handleClick}
       >
         {label}
-        <button
-          className="cursor-pointer text-text-positive-weak hover:text-text-positive-strong"
-          onClick={e => {
-            onRemove?.();
-            e.stopPropagation();
-            e.preventDefault();
-          }}
-        >
+        <button className="cursor-pointer text-text-positive-weak hover:text-text-positive-strong" onClick={handleRemoveClick}>
           <XIcon size={12} />
         </button>
       </div>
     );
   }
   return (
-    <button
-      className="w-fit rounded-full border border-border px-3 py-1 text-text-positive text-xs shadow-xs"
-      onClick={e => {
-        onClick?.();
-        e.stopPropagation();
-        e.preventDefault();
-      }}
-    >
+    <button className="w-fit min-w-20 rounded border border-border bg-white px-3 py-1 text-text-positive text-xs shadow-xs" onClick={handleClick}>
       {label}
     </button>
   );
-};
+});

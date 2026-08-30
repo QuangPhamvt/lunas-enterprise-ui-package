@@ -1,13 +1,14 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import type { InputVariantProps } from '@/components/ui/input.variants';
+
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const InputVariant: React.FC<
   React.PropsWithChildren<{
     variant?: InputVariantProps['variant'];
   }>
-> = ({ variant, children }) => {
+> = ({ variant }) => {
   return (
     <Card>
       <CardHeader>
@@ -22,6 +23,8 @@ const InputVariant: React.FC<
           <Input variant={variant} size="xl" placeholder="Extra Large" />
           <Input variant={variant} size="md" placeholder="With value" aria-invalid value="Invalid" />
           <Input variant={variant} size="md" placeholder="Disabled" disabled />
+          <Input variant={variant} size="md" placeholder="Disabled" disabled value="Disabled" />
+          <Input variant={variant} size="md" placeholder="Read-only" readOnly value="Read-only" />
         </div>
       </CardContent>
     </Card>
@@ -43,7 +46,7 @@ export const Default: Story = {
   },
   render: () => {
     return (
-      <div className="flex flex-col w-full gap-y-4">
+      <div className="flex w-full flex-col gap-y-4">
         <InputVariant variant="outline" />
       </div>
     );

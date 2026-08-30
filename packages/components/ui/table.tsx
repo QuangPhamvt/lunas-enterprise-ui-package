@@ -49,7 +49,7 @@ const TableBody = memo(({ className, ...props }: React.ComponentProps<'tbody'>) 
       data-slot="table-body"
       className={cn(
         '[&_tr:last-child]:border-0',
-        '[&_tr]:hover:bg-muted-muted/50',
+        '[&_tr]:hover:bg-secondary-bg-subtle/50',
         '[&_tr]:active:bg-muted-muted',
         '[&_tr]:data-[state=selected]:bg-muted',
         '[&_tr]:border-border-weak',

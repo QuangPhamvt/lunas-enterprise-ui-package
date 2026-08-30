@@ -23,6 +23,12 @@ const preview: Preview = {
       options: INITIAL_VIEWPORTS,
     },
     layout: 'padded',
+    backgrounds: {
+      options: {
+        default: { name: 'Default', value: '#f8fafc' },
+      },
+      default: 'default',
+    },
     controls: {
       matchers: {
         color: /(background|color)$/i,

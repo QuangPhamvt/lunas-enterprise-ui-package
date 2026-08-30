@@ -5,6 +5,10 @@ export { ProductCard } from './cards/product-card';
 export { SimpleCard } from './cards/simple-card';
 
 // ─── Data Display ─────────────────────────────────────────────────────────────
+export { ClampedText } from './data-display/clamped-text';
+export type { ClampedTextProps } from './data-display/clamped-text';
+export { clampedTextVariants } from './data-display/clamped-text.variants';
+export type { ClampedTextVariants } from './data-display/clamped-text.variants';
 export { CountryDisplay } from './data-display/country';
 export { DataList, DataListItem } from './data-display/data-list';
 export { DateDisplay } from './data-display/date';
@@ -26,14 +30,35 @@ export { ErrorDialog } from './dialogs/error-dialog';
 export type { ErrorDialogProps } from './dialogs/error-dialog';
 export { LoadingDialog } from './dialogs/loading-dialog';
 export type { LoadingDialogProps } from './dialogs/loading-dialog';
+export { SidePanel } from './dialogs/side-panel';
+export type { SidePanelProps } from './dialogs/side-panel';
 
 // ─── Features ─────────────────────────────────────────────────────────────────
 export * from './features/charts/index';
 export {
   Description,
+  DescriptionCollapsibleSection,
+  DescriptionGroup,
   DescriptionHeader,
   DescriptionItem,
+  DescriptionRow,
+  DescriptionSearch,
   DescriptionSection,
+} from './features/descriptions/index';
+export type {
+  DescriptionCollapsibleSectionProps,
+  DescriptionGroupProps,
+  DescriptionHeaderProps,
+  DescriptionItemProps,
+  DescriptionProps,
+  DescriptionRowProps,
+  DescriptionSearchProps,
+  DescriptionSectionProps,
+  TDescriptionLabelColSpan,
+  TDescriptionLabelSpan,
+  TDescriptionRowColumns,
+  TDescriptionRowColumnsConfig,
+  TDescriptionSize,
 } from './features/descriptions/index';
 export * from './features/descriptions/components';
 export { SearchModal } from './features/search-modal/index';
@@ -47,6 +72,7 @@ export * from './layouts/cms-layout/index';
 export * from './layouts/payment-layout/index';
 export { Flex } from './layouts/flex';
 export { Grid } from './layouts/grid';
+export { UIGrid, UIGridItem } from './layouts/ui-grid';
 
 // ─── Pages ────────────────────────────────────────────────────────────────────
 export { FeatureDeveloping } from './pages/FeatureDeveloping';

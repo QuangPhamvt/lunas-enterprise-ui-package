@@ -42,6 +42,15 @@ export type TUITableEmptyDisplay = {
 /** Props for `UITableWrapper` — all native `<div>` attributes are forwarded. */
 export type TUITableWrapper = React.PropsWithChildren<React.ComponentProps<'div'>>;
 
+/**
+ * Props for `UITableContainer`. `sidePanels` renders additional resizable
+ * panels next to the table (e.g. `UITableFilter`) — each entry gets its own
+ * `ResizableHandle`, in array order. Omit or pass `[]` for no side panels.
+ */
+export type TUITableContainer = {
+  sidePanels?: React.ReactNode[];
+};
+
 /** Props for `UITableInnerWrapper` — all native `<div>` attributes are forwarded. */
 export type TUITableInnerWrapper = React.PropsWithChildren<React.ComponentProps<'div'>>;
 
@@ -275,7 +284,7 @@ export type CsvCell = {
  * components via `useUITableContext`.
  */
 export type TTableContext<TData extends RowData<TData>> = {
-  /** Human-readable table title rendered in `UITableTooltip`. */
+  /** Human-readable table title rendered in `UITableToolbar`. */
   title: string;
   /** The TanStack `Table` instance for the current dataset. */
   table: Table<TData>;
@@ -316,12 +325,12 @@ export type TTableContext<TData extends RowData<TData>> = {
   summary?: SummaryItem[];
   /** Called when a summary bar card is clicked; receives the clicked `SummaryItem`. */
   onSummaryItemClick?: (item: SummaryItem) => void;
-  /** When `true`, a toggle button appears in `UITableTooltipActions` to open `UITableAnalysisPanel`. */
+  /** When `true`, a toggle button appears in `UITableToolbarActions` to open `UITableAnalysisPanel`. */
   showAnalysisPanel?: boolean;
 
-  /** Optional subtitle rendered below the title in `UITableTooltip`. */
+  /** Optional subtitle rendered below the title in `UITableToolbar`. */
   description?: string;
-  /** Optional React node rendered on the right side of the `UITableTooltip` header row (e.g. action buttons). */
+  /** Optional React node rendered on the right side of the `UITableToolbar` header row (e.g. action buttons). */
   headerActions?: React.ReactNode;
 };
 
@@ -341,6 +350,11 @@ export type TTableInnerTableContext = {
   totalSize: number;
   /** Ref attached to the inner `<table>` DOM element, shared with descendants that need direct DOM access. */
   tableRef: React.RefObject<HTMLTableElement | null>;
+  /**
+   * The current `{ left, right }` column pinning map. Included so `UITableInnerTableProvider`
+   * re-renders on a pin-only change — its other fields never change reference/value then.
+   */
+  columnPinningState: ColumnPinningState;
 };
 
 /** Context value provided by `UITableHeadRowProvider`. */
@@ -367,6 +381,11 @@ export type TTableBodyContext = {
   isEmpty: boolean;
   /** The current `Record<rowId, boolean>` row-selection map from TanStack state. */
   rowSelectionState: RowSelectionState;
+  /**
+   * The current `{ left, right }` column pinning map. Exposed here, alongside `rowSelectionState`,
+   * so `UITableContainer` reliably re-renders and remounts header/body rows on a pin-only change.
+   */
+  columnPinningState: ColumnPinningState;
 };
 
 /** Context value provided by `UITableRowProvider`, consumed by individual `UITableRow` renders. */
@@ -404,7 +423,7 @@ export type TTableRowContext<TData extends RowData<TData> = RowData<AnyEntity>, 
  *   onRowSelection={sel => setSelected(sel)}
  *   fetchMoreData={fetchNextPage}
  * >
- *   <UITable />
+ *   <UITableContainer />
  * </UITableProvider>
  * ```
  */
@@ -413,7 +432,7 @@ export type TableProviderProps<
   TKey extends keyof TData = keyof TData,
   TColumns extends ReadonlyArray<TUITableColumn<TData>> = TUITableColumn<TData>[],
 > = {
-  /** Human-readable label shown in `UITableTooltip`. */
+  /** Human-readable label shown in `UITableToolbar`. */
   title: string;
 
   /** Pass `true` while the initial page of data is being fetched. */
@@ -470,12 +489,12 @@ export type TableProviderProps<
   summary?: SummaryItem[];
   /** Called when a summary bar card is clicked; receives the clicked `SummaryItem`. */
   onSummaryItemClick?: (item: SummaryItem) => void;
-  /** When `true`, a toggle button appears in `UITableTooltipActions` to open `UITableAnalysisPanel`. */
+  /** When `true`, a toggle button appears in `UITableToolbarActions` to open `UITableAnalysisPanel`. */
   showAnalysisPanel?: boolean;
 
-  /** Optional subtitle rendered below the title in `UITableTooltip`. */
+  /** Optional subtitle rendered below the title in `UITableToolbar`. */
   description?: string;
-  /** Optional React node rendered on the right side of the `UITableTooltip` header row (e.g. action buttons). */
+  /** Optional React node rendered on the right side of the `UITableToolbar` header row (e.g. action buttons). */
   headerActions?: React.ReactNode;
 };
 

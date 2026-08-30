@@ -1,7 +1,10 @@
 'use client';
 
+import { memo } from 'react';
+
 import { Badge } from '@/components/ui/badge';
-import { UITableEmpty } from './empty';
+
+import { UITableEmptyValue } from './empty';
 
 type BadgeColor = 'primary' | 'secondary' | 'muted' | 'accent' | 'info' | 'success' | 'warning' | 'danger';
 
@@ -33,15 +36,16 @@ type Props = {
  *   colorMap={{ active: 'success', inactive: 'danger', pending: 'warning' }}
  * />
  */
-export const UITableStatusDisplay: React.FC<Props> = ({ value, colorMap, defaultColor = 'muted', variant = 'soft' }) => {
-  if (value === null || value === undefined || value === '') return <UITableEmpty />;
+export const UITableStatusDisplay: React.FC<Props> = memo(({ value, colorMap, defaultColor = 'muted', variant = 'soft' }) => {
+  if (value === null || value === undefined || value === '') return <UITableEmptyValue />;
 
-  const color: BadgeColor = (colorMap && colorMap[value]) ?? defaultColor;
+  const color: BadgeColor = colorMap?.[value] ?? defaultColor;
   const label = value.charAt(0).toUpperCase() + value.slice(1).replace(/_/g, ' ');
 
   return (
-    <Badge variant={variant} color={color} size="sm" className="min-w-16 justify-center capitalize">
+    <Badge pill={false} variant={variant} color={color} size="sm" className="min-w-20 justify-center capitalize">
       {label}
     </Badge>
   );
-};
+});
+UITableStatusDisplay.displayName = 'UITableStatusDisplay';

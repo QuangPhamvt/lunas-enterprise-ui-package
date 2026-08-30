@@ -32,14 +32,12 @@ export const UITableHeadCell = memo<TUITableHeadCell>(
     }, [isPinned]);
 
     const left = useMemo(() => {
-      const axis = headerColumn?.getStart?.('left');
-      return isPinned === 'left' && typeof axis === 'number' ? `${axis}px` : undefined;
-    }, [isPinned, headerColumn]);
+      return isPinned === 'left' ? `calc(var(--col-${headerId}-left) * 1px)` : undefined;
+    }, [isPinned, headerId]);
 
     const right = useMemo(() => {
-      const axis = headerColumn?.getAfter?.('right');
-      return isPinned === 'right' && typeof axis === 'number' ? `${axis}px` : undefined;
-    }, [isPinned, headerColumn]);
+      return isPinned === 'right' ? `calc(var(--col-${headerId}-right) * 1px)` : undefined;
+    }, [isPinned, headerId]);
 
     const width = useMemo(() => {
       return `calc(var(--header-${headerId}-size) * 1px)`;
@@ -61,7 +59,7 @@ export const UITableHeadCell = memo<TUITableHeadCell>(
         style={{ zIndex, left, right, width, minWidth: minSize, maxWidth: maxSize }}
         className={cn(
           tableHeadCellVariants({
-            isPinned: isPinned || 'false',
+            isPinned: isPinned || false,
             isActions: headerId === 'actions',
             isLastCell,
             isFirstCell,
@@ -72,7 +70,7 @@ export const UITableHeadCell = memo<TUITableHeadCell>(
         {...props}
       >
         <div className="truncate px-4">{children}</div>
-        {isOptionsVisible && (
+        {!!isOptionsVisible && (
           <UITableHeadCellOption isPinned={isPinned} isVisible={isVisible} onLeftPin={onColumnPin} onRightPin={onColumnPin} onUnpin={onColumnPin} />
         )}
       </th>

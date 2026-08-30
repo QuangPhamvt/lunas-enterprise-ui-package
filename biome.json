@@ -101,6 +101,11 @@
     "bracketSpacing": true,
     "expand": "auto"
   },
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
+    }
+  },
   "javascript": {
     "formatter": {
       "enabled": true,

@@ -13,7 +13,7 @@ type DescriptionBooleanProps = {
 export const DescriptionBoolean: React.FC<DescriptionBooleanProps> = ({ value, trueLabel = 'Yes', falseLabel = 'No' }) => {
   if (value == null) return <DescriptionEmpty />;
   return (
-    <Badge data-slot="description-boolean" variant="soft" color={value ? 'success' : 'danger'} size="sm">
+    <Badge data-slot="description-boolean" pill={false} variant="soft" color={value ? 'success' : 'danger'} size="sm" className="min-w-20">
       {value ? trueLabel : falseLabel}
     </Badge>
   );

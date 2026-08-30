@@ -1,8 +1,9 @@
 'use client';
 
 import { cn } from '@customafk/react-toolkit/utils';
-import { headingVariants } from '../typography/heading';
+
 import { paragraphVariants } from '../typography/paragraph';
+import { titleVariants } from '../typography/title';
 
 /**
  * Surface container for grouping related content with a bordered, shadowed panel that supports optional interactive hover states.
@@ -17,9 +18,11 @@ import { paragraphVariants } from '../typography/paragraph';
  *
  * <Card>
  *   <CardHeader>
- *     <CardTitle>Plan overview</CardTitle>
+ *     <CardTitle>
+ *       Plan overview
+ *       <CardAction><Button size="sm">Upgrade</Button></CardAction>
+ *     </CardTitle>
  *     <CardDescription>Your current subscription details.</CardDescription>
- *     <CardAction><Button size="sm">Upgrade</Button></CardAction>
  *   </CardHeader>
  *   <CardContent>Monthly usage: 42 / 100 requests</CardContent>
  *   <CardFooter>Renews on 1 Jun 2026</CardFooter>
@@ -31,11 +34,14 @@ function Card({ className, ...props }: React.ComponentProps<'div'>) {
     <div
       data-slot="card"
       className={cn(
-        'flex flex-col gap-6 rounded-lg border border-border bg-card py-6 text-text-positive shadow-card',
-        'transition-[box-shadow,opacity] duration-150 ease-in-out',
+        'flex flex-col gap-6 rounded border border-border bg-white py-5 text-text-positive shadow-md',
+        'transition-all ease-in-out',
         'data-[interactive=true]:cursor-pointer',
-        'data-[interactive=true]:hover:shadow-dropdown',
-        'data-[interactive=true]:focus-visible:outline-none data-[interactive=true]:focus-visible:ring-2 data-[interactive=true]:focus-visible:ring-ring data-[interactive=true]:focus-visible:ring-offset-2',
+        'data-[interactive=true]:hover:shadow-lg',
+        'data-[interactive=true]:focus-visible:outline-none',
+        'data-[interactive=true]:focus-visible:ring-2',
+        'data-[interactive=true]:focus-visible:ring-ring',
+        'data-[interactive=true]:focus-visible:ring-offset-2',
         'data-[interactive=true]:active:opacity-90',
         className
       )}
@@ -49,42 +55,39 @@ function CardHeader({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="card-header"
-      className={cn(
-        '@container/card-header',
-        'grid auto-rows-min grid-rows-[auto_auto]',
-        'items-start gap-1.5 px-6 text-text-positive-strong',
-        'has-data-[slot=card-action]:grid-cols-[1fr_auto]',
-        '[.border-b]:pb-6',
-        className
-      )}
+      className={cn('@container/card-header flex flex-col items-start gap-1 border-border px-5 [.border-b]:pb-5', className)}
       {...props}
     />
   );
 }
 
 /** Primary heading for the card, styled with the h3 heading variant. */
-function CardTitle({ className, ...props }: React.ComponentProps<'div'>) {
-  return <div data-slot="card-title" className={cn(headingVariants({ level: 'h3' }), className)} {...props} />;
+function CardTitle({ className, children, ...props }: React.ComponentProps<'div'>) {
+  return (
+    <div data-slot="card-title" className={cn(titleVariants({ level: 4 }), 'flex w-full items-center justify-between truncate', className)} {...props}>
+      {children}
+    </div>
+  );
 }
 
 /** Muted supporting text displayed beneath the card title. */
 function CardDescription({ className, ...props }: React.ComponentProps<'div'>) {
-  return <div data-slot="card-description" className={cn(paragraphVariants({ variant: 'muted' }), className)} {...props} />;
+  return <div data-slot="card-description" className={cn(paragraphVariants({ variant: 'muted' }), 'not-first:mt-0', className)} {...props} />;
 }
 
-/** Optional slot in the card header for a contextual action (e.g. a button or menu); positioned in the top-right grid cell. */
+/** Optional slot for a contextual action (e.g. a button or menu), meant to be nested inside `CardTitle` so it's pushed to the opposite end of the title row. */
 function CardAction({ className, ...props }: React.ComponentProps<'div'>) {
-  return <div data-slot="card-action" className={cn('col-start-2 row-span-2 row-start-1 self-start justify-self-end', className)} {...props} />;
+  return <div data-slot="card-action" className={cn('shrink', className)} {...props} />;
 }
 
 /** Main body area of the card with horizontal padding for content alignment. */
 function CardContent({ className, ...props }: React.ComponentProps<'div'>) {
-  return <div data-slot="card-content" className={cn('px-6 text-sm', className)} {...props} />;
+  return <div data-slot="card-content" className={cn('px-5 text-sm', className)} {...props} />;
 }
 
 /** Bottom section of the card, typically used for supplementary text or secondary actions. */
 function CardFooter({ className, ...props }: React.ComponentProps<'div'>) {
-  return <div data-slot="card-footer" className={cn('flex items-center px-6 text-sm [.border-t]:pt-6', className)} {...props} />;
+  return <div data-slot="card-footer" className={cn('flex items-center border-border px-5 text-sm [.border-t]:pt-5', className)} {...props} />;
 }
 
 export { Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle };

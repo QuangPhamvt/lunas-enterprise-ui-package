@@ -5,13 +5,13 @@ import { cn } from '@customafk/react-toolkit/utils';
 import { cva, type VariantProps } from 'class-variance-authority';
 
 const badgeVariants = cva(
-  'inline-flex items-center justify-center font-medium transition-colors duration-150 focus:ring-2 focus:ring-offset-2 focus:outline-hidden focus:ring-ring forced-colors:outline',
+  'inline-flex items-center justify-center font-medium transition-colors duration-150 focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2 forced-colors:outline',
   {
     variants: {
       variant: {
         solid: 'shadow-btn',
         soft: '',
-        outline: 'bg-transparent border',
+        outline: 'border bg-transparent',
       },
       color: {
         primary: '',
@@ -24,11 +24,11 @@ const badgeVariants = cva(
         danger: '',
       },
       size: {
-        xs: 'text-[10px]/3 px-1.5 py-0.5 gap-1',
-        sm: 'text-xs px-2 py-0.5 gap-1',
-        md: 'text-sm px-2.5 py-0.5 gap-1.5',
-        lg: 'text-base px-3 py-1 gap-1.5',
-        xl: 'text-lg px-3.5 py-1 gap-1.5',
+        xs: 'gap-1 px-1.5 py-0.5 text-[10px]/3',
+        sm: 'gap-1 px-2 py-1 text-xs',
+        md: 'gap-1.5 px-2.5 py-0.5 text-sm',
+        lg: 'gap-1.5 px-3 py-1 text-base',
+        xl: 'gap-1.5 px-3.5 py-1 text-lg',
       },
       pill: {
         true: 'rounded-full',
@@ -98,5 +98,30 @@ function Badge({ className, variant, color, size, pill, ...props }: BadgeProps) 
   return <span className={cn(badgeVariants({ variant, color, pill, size }), className)} {...props} />;
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
+/**
+ * Dot indicator fill color, keyed by the same `color` union as `badgeVariants`, so the palette
+ * has a single home instead of being re-declared by each consumer that pairs a status dot with a Badge.
+ */
+
+// biome-ignore lint/style/useComponentExportOnlyModules: more
+export const badgeDotVariants = cva('inline-block size-1.5 shrink-0 rounded-full', {
+  variants: {
+    color: {
+      primary: 'bg-primary',
+      secondary: 'bg-secondary',
+      muted: 'bg-muted',
+      accent: 'bg-accent',
+      info: 'bg-info',
+      success: 'bg-success',
+      warning: 'bg-warning',
+      danger: 'bg-danger',
+      white: 'bg-white',
+    },
+  },
+  defaultVariants: {
+    color: 'primary',
+  },
+});
+
+// biome-ignore lint/style/useComponentExportOnlyModules: more
 export { Badge, badgeVariants };

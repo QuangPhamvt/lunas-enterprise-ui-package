@@ -141,7 +141,7 @@ const CMSLayoutSidebar = memo(
           className={cn(
             'absolute inset-y-0 z-10 flex w-(--sidebar-width) p-2 shadow-nav',
             'transition-[left,right,width] duration-200 ease-linear',
-            'group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4)))]',
+            `group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4)))]`,
             side === 'left' ? 'left-0' : 'right-0',
             className
           )}
@@ -317,7 +317,7 @@ const sidebarMenuButtonVariants = cva(
     'aria-disabled:pointer-events-none aria-disabled:opacity-50',
     'data-[active=true]:bg-sidebar-primary-muted data-[active=true]:text-sidebar-primary',
     'data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground',
-    'group-data-[collapsible=icon]:size-12! group-data-[collapsible=icon]:p-3! group-data-[collapsible=icon]:gap-3!',
+    'group-data-[collapsible=icon]:size-12! group-data-[collapsible=icon]:gap-3! group-data-[collapsible=icon]:p-3!',
     '[&>svg]:size-6 [&>svg]:shrink-0',
     '[&>span:last-child]:truncate',
   ],

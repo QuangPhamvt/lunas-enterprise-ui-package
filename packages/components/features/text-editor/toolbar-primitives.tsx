@@ -12,9 +12,11 @@ function ToolbarButton({ isActive, className, children, ...props }: ToolbarButto
       type="button"
       data-slot="toolbar-button"
       data-active={isActive || undefined}
+      aria-pressed={isActive === undefined ? undefined : isActive}
       className={cn(
-        'inline-flex h-7 w-7 items-center justify-center rounded text-sm transition-colors',
-        'hover:bg-muted-muted hover:text-text-positive-strong',
+        'inline-flex size-8 shrink-0 items-center justify-center rounded text-sm outline-none transition-colors min-w-8',
+        'hover:bg-muted-weak hover:text-text-positive-strong',
+        'focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1',
         'disabled:pointer-events-none disabled:opacity-40',
         isActive && 'bg-primary-muted text-primary hover:bg-primary-muted/80 hover:text-primary',
         className
@@ -27,9 +29,9 @@ function ToolbarButton({ isActive, className, children, ...props }: ToolbarButto
 }
 
 function ToolbarDivider() {
-  return <div data-slot="toolbar-divider" className="mx-0.5 h-5 w-px shrink-0 bg-border" />;
+  return <div data-slot="toolbar-divider" role="separator" aria-orientation="vertical" className="mx-0.5 h-5 w-px shrink-0 bg-border" />;
 }
 
-export { ToolbarButton, ToolbarDivider };
 // biome-ignore lint/style/useComponentExportOnlyModules: type export needed by sibling feature files
 export type { ToolbarButtonProps };
+export { ToolbarButton, ToolbarDivider };

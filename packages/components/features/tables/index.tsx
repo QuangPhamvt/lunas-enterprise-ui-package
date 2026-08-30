@@ -18,9 +18,9 @@
  * import {
  *   UITableProvider,
  *   UITableWrapper,
- *   UITableTooltip,
- *   UITableTooltipFilter,
- *   UITableTooltipActions,
+ *   UITableToolbar,
+ *   UITableToolbarSearch,
+ *   UITableToolbarActions,
  *   UITableFilter,
  * } from '@customafk/lunas-ui/features/tables';
  * ```
@@ -28,8 +28,10 @@
 import type { ComponentProps, ComponentType } from 'react';
 import { lazy, Suspense } from 'react';
 
-export { UITableEmpty } from './components/atoms/empty';
-export * from './components/common';
+import type { TSlotKey } from './components/commons/wrapper';
+
+export { UITableEmptyValue } from './components/atoms/empty';
+export * from './components/commons';
 export * from './components/table';
 export { UITableProvider } from './components/table/provider';
 export * from './types';
@@ -54,10 +56,10 @@ import type { UITableStatusDisplay as UITableStatusDisplayType } from './compone
 import type { UITableToggleButton as UITableToggleButtonType } from './components/atoms/toggle-button';
 import type { UITableUserDataDisplay as UITableUserDataDisplayType } from './components/atoms/user';
 import type {
-  UITableTooltipActions as UITableTooltipActionsType,
-  UITableTooltipFilter as UITableTooltipFilterType,
-  UITableTooltip as UITableTooltipType,
-} from './components/table/tooltip';
+  UITableToolbarActions as UITableToolbarActionsType,
+  UITableToolbarSearch as UITableToolbarSearchType,
+  UITableToolbar as UITableToolbarType,
+} from './components/table/toolbar';
 
 /**
  * Wraps a `lazy()`-loaded component in its own `Suspense` boundary so it can be dropped
@@ -65,13 +67,18 @@ import type {
  * small — the heavy per-atom/per-panel implementations (Radix primitives, lucide icon sets,
  * the filter builder, CSV export, etc.) only load when a table actually renders that piece.
  */
-function lazyField<P extends object>(loader: () => Promise<{ default: ComponentType<P> }>): ComponentType<P> {
+function lazyField<P extends object>(
+  loader: () => Promise<{ default: ComponentType<P> }>,
+  tableWrapperSlot?: TSlotKey
+): ComponentType<P> & { tableWrapperSlot?: TSlotKey } {
   const LazyComponent = lazy(loader);
-  return (props: P) => (
+  const Field: ComponentType<P> & { tableWrapperSlot?: TSlotKey } = props => (
     <Suspense fallback={null}>
       <LazyComponent {...props} />
     </Suspense>
   );
+  Field.tableWrapperSlot = tableWrapperSlot;
+  return Field;
 }
 
 // ─── Cell-renderer atoms (lazy) ────────────────────────────────────────────────
@@ -136,19 +143,24 @@ const UITableUserDataDisplay = lazyField<ComponentProps<typeof UITableUserDataDi
 
 // ─── Optional panels & toolbar (lazy) ──────────────────────────────────────────
 
-const UITableFilter = lazyField<Record<string, never>>(() => import('./components/table/filter').then(m => ({ default: m.UITableFilter })));
-const UITableAnalysisPanel = lazyField<Record<string, never>>(() =>
-  import('./components/table/analysis-panel').then(m => ({ default: m.UITableAnalysisPanel }))
+const UITableFilter = lazyField<object>(() => import('./components/table/filter').then(m => ({ default: m.UITableFilter })));
+const UITableAnalysisPanel = lazyField<object>(
+  () => import('./components/table/analysis-panel').then(m => ({ default: m.UITableAnalysisPanel })),
+  'analysisPanel'
 );
-const UITableSummaryBar = lazyField<Record<string, never>>(() => import('./components/table/summary-bar').then(m => ({ default: m.UITableSummaryBar })));
-const UITableTooltip = lazyField<ComponentProps<typeof UITableTooltipType>>(() =>
-  import('./components/table/tooltip').then(m => ({ default: m.UITableTooltip }))
+UITableAnalysisPanel.displayName = 'UITableAnalysisPanel';
+const UITableSummaryBar = lazyField<object>(() => import('./components/table/summary-bar').then(m => ({ default: m.UITableSummaryBar })), 'summaryBar');
+UITableSummaryBar.displayName = 'UITableSummaryBar';
+const UITableToolbar = lazyField<ComponentProps<typeof UITableToolbarType>>(
+  () => import('./components/table/toolbar').then(m => ({ default: m.UITableToolbar })),
+  'toolbar'
 );
-const UITableTooltipFilter = lazyField<ComponentProps<typeof UITableTooltipFilterType>>(() =>
-  import('./components/table/tooltip').then(m => ({ default: m.UITableTooltipFilter }))
+UITableToolbar.displayName = 'UITableToolbar';
+const UITableToolbarSearch = lazyField<ComponentProps<typeof UITableToolbarSearchType>>(() =>
+  import('./components/table/toolbar').then(m => ({ default: m.UITableToolbarSearch }))
 );
-const UITableTooltipActions = lazyField<ComponentProps<typeof UITableTooltipActionsType>>(() =>
-  import('./components/table/tooltip').then(m => ({ default: m.UITableTooltipActions }))
+const UITableToolbarActions = lazyField<ComponentProps<typeof UITableToolbarActionsType>>(() =>
+  import('./components/table/toolbar').then(m => ({ default: m.UITableToolbarActions }))
 );
 
 export {
@@ -175,8 +187,8 @@ export {
   UITableStatusDisplay,
   UITableSummaryBar,
   UITableToggleButton,
-  UITableTooltip,
-  UITableTooltipActions,
-  UITableTooltipFilter,
+  UITableToolbar,
+  UITableToolbarActions,
+  UITableToolbarSearch,
   UITableUserDataDisplay,
 };

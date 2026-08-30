@@ -1,3 +1,5 @@
+import { memo } from 'react';
+
 import { MinusIcon } from 'lucide-react';
 
 /**
@@ -5,15 +7,16 @@ import { MinusIcon } from 'lucide-react';
  * indicate that a cell has no data to display.
  *
  * @example
- * import { UITableEmpty } from '@customafk/lunas-ui/features/tables';
+ * import { UITableEmptyValue } from '@customafk/lunas-ui/features/tables';
  *
- * <UITableEmpty />
+ * <UITableEmptyValue />
  */
-export const UITableEmpty: React.FC = () => {
+export const UITableEmptyValue: React.FC = memo(() => {
   return (
     <div className="flex gap-0 text-text-positive-weak">
       <MinusIcon size={16} />
       <MinusIcon size={16} />
     </div>
   );
-};
+});
+UITableEmptyValue.displayName = 'UITableEmptyValue';

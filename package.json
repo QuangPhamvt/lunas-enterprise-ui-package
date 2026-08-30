@@ -1,6 +1,6 @@
 {
   "name": "@customafk/lunas-ui",
-  "version": "0.2.80",
+  "version": "0.2.88",
   "description": "UI library for Lunas Enterprise",
   "type": "module",
   "author": {
@@ -16,8 +16,7 @@
   "files": [
     "dist",
     "styles",
-    "README.md",
-    "ai-docs.md"
+    "README.md"
   ],
   "engines": {
     "node": ">= 22.0.0"
@@ -43,6 +42,10 @@
     "./cards/simple-card": {
       "require": "./dist/cards/simple-card.cjs",
       "import": "./dist/cards/simple-card.mjs"
+    },
+    "./data-display/clamped-text": {
+      "require": "./dist/data-display/clamped-text.cjs",
+      "import": "./dist/data-display/clamped-text.mjs"
     },
     "./data-display/country": {
       "require": "./dist/data-display/country.cjs",
@@ -104,6 +107,10 @@
       "require": "./dist/dialogs/loading-dialog.cjs",
       "import": "./dist/dialogs/loading-dialog.mjs"
     },
+    "./dialogs/side-panel": {
+      "require": "./dist/dialogs/side-panel.cjs",
+      "import": "./dist/dialogs/side-panel.mjs"
+    },
     "./features/charts": {
       "require": "./dist/features/charts/index.cjs",
       "import": "./dist/features/charts/index.mjs"
@@ -119,6 +126,10 @@
     "./features/logo": {
       "require": "./dist/features/logo/index.cjs",
       "import": "./dist/features/logo/index.mjs"
+    },
+    "./features/notification-center": {
+      "require": "./dist/features/notification-center/index.cjs",
+      "import": "./dist/features/notification-center/index.mjs"
     },
     "./features/search-modal": {
       "require": "./dist/features/search-modal/index.cjs",
@@ -148,6 +159,10 @@
       "require": "./dist/layouts/grid.cjs",
       "import": "./dist/layouts/grid.mjs"
     },
+    "./layouts/ui-grid": {
+      "require": "./dist/layouts/ui-grid.cjs",
+      "import": "./dist/layouts/ui-grid.mjs"
+    },
     "./layouts/payment-layout": {
       "require": "./dist/layouts/payment-layout/index.cjs",
       "import": "./dist/layouts/payment-layout/index.mjs"
@@ -161,8 +176,8 @@
       "import": "./dist/pages/FeatureFixing.mjs"
     },
     "./pages/LoginPage": {
-      "require": "./dist/pages/LoginPage.cjs",
-      "import": "./dist/pages/LoginPage.mjs"
+      "require": "./dist/pages/LoginPage/index.cjs",
+      "import": "./dist/pages/LoginPage/index.mjs"
     },
     "./pages/NotAuthorized": {
       "require": "./dist/pages/NotAuthorized.cjs",
@@ -420,6 +435,10 @@
       "require": "./dist/ui/textarea.cjs",
       "import": "./dist/ui/textarea.mjs"
     },
+    "./ui/timeline": {
+      "require": "./dist/ui/timeline.cjs",
+      "import": "./dist/ui/timeline.mjs"
+    },
     "./ui/toggle": {
       "require": "./dist/ui/toggle.cjs",
       "import": "./dist/ui/toggle.mjs"
@@ -441,6 +460,8 @@
     "build": "tsdown",
     "build:dev": "bunx --bun tsdown --watch",
     "build:rslib": "rslib build",
+    "version:bump": "node scripts/bump-version.mjs",
+    "publish:npm": "npm publish",
     "typecheck": "tsc --noEmit",
     "lint": "npx @biomejs/biome check",
     "lint:fix": "npx @biomejs/biome lint --write ./packages",
@@ -463,12 +484,14 @@
     "@tanstack/react-virtual": "^3.13.12",
     "@tiptap/extension-bubble-menu": "^3.26.0",
     "@tiptap/extension-character-count": "^3.26.0",
+    "@tiptap/extension-code-block-lowlight": "^3.26.0",
     "@tiptap/extension-color": "^3.26.0",
-    "@tiptap/extension-floating-menu": "^3.26.0",
     "@tiptap/extension-highlight": "^3.26.0",
+    "@tiptap/extension-image": "^3.26.0",
     "@tiptap/extension-link": "^3.26.0",
     "@tiptap/extension-list-keymap": "^3.26.0",
     "@tiptap/extension-placeholder": "^3.26.0",
+    "@tiptap/extension-table": "^3.26.0",
     "@tiptap/extension-task-item": "^3.26.0",
     "@tiptap/extension-task-list": "^3.26.0",
     "@tiptap/extension-text-align": "^3.26.0",
@@ -476,10 +499,14 @@
     "@tiptap/extension-underline": "^3.26.0",
     "@tiptap/react": "^3.26.0",
     "@tiptap/starter-kit": "^3.26.0",
+    "@tiptap/suggestion": "^3.26.0",
     "class-variance-authority": "^0.7.0",
     "cmdk": "^1.1.0",
+    "date-fns": "^4.1.0",
+    "dompurify": "^3.4.13",
     "embla-carousel-react": "^8.6.0",
     "input-otp": "^1.4.0",
+    "lowlight": "^3.3.0",
     "lucide-react": "^0.545.0",
     "nanoid": "^5.1.6",
     "next-themes": "^0.4.6",

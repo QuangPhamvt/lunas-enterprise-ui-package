@@ -1,8 +1,9 @@
 'use client';
+import { memo } from 'react';
 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
-import { UITableEmpty } from './empty';
+import { UITableEmptyValue } from './empty';
 
 /** Props for the {@link UITableListDisplay} component. */
 type Props = {
@@ -18,7 +19,7 @@ type Props = {
 /**
  * Renders an array of values as compact inline pills in a table cell.  When the
  * list exceeds `maxVisible`, a `+N more` badge is shown; hovering it reveals all
- * remaining items in a tooltip.  Renders {@link UITableEmpty} for empty or absent
+ * remaining items in a tooltip.  Renders {@link UITableEmptyValue} for empty or absent
  * arrays.
  *
  * @example
@@ -26,8 +27,8 @@ type Props = {
  *
  * <UITableListDisplay items={['React', 'TypeScript', 'TailwindCSS', 'Vite']} maxVisible={3} />
  */
-export const UITableListDisplay: React.FC<Props> = ({ items, maxVisible = 3 }) => {
-  if (!items || items.length === 0) return <UITableEmpty />;
+export const UITableListDisplay: React.FC<Props> = memo(({ items, maxVisible = 3 }) => {
+  if (!items || items.length === 0) return <UITableEmptyValue />;
 
   const visible = items.slice(0, maxVisible);
   const overflow = items.slice(maxVisible);
@@ -37,7 +38,7 @@ export const UITableListDisplay: React.FC<Props> = ({ items, maxVisible = 3 }) =
       {visible.map((item, i) => (
         <span
           key={`item-${i.toString()}`}
-          className="weak inline-flex items-center rounded border border-border bg-white px-2 py-0.5 text-text-positive text-xs"
+          className="inline-flex min-w-15 items-center justify-center rounded border border-border bg-white px-2 py-0.5 text-text-positive text-xs shadow-xs"
         >
           {item}
         </span>
@@ -47,7 +48,7 @@ export const UITableListDisplay: React.FC<Props> = ({ items, maxVisible = 3 }) =
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <span className="inline-flex cursor-default items-center rounded-full bg-primary-bg-subtle px-2 py-0.5 text-primary-intense text-xs">
+              <span className="inline-flex cursor-default items-center rounded bg-primary-bg-subtle px-2 py-0.5 text-primary-strong text-xs">
                 +{overflow.length} more
               </span>
             </TooltipTrigger>
@@ -66,4 +67,5 @@ export const UITableListDisplay: React.FC<Props> = ({ items, maxVisible = 3 }) =
       )}
     </div>
   );
-};
+});
+UITableListDisplay.displayName = 'UITableListDisplay';

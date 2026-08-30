@@ -32,7 +32,6 @@ export const UITableAnalysisPanel = memo(() => {
   const { rowSelectionState } = useUITableBodyContext();
   const { isOpen, toggle } = useUITableAnalysisContext();
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: row model
   const allRows = useMemo(() => table.getRowModel().rows, [table]);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: selected rows
@@ -65,12 +64,12 @@ export const UITableAnalysisPanel = memo(() => {
   }, [headers, allRows, selectedRows]);
 
   return (
-    <div data-slot="table-analysis-panel" className="w-full border-t border-border">
+    <div data-slot="table-analysis-panel" className="w-full border-border border-t">
       <button
         type="button"
         className={cn(
-          'flex w-full items-center justify-between px-4 py-2 text-sm font-medium text-text-positive',
-          'hover:bg-muted-bg-subtle transition-colors outline-none',
+          'flex w-full items-center justify-between px-4 py-2 font-medium text-sm text-text-positive',
+          'outline-none transition-colors hover:bg-muted-bg-subtle',
           'focus-visible:ring-2 focus-visible:ring-primary-weak'
         )}
         onClick={toggle}
@@ -80,8 +79,8 @@ export const UITableAnalysisPanel = memo(() => {
         {isOpen ? <ChevronUpIcon size={14} /> : <ChevronDownIcon size={14} />}
       </button>
 
-      {isOpen && (
-        <div className="px-4 pb-4 pt-2 space-y-4">
+      {!!isOpen && (
+        <div className="space-y-4 px-4 pt-2 pb-4">
           {/* Row summary */}
           <div className="flex flex-wrap gap-4">
             <StatChip label="Tổng bản ghi" value={totalRows ?? allRows.length} />
@@ -92,11 +91,11 @@ export const UITableAnalysisPanel = memo(() => {
           {/* Column aggregations */}
           {aggregationRows.length > 0 && (
             <div>
-              <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-text-positive-weak">Tóm tắt cột</p>
+              <p className="mb-2 font-semibold text-text-positive-weak text-xs uppercase tracking-wide">Tóm tắt cột</p>
               <div className="overflow-x-auto rounded-md border border-border">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b border-border bg-muted-bg-subtle text-xs text-text-positive-weak">
+                    <tr className="border-border border-b bg-muted-bg-subtle text-text-positive-weak text-xs">
                       <th className="px-3 py-2 text-left font-medium">Cột</th>
                       <th className="px-3 py-2 text-left font-medium">Kiểu</th>
                       <th className="px-3 py-2 text-right font-medium">Tất cả hàng</th>
@@ -105,8 +104,8 @@ export const UITableAnalysisPanel = memo(() => {
                   </thead>
                   <tbody>
                     {aggregationRows.map((row, idx) => (
-                      <tr key={row.colId} className={cn('border-b border-border last:border-b-0', idx % 2 === 1 && 'bg-muted-bg-subtle/50')}>
-                        <td className="px-3 py-2 text-text-positive font-medium">{row.header}</td>
+                      <tr key={row.colId} className={cn('border-border border-b last:border-b-0', idx % 2 === 1 && 'bg-muted-bg-subtle/50')}>
+                        <td className="px-3 py-2 font-medium text-text-positive">{row.header}</td>
                         <td className="px-3 py-2 text-text-positive-weak">{typeLabels[row.aggregation.type]}</td>
                         <td className="px-3 py-2 text-right">
                           <Statistic
@@ -149,12 +148,12 @@ UITableAnalysisPanel.displayName = 'UITableAnalysisPanel';
 const StatChip = memo<{ label: string; value: number; highlight?: boolean }>(({ label, value, highlight }) => (
   <div
     className={cn(
-      'flex flex-col gap-0.5 rounded border px-3 py-2 min-w-25 bg-white',
+      'flex min-w-25 flex-col gap-0.5 rounded border bg-white px-3 py-2',
       highlight && value > 0 ? 'border-primary bg-primary-bg-subtle' : 'border-border bg-white'
     )}
   >
     <span className="text-[11px] text-text-positive-weak">{label}</span>
-    <span className="text-base font-semibold tabular-nums text-text-positive-strong">{value.toLocaleString()}</span>
+    <span className="font-semibold text-base text-text-positive-strong tabular-nums">{value.toLocaleString()}</span>
   </div>
 ));
 StatChip.displayName = 'StatChip';

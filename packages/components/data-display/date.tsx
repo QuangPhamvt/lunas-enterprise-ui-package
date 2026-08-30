@@ -63,7 +63,9 @@ export const DateDisplay: React.FC<DateDisplayProps> = ({
       if (date instanceof Date) return isValid(date) ? date : null;
       if (typeof date === 'string') {
         const parsed = parseISO(date);
-        return isValid(parsed) ? parsed : new Date(date);
+        if (isValid(parsed)) return parsed;
+        const fallback = new Date(date);
+        return isValid(fallback) ? fallback : null;
       }
       if (typeof date === 'number') {
         const parsed = new Date(date);
@@ -77,12 +79,12 @@ export const DateDisplay: React.FC<DateDisplayProps> = ({
 
   const formatRelativeTime = useCallback((d: Date): string => {
     const diffInSeconds = Math.floor((Date.now() - d.getTime()) / 1000);
-    if (diffInSeconds < 60) return 'Vừa xong';
-    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / TIME_IN_SECONDS.MINUTE)} phút trước`;
-    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / TIME_IN_SECONDS.HOUR)} giờ trước`;
-    if (diffInSeconds < 604800) return `${Math.floor(diffInSeconds / TIME_IN_SECONDS.DAY)} ngày trước`;
-    if (diffInSeconds < 2592000) return `${Math.floor(diffInSeconds / TIME_IN_SECONDS.WEEK)} tuần trước`;
-    if (diffInSeconds < 31536000) return `${Math.floor(diffInSeconds / TIME_IN_SECONDS.MONTH)} tháng trước`;
+    if (diffInSeconds < TIME_IN_SECONDS.MINUTE) return 'Vừa xong';
+    if (diffInSeconds < TIME_IN_SECONDS.HOUR) return `${Math.floor(diffInSeconds / TIME_IN_SECONDS.MINUTE)} phút trước`;
+    if (diffInSeconds < TIME_IN_SECONDS.DAY) return `${Math.floor(diffInSeconds / TIME_IN_SECONDS.HOUR)} giờ trước`;
+    if (diffInSeconds < TIME_IN_SECONDS.WEEK) return `${Math.floor(diffInSeconds / TIME_IN_SECONDS.DAY)} ngày trước`;
+    if (diffInSeconds < TIME_IN_SECONDS.MONTH) return `${Math.floor(diffInSeconds / TIME_IN_SECONDS.WEEK)} tuần trước`;
+    if (diffInSeconds < TIME_IN_SECONDS.YEAR) return `${Math.floor(diffInSeconds / TIME_IN_SECONDS.MONTH)} tháng trước`;
     return `${Math.floor(diffInSeconds / TIME_IN_SECONDS.YEAR)} năm trước`;
   }, []);
 
@@ -123,13 +125,13 @@ export const DateDisplay: React.FC<DateDisplayProps> = ({
       const timeStr = showTime ? format(d, ', HH:mm:ss') : '';
       switch (type) {
         case 'short':
-          return format(d, 'd/M/yy') + timeStr;
+          return format(d, 'dd/MM/yy') + timeStr;
         case 'medium':
           return format(d, 'dd/MM/yyyy') + timeStr;
         case 'long':
-          return `${format(d, 'd')} ${getVietnameseMonth(d)} ${format(d, 'yyyy')}` + timeStr;
+          return `${format(d, 'd')} ${getVietnameseMonth(d)} ${format(d, 'yyyy')}${timeStr}`;
         case 'full':
-          return `${getVietnameseWeekday(d)}, ngày ${format(d, 'd')} ${getVietnameseMonth(d)} năm ${format(d, 'yyyy')}` + timeStr;
+          return `${getVietnameseWeekday(d)}, ngày ${format(d, `d`)} ${getVietnameseMonth(d)} năm ${format(d, 'yyyy')}${timeStr}`;
         case 'relative':
           return formatRelativeTime(d);
         case 'datetime':
@@ -152,13 +154,14 @@ export const DateDisplay: React.FC<DateDisplayProps> = ({
   const formattedDate = formatDate(parsedDate, formatType);
   const holiday = showHoliday ? getHoliday(parsedDate) : null;
   const displayText = holiday ? `${formattedDate} (${holiday})` : formattedDate;
-  const tooltipTitle = title || format(parsedDate, 'EEEE, d MMMM yyyy HH:mm:ss');
+  const tooltipTitle =
+    title || `${getVietnameseWeekday(parsedDate)}, ${format(parsedDate, 'd')} ${getVietnameseMonth(parsedDate)} năm ${format(parsedDate, 'yyyy HH:mm:ss')}`;
 
   return (
     <time
       data-slot="date-display"
       dateTime={parsedDate.toISOString()}
-      className={cn('tabular-nums text-xs text-text-positive-weak transition-colors', className)}
+      className={cn('text-text-positive-weak text-xs tabular-nums transition-colors', className)}
       title={tooltipTitle}
     >
       {displayText}
