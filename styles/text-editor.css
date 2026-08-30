@@ -29,7 +29,7 @@
    paragraph that follows it. */
 .lunas-text-editor .ProseMirror h1 {
   font-size: 2em;
-  font-weight: 800;
+  font-weight: 700;
   line-height: 1.25;
   letter-spacing: -0.02em;
   color: var(--text-positive-strong);
@@ -64,9 +64,9 @@
    avoids single short words getting orphaned onto their own line. */
 .lunas-text-editor .ProseMirror p {
   font-size: 1em;
-  margin: 0 0 1.15em;
+  margin: 0 0 1em;
   color: var(--text-positive);
-  line-height: 1.75;
+  line-height: 1.5;
   text-wrap: pretty;
 }
 
@@ -74,7 +74,7 @@
 .lunas-text-editor .ProseMirror ul,
 .lunas-text-editor .ProseMirror ol {
   padding-left: 1.5em;
-  margin: 0 0 1.15em;
+  margin: 0 0 1em;
   color: var(--text-positive);
 }
 
@@ -128,14 +128,18 @@
   line-height: 1.75;
 }
 
+.lunas-text-editor .ProseMirror li > p {
+  margin: 0;
+}
+
 /* Blockquote */
 .lunas-text-editor .ProseMirror blockquote {
   border-left: 3px solid var(--primary-weak);
   padding-left: 1.1em;
   margin: 1.3em 0;
   color: var(--text-positive-weak);
-  font-size: 1.05em;
-  line-height: 1.7;
+  font-size: 1em;
+  line-height: 1.5;
   font-style: italic;
 }
 
@@ -146,7 +150,7 @@
 /* Inline code */
 .lunas-text-editor .ProseMirror code {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 0.875em;
+  font-size: 0.75em;
   background-color: var(--muted-muted);
   color: var(--text-positive-strong);
   padding: 0.125rem 0.25rem;
@@ -231,16 +235,15 @@
 
 .lunas-text-editor .ProseMirror ul[data-type='taskList'] li {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 0.5em;
-  padding: 0.2em 0;
+  padding: 0;
   margin: 0;
 }
 
 .lunas-text-editor .ProseMirror ul[data-type='taskList'] li > label {
   flex: 0 0 auto;
   user-select: none;
-  margin-top: 0.25em;
 }
 
 .lunas-text-editor .ProseMirror ul[data-type='taskList'] li > label input[type='checkbox'] {
@@ -252,7 +255,15 @@
 
 .lunas-text-editor .ProseMirror ul[data-type='taskList'] li > div {
   flex: 1;
-  line-height: 1.75;
+  line-height: 1.5;
+}
+
+/* TaskItem wraps its content one level deeper than a plain list item
+   (`li > div > p`, not `li > p`), so the plain-list `li > p` margin reset above
+   never reaches it — without this, each item keeps the paragraph's default
+   1em bottom margin and the list reads as double-spaced. */
+.lunas-text-editor .ProseMirror ul[data-type='taskList'] li > div > p {
+  margin: 0;
 }
 
 .lunas-text-editor .ProseMirror ul[data-type='taskList'] li[data-checked='true'] > div {

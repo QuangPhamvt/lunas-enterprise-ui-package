@@ -406,7 +406,7 @@ function TextEditor({
           >
             <Strikethrough className="h-3.5 w-3.5" />
           </ToolbarButton>
-          {enableLink && (
+          {!!enableLink && (
             <>
               <ToolbarDivider />
               <LinkDialog editor={editor} />
@@ -420,7 +420,7 @@ function TextEditor({
       `text-editor.css` (headings, paragraphs, lists use `em`) actually respond to `size`. */}
       <EditorContent editor={editor} data-slot="text-editor-content" className={cn('flex-1 bg-white text-text-positive', editorClassName)} />
 
-      {showCharCount && needsCharCount && (
+      {!!showCharCount && !!needsCharCount && (
         <div
           data-slot="text-editor-footer"
           className="flex items-center justify-between border-border border-t bg-muted-muted/30 px-3 py-1 text-text-positive-weak text-xs"

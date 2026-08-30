@@ -56,7 +56,7 @@ export const descriptionVariants = cva('relative flex flex-col bg-white', {
  * `DescriptionGroup` renders inside its own `@container/description-panel` wrapper too (`group.tsx`).
  */
 export const descriptionGroupVariants = cva(
-  'relative mx-auto size-full @3xl/description-panel:max-w-3xl @4xl/description-panel:max-w-4xl @5xl/description-panel:max-w-5xl @6xl/description-panel:max-w-6xl @7xl/description-panel:max-w-7xl max-w-full overflow-y-auto rounded bg-white',
+  'relative size-full @3xl/description-panel:max-w-3xl @4xl/description-panel:max-w-4xl @5xl/description-panel:max-w-5xl @6xl/description-panel:max-w-6xl @7xl/description-panel:max-w-7xl max-w-full overflow-y-auto rounded bg-white',
   {
     variants: {
       bordered: {

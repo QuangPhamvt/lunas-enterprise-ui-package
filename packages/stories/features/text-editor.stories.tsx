@@ -366,8 +366,8 @@ export const ReadOnlyArticle: Story = {
   render: () => (
     <article className="min-h-screen bg-background px-8 py-12">
       <div className="mx-auto w-full max-w-3xl">
-        <p className="mb-2 font-medium text-primary text-xs uppercase tracking-wide">Năng suất làm việc</p>
-        <div className="mb-8 flex items-center gap-2 text-text-positive-weak text-sm">
+        <p className="mb-2 font-medium text-primary text-sm uppercase">Năng suất làm việc</p>
+        <div className="mb-8 flex items-center gap-2 text-sm text-text-positive-weak">
           <span>Đội ngũ Vận hành</span>
           <span aria-hidden="true">·</span>
           <time dateTime="2026-08-07">7 tháng 8, 2026</time>

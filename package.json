@@ -435,6 +435,10 @@
       "require": "./dist/ui/textarea.cjs",
       "import": "./dist/ui/textarea.mjs"
     },
+    "./ui/timeline": {
+      "require": "./dist/ui/timeline.cjs",
+      "import": "./dist/ui/timeline.mjs"
+    },
     "./ui/toggle": {
       "require": "./dist/ui/toggle.cjs",
       "import": "./dist/ui/toggle.mjs"

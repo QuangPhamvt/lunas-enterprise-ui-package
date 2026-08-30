@@ -259,8 +259,8 @@ export const buttonVariants = cva(
       },
       size: {
         default: 'h-8 px-2.5 font-normal',
-        xs: 'h-6 px-2.5 font-normal',
-        sm: 'h-7 px-2.5 font-normal',
+        xs: 'h-6 px-2.5 font-normal text-xs',
+        sm: 'h-7 px-2.5 font-normal text-xs',
         md: 'h-8 px-2.5 font-medium',
         lg: 'h-9 px-2.5 font-medium',
         xl: 'h-10 px-2.5 font-medium',
@@ -456,7 +456,7 @@ export const buttonVariants = cva(
       {
         variant: 'ghost',
         color: 'muted',
-        className: 'text-muted hover:bg-muted-bg-subtle focus:bg-muted-muted',
+        className: 'text-text-positive hover:bg-muted-bg-subtle focus:bg-muted-muted',
       },
       {
         variant: 'ghost',

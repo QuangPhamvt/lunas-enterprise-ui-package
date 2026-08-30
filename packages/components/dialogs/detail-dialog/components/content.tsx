@@ -21,7 +21,10 @@ function DetailDialogLoader() {
 
 export function DetailDialogContent({ isLoading, children }: DetailDialogContentProps) {
   return (
-    <main data-slot="detail-dialog-main" className="@container/detail-content inset-shadow-sm col-start-2 row-start-2 grid min-h-0 min-w-0 grid-rows-1 overflow-y-auto">
+    <main
+      data-slot="detail-dialog-main"
+      className="@container/detail-content inset-shadow-sm col-start-2 row-start-2 grid min-h-0 min-w-0 grid-rows-1 overflow-y-auto"
+    >
       {isLoading ? (
         <DetailDialogLoader />
       ) : (

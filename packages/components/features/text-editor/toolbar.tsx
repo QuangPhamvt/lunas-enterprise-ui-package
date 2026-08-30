@@ -184,14 +184,14 @@ function TextEditorToolbar({
             aria-label="Kiểu đoạn văn"
             aria-haspopup="menu"
             className={cn(
-              'inline-flex h-8 items-center gap-1 rounded px-1.5 font-medium text-xs transition-colors',
-              'hover:bg-muted-muted hover:text-text-positive-strong',
+              'inline-flex h-8 items-center gap-1 rounded px-1.5 font-medium text-xs outline-none transition-colors',
+              !heading && 'hover:bg-muted-muted hover:text-text-positive-strong',
               'disabled:pointer-events-none disabled:opacity-40',
-              heading !== null && 'bg-primary-muted text-primary hover:bg-primary-muted/80 hover:text-primary'
+              heading !== null && 'bg-muted text-text-positive-strong'
             )}
           >
             <span className="w-5 text-center">{headingLabel}</span>
-            <ChevronDown className="h-3 w-3 opacity-60" />
+            <ChevronDown className="size-3 opacity-60" />
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start" className="min-w-32">

@@ -76,6 +76,8 @@ export type CMSLayoutProps = {
   copyright?: string;
   /** Authenticated user shown in the header avatar dropdown. Omit to hide the user menu. */
   user?: CMSLayoutUser;
+  /** Extra content rendered in the header's right-hand cluster, before the user/locale menus — e.g. a notification bell. */
+  headerActions?: React.ReactNode;
 };
 
 const SidebarContentGroupItem = memo<NavItem & { activeNavItemId?: string }>(({ id, label, icon, activeNavItemId, onClick, renderAs }) => (
@@ -151,6 +153,7 @@ export const CMSLayout: React.FC<React.PropsWithChildren<CMSLayoutProps>> = memo
     logoutLabel = 'Log out',
     copyright = `Copyright © ${new Date().getFullYear()}, Lunas.`,
     user,
+    headerActions,
   }) => {
     const groups = sidebar?.groupcontent ?? [];
 
@@ -163,6 +166,7 @@ export const CMSLayout: React.FC<React.PropsWithChildren<CMSLayoutProps>> = memo
           user={user}
           onLogout={onLogout}
           logoutLabel={logoutLabel}
+          headerActions={headerActions}
         />
         <CMSLayoutSidebar>
           <SidebarContent>

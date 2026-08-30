@@ -40,7 +40,9 @@ export const CMSLayoutHeader: React.FC<{
   onLogout?: () => void;
   logoutLabel?: string;
   logo?: React.ReactNode;
-}> = ({ i18nText, onChangeToEnLocale, onChangeToViLocale, user, onLogout, logoutLabel = 'Log out', logo }) => {
+  /** Extra content rendered in the header's right-hand cluster, before the user/locale menus — e.g. a notification bell. */
+  headerActions?: React.ReactNode;
+}> = ({ i18nText, onChangeToEnLocale, onChangeToViLocale, user, onLogout, logoutLabel = 'Log out', logo, headerActions }) => {
   const { toggleSidebar } = useSidebar();
 
   const handleToggleSidebar = useCallback(
@@ -100,6 +102,10 @@ export const CMSLayoutHeader: React.FC<{
       <div className="flex flex-1 items-center sm:ml-2.5">{logo ?? <LunasLogo variant="horizontal" size="xs" />}</div>
 
       <div className="flex items-center gap-1">
+        {headerActions}
+
+        {headerActions && (user || onChangeToEnLocale || onChangeToViLocale) && <div className="mx-1 h-5 w-px bg-border" />}
+
         {user && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

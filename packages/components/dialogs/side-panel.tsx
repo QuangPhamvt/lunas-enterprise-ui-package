@@ -114,7 +114,7 @@ export const SidePanel: React.FC<SidePanelProps> = ({
   return (
     <SidePanelPrimitive.Root open={open} onOpenChange={onOpenChange} modal={modal}>
       <SidePanelPrimitive.Portal>
-        {modal && (
+        {!!modal && (
           <SidePanelPrimitive.Overlay
             className={cn(
               'fixed inset-0 z-50 bg-black/50',
@@ -125,7 +125,7 @@ export const SidePanel: React.FC<SidePanelProps> = ({
         )}
         <SidePanelPrimitive.Content
           className={cn(
-            'fixed z-50 flex flex-col bg-background',
+            'fixed z-50 flex flex-col overflow-hidden bg-background',
             'rounded-2xl border border-border-weak shadow-dialog outline-none',
             'inset-2 sm:inset-y-2 sm:right-2 sm:left-auto',
             width,
@@ -140,10 +140,10 @@ export const SidePanel: React.FC<SidePanelProps> = ({
             if (!modal) event.preventDefault();
           }}
         >
-          {(title || description) && (
+          {!!(title || description) && (
             <div className={cn('flex flex-none flex-col gap-1 border-border-weak border-b p-4', resolvedShowCloseButton && 'pr-14')}>
-              {title && <SidePanelPrimitive.Title className="font-bold text-base text-text-positive-strong">{title}</SidePanelPrimitive.Title>}
-              {description && (
+              {!!title && <SidePanelPrimitive.Title className="font-bold text-base text-text-positive-strong">{title}</SidePanelPrimitive.Title>}
+              {!!description && (
                 <SidePanelPrimitive.Description className={cn(paragraphVariants({ variant: 'muted' }), 'not-first:mt-0 md:text-sm')}>
                   {description}
                 </SidePanelPrimitive.Description>
@@ -151,8 +151,8 @@ export const SidePanel: React.FC<SidePanelProps> = ({
             </div>
           )}
           <div className="min-h-0 flex-1 overflow-y-auto p-4">{children}</div>
-          {footer && <div className="mt-auto flex flex-none flex-col-reverse gap-2 border-t border-border-weak p-4 sm:flex-row sm:justify-end">{footer}</div>}
-          {resolvedShowCloseButton && (
+          {!!footer && <div className="mt-auto flex flex-none flex-col-reverse gap-2 border-border-weak border-t p-4 sm:flex-row sm:justify-end">{footer}</div>}
+          {!!resolvedShowCloseButton && (
             <SidePanelPrimitive.Close tabIndex={-1} asChild className="absolute top-4 right-4">
               <CloseButton aria-label="Đóng" />
             </SidePanelPrimitive.Close>

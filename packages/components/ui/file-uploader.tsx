@@ -280,9 +280,7 @@ export function FileUploader(props: FileUploaderProps) {
                 </div>
                 {!!showText && (
                   <div className="flex flex-col gap-px">
-                    <p className="font-medium text-text-positive text-xs">
-                      Drag {`'n'`} drop files here, click to select, or paste an image (Ctrl+V)
-                    </p>
+                    <p className="font-medium text-text-positive text-xs">Drag {`'n'`} drop files here, click to select, or paste an image (Ctrl+V)</p>
                     <p className="text-text-positive-weak text-xs">
                       You can upload
                       {maxFileCount > 1
@@ -305,10 +303,10 @@ export function FileUploader(props: FileUploaderProps) {
               <p className="text-sm">Ảnh đã tải lên ({files.length})</p>
             </div>
             <Button
-              size='xs'
-              variant='ghost'
-              color='muted'
-              className='text-text-positive'
+              size="xs"
+              variant="ghost"
+              color="muted"
+              className="text-text-positive"
               onClick={() => {
                 if (!files) return;
                 files.forEach(file => {
@@ -320,7 +318,7 @@ export function FileUploader(props: FileUploaderProps) {
               }}
             >
               <Trash2 size={16} aria-hidden="true" />
-              <p className='mt-0.5 text-xs'>Xóa tất cả</p>
+              <p className="mt-0.5 text-xs">Xóa tất cả</p>
             </Button>
           </div>
           <div className="flex flex-col gap-2.5">
