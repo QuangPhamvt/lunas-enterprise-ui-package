@@ -77,7 +77,11 @@ function TimelineItem({ className, ...props }: React.ComponentProps<'div'>) {
     <div
       role="listitem"
       data-slot="timeline-item"
-      className={cn('group/timeline-item relative flex items-stretch gap-x-3', "last:[&_[data-slot='timeline-connector']]:hidden", className)}
+      className={cn(
+        'group/timeline-item relative flex items-stretch gap-x-3',
+        "last:[&_[data-slot='timeline-connector']]:hidden last:[&_[data-slot='timeline-content']]:pb-0",
+        className
+      )}
       {...props}
     />
   );
@@ -154,9 +158,12 @@ function TimelineConnector({ className, status = 'upcoming', color, ...props }: 
   );
 }
 
-/** Flex-1 column holding a TimelineItem's title, description, and time — its bottom padding is what creates the gap between items. */
+/**
+ * Flex-1 column holding a TimelineItem's title, description, and time — its bottom padding is what
+ * creates the gap between items. Override `pb-*` via `className` to tune the rhythm for denser lists.
+ */
 function TimelineContent({ className, ...props }: React.ComponentProps<'div'>) {
-  return <div data-slot="timeline-content" className={cn('flex flex-1 flex-col gap-1 pb-6', className)} {...props} />;
+  return <div data-slot="timeline-content" className={cn('flex flex-1 flex-col gap-1 pb-4', className)} {...props} />;
 }
 
 /** Primary label text inside a TimelineContent. */
