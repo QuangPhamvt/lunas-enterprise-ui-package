@@ -77,11 +77,7 @@ function TimelineItem({ className, ...props }: React.ComponentProps<'div'>) {
     <div
       role="listitem"
       data-slot="timeline-item"
-      className={cn(
-        'group/timeline-item relative flex items-stretch gap-x-[var(--spacing-component-md)]',
-        "last:[&_[data-slot='timeline-connector']]:hidden",
-        className
-      )}
+      className={cn('group/timeline-item relative flex items-stretch gap-x-3', "last:[&_[data-slot='timeline-connector']]:hidden", className)}
       {...props}
     />
   );
@@ -89,12 +85,11 @@ function TimelineItem({ className, ...props }: React.ComponentProps<'div'>) {
 
 /**
  * Column wrapper around a TimelineDot and its TimelineConnector, stretched to the item's full
- * height. Laid out as a 2-row grid whose first row is one `text-sm` line-height tall, so the dot
- * sits centered against the first line of `TimelineTitle` instead of the top of the content column;
- * the connector fills the rest.
+ * height. `relative` so the absolutely-positioned connector can span it; the dot is nudged down
+ * (`mt-1`) so its center lines up with the first line of `TimelineTitle` (`text-sm`/`leading-snug`).
  */
 function TimelineIndicator({ className, ...props }: React.ComponentProps<'div'>) {
-  return <div data-slot="timeline-indicator" className={cn('grid grid-rows-[1.25rem_1fr] items-center justify-items-center', className)} {...props} />;
+  return <div data-slot="timeline-indicator" className={cn('relative flex flex-col items-center [&>[data-slot=timeline-dot]]:mt-1', className)} {...props} />;
 }
 
 type TimelineDotStatus = NonNullable<TimelineDotVariants['status']>;
@@ -161,7 +156,7 @@ function TimelineConnector({ className, status = 'upcoming', color, ...props }: 
 
 /** Flex-1 column holding a TimelineItem's title, description, and time — its bottom padding is what creates the gap between items. */
 function TimelineContent({ className, ...props }: React.ComponentProps<'div'>) {
-  return <div data-slot="timeline-content" className={cn('flex flex-1 flex-col gap-1 pb-[var(--spacing-section-md)]', className)} {...props} />;
+  return <div data-slot="timeline-content" className={cn('flex flex-1 flex-col gap-1 pb-6', className)} {...props} />;
 }
 
 /** Primary label text inside a TimelineContent. */

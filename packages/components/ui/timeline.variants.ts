@@ -10,7 +10,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
  * - `current` adds a pulsing ring; `error` adds a static ring — both tinted `ring-{color}/20`.
  * - `upcoming` renders a hollow dot (transparent-to-background fill + a `border-{color}` outline).
  */
-export const timelineDotVariants = cva('relative inline-flex shrink-0 items-center justify-center rounded-full transition-colors [&_svg]:size-2.5', {
+export const timelineDotVariants = cva('relative z-10 inline-flex shrink-0 items-center justify-center rounded-full transition-colors [&_svg]:size-2.5', {
   variants: {
     status: {
       completed: '',
@@ -69,11 +69,14 @@ export const timelineDotVariants = cva('relative inline-flex shrink-0 items-cent
 export type TimelineDotVariants = VariantProps<typeof timelineDotVariants>;
 
 /**
- * Styling for the `TimelineConnector` line segment. Neutral (`bg-border`) by default; a `completed`
- * segment is tinted with its resolved hue so a run of finished steps reads as a vertical progress
- * track. Consumers pass the same `status` (and optional `color`) they gave the dot above it.
+ * Styling for the `TimelineConnector` line. It is absolutely positioned to span the full height of
+ * its `TimelineItem` and sits *behind* the dots (which have an opaque fill), so the line reads as
+ * one continuous vertical track with the dots punched along it — no gap between a dot and the next.
+ * Neutral (`bg-border`) by default; a `completed` segment is tinted with its resolved hue so a run
+ * of finished steps reads as a progress track. Consumers pass the same `status` (and optional
+ * `color`) they gave the dot above it.
  */
-export const timelineConnectorVariants = cva('w-px flex-1 self-stretch bg-border', {
+export const timelineConnectorVariants = cva('pointer-events-none absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-border', {
   variants: {
     status: {
       completed: '',
