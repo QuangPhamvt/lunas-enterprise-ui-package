@@ -76,7 +76,11 @@ export const UITableListDisplay: React.FC<Props> = memo(({ items, maxVisible = 3
                 {moreLabel ? moreLabel(overflow.length) : `+${overflow.length} more`}
               </span>
             </TooltipTrigger>
-            <TooltipContent align="start" className="flex max-w-64 flex-wrap gap-1 p-2">
+            {/* `TooltipContent` is `w-fit` by default — combined with `flex-wrap` that
+                collapses to one item per row (fit-content sizing minimizes width before
+                wrapping). A definite `w-*` gives the wrap enough room to actually pack
+                multiple short items per row instead of stacking a tall single column. */}
+            <TooltipContent align="start" className="flex w-72 max-w-[90vw] flex-wrap gap-1 p-2">
               {/* White chips on the tooltip's dark ground — a border-only chip
                   would blend into the tooltip background and be unreadable. */}
               {tooltipList.map((item, i) => (
