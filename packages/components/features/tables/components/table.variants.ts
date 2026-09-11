@@ -149,17 +149,21 @@ export const tableBodyVariants = cva([
 
   // Nested (sub-)rows read as children of their parent: a faint tinted ground
   // (half-opacity so it stays subtle rather than a flat block of color). Only
-  // the `<tr>` itself carries the tint — plain (non-pinned) `<td>`s stay
-  // transparent so the row's single translucent layer shows through them.
-  // Pinned `<td>`s need their own copy of the same tint only to *replace*
-  // their opaque `bg-card` (set below); if every `<td>` repainted the tint on
-  // top of the already-tinted row, two stacked 50%-alpha layers would
-  // composite to a darker shade than the row's bare (single-layer) empty
-  // space, producing a visible seam. The parent row itself keeps its normal
-  // background when expanded — only its chevron rotates — so expanding
-  // doesn't repaint a row the user is already looking at.
+  // the `<tr>` itself carries the translucent tint — plain (non-pinned) `<td>`s
+  // stay transparent so the row's single translucent layer shows through them.
+  //
+  // Pinned `<td>`s are `position: sticky` — while the table scrolls
+  // horizontally, whatever's underneath them is still there, just off-screen
+  // until it scrolls back under the sticky column. They MUST stay fully
+  // opaque to occlude that content, so unlike the row/plain-cell tint above,
+  // theirs can't be translucent (a `/50` background would let the scrolled
+  // content bleed through). This is the same reason pinned cells get an
+  // opaque `bg-card` normally (below) instead of staying transparent.
+  // The parent row itself keeps its normal background when expanded — only
+  // its chevron rotates — so expanding doesn't repaint a row the user is
+  // already looking at.
   '[&_tr[data-depth]]:bg-muted-bg-subtle/50',
-  '[&_tr[data-depth]_td:not([data-pinned=false])]:bg-muted-bg-subtle/50',
+  '[&_tr[data-depth]_td:not([data-pinned=false])]:bg-muted-bg-subtle',
 ]);
 
 export const tableRowVariants = cva(['group']);
