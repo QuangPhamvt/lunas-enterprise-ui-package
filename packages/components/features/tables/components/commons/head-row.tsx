@@ -9,10 +9,12 @@ import { useUITableHeadRowContext } from '../../hooks/use-context';
 import type { TUITableHeadRow } from '../../types';
 import { tableHeadRowVariants } from '../table.variants';
 import { UITableHeadCell } from './head-cell';
+import { UITableHeadCellExpand } from './head-cell-expand';
 import { UITableHeadCellSelect } from './head-cell-select';
 
 export const UITableHeadRow = memo<TUITableHeadRow>(({ headerGroup, className, ...props }) => {
-  const { isAllRowsSelected, columnPinningState, leftPinnedHeaders, rightPinnedHeaders, onToggleAllRowsSelected } = useUITableHeadRowContext();
+  const { isAllRowsSelected, isAllRowsExpanded, columnPinningState, leftPinnedHeaders, rightPinnedHeaders, onToggleAllRowsSelected, onToggleAllRowsExpanded } =
+    useUITableHeadRowContext();
   const firstRightPinnedHeaderId = rightPinnedHeaders[0]?.id;
   const lastLeftPinnedHeaderId = leftPinnedHeaders[leftPinnedHeaders.length - 1]?.id;
   return (
@@ -31,6 +33,17 @@ export const UITableHeadRow = memo<TUITableHeadRow>(({ headerGroup, className, .
             />
           );
         }
+        if (header.id === 'expand') {
+          return (
+            <UITableHeadCellExpand
+              key={header.id}
+              isPinned={isPinned}
+              isLastCell={header.id === lastLeftPinnedHeaderId}
+              isAllRowsExpanded={isAllRowsExpanded}
+              onToggleAllRowsExpanded={onToggleAllRowsExpanded}
+            />
+          );
+        }
         return (
           <UITableHeadCell
             key={`${header.id}-${index.toLocaleString()}`}
@@ -38,7 +51,7 @@ export const UITableHeadRow = memo<TUITableHeadRow>(({ headerGroup, className, .
             isPinned={isPinned}
             isFirstCell={header.id === firstRightPinnedHeaderId}
             isLastCell={header.id === lastLeftPinnedHeaderId}
-            isOptionsVisible={!['select', 'actions'].includes(header.id)}
+            isOptionsVisible={!['select', 'expand', 'actions'].includes(header.id)}
             headerId={header.id}
             headerColumn={header.column}
             colSpan={header.colSpan}

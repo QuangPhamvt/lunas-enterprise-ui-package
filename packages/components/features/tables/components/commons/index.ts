@@ -1,12 +1,14 @@
 export { UITableBody } from './body';
 export { UITableCell } from './cell';
 export { UITableCellActions } from './cell-actions';
+export { UITableCellExpand } from './cell-expand';
 export { UITableCellSelect } from './cell-select';
 export { UITableEmptyDisplay } from './empty-display';
 export { UITableFooter } from './footer';
 export { UITableFooterRow } from './footer-row';
 export { UITableHead } from './head';
 export { UITableHeadCell } from './head-cell';
+export { UITableHeadCellExpand } from './head-cell-expand';
 export { UITableHeadCellOption } from './head-cell-option';
 export { UITableHeadCellSelect } from './head-cell-select';
 export { UITableHeadRow } from './head-row';

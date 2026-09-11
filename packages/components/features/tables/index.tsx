@@ -31,6 +31,7 @@ import { lazy, Suspense } from 'react';
 import type { TSlotKey } from './components/commons/wrapper';
 
 export { UITableEmptyValue } from './components/atoms/empty';
+export type { UITableStatusListItem } from './components/atoms/status-list-display';
 export * from './components/commons';
 export * from './components/table';
 export { UITableProvider } from './components/table/provider';
@@ -53,6 +54,7 @@ import type { UITableProgressDisplay as UITableProgressDisplayType } from './com
 import type { UITableRemoveButton as UITableRemoveButtonType } from './components/atoms/remove-button';
 import type { UITableStatisticDisplay as UITableStatisticDisplayType } from './components/atoms/statistic';
 import type { UITableStatusDisplay as UITableStatusDisplayType } from './components/atoms/status-display';
+import type { UITableStatusListDisplay as UITableStatusListDisplayType } from './components/atoms/status-list-display';
 import type { UITableToggleButton as UITableToggleButtonType } from './components/atoms/toggle-button';
 import type { UITableUserDataDisplay as UITableUserDataDisplayType } from './components/atoms/user';
 import type {
@@ -134,6 +136,9 @@ const UITableStatisticDisplay = lazyField<ComponentProps<typeof UITableStatistic
 const UITableStatusDisplay = lazyField<ComponentProps<typeof UITableStatusDisplayType>>(() =>
   import('./components/atoms/status-display').then(m => ({ default: m.UITableStatusDisplay }))
 );
+const UITableStatusListDisplay = lazyField<ComponentProps<typeof UITableStatusListDisplayType>>(() =>
+  import('./components/atoms/status-list-display').then(m => ({ default: m.UITableStatusListDisplay }))
+);
 const UITableToggleButton = lazyField<ComponentProps<typeof UITableToggleButtonType>>(() =>
   import('./components/atoms/toggle-button').then(m => ({ default: m.UITableToggleButton }))
 );
@@ -185,6 +190,7 @@ export {
   UITableRemoveButton,
   UITableStatisticDisplay,
   UITableStatusDisplay,
+  UITableStatusListDisplay,
   UITableSummaryBar,
   UITableToggleButton,
   UITableToolbar,

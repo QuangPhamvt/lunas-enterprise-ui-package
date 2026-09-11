@@ -105,8 +105,24 @@ export const tableBodyVariants = cva([
   '[&_tr]:flex-none',
   '[&_tr]:w-full',
   '[&_tr]:transition-all',
-  '[&_tr]:hover:bg-muted-muted',
-  '[&_tr]:hover:[&_td]:bg-muted-bg-subtle',
+  // The `<tr>` itself is the single source of truth for hover color — any
+  // empty trailing space after the last column (row width > sum of column
+  // widths) IS the `<tr>`'s own background, so it always matches automatically.
+  // Only pinned `<td>`s need their own (important, so it reliably wins over a
+  // static `[data-depth]`/`[data-selected]` tint) copy to replace their
+  // opaque `bg-card`; a plain `<td>` stays transparent and lets the row's
+  // color show through — repainting it too would double-composite with the
+  // row underneath and drift off-color for any translucent value.
+  '[&_tr]:hover:bg-muted-bg-subtle!',
+  // `:not([data-selected=true])` keeps this from outranking the dedicated
+  // selected+hover cell rule below — both would otherwise be `!important` at
+  // equal-or-higher specificity (this one gains an extra `tr` ancestor), which
+  // would make the ordering between them a fragile stylesheet-order tiebreak.
+  '[&_tr]:hover:[&_td:not([data-pinned=false]):not([data-selected=true])]:bg-muted-bg-subtle!',
+  // Same reasoning for the selected state — the `<tr>` itself needs the tint,
+  // not just its `<td>`s, or the row's empty trailing space stays untinted.
+  '[&_tr[data-selected=true]]:bg-muted-muted!',
+  '[&_tr[data-selected=true]]:hover:bg-muted-muted!',
   '[&_tr]:cursor-pointer',
   '[&_tr]:focus:outline-none',
   '[&_tr]:border-b',
@@ -130,6 +146,20 @@ export const tableBodyVariants = cva([
   '[&_td:not([data-pinned=false])]:z-20',
   '[&_td:not([data-pinned=false])]:sticky',
   '[&_td:not([data-pinned=false])]:bg-card',
+
+  // Nested (sub-)rows read as children of their parent: a faint tinted ground
+  // (half-opacity so it stays subtle rather than a flat block of color). Only
+  // the `<tr>` itself carries the tint — plain (non-pinned) `<td>`s stay
+  // transparent so the row's single translucent layer shows through them.
+  // Pinned `<td>`s need their own copy of the same tint only to *replace*
+  // their opaque `bg-card` (set below); if every `<td>` repainted the tint on
+  // top of the already-tinted row, two stacked 50%-alpha layers would
+  // composite to a darker shade than the row's bare (single-layer) empty
+  // space, producing a visible seam. The parent row itself keeps its normal
+  // background when expanded — only its chevron rotates — so expanding
+  // doesn't repaint a row the user is already looking at.
+  '[&_tr[data-depth]]:bg-muted-bg-subtle/50',
+  '[&_tr[data-depth]_td:not([data-pinned=false])]:bg-muted-bg-subtle/50',
 ]);
 
 export const tableRowVariants = cva(['group']);

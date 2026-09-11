@@ -30,11 +30,15 @@ export const UITableContainer: React.FC<TUITableContainer> & { tableWrapperSlot?
   // pin-only change. `pinKey` is folded into the header/body row `key`s below so pinning a
   // column always forces a fresh render in the new [...left, ...center, ...right] grouping,
   // instead of possibly leaving stale, memoized rows behind.
-  const { rowSelectionState, columnPinningState } = useUITableBodyContext();
+  const { rowSelectionState, columnPinningState, expandedState } = useUITableBodyContext();
 
   const { left: leftPinned = [], right: rightPinned = [] } = columnPinningState;
 
   const pinKey = `${leftPinned.join(',')}|${rightPinned.join(',')}`;
+
+  // Reading `expandedState` from context (not `table.getState().expanded`) is what makes this
+  // component re-render when a row is expanded/collapsed — same workaround as `pinKey` above.
+  const expandKey = expandedState === true ? 'all' : Object.keys(expandedState).join(',');
 
   const { rows } = table.getRowModel();
 
@@ -55,7 +59,7 @@ export const UITableContainer: React.FC<TUITableContainer> & { tableWrapperSlot?
             <UITableBody>
               {rows.map((row, index) => {
                 const isSelected = rowSelectionState[row.id] === true;
-                return <UITableRow key={`${row.id}-${pinKey}`} row={row} isSelected={isSelected} rowIndex={index} />;
+                return <UITableRow key={`${row.id}-${pinKey}-${expandKey}`} row={row} isSelected={isSelected} rowIndex={index} />;
               })}
               {!!fetchMoreData && <UITableLoadMore fetchMoreData={fetchMoreData} />}
             </UITableBody>

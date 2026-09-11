@@ -7,7 +7,10 @@ import type { TUITableRow } from '../../types';
 import { tableRowVariants } from '../table.variants';
 import { UITableCell } from './cell';
 import { UITableCellActions } from './cell-actions';
+import { UITableCellExpand } from './cell-expand';
 import { UITableCellSelect } from './cell-select';
+
+const SPECIAL_COLUMN_IDS = ['select', 'expand', 'actions'];
 
 export const UITableRow = memo<TUITableRow>(({ row, isSelected, rowIndex, children, ...props }) => {
   const { keyOfClickRow, isAllRowsSelected, columnPinningState, leftPinnedHeaders, rightPinnedHeaders, onClickRow } = useUITableRowContext();
@@ -22,6 +25,9 @@ export const UITableRow = memo<TUITableRow>(({ row, isSelected, rowIndex, childr
   const visibleCells = row.getVisibleCells();
 
   const hasSelectColumn = useMemo(() => visibleCells.some(c => c.column.id === 'select'), [visibleCells]);
+  const firstDataCellId = useMemo(() => visibleCells.find(c => !SPECIAL_COLUMN_IDS.includes(c.column.id))?.column.id, [visibleCells]);
+
+  const depth = row.depth;
 
   const handleClick = useCallback<React.MouseEventHandler<HTMLTableRowElement>>(
     e => {
@@ -38,11 +44,36 @@ export const UITableRow = memo<TUITableRow>(({ row, isSelected, rowIndex, childr
   );
 
   return (
-    <tr slot="table-row" data-index={rowIndex} className={tableRowVariants()} onClick={handleClick} {...props}>
+    <tr
+      slot="table-row"
+      data-index={rowIndex}
+      data-depth={depth || undefined}
+      data-expanded={row.getIsExpanded() || undefined}
+      data-selected={isSelected || undefined}
+      className={tableRowVariants()}
+      onClick={handleClick}
+      {...props}
+    >
       {visibleCells.map((cell, index) => {
         const isPinnedLeft = pinnedLeftColumns.includes(cell.column.id);
         const isPinnedRight = pinnedRightColumns.includes(cell.column.id);
         const isPinned = isPinnedLeft ? 'left' : isPinnedRight ? 'right' : false;
+        if (cell.column.id === 'expand') {
+          return (
+            <UITableCellExpand
+              key={`${cell.id}-${index.toLocaleString()}`}
+              data-col={cell.column.id}
+              data-cell={rowIndex}
+              data-selected={isSelected || undefined}
+              isPinned={isPinned}
+              isLastCell={cell.column.id === lastLeftPinnedHeaderId}
+              canExpand={row.getCanExpand()}
+              isExpanded={row.getIsExpanded()}
+              depth={depth}
+              onToggleExpanded={row.toggleExpanded}
+            />
+          );
+        }
         if (cell.column.id === 'actions') {
           return (
             <UITableCellActions
@@ -64,7 +95,8 @@ export const UITableRow = memo<TUITableRow>(({ row, isSelected, rowIndex, childr
               data-selected={isSelected || undefined}
               isPinned={isPinned}
               isLastCell={cell.column.id === lastLeftPinnedHeaderId}
-              isSelected={isAllRowsSelected || isSelected}
+              canSelect={cell.row.getCanSelect()}
+              isSelected={(isAllRowsSelected && cell.row.getCanSelect()) || isSelected}
               onToggleRowSelected={cell.row.toggleSelected}
             />
           );
@@ -80,6 +112,7 @@ export const UITableRow = memo<TUITableRow>(({ row, isSelected, rowIndex, childr
             isLastCell={cell.column.id === lastLeftPinnedHeaderId}
             colId={cell.column.id}
             position={(cell.column.columnDef.meta as AnyEntity)?.position ?? 'start'}
+            indent={cell.column.id === firstDataCellId ? depth : 0}
             column={cell.column}
             getContext={cell.getContext}
           />
