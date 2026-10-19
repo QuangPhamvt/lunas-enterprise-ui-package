@@ -1,37 +1,17 @@
 'use client';
-import { memo, useCallback, useMemo } from 'react';
+import { memo, useMemo } from 'react';
 
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { Flex } from '@/components/layouts/flex';
+import { formatNumber } from '@/libs/number';
 import { UITableEmptyValue } from './empty';
-
-/**
- * Applies the specified rounding mode to `num` at the given decimal precision.
- *
- * @param num - The number to round.
- * @param precisionValue - Number of decimal places to keep.
- * @param roundingMode - Rounding strategy: `'round'` (default), `'floor'`, or `'ceil'`.
- * @returns The rounded number.
- */
-const applyRounding = (num: number, precisionValue: number, roundingMode?: 'round' | 'floor' | 'ceil') => {
-  const multiplier = 10 ** precisionValue;
-
-  switch (roundingMode) {
-    case 'floor':
-      return Math.floor(num * multiplier) / multiplier;
-    case 'ceil':
-      return Math.ceil(num * multiplier) / multiplier;
-    default:
-      return Math.round(num * multiplier) / multiplier;
-  }
-};
 
 /** Props for the {@link UITableStatisticDisplay} component. */
 type Props = {
-  /** Character used to separate the integer and fractional parts (default: `'.'`). */
+  /** Character used to separate the integer and fractional parts (default: `','`). */
   decimalSeparator?: string;
-  /** Character used to separate thousands groups (default: `','`). */
+  /** Character used to separate thousands groups (default: `'.'`). */
   groupSeparator?: string;
   /** Optional node rendered before the formatted number (e.g. a currency symbol). */
   prefix?: React.ReactNode;
@@ -70,8 +50,8 @@ type Props = {
  */
 export const UITableStatisticDisplay = memo(
   ({
-    decimalSeparator = '.',
-    groupSeparator = ',',
+    decimalSeparator = ',',
+    groupSeparator = '.',
     prefix: Prefix,
     suffix: Suffix,
     precision,
@@ -82,75 +62,10 @@ export const UITableStatisticDisplay = memo(
     colorize = false,
     trend,
   }: Props) => {
-    // Memoize number formatting options
-    const formatOptions = useMemo((): Intl.NumberFormatOptions => {
-      const options: Intl.NumberFormatOptions = {};
-
-      if (typeof precision === 'number' && precision >= 0 && showTrailingZeros) {
-        options.minimumFractionDigits = precision;
-        options.maximumFractionDigits = precision;
-      } else {
-        options.maximumFractionDigits = precision;
-      }
-
-      return options;
-    }, [precision, showTrailingZeros]);
-
-    const formatNumber = useCallback(
-      (num: number): string => {
-        let processedNum = num;
-
-        // Áp dụng làm tròn nếu có precision
-        if (typeof precision === 'number' && precision >= 0) {
-          processedNum = applyRounding(num, precision, roundingMode);
-        }
-
-        return processedNum.toLocaleString('vi-VN', formatOptions);
-      },
-      [roundingMode, formatOptions, precision]
+    const finalFormattedValue = useMemo(
+      () => formatNumber(value, { precision, roundingMode, showTrailingZeros, decimalSeparator, groupSeparator }) ?? 'N/A',
+      [value, precision, roundingMode, showTrailingZeros, decimalSeparator, groupSeparator]
     );
-
-    // Memoize value processing
-    const processedValue = useMemo((): string => {
-      // Xử lý giá trị number
-      if (typeof value === 'number') {
-        if (Number.isNaN(value) || !Number.isFinite(value)) {
-          return 'N/A';
-        }
-        return formatNumber(value);
-      }
-
-      // Xử lý giá trị string
-      if (typeof value === 'string') {
-        const trimmedValue = value.trim();
-
-        // Nếu là chuỗi rỗng
-        if (!trimmedValue) {
-          return 'N/A';
-        }
-
-        // Thử convert sang number
-        const numValue = Number(trimmedValue);
-
-        if (Number.isNaN(numValue) || !Number.isFinite(numValue)) {
-          // Nếu không phải số, trả về string gốc
-          return 'N/A';
-        }
-
-        return formatNumber(numValue);
-      }
-
-      return 'N/A';
-    }, [value, formatNumber]);
-
-    // Memoize separator replacement
-    const finalFormattedValue = useMemo((): string => {
-      // Chỉ thay thế separators nếu khác mặc định
-      if (decimalSeparator === '.' && groupSeparator === ',') {
-        return processedValue;
-      }
-      return processedValue.replace(/,/g, groupSeparator).replace(/\./g, decimalSeparator);
-    }, [processedValue, decimalSeparator, groupSeparator]);
 
     const effectiveTrend = useMemo(() => {
       if (trend) return trend;

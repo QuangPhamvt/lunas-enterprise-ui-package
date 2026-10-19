@@ -142,7 +142,15 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
               )}
             </TabsTrigger>
           </TabsList>
-          <Button type="button" color="muted" variant="ghost" size="icon" onClick={() => onMarkAllAsRead(activeScope)}>
+          <Button
+            type="button"
+            color="muted"
+            variant="ghost"
+            size="icon"
+            aria-label="Đánh dấu tất cả đã đọc"
+            title="Đánh dấu tất cả đã đọc"
+            onClick={() => onMarkAllAsRead(activeScope)}
+          >
             <BookCheckIcon />
           </Button>
         </div>

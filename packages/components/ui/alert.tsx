@@ -94,7 +94,13 @@ export interface AlertTitleProps extends React.HTMLAttributes<HTMLDivElement> {
  * Renders the bold title line inside an Alert.
  */
 function AlertTitle({ className, ...props }: AlertTitleProps) {
-  return <div data-slot="alert-title" className={cn('col-start-2 line-clamp-1 min-h-4 font-medium leading-4.5 tracking-tight', className)} {...props} />;
+  return (
+    <div
+      data-slot="alert-title"
+      className={cn('[[data-slot=alert]:has(>svg)>&]:col-start-2 line-clamp-1 min-h-4 font-medium leading-4.5 tracking-tight', className)}
+      {...props}
+    />
+  );
 }
 
 /**
@@ -111,7 +117,13 @@ export interface AlertDescriptionProps extends React.HTMLAttributes<HTMLDivEleme
  * Renders the supporting body text inside an Alert.
  */
 function AlertDescription({ className, ...props }: AlertDescriptionProps) {
-  return <div data-slot="alert-description" className={cn('col-start-2 grid justify-items-start gap-1 text-sm [&_p]:leading-relaxed', className)} {...props} />;
+  return (
+    <div
+      data-slot="alert-description"
+      className={cn('[[data-slot=alert]:has(>svg)>&]:col-start-2 grid justify-items-start gap-1 text-sm [&_p]:leading-relaxed', className)}
+      {...props}
+    />
+  );
 }
 
 export { Alert, AlertDescription, AlertTitle };
