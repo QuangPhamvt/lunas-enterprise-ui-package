@@ -1,6 +1,6 @@
 'use client';
 
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 
 import { CheckIcon, ChevronDownIcon, PlusIcon, XIcon } from 'lucide-react';
 
@@ -170,11 +170,11 @@ function haveSameOptionValues(a: ComboboxOption[], b: ComboboxOption[]) {
  *
  * @reference https://github.com/hsuanyi-chou/shadcn-ui-expansions/issues/34#issuecomment-1949561607
  */
-const CommandEmpty = forwardRef<HTMLDivElement, React.ComponentProps<typeof CommandPrimitive.Empty>>(({ className, ...props }, forwardedRef) => {
+const CommandEmpty = ({ className, ref: forwardedRef, ...props }: React.ComponentProps<typeof CommandPrimitive.Empty>) => {
   const render = useCommandState(state => state.filtered.count === 0);
   if (!render) return null;
   return <div ref={forwardedRef} className={cn('p-2.5 pt-1 text-center text-xs', className)} cmdk-empty="" role="presentation" {...props} />;
-});
+};
 CommandEmpty.displayName = 'ComboboxCommandEmpty';
 
 /**
@@ -201,399 +201,395 @@ CommandEmpty.displayName = 'ComboboxCommandEmpty';
  * />
  * ```
  */
-export const Combobox = forwardRef<ComboboxRef, ComboboxProps>(
-  (
-    {
-      value,
-      defaultValue = [],
-      onChange,
-      options: arrayOptions,
-      defaultOptions: arrayDefaultOptions = [],
-      onSearch,
-      delay,
-      triggerSearchOnFocus = false,
-      groupBy,
-      placeholder,
-      disabled,
-      color,
-      size = 'md',
-      loadingIndicator,
-      loadingText,
-      emptyIndicator,
-      creatable = false,
-      createHint,
-      createLabel,
-      onCreateOption,
-      maxSelected = Number.MAX_SAFE_INTEGER,
-      onMaxSelected,
-      hideSelectedFromList = false,
-      hideClearAllButton = false,
-      onClearAll,
-      hideClearQueryButton = false,
-      onClearQuery,
-      className,
-      badgeClassName,
-      contentClassName,
-      commandProps,
-      inputProps,
-    }: ComboboxProps,
-    ref: React.Ref<ComboboxRef>
-  ) => {
-    const inputRef = useRef<HTMLInputElement>(null);
-    const searchRequestIdRef = useRef(0);
-    const isMountedRef = useRef(true);
+export const Combobox = ({
+  value,
+  defaultValue = [],
+  onChange,
+  options: arrayOptions,
+  defaultOptions: arrayDefaultOptions = [],
+  onSearch,
+  delay,
+  triggerSearchOnFocus = false,
+  groupBy,
+  placeholder,
+  disabled,
+  color,
+  size = 'md',
+  loadingIndicator,
+  loadingText,
+  emptyIndicator,
+  creatable = false,
+  createHint,
+  createLabel,
+  onCreateOption,
+  maxSelected = Number.MAX_SAFE_INTEGER,
+  onMaxSelected,
+  hideSelectedFromList = false,
+  hideClearAllButton = false,
+  onClearAll,
+  hideClearQueryButton = false,
+  onClearQuery,
+  className,
+  badgeClassName,
+  contentClassName,
+  commandProps,
+  inputProps,
+  ref,
+}: ComboboxProps & { ref?: React.Ref<ComboboxRef> }) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const searchRequestIdRef = useRef(0);
+  const isMountedRef = useRef(true);
 
-    const [open, setOpen] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-    const [internalSelected, setInternalSelected] = useState<ComboboxOption[]>(defaultValue);
-    const [options, setOptions] = useState<GroupOption>(transToGroupOption(arrayDefaultOptions, groupBy));
-    const [inputValue, setInputValue] = useState('');
+  const [internalSelected, setInternalSelected] = useState<ComboboxOption[]>(defaultValue);
+  const [options, setOptions] = useState<GroupOption>(transToGroupOption(arrayDefaultOptions, groupBy));
+  const [inputValue, setInputValue] = useState('');
 
-    const selected = value ?? internalSelected;
-    const trimmedInputValue = inputValue.trim();
-    const debouncedSearchTerm = useDebounce(inputValue, delay ?? 500);
+  const selected = value ?? internalSelected;
+  const trimmedInputValue = inputValue.trim();
+  const debouncedSearchTerm = useDebounce(inputValue, delay ?? 500);
 
-    /** Notifies `onChange` unconditionally; only mirrors into local state when uncontrolled. */
-    const setSelected = useCallback(
-      (next: ComboboxOption[]) => {
-        if (value === undefined) setInternalSelected(next);
-        onChange?.(next);
+  /** Notifies `onChange` unconditionally; only mirrors into local state when uncontrolled. */
+  const setSelected = useCallback(
+    (next: ComboboxOption[]) => {
+      if (value === undefined) setInternalSelected(next);
+      onChange?.(next);
+    },
+    [onChange, value]
+  );
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      selectedValue: [...selected],
+      input: inputRef.current as HTMLInputElement,
+      focus: () => {
+        setOpen(true);
+        inputRef.current?.focus();
       },
-      [onChange, value]
-    );
+      reset: () => setSelected([]),
+      clearQuery: () => setInputValue(''),
+    }),
+    [selected, setSelected]
+  );
 
-    useImperativeHandle(
-      ref,
-      () => ({
-        selectedValue: [...selected],
-        input: inputRef.current as HTMLInputElement,
-        focus: () => {
-          setOpen(true);
-          inputRef.current?.focus();
-        },
-        reset: () => setSelected([]),
-        clearQuery: () => setInputValue(''),
-      }),
-      [selected, setSelected]
-    );
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
 
-    useEffect(() => {
-      isMountedRef.current = true;
-      return () => {
-        isMountedRef.current = false;
-      };
-    }, []);
+  // Start each open with a blank query, so reopening always shows the full list first.
+  useEffect(() => {
+    if (!open) setInputValue('');
+  }, [open]);
 
-    // Start each open with a blank query, so reopening always shows the full list first.
-    useEffect(() => {
-      if (!open) setInputValue('');
-    }, [open]);
+  const selectedValues = useMemo(() => new Set(selected.map(option => option.value)), [selected]);
 
-    const selectedValues = useMemo(() => new Set(selected.map(option => option.value)), [selected]);
+  const handleUnselect = useCallback(
+    (option: ComboboxOption) => {
+      setSelected(selected.filter(s => s.value !== option.value));
+    },
+    [selected, setSelected]
+  );
 
-    const handleUnselect = useCallback(
-      (option: ComboboxOption) => {
-        setSelected(selected.filter(s => s.value !== option.value));
-      },
-      [selected, setSelected]
-    );
-
-    const handleSelect = useCallback(
-      (option: ComboboxOption) => {
-        if (selectedValues.has(option.value)) {
-          if (!option.fixed) handleUnselect(option);
-          return;
-        }
-        if (selected.length >= maxSelected) {
-          onMaxSelected?.(maxSelected);
-          return;
-        }
-        setInputValue('');
-        setSelected([...selected, option]);
-      },
-      [handleUnselect, maxSelected, onMaxSelected, selected, selectedValues, setSelected]
-    );
-
-    useEffect(() => {
-      if (!arrayOptions || onSearch) return;
-      setOptions(prev => {
-        const prevFlat = Object.values(prev).flat();
-        return haveSameOptionValues(arrayOptions, prevFlat) ? prev : transToGroupOption(arrayOptions, groupBy);
-      });
-    }, [arrayOptions, groupBy, onSearch]);
-
-    useEffect(() => {
-      const exec = async () => {
-        if (!onSearch || !open) return;
-        if (!triggerSearchOnFocus && !debouncedSearchTerm) return;
-
-        const requestId = ++searchRequestIdRef.current;
-        setIsLoading(true);
-        const res = await onSearch(debouncedSearchTerm);
-        if (!isMountedRef.current || requestId !== searchRequestIdRef.current) return;
-        setOptions(transToGroupOption(res, groupBy));
-        setIsLoading(false);
-      };
-      void exec();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [debouncedSearchTerm, groupBy, open, triggerSearchOnFocus, onSearch]);
-
-    const selectables = useMemo<GroupOption>(
-      () => (hideSelectedFromList ? removePickedOption(options, selectedValues) : options),
-      [hideSelectedFromList, options, selectedValues]
-    );
-
-    const showCreatePrompt = useMemo(() => {
-      if (!creatable || !trimmedInputValue || isLoading) return false;
-
-      const normalizedQuery = trimmedInputValue.toLowerCase();
-      const matchesExisting = Object.values(options).some(group => group.some(o => o.label.toLowerCase() === normalizedQuery));
-      const matchesSelected = selected.some(s => s.label.toLowerCase() === normalizedQuery);
-      return !matchesExisting && !matchesSelected;
-    }, [creatable, trimmedInputValue, isLoading, options, selected]);
-
-    const resolvedCreateLabel = typeof createLabel === 'function' ? createLabel(trimmedInputValue) : (createLabel ?? `Create "${trimmedInputValue}"`);
-    const resolvedCreateHint = typeof createHint === 'function' ? createHint(trimmedInputValue) : createHint;
-
-    const handleCreateOption = useCallback(() => {
+  const handleSelect = useCallback(
+    (option: ComboboxOption) => {
+      if (selectedValues.has(option.value)) {
+        if (!option.fixed) handleUnselect(option);
+        return;
+      }
       if (selected.length >= maxSelected) {
         onMaxSelected?.(maxSelected);
         return;
       }
-      const query = trimmedInputValue;
       setInputValue('');
-      setSelected([...selected, { value: query, label: query }]);
-      onCreateOption?.(query);
-      setOpen(false);
-    }, [trimmedInputValue, maxSelected, onCreateOption, onMaxSelected, selected, setSelected]);
+      setSelected([...selected, option]);
+    },
+    [handleUnselect, maxSelected, onMaxSelected, selected, selectedValues, setSelected]
+  );
 
-    const handleKeyDown = useCallback(
-      (e: React.KeyboardEvent<HTMLDivElement>) => {
-        const input = inputRef.current;
-        if (!input) return;
+  useEffect(() => {
+    if (!arrayOptions || onSearch) return;
+    setOptions(prev => {
+      const prevFlat = Object.values(prev).flat();
+      return haveSameOptionValues(arrayOptions, prevFlat) ? prev : transToGroupOption(arrayOptions, groupBy);
+    });
+  }, [arrayOptions, groupBy, onSearch]);
 
-        if ((e.key === 'Delete' || e.key === 'Backspace') && input.value === '' && selected.length > 0) {
-          const lastSelectOption = selected[selected.length - 1];
-          if (!lastSelectOption.fixed) handleUnselect(lastSelectOption);
-        }
+  useEffect(() => {
+    const exec = async () => {
+      if (!onSearch || !open) return;
+      if (!triggerSearchOnFocus && !debouncedSearchTerm) return;
 
-        if (e.key === 'Enter' && showCreatePrompt) {
-          e.preventDefault();
-          handleCreateOption();
-        }
-      },
-      [handleCreateOption, handleUnselect, selected, showCreatePrompt]
-    );
+      const requestId = ++searchRequestIdRef.current;
+      setIsLoading(true);
+      const res = await onSearch(debouncedSearchTerm);
+      if (!isMountedRef.current || requestId !== searchRequestIdRef.current) return;
+      setOptions(transToGroupOption(res, groupBy));
+      setIsLoading(false);
+    };
+    void exec();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedSearchTerm, groupBy, open, triggerSearchOnFocus, onSearch]);
 
-    const hasClearableSelection = selected.some(s => !s.fixed);
+  const selectables = useMemo<GroupOption>(
+    () => (hideSelectedFromList ? removePickedOption(options, selectedValues) : options),
+    [hideSelectedFromList, options, selectedValues]
+  );
 
-    return (
-      <Popover open={open} onOpenChange={next => !disabled && setOpen(next)}>
-        <PopoverTrigger asChild>
-          <div
-            data-slot="combobox-trigger"
-            role="combobox"
-            aria-expanded={open}
-            aria-haspopup="listbox"
-            aria-disabled={disabled || undefined}
-            tabIndex={disabled ? -1 : 0}
-            className={cn(
-              comboboxVariants({ color, size }),
-              selected.length !== 0 && 'p-1',
-              !disabled && 'cursor-pointer',
-              disabled && 'pointer-events-none',
-              className
-            )}
-            onKeyDown={e => {
-              if (disabled) return;
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                setOpen(o => !o);
-              }
-            }}
-          >
-            {selected.length === 0 && <span className="flex-1 truncate px-3 py-2 text-text-positive-muted">{placeholder}</span>}
+  const showCreatePrompt = useMemo(() => {
+    if (!creatable || !trimmedInputValue || isLoading) return false;
 
-            {selected.map(option => (
-              <Badge
-                key={option.value}
-                data-slot="combobox-chip"
-                data-fixed={option.fixed || undefined}
-                variant="soft"
-                color={color === 'danger' ? 'danger' : 'secondary'}
-                size={size}
-                pill={false}
-                className={cn('gap-1 text-xs bg-muted-muted font-normal', disabled && 'opacity-50', badgeClassName)}
-              >
-                {option.label}
-                {!option.fixed && !disabled && (
-                  <button
-                    type="button"
-                    data-slot="combobox-chip-remove"
-                    aria-label={`Remove ${option.label}`}
-                    onMouseDown={stopMouseDown}
-                    onClick={e => {
-                      e.stopPropagation();
-                      handleUnselect(option);
-                    }}
-                    className="ms-0.5 -me-0.5 rounded-sm outline-hidden hover:text-text-positive text-text-positive-muted"
-                  >
-                    <XIcon size={12} strokeWidth={2} aria-hidden="true" />
-                  </button>
-                )}
-              </Badge>
-            ))}
+    const normalizedQuery = trimmedInputValue.toLowerCase();
+    const matchesExisting = Object.values(options).some(group => group.some(o => o.label.toLowerCase() === normalizedQuery));
+    const matchesSelected = selected.some(s => s.label.toLowerCase() === normalizedQuery);
+    return !matchesExisting && !matchesSelected;
+  }, [creatable, trimmedInputValue, isLoading, options, selected]);
 
-            <ChevronDownIcon
-              size={16}
-              aria-hidden="true"
-              className={cn('ms-auto me-2 shrink-0 text-text-positive-muted transition-transform', open && 'rotate-180')}
-            />
-          </div>
-        </PopoverTrigger>
+  const resolvedCreateLabel = typeof createLabel === 'function' ? createLabel(trimmedInputValue) : (createLabel ?? `Create "${trimmedInputValue}"`);
+  const resolvedCreateHint = typeof createHint === 'function' ? createHint(trimmedInputValue) : createHint;
 
-        <PopoverContent align="start" data-slot="combobox-content" className={cn('w-(--radix-popover-trigger-width) p-0', contentClassName)}>
-          <Command
-            {...commandProps}
-            onKeyDown={e => {
-              handleKeyDown(e);
-              commandProps?.onKeyDown?.(e);
-            }}
-            data-slot="combobox"
-            className={cn('overflow-visible bg-white', commandProps?.className)}
-            shouldFilter={commandProps?.shouldFilter ?? !onSearch}
-          >
-            {!hideClearAllButton && hasClearableSelection && (
-              <Button
-                type="button"
-                data-slot="combobox-clear-all"
-                tabIndex={-1}
-                size="xs"
-                variant="ghost"
-                color="muted"
-                className="w-fit mt-1 font-normal hover:text-text-positive"
-                onMouseDown={stopMouseDown}
-                onClick={() => {
-                  const remaining = selected.filter(s => s.fixed);
-                  setSelected(remaining);
-                  onClearAll?.();
-                }}
-              >
-                <XIcon size={10} strokeWidth={2} aria-hidden="true" className="size-3!" />
-                Clear Selected Input
-              </Button>
-            )}
+  const handleCreateOption = useCallback(() => {
+    if (selected.length >= maxSelected) {
+      onMaxSelected?.(maxSelected);
+      return;
+    }
+    const query = trimmedInputValue;
+    setInputValue('');
+    setSelected([...selected, { value: query, label: query }]);
+    onCreateOption?.(query);
+    setOpen(false);
+  }, [trimmedInputValue, maxSelected, onCreateOption, onMaxSelected, selected, setSelected]);
 
-            <div data-slot="combobox-search" className="relative px-2.5 pt-2.5 pb-1 border-t border-t-border">
-              <CommandPrimitive.Input
-                {...inputProps}
-                ref={inputRef}
-                data-slot="combobox-input"
-                value={inputValue}
-                onValueChange={val => {
-                  setInputValue(val);
-                  inputProps?.onValueChange?.(val);
-                }}
-                placeholder={placeholder}
-                className={cn(inputVariants({ size: 'sm' }), 'pe-8', inputProps?.className)}
-              />
-              {!hideClearQueryButton && inputValue.length > 0 && (
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLDivElement>) => {
+      const input = inputRef.current;
+      if (!input) return;
+
+      if ((e.key === 'Delete' || e.key === 'Backspace') && input.value === '' && selected.length > 0) {
+        const lastSelectOption = selected[selected.length - 1];
+        if (!lastSelectOption.fixed) handleUnselect(lastSelectOption);
+      }
+
+      if (e.key === 'Enter' && showCreatePrompt) {
+        e.preventDefault();
+        handleCreateOption();
+      }
+    },
+    [handleCreateOption, handleUnselect, selected, showCreatePrompt]
+  );
+
+  const hasClearableSelection = selected.some(s => !s.fixed);
+
+  return (
+    <Popover open={open} onOpenChange={next => !disabled && setOpen(next)}>
+      <PopoverTrigger asChild>
+        <div
+          data-slot="combobox-trigger"
+          role="combobox"
+          aria-expanded={open}
+          aria-haspopup="listbox"
+          aria-disabled={disabled || undefined}
+          tabIndex={disabled ? -1 : 0}
+          className={cn(
+            comboboxVariants({ color, size }),
+            selected.length !== 0 && 'p-1',
+            !disabled && 'cursor-pointer',
+            disabled && 'pointer-events-none',
+            className
+          )}
+          onKeyDown={e => {
+            if (disabled) return;
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              setOpen(o => !o);
+            }
+          }}
+        >
+          {selected.length === 0 && <span className="flex-1 truncate px-3 py-2 text-text-positive-muted">{placeholder}</span>}
+
+          {selected.map(option => (
+            <Badge
+              key={option.value}
+              data-slot="combobox-chip"
+              data-fixed={option.fixed || undefined}
+              variant="soft"
+              color={color === 'danger' ? 'danger' : 'secondary'}
+              size={size}
+              pill={false}
+              className={cn('gap-1 text-xs bg-muted-muted font-normal', disabled && 'opacity-50', badgeClassName)}
+            >
+              {option.label}
+              {!option.fixed && !disabled && (
                 <button
                   type="button"
-                  data-slot="combobox-clear-query"
-                  aria-label="Clear search"
+                  data-slot="combobox-chip-remove"
+                  aria-label={`Remove ${option.label}`}
                   onMouseDown={stopMouseDown}
-                  onClick={() => {
-                    setInputValue('');
-                    onClearQuery?.();
-                    inputRef.current?.focus();
+                  onClick={e => {
+                    e.stopPropagation();
+                    handleUnselect(option);
                   }}
-                  className="absolute inset-y-6 inset-e-4 flex items-center justify-center text-text-positive-muted transition-colors hover:text-text-positive"
+                  className="ms-0.5 -me-0.5 rounded-sm outline-hidden hover:text-text-positive text-text-positive-muted"
                 >
-                  <XIcon size={14} strokeWidth={2} aria-hidden="true" />
+                  <XIcon size={12} strokeWidth={2} aria-hidden="true" />
                 </button>
               )}
-            </div>
+            </Badge>
+          ))}
 
-            <CommandList data-slot="combobox-list" className="shadow-lg outline-hidden" onMouseDown={e => e.preventDefault()}>
-              {isLoading ? (
-                <div data-slot="combobox-loading" className="flex items-center justify-center gap-2 px-2 py-6 text-sm text-text-positive-muted">
-                  {loadingIndicator ?? (
-                    <>
-                      <Spinner className="size-4" />
-                      {loadingText}
-                    </>
-                  )}
-                </div>
-              ) : showCreatePrompt ? (
-                <div data-slot="combobox-create" className="flex flex-col gap-2 p-3">
-                  {resolvedCreateHint && <p className="pe-10 text-text-positive-weak text-xs">{resolvedCreateHint}</p>}
-                  <div className="flex justify-end">
-                    <Button
-                      type="button"
-                      data-slot="combobox-create-confirm"
-                      aria-label={resolvedCreateLabel}
-                      size="xs"
-                      variant="outline"
-                      color="muted"
-                      onMouseDown={stopMouseDown}
-                      onClick={handleCreateOption}
-                    >
-                      <PlusIcon />
-                      Thêm mới
-                    </Button>
-                  </div>
-                </div>
-              ) : (
-                <>
-                  <CommandEmpty data-slot="combobox-empty">
-                    <div className="bg-muted-muted size-full min-h-14 flex items-center justify-center">{emptyIndicator ?? 'No results found.'}</div>
-                  </CommandEmpty>
+          <ChevronDownIcon
+            size={16}
+            aria-hidden="true"
+            className={cn('ms-auto me-2 shrink-0 text-text-positive-muted transition-transform', open && 'rotate-180')}
+          />
+        </div>
+      </PopoverTrigger>
 
-                  {/* Absorbs cmdk's default "auto-highlight the first item" behavior so opening the
+      <PopoverContent align="start" data-slot="combobox-content" className={cn('w-(--radix-popover-trigger-width) p-0', contentClassName)}>
+        <Command
+          {...commandProps}
+          onKeyDown={e => {
+            handleKeyDown(e);
+            commandProps?.onKeyDown?.(e);
+          }}
+          data-slot="combobox"
+          className={cn('overflow-visible bg-white', commandProps?.className)}
+          shouldFilter={commandProps?.shouldFilter ?? !onSearch}
+        >
+          {!hideClearAllButton && hasClearableSelection && (
+            <Button
+              type="button"
+              data-slot="combobox-clear-all"
+              tabIndex={-1}
+              size="xs"
+              variant="ghost"
+              color="muted"
+              className="w-fit mt-1 font-normal hover:text-text-positive"
+              onMouseDown={stopMouseDown}
+              onClick={() => {
+                const remaining = selected.filter(s => s.fixed);
+                setSelected(remaining);
+                onClearAll?.();
+              }}
+            >
+              <XIcon size={10} strokeWidth={2} aria-hidden="true" className="size-3!" />
+              Clear Selected Input
+            </Button>
+          )}
+
+          <div data-slot="combobox-search" className="relative px-2.5 pt-2.5 pb-1 border-t border-t-border">
+            <CommandPrimitive.Input
+              {...inputProps}
+              ref={inputRef}
+              data-slot="combobox-input"
+              value={inputValue}
+              onValueChange={val => {
+                setInputValue(val);
+                inputProps?.onValueChange?.(val);
+              }}
+              placeholder={placeholder}
+              className={cn(inputVariants({ size: 'sm' }), 'pe-8', inputProps?.className)}
+            />
+            {!hideClearQueryButton && inputValue.length > 0 && (
+              <button
+                type="button"
+                data-slot="combobox-clear-query"
+                aria-label="Clear search"
+                onMouseDown={stopMouseDown}
+                onClick={() => {
+                  setInputValue('');
+                  onClearQuery?.();
+                  inputRef.current?.focus();
+                }}
+                className="absolute inset-y-6 inset-e-4 flex items-center justify-center text-text-positive-muted transition-colors hover:text-text-positive"
+              >
+                <XIcon size={14} strokeWidth={2} aria-hidden="true" />
+              </button>
+            )}
+          </div>
+
+          <CommandList data-slot="combobox-list" className="shadow-lg outline-hidden" onMouseDown={e => e.preventDefault()}>
+            {isLoading ? (
+              <div data-slot="combobox-loading" className="flex items-center justify-center gap-2 px-2 py-6 text-sm text-text-positive-muted">
+                {loadingIndicator ?? (
+                  <>
+                    <Spinner className="size-4" />
+                    {loadingText}
+                  </>
+                )}
+              </div>
+            ) : showCreatePrompt ? (
+              <div data-slot="combobox-create" className="flex flex-col gap-2 p-3">
+                {resolvedCreateHint && <p className="pe-10 text-text-positive-weak text-xs">{resolvedCreateHint}</p>}
+                <div className="flex justify-end">
+                  <Button
+                    type="button"
+                    data-slot="combobox-create-confirm"
+                    aria-label={resolvedCreateLabel}
+                    size="xs"
+                    variant="outline"
+                    color="muted"
+                    onMouseDown={stopMouseDown}
+                    onClick={handleCreateOption}
+                  >
+                    <PlusIcon />
+                    Thêm mới
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <>
+                <CommandEmpty data-slot="combobox-empty">
+                  <div className="bg-muted-muted size-full min-h-14 flex items-center justify-center">{emptyIndicator ?? 'No results found.'}</div>
+                </CommandEmpty>
+
+                {/* Absorbs cmdk's default "auto-highlight the first item" behavior so opening the
                       dropdown with no typed query doesn't silently arm Enter to toggle a real option. */}
-                  <CommandItem value="__combobox-first-item-guard__" className="hidden" aria-hidden="true" />
+                <CommandItem value="__combobox-first-item-guard__" className="hidden" aria-hidden="true" />
 
-                  {Object.entries(selectables).map(([key, groupOptions]) => (
-                    <CommandGroup key={key} heading={key || undefined} value={key || '__combobox-options__'}>
-                      {groupOptions.map(option => {
-                        const picked = selectedValues.has(option.value);
-                        return (
-                          <CommandItem
-                            key={option.value}
-                            value={option.value}
-                            keywords={[option.label]}
-                            disabled={option.disable}
-                            data-picked={picked || undefined}
-                            onMouseDown={stopMouseDown}
-                            onSelect={() => handleSelect(option)}
-                            className={cn(
-                              'cursor-pointer justify-between',
-                              option.disable && 'cursor-not-allowed opacity-50',
-                              picked && 'bg-primary-bg-subtle! text-primary!'
-                            )}
-                          >
-                            {option.label}
-                            {picked && (
-                              <>
-                                <CheckIcon size={14} className="ms-auto text-primary" aria-hidden="true" />
-                                <span className="sr-only">, selected</span>
-                              </>
-                            )}
-                          </CommandItem>
-                        );
-                      })}
-                    </CommandGroup>
-                  ))}
-                </>
-              )}
-            </CommandList>
-          </Command>
-        </PopoverContent>
-      </Popover>
-    );
-  }
-);
+                {Object.entries(selectables).map(([key, groupOptions]) => (
+                  <CommandGroup key={key} heading={key || undefined} value={key || '__combobox-options__'}>
+                    {groupOptions.map(option => {
+                      const picked = selectedValues.has(option.value);
+                      return (
+                        <CommandItem
+                          key={option.value}
+                          value={option.value}
+                          keywords={[option.label]}
+                          disabled={option.disable}
+                          data-picked={picked || undefined}
+                          onMouseDown={stopMouseDown}
+                          onSelect={() => handleSelect(option)}
+                          className={cn(
+                            'cursor-pointer justify-between',
+                            option.disable && 'cursor-not-allowed opacity-50',
+                            picked && 'bg-primary-bg-subtle! text-primary!'
+                          )}
+                        >
+                          {option.label}
+                          {picked && (
+                            <>
+                              <CheckIcon size={14} className="ms-auto text-primary" aria-hidden="true" />
+                              <span className="sr-only">, selected</span>
+                            </>
+                          )}
+                        </CommandItem>
+                      );
+                    })}
+                  </CommandGroup>
+                ))}
+              </>
+            )}
+          </CommandList>
+        </Command>
+      </PopoverContent>
+    </Popover>
+  );
+};
 
 Combobox.displayName = 'Combobox';
