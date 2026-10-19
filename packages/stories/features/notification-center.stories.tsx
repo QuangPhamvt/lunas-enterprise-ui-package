@@ -242,8 +242,9 @@ export const Default: Story = {
     await expect(body.getByText('Xem thêm')).toBeInTheDocument();
 
     // Switch to the Cá nhân tab — independent unread state and its own long history.
-    await userEvent.click(body.getByRole('tab', { name: 'Cá nhân' }));
-    await expect(body.getByText('Vai trò của bạn đã được đổi thành ADMIN')).toBeInTheDocument();
+    await userEvent.click(body.getByRole('tab', { name: /^Cá nhân/ }));
+    // The generated personal list cycles through roles, so ADMIN appears on several rows.
+    await expect(body.getAllByText('Vai trò của bạn đã được đổi thành ADMIN').length).toBeGreaterThan(0);
 
     // Mark the newest personal notification read — its action disappears.
     const markReadButtons = body.getAllByRole('button', { name: 'Đánh dấu đã đọc' });

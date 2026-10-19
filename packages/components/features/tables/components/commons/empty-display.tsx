@@ -19,6 +19,10 @@ import {
 import { PINNED_COLUMN_Z_INDEX, SELECT_WIDTH } from '../../constants';
 import type { AnyEntity } from '@/types';
 
+/**
+ * Skeleton rows shown in the body while the first page loads. Rendered by `UITableContainer`; use
+ * it directly only when building a custom table layout.
+ */
 export const UITableLoadingDisplay = memo<TUITableEmptyDisplay>(() => {
   const { table, isFetching, isRefetching, loadingDisplayRow = 3 } = useUITableContext();
   if (!isFetching && !isRefetching) return null;
@@ -104,6 +108,10 @@ export const UITableLoadingDisplay = memo<TUITableEmptyDisplay>(() => {
   );
 });
 
+/**
+ * Empty-state message shown in the body when there are no rows. Rendered by `UITableContainer`; use
+ * it directly only when building a custom table layout.
+ */
 export const UITableEmptyDisplay = memo<TUITableEmptyDisplay>(() => {
   const { isEmpty, emptyDisplayHeight } = useUITableContext();
   if (!isEmpty) return null;

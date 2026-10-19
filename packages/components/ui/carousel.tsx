@@ -8,6 +8,7 @@ import { cn } from '@customafk/react-toolkit/utils';
 import useEmblaCarousel, { type UseEmblaCarouselType } from 'embla-carousel-react';
 import { Button } from '@/components/ui/button';
 
+/** Embla carousel instance handed to `Carousel`'s `setApi` — use it to read or drive the scroll position. */
 type CarouselApi = UseEmblaCarouselType[1];
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>;
 type CarouselOptions = UseCarouselParameters[0];

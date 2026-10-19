@@ -1,3 +1,5 @@
+'use client';
+
 import { HeartIcon, ShoppingCartIcon } from 'lucide-react';
 
 import { Button } from '../ui/button';

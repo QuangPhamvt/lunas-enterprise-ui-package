@@ -11,28 +11,50 @@ import { Rectangle, Sankey } from 'recharts';
 import type { BaseChartProps } from '../types';
 import { getChartColor } from '../utils';
 
+/** A node (stage, channel, …) in a Sankey diagram. */
 export type SankeyFlowNode = {
+  /** Unique node name — also how links refer to it. */
   name: string;
+  /** Node color; defaults to the next `--chart-N` palette color. */
   color?: string;
 };
 
+/** A weighted flow from one node to another. */
 export type SankeyFlowLink = {
   /** Node name, matching an entry in `nodes`. */
   source: string;
   /** Node name, matching an entry in `nodes`. */
   target: string;
+  /** Flow amount; sets the link's thickness. */
   value: number;
 };
 
+/** Props for `SankeyFlowChart`. */
 export type SankeyFlowChartProps = BaseChartProps & {
+  /** Flow nodes; `links` refer to them by `name`. */
   nodes: Array<SankeyFlowNode | string>;
+  /** Weighted flows between `nodes`, referenced by node name. */
   links: SankeyFlowLink[];
+  /**
+   * Formats values in the tooltip and on the value axis.
+   */
   valueFormatter?: (value: number) => string;
+  /**
+   * Width of each node bar, in px.
+   * @default 14
+   */
   nodeWidth?: number;
+  /**
+   * Vertical gap between nodes, in px.
+   * @default 24
+   */
   nodePadding?: number;
   /** Minimum horizontal space reserved for node labels outside the plot area; grows to fit the longest root/leaf label. Defaults to `170`. */
   labelWidth?: number;
 };
+
+/** Rough rendered width of a node label, used to reserve horizontal room for the labels. */
+const estimateLabelWidth = (label: string): number => label.length * 5.6 + 14;
 
 /**
  * A Sankey flow diagram — revenue/cost breakdowns, funnels with branching paths, budget
@@ -54,8 +76,6 @@ export type SankeyFlowChartProps = BaseChartProps & {
  * />
  * ```
  */
-const estimateLabelWidth = (label: string): number => label.length * 5.6 + 14;
-
 export const SankeyFlowChart = ({
   nodes,
   links,

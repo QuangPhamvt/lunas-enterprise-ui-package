@@ -9,6 +9,10 @@ import { useUITableInnerWrapperContext } from '../../hooks/use-context';
 import type { TUITableLoadMore } from '../../types';
 import { tableLoadMoreButtonVariants } from '../table.variants';
 
+/**
+ * “Load more” button that awaits `fetchMoreData`, showing a loading state and a retry state on
+ * error. Rendered by `UITableContainer`; use it directly only when building a custom table layout.
+ */
 export const UITableLoadMore = memo<TUITableLoadMore>(({ fetchMoreData }) => {
   const { innerWrapperId } = useUITableInnerWrapperContext();
 

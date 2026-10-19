@@ -10,6 +10,7 @@ import { Label } from '../../../ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../ui/select';
 import type { LoginMethod } from '../types';
 
+/** Props for `CredentialsForm`. */
 export interface CredentialsFormProps {
   emailId: string;
   passwordId: string;

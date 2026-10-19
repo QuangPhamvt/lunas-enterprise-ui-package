@@ -21,6 +21,7 @@ import { LunasLogo } from '@/components/features/logo';
 
 import { useSidebar } from './sidebar';
 
+/** Signed-in user shown in the CMS header and its account dropdown. */
 export type CMSLayoutUser = {
   /** Display name shown in the header and user dropdown. */
   name: string;

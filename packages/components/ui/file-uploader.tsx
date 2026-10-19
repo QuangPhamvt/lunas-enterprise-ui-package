@@ -126,6 +126,22 @@ interface FileUploaderProps extends React.HTMLAttributes<HTMLDivElement> {
 
 /**
  * A drag-and-drop file upload zone that manages file selection, validation, preview generation, and optional async upload with progress tracking.
+ *
+ * @example
+ * ```tsx
+ * import { FileUploader } from '@customafk/lunas-ui/ui/file-uploader';
+ *
+ * const [files, setFiles] = useState<File[]>([]);
+ *
+ * <FileUploader
+ *   value={files}
+ *   onValueChange={setFiles}
+ *   accept={{ 'image/*': [] }}
+ *   maxSize={5 * 1024 * 1024}
+ *   maxFileCount={20}
+ *   multiple
+ * />
+ * ```
  */
 export function FileUploader(props: FileUploaderProps) {
   const {
@@ -382,7 +398,7 @@ const MIME_TYPE_ICON_MAP: Record<string, React.FC<FileIconProps>> = {
 
 function FilePreview({ file }: FilePreviewProps) {
   if (file.type.startsWith('image/')) {
-    return <img src={file.preview} className="aspect-square size-10 shrink-0 rounded border border-border object-cover object-top" />;
+    return <img src={file.preview} alt={file.name} className="aspect-square size-10 shrink-0 rounded border border-border object-cover object-top" />;
   }
 
   if (file.type.startsWith('audio/')) {

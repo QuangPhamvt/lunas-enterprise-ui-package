@@ -1,3 +1,5 @@
+'use client';
+
 import { ArrowRightIcon, SearchIcon } from 'lucide-react';
 
 import { cn } from '@customafk/react-toolkit/utils';

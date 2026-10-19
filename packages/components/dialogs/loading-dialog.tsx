@@ -2,6 +2,7 @@
 
 import { Dialog, DialogContent, DialogTitle } from '../ui/dialog';
 
+/** Props for `LoadingDialog`. */
 export type LoadingDialogProps = {
   /** Controls whether the dialog is open. */
   open?: boolean;

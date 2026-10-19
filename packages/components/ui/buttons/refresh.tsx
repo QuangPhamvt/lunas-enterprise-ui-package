@@ -1,3 +1,5 @@
+'use client';
+
 import { RefreshCwIcon } from 'lucide-react';
 
 import { Paragraph } from '@/components/typography/paragraph';

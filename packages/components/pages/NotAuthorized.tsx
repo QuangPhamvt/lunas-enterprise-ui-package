@@ -5,6 +5,7 @@ import { cn } from '@customafk/react-toolkit/utils';
 import { ShieldAlert } from 'lucide-react';
 import { LunasLogo } from '../features/logo';
 
+/** Props for `NotAuthorized`. */
 export interface NotAuthorizedProps {
   /** Main heading shown beneath the shield icon. Defaults to `'Quyền truy cập bị từ chối'`. */
   title?: string;

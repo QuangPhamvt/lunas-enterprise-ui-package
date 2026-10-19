@@ -10,7 +10,9 @@ import { CartesianGrid, Line, LineChart, XAxis, YAxis } from 'recharts';
 import type { BaseChartProps, ChartSeries } from '../types';
 import { computeIndexedSeries, formatSignedPercent, getChartColor, toDateLabel } from '../utils';
 
+/** Props for `IndexedPerformanceLineChart`. */
 export type IndexedPerformanceLineChartProps = BaseChartProps & {
+  /** Data points to plot, in display order. */
   data: Array<{ date: string | Date } & Record<string, unknown>>;
   /** One entry per instrument/fund to compare. */
   series: ChartSeries[];
@@ -18,8 +20,20 @@ export type IndexedPerformanceLineChartProps = BaseChartProps & {
   base?: number;
   /** Formats tooltip and Y-axis values. Defaults to signed % change from `base`. */
   valueFormatter?: (indexedValue: number, base: number) => string;
+  /**
+   * Formats dates on the time axis and in the tooltip.
+   * @default toDateLabel
+   */
   dateFormatter?: (date: string | Date) => string;
+  /**
+   * Show the series legend.
+   * @default true
+   */
   showLegend?: boolean;
+  /**
+   * Draw background grid lines.
+   * @default true
+   */
   showGrid?: boolean;
 };
 

@@ -10,6 +10,10 @@ import type { TUITableHeadCell } from '../../types';
 import { tableHeadCellVariants } from '../table.variants';
 import { UITableHeadCellOption } from './head-cell-option';
 
+/**
+ * One `<th>` — header text plus pinning, resizing and the column options menu. Rendered by
+ * `UITableContainer`; use it directly only when building a custom table layout.
+ */
 export const UITableHeadCell = memo<TUITableHeadCell>(
   ({
     isVisible = true,

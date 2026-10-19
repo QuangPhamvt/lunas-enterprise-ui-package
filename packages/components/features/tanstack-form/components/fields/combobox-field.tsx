@@ -30,6 +30,23 @@ import {
   FieldTooltip,
 } from '../ui/field';
 
+/**
+ * A TanStack Form-connected searchable single-select: type to filter `options`, optional clear
+ * button, and inline validation error display. Opens a popover on desktop and a picker dialog on
+ * mobile. Stores the selected option's `value` (`string | null`).
+ *
+ * @example
+ * ```tsx
+ * const form = useTanStackForm({ defaultValues: { province: null as string | null } });
+ *
+ * <form.AppField
+ *   name="province"
+ *   children={({ ComboboxField }) => (
+ *     <ComboboxField label="Tỉnh / thành" placeholder="Tìm tỉnh..." options={provinces} clearable />
+ *   )}
+ * />
+ * ```
+ */
 export const ComboboxField = memo<ComboboxFieldProps>(
   ({
     label,

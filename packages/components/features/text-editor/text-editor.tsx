@@ -6,33 +6,26 @@ import { Bold, Italic, Strikethrough, Underline as UnderlineIcon } from 'lucide-
 
 import { cn } from '@customafk/react-toolkit/utils';
 
-import { CharacterCount } from '@tiptap/extension-character-count';
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
 import { Highlight } from '@tiptap/extension-highlight';
 import Image from '@tiptap/extension-image';
-import { Link } from '@tiptap/extension-link';
-import { ListKeymap } from '@tiptap/extension-list-keymap';
-import Placeholder from '@tiptap/extension-placeholder';
 import { Table, TableCell, TableHeader, TableRow } from '@tiptap/extension-table';
 import { TaskItem } from '@tiptap/extension-task-item';
 import { TaskList } from '@tiptap/extension-task-list';
 import TextAlign from '@tiptap/extension-text-align';
 import { Color, TextStyle } from '@tiptap/extension-text-style';
-import Underline from '@tiptap/extension-underline';
+import { CharacterCount, Placeholder } from '@tiptap/extensions';
 import { type AnyExtension, EditorContent, ReactNodeViewRenderer, useEditor, useEditorState } from '@tiptap/react';
 import { BubbleMenu } from '@tiptap/react/menus';
 import StarterKit from '@tiptap/starter-kit';
 import DOMPurify, { type Config as SanitizeConfig } from 'dompurify';
-import { common, createLowlight } from 'lowlight';
 import { ImageNodeView } from './image-node-view';
+import { lowlight } from './languages';
 import { LinkDialog } from './link-dialog';
 import { createSlashCommandExtension } from './slash-command';
 import { type TextEditorVariantProps, textEditorVariants } from './text-editor.variants';
 import { TextEditorToolbar } from './toolbar';
 import { ToolbarButton, ToolbarDivider } from './toolbar-primitives';
-
-// Built once at module scope — constructing the grammar registry per render would be wasteful.
-const lowlight = createLowlight(common);
 
 // Adds a centered wrapper + small "source" caption link below every image — purely a
 // live-rendering affordance (both editing and `readOnly`), not persisted: the caption is
@@ -91,10 +84,48 @@ function buildSanitizeConfig(flags: SanitizeFlags): SanitizeConfig {
   return { ALLOWED_TAGS: Array.from(tags), ALLOWED_ATTR: Array.from(attr) };
 }
 
-/** No-op on the server — DOMPurify needs a DOM, and SSR content gets sanitized again on hydration anyway. */
+// The only CSS properties the enabled extensions emit (TextAlign, Color, Highlight, table column widths).
+const ALLOWED_STYLE_PROPERTIES = new Set(['color', 'background-color', 'text-align', 'width', 'min-width']);
+const UNSAFE_STYLE_VALUE = /url\(|expression\(|@import|javascript:/i;
+
+/** Keeps only allowlisted, non-resource-loading declarations of a `style` attribute value. */
+function filterStyle(style: string): string {
+  return style
+    .split(';')
+    .map(declaration => declaration.trim())
+    .filter(declaration => {
+      const separator = declaration.indexOf(':');
+      if (separator <= 0) return false;
+      const property = declaration.slice(0, separator).trim().toLowerCase();
+      return ALLOWED_STYLE_PROPERTIES.has(property) && !UNSAFE_STYLE_VALUE.test(declaration);
+    })
+    .join('; ');
+}
+
+let purifier: ReturnType<typeof DOMPurify> | null = null;
+
+/**
+ * A private DOMPurify instance, so the `style` hook never leaks into other DOMPurify usage in the
+ * consuming app (the default export is a shared singleton).
+ */
+function getPurifier(): ReturnType<typeof DOMPurify> {
+  if (purifier) return purifier;
+  purifier = DOMPurify(window);
+  purifier.addHook('uponSanitizeAttribute', (_node, data) => {
+    if (data.attrName !== 'style') return;
+    data.attrValue = filterStyle(data.attrValue);
+    if (!data.attrValue) data.keepAttr = false;
+  });
+  return purifier;
+}
+
+/**
+ * No-op on the server — DOMPurify needs a DOM, and SSR content gets sanitized again on hydration
+ * anyway.
+ */
 function sanitizeHtml(html: string, config: SanitizeConfig): string {
   if (typeof window === 'undefined') return html;
-  return DOMPurify.sanitize(html, config);
+  return getPurifier().sanitize(html, config);
 }
 
 /** Best-effort alt text for drag/drop/paste image inserts, which have no dialog to ask for one. */
@@ -102,34 +133,105 @@ function imageAltFromFile(file: File): string {
   return file.name.replace(/\.[^./]+$/, '');
 }
 
-export interface TextEditorProps extends TextEditorVariantProps {
+/** Props for `TextEditor`. */
+/** Props for `TextEditor`. */
+export interface TextEditorProps {
+  /** Controlled HTML content. Sanitized before it reaches the editor. */
   value?: string;
+  /** Initial HTML content for an uncontrolled editor. */
   defaultValue?: string;
+  /** Receives the sanitized HTML, debounced while typing and flushed on blur/unmount. */
   onChange?: (html: string) => void;
+  /**
+   * Text shown while the document is empty.
+   * @default 'Start writing...'
+   */
   placeholder?: string;
+  /**
+   * Render the content without editing (and without toolbar or bubble menu).
+   * @default false
+   */
   readOnly?: boolean;
+  /**
+   * Show the formatting toolbar above the content.
+   * @default true
+   */
   showToolbar?: boolean;
+  /**
+   * Frame style: `outline` (bordered) or `ghost` (borderless).
+   * @default 'outline'
+   */
+  variant?: TextEditorVariantProps['variant'];
+  /**
+   * Font size and minimum content height.
+   * @default 'md'
+   */
+  size?: TextEditorVariantProps['size'];
+  /** Class names for the outer frame. */
   className?: string;
+  /** Class names for the toolbar. */
   toolbarClassName?: string;
+  /** Class names for the editable content area. */
   editorClassName?: string;
-  // Character count
+  /**
+   * Hard limit on characters — typing stops at the limit. Also shows the count footer as `n / max`.
+   */
   maxLength?: number;
+  /** Show a footer with the word and character count (always shown when `maxLength` is set). */
   showCharacterCount?: boolean;
+  /** Receives the character and word count whenever the content changes. */
   onCharacterCount?: (stats: { characters: number; words: number }) => void;
-  // Feature flags
+  /** Allow links (toolbar button, link dialog, paste-to-link). */
   enableLink?: boolean;
+  /** Show a floating bold/italic/underline/strike menu over selected text. */
   enableBubbleMenu?: boolean;
+  /** Allow checklists (task lists, nestable). */
   enableTaskList?: boolean;
+  /** Allow multi-color text highlighting. */
   enableHighlight?: boolean;
+  /** Allow text color. */
   enableColor?: boolean;
+  /** Allow images (needs `onImageUpload` for files; pasting an image URL always works). */
   enableImage?: boolean;
+  /** Allow resizable tables. */
   enableTable?: boolean;
-  /** Enables the `/` slash-command menu for quickly inserting blocks (headings, lists, table, image, etc.). */
+  /**
+   * Enables the `/` slash-command menu for quickly inserting blocks (headings, lists, table, image,
+   * etc.).
+   */
   enableSlashCommand?: boolean;
-  /** Called when the user picks/drops/pastes an image file. Return the URL to embed. Without it, only pasting an image URL as text works. */
+  /**
+   * Called when the user picks/drops/pastes an image file. Return the URL to embed. Without it,
+   * only pasting an image URL as text works.
+   */
   onImageUpload?: (file: File) => Promise<string>;
 }
 
+/**
+ * Rich-text (WYSIWYG) editor built on Tiptap that reads and writes sanitized HTML. Headings, lists,
+ * quotes, code blocks with syntax highlighting, alignment and underline ship by default; links,
+ * task lists, highlight, color, images, tables, the bubble menu and the `/` command menu are opt-in
+ * via `enable*` props. Output is filtered through DOMPurify with an allowlist scoped to the enabled features.
+ *
+ * Requires the optional `@tiptap/*`, `@tiptap/extensions`, `lowlight`, `highlight.js` and
+ * `dompurify` peers, plus `@customafk/lunas-ui/styles/text-editor`.
+ *
+ * @example
+ * ```tsx
+ * import { TextEditor } from '@customafk/lunas-ui/features/text-editor';
+ *
+ * <TextEditor
+ *   value={html}
+ *   onChange={setHtml}
+ *   maxLength={5000}
+ *   enableImage
+ *   enableTable
+ *   enableSlashCommand
+ *   onImageUpload={file => uploadMedia(file).then(media => media.url)}
+ * />
+ * ```
+ * @see https://tiptap.dev/docs/editor/getting-started/overview
+ */
 function TextEditor({
   value,
   defaultValue,
@@ -165,21 +267,18 @@ function TextEditor({
 
   const extensions = useMemo(() => {
     const base: AnyExtension[] = [
-      // `link`/`underline`/`codeBlock`/`listKeymap` are disabled here because we register
-      // our own configured instances below — leaving StarterKit's defaults on causes
-      // duplicate extension name warnings and the later-registered config silently wins.
-      StarterKit.configure({ link: false, underline: false, codeBlock: false, listKeymap: false }),
-      Underline,
+      // StarterKit v3 already bundles Underline, ListKeymap and Link — configure them here instead
+      // of registering separate copies. `codeBlock` is off because CodeBlockLowlight replaces it.
+      StarterKit.configure({
+        codeBlock: false,
+        link: enableLink ? { openOnClick: false, linkOnPaste: true, defaultProtocol: 'https' } : false,
+      }),
       Placeholder.configure({ placeholder }),
       TextAlign.configure({ types: ['heading', 'paragraph'] }),
-      ListKeymap,
       CodeBlockLowlight.configure({ lowlight, defaultLanguage: 'plaintext' }),
     ];
 
     if (needsTextStyle) base.push(TextStyle);
-    if (enableLink) {
-      base.push(Link.configure({ openOnClick: false, linkOnPaste: true, defaultProtocol: 'https' }));
-    }
     if (enableTaskList) {
       base.push(TaskList, TaskItem.configure({ nested: true }));
     }

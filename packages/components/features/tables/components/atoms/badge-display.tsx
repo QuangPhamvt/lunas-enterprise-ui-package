@@ -27,7 +27,7 @@ export const UITableBadgeDisplay: React.FC<{
   onRemove?: () => void;
 }> = memo(({ label, onClick, onRemove }) => {
   const handleClick = useCallback(
-    (e: React.MouseEvent<HTMLDivElement | HTMLButtonElement>) => {
+    (e: React.MouseEvent<HTMLButtonElement>) => {
       onClick?.();
       e.stopPropagation();
       e.preventDefault();
@@ -47,19 +47,18 @@ export const UITableBadgeDisplay: React.FC<{
   if (!label) return <UITableEmptyValue />;
   if (onRemove) {
     return (
-      <div
-        className="flex w-fit min-w-20 gap-x-0.5 rounded border border-border bg-white py-1 pr-2 pl-3 text-text-positive text-xs shadow-xs"
-        onClick={handleClick}
-      >
-        {label}
-        <button className="cursor-pointer text-text-positive-weak hover:text-text-positive-strong" onClick={handleRemoveClick}>
+      <div className="flex w-fit min-w-20 gap-x-0.5 rounded border border-border bg-white py-1 pr-2 pl-3 text-text-positive text-xs shadow-xs">
+        <button type="button" className="cursor-pointer text-left" onClick={handleClick}>
+          {label}
+        </button>
+        <button type="button" aria-label="Xóa" className="cursor-pointer text-text-positive-weak hover:text-text-positive-strong" onClick={handleRemoveClick}>
           <XIcon size={12} />
         </button>
       </div>
     );
   }
   return (
-    <button className="w-fit min-w-20 rounded border border-border bg-white px-3 py-1 text-text-positive text-xs shadow-xs" onClick={handleClick}>
+    <button type="button" className="w-fit min-w-20 rounded border border-border bg-white px-3 py-1 text-text-positive text-xs shadow-xs" onClick={handleClick}>
       {label}
     </button>
   );

@@ -13,12 +13,27 @@ import { useTanStackFieldContext } from '../form-context';
 import { FieldError } from '../ui/field';
 
 type Props = {
+  /** Field label rendered above the control. Omit to render label-less. */
   label?: string;
+  /** Placeholder shown when the value is empty. */
   placeholder?: string;
+  /** When `true`, appends a required asterisk to the label. */
   required?: boolean;
+  /** When `true`, disables the control. Also disabled automatically while the form is submitting. */
   disabled?: boolean;
 };
 
+/**
+ * Minimal password input with a show/hide toggle, bound to the surrounding `AppField`. Use it for
+ * compact forms; the non-`Simple` variants add description, tooltip, orientation and helper text.
+ *
+ * @example
+ * ```tsx
+ * const form = useTanStackForm({ defaultValues: { password: null as string | null } });
+ *
+ * <form.AppField name="password" children={({ SimplePasswordField }) => <SimplePasswordField label="Mật khẩu" required />} />
+ * ```
+ */
 export const SimplePasswordField: React.FC<Props> = ({ label, placeholder, required, disabled }) => {
   const id = useId();
   const { form, name, state, handleBlur, handleChange } = useTanStackFieldContext<string | null>();

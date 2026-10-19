@@ -252,8 +252,13 @@ export const tableLoadMoreButtonVariants = cva(['flex cursor-pointer gap-x-0.5']
   },
 });
 
+/** Variant props of `TableHeadCell` (its `cva` style options). */
 export type TableHeadCellVariantProps = VariantProps<typeof tableHeadCellVariants>;
+/** Variant props of `TableCellSelect` (its `cva` style options). */
 export type TableCellSelectVariantProps = VariantProps<typeof tableCellSelectVariants>;
+/** Variant props of `TableCell` (its `cva` style options). */
 export type TableCellVariantProps = VariantProps<typeof tableCellVariants>;
+/** Variant props of `TableCellInner` (its `cva` style options). */
 export type TableCellInnerVariantProps = VariantProps<typeof tableCellInnerVariants>;
+/** Variant props of `TableLoadMoreButton` (its `cva` style options). */
 export type TableLoadMoreButtonVariantProps = VariantProps<typeof tableLoadMoreButtonVariants>;

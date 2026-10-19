@@ -1,12 +1,11 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 
-/**
- * Alert component variants for styling using class-variance-authority
- */
+/** Class names for `Alert`, keyed by its visual intent. */
 export const alertVariants = cva(
   [
     'relative grid w-full items-start gap-y-0.5 rounded border py-3 pr-5 pl-4 text-sm',
-    'grid-cols-[0_1fr]',
+    // One column without an icon (so bare text children aren't squeezed into an empty icon track).
+    'grid-cols-1',
     'has-[>svg]:grid-cols-[24px_1fr] has-[>svg]:gap-x-3',
     '[&>svg]:size-6 [&>svg]:text-current',
     'transition-colors duration-150',
@@ -29,4 +28,12 @@ export const alertVariants = cva(
   }
 );
 
-export type AlertVariantProps = VariantProps<typeof alertVariants>;
+/** Variant props accepted by `Alert`. */
+export type AlertVariantProps = {
+  /**
+   * Visual intent: neutral `default`, or `destructive` / `warning` / `success` / `info`, each with a
+   * matching default icon.
+   * @default 'default'
+   */
+  variant?: VariantProps<typeof alertVariants>['variant'];
+};

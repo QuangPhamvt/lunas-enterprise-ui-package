@@ -22,19 +22,19 @@ export const AllVariants: Story = {
     <>
       <div className="flex flex-wrap gap-2">
         <Button onClick={() => toast('Primary', { description: 'Default brand intent for system messages.' })}>Primary</Button>
-        <Button variant="secondary" onClick={() => toast.info('Info', { description: 'Informational context without urgency.' })}>
+        <Button variant="outline" color="muted" onClick={() => toast.info('Info', { description: 'Informational context without urgency.' })}>
           Info
         </Button>
-        <Button variant="secondary" onClick={() => toast.success('Success', { description: 'An action completed as expected.' })}>
+        <Button variant="outline" color="muted" onClick={() => toast.success('Success', { description: 'An action completed as expected.' })}>
           Success
         </Button>
-        <Button variant="secondary" onClick={() => toast.warning('Warning', { description: 'Something needs attention but is not yet broken.' })}>
+        <Button variant="outline" color="muted" onClick={() => toast.warning('Warning', { description: 'Something needs attention but is not yet broken.' })}>
           Warning
         </Button>
-        <Button variant="secondary" onClick={() => toast.error('Danger', { description: 'An operation failed and needs user action.' })}>
+        <Button variant="outline" color="muted" onClick={() => toast.error('Danger', { description: 'An operation failed and needs user action.' })}>
           Danger
         </Button>
-        <Button variant="secondary" onClick={() => toast.loading('Loading', { description: 'Please wait while we process your request.' })}>
+        <Button variant="outline" color="muted" onClick={() => toast.loading('Loading', { description: 'Please wait while we process your request.' })}>
           Loading
         </Button>
       </div>
@@ -129,10 +129,10 @@ export const TitleOnly: Story = {
     <>
       <div className="flex gap-2">
         <Button onClick={() => toast.success('Saved!')}>Success</Button>
-        <Button variant="secondary" onClick={() => toast.error('Something went wrong.')}>
+        <Button variant="outline" color="muted" onClick={() => toast.error('Something went wrong.')}>
           Error
         </Button>
-        <Button variant="secondary" onClick={() => toast.info('New update available.')}>
+        <Button variant="outline" color="muted" onClick={() => toast.info('New update available.')}>
           Info
         </Button>
       </div>

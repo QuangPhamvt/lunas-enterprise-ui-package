@@ -10,17 +10,24 @@ import { Funnel, FunnelChart, LabelList } from 'recharts';
 import type { BaseChartProps, NamedValue } from '../types';
 import { formatCompactNumber, formatPercent, getChartColor } from '../utils';
 
+/** One funnel stage: its `name` and `value`, plus optional config key and color. */
 export type FunnelStage = NamedValue & {
   /** Config key; derived from `name` when omitted. */
   key?: string;
+  /** Color; defaults to the next `--chart-N` palette color. */
   color?: string;
 };
 
+/** Props for `ConversionFunnelChart`. */
 export type ConversionFunnelChartProps = BaseChartProps & {
   /** Funnel stages ordered top (widest) to bottom. */
   data: FunnelStage[];
   /** Appends each stage's percentage of the first stage. Defaults to `true`. */
   showConversionRates?: boolean;
+  /**
+   * Formats values in the tooltip and on the value axis.
+   * @default formatCompactNumber
+   */
   valueFormatter?: (value: number) => string;
 };
 

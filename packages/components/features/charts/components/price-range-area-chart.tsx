@@ -10,6 +10,7 @@ import { Area, CartesianGrid, ComposedChart, Line, XAxis, YAxis } from 'recharts
 import type { BaseChartProps, OHLCPoint } from '../types';
 import { toDateLabel } from '../utils';
 
+/** Props for `PriceRangeAreaChart`. */
 export type PriceRangeAreaChartProps = BaseChartProps & {
   /** Only `date`, `high`, `low`, and `close` are used; pass the same rows given to `CandlestickChart`. */
   data: Array<Pick<OHLCPoint, 'date' | 'high' | 'low' | 'close'>>;
@@ -17,9 +18,24 @@ export type PriceRangeAreaChartProps = BaseChartProps & {
   label?: string;
   /** High-low band label. Defaults to `'Range'`. */
   rangeLabel?: string;
+  /**
+   * Series color — any CSS color or `var(--token)`.
+   * @default 'var(--chart-1)'
+   */
   color?: string;
+  /**
+   * Formats values in the tooltip and on the value axis.
+   */
   valueFormatter?: (value: number) => string;
+  /**
+   * Formats dates on the time axis and in the tooltip.
+   * @default toDateLabel
+   */
   dateFormatter?: (date: string | Date) => string;
+  /**
+   * Draw background grid lines.
+   * @default true
+   */
   showGrid?: boolean;
 };
 

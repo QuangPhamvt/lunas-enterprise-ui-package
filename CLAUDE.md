@@ -15,7 +15,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ```bash
 npm install
-npm run build           # build with tsdown (ESM + CJS + DTS)
+npm run build           # build with tsdown (ESM-only + DTS, React Compiler); also regenerates package.json exports
 npm run build:dev       # watch mode
 npm run typecheck       # tsc --noEmit
 npm run lint            # Biome lint check
@@ -23,8 +23,9 @@ npm run lint:fix        # Biome lint + fix (scoped to packages/)
 npm run format:fix      # Biome format + write
 npm run storybook       # dev server at :6006
 npm run build-storybook # static Storybook build
-npm test                # unit tests (vitest + jsdom)
-npm run test:storybook  # component tests in real browser (Playwright/Chromium)
+npm test                # every story's play function in real Chromium (Playwright) — the only test suite
+npm run test:watch      # same, watch mode
+npm run test:coverage   # same, with v8 coverage
 ```
 
 ## Architecture
@@ -39,12 +40,27 @@ Components live under `packages/components/` organized by layer:
 
 ### Public API sync
 
-Every public component requires entries in **two** places that must stay in sync:
+`tsdown.config.ts` `entry` is the single source of truth for the public API. `npm run build`
+regenerates the `package.json` `exports` map from it (style exports come from
+`exports.customExports` in the same config) — **never edit `exports` by hand**. When adding a
+public component: add it to `entry`, build, and add a Storybook story.
 
-1. `tsdown.config.ts` — `entry` list (controls what gets built)
-2. `package.json` — `exports` map (controls what consumers can import)
+### Build & dependencies
 
-When adding a new public component, update both files plus add a Storybook story.
+- ESM-only output, unminified (consumers minify), `deps.neverBundle: true` — no third-party code
+  is ever inlined into `dist`. Import Radix only through the `radix-ui` meta package (e.g.
+  `import { Slot as SlotPrimitive } from 'radix-ui'`), never `@radix-ui/react-*` directly.
+- `"sideEffects": ["**/*.css"]` — keep modules free of top-level side effects so tree-shaking works.
+- The React Compiler runs in **annotation mode** (build, Storybook and tests alike): only a
+  component or hook whose body starts with the `'use memo'` directive is compiled. Compiling
+  everything made the library ~39% larger, while most existing code is already memoized by hand.
+  Existing `useMemo`/`useCallback`/`memo` stay as they are; **new components add `'use memo'`
+  instead of manual memoization**.
+- `features/charts`, `features/tables` and `features/tanstack-form` expose components through
+  `lazy()` wrappers. Wrappers carry a copy of the implementation's JSDoc so editor hover works —
+  after editing a lazy component's JSDoc run `npm run docs:sync-lazy` (`docs:check-lazy` verifies).
+- Peers used by only one feature (Tiptap, recharts, lowlight, dompurify, zod, …) are marked
+  optional in `peerDependenciesMeta`; consumers that use that feature must install them.
 
 ### Styling
 
@@ -65,8 +81,29 @@ When adding a new public component, update both files plus add a Storybook story
 - Add a `play` function to each story that covers a meaningful interaction or state
 - Import test utilities from `storybook/test` (not `@storybook/test`): `expect`, `userEvent`, `waitFor`, `within`
 - Query inputs by `getByPlaceholderText` or `getByDisplayValue` — avoid `getByLabelText` (label DOM wraps children in extra spans that break exact-text matching)
-- Error containers (`role="alert"`) stay in the DOM after errors clear; assert `.not.toHaveTextContent(msg)` rather than `.not.toBeInTheDocument()`
+- Form fields render their error row (`role="alert"`) only while the field is touched **and** has
+  errors (a field with `counter` keeps the row for the counter). After the user fixes the value,
+  assert `queryByRole('alert')` is gone — or, with `counter`, `.not.toHaveTextContent(msg)`
+- Fields are `lazy()`-loaded: query with `findBy*` first (the shared setup sets a 5 s async timeout)
+- Test-only stories use `tags: ['!dev', '!autodocs']` so they run in `test:storybook` without
+  cluttering the sidebar or docs
 - Run before committing: `npm run test:storybook`, or invoke `/storybook-test`
+
+## JSDoc standard
+
+Every public export and every prop this library declares must have JSDoc — `npm run docs:check`
+enforces it (plus the lazy-wrapper sync). Conventions:
+
+- Summary sentence first; JSDoc in English, user-facing strings in Vietnamese.
+- Top-level components get an `@example` in a ```` ```tsx ```` fence showing the real import path;
+  compound sub-parts (`DialogContent`, `UITableCell`, …) get a one-line summary and rely on the
+  root's example.
+- Props: one `/** … */` per prop, `@default` matching the destructuring default. Declare variant
+  props explicitly (`size?: VariantProps<typeof xVariants>['size']`) instead of spreading a bare
+  `VariantProps<…>`, which carries no docs.
+- Form field examples use `form.AppField name="…" children={({ TextField }) => …}` — never
+  `form.Field`.
+- `@see` links to the upstream docs (Radix, Tiptap, recharts, TanStack) for wrapped primitives.
 
 ## Coding conventions
 

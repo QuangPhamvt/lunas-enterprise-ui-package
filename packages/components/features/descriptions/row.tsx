@@ -27,13 +27,18 @@ function resolveCellSpan(columns: TDescriptionRowColumnsConfig): TUIGridItemSpan
   ) as TUIGridItemSpan;
 }
 
+/** Props for `DescriptionRow`. */
 export type DescriptionRowProps = React.PropsWithChildren<{
-  /** @default 2 */
+  /**
+   * Items per row — fixed, or per container breakpoint.
+   * @default 2
+   */
   columns?: TDescriptionRowColumnsConfig;
   /** Label column width override for every `DescriptionItem` in this row (they'd otherwise inherit the panel default). */
   labelColSpan?: TDescriptionLabelColSpan;
   /** Renders a vertical rule between cells. Only safe when every row has exactly `columns` items. @default false */
   divided?: boolean;
+  /** Class names for the row grid. */
   className?: string;
 }>;
 

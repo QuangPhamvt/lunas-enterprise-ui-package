@@ -171,7 +171,8 @@ export const Validation: Story = {
     const todayBtn = await waitFor(() => within(document.body).getByRole('button', { name: /hôm nay/i }));
     await userEvent.click(todayBtn);
 
-    await waitFor(() => expect(canvas.getByRole('alert')).not.toHaveTextContent('Vui lòng chọn ngày'));
+    // A valid date removes the error row entirely.
+    await waitFor(() => expect(canvas.queryByRole('alert')).not.toBeInTheDocument());
   },
 };
 
@@ -291,7 +292,7 @@ export const KitchenSink: Story = {
         start: null as Date | null,
         end: new Date() as Date | null,
         locked: new Date() as Date | null,
-      } as z.output<typeof schema>,
+      } as z.input<typeof schema>,
       validators: { onChange: schema },
       onSubmit: ({ value }) => console.log('Đã gửi:', value),
     });

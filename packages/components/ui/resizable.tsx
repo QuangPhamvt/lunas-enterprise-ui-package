@@ -13,6 +13,7 @@ type TResizablePanelGroup = React.ComponentProps<typeof ResizablePrimitive.Panel
 type TResizablePanel = React.ComponentProps<typeof ResizablePrimitive.Panel>;
 
 type TResizableHandle = React.ComponentProps<typeof ResizablePrimitive.PanelResizeHandle> & {
+  /** Show a visible grip in the middle of the handle. */
   withHandle?: boolean;
 };
 

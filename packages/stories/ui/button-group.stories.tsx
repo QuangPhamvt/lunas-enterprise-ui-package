@@ -8,7 +8,6 @@ import {
   ListFilterPlusIcon,
   MailCheckIcon,
   MoreHorizontalIcon,
-  PlusIcon,
   TagIcon,
   Trash2Icon,
 } from 'lucide-react';

@@ -50,7 +50,19 @@ export const inputVariants = cva(
   }
 );
 
-export type InputVariantProps = VariantProps<typeof inputVariants>;
+/** Variant props accepted by `Input`. */
+export type InputVariantProps = {
+  /**
+   * Border style — `outline`, `ghost`, `none`, `soft` or `subtle`.
+   * @default 'outline'
+   */
+  variant?: VariantProps<typeof inputVariants>['variant'];
+  /**
+   * Padding and font size, `xs` through `xl`.
+   * @default 'md'
+   */
+  size?: VariantProps<typeof inputVariants>['size'];
+};
 
 /**
  * Styled text input field built on the native `<input>` element with CVA-driven size and variant tokens.
@@ -74,14 +86,11 @@ function Input({
   onChange,
   onValueChange,
   ...props
-}: Omit<React.ComponentProps<'input'>, 'size'> & {
-  /** Visual style of the input border — `'outline'` (default), `'ghost'`, `'none'`, `'soft'`, or `'subtle'`. */
-  variant?: InputVariantProps['variant'];
-  /** Controls padding and font size — `'xs'` | `'sm'` | `'md'` (default) | `'lg'` | `'xl'`. */
-  size?: InputVariantProps['size'];
-  /** Convenience callback that receives the raw string value on every change, bypassing the synthetic event. */
-  onValueChange?: (value: string) => void;
-}) {
+}: Omit<React.ComponentProps<'input'>, 'size'> &
+  InputVariantProps & {
+    /** Convenience callback that receives the raw string value on every change, bypassing the synthetic event. */
+    onValueChange?: (value: string) => void;
+  }) {
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       onChange?.(e);

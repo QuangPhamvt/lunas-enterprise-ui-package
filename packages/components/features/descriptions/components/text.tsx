@@ -15,8 +15,9 @@ type DescriptionTextProps = {
 };
 
 /**
- * Plain-text value cell with a built-in `DescriptionEmpty` fallback — use this instead of hand-wrapping
- * a value in `<p className="text-sm">` (the `DescriptionItem` value slot already applies that styling).
+ * Plain-text value cell with a built-in `DescriptionEmpty` fallback — use this instead of
+ * hand-wrapping a value in `<p className="text-sm">` (the `DescriptionItem` value slot already
+ * applies that styling).
  *
  * @example
  * import { DescriptionItem, DescriptionText } from '@customafk/lunas-ui/features/descriptions';

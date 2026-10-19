@@ -21,6 +21,28 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 import type { RadioGroupFieldProps as Props } from '../../types';
 
+/**
+ * A TanStack Form-connected radio group rendered as selectable option cards (each with an optional
+ * description), dimmed while the form is submitting. Stores the chosen option's `value`.
+ *
+ * @example
+ * ```tsx
+ * const form = useTanStackForm({ defaultValues: { shipping: null as string | null } });
+ *
+ * <form.AppField
+ *   name="shipping"
+ *   children={({ RadioGroupField }) => (
+ *     <RadioGroupField
+ *       label="Hình thức giao hàng"
+ *       options={[
+ *         { value: 'standard', label: 'Tiêu chuẩn', description: '3–5 ngày' },
+ *         { value: 'express', label: 'Hỏa tốc', description: 'Trong ngày' },
+ *       ]}
+ *     />
+ *   )}
+ * />
+ * ```
+ */
 export const RadioGroupField: React.FC<Props> = ({ label, description, orientation, options, tooltip, helperText }) => {
   const field = useTanStackFieldContext<string | null>();
   const isSubmitting = useStore(field.form.store, ({ isSubmitting }) => isSubmitting);

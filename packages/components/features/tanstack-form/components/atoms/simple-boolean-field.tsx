@@ -12,12 +12,31 @@ import { useTanStackFieldContext } from '../form-context';
 import { FieldError } from '../ui/field';
 
 type Props = {
+  /** Field label rendered above the control. Omit to render label-less. */
   label?: string;
+  /** When `true`, appends a required asterisk to the label. */
   required?: boolean;
+  /** When `true`, disables the control. Also disabled automatically while the form is submitting. */
   disabled?: boolean;
+  /**
+   * Render a checkbox or a switch.
+   * @default 'checkbox'
+   */
   variant?: 'checkbox' | 'switch';
 };
 
+/**
+ * Minimal boolean field — a checkbox or switch bound to the surrounding `AppField`, with its label
+ * and error. Use it for compact forms; the non-`Simple` variants add description, tooltip,
+ * orientation and helper text.
+ *
+ * @example
+ * ```tsx
+ * const form = useTanStackForm({ defaultValues: { notify: null as boolean | null } });
+ *
+ * <form.AppField name="notify" children={({ SimpleBooleanField }) => <SimpleBooleanField label="Nhận thông báo qua email" variant="switch" />} />
+ * ```
+ */
 export const SimpleBooleanField: React.FC<Props> = ({ label, required, disabled, variant = 'checkbox' }) => {
   const id = useId();
   const { form, name, state, handleBlur, handleChange } = useTanStackFieldContext<boolean | null>();

@@ -12,6 +12,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 
+/** Props for `RegisterPage`. */
 export interface RegisterPageProps {
   /** Controls whether the dialog is open */
   open: boolean;

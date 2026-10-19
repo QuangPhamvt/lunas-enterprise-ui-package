@@ -1,5 +1,7 @@
 import { Badge } from '@/components/ui/badge';
+
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, within } from 'storybook/test';
 
 const meta = {
   tags: ['autodocs'],
@@ -83,4 +85,42 @@ export const SizeLg: Story = {
 
 export const SizeXl: Story = {
   args: { ...Default.args, size: 'xl', children: 'XL' },
+};
+
+// ─── Behavior tests (hidden from the sidebar and docs; run by `npm run test:storybook`) ───
+
+const TEST_TAGS = ['!dev', '!autodocs'];
+
+const BADGE_VARIANTS = ['solid', 'soft', 'outline'] as const;
+const BADGE_COLORS = ['primary', 'secondary', 'muted', 'accent', 'info', 'success', 'warning', 'danger'] as const;
+const BADGE_SIZES = ['xs', 'sm', 'md', 'lg', 'xl'] as const;
+
+export const TestRendering: Story = {
+  tags: TEST_TAGS,
+  render: () => (
+    <div className="flex flex-wrap gap-2">
+      <Badge>Pill</Badge>
+      <Badge pill={false}>Square</Badge>
+      {BADGE_VARIANTS.map(variant => (
+        <Badge key={variant} variant={variant}>{`v-${variant}`}</Badge>
+      ))}
+      {BADGE_COLORS.map(color => (
+        <Badge key={color} color={color}>{`c-${color}`}</Badge>
+      ))}
+      {BADGE_SIZES.map(size => (
+        <Badge key={size} size={size}>{`s-${size}`}</Badge>
+      ))}
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const pill = canvas.getByText('Pill');
+    await expect(pill.tagName).toBe('SPAN');
+    await expect(pill).toHaveClass('rounded-full');
+    await expect(canvas.getByText('Square')).toHaveClass('rounded');
+    await expect(canvas.getByText('Square')).not.toHaveClass('rounded-full');
+    for (const label of [...BADGE_VARIANTS.map(v => `v-${v}`), ...BADGE_COLORS.map(c => `c-${c}`), ...BADGE_SIZES.map(s => `s-${s}`)]) {
+      await expect(canvas.getByText(label)).toBeVisible();
+    }
+  },
 };

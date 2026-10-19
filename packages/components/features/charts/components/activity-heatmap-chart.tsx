@@ -14,11 +14,20 @@ const WEEKDAY_LABELS = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 const CELL_SIZE = 13;
 const MS_PER_DAY = 86_400_000;
 
+/** Props for `ActivityHeatmapChart`. */
 export type ActivityHeatmapChartProps = BaseChartProps & {
+  /** Data points to plot, in display order. */
   data: ActivityPoint[];
   /** Series label used in the theme config. Defaults to `'Activity'`. */
   label?: string;
+  /**
+   * Series color — any CSS color or `var(--token)`.
+   * @default 'var(--chart-1)'
+   */
   color?: string;
+  /**
+   * Formats values in the tooltip and on the value axis.
+   */
   valueFormatter?: (value: number) => string;
 };
 

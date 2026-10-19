@@ -1,3 +1,5 @@
+import babel from '@rolldown/plugin-babel'
+import { reactCompilerPreset } from '@vitejs/plugin-react'
 import { defineConfig } from 'tsdown'
 
 export default defineConfig([
@@ -88,7 +90,6 @@ export default defineConfig([
       './packages/components/ui/empty.tsx',
       './packages/components/ui/field.tsx',
       './packages/components/ui/file-uploader.tsx',
-      './packages/components/ui/form.tsx',
       './packages/components/ui/hover-card.tsx',
       './packages/components/ui/image.tsx',
       './packages/components/ui/input.tsx',
@@ -122,9 +123,32 @@ export default defineConfig([
       './packages/components/ui/tooltip.tsx',
     ],
     dts: true,
-    exports: false,
+    format: ['esm'],
     sourcemap: true,
-    format: ['esm', 'cjs'],
-    minify: true,
+    // Ship readable code; the consuming app's bundler minifies.
+    minify: false,
+    // Every entry still starts with 'use client' in dist; the modules rolldown merges into shared
+    // chunks lose theirs, which is fine because those chunks are only ever imported by client
+    // entries. Drop that one known-benign warning (it fires once per source file) and keep the rest.
+    inputOptions: {
+      onLog(level, log, handler) {
+        if (log.code === 'MODULE_LEVEL_DIRECTIVE') return;
+        handler(level, log);
+      },
+    },
+    // Every import from node_modules stays external — nothing gets inlined into dist.
+    deps: { neverBundle: true },
+    // Generates package.json `exports` from `entry`, so the two can't drift apart.
+    exports: {
+      customExports: {
+        './styles/base': './styles/base.css',
+        './styles/loader': './styles/loader.css',
+        './styles/spacing': './styles/spacing.css',
+        './styles/theme': './styles/theme.css',
+        './styles/typography': './styles/typography.css',
+        './styles/text-editor': './styles/text-editor.css',
+      },
+    },
+    plugins: [babel({ presets: [reactCompilerPreset({ target: '19', compilationMode: 'annotation' })] })],
   },
 ])

@@ -15,23 +15,34 @@ export { NotificationItem, type NotificationItemProps } from './components/notif
 export { NotificationList, type NotificationListProps } from './components/notification-list';
 export type { NotificationItemData, NotificationScope } from './types';
 
+/** Props for `NotificationCenter`. */
 export type NotificationCenterProps = {
   /** Controls whether the panel is currently open. Pair with `onOpenChange`. */
   open: boolean;
+  /** Called when the panel opens or closes (bell click, outside click, Escape). */
   onOpenChange: (open: boolean) => void;
 
   /** Which tab is active. Pair with `onActiveScopeChange`. */
   activeScope: NotificationScope;
+  /** Called when the reader switches tabs. */
   onActiveScopeChange: (scope: NotificationScope) => void;
 
+  /** Loaded notifications of the shared (“Chung”) tab. */
   globalNotifications: NotificationItemData[];
+  /** Loaded notifications of the personal (“Cá nhân”) tab. */
   personalNotifications: NotificationItemData[];
+  /** Unread count shown on the global tab. */
   globalUnreadCount: number;
+  /** Unread count shown on the personal tab. */
   personalUnreadCount: number;
 
+  /** A page of global notifications is loading. */
   isLoadingGlobal?: boolean;
+  /** A page of personal notifications is loading. */
   isLoadingPersonal?: boolean;
+  /** More global notifications can be loaded — shows “Xem thêm”. */
   hasMoreGlobal?: boolean;
+  /** More personal notifications can be loaded — shows “Xem thêm”. */
   hasMorePersonal?: boolean;
 
   /** Called when the reader scrolls/clicks to load the next page for the given scope. */
@@ -131,7 +142,15 @@ export const NotificationCenter: React.FC<NotificationCenterProps> = ({
               )}
             </TabsTrigger>
           </TabsList>
-          <Button type="button" color="muted" variant="ghost" size="icon" onClick={() => onMarkAllAsRead(activeScope)}>
+          <Button
+            type="button"
+            color="muted"
+            variant="ghost"
+            size="icon"
+            aria-label="Đánh dấu tất cả đã đọc"
+            title="Đánh dấu tất cả đã đọc"
+            onClick={() => onMarkAllAsRead(activeScope)}
+          >
             <BookCheckIcon />
           </Button>
         </div>

@@ -3,6 +3,7 @@ import z from 'zod';
 import { useTanStackForm } from '@/components/features/tanstack-form';
 
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, within } from 'storybook/test';
 
 const meta = {
   tags: ['autodocs'],
@@ -48,5 +49,39 @@ export const Default: Story = {
         </TanStackSectionForm>
       </TanStackContainerForm>
     );
+  },
+};
+
+// ─── Behavior tests (hidden from the sidebar and docs; run by `npm run test:storybook`) ───
+
+const TEST_TAGS = ['!dev', '!autodocs'];
+
+const TEST_OPTIONS = [
+  { value: 'a', label: 'Option A', description: 'First option' },
+  { value: 'b', label: 'Option B', description: 'Second option' },
+  { value: 'c', label: 'Option C', description: 'Third option' },
+];
+
+export const TestSelection: Story = {
+  tags: TEST_TAGS,
+  render: () => {
+    const { AppField } = useTanStackForm({ defaultValues: { plan: 'b' as string | null } });
+    return <AppField name="plan" children={({ RadioGroupField }) => <RadioGroupField label="Select a plan" options={TEST_OPTIONS} />} />;
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(await canvas.findByText('Select a plan')).toBeInTheDocument();
+    for (const option of TEST_OPTIONS) {
+      await expect(canvas.getByText(option.label)).toBeInTheDocument();
+      await expect(canvas.getByText(option.description)).toBeInTheDocument();
+    }
+    const radios = canvas.getAllByRole('radio');
+    await expect(radios).toHaveLength(TEST_OPTIONS.length);
+    // The default value is selected.
+    await expect(radios[1]).toBeChecked();
+
+    await userEvent.click(radios[0]);
+    await expect(radios[0]).toBeChecked();
+    await expect(radios[1]).not.toBeChecked();
   },
 };

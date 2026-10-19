@@ -9,20 +9,53 @@ import { type ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, Char
 import { Bar, BarChart, CartesianGrid, ReferenceLine, XAxis, YAxis } from 'recharts';
 import type { BaseChartProps } from '../types';
 
+/** One category with a value on each side of the axis. */
 export type MirroredBarRow = {
+  /** Category label shown on the shared axis. */
   category: string;
+  /** Value drawn to the left. */
   left: number;
+  /** Value drawn to the right. */
   right: number;
 };
 
+/** Props for `MirroredBarChart`. */
 export type MirroredBarChartProps = BaseChartProps & {
+  /** Data points to plot, in display order. */
   data: MirroredBarRow[];
+  /**
+   * Legend label of the left-hand series.
+   * @default 'Left'
+   */
   leftLabel?: string;
+  /**
+   * Legend label of the right-hand series.
+   * @default 'Right'
+   */
   rightLabel?: string;
+  /**
+   * Color of the left-hand series.
+   * @default 'var(--chart-1)'
+   */
   leftColor?: string;
+  /**
+   * Color of the right-hand series.
+   * @default 'var(--chart-4)'
+   */
   rightColor?: string;
+  /**
+   * Formats values in the tooltip and on the value axis.
+   */
   valueFormatter?: (value: number) => string;
+  /**
+   * Show the series legend.
+   * @default true
+   */
   showLegend?: boolean;
+  /**
+   * Draw background grid lines.
+   * @default true
+   */
   showGrid?: boolean;
 };
 

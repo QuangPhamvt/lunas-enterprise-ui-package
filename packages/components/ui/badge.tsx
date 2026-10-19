@@ -4,6 +4,7 @@ import { cn } from '@customafk/react-toolkit/utils';
 
 import { cva, type VariantProps } from 'class-variance-authority';
 
+/** Class names for `Badge`; use it to give another element badge styling. */
 const badgeVariants = cva(
   'inline-flex items-center justify-center font-medium transition-colors duration-150 focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2 forced-colors:outline',
   {
@@ -81,7 +82,31 @@ const badgeVariants = cva(
  * @property size - Badge size — `'xs'` | `'sm'` | `'md'` (default) | `'lg'` | `'xl'`.
  * @property pill - When `true` (default), renders with fully rounded corners (`rounded-full`); when `false`, uses `rounded-sm`.
  */
-export type BadgeProps = VariantProps<typeof badgeVariants> & React.ComponentPropsWithoutRef<'span'>;
+type BadgeVariants = VariantProps<typeof badgeVariants>;
+
+/** Props for `Badge` — every native `<span>` prop plus the style variants below. */
+export type BadgeProps = React.ComponentPropsWithoutRef<'span'> & {
+  /**
+   * Fill style: `solid` (filled), `soft` (tinted background) or `outline` (border only).
+   * @default 'solid'
+   */
+  variant?: BadgeVariants['variant'];
+  /**
+   * Semantic color token.
+   * @default 'primary'
+   */
+  color?: BadgeVariants['color'];
+  /**
+   * Padding and font size, `xs` through `xl`.
+   * @default 'md'
+   */
+  size?: BadgeVariants['size'];
+  /**
+   * Fully rounded pill shape; `false` uses the regular corner radius.
+   * @default true
+   */
+  pill?: BadgeVariants['pill'];
+};
 
 /**
  * Inline status label rendered as a `<span>` with CVA-driven variant, color, size, and shape options.
@@ -103,7 +128,7 @@ function Badge({ className, variant, color, size, pill, ...props }: BadgeProps) 
  * has a single home instead of being re-declared by each consumer that pairs a status dot with a Badge.
  */
 
-// biome-ignore lint/style/useComponentExportOnlyModules: more
+// biome-ignore lint/style/useComponentExportOnlyModules: variants are exported alongside the component so consumers can reuse the styles
 export const badgeDotVariants = cva('inline-block size-1.5 shrink-0 rounded-full', {
   variants: {
     color: {
@@ -123,5 +148,5 @@ export const badgeDotVariants = cva('inline-block size-1.5 shrink-0 rounded-full
   },
 });
 
-// biome-ignore lint/style/useComponentExportOnlyModules: more
+// biome-ignore lint/style/useComponentExportOnlyModules: variants are exported alongside the component so consumers can reuse the styles
 export { Badge, badgeVariants };

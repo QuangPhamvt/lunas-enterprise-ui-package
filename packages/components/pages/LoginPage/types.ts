@@ -1,5 +1,7 @@
+/** Sign-in mode: one-time code sent by email (`otp`) or email + password. */
 export type LoginMethod = 'otp' | 'password';
 
+/** Props for `LoginPage`. */
 export interface LoginPageProps {
   /** Controls whether the dialog is open */
   open: boolean;

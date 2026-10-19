@@ -54,14 +54,35 @@ const CandlestickSeries = ({ data, upColor, downColor }: CandlestickSeriesProps)
   );
 };
 
+/** Props for `CandlestickChart`. */
 export type CandlestickChartProps = BaseChartProps & {
+  /** Data points to plot, in display order. */
   data: OHLCPoint[];
   /** Series label used in the theme config. Defaults to `'Price'`. */
   label?: string;
+  /**
+   * Color for rising / positive values.
+   * @default 'var(--success)'
+   */
   upColor?: string;
+  /**
+   * Color for falling / negative values.
+   * @default 'var(--danger)'
+   */
   downColor?: string;
+  /**
+   * Formats values in the tooltip and on the value axis.
+   */
   valueFormatter?: (value: number) => string;
+  /**
+   * Formats dates on the time axis and in the tooltip.
+   * @default toDateLabel
+   */
   dateFormatter?: (date: string | Date) => string;
+  /**
+   * Draw background grid lines.
+   * @default true
+   */
   showGrid?: boolean;
 };
 

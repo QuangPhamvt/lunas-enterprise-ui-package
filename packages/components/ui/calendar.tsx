@@ -33,6 +33,10 @@ const CalendarChevron = (props: { className?: string; size?: number; disabled?: 
   return <ChevronDownIcon size={16} className={props.className} {...props} />;
 };
 
+/**
+ * Day cell button used by `Calendar` — focuses itself when it becomes the focused day and applies
+ * the selection/range styling. Exported to customize `Calendar`'s `components.DayButton`.
+ */
 const CalendarDayButton = ({ className, day, modifiers, color: _, ...props }: React.ComponentProps<typeof DayButton>) => {
   const defaultClassNames = getDefaultClassNames();
 

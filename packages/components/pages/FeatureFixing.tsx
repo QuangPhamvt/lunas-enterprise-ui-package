@@ -5,6 +5,7 @@ import { cn } from '@customafk/react-toolkit/utils';
 import { Wrench } from 'lucide-react';
 import { LunasLogo } from '../features/logo';
 
+/** Props for `FeatureFixing`. */
 export interface FeatureFixingProps {
   /** Main heading shown beneath the wrench icon. Defaults to `'Tính năng đang bảo trì'`. */
   title?: string;

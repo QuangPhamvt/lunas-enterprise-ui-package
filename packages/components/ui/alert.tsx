@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react';
 
-import { AlertCircle, AlertTriangle, CheckCircle, Info } from 'lucide-react';
+import { AlertCircle, AlertTriangle, CheckCircle, Info, XIcon } from 'lucide-react';
 
 import { cn } from '@customafk/react-toolkit/utils';
 
@@ -13,11 +13,12 @@ import { type AlertVariantProps, alertVariants } from './alert-variants';
  */
 export interface AlertProps extends React.HTMLAttributes<HTMLDivElement>, Omit<AlertVariantProps, 'className'> {
   /**
-   * Optional icon to display in the alert; defaults to a variant-appropriate icon when omitted.
+   * Icon shown before the content. Omit it to get the variant's default icon (`destructive`,
+   * `warning`, `success`, `info`); the neutral `default` variant has none.
    */
   icon?: React.ReactNode;
   /**
-   * Whether the alert can be dismissed by the user.
+   * Show a close (×) button in the top-right corner; pair with `onDismiss` to hide the alert.
    */
   dismissible?: boolean;
   /**
@@ -53,16 +54,28 @@ function Alert({ className, variant, children, icon, dismissible, onDismiss, ...
         case 'info':
           return <Info />;
         default:
-          return <AlertCircle />;
+          // The neutral variant has no implied icon — pass one as a child or via `icon`.
+          return null;
       }
     }
     return icon;
   }, [icon, variant]);
 
   return (
-    <div data-slot="alert" role="alert" data-variant={variant} className={cn(alertVariants({ variant }), className)} {...props}>
+    <div data-slot="alert" role="alert" data-variant={variant} className={cn(alertVariants({ variant }), dismissible && 'pr-10', className)} {...props}>
       {defaultIcon}
       {children}
+      {dismissible && (
+        <button
+          type="button"
+          data-slot="alert-dismiss"
+          aria-label="Đóng thông báo"
+          onClick={onDismiss}
+          className="absolute top-2.5 right-2.5 flex size-6 cursor-pointer items-center justify-center rounded-sm opacity-60 transition-opacity hover:opacity-100 focus-visible:outline-2 focus-visible:outline-current"
+        >
+          <XIcon size={14} />
+        </button>
+      )}
     </div>
   );
 }
@@ -81,7 +94,13 @@ export interface AlertTitleProps extends React.HTMLAttributes<HTMLDivElement> {
  * Renders the bold title line inside an Alert.
  */
 function AlertTitle({ className, ...props }: AlertTitleProps) {
-  return <div data-slot="alert-title" className={cn('col-start-2 line-clamp-1 min-h-4 font-medium leading-4.5 tracking-tight', className)} {...props} />;
+  return (
+    <div
+      data-slot="alert-title"
+      className={cn('[[data-slot=alert]:has(>svg)>&]:col-start-2 line-clamp-1 min-h-4 font-medium leading-4.5 tracking-tight', className)}
+      {...props}
+    />
+  );
 }
 
 /**
@@ -98,7 +117,13 @@ export interface AlertDescriptionProps extends React.HTMLAttributes<HTMLDivEleme
  * Renders the supporting body text inside an Alert.
  */
 function AlertDescription({ className, ...props }: AlertDescriptionProps) {
-  return <div data-slot="alert-description" className={cn('col-start-2 grid justify-items-start gap-1 text-sm [&_p]:leading-relaxed', className)} {...props} />;
+  return (
+    <div
+      data-slot="alert-description"
+      className={cn('[[data-slot=alert]:has(>svg)>&]:col-start-2 grid justify-items-start gap-1 text-sm [&_p]:leading-relaxed', className)}
+      {...props}
+    />
+  );
 }
 
 export { Alert, AlertDescription, AlertTitle };

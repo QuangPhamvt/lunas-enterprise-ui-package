@@ -10,15 +10,36 @@ import { Bar, BarChart, CartesianGrid, Rectangle, XAxis, YAxis } from 'recharts'
 import type { BaseChartProps, OHLCPoint } from '../types';
 import { formatCompactNumber, getDirectionColor, toDateLabel } from '../utils';
 
+/** Props for `VolumeBarChart`. */
 export type VolumeBarChartProps = BaseChartProps & {
   /** Only `date`, `close`, and `volume` are used; pass the same rows given to `CandlestickChart`. */
   data: Array<Pick<OHLCPoint, 'date' | 'close' | 'volume'>>;
   /** Series label. Defaults to `'Volume'`. */
   label?: string;
+  /**
+   * Color for rising / positive values.
+   * @default 'var(--success)'
+   */
   upColor?: string;
+  /**
+   * Color for falling / negative values.
+   * @default 'var(--danger)'
+   */
   downColor?: string;
+  /**
+   * Formats values in the tooltip and on the value axis.
+   * @default formatCompactNumber
+   */
   valueFormatter?: (value: number) => string;
+  /**
+   * Formats dates on the time axis and in the tooltip.
+   * @default toDateLabel
+   */
   dateFormatter?: (date: string | Date) => string;
+  /**
+   * Draw background grid lines.
+   * @default true
+   */
   showGrid?: boolean;
 };
 

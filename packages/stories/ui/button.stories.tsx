@@ -312,3 +312,76 @@ export const AsChild: Story = {
     await expect(link).toHaveAttribute('data-slot', 'button');
   },
 };
+
+// ─── Behavior tests (hidden from the sidebar and docs; run by `npm run test:storybook`) ───
+
+const TEST_TAGS = ['!dev', '!autodocs'];
+
+const BUTTON_VARIANTS = ['default', 'outline', 'soft', 'subtle', 'ghost', 'link'] as const;
+const BUTTON_COLORS = ['primary', 'secondary', 'muted', 'success', 'important', 'info', 'warning', 'danger'] as const;
+
+export const TestRendering: Story = {
+  tags: TEST_TAGS,
+  render: () => (
+    <div className="flex flex-wrap gap-2">
+      <Button>Save</Button>
+      {BUTTON_VARIANTS.map(variant => (
+        <Button key={variant} variant={variant}>{`v-${variant}`}</Button>
+      ))}
+      {BUTTON_COLORS.map(color => (
+        <Button key={color} color={color}>{`c-${color}`}</Button>
+      ))}
+      <Button asChild>
+        <a href="#dashboard">Go</a>
+      </Button>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const save = canvas.getByRole('button', { name: 'Save' });
+    await expect(save).toHaveAttribute('data-slot', 'button');
+    // Defaults to type="button" so it never submits a surrounding form by accident.
+    await expect(save).toHaveAttribute('type', 'button');
+    for (const name of [...BUTTON_VARIANTS.map(v => `v-${v}`), ...BUTTON_COLORS.map(c => `c-${c}`)]) {
+      await expect(canvas.getByRole('button', { name })).toBeVisible();
+    }
+    // asChild renders the child element as the root.
+    await expect(canvas.getByRole('link', { name: 'Go' })).toHaveAttribute('data-slot', 'button');
+  },
+};
+
+export const TestClickStates: Story = {
+  tags: TEST_TAGS,
+  args: { onClick: fn() },
+  render: args => (
+    <div className="flex gap-2">
+      <Button onClick={args.onClick}>Enabled</Button>
+      <Button disabled onClick={args.onClick}>
+        Disabled
+      </Button>
+      <Button isLoading onClick={args.onClick} data-testid="loading">
+        Submit
+      </Button>
+    </div>
+  ),
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('button', { name: 'Enabled' }));
+    await expect(args.onClick).toHaveBeenCalledTimes(1);
+
+    const disabled = canvas.getByRole('button', { name: 'Disabled' });
+    await expect(disabled).toBeDisabled();
+    await expect(disabled).toHaveAttribute('aria-disabled', 'true');
+    await userEvent.click(disabled, { pointerEventsCheck: 0 });
+
+    const loading = canvas.getByTestId('loading');
+    await expect(loading).toBeDisabled();
+    await expect(loading).toHaveAttribute('aria-busy', 'true');
+    await expect(loading).toHaveAttribute('data-state', 'loading');
+    await expect(within(loading).getByText('Loading')).toHaveClass('sr-only');
+    await userEvent.click(loading, { pointerEventsCheck: 0 });
+
+    // Neither the disabled nor the loading button fired.
+    await expect(args.onClick).toHaveBeenCalledTimes(1);
+  },
+};

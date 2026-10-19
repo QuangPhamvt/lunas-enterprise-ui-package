@@ -1,8 +1,11 @@
 'use client';
 
-import { memo, useCallback, useMemo } from 'react';
-import { cva, type VariantProps } from 'class-variance-authority';
+import { memo, useMemo } from 'react';
+
 import { cn } from '@customafk/react-toolkit/utils';
+
+import { cva, type VariantProps } from 'class-variance-authority';
+import { formatNumber } from '@/libs/number';
 
 const statisticVariants = cva('inline-flex items-center gap-1 font-number tabular-nums transition-colors', {
   variants: {
@@ -25,10 +28,23 @@ const statisticVariants = cva('inline-flex items-center gap-1 font-number tabula
   },
 });
 
-export type StatisticProps = VariantProps<typeof statisticVariants> & {
-  /** Character used to separate the decimal part. Defaults to `'.'`. */
+/** Props for `Statistic`. */
+export type StatisticProps = {
+  /**
+   * Font size, `xs` through `xl`.
+   * @default 'lg'
+   */
+  size?: VariantProps<typeof statisticVariants>['size'];
+
+  /**
+   * Character between the integer and the decimal part.
+   * @default ','
+   */
   decimalSeparator?: string;
-  /** Character used to separate thousands groups. Defaults to `','`. */
+  /**
+   * Character between thousands groups.
+   * @default '.'
+   */
   groupSeparator?: string;
   /** Optional node rendered before the numeric value (e.g. a currency symbol). */
   prefix?: React.ReactNode;
@@ -60,8 +76,8 @@ export type StatisticProps = VariantProps<typeof statisticVariants> & {
  */
 export const Statistic = memo(
   ({
-    decimalSeparator = '.',
-    groupSeparator = ',',
+    decimalSeparator = ',',
+    groupSeparator = '.',
     prefix: Prefix,
     suffix: Suffix,
     precision,
@@ -72,64 +88,10 @@ export const Statistic = memo(
     value,
     className,
   }: StatisticProps) => {
-    const applyRounding = useCallback(
-      (num: number, precisionValue: number): number => {
-        const multiplier = 10 ** precisionValue;
-        switch (roundingMode) {
-          case 'floor':
-            return Math.floor(num * multiplier) / multiplier;
-          case 'ceil':
-            return Math.ceil(num * multiplier) / multiplier;
-          default:
-            return Math.round(num * multiplier) / multiplier;
-        }
-      },
-      [roundingMode]
+    const finalFormattedValue = useMemo(
+      () => formatNumber(value, { precision, roundingMode, showTrailingZeros, decimalSeparator, groupSeparator }) ?? 'N/A',
+      [value, precision, roundingMode, showTrailingZeros, decimalSeparator, groupSeparator]
     );
-
-    const formatOptions = useMemo((): Intl.NumberFormatOptions => {
-      const options: Intl.NumberFormatOptions = {};
-      if (typeof precision === 'number' && precision >= 0) {
-        if (showTrailingZeros) {
-          options.minimumFractionDigits = precision;
-          options.maximumFractionDigits = precision;
-        } else {
-          options.maximumFractionDigits = precision;
-        }
-      }
-      return options;
-    }, [precision, showTrailingZeros]);
-
-    const formatNumber = useCallback(
-      (num: number): string => {
-        let processedNum = num;
-        if (typeof precision === 'number' && precision >= 0) {
-          processedNum = applyRounding(num, precision);
-        }
-        return processedNum.toLocaleString('vi-VN', formatOptions);
-      },
-      [applyRounding, formatOptions, precision]
-    );
-
-    const processedValue = useMemo((): string => {
-      if (typeof value === 'number') {
-        if (Number.isNaN(value) || !Number.isFinite(value)) return 'N/A';
-        return formatNumber(value);
-      }
-      if (typeof value === 'string') {
-        const trimmedValue = value.trim();
-        if (!trimmedValue) return 'N/A';
-        const numValue = Number(trimmedValue);
-        if (Number.isNaN(numValue) || !Number.isFinite(numValue)) return 'N/A';
-        return formatNumber(numValue);
-      }
-      return 'N/A';
-    }, [value, formatNumber]);
-
-    const finalFormattedValue = useMemo((): string => {
-      if (decimalSeparator === '.' && groupSeparator === ',') return processedValue;
-      return processedValue.replace(/,/g, groupSeparator).replace(/\./g, decimalSeparator);
-    }, [processedValue, decimalSeparator, groupSeparator]);
 
     return (
       <div data-slot="statistic" className={cn(statisticVariants({ size, trend }), className)}>

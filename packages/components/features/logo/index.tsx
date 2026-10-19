@@ -2,17 +2,35 @@
 
 import { cn } from '@customafk/react-toolkit/utils';
 
+/** Logo layout: mark beside the wordmark, mark above it, or the mark alone. */
 export type LunasLogoVariant = 'horizontal' | 'stacked' | 'icon';
+/** Brand purple, or monochrome white/black for dark or photographic backgrounds. */
 export type LunasLogoColorScheme = 'purple' | 'white' | 'black';
+/** Preset logo size. */
 export type LunasLogoSize = 'xs' | 'sm' | 'md' | 'lg';
+/** Background treatment of the icon-only logo: none, a filled tile, or an outlined tile. */
 export type LunasLogoIconStyle = 'plain' | 'solid' | 'outline';
 
+/** Props for `LunasLogo`. */
 export type LunasLogoProps = {
+  /**
+   * Layout of mark and wordmark.
+   * @default 'horizontal'
+   */
   variant?: LunasLogoVariant;
+  /**
+   * Color treatment.
+   * @default 'purple'
+   */
   colorScheme?: LunasLogoColorScheme;
+  /**
+   * Preset size.
+   * @default 'md'
+   */
   size?: LunasLogoSize;
   /** Only applies when variant="icon". Controls background/border style. */
   iconStyle?: LunasLogoIconStyle;
+  /** Class names for the `<svg>`. */
   className?: string;
 };
 
@@ -48,6 +66,18 @@ function LunasIconPaths({ moon, accent }: { moon: string; accent: string }) {
   );
 }
 
+/**
+ * The Lunas brand logo as an inline SVG — horizontal, stacked or icon-only, in brand or
+ * monochrome colors.
+ *
+ * @example
+ * ```tsx
+ * import { LunasLogo } from '@customafk/lunas-ui/features/logo';
+ *
+ * <LunasLogo variant="horizontal" size="sm" />
+ * <LunasLogo variant="icon" iconStyle="solid" />
+ * ```
+ */
 export function LunasLogo({ variant = 'horizontal', colorScheme = 'purple', size = 'md', iconStyle = 'plain', className }: LunasLogoProps) {
   const colors = colorMap[colorScheme];
   const dims = sizeMap[size];

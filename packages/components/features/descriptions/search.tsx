@@ -10,10 +10,16 @@ import { Input } from '@/components/ui/input';
 
 import { DescriptionConfigContext, DescriptionSearchContext } from './context';
 
+/** Props for `DescriptionSearch`. */
 export type DescriptionSearchProps = {
-  /** @default 'Tìm kiếm...' */
+  /**
+   * Input placeholder.
+   * @default 'Tìm kiếm...'
+   */
   placeholder?: string;
+  /** Focus the input on mount. */
   autoFocus?: boolean;
+  /** Class names for the search input wrapper. */
   className?: string;
 };
 

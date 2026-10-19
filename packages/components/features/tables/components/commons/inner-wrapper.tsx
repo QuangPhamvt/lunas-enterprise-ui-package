@@ -5,6 +5,10 @@ import { useUITableInnerWrapperContext } from '../../hooks/use-context';
 import type { TUITableInnerWrapper } from '../../types';
 import { tableInnerWrapperVariants } from '../table.variants';
 
+/**
+ * Scroll container around the `<table>`; keeps pinned columns and the header sticky. Rendered by
+ * `UITableContainer`; use it directly only when building a custom table layout.
+ */
 export const UITableInnerWrapper = memo<TUITableInnerWrapper>(({ children, ...props }) => {
   const { innerWrapperId } = useUITableInnerWrapperContext();
   return (

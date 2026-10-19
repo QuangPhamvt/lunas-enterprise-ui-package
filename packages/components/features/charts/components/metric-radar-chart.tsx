@@ -10,13 +10,22 @@ import { PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart } from 'r
 import type { BaseChartProps, ChartSeries } from '../types';
 import { getChartColor } from '../utils';
 
+/** Props for `MetricRadarChart`. */
 export type MetricRadarChartProps = BaseChartProps & {
+  /** Data points to plot, in display order. */
   data: Array<{ metric: string } & Record<string, unknown>>;
   /** One entry per entity being compared (e.g. a candidate, a product, a team). */
   series: ChartSeries[];
+  /**
+   * Formats values in the tooltip and on the value axis.
+   */
   valueFormatter?: (value: number) => string;
   /** Radius-axis domain. Defaults to `['auto', 'auto']`. */
   domain?: [number | 'auto', number | 'auto'];
+  /**
+   * Show the series legend.
+   * @default true
+   */
   showLegend?: boolean;
 };
 

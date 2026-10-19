@@ -1,9 +1,9 @@
 import z from 'zod';
 
+import { useTanStackForm } from '@/components/features/tanstack-form';
+
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
-
-import { useTanStackForm } from '@/components/features/tanstack-form';
 
 const meta = {
   tags: ['autodocs'],
@@ -499,5 +499,39 @@ export const KitchenSink: Story = {
     // locked field is disabled; copy button hidden despite having a value
     const lockedTextarea = canvas.getByDisplayValue('Read-only content — disabled prop is set.');
     await expect(lockedTextarea).toBeDisabled();
+  },
+};
+
+// ─── Behavior tests (hidden from the sidebar and docs; run by `npm run test:storybook`) ───
+
+const TEST_TAGS = ['!dev', '!autodocs'];
+
+export const TestCounterModes: Story = {
+  tags: TEST_TAGS,
+  render: () => {
+    const { AppField } = useTanStackForm({
+      defaultValues: { notes: null as string | null, plain: 'some text' as string | null },
+    });
+    return (
+      <div className="grid gap-4">
+        <AppField name="notes" children={({ TextareaField }) => <TextareaField label="Notes" placeholder="Write something…" counter />} />
+        <AppField name="plain" children={({ TextareaField }) => <TextareaField label="Plain" />} />
+      </div>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(await canvas.findByText('Notes')).toBeInTheDocument();
+    const [notes, plain] = await canvas.findAllByRole('textbox');
+    await expect(canvas.getByPlaceholderText('Write something…')).toBe(notes);
+    await expect(notes).toHaveValue('');
+    await expect(plain).toHaveValue('some text');
+
+    // Without maxLength the counter shows just the character count…
+    await userEvent.type(notes, 'hi');
+    await expect(notes).toHaveValue('hi');
+    await expect(canvas.getByText('2 ký tự')).toBeInTheDocument();
+    // …and a field without `counter` shows none at all.
+    await expect(canvas.getAllByText(/ký tự/)).toHaveLength(1);
   },
 };

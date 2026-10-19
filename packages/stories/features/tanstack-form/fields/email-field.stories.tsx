@@ -3,6 +3,7 @@ import z from 'zod';
 import { useTanStackForm } from '@/components/features/tanstack-form';
 
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, within } from 'storybook/test';
 
 const meta = {
   tags: ['autodocs'],
@@ -92,5 +93,41 @@ export const Submitting: Story = {
         </TanStackSectionForm>
       </TanStackContainerForm>
     );
+  },
+};
+
+// ─── Behavior tests (hidden from the sidebar and docs; run by `npm run test:storybook`) ───
+
+const TEST_TAGS = ['!dev', '!autodocs'];
+
+export const TestValueAndClear: Story = {
+  tags: TEST_TAGS,
+  render: () => {
+    const { AppField } = useTanStackForm({
+      defaultValues: { empty: null as string | null, filled: 'user@example.com' as string | null },
+    });
+    return (
+      <div className="grid gap-4">
+        <AppField name="empty" children={({ EmailField }) => <EmailField label="Email address" placeholder="you@example.com" />} />
+        <AppField name="filled" children={({ EmailField }) => <EmailField label="Backup email" />} />
+      </div>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(await canvas.findByText('Email address')).toBeInTheDocument();
+    const [empty, filled] = await canvas.findAllByRole('textbox');
+    await expect(canvas.getByPlaceholderText('you@example.com')).toBe(empty);
+    await expect(empty).toHaveValue('');
+    await expect(filled).toHaveValue('user@example.com');
+
+    // Only the field that has a value shows the clear button.
+    await expect(canvas.getAllByRole('button', { name: 'Xóa' })).toHaveLength(1);
+    await userEvent.type(empty, 'test@example.com');
+    await expect(empty).toHaveValue('test@example.com');
+    await expect(canvas.getAllByRole('button', { name: 'Xóa' })).toHaveLength(2);
+
+    await userEvent.click(canvas.getAllByRole('button', { name: 'Xóa' })[0]);
+    await expect(empty).toHaveValue('');
   },
 };

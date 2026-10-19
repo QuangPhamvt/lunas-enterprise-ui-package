@@ -9,6 +9,10 @@ import { PINNED_COLUMN_Z_INDEX, SELECT_WIDTH } from '../../constants';
 import type { TUITableCellSelect } from '../../types';
 import { tableCellSelectVariants } from '../table.variants';
 
+/**
+ * Pinned leading `<td>` with the row-selection checkbox; the whole cell is a click target. Rendered
+ * by `UITableContainer`; use it directly only when building a custom table layout.
+ */
 export const UITableCellSelect = memo<TUITableCellSelect>(
   ({ isPinned, isLastCell, canSelect = true, isSelected = false, className, onToggleRowSelected, ...props }) => {
     const id = useId();
@@ -34,6 +38,8 @@ export const UITableCellSelect = memo<TUITableCellSelect>(
         className={cn(tableCellSelectVariants({ isPinned, isLastCell }), className)}
         {...props}
       >
+        {/* biome-ignore lint/a11y/noStaticElementInteractions: widens the mouse hit area; the Checkbox inside is the keyboard-accessible control */}
+        {/* biome-ignore lint/a11y/useKeyWithClickEvents: widens the mouse hit area; the Checkbox inside is the keyboard-accessible control */}
         <div
           data-slot="table-cell-inner"
           className="flex! w-full! items-center justify-center bg-transparent text-center align-middle"

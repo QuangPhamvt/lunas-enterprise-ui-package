@@ -10,7 +10,9 @@ import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 import type { BaseChartProps, ChartSeries } from '../types';
 import { getChartColor, toDateLabel } from '../utils';
 
+/** Props for `OrdersBarChart`. */
 export type OrdersBarChartProps = BaseChartProps & {
+  /** Data points to plot, in display order. */
   data: Array<{ date: string | Date } & Record<string, unknown>>;
   /** Simple mode: the key holding each period's count. Defaults to `'orders'`. */
   dataKey?: string;
@@ -18,11 +20,26 @@ export type OrdersBarChartProps = BaseChartProps & {
   label?: string;
   /** Stacked mode: one series per order status; each `key` indexes into the data rows. */
   statuses?: ChartSeries[];
+  /**
+   * Series color — any CSS color or `var(--token)`.
+   * @default 'var(--chart-1)'
+   */
   color?: string;
+  /**
+   * Formats values in the tooltip and on the value axis.
+   */
   valueFormatter?: (value: number) => string;
+  /**
+   * Formats dates on the time axis and in the tooltip.
+   * @default toDateLabel
+   */
   dateFormatter?: (date: string | Date) => string;
   /** Defaults to `true` when `statuses` is provided. */
   showLegend?: boolean;
+  /**
+   * Draw background grid lines.
+   * @default true
+   */
   showGrid?: boolean;
 };
 

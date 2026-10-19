@@ -68,10 +68,11 @@ export const Default: Story = {
     const sidebar = document.body.querySelector<HTMLElement>('[data-slot="sidebar"]');
     expect(sidebar).toHaveAttribute('data-state', 'expanded');
 
-    const bodySection = document.body.querySelector<HTMLElement>('[data-slot="detail-dialog-body"]');
-    expect(bodySection).not.toBeNull();
-    expect(getComputedStyle(bodySection as HTMLElement).overflowY).toBe('auto');
-    expect((bodySection as HTMLElement).scrollHeight).toBeGreaterThan((bodySection as HTMLElement).clientHeight);
+    // The <main> cell is the scroll container; the body section inside it grows with its content.
+    expect(document.body.querySelector('[data-slot="detail-dialog-body"]')).not.toBeNull();
+    const scroller = main as HTMLElement;
+    expect(getComputedStyle(scroller).overflowY).toBe('auto');
+    expect(scroller.scrollHeight).toBeGreaterThan(scroller.clientHeight);
     await expect(body().getByText('Dòng nội dung mẫu số 1 để kiểm tra hành vi cuộn của phần thân dialog.')).toBeInTheDocument();
 
     const trigger = body().getByRole('button', { name: /toggle sidebar/i });

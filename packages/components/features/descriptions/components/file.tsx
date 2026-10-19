@@ -7,6 +7,7 @@ import { formatBytes } from '@customafk/react-toolkit/utils';
 import { DescriptionEmpty } from './empty';
 
 type DescriptionFileProps = {
+  /** File name shown as the link text. */
   name: string | null | undefined;
   /** Download/view URL. Omit while an upload is pending — the filename still renders as inert text. */
   url?: string | null;
@@ -15,9 +16,16 @@ type DescriptionFileProps = {
 };
 
 /**
- * Filename + optional size, linking to `url` for download when one is available. Only null-guards on
- * `!name` — a pending/unavailable upload has a name but no `url` yet, and showing the filename as inert
- * text is more useful than an empty dash.
+ * Filename + optional size, linking to `url` for download when one is available. Only null-guards
+ * on `!name` — a pending/unavailable upload has a name but no `url` yet, and showing the filename
+ * as inert text is more useful than an empty dash.
+ *
+ * @example
+ * ```tsx
+ * <DescriptionItem label="…">
+ *   <DescriptionFile name="hoa-don.pdf" url={invoice.url} size={invoice.size} />
+ * </DescriptionItem>
+ * ```
  */
 export const DescriptionFile: React.FC<DescriptionFileProps> = ({ name, url, size }) => {
   if (!name) return <DescriptionEmpty />;

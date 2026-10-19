@@ -189,7 +189,7 @@ export const UITableProvider = <
     onExpandedChange: setExpanded,
   });
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: rows
+  // biome-ignore lint/correctness/useExhaustiveDependencies: TanStack Table mutates a single `table` instance, so the state listed in deps — not `table` itself — is what invalidates this value
   const rows = useMemo(() => {
     const { rows } = table.getRowModel();
     return rows;
@@ -199,7 +199,7 @@ export const UITableProvider = <
     return !isFetching && !isRefetching && rows.length === 0;
   }, [rows, isFetching, isRefetching]);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: table get state
+  // biome-ignore lint/correctness/useExhaustiveDependencies: TanStack Table mutates a single `table` instance, so the state listed in deps — not `table` itself — is what invalidates this value
   const value = useMemo<TTableContext<TData>>(
     () => ({
       title,
@@ -255,17 +255,17 @@ export const UITableProvider = <
     ]
   );
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: table get state
+  // biome-ignore lint/correctness/useExhaustiveDependencies: TanStack Table mutates a single `table` instance, so the state listed in deps — not `table` itself — is what invalidates this value
   const tableState = useMemo(() => {
     return table.getState();
   }, [table.getState()]);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: table get state
+  // biome-ignore lint/correctness/useExhaustiveDependencies: TanStack Table mutates a single `table` instance, so the state listed in deps — not `table` itself — is what invalidates this value
   const isAllRowsSelected = useMemo(() => {
     return table.getIsAllRowsSelected();
   }, [table.getIsAllRowsSelected()]);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: table get state
+  // biome-ignore lint/correctness/useExhaustiveDependencies: TanStack Table mutates a single `table` instance, so the state listed in deps — not `table` itself — is what invalidates this value
   const isAllRowsExpanded = useMemo(() => {
     return table.getIsAllRowsExpanded();
   }, [table.getState().expanded]);
@@ -282,17 +282,17 @@ export const UITableProvider = <
     return tableState.expanded;
   }, [tableState.expanded]);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: table get state
+  // biome-ignore lint/correctness/useExhaustiveDependencies: TanStack Table mutates a single `table` instance, so the state listed in deps — not `table` itself — is what invalidates this value
   const leftPinnedHeaders = useMemo(() => {
     return table.getLeftHeaderGroups()[0]?.headers || [];
   }, [table.getState().columnPinning]);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: table get state
+  // biome-ignore lint/correctness/useExhaustiveDependencies: TanStack Table mutates a single `table` instance, so the state listed in deps — not `table` itself — is what invalidates this value
   const rightPinnedHeaders = useMemo(() => {
     return table.getRightHeaderGroups()[0]?.headers || [];
   }, [table.getState().columnPinning]);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: table get total size
+  // biome-ignore lint/correctness/useExhaustiveDependencies: TanStack Table mutates a single `table` instance, so the state listed in deps — not `table` itself — is what invalidates this value
   const totalSize = useMemo(() => {
     return table.getTotalSize();
   }, [table.getTotalSize()]);

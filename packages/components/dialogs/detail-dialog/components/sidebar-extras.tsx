@@ -41,15 +41,25 @@ function DetailDialogSidebarRail({ className, ...props }: React.ComponentProps<'
   );
 }
 
+/** Main content area next to a standalone `Sidebar` (inside `SidebarProvider`). */
 function SidebarInset({ className, ...props }: React.ComponentProps<'main'>) {
   return <main data-slot="sidebar-inset" className={cn('relative flex w-full flex-1 flex-col bg-background', className)} {...props} />;
 }
 
+/** Titled section of the sidebar content. */
 function DetailDialogSidebarGroup({ className, ...props }: React.ComponentProps<'div'>) {
   return <div data-slot="sidebar-group" data-sidebar="group" className={cn('relative flex w-full min-w-0 flex-col p-2', className)} {...props} />;
 }
 
-function DetailDialogSidebarGroupLabel({ className, asChild = false, ...props }: React.ComponentProps<'div'> & { asChild?: boolean }) {
+/** Heading of a `DetailDialogSidebarGroup`; hidden when the sidebar is collapsed to icons. */
+function DetailDialogSidebarGroupLabel({
+  className,
+  asChild = false,
+  ...props
+}: React.ComponentProps<'div'> & {
+  /** Render the child element instead of the default tag, merging props onto it. */
+  asChild?: boolean;
+}) {
   const Comp = asChild ? SlotPrimitive.Slot : 'div';
   return (
     <Comp
@@ -66,7 +76,15 @@ function DetailDialogSidebarGroupLabel({ className, asChild = false, ...props }:
   );
 }
 
-function DetailDialogSidebarGroupAction({ className, asChild = false, ...props }: React.ComponentProps<'button'> & { asChild?: boolean }) {
+/** Icon button in a group's header row (e.g. “add”). */
+function DetailDialogSidebarGroupAction({
+  className,
+  asChild = false,
+  ...props
+}: React.ComponentProps<'button'> & {
+  /** Render the child element instead of the default tag, merging props onto it. */
+  asChild?: boolean;
+}) {
   const Comp = asChild ? SlotPrimitive.Slot : 'button';
   return (
     <Comp
@@ -87,10 +105,12 @@ function DetailDialogSidebarGroupAction({ className, asChild = false, ...props }
   );
 }
 
+/** Body of a `DetailDialogSidebarGroup`. */
 function DetailDialogSidebarGroupContent({ className, ...props }: React.ComponentProps<'div'>) {
   return <div data-slot="sidebar-group-content" data-sidebar="group-content" className={cn('w-full text-sm', className)} {...props} />;
 }
 
+/** Secondary action button at the end of a menu row (e.g. a “more” menu). */
 function DetailDialogSidebarMenuAction({
   className,
   asChild = false,
@@ -130,6 +150,7 @@ function DetailDialogSidebarMenuAction({
   );
 }
 
+/** Small count/status badge at the end of a menu row. */
 function DetailDialogSidebarMenuBadge({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
@@ -149,7 +170,15 @@ function DetailDialogSidebarMenuBadge({ className, ...props }: React.ComponentPr
   );
 }
 
-function DetailDialogSidebarMenuSkeleton({ className, showIcon = false, ...props }: React.ComponentProps<'div'> & { showIcon?: boolean }) {
+/** Loading placeholder for a menu row. */
+function DetailDialogSidebarMenuSkeleton({
+  className,
+  showIcon = false,
+  ...props
+}: React.ComponentProps<'div'> & {
+  /** Also render a square icon placeholder before the text bar. */
+  showIcon?: boolean;
+}) {
   const width = useMemo(() => `${Math.floor(Math.random() * 40) + 50}%`, []);
   return (
     <div data-slot="sidebar-menu-skeleton" data-sidebar="menu-skeleton" className={cn('flex h-8 items-center gap-2 rounded-md px-2', className)} {...props}>
@@ -163,6 +192,7 @@ function DetailDialogSidebarMenuSkeleton({ className, showIcon = false, ...props
   );
 }
 
+/** Nested submenu list under a menu item. */
 function DetailDialogSidebarMenuSub({ className, ...props }: React.ComponentProps<'ul'>) {
   return (
     <ul
@@ -178,10 +208,12 @@ function DetailDialogSidebarMenuSub({ className, ...props }: React.ComponentProp
   );
 }
 
+/** One entry of a `DetailDialogSidebarMenuSub`. */
 function DetailDialogSidebarMenuSubItem({ className, ...props }: React.ComponentProps<'li'>) {
   return <li data-slot="sidebar-menu-sub-item" data-sidebar="menu-sub-item" className={cn('group/menu-sub-item relative', className)} {...props} />;
 }
 
+/** Clickable row inside a submenu item. */
 function DetailDialogSidebarMenuSubButton({
   asChild = false,
   size = 'md',
@@ -222,6 +254,7 @@ function DetailDialogSidebarMenuSubButton({
   );
 }
 
+/** Horizontal divider between sidebar sections. */
 function DetailDialogSidebarSeparator({ className, ...props }: React.ComponentProps<typeof Separator>) {
   return <Separator data-slot="sidebar-separator" data-sidebar="separator" className={cn('w-auto bg-sidebar-border', className)} {...props} />;
 }

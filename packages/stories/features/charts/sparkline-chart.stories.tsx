@@ -65,6 +65,6 @@ export const KpiCard: Story = {
     await waitFor(() => {
       expect(canvasElement.querySelector('svg.recharts-surface')).toBeInTheDocument();
     });
-    await expect(canvas.getByText('12,480')).toBeInTheDocument();
+    await expect(canvas.getByText('12.480')).toBeInTheDocument();
   },
 };

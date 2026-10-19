@@ -1,3 +1,5 @@
+'use client';
+
 import { cn } from '@customafk/react-toolkit/utils';
 
 import type { VariantProps } from 'class-variance-authority';

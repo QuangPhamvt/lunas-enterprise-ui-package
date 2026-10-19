@@ -12,6 +12,10 @@ import { UITableCellSelect } from './cell-select';
 
 const SPECIAL_COLUMN_IDS = ['select', 'expand', 'actions'];
 
+/**
+ * One `<tr>` — selection, expansion and the `keyOfClickRow` click target. Rendered by
+ * `UITableContainer`; use it directly only when building a custom table layout.
+ */
 export const UITableRow = memo<TUITableRow>(({ row, isSelected, rowIndex, children, ...props }) => {
   const { keyOfClickRow, isAllRowsSelected, columnPinningState, leftPinnedHeaders, rightPinnedHeaders, onClickRow } = useUITableRowContext();
 

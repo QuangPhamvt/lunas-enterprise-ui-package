@@ -8,6 +8,7 @@ import { DescriptionConfigContext, DescriptionGroupContext, DescriptionSearchCon
 import { type DescriptionVariants, descriptionVariants, type TDescriptionSize } from './descriptions.variants';
 import { DescriptionLoadingSkeleton } from './loading-skeleton';
 
+/** Props for `Description`. */
 export type DescriptionProps = React.PropsWithChildren<{
   /** Additional CSS class names applied to the root wrapper element. */
   className?: string;
@@ -86,8 +87,7 @@ export const Description: React.FC<DescriptionProps> = ({
             gap before the next group's sticky header. */}
         <div data-slot="description-panel" className={surface === 'card' ? '@container/description-panel size-full' : 'w-full'}>
           <div data-slot="description" data-surface={surface} className={cn(descriptionVariants({ surface, bordered: config.bordered }), className)}>
-            {/** biome-ignore lint/complexity/noUselessFragments: more */}
-            {loading ? <DescriptionLoadingSkeleton rows={loadingRows} /> : <>{children}</>}
+            {loading ? <DescriptionLoadingSkeleton rows={loadingRows} /> : children}
           </div>
         </div>
       </DescriptionSearchContext.Provider>

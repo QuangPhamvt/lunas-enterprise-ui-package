@@ -10,24 +10,58 @@ import { Bar, CartesianGrid, ComposedChart, Line, XAxis, YAxis } from 'recharts'
 import type { BaseChartProps } from '../types';
 import { formatCurrency, toDateLabel } from '../utils';
 
+/** Revenue and order count for one time bucket. */
 export type RevenueOrdersPoint = {
+  /** Bucket date — a `Date` or an ISO date string. */
   date: string | Date;
+  /** Revenue for the bucket (area series). */
   revenue: number;
+  /** Number of orders in the bucket (bar series). */
   orders: number;
 };
 
+/** Props for `RevenueOrdersComposedChart`. */
 export type RevenueOrdersComposedChartProps = BaseChartProps & {
+  /** Data points to plot, in display order. */
   data: RevenueOrdersPoint[];
+  /**
+   * Legend label of the revenue (area) series.
+   * @default 'Revenue'
+   */
   revenueLabel?: string;
+  /**
+   * Legend label of the orders (bar) series.
+   * @default 'Orders'
+   */
   ordersLabel?: string;
+  /**
+   * Color of the revenue series.
+   * @default 'var(--chart-1)'
+   */
   revenueColor?: string;
+  /**
+   * Color of the orders series.
+   * @default 'var(--chart-4)'
+   */
   ordersColor?: string;
   /** Formats the left (revenue) axis and tooltip values. Defaults to compact currency. */
   revenueFormatter?: (value: number) => string;
   /** Formats the right (orders) axis and tooltip values. */
   ordersFormatter?: (value: number) => string;
+  /**
+   * Formats dates on the time axis and in the tooltip.
+   * @default toDateLabel
+   */
   dateFormatter?: (date: string | Date) => string;
+  /**
+   * Show the series legend.
+   * @default true
+   */
   showLegend?: boolean;
+  /**
+   * Draw background grid lines.
+   * @default true
+   */
   showGrid?: boolean;
 };
 

@@ -96,7 +96,9 @@ function TimelineIndicator({ className, ...props }: React.ComponentProps<'div'>)
   return <div data-slot="timeline-indicator" className={cn('relative flex flex-col items-center [&>[data-slot=timeline-dot]]:mt-1', className)} {...props} />;
 }
 
+/** Step state of a timeline item — drives the dot's shape and the connector's tint. */
 type TimelineDotStatus = NonNullable<TimelineDotVariants['status']>;
+/** Semantic color token for a timeline dot or connector. */
 type TimelineDotColor = NonNullable<TimelineDotVariants['color']>;
 
 /** Per-status fallback hue, applied when `color` is not passed explicitly. */
@@ -107,23 +109,28 @@ const TIMELINE_DOT_DEFAULT_COLOR: Record<TimelineDotStatus, TimelineDotColor> = 
   error: 'danger',
 };
 
+/** Props for `TimelineDot`. */
 export type TimelineDotProps = React.ComponentProps<'span'> & {
+  /**
+   * Dot shape: `completed` (filled), `current` (filled with a pulsing ring), `upcoming` (hollow
+   * outline) or `error` (filled with a static ring). Independent from `color`. Put a `<CheckIcon />`
+   * in a `completed` dot or an `<XIcon />` in an `error` dot for a stronger signal.
+   * @default 'upcoming'
+   */
   status?: TimelineDotStatus;
+  /**
+   * Dot hue. Defaults per status: `completed` → `success`, `current` → `primary`,
+   * `upcoming` → `muted`, `error` → `danger`.
+   */
   color?: TimelineDotColor;
+  /**
+   * Dot diameter.
+   * @default 'md'
+   */
   size?: TimelineDotVariants['size'];
 };
 
-/**
- * The state/color-driven circular marker for one Timeline step.
- *
- * @param status - Controls the dot's shape: `'completed'` (filled), `'current'` (filled with a
- * pulsing ring), `'upcoming'` (hollow outline, default), or `'error'` (filled with a static ring).
- * Independent from `color`. Put a `<CheckIcon />` inside a `'completed'` dot / a `<XIcon />` inside
- * an `'error'` dot for a stronger signal.
- * @param color - Controls the dot's hue — semantic token (`'primary'` | `'secondary'` | `'muted'` |
- * `'accent'` | `'info'` | `'success'` | `'warning'` | `'danger'`). Defaults to a value derived from `status`.
- * @param size - `'sm'` | `'md'` (default) | `'lg'`.
- */
+/** The state- and color-driven circular marker for one Timeline step. */
 function TimelineDot({ className, status = 'upcoming', color, size = 'md', children, ...props }: TimelineDotProps) {
   const resolvedColor = color ?? TIMELINE_DOT_DEFAULT_COLOR[status];
 
@@ -134,8 +141,15 @@ function TimelineDot({ className, status = 'upcoming', color, size = 'md', child
   );
 }
 
+/** Props for `TimelineConnector`. */
 export type TimelineConnectorProps = React.ComponentProps<'div'> & {
+  /**
+   * Pass the same status as the dot above. Only `completed` tints the segment, so a run of finished
+   * steps reads as a progress track; every other status stays neutral.
+   * @default 'upcoming'
+   */
   status?: TimelineDotStatus;
+  /** Tint used for a `completed` segment. Defaults to the same per-status color as `TimelineDot`. */
   color?: TimelineDotColor;
 };
 

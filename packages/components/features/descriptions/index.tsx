@@ -19,9 +19,9 @@
  */
 export * from './collapsible-section';
 export * from './components';
-export * from './context';
+export type { TDescriptionLabelColSpan, TDescriptionLabelSpan } from './context';
 export * from './description';
-export * from './descriptions.variants';
+export type { TDescriptionSize } from './descriptions.variants';
 export * from './group';
 export * from './header';
 export * from './item';

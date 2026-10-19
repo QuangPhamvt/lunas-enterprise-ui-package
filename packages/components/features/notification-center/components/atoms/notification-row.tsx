@@ -12,7 +12,7 @@ import { cn } from '@customafk/react-toolkit/utils';
  * color is underneath uniformly, instead of needing a hand-picked "next" shade per accent color.
  */
 export const NotificationRow: React.FC<React.ComponentProps<'div'>> = ({ className, children, ...props }) => (
-  <div role="listitem" className={cn('group relative flex items-start gap-3 rounded-none p-3 text-sm', className)} {...props}>
+  <div className={cn('group relative flex items-start gap-3 rounded-none p-3 text-sm', className)} {...props}>
     <span aria-hidden className="pointer-events-none absolute inset-0 bg-black/4 opacity-0 transition-opacity group-hover:opacity-100" />
     {children}
   </div>
@@ -28,8 +28,8 @@ export const NotificationRowActions: React.FC<React.ComponentProps<'div'>> = ({ 
 );
 
 /** Wraps the whole list of {@link NotificationRow}s. */
-export const NotificationRowGroup: React.FC<React.ComponentProps<'div'>> = ({ className, ...props }) => (
-  <div role="list" className={cn('flex flex-col', className)} {...props} />
+export const NotificationRowGroup: React.FC<React.ComponentProps<'ul'>> = ({ className, ...props }) => (
+  <ul className={cn('flex flex-col', className)} {...props} />
 );
 
 /** Thin divider between two {@link NotificationRow}s. */

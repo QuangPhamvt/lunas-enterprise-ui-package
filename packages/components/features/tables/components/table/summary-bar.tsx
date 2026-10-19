@@ -13,6 +13,25 @@ const trendAccent: Record<NonNullable<SummaryItem['trend']>, string> = {
   neutral: 'bg-primary',
 };
 
+/**
+ * Row of KPI cards above the table, built from the provider's `summary` items (each with an
+ * optional trend accent); cards become buttons when `onSummaryItemClick` is set. Renders nothing
+ * while the summary is collapsed or empty. Reads everything from the surrounding `UITableProvider`.
+ *
+ * @example
+ * ```tsx
+ * import { UITableProvider, UITableSummaryBar } from '@customafk/lunas-ui/features/tables';
+ *
+ * <UITableProvider
+ *   data={orders}
+ *   columns={columns}
+ *   summary={[{ label: 'Doanh thu', value: 124_500_000, suffix: '₫', trend: 'up' }]}
+ * >
+ *   <UITableSummaryBar />
+ *   {table}
+ * </UITableProvider>
+ * ```
+ */
 export const UITableSummaryBar = memo(() => {
   const { summary, onSummaryItemClick } = useUITableContext();
   const { isOpen } = useUITableSummaryContext();
@@ -27,6 +46,7 @@ export const UITableSummaryBar = memo(() => {
           const isClickable = !!onSummaryItemClick;
 
           return (
+            // biome-ignore lint/a11y/noStaticElementInteractions: role/tabIndex/onKeyDown are applied together whenever the card is clickable
             <div
               key={item.label}
               className={cn(

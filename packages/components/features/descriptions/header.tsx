@@ -8,6 +8,7 @@ import { Flex } from '@/components/layouts/flex';
 import { DescriptionConfigContext } from './context';
 import { descriptionHeaderDescriptionVariants, descriptionHeaderTitleVariants, descriptionHeaderVariants } from './descriptions.variants';
 
+/** Props for `DescriptionHeader`. */
 export type DescriptionHeaderProps = {
   /** Primary heading text. */
   title: string;

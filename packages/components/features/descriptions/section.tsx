@@ -8,6 +8,7 @@ import { Flex } from '@/components/layouts/flex';
 import { DescriptionConfigContext } from './context';
 import { descriptionSectionVariants } from './descriptions.variants';
 
+/** Props for `DescriptionSection`. */
 export type DescriptionSectionProps = {
   /** Optional section label rendered as uppercase small-caps text beside the divider line. */
   title?: string;

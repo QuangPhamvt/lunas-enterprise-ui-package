@@ -3,6 +3,7 @@ import z from 'zod';
 import { useTanStackForm } from '@/components/features/tanstack-form';
 
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 
 const meta = {
   tags: ['autodocs'],
@@ -114,5 +115,67 @@ export const Disabled: Story = {
         </TanStackContainerForm>
       </div>
     );
+  },
+};
+
+// ─── Behavior tests (hidden from the sidebar and docs; run by `npm run test:storybook`) ───
+
+const TEST_TAGS = ['!dev', '!autodocs'];
+
+export const TestRendering: Story = {
+  tags: TEST_TAGS,
+  render: () => {
+    const { AppField } = useTanStackForm({
+      defaultValues: { name: 'initial' as string | null, email: null as string | null, bare: null as string | null, locked: null as string | null },
+    });
+    return (
+      <div className="grid gap-4" data-testid="fields">
+        <AppField name="name" children={({ SimpleTextField }) => <SimpleTextField label="Full Name" />} />
+        <AppField name="email" children={({ SimpleTextField }) => <SimpleTextField label="Email" required placeholder="Type here…" />} />
+        <AppField name="bare" children={({ SimpleTextField }) => <SimpleTextField maxLength={3} />} />
+        <AppField name="locked" children={({ SimpleTextField }) => <SimpleTextField label="Locked" disabled />} />
+      </div>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(await canvas.findByText('Full Name')).toBeInTheDocument();
+    const [name, email, bare, locked] = await canvas.findAllByRole('textbox');
+    await expect(name).toHaveValue('initial');
+    await expect(email).toHaveValue('');
+    await expect(canvas.getByPlaceholderText('Type here…')).toBe(email);
+    // Only the required field gets an asterisk; the label-less field renders no <label>.
+    await expect(canvas.getAllByText('*')).toHaveLength(1);
+    await expect(canvasElement.querySelectorAll('label')).toHaveLength(3);
+    await expect(locked).toBeDisabled();
+
+    await userEvent.type(email, 'hello');
+    await expect(email).toHaveValue('hello');
+    await userEvent.type(bare, 'abcdef');
+    await expect(bare).toHaveValue('abc');
+  },
+};
+
+export const TestTouchedValidation: Story = {
+  tags: TEST_TAGS,
+  render: () => {
+    const { AppField } = useTanStackForm({ defaultValues: { username: null as string | null } });
+    return (
+      <AppField
+        name="username"
+        validators={{ onBlur: ({ value }) => (value ? undefined : 'Required') }}
+        children={({ SimpleTextField }) => <SimpleTextField label="Username" />}
+      />
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const input = await canvas.findByRole('textbox');
+    // No error before the field is touched…
+    await expect(canvas.queryByRole('alert')).not.toBeInTheDocument();
+    // …and the onBlur validator reports it once the field loses focus.
+    await userEvent.click(input);
+    await userEvent.tab();
+    await waitFor(() => expect(canvas.getByRole('alert')).toHaveTextContent('Required'));
   },
 };

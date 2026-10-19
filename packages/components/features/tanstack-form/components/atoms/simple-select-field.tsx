@@ -16,12 +16,27 @@ import { useTanStackFieldContext } from '../form-context';
 import { FieldError } from '../ui/field';
 
 type Props = {
+  /** Field label rendered above the control. Omit to render label-less. */
   label?: string;
+  /** Placeholder shown when the value is empty. */
   placeholder?: string;
+  /** When `true`, appends a required asterisk to the label. */
   required?: boolean;
+  /** Choices to pick from. */
   options: Array<{ value: string; label: string }>;
 };
 
+/**
+ * Minimal single-select dropdown bound to the surrounding `AppField`. Use it for compact forms;
+ * the non-`Simple` variants add description, tooltip, orientation and helper text.
+ *
+ * @example
+ * ```tsx
+ * const form = useTanStackForm({ defaultValues: { status: null as string | null } });
+ *
+ * <form.AppField name="status" children={({ SimpleSelectField }) => <SimpleSelectField label="Trạng thái" options={statusOptions} placeholder="Chọn trạng thái" />} />
+ * ```
+ */
 export const SimpleSelectField: React.FC<Props> = ({ label, placeholder, required, options }) => {
   const id = useId();
   const { state, handleBlur, handleChange } = useTanStackFieldContext<string | null>();

@@ -11,16 +11,20 @@ import type { ColumnAggregation } from '../../types';
 import { computeAggregation, extractNumericValues } from '../../utils/aggregation';
 import { tableFooterCellVariants, tableFooterRowVariants } from '../table.variants';
 
+/**
+ * `<tfoot>` row showing each column's `meta.aggregation` over all and selected rows. Rendered by
+ * `UITableContainer`; use it directly only when building a custom table layout.
+ */
 export const UITableFooterRow = memo(() => {
   const { table } = useUITableContext();
   const { rowSelectionState } = useUITableBodyContext();
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: table header groups
+  // biome-ignore lint/correctness/useExhaustiveDependencies: TanStack Table mutates a single `table` instance, so the state listed in deps — not `table` itself — is what invalidates this value
   const headers = useMemo(() => table.getHeaderGroups()[0]?.headers ?? [], [table.getHeaderGroups()]);
 
   const hasAggregation = useMemo(() => headers.some(h => (h.column.columnDef.meta as AnyEntity)?.aggregation), [headers]);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: selected rows
+  // biome-ignore lint/correctness/useExhaustiveDependencies: TanStack Table mutates a single `table` instance, so the state listed in deps — not `table` itself — is what invalidates this value
   const selectedRows = useMemo(() => table.getSelectedRowModel().flatRows, [table, rowSelectionState]);
 
   const allRows = useMemo(() => table.getRowModel().rows, [table]);

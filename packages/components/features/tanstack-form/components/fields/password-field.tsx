@@ -29,17 +29,20 @@ import type { PasswordFieldProps as Props } from '../../types';
  * and inline validation error display.
  *
  * @example
- * import { PasswordField } from '@customafk/lunas-ui/features/tanstack-form';
+ * ```tsx
+ * const form = useTanStackForm({ defaultValues: { password: null as string | null } });
  *
- * <form.Field name="password">
- *   {() => (
+ * <form.AppField
+ *   name="password"
+ *   children={({ PasswordField }) => (
  *     <PasswordField
  *       label="Password"
  *       placeholder="Enter your password"
  *       helperText="Must be at least 8 characters"
  *     />
  *   )}
- * </form.Field>
+ * />
+ * ```
  */
 export const PasswordField: React.FC<Props> = ({
   label,

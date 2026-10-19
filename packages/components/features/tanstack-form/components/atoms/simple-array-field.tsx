@@ -19,6 +19,7 @@ type ArrayColProps = {
    * remaining row space (`flex: 1`).
    */
   width?: number | string;
+  /** Class names for the column cell. */
   className?: string;
   children: React.ReactNode;
 };
@@ -57,6 +58,7 @@ export function ArrayCol({ width, className, children }: ArrayColProps) {
 // ─── ArrayHeaderRow ────────────────────────────────────────────────────────
 
 type ArrayHeaderRowProps = {
+  /** Class names for the header row. */
   className?: string;
   children: React.ReactNode;
 };
@@ -89,6 +91,7 @@ export function ArrayHeaderRow({ className, children }: ArrayHeaderRowProps) {
 
 // ─── SimpleArrayField ──────────────────────────────────────────────────────
 
+/** Props for `SimpleArrayField`. */
 export type SimpleArrayFieldProps<T> = {
   /**
    * Shape of a brand-new empty row appended when the user clicks "Add row".
@@ -101,6 +104,7 @@ export type SimpleArrayFieldProps<T> = {
   children: (index: number) => React.ReactNode;
   /** Label on the add button. Defaults to `'Add row'`. */
   addLabel?: string;
+  /** Class names for the field wrapper. */
   className?: string;
 };
 
@@ -109,6 +113,7 @@ export type SimpleArrayFieldProps<T> = {
  * freely compose any fields inside each row.
  *
  * @example
+ * ```tsx
  * const { AppForm, AppField } = useTanStackForm({ defaultValues: { items: [] } });
  *
  * <AppForm>
@@ -129,6 +134,7 @@ export type SimpleArrayFieldProps<T> = {
  *     )}
  *   </AppField>
  * </AppForm>
+ * ```
  */
 export function SimpleArrayField<T>({ defaultRow, children, addLabel = 'Thêm hàng', className }: SimpleArrayFieldProps<T>) {
   const field = useTanStackFieldContext<T[]>();

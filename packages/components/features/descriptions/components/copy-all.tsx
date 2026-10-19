@@ -57,16 +57,19 @@ function buildPanelText(root: HTMLElement): string {
   return lines.join('\n');
 }
 
+/** Props for `DescriptionCopyAll`. */
 export type DescriptionCopyAllProps = {
   /** Accessible label / tooltip text for the button. @default 'Sao chép toàn bộ' */
   label?: string;
+  /** Class names for the button. */
   className?: string;
 };
 
 /**
  * A small icon button that copies every visible `label: value` pair of the nearest ancestor
- * `Description`/`DescriptionGroup` as plain text — place it explicitly wherever you want it, typically
- * inside `DescriptionHeader`'s `extra` slot: `<DescriptionHeader extra={<DescriptionCopyAll />} />`.
+ * `Description`/`DescriptionGroup` as plain text — place it explicitly wherever you want it,
+ * typically inside `DescriptionHeader`'s `extra` slot: `<DescriptionHeader
+ * extra={<DescriptionCopyAll />} />`.
  *
  * Reads the *rendered DOM* rather than any props, because a value cell can render arbitrary nodes —
  * the only universally correct "what's currently displayed" is what's actually painted. Section/header

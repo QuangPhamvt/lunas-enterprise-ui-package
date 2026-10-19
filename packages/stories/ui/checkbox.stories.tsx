@@ -1,6 +1,8 @@
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
+
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, fn, userEvent, within } from 'storybook/test';
 
 const meta = {
   title: 'Components/Checkbox',
@@ -44,5 +46,39 @@ export const Default: Story = {
         </Label>
       </div>
     );
+  },
+};
+
+// ─── Behavior tests (hidden from the sidebar and docs; run by `npm run test:storybook`) ───
+
+const TEST_TAGS = ['!dev', '!autodocs'];
+
+export const TestCheckedChange: Story = {
+  tags: TEST_TAGS,
+  args: { onCheckedChange: fn() },
+  render: args => (
+    <div className="flex gap-3">
+      <Checkbox aria-label="unchecked" onCheckedChange={args.onCheckedChange} />
+      <Checkbox aria-label="checked" checked onCheckedChange={args.onCheckedChange} />
+      <Checkbox aria-label="disabled" disabled onCheckedChange={args.onCheckedChange} />
+      <Checkbox aria-label="invalid" aria-invalid />
+    </div>
+  ),
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    const unchecked = canvas.getByRole('checkbox', { name: 'unchecked' });
+    await expect(unchecked).toHaveAttribute('data-slot', 'checkbox');
+
+    await userEvent.click(unchecked);
+    await expect(args.onCheckedChange).toHaveBeenLastCalledWith(true);
+    await userEvent.click(canvas.getByRole('checkbox', { name: 'checked' }));
+    await expect(args.onCheckedChange).toHaveBeenLastCalledWith(false);
+
+    const disabled = canvas.getByRole('checkbox', { name: 'disabled' });
+    await expect(disabled).toBeDisabled();
+    await userEvent.click(disabled, { pointerEventsCheck: 0 });
+    await expect(args.onCheckedChange).toHaveBeenCalledTimes(2);
+
+    await expect(canvas.getByRole('checkbox', { name: 'invalid' })).toHaveAttribute('aria-invalid', 'true');
   },
 };

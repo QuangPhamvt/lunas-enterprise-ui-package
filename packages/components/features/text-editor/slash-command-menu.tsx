@@ -1,11 +1,12 @@
 'use client';
 
-import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
+import { useEffect, useImperativeHandle, useState } from 'react';
 
 import { cn } from '@customafk/react-toolkit/utils';
 
 import type { SlashCommandItem } from './slash-command';
 
+/** Props for `SlashCommandMenu`. */
 export interface SlashCommandMenuProps {
   items: SlashCommandItem[];
   command: (item: SlashCommandItem) => void;
@@ -15,7 +16,7 @@ export interface SlashCommandMenuHandle {
   onKeyDown: (props: { event: KeyboardEvent }) => boolean;
 }
 
-const SlashCommandMenu = forwardRef<SlashCommandMenuHandle, SlashCommandMenuProps>(({ items, command }, ref) => {
+const SlashCommandMenu = ({ items, command, ref }: SlashCommandMenuProps & { ref?: React.Ref<SlashCommandMenuHandle> }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   useEffect(() => {
@@ -79,7 +80,7 @@ const SlashCommandMenu = forwardRef<SlashCommandMenuHandle, SlashCommandMenuProp
       })}
     </div>
   );
-});
+};
 SlashCommandMenu.displayName = 'SlashCommandMenu';
 
 export { SlashCommandMenu };

@@ -9,6 +9,10 @@ import { SELECT_WIDTH, TABLE_HEADER_Z_INDEX } from '../../constants';
 import type { TUITableHeadCellSelect } from '../../types';
 import { tableCellSelectVariants } from '../table.variants';
 
+/**
+ * Header cell with the “select all rows” checkbox. Rendered by `UITableContainer`; use it directly
+ * only when building a custom table layout.
+ */
 export const UITableHeadCellSelect = memo<TUITableHeadCellSelect>(
   ({ isPinned, isLastCell, isAllRowsSelected, style, className, onToggleAllRowsSelected, ...props }) => {
     const handleToggleAllRowsSelected = useCallback(
@@ -25,6 +29,8 @@ export const UITableHeadCellSelect = memo<TUITableHeadCellSelect>(
         className={cn(tableCellSelectVariants({ isPinned, isLastCell }), className)}
         {...props}
       >
+        {/* biome-ignore lint/a11y/noStaticElementInteractions: only stops the click reaching the header; the Checkbox inside is the keyboard-accessible control */}
+        {/* biome-ignore lint/a11y/useKeyWithClickEvents: only stops the click reaching the header; the Checkbox inside is the keyboard-accessible control */}
         <div
           className="absolute inset-0 flex items-center justify-center"
           onClick={e => {

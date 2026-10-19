@@ -18,6 +18,7 @@ export const SIDEBAR_WIDTH = '18rem';
 export const SIDEBAR_WIDTH_ICON = '3rem';
 export const SIDEBAR_KEYBOARD_SHORTCUT = 'p';
 
+/** Value provided by `SidebarContext`. */
 export type SidebarContextProps = {
   /** Current visual state of the sidebar. */
   state: 'expanded' | 'collapsed';
@@ -147,11 +148,30 @@ function SidebarProvider({
  *
  * @example
  * ```tsx
- * import { Sidebar } from '@customafk/lunas-ui/dialogs/detail-dialog/components/sidebar';
+ * import {
+ *   DetailDialogSidebarContent,
+ *   DetailDialogSidebarHeader,
+ *   DetailDialogSidebarMenu,
+ *   DetailDialogSidebarMenuButton,
+ *   DetailDialogSidebarMenuItem,
+ *   Sidebar,
+ *   SidebarInset,
+ *   SidebarProvider,
+ * } from '@customafk/lunas-ui/dialogs/detail-dialog/components/sidebar';
  *
- * <Sidebar side="left">
- *   {children}
- * </Sidebar>
+ * <SidebarProvider>
+ *   <Sidebar side="left">
+ *     <DetailDialogSidebarHeader>Đơn hàng</DetailDialogSidebarHeader>
+ *     <DetailDialogSidebarContent>
+ *       <DetailDialogSidebarMenu>
+ *         <DetailDialogSidebarMenuItem>
+ *           <DetailDialogSidebarMenuButton isActive tooltip="Tổng quan">Tổng quan</DetailDialogSidebarMenuButton>
+ *         </DetailDialogSidebarMenuItem>
+ *       </DetailDialogSidebarMenu>
+ *     </DetailDialogSidebarContent>
+ *   </Sidebar>
+ *   <SidebarInset>{content}</SidebarInset>
+ * </SidebarProvider>
  * ```
  */
 function Sidebar({
@@ -236,10 +256,12 @@ function DetailDialogSidebarTrigger({ className, onClick, ...props }: React.Comp
   );
 }
 
+/** Sticky top section of the sidebar (title, search, …). */
 function DetailDialogSidebarHeader({ className, ...props }: React.ComponentProps<'div'>) {
   return <div data-slot="sidebar-header" data-sidebar="header" className={cn('flex flex-col gap-2 p-2', className)} {...props} />;
 }
 
+/** Bottom section of the sidebar, pinned below the scrollable content. */
 function DetailDialogSidebarFooter({ className, children, ...props }: React.ComponentProps<'div'>) {
   const { open } = useSidebar();
   return (
@@ -256,6 +278,7 @@ function DetailDialogSidebarFooter({ className, children, ...props }: React.Comp
   );
 }
 
+/** Scrollable middle section that holds the sidebar's groups and menus. */
 function DetailDialogSidebarContent({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
@@ -267,10 +290,12 @@ function DetailDialogSidebarContent({ className, ...props }: React.ComponentProp
   );
 }
 
+/** List (`<ul>`) of `DetailDialogSidebarMenuItem`s. */
 function DetailDialogSidebarMenu({ className, ...props }: React.ComponentProps<'ul'>) {
   return <ul data-slot="sidebar-menu" data-sidebar="menu" className={cn('flex w-full min-w-0 flex-col gap-1', className)} {...props} />;
 }
 
+/** One entry (`<li>`) of a `DetailDialogSidebarMenu`. */
 function DetailDialogSidebarMenuItem({ className, ...props }: React.ComponentProps<'li'>) {
   return <li data-slot="sidebar-menu-item" data-sidebar="menu-item" className={cn('group/menu-item relative', className)} {...props} />;
 }
@@ -313,6 +338,7 @@ const sidebarMenuButtonVariants = cva(
   }
 );
 
+/** Clickable row inside a menu item; shows a tooltip with its label when the sidebar is collapsed to icons. */
 function DetailDialogSidebarMenuButton({
   asChild = false,
   isActive = false,
@@ -322,8 +348,11 @@ function DetailDialogSidebarMenuButton({
   className,
   ...props
 }: React.ComponentProps<'button'> & {
+  /** Render the child element (e.g. a router link) instead of a `<button>`, merging props onto it. */
   asChild?: boolean;
+  /** Highlight the row as the current page/section. */
   isActive?: boolean;
+  /** Tooltip shown while the sidebar is collapsed to icons — text, or full `TooltipContent` props. */
   tooltip?: string | React.ComponentProps<typeof TooltipContent>;
 } & VariantProps<typeof sidebarMenuButtonVariants>) {
   const Comp = asChild ? SlotPrimitive.Slot : 'button';
@@ -364,8 +393,8 @@ export {
   DetailDialogSidebarTrigger,
   Sidebar,
   SidebarProvider,
-  // biome-ignore lint/style/useComponentExportOnlyModules: true
+  // biome-ignore lint/style/useComponentExportOnlyModules: the hook is part of this component's public API
   useSidebar,
-  // biome-ignore lint/style/useComponentExportOnlyModules: true
+  // biome-ignore lint/style/useComponentExportOnlyModules: the hook is part of this component's public API
   useSidebarState,
 };

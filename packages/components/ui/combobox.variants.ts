@@ -31,4 +31,5 @@ export const comboboxVariants = cva(
   }
 );
 
+/** Variant props of `Combobox` (its `cva` style options). */
 export type ComboboxVariantProps = VariantProps<typeof comboboxVariants>;

@@ -11,8 +11,14 @@ import { Treemap } from 'recharts';
 import type { BaseChartProps, PortfolioHolding } from '../types';
 import { formatCompactNumber, getChartColor } from '../utils';
 
+/** Props for `PortfolioAllocationTreemap`. */
 export type PortfolioAllocationTreemapProps = BaseChartProps & {
+  /** Data points to plot, in display order. */
   data: PortfolioHolding[];
+  /**
+   * Formats values in the tooltip and on the value axis.
+   * @default formatCompactNumber
+   */
   valueFormatter?: (value: number) => string;
   /** Shows the holding name and formatted value inside each rect when it fits. Defaults to `true`. */
   showLabels?: boolean;

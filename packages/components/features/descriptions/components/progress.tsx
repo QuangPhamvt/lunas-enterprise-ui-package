@@ -23,21 +23,39 @@ const BAR_HEIGHT: Record<'xs' | 'sm' | 'md', string> = {
 };
 
 type DescriptionProgressProps = {
+  /** Current value; `null`/`NaN` renders the empty placeholder. */
   value: number | null | undefined;
-  /** @default 100 */
+  /**
+   * Value that counts as 100%.
+   * @default 100
+   */
   max?: number;
-  /** @default true */
+  /**
+   * Show the percentage next to the bar.
+   * @default true
+   */
   showValue?: boolean;
   /** Bar thickness. @default 'sm' */
   size?: 'xs' | 'sm' | 'md';
-  /** @default 'primary' */
+  /**
+   * Bar color.
+   * @default 'primary'
+   */
   color?: DescriptionProgressColor;
 };
 
 /**
- * Thin-wraps `ui/progress` for use as a description value. `value={0}` renders a (visually empty) bar,
- * not `DescriptionEmpty` — 0% progress is real information, unlike `DescriptionStatistic`'s `0`-hides-by-default
- * behavior for currency-like values, where an unset field and a genuine zero amount are indistinguishable.
+ * Thin-wraps `ui/progress` for use as a description value. `value={0}` renders a (visually empty)
+ * bar, not `DescriptionEmpty` — 0% progress is real information, unlike `DescriptionStatistic`'s
+ * `0`-hides-by-default behavior for currency-like values, where an unset field and a genuine zero
+ * amount are indistinguishable.
+ *
+ * @example
+ * ```tsx
+ * <DescriptionItem label="…">
+ *   <DescriptionProgress value={campaign.sent} max={campaign.total} />
+ * </DescriptionItem>
+ * ```
  */
 export const DescriptionProgress: React.FC<DescriptionProgressProps> = ({ value, max = 100, showValue = true, size = 'sm', color = 'primary' }) => {
   if (value == null || Number.isNaN(value)) return <DescriptionEmpty />;

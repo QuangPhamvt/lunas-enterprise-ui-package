@@ -356,18 +356,54 @@ export type DateFieldProps = {
  * }
  */
 export type AnyFieldProps =
-  | ({ fieldType: 'text' } & TextFieldProps)
-  | ({ fieldType: 'textarea' } & TextareaFieldProps)
-  | ({ fieldType: 'text-editor' } & TextEditorFieldProps)
-  | ({ fieldType: 'email' } & EmailFieldProps)
-  | ({ fieldType: 'number' } & NumberFieldProps)
-  | ({ fieldType: 'password' } & PasswordFieldProps)
-  | ({ fieldType: 'select' } & SelectFieldProps)
-  | ({ fieldType: 'combobox' } & ComboboxFieldProps)
-  | ({ fieldType: 'radio-group' } & RadioGroupFieldProps)
-  | ({ fieldType: 'checkbox' } & CheckboxFieldProps)
-  | ({ fieldType: 'switch' } & SwitchFieldProps)
-  | ({ fieldType: 'date' } & DateFieldProps);
+  | ({
+      /** Which field component to render. */
+      fieldType: 'text';
+    } & TextFieldProps)
+  | ({
+      /** Which field component to render. */
+      fieldType: 'textarea';
+    } & TextareaFieldProps)
+  | ({
+      /** Which field component to render. */
+      fieldType: 'text-editor';
+    } & TextEditorFieldProps)
+  | ({
+      /** Which field component to render. */
+      fieldType: 'email';
+    } & EmailFieldProps)
+  | ({
+      /** Which field component to render. */
+      fieldType: 'number';
+    } & NumberFieldProps)
+  | ({
+      /** Which field component to render. */
+      fieldType: 'password';
+    } & PasswordFieldProps)
+  | ({
+      /** Which field component to render. */
+      fieldType: 'select';
+    } & SelectFieldProps)
+  | ({
+      /** Which field component to render. */
+      fieldType: 'combobox';
+    } & ComboboxFieldProps)
+  | ({
+      /** Which field component to render. */
+      fieldType: 'radio-group';
+    } & RadioGroupFieldProps)
+  | ({
+      /** Which field component to render. */
+      fieldType: 'checkbox';
+    } & CheckboxFieldProps)
+  | ({
+      /** Which field component to render. */
+      fieldType: 'switch';
+    } & SwitchFieldProps)
+  | ({
+      /** Which field component to render. */
+      fieldType: 'date';
+    } & DateFieldProps);
 
 /** The `fieldType` discriminant extracted from {@link AnyFieldProps}. */
 export type FieldType = AnyFieldProps['fieldType'];

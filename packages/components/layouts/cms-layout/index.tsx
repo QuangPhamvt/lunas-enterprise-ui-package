@@ -51,6 +51,7 @@ type NavGroup = {
 
 export type { CMSLayoutUser };
 
+/** Props for `CMSLayout`. */
 export type CMSLayoutProps = {
   /** Text label used by the header for language-toggle or i18n display. */
   i18nText?: string;

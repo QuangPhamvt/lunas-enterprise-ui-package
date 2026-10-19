@@ -120,6 +120,7 @@ export const DisabledTrigger: Story = {
   render: () => (
     <Tooltip>
       <TooltipTrigger asChild>
+        {/* biome-ignore lint/a11y/noNoninteractiveTabindex: Radix-recommended wrapper so a disabled button can still be focused to reveal its tooltip */}
         <span tabIndex={0}>
           <Button variant="outline" color="muted" disabled className="pointer-events-none">
             Nút bị khoá

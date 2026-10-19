@@ -10,6 +10,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 
+/** Groups related fields in a native `<fieldset>`, tightening the gap around checkbox/radio groups. */
 const FieldSet = memo(({ className, ...props }: React.ComponentProps<'fieldset'>) => {
   return (
     <fieldset
@@ -21,18 +22,32 @@ const FieldSet = memo(({ className, ...props }: React.ComponentProps<'fieldset'>
 });
 FieldSet.displayName = 'FieldSet';
 
-const FieldLegend = memo(({ className, variant = 'legend', ...props }: React.ComponentProps<'legend'> & { variant?: 'legend' | 'label' }) => {
-  return (
-    <legend
-      data-slot="field-legend"
-      data-variant={variant}
-      className={cn('mb-3 font-medium', 'data-[variant=legend]:text-base', 'data-[variant=label]:text-sm', className)}
-      {...props}
-    />
-  );
-});
+/** `<legend>` for a `FieldSet`; `variant="label"` renders it at label size instead of heading size. */
+const FieldLegend = memo(
+  ({
+    className,
+    variant = 'legend',
+    ...props
+  }: React.ComponentProps<'legend'> & {
+    /**
+     * Text size: `legend` (heading) or `label` (matches `FieldLabel`).
+     * @default 'legend'
+     */
+    variant?: 'legend' | 'label';
+  }) => {
+    return (
+      <legend
+        data-slot="field-legend"
+        data-variant={variant}
+        className={cn('mb-3 font-medium', 'data-[variant=legend]:text-base', 'data-[variant=label]:text-sm', className)}
+        {...props}
+      />
+    );
+  }
+);
 FieldLegend.displayName = 'FieldLegend';
 
+/** Stacks several `Field`s and is the container-query root that `orientation="responsive"` reacts to. */
 const FieldGroup = memo(({ className, ...props }: React.ComponentProps<'div'>) => {
   return (
     <div
@@ -73,16 +88,38 @@ const fieldVariants = cva('group/field flex w-full gap-3 data-[invalid=true]:tex
   },
 });
 
+/**
+ * One form control with its label, description and error. Lay it out with `orientation`:
+ * `vertical` (label above), `horizontal` (label beside) or `responsive` (vertical until the parent
+ * `FieldGroup` is at least `md` wide).
+ *
+ * @example
+ * ```tsx
+ * import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from '@customafk/lunas-ui/ui/field';
+ * import { Input } from '@customafk/lunas-ui/ui/input';
+ *
+ * <FieldGroup>
+ *   <Field orientation="responsive" data-invalid={!!error}>
+ *     <FieldLabel htmlFor="email">Email</FieldLabel>
+ *     <Input id="email" type="email" aria-invalid={!!error} />
+ *     <FieldDescription>Dùng để đăng nhập.</FieldDescription>
+ *     <FieldError errors={error ? [{ message: error }] : undefined} />
+ *   </Field>
+ * </FieldGroup>
+ * ```
+ */
 const Field = memo(({ className, orientation = 'vertical', ...props }: React.ComponentProps<'div'> & VariantProps<typeof fieldVariants>) => {
   return <div data-slot="field" data-orientation={orientation} className={cn(fieldVariants({ orientation }), className)} {...props} />;
 });
 Field.displayName = 'Field';
 
+/** Wraps a field's label and description when they sit beside the control in a horizontal `Field`. */
 const FieldContent = memo(({ className, ...props }: React.ComponentProps<'div'>) => {
   return <div data-slot="field-content" className={cn('group/field-content flex basis-2/5 flex-col gap-1.5 leading-snug', className)} {...props} />;
 });
 FieldContent.displayName = 'FieldContent';
 
+/** Label for a `Field`'s control; wrapping a whole `Field` turns it into a selectable card. */
 const FieldLabel = memo(({ className, ...props }: React.ComponentProps<typeof Label>) => {
   return (
     <Label
@@ -105,6 +142,7 @@ const FieldLabel = memo(({ className, ...props }: React.ComponentProps<typeof La
 });
 FieldLabel.displayName = 'FieldLabel';
 
+/** Label-styled text for a field whose control is not a labelable element (e.g. a card choice). */
 const FieldTitle = memo(({ className, ...props }: React.ComponentProps<'div'>) => {
   return (
     <div
@@ -116,6 +154,7 @@ const FieldTitle = memo(({ className, ...props }: React.ComponentProps<'div'>) =
 });
 FieldTitle.displayName = 'FieldTitle';
 
+/** Helper text under (or beside) a field's label. */
 const FieldDescription = memo(({ className, ...props }: React.ComponentProps<'p'>) => {
   return (
     <p
@@ -132,6 +171,7 @@ const FieldDescription = memo(({ className, ...props }: React.ComponentProps<'p'
 });
 FieldDescription.displayName = 'FieldDescription';
 
+/** Horizontal rule between fields, optionally with centered text such as “hoặc”. */
 const FieldSeparator = memo(
   ({
     children,
@@ -159,6 +199,7 @@ const FieldSeparator = memo(
 );
 FieldSeparator.displayName = 'FieldSeparator';
 
+/** Validation message area (`role="alert"`): renders `children`, or one/many `errors[].message`; renders nothing when both are empty. */
 const FieldError = memo(
   ({
     className,
@@ -166,6 +207,7 @@ const FieldError = memo(
     errors,
     ...props
   }: React.ComponentProps<'div'> & {
+    /** Validation errors (e.g. from a form library); ignored when `children` is passed. */
     errors?: Array<{ message?: string } | undefined>;
   }) => {
     const content = useMemo(() => {

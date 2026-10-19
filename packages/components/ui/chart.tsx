@@ -9,11 +9,28 @@ import { Legend, ResponsiveContainer, Tooltip } from 'recharts';
 
 const THEMES = { light: '', dark: '.dark' } as const;
 
+/**
+ * Per-series display config, keyed by the series' `dataKey` (or `nameKey` value). Each key becomes a
+ * `--color-<key>` CSS variable on the chart, so series can use `fill="var(--color-revenue)"`.
+ */
 export type ChartConfig = {
   [k in string]: {
+    /** Human-readable series name shown in tooltips and the legend. */
     label?: React.ReactNode;
+    /** Icon rendered instead of the color swatch in tooltips and the legend. */
     icon?: React.ComponentType;
-  } & ({ color?: string; theme?: never } | { color?: never; theme: Record<keyof typeof THEMES, string> });
+  } & (
+    | {
+        /** One color for both themes — any CSS color, including `var(--token)`. */
+        color?: string;
+        theme?: never;
+      }
+    | {
+        color?: never;
+        /** Separate colors for the light and dark theme. */
+        theme: Record<keyof typeof THEMES, string>;
+      }
+  );
 };
 
 type ChartContextProps = {
@@ -22,6 +39,7 @@ type ChartContextProps = {
 
 const ChartContext = createContext<ChartContextProps | null>(null);
 
+/** Reads the nearest `ChartContainer`'s config; throws outside a `ChartContainer`. */
 export const useChart = () => {
   const context = useContext(ChartContext);
   if (!context) {
@@ -30,14 +48,40 @@ export const useChart = () => {
   return context;
 };
 
+/** Props for `ChartContainer`. */
 export type ChartContainerProps = React.ComponentProps<'div'> & {
+  /** Series labels, icons and colors — see {@link ChartConfig}. */
   config: ChartConfig;
+  /** A single recharts chart element (`<BarChart>`, `<LineChart>`, …). */
   children: React.ComponentProps<typeof ResponsiveContainer>['children'];
 };
 
+/**
+ * Responsive wrapper for a recharts chart: provides the `config` context to `ChartTooltipContent` /
+ * `ChartLegendContent`, emits one `--color-<key>` CSS variable per configured series (switching with
+ * the `.dark` theme), and restyles recharts' grid, axis and cursor with the design tokens.
+ *
+ * @example
+ * ```tsx
+ * import { Bar, BarChart, XAxis } from 'recharts';
+ * import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@customafk/lunas-ui/ui/chart';
+ *
+ * const config = { revenue: { label: 'Doanh thu', color: 'var(--color-primary)' } } satisfies ChartConfig;
+ *
+ * <ChartContainer config={config} className="h-64 w-full">
+ *   <BarChart data={data}>
+ *     <XAxis dataKey="month" />
+ *     <ChartTooltip content={<ChartTooltipContent />} />
+ *     <Bar dataKey="revenue" fill="var(--color-revenue)" radius={4} />
+ *   </BarChart>
+ * </ChartContainer>
+ * ```
+ * @see https://recharts.org/en-US/api
+ */
 export const ChartContainer = ({ id, className, children, config, ...props }: ChartContainerProps) => {
   const uniqueId = useId();
-  const chartId = `chart-${id || uniqueId.replace(/:/g, '')}`;
+  // Restricted to CSS-identifier characters: the id is interpolated into the <style> selector below.
+  const chartId = `chart-${(id || uniqueId).replace(/[^a-zA-Z0-9_-]/g, '')}`;
 
   return (
     <ChartContext.Provider value={{ config }}>
@@ -73,6 +117,7 @@ export const ChartContainer = ({ id, className, children, config, ...props }: Ch
 const SAFE_CSS_COLOR_PATTERN = /^[a-zA-Z0-9#(),.%\s/_-]+$/;
 const SAFE_CSS_KEY_PATTERN = /^[a-zA-Z0-9_-]+$/;
 
+/** Injects the `--color-<key>` variables for one chart; rendered by `ChartContainer`, rarely used directly. */
 export const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
   const colorConfig = Object.entries(config).filter(([key, itemConfig]) => (itemConfig.theme || itemConfig.color) && SAFE_CSS_KEY_PATTERN.test(key));
 
@@ -88,7 +133,7 @@ export const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) 
         })
         .filter(Boolean)
         .join('\n');
-      return `${prefix} [data-chart=${id}] {\n${rules}\n}`;
+      return `${prefix} [data-chart="${id}"] {\n${rules}\n}`;
     })
     .join('\n');
 
@@ -96,20 +141,32 @@ export const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) 
   return <style dangerouslySetInnerHTML={{ __html: css }} />;
 };
 
+/** recharts `Tooltip`, re-exported — pass `content={<ChartTooltipContent />}` for the themed tooltip. */
 export const ChartTooltip = Tooltip;
 
 type TooltipItemPayload = NonNullable<TooltipContentProps<number | string, string>['payload']>[number];
 
+/** Props for `ChartTooltipContent`; `active`, `payload` and `label` are injected by recharts. */
 export type ChartTooltipContentProps = React.ComponentProps<'div'> &
   Partial<Pick<TooltipContentProps<number | string, string>, 'active' | 'payload' | 'label' | 'labelFormatter' | 'formatter'>> & {
+    /** Hide the heading row (usually the x-axis value). */
     hideLabel?: boolean;
+    /** Hide the color swatch next to each series. */
     hideIndicator?: boolean;
+    /**
+     * Swatch shape next to each series.
+     * @default 'dot'
+     */
     indicator?: 'line' | 'dot' | 'dashed';
+    /** Payload field whose value selects the `ChartConfig` entry for each row (defaults to the series name). */
     nameKey?: string;
+    /** Payload field whose value selects the `ChartConfig` entry used as the heading. */
     labelKey?: string;
+    /** Class names for the heading row. */
     labelClassName?: string;
   };
 
+/** Themed tooltip body for `ChartTooltip`: a heading plus one row per series, labelled from `ChartConfig`. */
 export const ChartTooltipContent = ({
   active,
   payload,
@@ -208,15 +265,25 @@ export const ChartTooltipContent = ({
   );
 };
 
+/** recharts `Legend`, re-exported — pass `content={<ChartLegendContent />}` for the themed legend. */
 export const ChartLegend = Legend;
 
+/** Props for `ChartLegendContent`; `payload` and `verticalAlign` are injected by recharts. */
 export type ChartLegendContentProps = React.ComponentProps<'div'> & {
+  /** Legend entries, injected by recharts. */
   payload?: readonly LegendPayload[];
+  /**
+   * Which side of the chart the legend sits on; adds spacing on the side facing the chart.
+   * @default 'bottom'
+   */
   verticalAlign?: 'top' | 'bottom' | 'middle';
+  /** Always show the color swatch, even when the `ChartConfig` entry has an `icon`. */
   hideIcon?: boolean;
+  /** Payload field whose value selects the `ChartConfig` entry for each item. */
   nameKey?: string;
 };
 
+/** Themed legend body for `ChartLegend`: one swatch (or config icon) and label per series. */
 export const ChartLegendContent = ({ className, hideIcon = false, payload, verticalAlign = 'bottom', nameKey }: ChartLegendContentProps) => {
   const { config } = useChart();
 

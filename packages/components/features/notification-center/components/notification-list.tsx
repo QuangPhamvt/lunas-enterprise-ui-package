@@ -9,13 +9,21 @@ import type { NotificationItemData } from '../types';
 import { NotificationRowGroup, NotificationRowSeparator } from './atoms/notification-row';
 import { NotificationItem } from './notification-item';
 
+/** Props for `NotificationList`. */
 export type NotificationListProps = {
+  /** Notifications to render, newest first. */
   notifications: NotificationItemData[];
+  /** Show a spinner under the list (a page is loading). */
   isLoading?: boolean;
+  /** Show the “Xem thêm” button (needs `onLoadMore`). */
   hasMore?: boolean;
+  /** Text shown when the list is empty. */
   emptyLabel?: string;
+  /** Called by the “Xem thêm” button. */
   onLoadMore?: () => void;
+  /** Called with a notification's uuid when its “mark as read” button is clicked. */
   onMarkAsRead?: (notificationUuid: string) => void;
+  /** Called when a row is clicked. */
   onItemClick?: (notification: NotificationItemData) => void;
 };
 
@@ -23,7 +31,17 @@ export type NotificationListProps = {
  * Scrollable list of {@link NotificationItem} rows with an empty state and a "load more" affordance.
  * Purely presentational — the consuming app owns fetching/pagination and passes `notifications` in.
  *
- * **Import:** `import { NotificationList } from '@customafk/lunas-ui/features/notification-center'`
+ * @example
+ * ```tsx
+ * import { NotificationList } from '@customafk/lunas-ui/features/notification-center';
+ *
+ * <NotificationList
+ *   notifications={items}
+ *   hasMore={hasNextPage}
+ *   onLoadMore={fetchNextPage}
+ *   onMarkAsRead={markAsRead}
+ * />
+ * ```
  */
 export const NotificationList: React.FC<NotificationListProps> = ({
   notifications,
@@ -39,13 +57,15 @@ export const NotificationList: React.FC<NotificationListProps> = ({
   }
 
   return (
-    <NotificationRowGroup data-slot="notification-list">
-      {notifications.map((notification, index) => (
-        <div key={notification.uuid}>
-          <NotificationItem notification={notification} onMarkAsRead={onMarkAsRead} onClick={onItemClick} />
-          {index < notifications.length - 1 && <NotificationRowSeparator />}
-        </div>
-      ))}
+    <div data-slot="notification-list" className="flex flex-col">
+      <NotificationRowGroup>
+        {notifications.map((notification, index) => (
+          <li key={notification.uuid}>
+            <NotificationItem notification={notification} onMarkAsRead={onMarkAsRead} onClick={onItemClick} />
+            {index < notifications.length - 1 && <NotificationRowSeparator />}
+          </li>
+        ))}
+      </NotificationRowGroup>
       {!!isLoading && (
         <div className="flex items-center justify-center py-4 text-text-positive-muted">
           <Loader2Icon className="size-4 animate-spin" />
@@ -56,6 +76,6 @@ export const NotificationList: React.FC<NotificationListProps> = ({
           Xem thêm
         </Button>
       )}
-    </NotificationRowGroup>
+    </div>
   );
 };

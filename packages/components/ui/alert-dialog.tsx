@@ -126,7 +126,7 @@ function AlertDialogDescription({ className, ...props }: React.ComponentProps<ty
 
 /** Confirm button that closes the dialog and proceeds with the action; auto-focused and styled as the primary action. */
 function AlertDialogAction({ className, ...props }: React.ComponentProps<typeof AlertDialogPrimitive.Action>) {
-  return <AlertDialogPrimitive.Action className={cn(buttonVariants(), 'min-w-24', className)} {...props} autoFocus tabIndex={1} />;
+  return <AlertDialogPrimitive.Action className={cn(buttonVariants(), 'min-w-24', className)} {...props} autoFocus />;
 }
 
 /** Cancel button that closes the alert dialog without performing the destructive action. */
