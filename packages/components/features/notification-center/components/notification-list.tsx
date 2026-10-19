@@ -9,6 +9,7 @@ import type { NotificationItemData } from '../types';
 import { NotificationRowGroup, NotificationRowSeparator } from './atoms/notification-row';
 import { NotificationItem } from './notification-item';
 
+/** Props for `NotificationList`. */
 export type NotificationListProps = {
   notifications: NotificationItemData[];
   isLoading?: boolean;

@@ -10,6 +10,7 @@ import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 import type { BaseChartProps, ChartSeries } from '../types';
 import { getChartColor, toDateLabel } from '../utils';
 
+/** Props for `StackedAreaChart`. */
 export type StackedAreaChartProps = BaseChartProps & {
   data: Array<{ date: string | Date } & Record<string, unknown>>;
   /** One entry per stacked category. */

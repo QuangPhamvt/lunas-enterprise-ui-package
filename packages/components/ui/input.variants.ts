@@ -27,4 +27,5 @@ export const inputVariants = cva(
   }
 );
 
+/** Props for `InputVariant`. */
 export type InputVariantProps = VariantProps<typeof inputVariants>;

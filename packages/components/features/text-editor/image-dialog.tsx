@@ -12,6 +12,7 @@ import { Spinner } from '@/components/ui/spinner';
 import type { Editor } from '@tiptap/react';
 import { ToolbarButton } from './toolbar-primitives';
 
+/** Props for `ImageDialog`. */
 export interface ImageDialogProps {
   editor: Editor;
   onImageUpload?: (file: File) => Promise<string>;

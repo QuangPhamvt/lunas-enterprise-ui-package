@@ -10,6 +10,7 @@ import { PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart } from 'r
 import type { BaseChartProps, ChartSeries } from '../types';
 import { getChartColor } from '../utils';
 
+/** Props for `MetricRadarChart`. */
 export type MetricRadarChartProps = BaseChartProps & {
   data: Array<{ metric: string } & Record<string, unknown>>;
   /** One entry per entity being compared (e.g. a candidate, a product, a team). */

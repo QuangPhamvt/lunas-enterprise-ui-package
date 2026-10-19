@@ -10,6 +10,7 @@ import { Bar, BarChart, LabelList, XAxis, YAxis } from 'recharts';
 import type { BaseChartProps, NamedValue } from '../types';
 import { formatCompactNumber } from '../utils';
 
+/** Props for `TopProductsBarChart`. */
 export type TopProductsBarChartProps = BaseChartProps & {
   data: NamedValue[];
   /** Series label. Defaults to `'Sales'`. */

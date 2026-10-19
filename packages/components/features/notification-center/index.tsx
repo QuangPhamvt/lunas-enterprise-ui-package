@@ -15,6 +15,7 @@ export { NotificationItem, type NotificationItemProps } from './components/notif
 export { NotificationList, type NotificationListProps } from './components/notification-list';
 export type { NotificationItemData, NotificationScope } from './types';
 
+/** Props for `NotificationCenter`. */
 export type NotificationCenterProps = {
   /** Controls whether the panel is currently open. Pair with `onOpenChange`. */
   open: boolean;

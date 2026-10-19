@@ -7,6 +7,7 @@ export type LunasLogoColorScheme = 'purple' | 'white' | 'black';
 export type LunasLogoSize = 'xs' | 'sm' | 'md' | 'lg';
 export type LunasLogoIconStyle = 'plain' | 'solid' | 'outline';
 
+/** Props for `LunasLogo`. */
 export type LunasLogoProps = {
   variant?: LunasLogoVariant;
   colorScheme?: LunasLogoColorScheme;

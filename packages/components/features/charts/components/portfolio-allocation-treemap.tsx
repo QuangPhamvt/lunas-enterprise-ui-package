@@ -11,6 +11,7 @@ import { Treemap } from 'recharts';
 import type { BaseChartProps, PortfolioHolding } from '../types';
 import { formatCompactNumber, getChartColor } from '../utils';
 
+/** Props for `PortfolioAllocationTreemap`. */
 export type PortfolioAllocationTreemapProps = BaseChartProps & {
   data: PortfolioHolding[];
   valueFormatter?: (value: number) => string;

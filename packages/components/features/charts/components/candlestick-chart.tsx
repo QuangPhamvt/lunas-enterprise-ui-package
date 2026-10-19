@@ -54,6 +54,7 @@ const CandlestickSeries = ({ data, upColor, downColor }: CandlestickSeriesProps)
   );
 };
 
+/** Props for `CandlestickChart`. */
 export type CandlestickChartProps = BaseChartProps & {
   data: OHLCPoint[];
   /** Series label used in the theme config. Defaults to `'Price'`. */

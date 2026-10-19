@@ -8,6 +8,7 @@ import { DescriptionConfigContext, DescriptionGroupContext, DescriptionSearchCon
 import { type DescriptionVariants, descriptionVariants, type TDescriptionSize } from './descriptions.variants';
 import { DescriptionLoadingSkeleton } from './loading-skeleton';
 
+/** Props for `Description`. */
 export type DescriptionProps = React.PropsWithChildren<{
   /** Additional CSS class names applied to the root wrapper element. */
   className?: string;

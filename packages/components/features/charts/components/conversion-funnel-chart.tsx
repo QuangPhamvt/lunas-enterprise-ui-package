@@ -16,6 +16,7 @@ export type FunnelStage = NamedValue & {
   color?: string;
 };
 
+/** Props for `ConversionFunnelChart`. */
 export type ConversionFunnelChartProps = BaseChartProps & {
   /** Funnel stages ordered top (widest) to bottom. */
   data: FunnelStage[];

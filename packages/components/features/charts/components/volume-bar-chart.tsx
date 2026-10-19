@@ -10,6 +10,7 @@ import { Bar, BarChart, CartesianGrid, Rectangle, XAxis, YAxis } from 'recharts'
 import type { BaseChartProps, OHLCPoint } from '../types';
 import { formatCompactNumber, getDirectionColor, toDateLabel } from '../utils';
 
+/** Props for `VolumeBarChart`. */
 export type VolumeBarChartProps = BaseChartProps & {
   /** Only `date`, `close`, and `volume` are used; pass the same rows given to `CandlestickChart`. */
   data: Array<Pick<OHLCPoint, 'date' | 'close' | 'volume'>>;

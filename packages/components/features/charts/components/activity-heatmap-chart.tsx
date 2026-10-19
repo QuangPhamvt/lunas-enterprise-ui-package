@@ -14,6 +14,7 @@ const WEEKDAY_LABELS = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 const CELL_SIZE = 13;
 const MS_PER_DAY = 86_400_000;
 
+/** Props for `ActivityHeatmapChart`. */
 export type ActivityHeatmapChartProps = BaseChartProps & {
   data: ActivityPoint[];
   /** Series label used in the theme config. Defaults to `'Activity'`. */

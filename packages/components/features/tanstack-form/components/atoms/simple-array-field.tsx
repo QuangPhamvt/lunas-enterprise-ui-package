@@ -89,6 +89,7 @@ export function ArrayHeaderRow({ className, children }: ArrayHeaderRowProps) {
 
 // ─── SimpleArrayField ──────────────────────────────────────────────────────
 
+/** Props for `SimpleArrayField`. */
 export type SimpleArrayFieldProps<T> = {
   /**
    * Shape of a brand-new empty row appended when the user clicks "Add row".

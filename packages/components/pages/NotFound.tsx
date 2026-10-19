@@ -5,6 +5,7 @@ import { cn } from '@customafk/react-toolkit/utils';
 import { FileQuestion } from 'lucide-react';
 import { LunasLogo } from '../features/logo';
 
+/** Props for `NotFound`. */
 export interface NotFoundProps {
   /** Main heading shown beneath the file-question icon. Defaults to `'Không tìm thấy trang'`. */
   title?: string;

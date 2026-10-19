@@ -10,6 +10,7 @@ import { DateDisplay } from '@/components/data-display/date';
 import { Title } from '@/components/typography/title';
 import { DetailDialogSidebarTrigger } from './sidebar-core';
 
+/** Props for `DetailDialogHeader`. */
 export type DetailDialogHeaderProps = {
   /** Primary title displayed in the dialog header. */
   title?: string;

@@ -6,6 +6,7 @@ import { cn } from '@customafk/react-toolkit/utils';
 
 import { Badge } from '@/components/ui/badge';
 
+/** Props for `NotificationBell`. */
 export type NotificationBellProps = {
   /** Combined unread count (global + personal) shown as a badge; hidden when `0`. */
   unreadCount: number;

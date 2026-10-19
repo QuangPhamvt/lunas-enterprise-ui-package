@@ -8,6 +8,7 @@ import { cn } from '@customafk/react-toolkit/utils';
 
 import { Dialog as DialogPrimitive } from 'radix-ui';
 
+/** Props for `DetailDialogWrapper`. */
 export type DetailDialogWrapperProps = React.PropsWithChildren<{
   /** Controls whether the dialog is open. */
   open?: boolean;

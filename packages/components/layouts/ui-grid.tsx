@@ -21,7 +21,9 @@ import { cn } from '@customafk/react-toolkit/utils';
  * responsive classes.
  */
 export type TUIGridBreakpoint = 'base' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
+/** Number of grid columns (1–12). */
 export type TUIGridCols = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+/** Column count, either fixed or per breakpoint (`{ base: 1, md: 2, xl: 4 }`). */
 export type TUIGridColsConfig = TUIGridCols | Partial<Record<TUIGridBreakpoint, TUIGridCols>>;
 
 /**
@@ -211,7 +213,9 @@ export const UIGrid = memo(({ cols = 12, gap = 'md', className, children, ...res
 });
 UIGrid.displayName = 'UIGrid';
 
+/** Number of columns a grid item spans (1–12). */
 export type TUIGridSpan = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+/** Column span, either fixed or per breakpoint (`{ base: 12, lg: 6 }`). */
 export type TUIGridItemSpan = TUIGridSpan | Partial<Record<TUIGridBreakpoint, TUIGridSpan>>;
 
 /**

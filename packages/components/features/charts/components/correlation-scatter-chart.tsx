@@ -9,6 +9,7 @@ import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } f
 import { CartesianGrid, Scatter, ScatterChart, XAxis, YAxis, ZAxis } from 'recharts';
 import type { BaseChartProps, ScatterPoint } from '../types';
 
+/** Props for `CorrelationScatterChart`. */
 export type CorrelationScatterChartProps = BaseChartProps & {
   data: ScatterPoint[];
   /** Series label used in the theme config. Defaults to `'Points'`. */

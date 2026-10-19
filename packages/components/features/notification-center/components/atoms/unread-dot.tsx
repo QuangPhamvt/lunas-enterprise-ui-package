@@ -1,5 +1,6 @@
 import { cn } from '@customafk/react-toolkit/utils';
 
+/** Props for `UnreadDot`. */
 export type UnreadDotProps = {
   className?: string;
 };

@@ -16,6 +16,7 @@ export type DonutChartSegment = NamedValue & {
   color?: string;
 };
 
+/** Props for `DonutChart`. */
 export type DonutChartProps = BaseChartProps & {
   data: DonutChartSegment[];
   /** Text under the center total, e.g. `'Total sales'`. */

@@ -12,6 +12,7 @@ import {
   Sidebar,
 } from './sidebar-core';
 
+/** Props for `DetailDialogSidebarPanel`. */
 export type DetailDialogSidebarPanelProps = {
   /** Title shown in the collapsible sidebar header. Defaults to `'Detail Dialog'`. */
   title?: string;

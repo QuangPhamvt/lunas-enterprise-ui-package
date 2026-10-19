@@ -527,4 +527,5 @@ export const buttonVariants = cva(
   }
 );
 
+/** Props for `ButtonVariant`. */
 export type ButtonVariantProps = VariantProps<typeof buttonVariants>;

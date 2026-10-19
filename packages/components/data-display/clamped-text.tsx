@@ -6,6 +6,7 @@ import { Paragraph, type ParagraphProps } from '../typography/paragraph';
 import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 import { clampedTextVariants } from './clamped-text.variants';
 
+/** Props for `ClampedText`. */
 export type ClampedTextProps = {
   /** Text or numeric value to display. Empty/null handling is the caller's responsibility — pass a fallback element instead of rendering this component when there's nothing to show. */
   content: string | number;
@@ -24,6 +25,7 @@ export type ClampedTextProps = {
   interactive?: boolean;
   /** `data-slot` applied to the rendered trigger text, so each caller can keep its own existing slot name for styling/DOM-querying purposes. @default 'clamped-text' */
   slot?: string;
+  /** Class names for the clamped trigger text. */
   className?: string;
 };
 

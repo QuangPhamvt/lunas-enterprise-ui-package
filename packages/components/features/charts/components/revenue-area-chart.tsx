@@ -10,6 +10,7 @@ import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 import type { BaseChartProps, TimeSeriesPoint } from '../types';
 import { formatCurrency, toDateLabel } from '../utils';
 
+/** Props for `RevenueAreaChart`. */
 export type RevenueAreaChartProps = BaseChartProps & {
   data: TimeSeriesPoint[];
   /** Series label. Defaults to `'Revenue'`. */

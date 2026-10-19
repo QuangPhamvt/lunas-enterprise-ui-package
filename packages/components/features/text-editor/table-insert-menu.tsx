@@ -11,6 +11,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import type { Editor } from '@tiptap/react';
 import { ToolbarButton } from './toolbar-primitives';
 
+/** Props for `TableInsertMenu`. */
 export interface TableInsertMenuProps {
   editor: Editor;
 }

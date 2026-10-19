@@ -10,6 +10,7 @@ import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 import type { BaseChartProps, ChartSeries } from '../types';
 import { getChartColor, toDateLabel } from '../utils';
 
+/** Props for `OrdersBarChart`. */
 export type OrdersBarChartProps = BaseChartProps & {
   data: Array<{ date: string | Date } & Record<string, unknown>>;
   /** Simple mode: the key holding each period's count. Defaults to `'orders'`. */

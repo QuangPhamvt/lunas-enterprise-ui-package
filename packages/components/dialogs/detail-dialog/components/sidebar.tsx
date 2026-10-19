@@ -12,5 +12,31 @@
  * that bakes in its 2x2 header/content grid shell, sharing the underlying state logic with
  * `SidebarProvider` via `useSidebarState`.
  */
-export * from './sidebar-core';
-export * from './sidebar-extras';
+export {
+  DetailDialogSidebarContent,
+  DetailDialogSidebarFooter,
+  DetailDialogSidebarHeader,
+  DetailDialogSidebarMenu,
+  DetailDialogSidebarMenuButton,
+  DetailDialogSidebarMenuItem,
+  DetailDialogSidebarTrigger,
+  Sidebar,
+  SidebarProvider,
+  useSidebar,
+  useSidebarState,
+} from './sidebar-core';
+export {
+  DetailDialogSidebarGroup,
+  DetailDialogSidebarGroupAction,
+  DetailDialogSidebarGroupContent,
+  DetailDialogSidebarGroupLabel,
+  DetailDialogSidebarMenuAction,
+  DetailDialogSidebarMenuBadge,
+  DetailDialogSidebarMenuSkeleton,
+  DetailDialogSidebarMenuSub,
+  DetailDialogSidebarMenuSubButton,
+  DetailDialogSidebarMenuSubItem,
+  DetailDialogSidebarRail,
+  DetailDialogSidebarSeparator,
+  SidebarInset,
+} from './sidebar-extras';

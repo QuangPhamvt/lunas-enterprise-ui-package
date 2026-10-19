@@ -6,6 +6,7 @@ import { Button } from '../../../ui/button';
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from '../../../ui/input-otp';
 import { OTP_LENGTH, OTP_PATTERN } from '../constants';
 
+/** Props for `OtpVerifyStep`. */
 export interface OtpVerifyStepProps {
   otp: string;
   onOtpChange: (value: string) => void;

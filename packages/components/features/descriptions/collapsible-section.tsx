@@ -12,6 +12,7 @@ import { DescriptionConfigContext, DescriptionSearchContext, DescriptionSectionS
 import { descriptionSectionVariants } from './descriptions.variants';
 import { matchesSearch } from './search-utils';
 
+/** Props for `DescriptionCollapsibleSection`. */
 export type DescriptionCollapsibleSectionProps = React.PropsWithChildren<{
   /** Section label rendered beside the divider line and chevron. */
   title: string;

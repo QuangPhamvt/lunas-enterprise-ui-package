@@ -10,6 +10,7 @@ import { Bar, BarChart, CartesianGrid, Rectangle, XAxis, YAxis } from 'recharts'
 import type { BaseChartProps, WaterfallPoint } from '../types';
 import { getDirectionColor } from '../utils';
 
+/** Props for `WaterfallChart`. */
 export type WaterfallChartProps = BaseChartProps & {
   data: WaterfallPoint[];
   /** Color for `isTotal` bars. Defaults to `'var(--chart-1)'`. */

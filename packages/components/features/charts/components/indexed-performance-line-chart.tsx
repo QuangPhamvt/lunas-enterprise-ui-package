@@ -10,6 +10,7 @@ import { CartesianGrid, Line, LineChart, XAxis, YAxis } from 'recharts';
 import type { BaseChartProps, ChartSeries } from '../types';
 import { computeIndexedSeries, formatSignedPercent, getChartColor, toDateLabel } from '../utils';
 
+/** Props for `IndexedPerformanceLineChart`. */
 export type IndexedPerformanceLineChartProps = BaseChartProps & {
   data: Array<{ date: string | Date } & Record<string, unknown>>;
   /** One entry per instrument/fund to compare. */

@@ -6,6 +6,7 @@ import { DetailDialogProvider } from './components/provider';
 import { DetailDialogSidebarPanel, type DetailDialogSidebarPanelProps } from './components/sidebar-panel';
 import { DetailDialogWrapper } from './components/wrapper';
 
+/** Props for `DetailDialog`. */
 export type DetailDialogProps = {
   /** Controls whether the dialog is open. */
   open?: boolean;

@@ -130,6 +130,7 @@ function imageAltFromFile(file: File): string {
   return file.name.replace(/\.[^./]+$/, '');
 }
 
+/** Props for `TextEditor`. */
 export interface TextEditorProps extends TextEditorVariantProps {
   value?: string;
   defaultValue?: string;

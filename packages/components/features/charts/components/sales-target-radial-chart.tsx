@@ -10,6 +10,7 @@ import { Label, PolarAngleAxis, PolarRadiusAxis, RadialBar, RadialBarChart } fro
 import type { BaseChartProps } from '../types';
 import { formatPercent } from '../utils';
 
+/** Props for `SalesTargetRadialChart`. */
 export type SalesTargetRadialChartProps = BaseChartProps & {
   /** Current progress value, e.g. revenue to date. */
   value: number;

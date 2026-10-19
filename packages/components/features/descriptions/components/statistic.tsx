@@ -40,6 +40,7 @@ const descriptionStatisticVariants = cva('inline-flex items-center gap-1 font-me
   },
 });
 
+/** Props for `DescriptionStatistic`. */
 export type DescriptionStatisticProps = VariantProps<typeof descriptionStatisticVariants> & {
   decimalSeparator?: string;
   groupSeparator?: string;

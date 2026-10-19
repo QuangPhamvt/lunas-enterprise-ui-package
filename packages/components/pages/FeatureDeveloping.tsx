@@ -7,6 +7,7 @@ import { cn } from '@customafk/react-toolkit/utils';
 import { Button } from '../ui/button';
 import { LunasLogo } from '../features/logo';
 
+/** Props for `FeatureDeveloping`. */
 export interface FeatureDevelopingProps {
   /** Main heading shown beneath the construction icon. Defaults to `'Tính năng đang phát triển'`. */
   title?: string;

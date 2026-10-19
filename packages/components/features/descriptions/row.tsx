@@ -27,6 +27,7 @@ function resolveCellSpan(columns: TDescriptionRowColumnsConfig): TUIGridItemSpan
   ) as TUIGridItemSpan;
 }
 
+/** Props for `DescriptionRow`. */
 export type DescriptionRowProps = React.PropsWithChildren<{
   /** @default 2 */
   columns?: TDescriptionRowColumnsConfig;

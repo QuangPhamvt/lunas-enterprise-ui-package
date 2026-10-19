@@ -6,6 +6,7 @@ import { cn } from '@customafk/react-toolkit/utils';
 
 import type { SlashCommandItem } from './slash-command';
 
+/** Props for `SlashCommandMenu`. */
 export interface SlashCommandMenuProps {
   items: SlashCommandItem[];
   command: (item: SlashCommandItem) => void;

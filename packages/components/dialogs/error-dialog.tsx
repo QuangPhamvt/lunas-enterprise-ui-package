@@ -6,6 +6,7 @@ import { AlertTriangleIcon } from 'lucide-react';
 
 import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '../ui/alert-dialog';
 
+/** Props for `ErrorDialog`. */
 export type ErrorDialogProps = {
   /** Controls whether the dialog is open. */
   open?: boolean;

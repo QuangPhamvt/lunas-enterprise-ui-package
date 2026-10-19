@@ -10,6 +10,7 @@ import { Area, CartesianGrid, ComposedChart, Line, XAxis, YAxis } from 'recharts
 import type { BaseChartProps, OHLCPoint } from '../types';
 import { toDateLabel } from '../utils';
 
+/** Props for `PriceRangeAreaChart`. */
 export type PriceRangeAreaChartProps = BaseChartProps & {
   /** Only `date`, `high`, `low`, and `close` are used; pass the same rows given to `CandlestickChart`. */
   data: Array<Pick<OHLCPoint, 'date' | 'high' | 'low' | 'close'>>;

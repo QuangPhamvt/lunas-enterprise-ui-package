@@ -6,6 +6,7 @@ import { cva } from 'class-variance-authority';
 
 type HeadingLevel = 'h1' | 'h2' | 'h3' | 'h4' | 'h5';
 
+/** Props for `Heading`. */
 export type HeadingProps = {
   level?: HeadingLevel;
   className?: string;

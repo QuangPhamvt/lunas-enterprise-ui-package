@@ -16,6 +16,7 @@ export type RevenueOrdersPoint = {
   orders: number;
 };
 
+/** Props for `RevenueOrdersComposedChart`. */
 export type RevenueOrdersComposedChartProps = BaseChartProps & {
   data: RevenueOrdersPoint[];
   revenueLabel?: string;

@@ -6,6 +6,7 @@ import { cn } from '@customafk/react-toolkit/utils';
 
 import { Flex } from '@/components/layouts/flex';
 
+/** Props for `DetailDialogContent`. */
 export type DetailDialogContentProps = React.PropsWithChildren<{
   /** When `true`, replaces the content with a centered loading spinner. */
   isLoading?: boolean;

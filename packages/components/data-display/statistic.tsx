@@ -25,7 +25,14 @@ const statisticVariants = cva('inline-flex items-center gap-1 font-number tabula
   },
 });
 
-export type StatisticProps = VariantProps<typeof statisticVariants> & {
+/** Props for `Statistic`. */
+export type StatisticProps = {
+  /**
+   * Font size, `xs` through `xl`.
+   * @default 'lg'
+   */
+  size?: VariantProps<typeof statisticVariants>['size'];
+
   /** Character used to separate the decimal part. Defaults to `'.'`. */
   decimalSeparator?: string;
   /** Character used to separate thousands groups. Defaults to `','`. */

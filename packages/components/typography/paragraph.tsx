@@ -7,6 +7,7 @@ import { cn } from '@customafk/react-toolkit/utils';
 import { cva, type VariantProps } from 'class-variance-authority';
 
 // biome-ignore lint/style/useComponentExportOnlyModules: asdasd
+/** Class names for `Paragraph`, keyed by `variant`. */
 export const paragraphVariants = cva('not-first:mt-3 max-w-prose whitespace-pre-line text-pretty text-start transition-colors', {
   variants: {
     variant: {
@@ -23,20 +24,15 @@ export const paragraphVariants = cva('not-first:mt-3 max-w-prose whitespace-pre-
   },
 });
 
-/**
- * Props for the {@link Paragraph} component.
- *
- * Extends all native `<p>` HTML attributes plus the CVA variant.
- *
- * @property variant - Visual style variant.
- *   - `'lead'` — large, medium-weight introductory text (default size `text-base` / `md:text-lg`)
- *   - `'lg'`  — large normal-weight text
- *   - `'p'`   — standard body text (default)
- *   - `'sm'`  — small normal-weight text with tighter leading
- *   - `'muted'` — subdued colour, standard body size
- *   - `'xs'`  — extra-small text in a muted colour
- */
-export type ParagraphProps = ComponentPropsWithoutRef<'p'> & VariantProps<typeof paragraphVariants>;
+/** Props for {@link Paragraph} — every native `<p>` prop plus `variant`. */
+export type ParagraphProps = ComponentPropsWithoutRef<'p'> & {
+  /**
+   * Text style: `lead` (medium-weight intro), `lg`, `p` (body), `sm`, `muted` (subdued body) or
+   * `xs` (small, muted).
+   * @default 'p'
+   */
+  variant?: VariantProps<typeof paragraphVariants>['variant'];
+};
 
 /**
  * A styled `<p>` element with semantic size and weight variants for body text.

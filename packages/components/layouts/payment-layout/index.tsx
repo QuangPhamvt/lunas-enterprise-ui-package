@@ -20,7 +20,9 @@ import {
   SidebarProvider,
 } from './components/sidebar';
 
+/** Signed-in customer shown in the payment header and its account dropdown. */
 export type PaymentLayoutUser = {
+  /** Customer id, passed back to callbacks. */
   uuid?: string;
   /** Display name shown in the header and dropdown. */
   fullname: string;

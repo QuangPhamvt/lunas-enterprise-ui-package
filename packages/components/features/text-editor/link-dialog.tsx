@@ -11,6 +11,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { type Editor, useEditorState } from '@tiptap/react';
 import { ToolbarButton } from './toolbar-primitives';
 
+/** Props for `LinkDialog`. */
 export interface LinkDialogProps {
   editor: Editor;
 }

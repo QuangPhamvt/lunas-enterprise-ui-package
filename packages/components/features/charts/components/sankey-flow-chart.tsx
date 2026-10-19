@@ -24,6 +24,7 @@ export type SankeyFlowLink = {
   value: number;
 };
 
+/** Props for `SankeyFlowChart`. */
 export type SankeyFlowChartProps = BaseChartProps & {
   nodes: Array<SankeyFlowNode | string>;
   links: SankeyFlowLink[];

@@ -7,6 +7,7 @@ import { cn } from '@customafk/react-toolkit/utils';
 import { DescriptionConfigContext, DescriptionGroupContext, type TDescriptionConfig } from './context';
 import { descriptionGroupVariants, type TDescriptionSize } from './descriptions.variants';
 
+/** Props for `DescriptionGroup`. */
 export type DescriptionGroupProps = React.PropsWithChildren<{
   /** Additional CSS class names applied to the group wrapper. */
   className?: string;

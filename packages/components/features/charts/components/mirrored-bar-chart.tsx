@@ -15,6 +15,7 @@ export type MirroredBarRow = {
   right: number;
 };
 
+/** Props for `MirroredBarChart`. */
 export type MirroredBarChartProps = BaseChartProps & {
   data: MirroredBarRow[];
   leftLabel?: string;

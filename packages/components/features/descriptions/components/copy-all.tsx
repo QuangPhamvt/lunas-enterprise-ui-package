@@ -57,6 +57,7 @@ function buildPanelText(root: HTMLElement): string {
   return lines.join('\n');
 }
 
+/** Props for `DescriptionCopyAll`. */
 export type DescriptionCopyAllProps = {
   /** Accessible label / tooltip text for the button. @default 'Sao chép toàn bộ' */
   label?: string;

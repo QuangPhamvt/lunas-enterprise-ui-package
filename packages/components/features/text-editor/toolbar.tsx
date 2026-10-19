@@ -65,6 +65,7 @@ const TEXT_COLORS = [
   { label: 'Black', value: '#000000' },
 ];
 
+/** Props for `TextEditorToolbar`. */
 export interface TextEditorToolbarProps {
   editor: Editor;
   className?: string;

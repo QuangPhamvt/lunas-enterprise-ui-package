@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 
 import { DescriptionConfigContext, DescriptionSearchContext } from './context';
 
+/** Props for `DescriptionSearch`. */
 export type DescriptionSearchProps = {
   /** @default 'Tìm kiếm...' */
   placeholder?: string;

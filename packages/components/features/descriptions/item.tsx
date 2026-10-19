@@ -18,6 +18,7 @@ import { DescriptionItemLabelText } from './item-label-text';
 import { DEFAULT_LABEL_COL_SPAN, normalizeLabelSpan, toValueSpan } from './label-span-utils';
 import { matchesSearch } from './search-utils';
 
+/** Props for `DescriptionItem`. */
 export type DescriptionItemProps = React.PropsWithChildren<{
   /** Text displayed in the label column. */
   label: string;

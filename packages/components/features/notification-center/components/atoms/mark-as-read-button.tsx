@@ -4,6 +4,7 @@ import { CheckIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 
+/** Props for `MarkAsReadButton`. */
 export type MarkAsReadButtonProps = {
   onClick: () => void;
 };

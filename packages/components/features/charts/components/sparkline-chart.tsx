@@ -13,6 +13,7 @@ const TREND_COLORS: Record<ChartTrend, string> = {
   neutral: 'var(--chart-1)',
 };
 
+/** Props for `SparklineChart`. */
 export type SparklineChartProps = {
   data: number[] | Array<{ value: number }>;
   /** Render style. Defaults to `'area'`. */
