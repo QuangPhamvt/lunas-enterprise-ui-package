@@ -52,6 +52,9 @@ public component: add it to `entry`, build, and add a Storybook story.
 - `"sideEffects": ["**/*.css"]` — keep modules free of top-level side effects so tree-shaking works.
 - The React Compiler runs in the published build (and Storybook). Existing `useMemo`/`useCallback`/
   `memo` stay as they are; **new components must not add manual memoization**.
+- `features/charts`, `features/tables` and `features/tanstack-form` expose components through
+  `lazy()` wrappers. Wrappers carry a copy of the implementation's JSDoc so editor hover works —
+  after editing a lazy component's JSDoc run `npm run docs:sync-lazy` (`docs:check-lazy` verifies).
 - Peers used by only one feature (Tiptap, recharts, lowlight, dompurify, zod, …) are marked
   optional in `peerDependenciesMeta`; consumers that use that feature must install them.
 

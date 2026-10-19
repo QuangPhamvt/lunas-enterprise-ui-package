@@ -31,10 +31,12 @@ import type { NumberFieldProps } from '../../types';
  * decimal precision, unit labels, and submission-state feedback.
  *
  * @example
- * import { NumberField } from '@customafk/lunas-ui/features/tanstack-form';
+ * ```tsx
+ * const form = useTanStackForm({ defaultValues: { quantity: null as number | null } });
  *
- * <form.Field name="quantity">
- *   {() => (
+ * <form.AppField
+ *   name="quantity"
+ *   children={({ NumberField }) => (
  *     <NumberField
  *       label="Quantity"
  *       placeholder="0"
@@ -43,7 +45,8 @@ import type { NumberFieldProps } from '../../types';
  *       required
  *     />
  *   )}
- * </form.Field>
+ * />
+ * ```
  */
 export const NumberField = memo<NumberFieldProps>(
   ({

@@ -114,64 +114,413 @@ function lazyChart<P extends object>(loader: () => Promise<{ default: ComponentT
   );
 }
 
+/**
+ * A GitHub-style calendar heatmap for daily activity/usage intensity — logins, orders, commits
+ * per day — laid out as a week-by-weekday grid with color opacity mapped to value.
+ *
+ * @example
+ * ```tsx
+ * import { ActivityHeatmapChart } from '@customafk/lunas-ui/features/charts';
+ *
+ * <ActivityHeatmapChart
+ *   data={[
+ *     { date: '2026-06-01', value: 4 },
+ *     { date: '2026-06-02', value: 12 },
+ *   ]}
+ * />
+ * ```
+ */
 const ActivityHeatmapChart = lazyChart<ComponentProps<typeof ActivityHeatmapChartType>>(() =>
   import('./components/activity-heatmap-chart').then(m => ({ default: m.ActivityHeatmapChart }))
 );
+/**
+ * A stock candlestick chart — open/high/low/close per period, green/red bodies, high-low wicks.
+ * Recharts has no native candlestick type, so bodies and wicks are drawn against the chart's
+ * computed axis scales via `useXAxisScale`/`useYAxisScale` (recharts v3).
+ *
+ * @example
+ * ```tsx
+ * import { CandlestickChart } from '@customafk/lunas-ui/features/charts';
+ *
+ * <CandlestickChart
+ *   data={[
+ *     { date: '2026-06-01', open: 140, high: 146.2, low: 138.5, close: 144.9 },
+ *     { date: '2026-06-02', open: 144.9, high: 145.6, low: 141.2, close: 142.1 },
+ *   ]}
+ * />
+ * ```
+ */
 const CandlestickChart = lazyChart<ComponentProps<typeof CandlestickChartType>>(() =>
   import('./components/candlestick-chart').then(m => ({ default: m.CandlestickChart }))
 );
+/**
+ * A conversion funnel for the ecommerce purchase journey — sessions, product views, carts,
+ * checkouts, purchases — with per-stage conversion rates against the first stage.
+ *
+ * @example
+ * ```tsx
+ * import { ConversionFunnelChart } from '@customafk/lunas-ui/features/charts';
+ *
+ * <ConversionFunnelChart
+ *   data={[
+ *     { name: 'Sessions', value: 50000 },
+ *     { name: 'Product views', value: 32000 },
+ *     { name: 'Added to cart', value: 8400 },
+ *     { name: 'Purchased', value: 2900 },
+ *   ]}
+ * />
+ * ```
+ */
 const ConversionFunnelChart = lazyChart<ComponentProps<typeof ConversionFunnelChartType>>(() =>
   import('./components/conversion-funnel-chart').then(m => ({ default: m.ConversionFunnelChart }))
 );
+/**
+ * A scatter (or bubble, with `showBubbleSize`) chart for correlating two metrics, with an
+ * optional third dimension mapped to point size.
+ *
+ * @example
+ * ```tsx
+ * import { CorrelationScatterChart } from '@customafk/lunas-ui/features/charts';
+ *
+ * <CorrelationScatterChart
+ *   data={[
+ *     { x: 12, y: 4200, z: 40, name: 'Product A' },
+ *     { x: 18, y: 5100, z: 65, name: 'Product B' },
+ *   ]}
+ *   xLabel="Price ($)"
+ *   yLabel="Units sold"
+ *   showBubbleSize
+ * />
+ * ```
+ */
 const CorrelationScatterChart = lazyChart<ComponentProps<typeof CorrelationScatterChartType>>(() =>
   import('./components/correlation-scatter-chart').then(m => ({ default: m.CorrelationScatterChart }))
 );
+/**
+ * A donut breakdown chart with a center total — category sales, traffic sources, payment methods.
+ *
+ * @example
+ * ```tsx
+ * import { DonutChart } from '@customafk/lunas-ui/features/charts';
+ *
+ * <DonutChart
+ *   data={[
+ *     { name: 'Fashion', value: 12400 },
+ *     { name: 'Electronics', value: 8200 },
+ *   ]}
+ *   centerLabel="Total sales"
+ * />
+ * ```
+ */
 const DonutChart = lazyChart<ComponentProps<typeof DonutChartType>>(() => import('./components/donut-chart').then(m => ({ default: m.DonutChart })));
+/**
+ * Diverging bars for period returns — bars grow up (gain) or down (loss) from a zero baseline,
+ * colored accordingly. Clearer than a plain bar chart for signed data.
+ *
+ * @example
+ * ```tsx
+ * import { GainLossBarChart } from '@customafk/lunas-ui/features/charts';
+ *
+ * <GainLossBarChart
+ *   data={[
+ *     { name: 'Jan', value: 0.032 },
+ *     { name: 'Feb', value: -0.014 },
+ *   ]}
+ * />
+ * ```
+ */
 const GainLossBarChart = lazyChart<ComponentProps<typeof GainLossBarChartType>>(() =>
   import('./components/gain-loss-bar-chart').then(m => ({ default: m.GainLossBarChart }))
 );
+/**
+ * A multi-line chart normalizing several instruments to a common base (default 100) at the
+ * start of the period, so relative performance is directly comparable regardless of price scale.
+ *
+ * @example
+ * ```tsx
+ * import { IndexedPerformanceLineChart } from '@customafk/lunas-ui/features/charts';
+ *
+ * <IndexedPerformanceLineChart
+ *   data={[
+ *     { date: '2026-06-01', aapl: 142.5, spy: 512.1 },
+ *     { date: '2026-06-02', aapl: 145.1, spy: 515.8 },
+ *   ]}
+ *   series={[
+ *     { key: 'aapl', label: 'AAPL' },
+ *     { key: 'spy', label: 'S&P 500' },
+ *   ]}
+ * />
+ * ```
+ */
 const IndexedPerformanceLineChart = lazyChart<ComponentProps<typeof IndexedPerformanceLineChartType>>(() =>
   import('./components/indexed-performance-line-chart').then(m => ({ default: m.IndexedPerformanceLineChart }))
 );
+/**
+ * A radar chart comparing one or more entities across several metrics/dimensions — performance
+ * review scores, feature comparisons, skill matrices.
+ *
+ * @example
+ * ```tsx
+ * import { MetricRadarChart } from '@customafk/lunas-ui/features/charts';
+ *
+ * <MetricRadarChart
+ *   data={[
+ *     { metric: 'Speed', teamA: 80, teamB: 65 },
+ *     { metric: 'Quality', teamA: 70, teamB: 90 },
+ *     { metric: 'Cost', teamA: 60, teamB: 75 },
+ *   ]}
+ *   series={[
+ *     { key: 'teamA', label: 'Team A' },
+ *     { key: 'teamB', label: 'Team B' },
+ *   ]}
+ * />
+ * ```
+ */
 const MetricRadarChart = lazyChart<ComponentProps<typeof MetricRadarChartType>>(() =>
   import('./components/metric-radar-chart').then(m => ({ default: m.MetricRadarChart }))
 );
+/**
+ * A two-sided horizontal bar comparison (population-pyramid style) — this period vs. last
+ * period, male vs. female, before vs. after — mirrored around a shared zero baseline.
+ *
+ * @example
+ * ```tsx
+ * import { MirroredBarChart } from '@customafk/lunas-ui/features/charts';
+ *
+ * <MirroredBarChart
+ *   data={[
+ *     { category: '18-24', left: 1200, right: 1400 },
+ *     { category: '25-34', left: 2600, right: 2100 },
+ *   ]}
+ *   leftLabel="Male"
+ *   rightLabel="Female"
+ * />
+ * ```
+ */
 const MirroredBarChart = lazyChart<ComponentProps<typeof MirroredBarChartType>>(() =>
   import('./components/mirrored-bar-chart').then(m => ({ default: m.MirroredBarChart }))
 );
+/**
+ * A bar chart for order volume per period — a single series by default, or stacked by order
+ * status when `statuses` is provided.
+ *
+ * @example
+ * ```tsx
+ * import { OrdersBarChart } from '@customafk/lunas-ui/features/charts';
+ *
+ * <OrdersBarChart
+ *   data={[{ date: '2026-06-01', completed: 32, pending: 6, cancelled: 2 }]}
+ *   statuses={[
+ *     { key: 'completed', label: 'Completed' },
+ *     { key: 'pending', label: 'Pending' },
+ *     { key: 'cancelled', label: 'Cancelled' },
+ *   ]}
+ * />
+ * ```
+ */
 const OrdersBarChart = lazyChart<ComponentProps<typeof OrdersBarChartType>>(() =>
   import('./components/orders-bar-chart').then(m => ({ default: m.OrdersBarChart }))
 );
+/**
+ * A treemap for portfolio holdings / asset allocation, sized by weight — clearer than a donut
+ * once there are more than a handful of positions.
+ *
+ * @example
+ * ```tsx
+ * import { PortfolioAllocationTreemap } from '@customafk/lunas-ui/features/charts';
+ *
+ * <PortfolioAllocationTreemap
+ *   data={[
+ *     { name: 'AAPL', value: 24000 },
+ *     { name: 'MSFT', value: 18500 },
+ *     { name: 'Bonds', value: 12000 },
+ *   ]}
+ * />
+ * ```
+ */
 const PortfolioAllocationTreemap = lazyChart<ComponentProps<typeof PortfolioAllocationTreemapType>>(() =>
   import('./components/portfolio-allocation-treemap').then(m => ({ default: m.PortfolioAllocationTreemap }))
 );
+/**
+ * A shaded high-low trading-range band with the close price drawn on top — the daily range is
+ * visible at a glance alongside the closing trend.
+ *
+ * @example
+ * ```tsx
+ * import { PriceRangeAreaChart } from '@customafk/lunas-ui/features/charts';
+ *
+ * <PriceRangeAreaChart
+ *   data={[{ date: '2026-06-01', high: 146.2, low: 141.8, close: 144.9 }]}
+ * />
+ * ```
+ */
 const PriceRangeAreaChart = lazyChart<ComponentProps<typeof PriceRangeAreaChartType>>(() =>
   import('./components/price-range-area-chart').then(m => ({ default: m.PriceRangeAreaChart }))
 );
+/**
+ * A gradient area chart for revenue (or any currency metric) over time, with an optional
+ * previous-period comparison series.
+ *
+ * @example
+ * ```tsx
+ * import { RevenueAreaChart } from '@customafk/lunas-ui/features/charts';
+ *
+ * <RevenueAreaChart
+ *   data={[
+ *     { date: '2026-06-01', value: 4200, previousValue: 3800 },
+ *     { date: '2026-06-02', value: 5100, previousValue: 4300 },
+ *   ]}
+ *   showComparison
+ * />
+ * ```
+ */
 const RevenueAreaChart = lazyChart<ComponentProps<typeof RevenueAreaChartType>>(() =>
   import('./components/revenue-area-chart').then(m => ({ default: m.RevenueAreaChart }))
 );
+/**
+ * A dual-axis chart combining revenue bars (left axis, currency) with an orders line
+ * (right axis, count) to correlate the two metrics per period.
+ *
+ * @example
+ * ```tsx
+ * import { RevenueOrdersComposedChart } from '@customafk/lunas-ui/features/charts';
+ *
+ * <RevenueOrdersComposedChart
+ *   data={[{ date: '2026-06-01', revenue: 12400, orders: 87 }]}
+ * />
+ * ```
+ */
 const RevenueOrdersComposedChart = lazyChart<ComponentProps<typeof RevenueOrdersComposedChartType>>(() =>
   import('./components/revenue-orders-composed-chart').then(m => ({ default: m.RevenueOrdersComposedChart }))
 );
+/**
+ * A radial gauge showing progress toward a sales target with the completion figure in the center.
+ *
+ * @example
+ * ```tsx
+ * import { SalesTargetRadialChart } from '@customafk/lunas-ui/features/charts';
+ *
+ * <SalesTargetRadialChart value={65_000} target={100_000} label="Monthly target" />
+ * ```
+ */
 const SalesTargetRadialChart = lazyChart<ComponentProps<typeof SalesTargetRadialChartType>>(() =>
   import('./components/sales-target-radial-chart').then(m => ({ default: m.SalesTargetRadialChart }))
 );
+/**
+ * A Sankey flow diagram — revenue/cost breakdowns, funnels with branching paths, budget
+ * allocation — where band width is proportional to the flow value between named nodes.
+ *
+ * @example
+ * ```tsx
+ * import { SankeyFlowChart } from '@customafk/lunas-ui/features/charts';
+ *
+ * <SankeyFlowChart
+ *   height={500}
+ *   nodes={['iPhone', 'Mac', 'Net Sales', 'Cost of Sales', 'Gross Profit']}
+ *   links={[
+ *     { source: 'iPhone', target: 'Net Sales', value: 205489 },
+ *     { source: 'Mac', target: 'Net Sales', value: 40177 },
+ *     { source: 'Net Sales', target: 'Cost of Sales', value: 223546 },
+ *     { source: 'Net Sales', target: 'Gross Profit', value: 170782 },
+ *   ]}
+ * />
+ * ```
+ */
 const SankeyFlowChart = lazyChart<ComponentProps<typeof SankeyFlowChartType>>(() =>
   import('./components/sankey-flow-chart').then(m => ({ default: m.SankeyFlowChart }))
 );
+/**
+ * A tiny, axis-less trend chart for KPI cards; pairs with the `Statistic` display component.
+ *
+ * @example
+ * ```tsx
+ * import { SparklineChart } from '@customafk/lunas-ui/features/charts';
+ *
+ * <SparklineChart data={[12, 18, 14, 26, 22, 31]} trend="up" />
+ * ```
+ */
 const SparklineChart = lazyChart<ComponentProps<typeof SparklineChartType>>(() =>
   import('./components/sparkline-chart').then(m => ({ default: m.SparklineChart }))
 );
+/**
+ * A stacked area chart for cumulative composition over time — e.g. revenue by channel, traffic
+ * by source. Unlike `RevenueAreaChart` (a single series plus one comparison overlay), every
+ * series here stacks to show the total alongside each category's contribution.
+ *
+ * @example
+ * ```tsx
+ * import { StackedAreaChart } from '@customafk/lunas-ui/features/charts';
+ *
+ * <StackedAreaChart
+ *   data={[{ date: '2026-06-01', direct: 4200, organic: 3100, paid: 1800 }]}
+ *   series={[
+ *     { key: 'direct', label: 'Direct' },
+ *     { key: 'organic', label: 'Organic' },
+ *     { key: 'paid', label: 'Paid' },
+ *   ]}
+ * />
+ * ```
+ */
 const StackedAreaChart = lazyChart<ComponentProps<typeof StackedAreaChartType>>(() =>
   import('./components/stacked-area-chart').then(m => ({ default: m.StackedAreaChart }))
 );
+/**
+ * A horizontal bar ranking chart — top products, best categories, top customers.
+ *
+ * @example
+ * ```tsx
+ * import { TopProductsBarChart } from '@customafk/lunas-ui/features/charts';
+ *
+ * <TopProductsBarChart
+ *   data={[
+ *     { name: 'Wireless Earbuds', value: 1245 },
+ *     { name: 'Smart Watch', value: 986 },
+ *   ]}
+ * />
+ * ```
+ */
 const TopProductsBarChart = lazyChart<ComponentProps<typeof TopProductsBarChartType>>(() =>
   import('./components/top-products-bar-chart').then(m => ({ default: m.TopProductsBarChart }))
 );
+/**
+ * Volume bars colored by day direction (close vs. previous close), meant to sit under a
+ * `CandlestickChart` on a shared time axis.
+ *
+ * @example
+ * ```tsx
+ * import { VolumeBarChart } from '@customafk/lunas-ui/features/charts';
+ *
+ * <VolumeBarChart
+ *   data={[
+ *     { date: '2026-06-01', close: 142.5, volume: 2_400_000 },
+ *     { date: '2026-06-02', close: 145.1, volume: 3_100_000 },
+ *   ]}
+ * />
+ * ```
+ */
 const VolumeBarChart = lazyChart<ComponentProps<typeof VolumeBarChartType>>(() =>
   import('./components/volume-bar-chart').then(m => ({ default: m.VolumeBarChart }))
 );
+/**
+ * A waterfall/bridge chart — an incremental sequence of positive/negative steps between totals
+ * (e.g. starting balance → revenue → costs → ending balance). Built as stacked bars: an
+ * invisible "base" bar positions each floating step at its running total.
+ *
+ * @example
+ * ```tsx
+ * import { WaterfallChart } from '@customafk/lunas-ui/features/charts';
+ *
+ * <WaterfallChart
+ *   data={[
+ *     { label: 'Starting cash', value: 50000, isTotal: true },
+ *     { label: 'Revenue', value: 32000 },
+ *     { label: 'COGS', value: -18000 },
+ *     { label: 'Opex', value: -9000 },
+ *     { label: 'Ending cash', value: 55000, isTotal: true },
+ *   ]}
+ * />
+ * ```
+ */
 const WaterfallChart = lazyChart<ComponentProps<typeof WaterfallChartType>>(() =>
   import('./components/waterfall-chart').then(m => ({ default: m.WaterfallChart }))
 );

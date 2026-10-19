@@ -352,10 +352,19 @@ FieldSeparator.displayName = 'FieldSeparator';
  * Props for {@link FieldError}.
  */
 type FieldErrorProps = React.ComponentProps<'div'> & {
+  /** The field's `state.meta.errors`; ignored when `children` is passed. */
   errors?: Array<{ code?: string; message?: string } | undefined>;
+  /**
+   * Message shown for an `invalid_type` error — what a schema reports for an empty required value.
+   * @default 'Trường này là bắt buộc'
+   */
   requiredMessage?: string;
 };
 
+/**
+ * Validation message area (`role="alert"`) for a form field: renders `children`, a single error with
+ * an icon, or a list of errors; renders nothing when there is nothing to show.
+ */
 const FieldError = memo(({ className, children, errors, requiredMessage = 'Trường này là bắt buộc', ...props }: FieldErrorProps) => {
   const content = useMemo(() => {
     const resolve = (error: { code?: string; message?: string }) => (error.code === 'invalid_type' ? requiredMessage : error.message);

@@ -11,17 +11,20 @@ import type { SwitchFieldProps as Props } from '../../types';
  * positioned absolutely in the top-right corner of the field card.
  *
  * @example
- * import { SwitchField } from '@customafk/lunas-ui/features/tanstack-form';
+ * ```tsx
+ * const form = useTanStackForm({ defaultValues: { notifications: false } });
  *
- * <form.Field name="notifications">
- *   {() => (
+ * <form.AppField
+ *   name="notifications"
+ *   children={({ SwitchField }) => (
  *     <SwitchField
  *       label="Enable notifications"
  *       description="Receive email alerts for important events"
  *       helperText="You can change this at any time"
  *     />
  *   )}
- * </form.Field>
+ * />
+ * ```
  */
 export const SwitchField: React.FC<Props> = ({ label, description, helperText }) => {
   const field = useTanStackFieldContext<boolean | null>();

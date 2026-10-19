@@ -11,14 +11,31 @@ import { useTanStackFieldContext } from '../form-context';
 import { FieldError } from '../ui/field';
 
 type Props = {
+  /** Field label rendered above the control. Omit to render label-less. */
   label?: string;
+  /** Placeholder shown when the value is empty. */
   placeholder?: string;
+  /** When `true`, appends a required asterisk to the label. */
   required?: boolean;
+  /** Unit label shown inside the input after the number (e.g. `kg`, `₫`). */
   unit?: string;
+  /** Allow values below zero. */
   allowNegative?: boolean;
+  /** When `true`, disables the control. Also disabled automatically while the form is submitting. */
   disabled?: boolean;
 };
 
+/**
+ * Minimal number input bound to the surrounding `AppField`; stores `number | null`. Use it for
+ * compact forms; the non-`Simple` variants add description, tooltip, orientation and helper text.
+ *
+ * @example
+ * ```tsx
+ * const form = useTanStackForm({ defaultValues: { weight: null as number | null } });
+ *
+ * <form.AppField name="weight" children={({ SimpleNumberField }) => <SimpleNumberField label="Cân nặng" unit="kg" />} />
+ * ```
+ */
 export const SimpleNumberField: React.FC<Props> = ({ label, placeholder, required, unit, allowNegative, disabled }) => {
   const id = useId();
   const { form, state, handleBlur, handleChange } = useTanStackFieldContext<number | null>();

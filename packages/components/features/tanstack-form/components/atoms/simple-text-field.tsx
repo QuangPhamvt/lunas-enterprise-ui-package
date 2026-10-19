@@ -12,6 +12,17 @@ import { FieldError } from '../ui/field';
 
 import type { SimpleTextFieldProps as Props } from '../../types';
 
+/**
+ * Minimal single-line text input bound to the surrounding `AppField`. Use it for compact forms;
+ * the non-`Simple` variants add description, tooltip, orientation and helper text.
+ *
+ * @example
+ * ```tsx
+ * const form = useTanStackForm({ defaultValues: { fullname: null as string | null } });
+ *
+ * <form.AppField name="fullname" children={({ SimpleTextField }) => <SimpleTextField label="Họ tên" required maxLength={100} />} />
+ * ```
+ */
 export const SimpleTextField: React.FC<Props> = ({ label, placeholder, required, maxLength, disabled }) => {
   const id = useId();
   const { form, name, state, handleBlur, handleChange } = useTanStackFieldContext<string | null>();

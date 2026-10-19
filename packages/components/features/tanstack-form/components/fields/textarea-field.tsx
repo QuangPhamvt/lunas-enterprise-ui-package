@@ -26,6 +26,20 @@ import {
 
 import type { TextareaFieldProps as Props } from '../../types';
 
+/**
+ * A TanStack Form-connected multi-line text input with an optional character counter (which turns
+ * warning at 80% of `maxLength` and danger at the limit) and inline validation error display.
+ *
+ * @example
+ * ```tsx
+ * const form = useTanStackForm({ defaultValues: { note: null as string | null } });
+ *
+ * <form.AppField
+ *   name="note"
+ *   children={({ TextareaField }) => <TextareaField label="Ghi chú" maxLength={500} counter />}
+ * />
+ * ```
+ */
 export const TextareaField = memo<Props>(
   ({
     label,

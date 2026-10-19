@@ -35,6 +35,9 @@ export type SankeyFlowChartProps = BaseChartProps & {
   labelWidth?: number;
 };
 
+/** Rough rendered width of a node label, used to reserve horizontal room for the labels. */
+const estimateLabelWidth = (label: string): number => label.length * 5.6 + 14;
+
 /**
  * A Sankey flow diagram — revenue/cost breakdowns, funnels with branching paths, budget
  * allocation — where band width is proportional to the flow value between named nodes.
@@ -55,8 +58,6 @@ export type SankeyFlowChartProps = BaseChartProps & {
  * />
  * ```
  */
-const estimateLabelWidth = (label: string): number => label.length * 5.6 + 14;
-
 export const SankeyFlowChart = ({
   nodes,
   links,

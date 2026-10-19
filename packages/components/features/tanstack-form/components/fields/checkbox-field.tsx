@@ -13,10 +13,12 @@ import type { CheckboxFieldProps as Props } from '../../types';
  * supporting multi-selection and submission-state disabling.
  *
  * @example
- * import { CheckboxField } from '@customafk/lunas-ui/features/tanstack-form';
+ * ```tsx
+ * const form = useTanStackForm({ defaultValues: { roles: [] as string[] } });
  *
- * <form.Field name="roles">
- *   {() => (
+ * <form.AppField
+ *   name="roles"
+ *   children={({ CheckboxField }) => (
  *     <CheckboxField
  *       label="Roles"
  *       options={[
@@ -26,7 +28,8 @@ import type { CheckboxFieldProps as Props } from '../../types';
  *       helperText="Select one or more roles"
  *     />
  *   )}
- * </form.Field>
+ * />
+ * ```
  */
 export const CheckboxField: React.FC<Props> = ({ label, description, options, tooltip, helperText, orientation }) => {
   const field = useTanStackFieldContext<string[] | null>();

@@ -149,6 +149,8 @@
     "version:bump": "node scripts/bump-version.mjs",
     "publish:npm": "npm publish",
     "typecheck": "tsc --noEmit",
+    "docs:sync-lazy": "node scripts/sync-lazy-docs.mjs",
+    "docs:check-lazy": "node scripts/sync-lazy-docs.mjs --check",
     "lint": "npx @biomejs/biome check",
     "lint:fix": "npx @biomejs/biome lint --write ./packages",
     "format": "npx @biomejs/biome format",

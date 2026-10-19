@@ -15,13 +15,29 @@ import { useTanStackFieldContext } from '../form-context';
 import { FieldError } from '../ui/field';
 
 type Props = {
+  /** Field label rendered above the control. Omit to render label-less. */
   label?: string;
+  /** Placeholder shown when the value is empty. */
   placeholder?: string;
+  /** When `true`, appends a required asterisk to the label. */
   required?: boolean;
+  /** Maximum number of characters the user may enter. */
   maxLength?: number;
+  /** When `true`, disables the control. Also disabled automatically while the form is submitting. */
   disabled?: boolean;
 };
 
+/**
+ * Minimal email input bound to the surrounding `AppField`. Use it for compact forms; the
+ * non-`Simple` variants add description, tooltip, orientation and helper text.
+ *
+ * @example
+ * ```tsx
+ * const form = useTanStackForm({ defaultValues: { email: null as string | null } });
+ *
+ * <form.AppField name="email" children={({ SimpleEmailField }) => <SimpleEmailField label="Email" placeholder="ban@vidu.com" required />} />
+ * ```
+ */
 export const SimpleEmailField: React.FC<Props> = ({ label, placeholder, required, maxLength, disabled }) => {
   const id = useId();
   const { form, name, state, handleBlur, handleChange } = useTanStackFieldContext<string | null>();

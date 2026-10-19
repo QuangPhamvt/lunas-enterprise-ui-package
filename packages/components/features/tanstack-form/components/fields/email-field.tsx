@@ -30,17 +30,20 @@ import type { EmailFieldProps as Props } from '../../types';
  * optional clear button, and inline validation error display.
  *
  * @example
- * import { EmailField } from '@customafk/lunas-ui/features/tanstack-form';
+ * ```tsx
+ * const form = useTanStackForm({ defaultValues: { email: null as string | null } });
  *
- * <form.Field name="email">
- *   {() => (
+ * <form.AppField
+ *   name="email"
+ *   children={({ EmailField }) => (
  *     <EmailField
  *       label="Email address"
  *       placeholder="you@example.com"
  *       required
  *     />
  *   )}
- * </form.Field>
+ * />
+ * ```
  */
 export const EmailField: React.FC<Props> = ({
   label,

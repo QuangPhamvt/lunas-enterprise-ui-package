@@ -27,6 +27,23 @@ const typeLabels: Record<ColumnAggregationType, string> = {
   max: 'Lớn nhất',
 };
 
+/**
+ * Collapsible panel under the table that shows, for every column with `meta.aggregation`, the
+ * aggregate (sum/avg/count/min/max) over all rows and over the currently selected rows. Reads
+ * everything from the surrounding `UITableProvider`; takes no props.
+ *
+ * @example
+ * ```tsx
+ * import { UITableAnalysisPanel, UITableProvider } from '@customafk/lunas-ui/features/tables';
+ *
+ * const columns = [{ accessorKey: 'total', header: 'Tổng tiền', meta: { aggregation: { type: 'sum' } } }];
+ *
+ * <UITableProvider data={orders} columns={columns}>
+ *   {table}
+ *   <UITableAnalysisPanel />
+ * </UITableProvider>
+ * ```
+ */
 export const UITableAnalysisPanel = memo(() => {
   const { table, totalRows } = useUITableContext();
   const { rowSelectionState } = useUITableBodyContext();

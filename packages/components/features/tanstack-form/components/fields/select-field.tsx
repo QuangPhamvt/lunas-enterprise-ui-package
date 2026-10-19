@@ -28,6 +28,21 @@ import {
   FieldTooltip,
 } from '../ui/field';
 
+/**
+ * A TanStack Form-connected single-select dropdown with an optional clear button and inline
+ * validation error display. Uses a Radix `Select` on desktop and a picker dialog on mobile.
+ * Stores the selected option's `value` (`string | null`).
+ *
+ * @example
+ * ```tsx
+ * const form = useTanStackForm({ defaultValues: { status: null as string | null } });
+ *
+ * <form.AppField
+ *   name="status"
+ *   children={({ SelectField }) => <SelectField label="Trạng thái" options={statusOptions} required />}
+ * />
+ * ```
+ */
 export const SelectField = memo<Props>(
   ({
     label,

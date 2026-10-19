@@ -29,6 +29,21 @@ import {
   FieldTooltip,
 } from '../ui/field';
 
+/**
+ * A TanStack Form-connected date picker: a trigger button showing the formatted date that opens a
+ * calendar popover, with optional `minDate`/`maxDate` bounds and inline validation error display.
+ * Stores a `Date | null`.
+ *
+ * @example
+ * ```tsx
+ * const form = useTanStackForm({ defaultValues: { deliveryDate: null as Date | null } });
+ *
+ * <form.AppField
+ *   name="deliveryDate"
+ *   children={({ DateField }) => <DateField label="Ngày giao hàng" minDate={new Date()} required />}
+ * />
+ * ```
+ */
 export const DateField = memo<Props>(
   ({
     label,
