@@ -131,7 +131,7 @@ function AlertDialogAction({ className, ...props }: React.ComponentProps<typeof 
 
 /** Cancel button that closes the alert dialog without performing the destructive action. */
 function AlertDialogCancel({ className, ...props }: React.ComponentProps<typeof AlertDialogPrimitive.Cancel>) {
-  return <AlertDialogPrimitive.Cancel className={cn(buttonVariants({ variant: 'soft', color: 'primary' }), 'min-w-24', className)} {...props} />;
+  return <AlertDialogPrimitive.Cancel className={cn(buttonVariants({ variant: 'outline', color: 'muted' }), 'min-w-24', className)} {...props} />;
 }
 
 export {

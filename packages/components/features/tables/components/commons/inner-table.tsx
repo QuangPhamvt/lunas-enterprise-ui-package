@@ -1,7 +1,7 @@
 'use client';
 import { memo, useEffect } from 'react';
 
-import { ACTION_WIDTH, SELECT_WIDTH } from '../../constants';
+import { ACTION_WIDTH, EXPAND_WIDTH, SELECT_WIDTH } from '../../constants';
 import { useUITableInnerTableContext } from '../../hooks/use-context';
 import type { TUITableInnerTable } from '../../types';
 import { tableInnerTableVariants } from '../table.variants';
@@ -32,13 +32,13 @@ export const UITableInnerTable = memo<TUITableInnerTable>(({ children, ...props 
         let fixedSizeTotal: number = 0;
         const columnSpecs = headers.map(header => {
           const { id } = header;
-          const isSpecial = id === 'select' || id === 'actions';
+          const isSpecial = id === 'select' || id === 'expand' || id === 'actions';
           const isPinned = leftColumnPinning.includes(id) || rightColumnPinning.includes(id);
           const size = header.getSize();
           const maxSize = header.column.columnDef.maxSize;
 
           if (isSpecial) {
-            const width = id === 'select' ? SELECT_WIDTH : ACTION_WIDTH;
+            const width = id === 'select' ? SELECT_WIDTH : id === 'expand' ? EXPAND_WIDTH : ACTION_WIDTH;
             pinnedWidth += width;
             return { id, isFlex: false, width };
           }

@@ -6,12 +6,13 @@ import { flexRender } from '@tanstack/react-table';
 import { cn } from '@customafk/react-toolkit/utils';
 
 import type { AnyEntity } from '@/types';
+import { ROW_INDENT_PER_DEPTH } from '../../constants';
 import { useUITableInnerTableContext } from '../../hooks/use-context';
 import type { TUITableCell } from '../../types';
 import { tableCellInnerVariants, tableCellVariants } from '../table.variants';
 
 export const UITableCell = memo<TUITableCell>(
-  ({ isPinned = false, isFirstCell = false, isLastCell = false, colId, position = 'start', column, getContext, className, ...props }) => {
+  ({ isPinned = false, isFirstCell = false, isLastCell = false, colId, position = 'start', indent = 0, column, getContext, className, ...props }) => {
     const { table, tableRef } = useUITableInnerTableContext();
     const cellRef = useRef<HTMLDivElement>(null);
 
@@ -66,7 +67,12 @@ export const UITableCell = memo<TUITableCell>(
         className={cn(tableCellVariants({ isPinned: isPinned || undefined, isLastCell, isFirstCell }), className)}
         {...props}
       >
-        <div ref={cellRef} slot="table-body-cell-inner" className={tableCellInnerVariants({ position })}>
+        <div
+          ref={cellRef}
+          slot="table-body-cell-inner"
+          className={tableCellInnerVariants({ position })}
+          style={indent > 0 ? { paddingLeft: indent * ROW_INDENT_PER_DEPTH } : undefined}
+        >
           {render}
         </div>
       </td>

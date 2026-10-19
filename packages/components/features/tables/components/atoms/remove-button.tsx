@@ -34,7 +34,7 @@ export const UITableRemoveButton: React.FC<{
   );
   return (
     <Tooltip>
-      <TooltipTrigger>
+      <TooltipTrigger asChild>
         <Button type="button" variant="ghost" color="danger" size="icon" onClick={handleClick}>
           <Trash2Icon />
         </Button>

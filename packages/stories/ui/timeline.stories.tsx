@@ -1,6 +1,6 @@
 'use client';
 
-import { CheckIcon } from 'lucide-react';
+import { CheckIcon, XIcon } from 'lucide-react';
 
 import {
   Timeline,
@@ -37,18 +37,21 @@ export const Default: Story = {
     <Timeline className="w-80">
       <TimelineItem>
         <TimelineIndicator>
-          <TimelineDot status="completed" />
-          <TimelineConnector />
+          <TimelineDot status="completed">
+            <CheckIcon />
+          </TimelineDot>
+          <TimelineConnector status="completed" />
         </TimelineIndicator>
         <TimelineContent>
           <TimelineTitle>Tạo Đơn</TimelineTitle>
           <TimelineDescription>Đơn hàng đã được tạo thành công.</TimelineDescription>
+          <TimelineTime>10:32 26/08/2026</TimelineTime>
         </TimelineContent>
       </TimelineItem>
       <TimelineItem>
         <TimelineIndicator>
           <TimelineDot status="current" />
-          <TimelineConnector />
+          <TimelineConnector status="current" />
         </TimelineIndicator>
         <TimelineContent>
           <TimelineTitle>Đang Mua</TimelineTitle>
@@ -58,7 +61,7 @@ export const Default: Story = {
       <TimelineItem>
         <TimelineIndicator>
           <TimelineDot status="upcoming" />
-          <TimelineConnector />
+          <TimelineConnector status="upcoming" />
         </TimelineIndicator>
         <TimelineContent>
           <TimelineTitle>Đang Giao</TimelineTitle>
@@ -71,6 +74,9 @@ export const Default: Story = {
     await expect(canvas.getByText('Tạo Đơn')).toBeInTheDocument();
     await expect(canvas.getByText('Đang Mua')).toBeInTheDocument();
     await expect(canvas.getByText('Đang Giao')).toBeInTheDocument();
+    // Description text must be legible — resolves to the project token, never shadcn's near-white muted-foreground.
+    const description = canvas.getByText('Đơn hàng đã được tạo thành công.');
+    await expect(description).toHaveClass('text-text-positive-weak');
   },
 };
 
@@ -90,8 +96,11 @@ export const States: Story = {
       {STATES.map(({ status, label }) => (
         <TimelineItem key={status}>
           <TimelineIndicator>
-            <TimelineDot status={status} />
-            <TimelineConnector />
+            <TimelineDot status={status}>
+              {status === 'completed' && <CheckIcon />}
+              {status === 'error' && <XIcon />}
+            </TimelineDot>
+            <TimelineConnector status={status} />
           </TimelineIndicator>
           <TimelineContent>
             <TimelineTitle>{label}</TimelineTitle>
@@ -107,6 +116,13 @@ export const States: Story = {
     }
     const dots = canvasElement.querySelectorAll('[data-slot="timeline-dot"]');
     await expect(dots).toHaveLength(4);
+
+    // `error` must be visually distinct from `completed`: it carries a ring, `completed` does not.
+    const errorDot = canvasElement.querySelector('[data-slot="timeline-dot"][data-status="error"]');
+    const completedDot = canvasElement.querySelector('[data-slot="timeline-dot"][data-status="completed"]');
+    await expect(errorDot).toHaveClass('ring-4');
+    await expect(errorDot?.querySelector('svg')).toBeInTheDocument();
+    await expect(completedDot).not.toHaveClass('ring-4');
   },
 };
 
@@ -126,7 +142,7 @@ export const ColorOverride: Story = {
         <TimelineItem key={color}>
           <TimelineIndicator>
             <TimelineDot status="completed" color={color} />
-            <TimelineConnector />
+            <TimelineConnector status="completed" color={color} />
           </TimelineIndicator>
           <TimelineContent>
             <TimelineTitle>{label}</TimelineTitle>
@@ -140,6 +156,8 @@ export const ColorOverride: Story = {
     for (const { label } of COLOR_OVERRIDES) {
       await expect(canvas.getByText(label)).toBeInTheDocument();
     }
+    const warningDot = canvasElement.querySelectorAll('[data-slot="timeline-dot"]')[1];
+    await expect(warningDot).toHaveClass('bg-warning');
   },
 };
 
@@ -169,7 +187,7 @@ export const OrderStatusHistory: Story = {
         <TimelineItem key={label}>
           <TimelineIndicator>
             <TimelineDot status={status}>{status === 'completed' && <CheckIcon />}</TimelineDot>
-            <TimelineConnector />
+            <TimelineConnector status={status} />
           </TimelineIndicator>
           <TimelineContent>
             <TimelineTitle>{label}</TimelineTitle>
@@ -187,6 +205,13 @@ export const OrderStatusHistory: Story = {
     }
     const currentDots = canvasElement.querySelectorAll('[data-slot="timeline-dot"][data-status="current"]');
     await expect(currentDots).toHaveLength(1);
+
+    // Completed segments form a tinted progress track; upcoming segments stay neutral.
+    const connectors = [...canvasElement.querySelectorAll('[data-slot="timeline-connector"]')];
+    const completedConnector = connectors.find(c => (c as HTMLElement).dataset.status === 'completed');
+    const upcomingConnector = connectors.find(c => (c as HTMLElement).dataset.status === 'upcoming');
+    await expect(completedConnector).toHaveClass('bg-success');
+    await expect(upcomingConnector).toHaveClass('bg-border');
   },
 };
 
@@ -201,4 +226,11 @@ export const Sizes: Story = {
       <TimelineDot status="completed" size="lg" />
     </div>
   ),
+  play: async ({ canvasElement }) => {
+    const dots = canvasElement.querySelectorAll('[data-slot="timeline-dot"]');
+    await expect(dots).toHaveLength(3);
+    await expect(dots[0]).toHaveClass('size-2.5');
+    await expect(dots[1]).toHaveClass('size-3');
+    await expect(dots[2]).toHaveClass('size-3.5');
+  },
 };

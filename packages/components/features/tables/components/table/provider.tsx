@@ -11,7 +11,7 @@
  */
 import { useId, useMemo, useRef, useState } from 'react';
 
-import type { ColumnDef, ExpandedState } from '@tanstack/react-table';
+import type { ColumnDef, ExpandedState, Row } from '@tanstack/react-table';
 import { getCoreRowModel, getExpandedRowModel, getGroupedRowModel, useReactTable } from '@tanstack/react-table';
 
 import type { AnyEntity } from '@/types';
@@ -109,6 +109,11 @@ export const UITableProvider = <
   onRowSelection,
   onColumnPinning,
 
+  enableRowSelection = true,
+  enableSubRowSelection = true,
+  getRowId,
+  defaultExpanded,
+
   fetchMoreData,
   emptyDisplayHeight,
   csvData,
@@ -130,7 +135,11 @@ export const UITableProvider = <
   const innerTableId = useId();
   const tableRef = useRef<HTMLTableElement | null>(null);
 
-  const [expanded, setExpanded] = useState<ExpandedState>({});
+  const [expanded, setExpanded] = useState<ExpandedState>(() => {
+    if (defaultExpanded === true) return true;
+    if (defaultExpanded && typeof defaultExpanded === 'object') return defaultExpanded;
+    return {};
+  });
 
   const { rowSelection, onRowSelectionChange } = useTableSelection(onRowSelection);
   const { columnPinning, onColumnPinningChange } = useTableColumnPinning({
@@ -160,7 +169,8 @@ export const UITableProvider = <
     columnResizeDirection: 'ltr',
 
     enableColumnPinning: true,
-    enableRowSelection: true,
+    enableRowSelection: enableRowSelection as boolean | ((row: Row<TData>) => boolean),
+    enableSubRowSelection,
     enableColumnResizing: true,
     enableMultiRowSelection: true,
 
@@ -169,6 +179,7 @@ export const UITableProvider = <
     autoResetPageIndex: false,
 
     getSubRows: row => row.subRows,
+    ...(getRowId ? { getRowId: getRowId as (originalRow: TData, index: number, parent?: Row<TData>) => string } : {}),
     getCoreRowModel: getCoreRowModel(),
     getGroupedRowModel: getGroupedRowModel(),
     getExpandedRowModel: getExpandedRowModel(),
@@ -254,6 +265,11 @@ export const UITableProvider = <
     return table.getIsAllRowsSelected();
   }, [table.getIsAllRowsSelected()]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: table get state
+  const isAllRowsExpanded = useMemo(() => {
+    return table.getIsAllRowsExpanded();
+  }, [table.getState().expanded]);
+
   const rowSelectionState = useMemo(() => {
     return tableState.rowSelection;
   }, [tableState.rowSelection]);
@@ -261,6 +277,10 @@ export const UITableProvider = <
   const columnPinningState = useMemo(() => {
     return tableState.columnPinning;
   }, [tableState.columnPinning]);
+
+  const expandedState = useMemo(() => {
+    return tableState.expanded;
+  }, [tableState.expanded]);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: table get state
   const leftPinnedHeaders = useMemo(() => {
@@ -292,10 +312,12 @@ export const UITableProvider = <
               >
                 <UITableHeadRowProvider
                   isAllRowsSelected={isAllRowsSelected}
+                  isAllRowsExpanded={isAllRowsExpanded}
                   columnPinningState={columnPinningState}
                   leftPinnedHeaders={leftPinnedHeaders}
                   rightPinnedHeaders={rightPinnedHeaders}
                   onToggleAllRowsSelected={table.toggleAllRowsSelected}
+                  onToggleAllRowsExpanded={table.toggleAllRowsExpanded}
                 >
                   <UITableBodyProvider
                     isFetching={isFetching}
@@ -303,6 +325,7 @@ export const UITableProvider = <
                     isEmpty={isEmpty}
                     rowSelectionState={rowSelectionState}
                     columnPinningState={columnPinningState}
+                    expandedState={expandedState}
                   >
                     <UITableRowProvider
                       keyOfClickRow={keyOfClickRow}

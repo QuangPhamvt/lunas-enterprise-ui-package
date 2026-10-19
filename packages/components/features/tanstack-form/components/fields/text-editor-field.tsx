@@ -1,14 +1,20 @@
 'use client';
 
-import { memo, useCallback } from 'react';
+import { lazy, memo, Suspense, useCallback } from 'react';
 
 import { useStore } from '@tanstack/react-form';
 
-import { TextEditor } from '@/components/features/text-editor';
+import { Skeleton } from '@/components/ui/skeleton';
 
 import type { TextEditorFieldProps as Props } from '../../types';
 import { useTanStackFieldContext } from '../form-context';
 import { Field, FieldContent, FieldDescription, FieldError, FieldGroup, FieldLabel, FieldNote, FieldSeparator, FieldTooltip } from '../ui/field';
+
+/**
+ * Loaded on demand: the editor pulls in tiptap + lowlight, and every consumer of
+ * `features/tanstack-form` would otherwise pay for it even on forms with no rich-text field.
+ */
+const TextEditor = lazy(() => import('@/components/features/text-editor').then(m => ({ default: m.TextEditor })));
 
 export const TextEditorField: React.FC<Props> = memo(
   ({
@@ -58,25 +64,27 @@ export const TextEditorField: React.FC<Props> = memo(
             </FieldLabel>
             <FieldDescription>{description}</FieldDescription>
           </FieldContent>
-          <TextEditor
-            value={state.value ?? ''}
-            placeholder={placeholder}
-            readOnly={isSubmitting}
-            onChange={onChange}
-            maxLength={maxLength}
-            showCharacterCount={showCharacterCount}
-            enableLink={enableLink}
-            enableBubbleMenu={enableBubbleMenu}
-            enableTaskList={enableTaskList}
-            enableHighlight={enableHighlight}
-            enableColor={enableColor}
-            enableImage={enableImage}
-            enableTable={enableTable}
-            enableSlashCommand={enableSlashCommand}
-            onImageUpload={onImageUpload}
-            variant={variant}
-            size={size}
-          />
+          <Suspense fallback={<Skeleton data-slot="text-editor-skeleton" className="h-40 w-full rounded-md" />}>
+            <TextEditor
+              value={state.value ?? ''}
+              placeholder={placeholder}
+              readOnly={isSubmitting}
+              onChange={onChange}
+              maxLength={maxLength}
+              showCharacterCount={showCharacterCount}
+              enableLink={enableLink}
+              enableBubbleMenu={enableBubbleMenu}
+              enableTaskList={enableTaskList}
+              enableHighlight={enableHighlight}
+              enableColor={enableColor}
+              enableImage={enableImage}
+              enableTable={enableTable}
+              enableSlashCommand={enableSlashCommand}
+              onImageUpload={onImageUpload}
+              variant={variant}
+              size={size}
+            />
+          </Suspense>
           {state.meta.isDirty && showErrorMessage && !!state.meta.errors.length && <FieldError errors={state.meta.errors} />}
           <FieldNote isShow={!!helperText}>{helperText}</FieldNote>
         </Field>

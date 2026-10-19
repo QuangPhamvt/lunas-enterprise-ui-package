@@ -293,7 +293,9 @@ function TextEditor({
       }
       if (!onChangeRef.current) return;
       if (emitTimerRef.current) clearTimeout(emitTimerRef.current);
-      emitTimerRef.current = setTimeout(() => flushPendingChange(e.getHTML()), 200);
+      emitTimerRef.current = setTimeout(() => {
+        if (!e.isDestroyed) flushPendingChange(e.getHTML());
+      }, 200);
     },
     onBlur: ({ editor: e }) => flushPendingChange(e.getHTML()),
   });
@@ -305,20 +307,23 @@ function TextEditor({
   editorRef.current = editor;
   useEffect(
     () => () => {
-      if (editorRef.current) flushRef.current(editorRef.current.getHTML());
+      const current = editorRef.current;
+      if (current && !current.isDestroyed) flushRef.current(current.getHTML());
     },
     []
   );
 
   useEffect(() => {
-    if (!editor || value === undefined) return;
+    // A Suspense boundary hiding this tree destroys the editor before React reconnects these
+    // effects; `useEditor` recreates it on the next render, so skip the stale instance.
+    if (!editor || editor.isDestroyed || value === undefined) return;
     const sanitized = sanitizeHtml(value, sanitizeConfig);
     if (editor.getHTML() === sanitized) return;
     editor.commands.setContent(sanitized);
   }, [editor, value, sanitizeConfig]);
 
   useEffect(() => {
-    if (!editor) return;
+    if (!editor || editor.isDestroyed) return;
     editor.setEditable(!readOnly);
   }, [editor, readOnly]);
 

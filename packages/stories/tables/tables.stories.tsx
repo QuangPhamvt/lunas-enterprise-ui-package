@@ -15,8 +15,11 @@ import {
   UITableContainer,
   UITableCurrencyDisplay,
   UITableFilter,
+  UITableListDisplay,
   UITableProvider,
+  UITableStatisticDisplay,
   UITableStatusDisplay,
+  UITableStatusListDisplay,
   UITableSummaryBar,
   UITableToolbar,
   UITableToolbarActions,
@@ -948,5 +951,200 @@ export const WithSummaryAndAnalysis: Story = {
         </UITableProvider>
       </div>
     );
+  },
+};
+
+// ─── Expandable Sub Rows (parent = product, sub-row = order) ──────────────────
+
+/**
+ * A product‑grouped manifest list: each **parent** row aggregates several order
+ * lines for the same product, and expands into one **sub‑row per order**.
+ *
+ * Demonstrates the expand column (`{ accessorKey: 'expand' }`, auto‑pinned next
+ * to `select`), depth indentation, and — via `enableRowSelection={row =>
+ * row.depth > 0}` + `enableSubRowSelection={false}` — selection checkboxes that
+ * appear **only on sub‑rows**. Parent cells use `UITableStatusListDisplay` /
+ * `UITableListDisplay` (with a hover tooltip listing every value) and summed
+ * quantity / amount.
+ */
+type TManifestLine = {
+  id: string;
+  productName: string;
+  orderCode: string;
+  status: 'PURCHASING' | 'PURCHASED' | 'IN_TRANSIT' | 'DELIVERED';
+  quantity: number;
+  amount: number;
+  shipmentCode: string | null;
+  orderCount?: number;
+  statuses?: { value: string; count: number }[];
+  shipmentCodes?: string[];
+  orderCodes?: string[];
+  subRows?: TManifestLine[];
+};
+
+const MANIFEST_STATUS_COLORS: Record<string, 'success' | 'warning' | 'info' | 'secondary'> = {
+  PURCHASING: 'warning',
+  PURCHASED: 'success',
+  IN_TRANSIT: 'info',
+  DELIVERED: 'secondary',
+};
+
+const buildManifestGroup = (productName: string, lines: Omit<TManifestLine, 'productName'>[]): TManifestLine => {
+  const subRows = lines.map(l => ({ ...l, productName }));
+  const statusCounts = subRows.reduce<Record<string, number>>((acc, l) => {
+    acc[l.status] = (acc[l.status] ?? 0) + 1;
+    return acc;
+  }, {});
+  return {
+    id: `group-${productName}`,
+    productName,
+    orderCode: '',
+    status: subRows[0].status,
+    quantity: subRows.reduce((s, l) => s + l.quantity, 0),
+    amount: subRows.reduce((s, l) => s + l.amount, 0),
+    shipmentCode: null,
+    orderCount: subRows.length,
+    statuses: Object.entries(statusCounts).map(([value, count]) => ({ value, count })),
+    shipmentCodes: [...new Set(subRows.map(l => l.shipmentCode).filter((c): c is string => !!c))],
+    orderCodes: subRows.map(l => l.orderCode),
+    subRows,
+  };
+};
+
+const ManifestGroupedData: TManifestLine[] = [
+  buildManifestGroup('Nendoroid Hatsune Miku', [
+    { id: 'm1', orderCode: 'LN-001', status: 'PURCHASED', quantity: 2, amount: 1_240_000, shipmentCode: 'SPX-1' },
+    { id: 'm2', orderCode: 'LN-014', status: 'PURCHASING', quantity: 1, amount: 620_000, shipmentCode: null },
+    { id: 'm3', orderCode: 'LN-022', status: 'PURCHASED', quantity: 3, amount: 1_860_000, shipmentCode: 'SPX-1' },
+    { id: 'm4', orderCode: 'LN-039', status: 'IN_TRANSIT', quantity: 1, amount: 620_000, shipmentCode: 'SPX-7' },
+  ]),
+  buildManifestGroup('Figma Chainsaw Man - Denji', [
+    { id: 'm5', orderCode: 'LN-005', status: 'DELIVERED', quantity: 1, amount: 3_400_000, shipmentCode: 'SPX-3' },
+    { id: 'm6', orderCode: 'LN-018', status: 'DELIVERED', quantity: 1, amount: 3_400_000, shipmentCode: 'SPX-4' },
+  ]),
+  buildManifestGroup('Acrylic Stand - Frieren', [
+    { id: 'm7', orderCode: 'LN-041', status: 'PURCHASING', quantity: 5, amount: 750_000, shipmentCode: null },
+    { id: 'm8', orderCode: 'LN-042', status: 'PURCHASING', quantity: 2, amount: 300_000, shipmentCode: null },
+    { id: 'm9', orderCode: 'LN-050', status: 'PURCHASED', quantity: 4, amount: 600_000, shipmentCode: 'SPX-9' },
+  ]),
+];
+
+const ManifestGroupedColumns: TUITableColumn<TManifestLine>[] = [
+  { accessorKey: 'expand', size: 44 },
+  { accessorKey: 'select', size: 60 },
+  {
+    id: 'productName',
+    accessorKey: 'productName',
+    header: 'Sản phẩm / Đơn hàng',
+    size: 320,
+    cell: ({ row }) =>
+      row.getCanExpand() ? (
+        <div className="flex flex-col">
+          <span className="font-medium">{row.original.productName}</span>
+          <span className="text-text-positive-weak text-xs">{row.original.orderCount} đơn hàng</span>
+        </div>
+      ) : (
+        <span className="font-mono text-text-positive-weak text-xs">{row.original.orderCode}</span>
+      ),
+  },
+  {
+    id: 'status',
+    accessorKey: 'status',
+    header: 'Trạng thái',
+    size: 220,
+    cell: ({ row }) =>
+      row.getCanExpand() ? (
+        <UITableStatusListDisplay items={row.original.statuses ?? []} colorMap={MANIFEST_STATUS_COLORS} maxVisible={1} />
+      ) : (
+        <UITableStatusDisplay value={row.original.status} colorMap={MANIFEST_STATUS_COLORS} />
+      ),
+  },
+  {
+    id: 'quantity',
+    accessorKey: 'quantity',
+    header: 'Số lượng',
+    size: 120,
+    meta: { position: 'end' },
+    cell: ({ row }) => <UITableStatisticDisplay size="sm" value={row.original.quantity} />,
+  },
+  {
+    id: 'amount',
+    accessorKey: 'amount',
+    header: 'Tổng tiền',
+    size: 180,
+    meta: { position: 'end' },
+    cell: ({ row }) => <UITableCurrencyDisplay size="sm" value={row.original.amount} currency="VND" locale="vi-VN" />,
+  },
+  {
+    id: 'shipmentCode',
+    accessorKey: 'shipmentCode',
+    header: 'Mã vận đơn',
+    size: 200,
+    cell: ({ row }) =>
+      row.getCanExpand() ? (
+        <UITableListDisplay items={row.original.shipmentCodes ?? []} variant="tag" tooltipItems="all" maxVisible={1} moreLabel={n => `+${n}`} />
+      ) : row.original.shipmentCode ? (
+        <span className="font-mono text-xs">{row.original.shipmentCode}</span>
+      ) : (
+        <span className="text-text-positive-weak">—</span>
+      ),
+  },
+];
+
+const ExpandableSubRowsDemo: React.FC<{ onRowSelection?: (s: RowSelectionState) => void }> = ({ onRowSelection }) => (
+  <div className="h-[calc(100vh-4rem)] w-full">
+    <UITableProvider<TManifestLine>
+      title="Danh sách mặt hàng"
+      description="Gom theo sản phẩm — sổ ra để xem từng đơn"
+      columns={ManifestGroupedColumns}
+      data={ManifestGroupedData}
+      totalRows={ManifestGroupedData.length}
+      leftPinnedColumns={['productName']}
+      getRowId={row => row.id}
+      enableRowSelection={row => row.depth > 0}
+      enableSubRowSelection={false}
+      onRowSelection={onRowSelection}
+    >
+      <UITableWrapper>
+        <UITableToolbar>
+          <UITableToolbarSearch />
+          <UITableToolbarActions />
+        </UITableToolbar>
+        <UITableContainer />
+      </UITableWrapper>
+    </UITableProvider>
+  </div>
+);
+
+export const ExpandableSubRows: StoryObj<typeof ExpandableSubRowsDemo> = {
+  name: 'Expandable Sub Rows',
+  render: args => <ExpandableSubRowsDemo {...args} />,
+  args: {
+    onRowSelection: fn(),
+  },
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+
+    // Parent rows carry no selection checkbox — only the header "select all" exists.
+    const initialCheckboxes = canvas.getAllByRole('checkbox');
+    await expect(initialCheckboxes).toHaveLength(1);
+
+    // Expand the first product group.
+    const expandButtons = await canvas.findAllByRole('button', { name: /expand row/i }, { timeout: 8000 });
+    await userEvent.click(expandButtons[0]);
+
+    // Its four order sub-rows now render, each with its own checkbox.
+    await expect(canvas.getByText('LN-001')).toBeInTheDocument();
+    const afterExpand = canvas.getAllByRole('checkbox');
+    await expect(afterExpand.length).toBe(1 + 4);
+
+    // Selecting a sub-row reports only that sub-row's id — the parent is never selected.
+    await userEvent.click(afterExpand[1]);
+    await expect(args.onRowSelection).toHaveBeenLastCalledWith({ m1: true });
+
+    // Collapse again.
+    const collapseButton = canvas.getAllByRole('button', { name: /collapse row/i })[0];
+    await userEvent.click(collapseButton);
+    await expect(canvas.queryByText('LN-001')).not.toBeInTheDocument();
   },
 };

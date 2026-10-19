@@ -4,6 +4,7 @@ import type {
   Column,
   ColumnPinningPosition,
   ColumnPinningState,
+  ExpandedState,
   Header,
   HeaderGroup,
   Row,
@@ -144,12 +145,45 @@ export type TUITableRow = React.ComponentProps<'tr'> & {
   rowIndex: number;
 };
 
+/** Props for `UITableCellExpand` — the per-row expand/collapse toggle `<td>`. */
+export type TUITableCellExpand = React.ComponentProps<'td'> & {
+  /** Pinning position; the expand cell is always rendered sticky regardless. */
+  isPinned?: ColumnPinningPosition;
+  /** Whether this is the last left-pinned column; renders a trailing edge shadow. */
+  isLastCell?: boolean;
+  /** Whether the row currently has child rows that can be expanded. */
+  canExpand?: boolean;
+  /** Whether the row is currently expanded (drives the chevron rotation). */
+  isExpanded?: boolean;
+  /** Nesting level of the row; the toggle is indented by `depth` steps. */
+  depth?: number;
+  /** Calls `row.toggleExpanded` when the toggle is clicked. */
+  onToggleExpanded?: () => void;
+};
+
+/** Props for `UITableHeadCellExpand` — the header cell above the expand column. */
+export type TUITableHeadCellExpand = React.ComponentProps<'th'> & {
+  /** Whether the column is pinned to a side (the expand cell is always sticky). */
+  isPinned?: ColumnPinningPosition;
+  /** Whether this is the last left-pinned column; renders a trailing edge shadow. */
+  isLastCell?: boolean;
+  /** Reflects `table.getIsAllRowsExpanded()` to set the toggle state. */
+  isAllRowsExpanded?: boolean;
+  /** Calls `table.toggleAllRowsExpanded` when the toggle is clicked. */
+  onToggleAllRowsExpanded?: () => void;
+};
+
 /** Props for `UITableCellSelect` — the per-row selection checkbox `<td>`. */
 export type TUITableCellSelect = React.ComponentProps<'td'> & {
   /** Pinning position; the select cell is always rendered sticky regardless. */
   isPinned?: ColumnPinningPosition;
   /** Whether this is the last left-pinned column; renders a trailing edge shadow so users can see it's pinned over scrollable content. */
   isLastCell?: boolean;
+  /**
+   * Whether this row may be selected (`row.getCanSelect()`). When `false` the
+   * `<td>` renders empty — used to keep selection on sub-rows only.
+   */
+  canSelect?: boolean;
   /** Whether the checkbox should appear checked. */
   isSelected?: boolean;
   /** Calls `row.toggleSelected` when the checkbox value changes. */
@@ -178,6 +212,12 @@ export type TUITableCell = React.ComponentProps<'td'> & {
   cellId?: string;
   /** Horizontal alignment of the cell content (`'start'` is the default). */
   position?: 'start' | 'center' | 'end';
+  /**
+   * Row nesting level. When `> 0` the cell content is indented by that many
+   * steps — set only on the first non-special data cell so nested rows read as
+   * children of their parent.
+   */
+  indent?: number;
   /** TanStack `Column` instance used to derive sticky offsets and content-fit sizing. */
   column?: Column<unknown, unknown>;
   /** Returns the `CellContext` passed to `flexRender`. */
@@ -369,6 +409,10 @@ export type TTableHeadRowContext = {
   rightPinnedHeaders: Header<AnyEntity, unknown>[];
   /** Toggles all-row selection; delegates to `table.toggleAllRowsSelected`. */
   onToggleAllRowsSelected?: (value?: boolean) => void;
+  /** Whether every expandable row is currently expanded. */
+  isAllRowsExpanded?: boolean;
+  /** Toggles all-row expansion; delegates to `table.toggleAllRowsExpanded`. */
+  onToggleAllRowsExpanded?: () => void;
 };
 
 /** Context value provided by `UITableBodyProvider`. */
@@ -386,6 +430,12 @@ export type TTableBodyContext = {
    * so `UITableContainer` reliably re-renders and remounts header/body rows on a pin-only change.
    */
   columnPinningState: ColumnPinningState;
+  /**
+   * The current expansion map. Exposed here (same reasoning as `columnPinningState`) so
+   * `UITableContainer` reliably re-renders and picks up newly-visible sub-rows when a
+   * parent row is expanded or collapsed.
+   */
+  expandedState: ExpandedState;
 };
 
 /** Context value provided by `UITableRowProvider`, consumed by individual `UITableRow` renders. */
@@ -469,6 +519,31 @@ export type TableProviderProps<
   onClickRow?: TTableRowContext<TData, TKey>['onClickRow'];
   /** Called with the updated row-selection map after each selection change. */
   onRowSelection?: (rowSelection: RowSelectionState) => void;
+  /**
+   * Which rows may be selected. `true` (default) allows every row; pass a
+   * predicate to restrict selection — e.g. `row => row.depth > 0` to only allow
+   * selecting nested child rows and never their parent.
+   */
+  enableRowSelection?: boolean | ((row: Row<TData>) => boolean);
+  /**
+   * Whether toggling a parent row also selects its sub-rows (default `true`).
+   * Set `false` when a parent row is an aggregate that should not carry a
+   * selection of its own.
+   */
+  enableSubRowSelection?: boolean;
+  /**
+   * Derives a stable id for each row (and sub-row) from its data. Without it
+   * TanStack falls back to the row's index path (`"0"`, `"0.1"`, …), which is
+   * not stable across reorders/pagination — pass e.g. `row => row.uuid` when the
+   * selection map is keyed back to domain ids.
+   */
+  getRowId?: (originalRow: TData, index: number, parent?: Row<TData>) => string;
+  /**
+   * Initial expansion state for the grouped/expanded row model. `true` expands
+   * every parent row on mount; an `ExpandedState` object expands specific rows.
+   * Defaults to all rows collapsed.
+   */
+  defaultExpanded?: ExpandedState | boolean;
   /** Called with the updated column-pinning state after each pin/unpin action. */
   onColumnPinning?: (columnPinning: ColumnPinningState) => void;
 

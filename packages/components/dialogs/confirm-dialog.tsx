@@ -193,7 +193,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>{cancelText}</AlertDialogCancel>
-          <AlertDialogAction type="button" className="min-h-9 w-full md:w-24" onClick={handleConfirm}>
+          <AlertDialogAction type="button" className="w-full md:w-24" onClick={handleConfirm}>
             {isLoading ? (
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="loader-spinner text-text-positive-weak" />
