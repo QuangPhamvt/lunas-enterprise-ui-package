@@ -171,7 +171,8 @@ export const Validation: Story = {
     const todayBtn = await waitFor(() => within(document.body).getByRole('button', { name: /hôm nay/i }));
     await userEvent.click(todayBtn);
 
-    await waitFor(() => expect(canvas.getByRole('alert')).not.toHaveTextContent('Vui lòng chọn ngày'));
+    // A valid date removes the error row entirely.
+    await waitFor(() => expect(canvas.queryByRole('alert')).not.toBeInTheDocument());
   },
 };
 

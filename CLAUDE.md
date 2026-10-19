@@ -23,8 +23,9 @@ npm run lint:fix        # Biome lint + fix (scoped to packages/)
 npm run format:fix      # Biome format + write
 npm run storybook       # dev server at :6006
 npm run build-storybook # static Storybook build
-npm test                # unit tests (vitest + jsdom)
-npm run test:storybook  # component tests in real browser (Playwright/Chromium)
+npm test                # every story's play function in real Chromium (Playwright) — the only test suite
+npm run test:watch      # same, watch mode
+npm run test:coverage   # same, with v8 coverage
 ```
 
 ## Architecture
@@ -80,7 +81,12 @@ public component: add it to `entry`, build, and add a Storybook story.
 - Add a `play` function to each story that covers a meaningful interaction or state
 - Import test utilities from `storybook/test` (not `@storybook/test`): `expect`, `userEvent`, `waitFor`, `within`
 - Query inputs by `getByPlaceholderText` or `getByDisplayValue` — avoid `getByLabelText` (label DOM wraps children in extra spans that break exact-text matching)
-- Error containers (`role="alert"`) stay in the DOM after errors clear; assert `.not.toHaveTextContent(msg)` rather than `.not.toBeInTheDocument()`
+- Form fields render their error row (`role="alert"`) only while the field is touched **and** has
+  errors (a field with `counter` keeps the row for the counter). After the user fixes the value,
+  assert `queryByRole('alert')` is gone — or, with `counter`, `.not.toHaveTextContent(msg)`
+- Fields are `lazy()`-loaded: query with `findBy*` first (the shared setup sets a 5 s async timeout)
+- Test-only stories use `tags: ['!dev', '!autodocs']` so they run in `test:storybook` without
+  cluttering the sidebar or docs
 - Run before committing: `npm run test:storybook`, or invoke `/storybook-test`
 
 ## JSDoc standard

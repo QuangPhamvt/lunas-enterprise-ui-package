@@ -158,10 +158,10 @@
     "format:fix": "npx @biomejs/biome format --write",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage",
-    "test:storybook": "vitest --config vitest.storybook.config.ts"
+    "test": "vitest run --config vitest.storybook.config.ts",
+    "test:watch": "vitest --config vitest.storybook.config.ts",
+    "test:coverage": "vitest run --config vitest.storybook.config.ts --coverage",
+    "test:storybook": "vitest run --config vitest.storybook.config.ts"
   },
   "peerDependencies": {
     "@customafk/react-toolkit": "0.0.19",
@@ -284,10 +284,6 @@
     "@storybook/addon-vitest": "^10.4.6",
     "@storybook/react-vite": "^10.1.0",
     "@tailwindcss/vite": "^4.1.0",
-    "@testing-library/dom": "^10.4.1",
-    "@testing-library/jest-dom": "^6.9.1",
-    "@testing-library/react": "^16.3.2",
-    "@testing-library/user-event": "^14.6.1",
     "@tiptap/extension-bubble-menu": "^3.26.0",
     "@tiptap/extension-code-block-lowlight": "^3.26.0",
     "@tiptap/extension-highlight": "^3.26.0",
@@ -314,7 +310,6 @@
     "embla-carousel-react": "^8.6.0",
     "highlight.js": "^11.11.0",
     "input-otp": "^1.4.0",
-    "jsdom": "^26.1.0",
     "lowlight": "^3.3.0",
     "playwright": "^1.61.0",
     "react-dropzone": "^14.3.0",

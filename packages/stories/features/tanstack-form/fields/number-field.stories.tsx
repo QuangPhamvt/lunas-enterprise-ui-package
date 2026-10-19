@@ -1,9 +1,9 @@
 import z from 'zod';
 
+import { useTanStackForm } from '@/components/features/tanstack-form';
+
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
-
-import { useTanStackForm } from '@/components/features/tanstack-form';
 
 const meta = {
   tags: ['autodocs'],
@@ -589,5 +589,24 @@ export const KitchenSink: Story = {
     // temperature accepts a negative value
     await userEvent.type(inputs[3], '-18');
     await expect(inputs[3]).toHaveValue('-18');
+  },
+};
+
+// ─── Behavior tests (hidden from the sidebar and docs; run by `npm run test:storybook`) ───
+
+const TEST_TAGS = ['!dev', '!autodocs'];
+
+export const TestLabelAndPlaceholder: Story = {
+  tags: TEST_TAGS,
+  render: () => {
+    const { AppField } = useTanStackForm({ defaultValues: { quantity: null as number | null } });
+    return <AppField name="quantity" children={({ NumberField }) => <NumberField label="Quantity" placeholder="0" />} />;
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(await canvas.findByText('Quantity')).toBeInTheDocument();
+    const input = await canvas.findByPlaceholderText('0');
+    // A null value renders as an empty input, not "0".
+    await expect(input).toHaveValue('');
   },
 };

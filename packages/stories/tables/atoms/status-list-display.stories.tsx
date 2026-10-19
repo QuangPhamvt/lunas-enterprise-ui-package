@@ -42,7 +42,7 @@ export const MultipleStatuses: Story = {
   render: args => <UITableStatusListDisplay {...args} />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await userEvent.hover(canvas.getByText('+2'));
+    await userEvent.hover(await canvas.findByText('+2'));
     const body = within(document.body);
     await expect((await body.findAllByText('Purchasing')).length).toBeGreaterThan(0);
     await expect((await body.findAllByText(/×\s*1/)).length).toBeGreaterThan(0);

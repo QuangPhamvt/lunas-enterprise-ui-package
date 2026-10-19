@@ -291,10 +291,10 @@ export const WithSections: Story = {
     for (const title of ['Basic Info', 'Customer', 'Financials']) {
       await expect(canvas.getByText(title)).toBeInTheDocument();
     }
-    // vi-VN grouping: 4500000 → "4.500.000". Prefix/value render as separate elements, so assert
-    // combined textContent (toHaveTextContent) rather than getByText, which only matches a single element's own text.
+    // Vietnamese grouping: 4500000 → "4.500.000", with `₫` passed as the suffix. Value and suffix render
+    // as separate elements, so assert combined textContent rather than getByText (one element's own text).
     const totalStatistic = canvasElement.querySelector('[data-slot="description-statistic"]');
-    await expect(totalStatistic).toHaveTextContent('₫4.500.000');
+    await expect(totalStatistic).toHaveTextContent('4.500.000₫');
   },
 };
 
@@ -981,8 +981,8 @@ export const CollapsibleSections: Story = {
     await userEvent.click(advancedTrigger);
     await waitFor(() => expect(advancedTrigger).toHaveAttribute('data-state', 'open'));
     await waitFor(() => expect(advancedContent.getBoundingClientRect().height).toBeGreaterThan(10));
-    const openRotate = getComputedStyle(chevron).rotate;
-    expect(openRotate).not.toBe(closedRotate);
+    // The chevron rotates through a CSS transition, so poll until it has moved off the closed angle.
+    await waitFor(() => expect(getComputedStyle(chevron).rotate).not.toBe(closedRotate));
 
     await userEvent.click(advancedTrigger);
     await waitFor(() => expect(advancedTrigger).toHaveAttribute('data-state', 'closed'));

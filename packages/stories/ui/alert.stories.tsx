@@ -20,10 +20,12 @@ export const Default: Story = {
     return (
       <div className="grid w-full max-w-xl items-start gap-4">
         <Alert variant="default">
+          <CheckCircle2Icon />
           <AlertTitle>Success! Your changes have been saved</AlertTitle>
           <AlertDescription>This is an alert with icon, title and description.</AlertDescription>
         </Alert>
         <Alert variant="default">
+          <PopcornIcon />
           <AlertTitle>This Alert has a title and an icon. No description.</AlertTitle>
         </Alert>
         <Alert variant="destructive">
@@ -130,5 +132,34 @@ export const TestDismissible: Story = {
     await expect(buttons).toHaveLength(1);
     await userEvent.click(buttons[0]);
     await expect(args.onDismiss).toHaveBeenCalledTimes(1);
+  },
+};
+
+export const TestLayout: Story = {
+  tags: TEST_TAGS,
+  render: () => (
+    <div className="grid w-xl gap-2">
+      <Alert data-testid="plain">Plain text without an icon</Alert>
+      <Alert data-testid="titled">
+        <AlertTitle>No icon, with a title</AlertTitle>
+        <AlertDescription>And a description.</AlertDescription>
+      </Alert>
+      <Alert variant="info" data-testid="with-icon">
+        <AlertTitle>With icon</AlertTitle>
+        <AlertDescription>Content sits in the second column.</AlertDescription>
+      </Alert>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    // Without an icon the content spans the full width: a short sentence stays on one line.
+    await expect(canvas.getByTestId('plain').getBoundingClientRect().height).toBeLessThan(60);
+    const titled = canvas.getByText('No icon, with a title');
+    await expect(titled.getBoundingClientRect().left - canvas.getByTestId('titled').getBoundingClientRect().left).toBeLessThan(24);
+    // With an icon, title and description start to the right of it.
+    const icon = canvas.getByTestId('with-icon').querySelector('svg');
+    if (!icon) throw new Error('icon missing');
+    await expect(canvas.getByText('With icon').getBoundingClientRect().left).toBeGreaterThan(icon.getBoundingClientRect().right);
+    await expect(canvas.getByText('Content sits in the second column.').getBoundingClientRect().left).toBeGreaterThan(icon.getBoundingClientRect().right);
   },
 };

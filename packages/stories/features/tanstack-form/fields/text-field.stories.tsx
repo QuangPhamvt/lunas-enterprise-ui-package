@@ -5,7 +5,7 @@ import z from 'zod';
 import { useTanStackForm } from '@/components/features/tanstack-form';
 
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, userEvent, waitFor, within } from 'storybook/test';
+import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
 
 const meta = {
   tags: ['autodocs'],
@@ -295,10 +295,10 @@ export const BlurValidation: Story = {
     await waitFor(() => expect(canvas.getByRole('alert')).toBeInTheDocument());
     await expect(canvas.getByRole('alert')).toHaveTextContent('Only lowercase letters');
 
-    // fix the value → error text clears (container stays in DOM but is empty)
+    // fix the value → the error row is removed entirely (it only renders while there are errors)
     await userEvent.clear(input);
     await userEvent.type(input, 'valid_user');
-    await waitFor(() => expect(canvas.getByRole('alert')).not.toHaveTextContent('Only lowercase letters'));
+    await waitFor(() => expect(canvas.queryByRole('alert')).not.toBeInTheDocument());
   },
 };
 
@@ -488,5 +488,170 @@ export const KitchenSink: Story = {
     // locked field is disabled with its prefilled value
     const lockedInput = canvas.getByDisplayValue('Cannot edit this');
     await expect(lockedInput).toBeDisabled();
+  },
+};
+
+// ─── Behavior tests (hidden from the sidebar and docs; run by `npm run test:storybook`) ───
+
+const TEST_TAGS = ['!dev', '!autodocs'];
+
+/** The `<label>` wired to `input` through `htmlFor`. */
+const labelOf = (root: HTMLElement, input: HTMLElement) => root.querySelector(`label[for="${input.getAttribute('id')}"]`);
+
+export const TestLabelsAndText: Story = {
+  tags: TEST_TAGS,
+  render: () => {
+    const { AppField } = useTanStackForm({
+      defaultValues: { empty: null as string | null, filled: 'filled' as string | null, plain: null as string | null },
+    });
+    return (
+      <div className="grid gap-4">
+        <AppField
+          name="empty"
+          children={({ TextField }) => (
+            <TextField label="Full Name" description="Nhập đầy đủ họ tên." helperText="Nhập ít nhất 3 ký tự." placeholder="Enter your name" required />
+          )}
+        />
+        <AppField name="filled" children={({ TextField }) => <TextField label="Username" required />} />
+        <AppField name="plain" children={({ TextField }) => <TextField label="Plain" />} />
+      </div>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const [empty, filled, plain] = await canvas.findAllByRole('textbox');
+    await expect(labelOf(canvasElement, empty)).toHaveTextContent('Full Name');
+    await expect(canvas.getByPlaceholderText('Enter your name')).toBe(empty);
+    await expect(canvas.getByText('Nhập đầy đủ họ tên.')).toBeInTheDocument();
+    await expect(canvas.getByText('Nhập ít nhất 3 ký tự.')).toBeInTheDocument();
+    // Only one field has a description.
+    await expect(canvasElement.querySelectorAll('[data-slot="field-description"]')).toHaveLength(1);
+
+    // aria-required marks a required field only while it is still empty.
+    await expect(labelOf(canvasElement, empty)).toHaveAttribute('aria-required', 'true');
+    await expect(labelOf(canvasElement, filled)).not.toHaveAttribute('aria-required', 'true');
+    await expect(empty).toHaveValue('');
+    await expect(filled).toHaveValue('filled');
+
+    // No counter text unless `counter` is set.
+    await userEvent.type(plain, 'hello');
+    await expect(plain).toHaveValue('hello');
+    await expect(canvas.queryByText(/ký tự$/)).not.toBeInTheDocument();
+  },
+};
+
+export const TestCounterAndLimit: Story = {
+  tags: TEST_TAGS,
+  render: () => {
+    const { AppField } = useTanStackForm({ defaultValues: { free: null as string | null, ten: null as string | null, five: null as string | null } });
+    return (
+      <div className="grid gap-4">
+        <AppField name="free" children={({ TextField }) => <TextField label="Free" counter />} />
+        <AppField name="ten" children={({ TextField }) => <TextField label="Ten" counter maxLength={10} />} />
+        <AppField name="five" children={({ TextField }) => <TextField label="Five" counter maxLength={5} />} />
+      </div>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const [free, ten, five] = await canvas.findAllByRole('textbox');
+    await userEvent.type(free, 'x');
+    await expect(canvas.getByText('1 ký tự')).toBeInTheDocument();
+    await userEvent.type(free, 'y');
+    await expect(canvas.getByText('2 ký tự')).toBeInTheDocument();
+
+    await userEvent.type(ten, 'hello');
+    await expect(canvas.getByText('5 / 10 ký tự')).toBeInTheDocument();
+    // 80% of the limit turns the counter to warning…
+    await userEvent.type(ten, '123');
+    await expect(canvas.getByText('8 / 10 ký tự')).toHaveClass('text-warning-strong');
+
+    // …100% to danger, and typing past the limit is blocked.
+    await userEvent.type(five, 'abcdefgh');
+    await expect(five).toHaveValue('abcde');
+    await expect(canvas.getByText('5 / 5 ký tự')).toHaveClass('text-danger-strong');
+  },
+};
+
+export const TestClearButton: Story = {
+  tags: TEST_TAGS,
+  render: () => {
+    const { AppField } = useTanStackForm({
+      defaultValues: { value: 'hello' as string | null, empty: null as string | null, locked: 'hello' as string | null },
+    });
+    return (
+      <div className="grid gap-4">
+        <AppField name="value" children={({ TextField }) => <TextField label="Value" showClearButton />} />
+        <AppField name="empty" children={({ TextField }) => <TextField label="Empty" showClearButton />} />
+        <AppField name="locked" children={({ TextField }) => <TextField label="Locked" showClearButton disabled />} />
+      </div>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const [value, , locked] = await canvas.findAllByRole('textbox');
+    await expect(locked).toBeDisabled();
+    // Only the enabled, non-empty field offers a clear button.
+    await expect(canvas.getAllByRole('button', { name: 'Xóa' })).toHaveLength(1);
+    await userEvent.click(canvas.getByRole('button', { name: 'Xóa' }));
+    await expect(value).toHaveValue('');
+    await expect(canvas.queryByRole('button', { name: 'Xóa' })).not.toBeInTheDocument();
+  },
+};
+
+const enterSubmitSpy = fn();
+
+export const TestEnterDoesNotSubmit: Story = {
+  tags: TEST_TAGS,
+  render: () => {
+    const { AppField } = useTanStackForm({ defaultValues: { name: 'hello' as string | null } });
+    return (
+      <form onSubmit={enterSubmitSpy}>
+        <AppField name="name" children={({ TextField }) => <TextField label="Name" />} />
+      </form>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    enterSubmitSpy.mockClear();
+    await userEvent.type(await within(canvasElement).findByRole('textbox'), '{Enter}');
+    await expect(enterSubmitSpy).not.toHaveBeenCalled();
+  },
+};
+
+export const TestValidationVisibility: Story = {
+  tags: TEST_TAGS,
+  render: () => {
+    const { AppField } = useTanStackForm({ defaultValues: { blur: null as string | null, change: null as string | null, silent: null as string | null } });
+    const required = ({ value }: { value: string | null }) => (value ? undefined : 'Bắt buộc điền');
+    return (
+      <div className="grid gap-4">
+        <AppField name="blur" validators={{ onBlur: required }} children={({ TextField }) => <TextField label="Blur" />} />
+        <AppField name="change" validators={{ onChange: required }} children={({ TextField }) => <TextField label="Change" />} />
+        <AppField name="silent" validators={{ onBlur: required }} children={({ TextField }) => <TextField label="Silent" showErrorMessage={false} />} />
+      </div>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const [blur, change, silent] = await canvas.findAllByRole('textbox');
+    // Nothing is shown before a field is touched.
+    await expect(canvas.queryByRole('alert')).not.toBeInTheDocument();
+
+    // onBlur validator: the error appears once focus leaves.
+    await userEvent.click(blur);
+    await userEvent.tab();
+    await waitFor(() => expect(canvas.getByText('Bắt buộc điền')).toBeInTheDocument());
+
+    // onChange validator: clearing reports the error, a valid value removes it again.
+    await userEvent.type(change, 'a');
+    await userEvent.clear(change);
+    await waitFor(() => expect(canvas.getAllByText('Bắt buộc điền')).toHaveLength(2));
+    await userEvent.type(change, 'fixed');
+    await waitFor(() => expect(canvas.getAllByText('Bắt buộc điền')).toHaveLength(1));
+
+    // showErrorMessage={false} keeps the message hidden even when invalid.
+    await userEvent.click(silent);
+    await userEvent.tab();
+    await expect(canvas.getAllByText('Bắt buộc điền')).toHaveLength(1);
   },
 };

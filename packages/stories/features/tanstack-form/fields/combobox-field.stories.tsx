@@ -414,7 +414,8 @@ export const BlurValidation: Story = {
     const canvas = within(canvasElement);
 
     // Country pre-selected (Vietnam) — no errors initially (not yet touched)
-    expect(canvas.queryByRole('alert')).not.toBeInTheDocument();
+    await canvas.findAllByRole('button', { name: /xóa lựa chọn/i });
+    await expect(canvas.queryByRole('alert')).not.toBeInTheDocument();
 
     // Clear country → onChange fires with null → required error shows
     const [countryClear] = canvas.getAllByRole('button', { name: /xóa lựa chọn/i });
@@ -429,8 +430,8 @@ export const BlurValidation: Story = {
     await userEvent.type(countryInput, 'vietnam');
     await userEvent.click(await waitFor(() => within(document.body).getByRole('option', { name: 'Vietnam' })));
 
-    // Country now shows "Vietnam" — error clears
-    await waitFor(() => expect(canvas.getAllByRole('alert')[0]).not.toHaveTextContent('Please select a country'));
+    // Country now shows "Vietnam" — its error row is removed
+    await waitFor(() => expect(canvas.queryByText('Please select a country')).not.toBeInTheDocument());
 
     // Now only the shipping trigger matches "Search country…"
     const shippingTrigger = canvas.getByRole('button', { name: /search country/i });
