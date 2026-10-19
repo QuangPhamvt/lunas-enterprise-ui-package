@@ -37,7 +37,8 @@ export type ChartContainerProps = React.ComponentProps<'div'> & {
 
 export const ChartContainer = ({ id, className, children, config, ...props }: ChartContainerProps) => {
   const uniqueId = useId();
-  const chartId = `chart-${id || uniqueId.replace(/:/g, '')}`;
+  // Restricted to CSS-identifier characters: the id is interpolated into the <style> selector below.
+  const chartId = `chart-${(id || uniqueId).replace(/[^a-zA-Z0-9_-]/g, '')}`;
 
   return (
     <ChartContext.Provider value={{ config }}>
@@ -88,7 +89,7 @@ export const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) 
         })
         .filter(Boolean)
         .join('\n');
-      return `${prefix} [data-chart=${id}] {\n${rules}\n}`;
+      return `${prefix} [data-chart="${id}"] {\n${rules}\n}`;
     })
     .join('\n');
 

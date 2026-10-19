@@ -6,33 +6,26 @@ import { Bold, Italic, Strikethrough, Underline as UnderlineIcon } from 'lucide-
 
 import { cn } from '@customafk/react-toolkit/utils';
 
-import { CharacterCount } from '@tiptap/extension-character-count';
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
 import { Highlight } from '@tiptap/extension-highlight';
 import Image from '@tiptap/extension-image';
-import { Link } from '@tiptap/extension-link';
-import { ListKeymap } from '@tiptap/extension-list-keymap';
-import Placeholder from '@tiptap/extension-placeholder';
 import { Table, TableCell, TableHeader, TableRow } from '@tiptap/extension-table';
 import { TaskItem } from '@tiptap/extension-task-item';
 import { TaskList } from '@tiptap/extension-task-list';
 import TextAlign from '@tiptap/extension-text-align';
 import { Color, TextStyle } from '@tiptap/extension-text-style';
-import Underline from '@tiptap/extension-underline';
+import { CharacterCount, Placeholder } from '@tiptap/extensions';
 import { type AnyExtension, EditorContent, ReactNodeViewRenderer, useEditor, useEditorState } from '@tiptap/react';
 import { BubbleMenu } from '@tiptap/react/menus';
 import StarterKit from '@tiptap/starter-kit';
 import DOMPurify, { type Config as SanitizeConfig } from 'dompurify';
-import { common, createLowlight } from 'lowlight';
 import { ImageNodeView } from './image-node-view';
+import { lowlight } from './languages';
 import { LinkDialog } from './link-dialog';
 import { createSlashCommandExtension } from './slash-command';
 import { type TextEditorVariantProps, textEditorVariants } from './text-editor.variants';
 import { TextEditorToolbar } from './toolbar';
 import { ToolbarButton, ToolbarDivider } from './toolbar-primitives';
-
-// Built once at module scope — constructing the grammar registry per render would be wasteful.
-const lowlight = createLowlight(common);
 
 // Adds a centered wrapper + small "source" caption link below every image — purely a
 // live-rendering affordance (both editing and `readOnly`), not persisted: the caption is
@@ -91,10 +84,45 @@ function buildSanitizeConfig(flags: SanitizeFlags): SanitizeConfig {
   return { ALLOWED_TAGS: Array.from(tags), ALLOWED_ATTR: Array.from(attr) };
 }
 
+// The only CSS properties the enabled extensions emit (TextAlign, Color, Highlight, table column widths).
+const ALLOWED_STYLE_PROPERTIES = new Set(['color', 'background-color', 'text-align', 'width', 'min-width']);
+const UNSAFE_STYLE_VALUE = /url\(|expression\(|@import|javascript:/i;
+
+/** Keeps only allowlisted, non-resource-loading declarations of a `style` attribute value. */
+function filterStyle(style: string): string {
+  return style
+    .split(';')
+    .map(declaration => declaration.trim())
+    .filter(declaration => {
+      const separator = declaration.indexOf(':');
+      if (separator <= 0) return false;
+      const property = declaration.slice(0, separator).trim().toLowerCase();
+      return ALLOWED_STYLE_PROPERTIES.has(property) && !UNSAFE_STYLE_VALUE.test(declaration);
+    })
+    .join('; ');
+}
+
+let purifier: ReturnType<typeof DOMPurify> | null = null;
+
+/**
+ * A private DOMPurify instance, so the `style` hook never leaks into other DOMPurify usage in the
+ * consuming app (the default export is a shared singleton).
+ */
+function getPurifier(): ReturnType<typeof DOMPurify> {
+  if (purifier) return purifier;
+  purifier = DOMPurify(window);
+  purifier.addHook('uponSanitizeAttribute', (_node, data) => {
+    if (data.attrName !== 'style') return;
+    data.attrValue = filterStyle(data.attrValue);
+    if (!data.attrValue) data.keepAttr = false;
+  });
+  return purifier;
+}
+
 /** No-op on the server — DOMPurify needs a DOM, and SSR content gets sanitized again on hydration anyway. */
 function sanitizeHtml(html: string, config: SanitizeConfig): string {
   if (typeof window === 'undefined') return html;
-  return DOMPurify.sanitize(html, config);
+  return getPurifier().sanitize(html, config);
 }
 
 /** Best-effort alt text for drag/drop/paste image inserts, which have no dialog to ask for one. */
@@ -165,21 +193,18 @@ function TextEditor({
 
   const extensions = useMemo(() => {
     const base: AnyExtension[] = [
-      // `link`/`underline`/`codeBlock`/`listKeymap` are disabled here because we register
-      // our own configured instances below — leaving StarterKit's defaults on causes
-      // duplicate extension name warnings and the later-registered config silently wins.
-      StarterKit.configure({ link: false, underline: false, codeBlock: false, listKeymap: false }),
-      Underline,
+      // StarterKit v3 already bundles Underline, ListKeymap and Link — configure them here instead
+      // of registering separate copies. `codeBlock` is off because CodeBlockLowlight replaces it.
+      StarterKit.configure({
+        codeBlock: false,
+        link: enableLink ? { openOnClick: false, linkOnPaste: true, defaultProtocol: 'https' } : false,
+      }),
       Placeholder.configure({ placeholder }),
       TextAlign.configure({ types: ['heading', 'paragraph'] }),
-      ListKeymap,
       CodeBlockLowlight.configure({ lowlight, defaultLanguage: 'plaintext' }),
     ];
 
     if (needsTextStyle) base.push(TextStyle);
-    if (enableLink) {
-      base.push(Link.configure({ openOnClick: false, linkOnPaste: true, defaultProtocol: 'https' }));
-    }
     if (enableTaskList) {
       base.push(TaskList, TaskItem.configure({ nested: true }));
     }

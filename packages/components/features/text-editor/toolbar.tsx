@@ -34,6 +34,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 
 import { type Editor, useEditorState } from '@tiptap/react';
 import { ImageDialog } from './image-dialog';
+import { CODE_LANGUAGES } from './languages';
 import { LinkDialog } from './link-dialog';
 import { TableInsertMenu } from './table-insert-menu';
 import { ToolbarButton, ToolbarDivider } from './toolbar-primitives';
@@ -62,30 +63,6 @@ const TEXT_COLORS = [
   { label: 'Pink', value: '#ec4899' },
   { label: 'Gray', value: '#6b7280' },
   { label: 'Black', value: '#000000' },
-];
-
-/** Subset of lowlight's `common` grammar bundle relevant to a blog/docs editor. */
-const CODE_LANGUAGES = [
-  { label: 'Plain text', value: 'plaintext' },
-  { label: 'JavaScript', value: 'javascript' },
-  { label: 'TypeScript', value: 'typescript' },
-  { label: 'Python', value: 'python' },
-  { label: 'Java', value: 'java' },
-  { label: 'C#', value: 'csharp' },
-  { label: 'C++', value: 'cpp' },
-  { label: 'Go', value: 'go' },
-  { label: 'Rust', value: 'rust' },
-  { label: 'PHP', value: 'php' },
-  { label: 'Ruby', value: 'ruby' },
-  { label: 'Swift', value: 'swift' },
-  { label: 'Kotlin', value: 'kotlin' },
-  { label: 'SQL', value: 'sql' },
-  { label: 'Bash', value: 'bash' },
-  { label: 'JSON', value: 'json' },
-  { label: 'YAML', value: 'yaml' },
-  { label: 'CSS', value: 'css' },
-  { label: 'HTML/XML', value: 'xml' },
-  { label: 'Markdown', value: 'markdown' },
 ];
 
 export interface TextEditorToolbarProps {

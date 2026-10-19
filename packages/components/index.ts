@@ -150,7 +150,6 @@ export * from './ui/drawer';
 export * from './ui/dropdown-menu';
 export * from './ui/empty';
 export * from './ui/file-uploader';
-export * from './ui/form';
 export * from './ui/hover-card';
 export * from './ui/image';
 export { Input } from './ui/input';

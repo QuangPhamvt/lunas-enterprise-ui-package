@@ -1,7 +1,37 @@
 'use client';
+import { useSyncExternalStore } from 'react';
+
 import { LoaderIcon } from 'lucide-react';
-import { useTheme } from 'next-themes';
-import { Toaster as Sonner, toast, type ToasterProps } from 'sonner';
+import { Toaster as Sonner, type ToasterProps, toast } from 'sonner';
+
+type ToasterTheme = NonNullable<ToasterProps['theme']>;
+
+function subscribeToRootClass(onChange: () => void) {
+  const observer = new MutationObserver(onChange);
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+  return () => observer.disconnect();
+}
+
+function getRootTheme(): ToasterTheme {
+  return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+}
+
+function getServerTheme(): ToasterTheme {
+  return 'system';
+}
+
+/** Tracks the `.dark` class on `<html>` — the library's dark-mode switch — without needing a theme provider. */
+function useDocumentTheme(): ToasterTheme {
+  return useSyncExternalStore(subscribeToRootClass, getRootTheme, getServerTheme);
+}
+
+type ToasterComponentProps = {
+  /**
+   * Color scheme for the toasts. Omit it to follow the `.dark` class on `<html>`, so the toaster
+   * stays in sync with the rest of the library without any theme provider.
+   */
+  theme?: ToasterTheme;
+};
 
 /**
  * Global toast notification container — mount once near the root of your app; use the exported `toast` helper to trigger toasts from anywhere.
@@ -10,7 +40,7 @@ import { Toaster as Sonner, toast, type ToasterProps } from 'sonner';
  * ```tsx
  * import { Toaster, toast } from '@customafk/lunas-ui/ui/sonner';
  *
- * // In your app root:
+ * // In your app root (theme follows the `.dark` class on <html> unless passed explicitly):
  * <Toaster />
  *
  * // Anywhere in your code:
@@ -18,12 +48,12 @@ import { Toaster as Sonner, toast, type ToasterProps } from 'sonner';
  * toast.error('Something went wrong.');
  * ```
  */
-const Toaster = () => {
-  const { theme = 'system' } = useTheme();
+const Toaster = ({ theme }: ToasterComponentProps) => {
+  const documentTheme = useDocumentTheme();
 
   return (
     <Sonner
-      theme={theme as ToasterProps['theme']}
+      theme={theme ?? documentTheme}
       expand={false}
       visibleToasts={5}
       closeButton={true}

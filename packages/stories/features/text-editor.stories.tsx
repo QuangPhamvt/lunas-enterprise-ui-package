@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
 
 import { TextEditor } from '@/components/features/text-editor';
 
@@ -197,17 +196,18 @@ export const AllFeatures: Story = {
 
 export const FormIntegration: Story = {
   render: () => {
-    const { watch, handleSubmit, setValue } = useForm<{ content: string }>({
-      defaultValues: { content: '' },
-    });
-    const content = watch('content');
+    const [content, setContent] = useState('');
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      alert(JSON.stringify({ content }, null, 2));
+    };
     return (
       <div className="w-full max-w-2xl space-y-4">
-        <form onSubmit={handleSubmit(data => alert(JSON.stringify(data, null, 2)))} className="space-y-3">
-          <label className="block font-medium text-sm text-text-positive">Content</label>
+        <form onSubmit={handleSubmit} className="space-y-3">
+          <p className="block font-medium text-sm text-text-positive">Content</p>
           <TextEditor
             value={content}
-            onChange={html => setValue('content', html, { shouldValidate: true })}
+            onChange={setContent}
             enableLink
             showCharacterCount
             placeholder="Write your content..."
