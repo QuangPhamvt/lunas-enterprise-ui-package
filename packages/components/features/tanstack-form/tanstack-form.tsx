@@ -40,15 +40,9 @@ import type { TanStackFieldGroup as TanStackFieldGroupType } from './components/
 import type { TanStackPopoverForm as TanStackPopoverFormType } from './components/forms/popover-form';
 import type { TanStackSectionForm as TanStackSectionFormType } from './components/forms/section-form';
 import type { TanStackTitleField as TanStackTitleFieldType } from './components/forms/title-field';
-import type {
-  FieldContentMain as FieldContentMainType,
-  FieldContent as FieldContentType,
-  FieldError as FieldErrorType,
-  FieldGroup as FieldGroupType,
-  FieldLabel as FieldLabelType,
-  FieldSeparator as FieldSeparatorType,
-  Field as FieldType,
-} from './components/ui/field';
+// Field layout primitives are imported eagerly: every field component already imports
+// `./components/ui/field` statically, so lazy-loading it could never split it into its own chunk.
+import { Field, FieldContent, FieldContentMain, FieldError, FieldGroup, FieldLabel, FieldSeparator } from './components/ui/field';
 
 /** Input-shaped pulse placeholder shown while a lazy field/form chunk is still loading. */
 function FieldSkeleton() {
@@ -730,80 +724,6 @@ const TanStackActionSubmit = lazyField<ComponentProps<typeof TanStackActionSubmi
 );
 
 // ─── Field UI primitives (lazy) ───────────────────────────────────────────────
-
-/**
- * Container `<div>` that groups a set of `Field` rows with container-query support for responsive layouts.
- *
- * @example
- * import { FieldGroup } from '@customafk/lunas-ui/features/tanstack-form';
- *
- * <FieldGroup>
- *   <Field>…</Field>
- *   <Field>…</Field>
- * </FieldGroup>
- */
-const FieldGroup = lazyField<ComponentProps<typeof FieldGroupType>>(() => import('./components/ui/field').then(m => ({ default: m.FieldGroup })));
-/**
- * Single form field row that arranges label, input, and meta elements with configurable orientation.
- *
- * @example
- * import { Field } from '@customafk/lunas-ui/features/tanstack-form';
- *
- * <Field orientation="horizontal">
- *   <FieldLabel htmlFor="username">Username</FieldLabel>
- *   <FieldContent><input id="username" /></FieldContent>
- * </Field>
- */
-const Field = lazyField<ComponentProps<typeof FieldType>>(() => import('./components/ui/field').then(m => ({ default: m.Field })));
-/**
- * Flex column wrapper that houses the primary input control together with description and error slots.
- *
- * @example
- * import { FieldContent } from '@customafk/lunas-ui/features/tanstack-form';
- *
- * <FieldContent>
- *   <input type="text" />
- *   <FieldDescription>Enter your full name.</FieldDescription>
- * </FieldContent>
- */
-const FieldContent = lazyField<ComponentProps<typeof FieldContentType>>(() => import('./components/ui/field').then(m => ({ default: m.FieldContent })));
-/**
- * Styled `<label>` element for a `Field`, extending the base `Label` with field-group-aware spacing and border states.
- *
- * @example
- * import { FieldLabel } from '@customafk/lunas-ui/features/tanstack-form';
- *
- * <FieldLabel htmlFor="email" aria-required>Email</FieldLabel>
- */
-const FieldLabel = lazyField<ComponentProps<typeof FieldLabelType>>(() => import('./components/ui/field').then(m => ({ default: m.FieldLabel })));
-/**
- * Positioned wrapper for the main input element that enables absolutely-placed adornments (icons, spinners).
- *
- * @example
- * import { FieldContentMain } from '@customafk/lunas-ui/features/tanstack-form';
- *
- * <FieldContentMain>
- *   <input type="text" className="pr-8" />
- *   <SearchIcon className="absolute right-2 top-2" />
- * </FieldContentMain>
- */
-const FieldContentMain = lazyField<ComponentProps<typeof FieldContentMainType>>(() =>
-  import('./components/ui/field').then(m => ({ default: m.FieldContentMain }))
-);
-/**
- * Visual divider row that optionally displays a centered text label, used to separate logical sections within a `FieldGroup`.
- *
- * @example
- * import { FieldSeparator } from '@customafk/lunas-ui/features/tanstack-form';
- *
- * <FieldSeparator>or</FieldSeparator>
- */
-const FieldSeparator = lazyField<ComponentProps<typeof FieldSeparatorType>>(() => import('./components/ui/field').then(m => ({ default: m.FieldSeparator })));
-/**
- * Validation message area (`role="alert"`) for a form field: renders `children`, a single error with
- * an icon, or a list of errors; renders nothing when there is nothing to show.
- */
-const FieldError = lazyField<ComponentProps<typeof FieldErrorType>>(() => import('./components/ui/field').then(m => ({ default: m.FieldError })));
 
 const formHook = createFormHook({
   fieldContext,

@@ -127,6 +127,15 @@ export default defineConfig([
     sourcemap: true,
     // Ship readable code; the consuming app's bundler minifies.
     minify: false,
+    // Every entry still starts with 'use client' in dist; the modules rolldown merges into shared
+    // chunks lose theirs, which is fine because those chunks are only ever imported by client
+    // entries. Drop that one known-benign warning (it fires once per source file) and keep the rest.
+    inputOptions: {
+      onLog(level, log, handler) {
+        if (log.code === 'MODULE_LEVEL_DIRECTIVE') return;
+        handler(level, log);
+      },
+    },
     // Every import from node_modules stays external — nothing gets inlined into dist.
     deps: { neverBundle: true },
     // Generates package.json `exports` from `entry`, so the two can't drift apart.
