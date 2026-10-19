@@ -1,13 +1,15 @@
 'use client';
 import { useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
-import { cn } from '@customafk/react-toolkit/utils';
 
 import { PlusIcon, X } from 'lucide-react';
+
+import { cn } from '@customafk/react-toolkit/utils';
 
 import { Button } from '@/components/ui/button';
 import { Command, CommandGroup, CommandItem, CommandList, CommandSeparator } from '@/components/ui/command';
 
-import { Command as CommandPrimitive, useCommandState } from 'cmdk';
+import { Command as CommandPrimitive } from 'cmdk';
+import { CommandEmpty, type GroupedOptions, groupOptions, removePickedOptions, useDebouncedValue } from './internal/command-options';
 
 /** Represents a single selectable option in the MultipleSelector. */
 export interface Option {
@@ -22,9 +24,7 @@ export interface Option {
   /** Group the options by providing key. */
   [key: string]: string | boolean | undefined;
 }
-interface GroupOption {
-  [key: string]: Option[];
-}
+type GroupOption = GroupedOptions<Option>;
 
 /** Props for the MultipleSelector component. */
 interface MultipleSelectorProps {
@@ -100,54 +100,9 @@ export interface MultipleSelectorRef {
 
 /**
  * Returns a debounced copy of `value` that only updates after `delay` ms of inactivity.
- *
- * @param value - The value to debounce.
- * @param delay - Debounce delay in milliseconds (default 500).
+ * @deprecated Kept for backwards compatibility; not specific to this component.
  */
-// eslint-disable-next-line react-refresh/only-export-components
-export function useDebounce<T>(value: T, delay?: number): T {
-  const [debouncedValue, setDebouncedValue] = useState<T>(value);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setDebouncedValue(value), delay || 500);
-
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [value, delay]);
-
-  return debouncedValue;
-}
-
-function transToGroupOption(options: Option[], groupBy?: string) {
-  if (options.length === 0) {
-    return {};
-  }
-  if (!groupBy) {
-    return {
-      '': options,
-    };
-  }
-
-  const groupOption: GroupOption = {};
-  options.forEach(option => {
-    const key = (option[groupBy] as string) || '';
-    if (!groupOption[key]) {
-      groupOption[key] = [];
-    }
-    groupOption[key].push(option);
-  });
-  return groupOption;
-}
-
-function removePickedOption(groupOption: GroupOption, picked: Option[]) {
-  const cloneOption = JSON.parse(JSON.stringify(groupOption)) as GroupOption;
-
-  for (const [key, value] of Object.entries(cloneOption)) {
-    cloneOption[key] = value.filter(val => !picked.find(p => p.value === val.value));
-  }
-  return cloneOption;
-}
+export const useDebounce = useDebouncedValue;
 
 function isOptionsExist(groupOption: GroupOption, targetOption: Option[]) {
   for (const [, value] of Object.entries(groupOption)) {
@@ -157,22 +112,6 @@ function isOptionsExist(groupOption: GroupOption, targetOption: Option[]) {
   }
   return false;
 }
-
-/**
- * The `CommandEmpty` of shadcn/ui will cause the cmdk empty not rendering correctly.
- * So we create one and copy the `Empty` implementation from `cmdk`.
- *
- * @reference: https://github.com/hsuanyi-chou/shadcn-ui-expansions/issues/34#issuecomment-1949561607
- **/
-const CommandEmpty = ({ className, ref: forwardedRef, ...props }: React.ComponentProps<typeof CommandPrimitive.Empty>) => {
-  const render = useCommandState(state => state.filtered.count === 0);
-
-  if (!render) return null;
-
-  return <div ref={forwardedRef} className={cn('px-2 py-4 text-center text-sm', className)} cmdk-empty="" role="presentation" {...props} />;
-};
-
-CommandEmpty.displayName = 'CommandEmpty';
 
 /**
  * A combobox-style input that allows selecting multiple options displayed as removable badge chips, with optional async search and creatable mode.
@@ -228,10 +167,10 @@ export const MultipleSelector = ({
   const [isLoading, setIsLoading] = useState(false);
 
   const [selected, setSelected] = useState<Option[]>(value || []);
-  const [options, setOptions] = useState<GroupOption>(transToGroupOption(arrayDefaultOptions, groupBy));
+  const [options, setOptions] = useState<GroupOption>(groupOptions(arrayDefaultOptions, groupBy));
   const [inputValue, setInputValue] = useState('');
 
-  const debouncedSearchTerm = useDebounce(inputValue, delay || 500);
+  const debouncedSearchTerm = useDebouncedValue(inputValue, delay || 500);
 
   useImperativeHandle(
     ref,
@@ -310,7 +249,7 @@ export const MultipleSelector = ({
     if (!arrayOptions || onSearch) {
       return;
     }
-    const newOption = transToGroupOption(arrayOptions || [], groupBy);
+    const newOption = groupOptions(arrayOptions || [], groupBy);
     if (JSON.stringify(newOption) !== JSON.stringify(options)) {
       setOptions(newOption);
     }
@@ -321,7 +260,7 @@ export const MultipleSelector = ({
 
     const doSearchSync = () => {
       const res = onSearchSync?.(debouncedSearchTerm);
-      setOptions(transToGroupOption(res || [], groupBy));
+      setOptions(groupOptions(res || [], groupBy));
     };
 
     const exec = async () => {
@@ -346,7 +285,7 @@ export const MultipleSelector = ({
     const doSearch = async () => {
       setIsLoading(true);
       const res = await onSearch?.(debouncedSearchTerm);
-      setOptions(transToGroupOption(res || [], groupBy));
+      setOptions(groupOptions(res || [], groupBy));
       setIsLoading(false);
     };
 
@@ -420,10 +359,10 @@ export const MultipleSelector = ({
       );
     }
 
-    return <CommandEmpty>{emptyIndicator}</CommandEmpty>;
+    return <CommandEmpty className="px-2 py-4 text-sm">{emptyIndicator}</CommandEmpty>;
   }, [creatable, emptyIndicator, onSearch, options]);
 
-  const selectables = useMemo<GroupOption>(() => removePickedOption(options, selected), [options, selected]);
+  const selectables = useMemo<GroupOption>(() => removePickedOptions(options, new Set(selected.map(option => option.value))), [options, selected]);
 
   /** Avoid Creatable Selector freezing or lagging when paste a long string. */
   const commandFilter = useCallback(() => {

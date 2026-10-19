@@ -6,14 +6,15 @@ import { CheckIcon, ChevronDownIcon, PlusIcon, XIcon } from 'lucide-react';
 
 import { cn } from '@customafk/react-toolkit/utils';
 
-import { Command as CommandPrimitive, useCommandState } from 'cmdk';
+import { Command as CommandPrimitive } from 'cmdk';
 import { Badge } from './badge';
+import { Button } from './button';
 import { comboboxVariants } from './combobox.variants';
 import { Command, CommandGroup, CommandItem, CommandList } from './command';
 import { inputVariants } from './input';
+import { CommandEmpty, type GroupedOptions, groupOptions, removePickedOptions, useDebouncedValue } from './internal/command-options';
 import { Popover, PopoverContent, PopoverTrigger } from './popover';
 import { Spinner } from './spinner';
-import { Button } from './button';
 
 /** A single selectable/creatable option rendered in the `Combobox` dropdown. */
 export interface ComboboxOption {
@@ -29,9 +30,7 @@ export interface ComboboxOption {
   [key: string]: string | boolean | undefined;
 }
 
-interface GroupOption {
-  [key: string]: ComboboxOption[];
-}
+type GroupOption = GroupedOptions<ComboboxOption>;
 
 /** Props for the `Combobox` component. */
 export interface ComboboxProps {
@@ -126,56 +125,11 @@ function stopMouseDown(event: React.MouseEvent) {
   event.stopPropagation();
 }
 
-function useDebounce<T>(value: T, delay?: number): T {
-  const [debouncedValue, setDebouncedValue] = useState<T>(value);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setDebouncedValue(value), delay ?? 500);
-    return () => clearTimeout(timer);
-  }, [value, delay]);
-
-  return debouncedValue;
-}
-
-function transToGroupOption(options: ComboboxOption[], groupBy?: string) {
-  if (options.length === 0) return {};
-  if (!groupBy) return { '': options };
-
-  const groupOption: GroupOption = {};
-  options.forEach(option => {
-    const key = (option[groupBy] as string) || '';
-    if (!groupOption[key]) groupOption[key] = [];
-    groupOption[key].push(option);
-  });
-  return groupOption;
-}
-
-function removePickedOption(groupOption: GroupOption, pickedValues: Set<string>) {
-  const cloneOption: GroupOption = {};
-  for (const [key, options] of Object.entries(groupOption)) {
-    cloneOption[key] = options.filter(option => !pickedValues.has(option.value));
-  }
-  return cloneOption;
-}
-
 /** Cheap structural-equality check on option identity (by `value`, in order) — avoids `JSON.stringify` comparisons. */
 function haveSameOptionValues(a: ComboboxOption[], b: ComboboxOption[]) {
   if (a.length !== b.length) return false;
   return a.every((option, index) => option.value === b[index]?.value);
 }
-
-/**
- * shadcn/ui's `CommandEmpty` doesn't render correctly inside a controlled/filtered `Command`, so
- * this re-implements `cmdk`'s own `Empty` primitive directly.
- *
- * @reference https://github.com/hsuanyi-chou/shadcn-ui-expansions/issues/34#issuecomment-1949561607
- */
-const CommandEmpty = ({ className, ref: forwardedRef, ...props }: React.ComponentProps<typeof CommandPrimitive.Empty>) => {
-  const render = useCommandState(state => state.filtered.count === 0);
-  if (!render) return null;
-  return <div ref={forwardedRef} className={cn('p-2.5 pt-1 text-center text-xs', className)} cmdk-empty="" role="presentation" {...props} />;
-};
-CommandEmpty.displayName = 'ComboboxCommandEmpty';
 
 /**
  * A multi-select combobox: a closed trigger shows the current selection as removable chips (or a
@@ -244,12 +198,12 @@ export const Combobox = ({
   const [isLoading, setIsLoading] = useState(false);
 
   const [internalSelected, setInternalSelected] = useState<ComboboxOption[]>(defaultValue);
-  const [options, setOptions] = useState<GroupOption>(transToGroupOption(arrayDefaultOptions, groupBy));
+  const [options, setOptions] = useState<GroupOption>(groupOptions(arrayDefaultOptions, groupBy));
   const [inputValue, setInputValue] = useState('');
 
   const selected = value ?? internalSelected;
   const trimmedInputValue = inputValue.trim();
-  const debouncedSearchTerm = useDebounce(inputValue, delay ?? 500);
+  const debouncedSearchTerm = useDebouncedValue(inputValue, delay);
 
   /** Notifies `onChange` unconditionally; only mirrors into local state when uncontrolled. */
   const setSelected = useCallback(
@@ -316,7 +270,7 @@ export const Combobox = ({
     if (!arrayOptions || onSearch) return;
     setOptions(prev => {
       const prevFlat = Object.values(prev).flat();
-      return haveSameOptionValues(arrayOptions, prevFlat) ? prev : transToGroupOption(arrayOptions, groupBy);
+      return haveSameOptionValues(arrayOptions, prevFlat) ? prev : groupOptions(arrayOptions, groupBy);
     });
   }, [arrayOptions, groupBy, onSearch]);
 
@@ -329,7 +283,7 @@ export const Combobox = ({
       setIsLoading(true);
       const res = await onSearch(debouncedSearchTerm);
       if (!isMountedRef.current || requestId !== searchRequestIdRef.current) return;
-      setOptions(transToGroupOption(res, groupBy));
+      setOptions(groupOptions(res, groupBy));
       setIsLoading(false);
     };
     void exec();
@@ -337,7 +291,7 @@ export const Combobox = ({
   }, [debouncedSearchTerm, groupBy, open, triggerSearchOnFocus, onSearch]);
 
   const selectables = useMemo<GroupOption>(
-    () => (hideSelectedFromList ? removePickedOption(options, selectedValues) : options),
+    () => (hideSelectedFromList ? removePickedOptions(options, selectedValues) : options),
     [hideSelectedFromList, options, selectedValues]
   );
 
@@ -544,7 +498,7 @@ export const Combobox = ({
               </div>
             ) : (
               <>
-                <CommandEmpty data-slot="combobox-empty">
+                <CommandEmpty data-slot="combobox-empty" className="p-2.5 pt-1 text-xs">
                   <div className="bg-muted-muted size-full min-h-14 flex items-center justify-center">{emptyIndicator ?? 'No results found.'}</div>
                 </CommandEmpty>
 
