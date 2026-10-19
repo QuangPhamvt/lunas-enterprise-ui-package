@@ -12,7 +12,7 @@ const dirname =
   typeof __dirname !== 'undefined' ? __dirname : path.dirname(fileURLToPath(import.meta.url))
 
 export default defineConfig({
-  plugins: [react(), babel({ presets: [reactCompilerPreset({ target: '19' })] }), tailwindcss()],
+  plugins: [react(), babel({ presets: [reactCompilerPreset({ target: '19', compilationMode: 'annotation' })] }), tailwindcss()],
   resolve: {
     alias: {
       '@': new URL('./packages', import.meta.url).pathname,

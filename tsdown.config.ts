@@ -140,6 +140,6 @@ export default defineConfig([
         './styles/text-editor': './styles/text-editor.css',
       },
     },
-    plugins: [babel({ presets: [reactCompilerPreset({ target: '19' })] })],
+    plugins: [babel({ presets: [reactCompilerPreset({ target: '19', compilationMode: 'annotation' })] })],
   },
 ])

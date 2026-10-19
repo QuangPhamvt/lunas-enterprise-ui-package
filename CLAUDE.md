@@ -50,8 +50,11 @@ public component: add it to `entry`, build, and add a Storybook story.
   is ever inlined into `dist`. Import Radix only through the `radix-ui` meta package (e.g.
   `import { Slot as SlotPrimitive } from 'radix-ui'`), never `@radix-ui/react-*` directly.
 - `"sideEffects": ["**/*.css"]` — keep modules free of top-level side effects so tree-shaking works.
-- The React Compiler runs in the published build (and Storybook). Existing `useMemo`/`useCallback`/
-  `memo` stay as they are; **new components must not add manual memoization**.
+- The React Compiler runs in **annotation mode** (build, Storybook and tests alike): only a
+  component or hook whose body starts with the `'use memo'` directive is compiled. Compiling
+  everything made the library ~39% larger, while most existing code is already memoized by hand.
+  Existing `useMemo`/`useCallback`/`memo` stay as they are; **new components add `'use memo'`
+  instead of manual memoization**.
 - `features/charts`, `features/tables` and `features/tanstack-form` expose components through
   `lazy()` wrappers. Wrappers carry a copy of the implementation's JSDoc so editor hover works —
   after editing a lazy component's JSDoc run `npm run docs:sync-lazy` (`docs:check-lazy` verifies).
