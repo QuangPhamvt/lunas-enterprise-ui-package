@@ -69,6 +69,13 @@ export const Image: React.FC<Props> = ({ src, alt, width, height, maxRetries = 3
     setCurrentSrc(src);
   }, [maxRetries, retryCount, retryDelay, src]);
 
+  // A clickable image acts as a button, so it must also respond to Enter/Space.
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    e.preventDefault();
+    onClick?.();
+  };
+
   if (hasError) {
     return (
       <div style={{ width, height }} className={cn('@container relative inline-block', className)}>
@@ -81,9 +88,13 @@ export const Image: React.FC<Props> = ({ src, alt, width, height, maxRetries = 3
   }
 
   return (
-    <div style={{ width, height }} className={cn('relative flex items-center justify-center overflow-hidden rounded', className)} onClick={onClick}>
+    <div
+      style={{ width, height }}
+      className={cn('relative flex items-center justify-center overflow-hidden rounded', onClick && 'cursor-pointer', className)}
+      {...(onClick && { role: 'button', tabIndex: 0, onClick, onKeyDown: handleKeyDown })}
+    >
       {!isLoaded && <Skeleton className="absolute inset-0 flex size-full animate-pulse items-center justify-center" />}
-      <img src={currentSrc} className="absolute inset-0 z-0 size-full scale-110 object-cover blur-xl brightness-60" />
+      <img src={currentSrc} alt="" aria-hidden className="absolute inset-0 z-0 size-full scale-110 object-cover blur-xl brightness-60" />
       <img
         id={currentSrc}
         ref={imageRef}

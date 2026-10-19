@@ -382,7 +382,7 @@ const MIME_TYPE_ICON_MAP: Record<string, React.FC<FileIconProps>> = {
 
 function FilePreview({ file }: FilePreviewProps) {
   if (file.type.startsWith('image/')) {
-    return <img src={file.preview} className="aspect-square size-10 shrink-0 rounded border border-border object-cover object-top" />;
+    return <img src={file.preview} alt={file.name} className="aspect-square size-10 shrink-0 rounded border border-border object-cover object-top" />;
   }
 
   if (file.type.startsWith('audio/')) {

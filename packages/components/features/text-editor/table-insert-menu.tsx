@@ -46,6 +46,7 @@ function TableInsertMenu({ editor }: TableInsertMenuProps) {
         <p className="mb-2 font-medium text-text-positive-strong text-xs">
           {hovered.rows > 0 ? `Bảng ${hovered.rows} × ${hovered.cols}` : 'Chọn kích thước bảng'}
         </p>
+        {/* biome-ignore lint/a11y/noStaticElementInteractions: mouse-leave only clears the hover preview; the cells are buttons */}
         <div className="grid grid-cols-6 gap-1" onMouseLeave={() => setHovered({ rows: 0, cols: 0 })}>
           {Array.from({ length: GRID_SIZE * GRID_SIZE }, (_, i) => {
             const row = Math.floor(i / GRID_SIZE) + 1;

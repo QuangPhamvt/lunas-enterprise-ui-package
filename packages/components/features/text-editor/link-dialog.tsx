@@ -74,6 +74,7 @@ function LinkDialog({ editor }: LinkDialogProps) {
             onChange={e => setUrl(e.target.value)}
             onKeyDown={handleKeyDown}
             aria-label="Đường dẫn liên kết"
+            // biome-ignore lint/a11y/noAutofocus: the popover opens on an explicit user action, and typing the URL is its only purpose
             autoFocus
             className={cn(
               'flex-1 rounded border border-border bg-transparent px-2.5 py-1.5 text-sm text-text-positive',

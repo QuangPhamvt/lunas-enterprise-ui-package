@@ -455,6 +455,8 @@ export const MultipleSelector = forwardRef<MultipleSelectorRef, MultipleSelector
         shouldFilter={commandProps?.shouldFilter !== undefined ? commandProps.shouldFilter : !onSearch} // When onSearch is provided, we don&lsquo;t want to filter the options. You can still override it.
         filter={commandFilter()}
       >
+        {/* biome-ignore lint/a11y/noStaticElementInteractions: forwards mouse clicks to the input, which is itself keyboard-focusable */}
+        {/* biome-ignore lint/a11y/useKeyWithClickEvents: forwards mouse clicks to the input, which is itself keyboard-focusable */}
         <div
           className={cn(
             'border-border-weak relative rounded-md border text-sm transition-shadow',
