@@ -1,5 +1,8 @@
 import { Separator } from '@/components/ui/separator';
+
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, within } from 'storybook/test';
+
 const meta = {
   tags: ['autodocs'],
   title: 'Components/Separator',
@@ -27,5 +30,30 @@ export const Default: Story = {
         </div>
       </div>
     );
+  },
+};
+
+// ─── Behavior tests (hidden from the sidebar and docs; run by `npm run test:storybook`) ───
+
+const TEST_TAGS = ['!dev', '!autodocs'];
+
+export const TestOrientationAndRole: Story = {
+  tags: TEST_TAGS,
+  render: () => (
+    <div className="flex h-10 items-center gap-4">
+      <Separator data-testid="default" />
+      <Separator orientation="vertical" data-testid="vertical" />
+      <Separator decorative={false} data-testid="semantic" />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const separator = canvas.getByTestId('default');
+    await expect(separator).toHaveAttribute('data-slot', 'separator');
+    await expect(separator).toHaveAttribute('data-orientation', 'horizontal');
+    // Decorative by default, so it is hidden from assistive tech.
+    await expect(separator).toHaveAttribute('role', 'none');
+    await expect(canvas.getByTestId('vertical')).toHaveAttribute('data-orientation', 'vertical');
+    await expect(canvas.getByRole('separator')).toBe(canvas.getByTestId('semantic'));
   },
 };
