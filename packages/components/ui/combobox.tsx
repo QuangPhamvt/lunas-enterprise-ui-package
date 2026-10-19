@@ -56,6 +56,7 @@ export interface ComboboxProps {
 
   /** Placeholder shown on the closed trigger (when nothing is selected) and in the search input. */
   placeholder?: string;
+  /** Disable the trigger, the search input and every option. */
   disabled?: boolean;
   /** Visual color variant of the trigger box. Defaults to `'normal'`. */
   color?: 'normal' | 'danger';
@@ -96,8 +97,11 @@ export interface ComboboxProps {
   /** Fired after the typed query is cleared via the search input's clear button. */
   onClearQuery?: () => void;
 
+  /** Class names for the closed trigger box. */
   className?: string;
+  /** Class names applied to every selected-option chip. */
   badgeClassName?: string;
+  /** Class names for the dropdown popover content. */
   contentClassName?: string;
   /** Props forwarded to the underlying `Command` root. `value`/`onValueChange` are excluded — they control cmdk's internal highlighted-item tracking, not this component's selection. */
   commandProps?: Omit<React.ComponentPropsWithoutRef<typeof Command>, 'value' | 'onValueChange'>;

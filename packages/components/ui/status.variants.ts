@@ -1,5 +1,6 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 
+/** Class names for `Status`, keyed by variant, color and size. */
 export const statusVariants = cva('inline-flex w-fit items-center font-medium transition-colors duration-150', {
   variants: {
     variant: {

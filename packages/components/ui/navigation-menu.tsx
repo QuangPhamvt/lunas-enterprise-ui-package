@@ -66,6 +66,7 @@ function NavigationMenuItem({ className, ...props }: React.ComponentProps<typeof
   return <NavigationMenuPrimitive.Item data-slot="navigation-menu-item" className={cn('relative', className)} {...props} />;
 }
 
+/** Class names for a `NavigationMenuTrigger`; apply them to a `NavigationMenuLink` so plain links match the triggers. */
 const navigationMenuTriggerStyle = cva([
   'group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium',
   'outline-none transition-[color,box-shadow]',

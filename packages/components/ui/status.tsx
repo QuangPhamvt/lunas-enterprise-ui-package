@@ -56,17 +56,26 @@ const solidDotColorMap: Record<NonNullable<StatusVariants['color']>, string> = {
   rose: 'bg-rose-300',
 };
 
-/**
- * Props for the `Status` component.
- *
- * @property variant - Visual style — `'dot'` (outlined pill with a colored dot, default), `'solid'`
- * (filled pill with a colored dot), `'soft'` (tinted pill, no dot), or `'bar'` (plain text with a
- * colored left accent bar, for lists/timelines).
- * @property color - Full Tailwind color family, e.g. `'red'` | `'orange'` | `'green'` | `'cyan'` |
- * `'blue'` | `'pink'` | ... , or `'none'` for an unset/dashed neutral state. Defaults to `'gray'`.
- * @property size - `'sm'` | `'md'` (default) | `'lg'`.
- */
-export type StatusProps = StatusVariants & React.ComponentPropsWithoutRef<'span'>;
+/** Props for `Status` — every native `<span>` prop plus the style variants below. */
+export type StatusProps = React.ComponentPropsWithoutRef<'span'> & {
+  /**
+   * Visual style: `dot` (outlined pill with a colored dot), `solid` (filled pill with a dot), `soft`
+   * (tinted pill, no dot) or `bar` (plain text with a colored left accent bar, for lists/timelines).
+   * @default 'dot'
+   */
+  variant?: StatusVariants['variant'];
+  /**
+   * Tailwind color family (`'red'`, `'green'`, `'blue'`, …), or `'none'` for an unset, dashed
+   * neutral state.
+   * @default 'gray'
+   */
+  color?: StatusVariants['color'];
+  /**
+   * Padding and font size.
+   * @default 'md'
+   */
+  size?: StatusVariants['size'];
+};
 
 /**
  * Color-coded status indicator for pipeline/lifecycle states (e.g. lead, deal, order status).
