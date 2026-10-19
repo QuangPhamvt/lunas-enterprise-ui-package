@@ -10,7 +10,9 @@ import { Badge } from '@/components/ui/badge';
 export type NotificationBellProps = {
   /** Combined unread count (global + personal) shown as a badge; hidden when `0`. */
   unreadCount: number;
+  /** Called when the bell is clicked — usually toggles the `NotificationCenter` panel. */
   onClick: () => void;
+  /** Class names for the bell button. */
   className?: string;
 };
 
@@ -18,7 +20,12 @@ export type NotificationBellProps = {
  * Header trigger button for {@link NotificationCenter} — a bell icon with an unread-count badge.
  * Purely presentational; the consuming app owns open/close state and passes `onClick`.
  *
- * **Import:** `import { NotificationBell } from '@customafk/lunas-ui/features/notification-center'`
+ * @example
+ * ```tsx
+ * import { NotificationBell } from '@customafk/lunas-ui/features/notification-center';
+ *
+ * <NotificationBell unreadCount={globalUnread + personalUnread} onClick={() => setOpen(open => !open)} />
+ * ```
  */
 export const NotificationBell: React.FC<NotificationBellProps> = ({ unreadCount, onClick, className }) => {
   return (

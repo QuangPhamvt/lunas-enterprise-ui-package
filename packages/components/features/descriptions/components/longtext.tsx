@@ -5,8 +5,8 @@ import { DescriptionEmpty } from './empty';
 
 /**
  * Renders free-form text clamped to 2 lines inside a {@link Description} value cell, revealing the
- * full text and its character count in a tooltip on hover/click. Falls back to {@link DescriptionEmpty}
- * when `content` is `null` or `undefined`.
+ * full text and its character count in a tooltip on hover/click. Falls back to {@link
+ * DescriptionEmpty} when `content` is `null` or `undefined`.
  *
  * @example
  * import { DescriptionLongText } from '@customafk/lunas-ui/features/descriptions';

@@ -12,6 +12,7 @@ import { formatCurrency, toDateLabel } from '../utils';
 
 /** Props for `RevenueAreaChart`. */
 export type RevenueAreaChartProps = BaseChartProps & {
+  /** Data points to plot, in display order. */
   data: TimeSeriesPoint[];
   /** Series label. Defaults to `'Revenue'`. */
   label?: string;
@@ -19,13 +20,29 @@ export type RevenueAreaChartProps = BaseChartProps & {
   comparisonLabel?: string;
   /** Renders `previousValue` as a second, muted area series. */
   showComparison?: boolean;
+  /**
+   * Series color — any CSS color or `var(--token)`.
+   * @default 'var(--chart-1)'
+   */
   color?: string;
+  /**
+   * Color of the comparison series.
+   * @default 'var(--chart-8)'
+   */
   comparisonColor?: string;
   /** Formats tooltip and Y-axis values. Defaults to compact currency. */
   valueFormatter?: (value: number) => string;
+  /**
+   * Formats dates on the time axis and in the tooltip.
+   * @default toDateLabel
+   */
   dateFormatter?: (date: string | Date) => string;
   /** Defaults to `showComparison`. */
   showLegend?: boolean;
+  /**
+   * Draw background grid lines.
+   * @default true
+   */
   showGrid?: boolean;
 };
 

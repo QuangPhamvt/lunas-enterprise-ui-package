@@ -6,12 +6,36 @@ import { Badge } from '@/components/ui/badge';
 import { DescriptionEmpty } from './empty';
 
 type DescriptionTagListProps = {
+  /** Tags to show; duplicates are removed. */
   tags: Array<string | number> | null | undefined;
+  /**
+   * Number of tags shown before the “+N” badge.
+   * @default 5
+   */
   max?: number;
+  /**
+   * Badge color.
+   * @default 'muted'
+   */
   color?: BadgeProps['color'];
+  /**
+   * Badge fill style.
+   * @default 'outline'
+   */
   variant?: BadgeProps['variant'];
 };
 
+/**
+ * A wrapping list of tag badges, de-duplicated, showing at most `max` plus a “+N” overflow badge.
+ * Renders `DescriptionEmpty` when there is nothing to show.
+ *
+ * @example
+ * ```tsx
+ * <DescriptionItem label="…">
+ *   <DescriptionTagList tags={product.tags} max={3} />
+ * </DescriptionItem>
+ * ```
+ */
 export const DescriptionTagList: React.FC<DescriptionTagListProps> = ({ tags, max = 5, color = 'muted', variant = 'outline' }) => {
   if (!tags?.length) return <DescriptionEmpty />;
 

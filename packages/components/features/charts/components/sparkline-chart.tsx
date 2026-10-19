@@ -15,6 +15,7 @@ const TREND_COLORS: Record<ChartTrend, string> = {
 
 /** Props for `SparklineChart`. */
 export type SparklineChartProps = {
+  /** Data points to plot, in display order. */
   data: number[] | Array<{ value: number }>;
   /** Render style. Defaults to `'area'`. */
   type?: 'line' | 'area';
@@ -24,7 +25,9 @@ export type SparklineChartProps = {
   color?: string;
   /** Fixed height in px. Defaults to `40`. */
   height?: number;
+  /** Enable the recharts enter animation. Disable for deterministic tests. */
   animate?: boolean;
+  /** Class names for the chart container. */
   className?: string;
 };
 

@@ -12,12 +12,28 @@ import { getDirectionColor } from '../utils';
 
 /** Props for `WaterfallChart`. */
 export type WaterfallChartProps = BaseChartProps & {
+  /** Data points to plot, in display order. */
   data: WaterfallPoint[];
   /** Color for `isTotal` bars. Defaults to `'var(--chart-1)'`. */
   totalColor?: string;
+  /**
+   * Color for rising / positive values.
+   * @default 'var(--success)'
+   */
   upColor?: string;
+  /**
+   * Color for falling / negative values.
+   * @default 'var(--danger)'
+   */
   downColor?: string;
+  /**
+   * Formats values in the tooltip and on the value axis.
+   */
   valueFormatter?: (value: number) => string;
+  /**
+   * Draw background grid lines.
+   * @default true
+   */
   showGrid?: boolean;
 };
 

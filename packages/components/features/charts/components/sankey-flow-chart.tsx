@@ -26,10 +26,23 @@ export type SankeyFlowLink = {
 
 /** Props for `SankeyFlowChart`. */
 export type SankeyFlowChartProps = BaseChartProps & {
+  /** Flow nodes; `links` refer to them by index. */
   nodes: Array<SankeyFlowNode | string>;
+  /** Weighted flows between `nodes`, by index. */
   links: SankeyFlowLink[];
+  /**
+   * Formats values in the tooltip and on the value axis.
+   */
   valueFormatter?: (value: number) => string;
+  /**
+   * Width of each node bar, in px.
+   * @default 14
+   */
   nodeWidth?: number;
+  /**
+   * Vertical gap between nodes, in px.
+   * @default 24
+   */
   nodePadding?: number;
   /** Minimum horizontal space reserved for node labels outside the plot area; grows to fit the longest root/leaf label. Defaults to `170`. */
   labelWidth?: number;

@@ -136,7 +136,12 @@ const getNotificationAccent = (type: string): NotificationAccent => {
  * icon chip's color, its icon, and the eyebrow category label change (see
  * {@link getNotificationAccent}).
  *
- * **Import:** `import { NotificationItem } from '@customafk/lunas-ui/features/notification-center'`
+ * @example
+ * ```tsx
+ * import { NotificationItem } from '@customafk/lunas-ui/features/notification-center';
+ *
+ * <NotificationItem notification={notification} onMarkAsRead={markAsRead} onClick={openRelated} />
+ * ```
  */
 export const NotificationItem: React.FC<NotificationItemProps> = ({ notification, onMarkAsRead, onClick }) => {
   const { isRead } = notification;

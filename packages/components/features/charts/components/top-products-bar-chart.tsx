@@ -12,12 +12,21 @@ import { formatCompactNumber } from '../utils';
 
 /** Props for `TopProductsBarChart`. */
 export type TopProductsBarChartProps = BaseChartProps & {
+  /** Data points to plot, in display order. */
   data: NamedValue[];
   /** Series label. Defaults to `'Sales'`. */
   label?: string;
   /** Number of items shown after sorting descending. Defaults to `8`. */
   maxItems?: number;
+  /**
+   * Series color — any CSS color or `var(--token)`.
+   * @default 'var(--chart-1)'
+   */
   color?: string;
+  /**
+   * Formats values in the tooltip and on the value axis.
+   * @default formatCompactNumber
+   */
   valueFormatter?: (value: number) => string;
   /** Value labels at the end of each bar. Defaults to `true`. */
   showValueLabels?: boolean;

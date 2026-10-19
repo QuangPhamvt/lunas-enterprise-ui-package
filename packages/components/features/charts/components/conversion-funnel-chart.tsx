@@ -22,6 +22,10 @@ export type ConversionFunnelChartProps = BaseChartProps & {
   data: FunnelStage[];
   /** Appends each stage's percentage of the first stage. Defaults to `true`. */
   showConversionRates?: boolean;
+  /**
+   * Formats values in the tooltip and on the value axis.
+   * @default formatCompactNumber
+   */
   valueFormatter?: (value: number) => string;
 };
 

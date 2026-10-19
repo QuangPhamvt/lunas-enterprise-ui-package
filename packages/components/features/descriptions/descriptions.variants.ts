@@ -7,6 +7,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
  */
 
 /** Shared size scale across every Description sub-component, matching `ui/badge.tsx`/`ui/button.tsx`'s `xs–xl` scale. */
+/** Density scale shared by every description part — padding and font size, `xs` through `xl`. */
 export type TDescriptionSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
 export const descriptionVariants = cva('relative flex flex-col bg-white', {

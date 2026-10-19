@@ -12,12 +12,28 @@ import { getChartColor, toDateLabel } from '../utils';
 
 /** Props for `StackedAreaChart`. */
 export type StackedAreaChartProps = BaseChartProps & {
+  /** Data points to plot, in display order. */
   data: Array<{ date: string | Date } & Record<string, unknown>>;
   /** One entry per stacked category. */
   series: ChartSeries[];
+  /**
+   * Formats values in the tooltip and on the value axis.
+   */
   valueFormatter?: (value: number) => string;
+  /**
+   * Formats dates on the time axis and in the tooltip.
+   * @default toDateLabel
+   */
   dateFormatter?: (date: string | Date) => string;
+  /**
+   * Show the series legend.
+   * @default true
+   */
   showLegend?: boolean;
+  /**
+   * Draw background grid lines.
+   * @default true
+   */
   showGrid?: boolean;
 };
 

@@ -16,10 +16,22 @@ export type GainLossBarChartProps = BaseChartProps & {
   data: NamedValue[];
   /** Series label. Defaults to `'Return'`. */
   label?: string;
+  /**
+   * Color for rising / positive values.
+   * @default 'var(--success)'
+   */
   upColor?: string;
+  /**
+   * Color for falling / negative values.
+   * @default 'var(--danger)'
+   */
   downColor?: string;
   /** Formats tooltip and Y-axis values. Defaults to a signed percentage. */
   valueFormatter?: (value: number) => string;
+  /**
+   * Draw background grid lines.
+   * @default true
+   */
   showGrid?: boolean;
 };
 

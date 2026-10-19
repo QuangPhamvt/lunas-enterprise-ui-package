@@ -9,7 +9,15 @@ type DescriptionColorProps = {
   label?: string;
 };
 
-/** A small color swatch + label — for hex codes, theme tokens, or any other color-valued field. */
+/** A small color swatch + label — for hex codes, theme tokens, or any other color-valued field.
+ *
+ * @example
+ * ```tsx
+ * <DescriptionItem label="…">
+ *   <DescriptionColor value="#7c3aed" />
+ * </DescriptionItem>
+ * ```
+ */
 export const DescriptionColor: React.FC<DescriptionColorProps> = ({ value, label }) => {
   if (!value?.trim()) return <DescriptionEmpty />;
 

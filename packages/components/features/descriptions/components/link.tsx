@@ -7,12 +7,30 @@ import { cn } from '@customafk/react-toolkit/utils';
 import { DescriptionEmpty } from './empty';
 
 type DescriptionLinkProps = {
+  /** Link target. */
   href: string | null | undefined;
+  /** Link text. Defaults to `href`. */
   label?: string;
+  /**
+   * Open in a new tab and show an external-link icon.
+   * @default true
+   */
   external?: boolean;
+  /** Class names for the `<a>`. */
   className?: string;
 };
 
+/**
+ * An underlined link; external links open in a new tab with `noopener`. Renders `DescriptionEmpty`
+ * when there is nothing to show.
+ *
+ * @example
+ * ```tsx
+ * <DescriptionItem label="…">
+ *   <DescriptionLink href={shop.website} />
+ * </DescriptionItem>
+ * ```
+ */
 export const DescriptionLink: React.FC<DescriptionLinkProps> = ({ href, label, external = true, className }) => {
   if (!href) return <DescriptionEmpty />;
 

@@ -18,6 +18,7 @@ export type DonutChartSegment = NamedValue & {
 
 /** Props for `DonutChart`. */
 export type DonutChartProps = BaseChartProps & {
+  /** Data points to plot, in display order. */
   data: DonutChartSegment[];
   /** Text under the center total, e.g. `'Total sales'`. */
   centerLabel?: string;
@@ -25,7 +26,15 @@ export type DonutChartProps = BaseChartProps & {
   centerValueFormatter?: (total: number) => string;
   /** Overrides the computed segment sum shown in the center. */
   totalValue?: number;
+  /**
+   * Show the series legend.
+   * @default true
+   */
   showLegend?: boolean;
+  /**
+   * Show the summed total in the donut hole.
+   * @default true
+   */
   showCenterTotal?: boolean;
 };
 

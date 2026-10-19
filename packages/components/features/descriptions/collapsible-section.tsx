@@ -20,6 +20,7 @@ export type DescriptionCollapsibleSectionProps = React.PropsWithChildren<{
   defaultOpen?: boolean;
   /** Controlled open state — pair with `onOpenChange`. */
   open?: boolean;
+  /** Called with the new state when the section is toggled. */
   onOpenChange?: (open: boolean) => void;
   /**
    * Set `false` to render a static section header with no trigger/chevron (children always render)
@@ -28,6 +29,7 @@ export type DescriptionCollapsibleSectionProps = React.PropsWithChildren<{
    * @default true
    */
   collapsible?: boolean;
+  /** Class names for the section wrapper. */
   className?: string;
 }>;
 

@@ -10,10 +10,26 @@ import { DescriptionEmpty } from './empty';
 import { useCopyFeedback } from './use-copy-feedback';
 
 type DescriptionCopyProps = {
+  /** Text to show and copy. */
   value: string | null | undefined;
+  /**
+   * Truncate long values to the row width instead of wrapping.
+   * @default true
+   */
   truncate?: boolean;
 };
 
+/**
+ * A monospace value that copies itself to the clipboard on click (with “copied” feedback) — for
+ * IDs, codes and tokens. Renders `DescriptionEmpty` when there is nothing to show.
+ *
+ * @example
+ * ```tsx
+ * <DescriptionItem label="…">
+ *   <DescriptionCopy value={order.uuid} />
+ * </DescriptionItem>
+ * ```
+ */
 export const DescriptionCopy: React.FC<DescriptionCopyProps> = ({ value, truncate = true }) => {
   const { copied, copy } = useCopyFeedback();
 

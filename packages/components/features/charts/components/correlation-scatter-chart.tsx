@@ -11,16 +11,33 @@ import type { BaseChartProps, ScatterPoint } from '../types';
 
 /** Props for `CorrelationScatterChart`. */
 export type CorrelationScatterChartProps = BaseChartProps & {
+  /** Data points to plot, in display order. */
   data: ScatterPoint[];
   /** Series label used in the theme config. Defaults to `'Points'`. */
   label?: string;
+  /**
+   * Series color — any CSS color or `var(--token)`.
+   * @default 'var(--chart-1)'
+   */
   color?: string;
+  /** Title of the X axis. */
   xLabel?: string;
+  /** Title of the Y axis. */
   yLabel?: string;
+  /**
+   * Formats X values in ticks and the tooltip.
+   */
   xFormatter?: (value: number) => string;
+  /**
+   * Formats Y values in ticks and the tooltip.
+   */
   yFormatter?: (value: number) => string;
   /** Sizes each point from its `z` value. Defaults to `false`. */
   showBubbleSize?: boolean;
+  /**
+   * Draw background grid lines.
+   * @default true
+   */
   showGrid?: boolean;
 };
 

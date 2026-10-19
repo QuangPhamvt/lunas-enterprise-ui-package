@@ -11,12 +11,19 @@ import { NotificationItem } from './notification-item';
 
 /** Props for `NotificationList`. */
 export type NotificationListProps = {
+  /** Notifications to render, newest first. */
   notifications: NotificationItemData[];
+  /** Show a spinner under the list (a page is loading). */
   isLoading?: boolean;
+  /** Show the “Xem thêm” button (needs `onLoadMore`). */
   hasMore?: boolean;
+  /** Text shown when the list is empty. */
   emptyLabel?: string;
+  /** Called by the “Xem thêm” button. */
   onLoadMore?: () => void;
+  /** Called with a notification's uuid when its “mark as read” button is clicked. */
   onMarkAsRead?: (notificationUuid: string) => void;
+  /** Called when a row is clicked. */
   onItemClick?: (notification: NotificationItemData) => void;
 };
 
@@ -24,7 +31,17 @@ export type NotificationListProps = {
  * Scrollable list of {@link NotificationItem} rows with an empty state and a "load more" affordance.
  * Purely presentational — the consuming app owns fetching/pagination and passes `notifications` in.
  *
- * **Import:** `import { NotificationList } from '@customafk/lunas-ui/features/notification-center'`
+ * @example
+ * ```tsx
+ * import { NotificationList } from '@customafk/lunas-ui/features/notification-center';
+ *
+ * <NotificationList
+ *   notifications={items}
+ *   hasMore={hasNextPage}
+ *   onLoadMore={fetchNextPage}
+ *   onMarkAsRead={markAsRead}
+ * />
+ * ```
  */
 export const NotificationList: React.FC<NotificationListProps> = ({
   notifications,

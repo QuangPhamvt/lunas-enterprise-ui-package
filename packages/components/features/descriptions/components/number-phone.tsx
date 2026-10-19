@@ -6,7 +6,21 @@ import { Paragraph } from '@/components/typography/paragraph';
 import { formatVietnamesePhone } from '@/libs/phone';
 import { DescriptionEmpty } from './empty';
 
-export const DescriptionNumberPhone: React.FC<{ value?: string | null }> = ({ value }) => {
+/**
+ * A Vietnamese phone number in national format, with the international format in a tooltip. Renders
+ * `DescriptionEmpty` when there is nothing to show.
+ *
+ * @example
+ * ```tsx
+ * <DescriptionItem label="…">
+ *   <DescriptionNumberPhone value={customer.phone} />
+ * </DescriptionItem>
+ * ```
+ */
+export const DescriptionNumberPhone: React.FC<{
+  /** Raw phone number in any common Vietnamese format. */
+  value?: string | null;
+}> = ({ value }) => {
   const phone = formatVietnamesePhone(value);
   if (!phone) return <DescriptionEmpty />;
 

@@ -4,9 +4,22 @@ import { Image } from '@/components/ui/image';
 
 import { DescriptionEmpty } from './empty';
 
+/** One image: a stable `id` (used as the React key), its `src` and `alt` text. */
 type ImageItem = { id: string; src: string; alt: string };
 
+/**
+ * A thumbnail grid (one large thumbnail when there is a single image). Renders `DescriptionEmpty`
+ * when there is nothing to show.
+ *
+ * @example
+ * ```tsx
+ * <DescriptionItem label="…">
+ *   <DescriptionImages images={product.images} />
+ * </DescriptionItem>
+ * ```
+ */
 export const DescriptionImages: React.FC<{
+  /** Images to show; an empty list renders the empty placeholder. */
   images?: Array<ImageItem> | null | undefined;
 }> = ({ images }) => {
   if (!images?.length) return <DescriptionEmpty />;

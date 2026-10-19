@@ -41,15 +41,31 @@ const descriptionStatisticVariants = cva('inline-flex items-center gap-1 font-me
 });
 
 /** Props for `DescriptionStatistic`. */
-export type DescriptionStatisticProps = VariantProps<typeof descriptionStatisticVariants> & {
+export type DescriptionStatisticProps = {
+  /**
+   * Font size of the value.
+   * @default 'sm'
+   */
+  size?: VariantProps<typeof descriptionStatisticVariants>['size'];
+  /** Colors the value: `up` (success), `down` (danger) or `neutral`. */
+  trend?: VariantProps<typeof descriptionStatisticVariants>['trend'];
+  /** Character between the integer and decimal part. */
   decimalSeparator?: string;
+  /** Character between thousands groups. */
   groupSeparator?: string;
+  /** Node before the number (e.g. a currency symbol). */
   prefix?: React.ReactNode;
+  /** Node after the number (e.g. a unit). */
   suffix?: React.ReactNode;
+  /** Number of decimal digits to show. */
   precision?: number;
+  /** How the value is rounded to `precision`. */
   roundingMode?: 'round' | 'floor' | 'ceil';
+  /** Keep trailing zeros up to `precision` (`1.50` instead of `1.5`). */
   showTrailingZeros?: boolean;
+  /** Number, or numeric string, to show; empty/invalid input renders `DescriptionEmpty`. */
   value: number | string | null | undefined;
+  /** Class names for the value. */
   className?: string;
   /**
    * Renders `DescriptionEmpty` for a literal `0` value, same as any other unset/invalid input.
@@ -61,7 +77,15 @@ export type DescriptionStatisticProps = VariantProps<typeof descriptionStatistic
 
 /**
  * The value-cell to use for numbers inside a `DescriptionItem` — prefer this over the standalone
- * `Statistic` (`data-display/statistic`) so empty/invalid values consistently fall back to `DescriptionEmpty`.
+ * `Statistic` (`data-display/statistic`) so empty/invalid values consistently fall back to
+ * `DescriptionEmpty`.
+ *
+ * @example
+ * ```tsx
+ * <DescriptionItem label="Tổng tiền">
+ *   <DescriptionStatistic value={order.total} suffix="₫" />
+ * </DescriptionItem>
+ * ```
  */
 export const DescriptionStatistic = memo(
   ({

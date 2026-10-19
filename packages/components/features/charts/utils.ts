@@ -3,9 +3,11 @@ const CHART_COLOR_COUNT = 8;
 /** Cycles through the eight `--chart-N` theme palette variables. */
 export const getChartColor = (index: number): string => `var(--chart-${(((index % CHART_COLOR_COUNT) + CHART_COLOR_COUNT) % CHART_COLOR_COUNT) + 1})`;
 
+/** Formats a number in compact notation (`12.5K`, `3.4M`). */
 export const formatCompactNumber = (value: number, locale = 'en-US'): string =>
   new Intl.NumberFormat(locale, { notation: 'compact', maximumFractionDigits: 1 }).format(value);
 
+/** Formats a currency amount, switching to compact notation from 10,000 up. */
 export const formatCurrency = (value: number, currency = 'USD', locale = 'en-US'): string =>
   new Intl.NumberFormat(locale, {
     style: 'currency',
@@ -14,9 +16,11 @@ export const formatCurrency = (value: number, currency = 'USD', locale = 'en-US'
     maximumFractionDigits: Math.abs(value) >= 10_000 ? 1 : 0,
   }).format(value);
 
+/** Formats a ratio as a percentage (`0.125` → `12.5%`). */
 export const formatPercent = (value: number, locale = 'en-US'): string =>
   new Intl.NumberFormat(locale, { style: 'percent', maximumFractionDigits: 1 }).format(value);
 
+/** Short month-day label for a date (`Jun 2`); returns the input unchanged when it is not a valid date. */
 export const toDateLabel = (date: string | Date, locale = 'en-US'): string => {
   const parsed = date instanceof Date ? date : new Date(date);
   if (Number.isNaN(parsed.getTime())) return String(date);
@@ -27,6 +31,7 @@ export const toDateLabel = (date: string | Date, locale = 'en-US'): string => {
 export const getDirectionColor = (current: number, reference: number, colors?: { up?: string; down?: string }): string =>
   current >= reference ? (colors?.up ?? 'var(--success)') : (colors?.down ?? 'var(--danger)');
 
+/** Like `formatPercent` but always signed (`+12.5%`, `-3%`), except for zero. */
 export const formatSignedPercent = (value: number, locale = 'en-US'): string => {
   const formatted = new Intl.NumberFormat(locale, { style: 'percent', maximumFractionDigits: 1, signDisplay: 'exceptZero' }).format(value);
   return formatted;

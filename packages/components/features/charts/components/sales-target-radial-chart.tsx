@@ -20,6 +20,10 @@ export type SalesTargetRadialChartProps = BaseChartProps & {
   label?: string;
   /** Formats the center figure. Defaults to percent-of-target. */
   valueFormatter?: (value: number, target: number) => string;
+  /**
+   * Series color — any CSS color or `var(--token)`.
+   * @default 'var(--chart-1)'
+   */
   color?: string;
 };
 

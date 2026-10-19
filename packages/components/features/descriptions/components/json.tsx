@@ -10,6 +10,7 @@ import { DescriptionEmpty } from './empty';
 import { useCopyFeedback } from './use-copy-feedback';
 
 type DescriptionJsonProps = {
+  /** Any JSON-serializable value. */
   value: unknown;
   /** Max rendered height in px before the block scrolls internally rather than growing the row. @default 240 */
   maxHeight?: number;
@@ -20,10 +21,17 @@ type DescriptionJsonProps = {
 };
 
 /**
- * Pretty-printed, monospaced JSON viewer for a value inside a `DescriptionItem`. Bounded height + internal
- * scroll rather than collapsible-by-default — inside a description row the JSON is a *value*, and a value
- * that's collapsed by default reads as empty. Reach for `DescriptionCollapsibleSection` if you want the
- * surrounding section itself to start collapsed.
+ * Pretty-printed, monospaced JSON viewer for a value inside a `DescriptionItem`. Bounded height +
+ * internal scroll rather than collapsible-by-default — inside a description row the JSON is a
+ * *value*, and a value that's collapsed by default reads as empty. Reach for
+ * `DescriptionCollapsibleSection` if you want the surrounding section itself to start collapsed.
+ *
+ * @example
+ * ```tsx
+ * <DescriptionItem label="…">
+ *   <DescriptionJson value={webhook.payload} />
+ * </DescriptionItem>
+ * ```
  */
 export const DescriptionJson: React.FC<DescriptionJsonProps> = ({ value, maxHeight = 240, indent = 2, copyable = true }) => {
   const text = useMemo(() => {

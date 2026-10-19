@@ -6,9 +6,21 @@ import { DateDisplay } from '@/components/data-display/date';
 import { DescriptionEmpty } from './empty';
 
 type DescriptionDateProps = {
+  /** A `Date`, an ISO string or a timestamp. */
   date: Date | string | number | null | undefined;
 };
 
+/**
+ * A medium-format date with the full date and time in a tooltip. Renders `DescriptionEmpty` when
+ * there is nothing to show.
+ *
+ * @example
+ * ```tsx
+ * <DescriptionItem label="…">
+ *   <DescriptionDate date={order.createdAt} />
+ * </DescriptionItem>
+ * ```
+ */
 export const DescriptionDate: React.FC<DescriptionDateProps> = ({ date }) => {
   if (date == null) return <DescriptionEmpty />;
   return (

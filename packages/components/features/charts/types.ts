@@ -1,21 +1,31 @@
 /** Trend direction shared with the `Statistic` display component. */
 export type ChartTrend = 'up' | 'down' | 'neutral';
 
+/** One value at a point in time. */
 export type TimeSeriesPoint = {
+  /** Bucket date — a `Date` or an ISO date string. */
   date: string | Date;
+  /** Metric value for the bucket. */
   value: number;
   /** Same-bucket value from the comparison period (enables the comparison series). */
   previousValue?: number;
 };
 
+/** One named series in a multi-series chart. */
 export type ChartSeries = {
+  /** Data field that holds this series' values. */
   key: string;
+  /** Human-readable name for the legend and tooltip. */
   label: string;
+  /** Series color; defaults to the next `--chart-N` palette color. */
   color?: string;
 };
 
+/** A labelled number — one slice, bar or ranking entry. */
 export type NamedValue = {
+  /** Display name. */
   name: string;
+  /** Numeric value. */
   value: number;
 };
 
@@ -61,6 +71,7 @@ export type ActivityPoint = {
 
 /** Props shared by every prebuilt chart. */
 export type BaseChartProps = {
+  /** Class names for the chart container. */
   className?: string;
   /** Enable the recharts enter animation. Disable for deterministic tests. Defaults to `true`. */
   animate?: boolean;
