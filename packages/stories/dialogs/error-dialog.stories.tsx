@@ -14,7 +14,6 @@ export const Default: Story = {
   args: {
     open: false,
     title: 'An error occurred',
-    description: 'An unexpected error has occurred. Please try again later.',
     children: <p className="text-muted-foreground text-sm">If the problem persists, please contact support or check the system status for more information.</p>,
   },
   render: args => {

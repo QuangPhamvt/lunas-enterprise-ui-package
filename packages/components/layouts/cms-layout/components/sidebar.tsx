@@ -532,6 +532,6 @@ export {
   SidebarRail,
   SidebarSeparator,
   SidebarTrigger,
-  // biome-ignore lint/style/useComponentExportOnlyModules: true
+  // biome-ignore lint/style/useComponentExportOnlyModules: the hook is part of this component's public API
   useSidebar,
 };

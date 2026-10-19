@@ -12,7 +12,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   render: () => (
-    <DataList title="Product Details">
+    <DataList>
       <DataListItem label="Name" value="Sample Product" />
       <DataListItem label="Description" value="This is a sample product description." />
       <DataListItem label="Price" value="$19.99" />

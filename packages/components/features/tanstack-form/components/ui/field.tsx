@@ -235,7 +235,7 @@ const FieldDescription = memo(({ className, ...props }: React.ComponentProps<'p'
     <p
       data-slot="field-description"
       className={cn(
-        // biome-ignore lint/security/noSecrets: true
+        // biome-ignore lint/security/noSecrets: a Tailwind class string, not a secret
         'nth-last-2:-mt-1 font-normal text-text-positive-weak text-xs leading-normal last:mt-0 [&>a:hover]:text-primary [&>a]:underline [&>a]:underline-offset-4 [[data-variant=legend]+&]:-mt-1.5',
         className
       )}

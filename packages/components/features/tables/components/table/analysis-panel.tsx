@@ -34,7 +34,7 @@ export const UITableAnalysisPanel = memo(() => {
 
   const allRows = useMemo(() => table.getRowModel().rows, [table]);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: selected rows
+  // biome-ignore lint/correctness/useExhaustiveDependencies: TanStack Table mutates a single `table` instance, so the state listed in deps — not `table` itself — is what invalidates this value
   const selectedRows = useMemo(() => table.getSelectedRowModel().flatRows, [table, rowSelectionState]);
 
   const headers = useMemo(() => table.getHeaderGroups()[0]?.headers ?? [], [table]);

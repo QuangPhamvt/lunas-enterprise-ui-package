@@ -291,7 +291,7 @@ export const KitchenSink: Story = {
         start: null as Date | null,
         end: new Date() as Date | null,
         locked: new Date() as Date | null,
-      } as z.output<typeof schema>,
+      } as z.input<typeof schema>,
       validators: { onChange: schema },
       onSubmit: ({ value }) => console.log('Đã gửi:', value),
     });

@@ -5,7 +5,7 @@
  * - "Columns" tab: toggle individual column visibility.
  * - "Filters" tab: "Add Filter" dropdown → active filter chips → per-filter Popover editor.
  */
-import { Activity, memo, useCallback, useState } from 'react';
+import { Activity, memo, useState } from 'react';
 
 import { CalendarIcon, HashIcon, ListFilterIcon, ListFilterPlus, TagIcon, ToggleLeftIcon, Trash2Icon, TypeIcon } from 'lucide-react';
 

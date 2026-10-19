@@ -9,7 +9,7 @@ import { tableInnerTableVariants } from '../table.variants';
 export const UITableInnerTable = memo<TUITableInnerTable>(({ children, ...props }) => {
   const { table, innerTableId, totalSize, tableRef, columnPinningState } = useUITableInnerTableContext();
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: table element.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: reads the table DOM element through a stable ref
   useEffect(() => {
     if (!tableRef.current) return;
 

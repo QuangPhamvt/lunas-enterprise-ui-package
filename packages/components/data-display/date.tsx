@@ -7,7 +7,7 @@ import { cn } from '@customafk/react-toolkit/utils';
 
 import { TIME_IN_SECONDS, vietnameseHolidays, vietnameseLocale } from '@/constants';
 
-interface DateDisplayProps {
+export interface DateDisplayProps {
   /** The date value to display; accepts a `Date` object, an ISO string, or a Unix timestamp (ms). */
   date: Date | string | number;
   /**

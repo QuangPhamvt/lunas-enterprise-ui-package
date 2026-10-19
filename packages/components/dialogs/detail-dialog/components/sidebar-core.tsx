@@ -364,8 +364,8 @@ export {
   DetailDialogSidebarTrigger,
   Sidebar,
   SidebarProvider,
-  // biome-ignore lint/style/useComponentExportOnlyModules: true
+  // biome-ignore lint/style/useComponentExportOnlyModules: the hook is part of this component's public API
   useSidebar,
-  // biome-ignore lint/style/useComponentExportOnlyModules: true
+  // biome-ignore lint/style/useComponentExportOnlyModules: the hook is part of this component's public API
   useSidebarState,
 };

@@ -1,3 +1,5 @@
+'use client';
+
 import { useMemo } from 'react';
 
 import { cn } from '@customafk/react-toolkit/utils';

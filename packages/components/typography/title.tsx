@@ -6,7 +6,7 @@ import { cn } from '@customafk/react-toolkit/utils';
 
 import { cva } from 'class-variance-authority';
 
-// biome-ignore lint/style/useComponentExportOnlyModules: more
+// biome-ignore lint/style/useComponentExportOnlyModules: variants are exported alongside the component so consumers can reuse the styles
 export const titleVariants = cva('scroll-m-20 text-balance text-start text-text-positive-strong tracking-tight transition-colors', {
   variants: {
     level: {

@@ -1,3 +1,5 @@
+'use client';
+
 import { Edit2Icon } from 'lucide-react';
 
 import { Button } from '../button';

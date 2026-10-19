@@ -1,3 +1,5 @@
+'use client';
+
 import { cn } from '@customafk/react-toolkit/utils';
 
 import { Slot as SlotPrimitive } from 'radix-ui';

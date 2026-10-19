@@ -75,7 +75,7 @@ function SidebarProvider({
       }
 
       // This sets the cookie to keep the sidebar state.
-      // biome-ignore lint/suspicious/noDocumentCookie: true
+      // biome-ignore lint/suspicious/noDocumentCookie: persists sidebar state across page loads
       document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`;
     },
     [setOpenProp, open]
@@ -657,6 +657,6 @@ export {
   SidebarRail,
   SidebarSeparator,
   SidebarTrigger,
-  // biome-ignore lint/style/useComponentExportOnlyModules: true
+  // biome-ignore lint/style/useComponentExportOnlyModules: the hook is part of this component's public API
   useSidebar,
 };

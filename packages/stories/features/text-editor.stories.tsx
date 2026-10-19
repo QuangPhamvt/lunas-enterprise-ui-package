@@ -205,13 +205,7 @@ export const FormIntegration: Story = {
       <div className="w-full max-w-2xl space-y-4">
         <form onSubmit={handleSubmit} className="space-y-3">
           <p className="block font-medium text-sm text-text-positive">Content</p>
-          <TextEditor
-            value={content}
-            onChange={setContent}
-            enableLink
-            showCharacterCount
-            placeholder="Write your content..."
-          />
+          <TextEditor value={content} onChange={setContent} enableLink showCharacterCount placeholder="Write your content..." />
           <button type="submit" className="rounded bg-primary px-4 py-2 font-medium text-sm text-text-negative transition-colors hover:bg-primary-strong">
             Submit
           </button>

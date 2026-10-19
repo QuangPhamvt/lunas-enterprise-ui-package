@@ -353,7 +353,7 @@ export const AllFieldsWithTooltips: Story = {
       permissions: z.string().array(),
     });
 
-    const { AppField, AppForm, TanStackContainerForm, TanStackSectionForm, TanStackCardForm, TanStackActionsForm, TanStackTitleField } = useTanStackForm({
+    const { AppField, AppForm, TanStackContainerForm, TanStackSectionForm, TanStackActionsForm, TanStackTitleField } = useTanStackForm({
       defaultValues: {
         name: null,
         email: null,

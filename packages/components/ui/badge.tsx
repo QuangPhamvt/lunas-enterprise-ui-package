@@ -103,7 +103,7 @@ function Badge({ className, variant, color, size, pill, ...props }: BadgeProps) 
  * has a single home instead of being re-declared by each consumer that pairs a status dot with a Badge.
  */
 
-// biome-ignore lint/style/useComponentExportOnlyModules: more
+// biome-ignore lint/style/useComponentExportOnlyModules: variants are exported alongside the component so consumers can reuse the styles
 export const badgeDotVariants = cva('inline-block size-1.5 shrink-0 rounded-full', {
   variants: {
     color: {
@@ -123,5 +123,5 @@ export const badgeDotVariants = cva('inline-block size-1.5 shrink-0 rounded-full
   },
 });
 
-// biome-ignore lint/style/useComponentExportOnlyModules: more
+// biome-ignore lint/style/useComponentExportOnlyModules: variants are exported alongside the component so consumers can reuse the styles
 export { Badge, badgeVariants };
