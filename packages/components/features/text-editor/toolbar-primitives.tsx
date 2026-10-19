@@ -29,7 +29,7 @@ function ToolbarButton({ isActive, className, children, ...props }: ToolbarButto
 }
 
 function ToolbarDivider() {
-  return <div data-slot="toolbar-divider" role="separator" aria-orientation="vertical" className="mx-0.5 h-5 w-px shrink-0 bg-border" />;
+  return <hr data-slot="toolbar-divider" aria-orientation="vertical" className="mx-0.5 h-5 w-px shrink-0 border-0 bg-border" />;
 }
 
 // biome-ignore lint/style/useComponentExportOnlyModules: type export needed by sibling feature files

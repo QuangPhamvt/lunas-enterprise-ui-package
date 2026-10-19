@@ -4,7 +4,7 @@ import { cn } from '@customafk/react-toolkit/utils';
 
 import { ChevronRight, MoreHorizontal } from 'lucide-react';
 
-import { Slot } from '@radix-ui/react-slot';
+import { Slot as SlotPrimitive } from 'radix-ui';
 
 /**
  * Root breadcrumb navigation `<nav>` element with accessible aria-label.
@@ -61,7 +61,7 @@ function BreadcrumbLink({
 }: React.ComponentProps<'a'> & {
   asChild?: boolean;
 }) {
-  const Comp = asChild ? Slot : 'a';
+  const Comp = asChild ? SlotPrimitive.Slot : 'a';
 
   return (
     <Comp

@@ -15,7 +15,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ```bash
 npm install
-npm run build           # build with tsdown (ESM + CJS + DTS)
+npm run build           # build with tsdown (ESM-only + DTS, React Compiler); also regenerates package.json exports
 npm run build:dev       # watch mode
 npm run typecheck       # tsc --noEmit
 npm run lint            # Biome lint check
@@ -39,12 +39,21 @@ Components live under `packages/components/` organized by layer:
 
 ### Public API sync
 
-Every public component requires entries in **two** places that must stay in sync:
+`tsdown.config.ts` `entry` is the single source of truth for the public API. `npm run build`
+regenerates the `package.json` `exports` map from it (style exports come from
+`exports.customExports` in the same config) — **never edit `exports` by hand**. When adding a
+public component: add it to `entry`, build, and add a Storybook story.
 
-1. `tsdown.config.ts` — `entry` list (controls what gets built)
-2. `package.json` — `exports` map (controls what consumers can import)
+### Build & dependencies
 
-When adding a new public component, update both files plus add a Storybook story.
+- ESM-only output, unminified (consumers minify), `deps.neverBundle: true` — no third-party code
+  is ever inlined into `dist`. Import Radix only through the `radix-ui` meta package (e.g.
+  `import { Slot as SlotPrimitive } from 'radix-ui'`), never `@radix-ui/react-*` directly.
+- `"sideEffects": ["**/*.css"]` — keep modules free of top-level side effects so tree-shaking works.
+- The React Compiler runs in the published build (and Storybook). Existing `useMemo`/`useCallback`/
+  `memo` stay as they are; **new components must not add manual memoization**.
+- Peers used by only one feature (Tiptap, recharts, lowlight, dompurify, zod, …) are marked
+  optional in `peerDependenciesMeta`; consumers that use that feature must install them.
 
 ### Styling
 

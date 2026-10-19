@@ -12,7 +12,7 @@ import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
-import { Slot } from '@radix-ui/react-slot';
+import { Slot as SlotPrimitive } from 'radix-ui';
 import { cva, type VariantProps } from 'class-variance-authority';
 
 const SIDEBAR_COOKIE_NAME = 'sidebar_state';
@@ -251,7 +251,7 @@ const SidebarGroup = memo(({ className, ...props }: React.ComponentProps<'div'>)
 SidebarGroup.displayName = 'SidebarGroup';
 
 const SidebarGroupLabel = memo(({ className, asChild = false, ...props }: React.ComponentProps<'div'> & { asChild?: boolean }) => {
-  const Comp = asChild ? Slot : 'div';
+  const Comp = asChild ? SlotPrimitive.Slot : 'div';
 
   return (
     <Comp
@@ -269,7 +269,7 @@ const SidebarGroupLabel = memo(({ className, asChild = false, ...props }: React.
 SidebarGroupLabel.displayName = 'SidebarGroupLabel';
 
 function SidebarGroupAction({ className, asChild = false, ...props }: React.ComponentProps<'button'> & { asChild?: boolean }) {
-  const Comp = asChild ? Slot : 'button';
+  const Comp = asChild ? SlotPrimitive.Slot : 'button';
 
   return (
     <Comp
@@ -355,7 +355,7 @@ const SidebarMenuButton = memo(
     isActive?: boolean;
     tooltip?: string | React.ComponentProps<typeof TooltipContent>;
   } & VariantProps<typeof sidebarMenuButtonVariants>) => {
-    const Comp = asChild ? Slot : 'button';
+    const Comp = asChild ? SlotPrimitive.Slot : 'button';
     const { state } = useSidebar();
 
     const button = (
@@ -394,7 +394,7 @@ function SidebarMenuAction({
   asChild?: boolean;
   showOnHover?: boolean;
 }) {
-  const Comp = asChild ? Slot : 'button';
+  const Comp = asChild ? SlotPrimitive.Slot : 'button';
 
   return (
     <Comp
@@ -487,7 +487,7 @@ function SidebarMenuSubButton({
   size?: 'sm' | 'md';
   isActive?: boolean;
 }) {
-  const Comp = asChild ? Slot : 'a';
+  const Comp = asChild ? SlotPrimitive.Slot : 'a';
 
   return (
     <Comp

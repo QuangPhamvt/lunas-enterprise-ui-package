@@ -73,6 +73,8 @@ export const UITableEmailDisplay: React.FC<Props> = memo(({ email, linkable = tr
         <Tooltip>
           <TooltipTrigger asChild>
             <button
+              type="button"
+              aria-label="Sao chép email"
               onClick={handleCopy}
               className="shrink-0 cursor-pointer text-text-positive-weak opacity-0 transition-opacity hover:text-text-positive group-hover:opacity-100"
             >

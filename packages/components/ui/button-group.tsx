@@ -1,6 +1,6 @@
 import { cn } from '@customafk/react-toolkit/utils';
 
-import { Slot } from '@radix-ui/react-slot';
+import { Slot as SlotPrimitive } from 'radix-ui';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { Separator } from '@/components/ui/separator';
 
@@ -52,7 +52,7 @@ function ButtonGroupText({
 }: React.ComponentProps<'div'> & {
   asChild?: boolean;
 }) {
-  const Comp = asChild ? Slot : 'div';
+  const Comp = asChild ? SlotPrimitive.Slot : 'div';
 
   return (
     <Comp

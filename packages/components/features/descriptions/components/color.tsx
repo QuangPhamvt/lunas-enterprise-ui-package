@@ -18,6 +18,7 @@ export const DescriptionColor: React.FC<DescriptionColorProps> = ({ value, label
   return (
     <span data-slot="description-color" className="inline-flex items-center gap-2 text-sm text-text-positive">
       <span
+        role="img"
         aria-label={text}
         style={{ backgroundColor: value }}
         className="size-4 shrink-0 rounded-sm border border-border-weak ring-1 ring-black/5 ring-inset"

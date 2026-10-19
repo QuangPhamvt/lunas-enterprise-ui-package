@@ -4,7 +4,7 @@ import { Loader2Icon } from 'lucide-react';
 
 import { cn } from '@customafk/react-toolkit/utils';
 
-import { Slot, Slottable } from '@radix-ui/react-slot';
+import { Slot as SlotPrimitive } from 'radix-ui';
 import { type ButtonVariantProps, buttonLoadingVariant, buttonVariants } from './button.variants';
 
 /**
@@ -167,7 +167,7 @@ function Button({
   innerClassName,
   ...props
 }: ButtonProps) {
-  const Comp = asChild ? Slot : 'button';
+  const Comp = asChild ? SlotPrimitive.Slot : 'button';
   const isDisabled = disabled || isLoading;
 
   return (
@@ -194,7 +194,7 @@ function Button({
         </div>
       )}
       {asChild ? (
-        <Slottable>{children}</Slottable>
+        <SlotPrimitive.Slottable>{children}</SlotPrimitive.Slottable>
       ) : (
         <div className={cn('inline-flex items-center justify-center gap-x-1', isLoading && 'pointer-events-none invisible', innerClassName)}>{children}</div>
       )}

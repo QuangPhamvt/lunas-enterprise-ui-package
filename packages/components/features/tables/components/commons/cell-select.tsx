@@ -34,6 +34,8 @@ export const UITableCellSelect = memo<TUITableCellSelect>(
         className={cn(tableCellSelectVariants({ isPinned, isLastCell }), className)}
         {...props}
       >
+        {/* biome-ignore lint/a11y/noStaticElementInteractions: widens the mouse hit area; the Checkbox inside is the keyboard-accessible control */}
+        {/* biome-ignore lint/a11y/useKeyWithClickEvents: widens the mouse hit area; the Checkbox inside is the keyboard-accessible control */}
         <div
           data-slot="table-cell-inner"
           className="flex! w-full! items-center justify-center bg-transparent text-center align-middle"

@@ -12,7 +12,7 @@ const Item: React.FC<{
           <p className="font-semibold">Content Item for {value}</p>
           <p className="font-medium text-text-positive-weak">100.000VND</p>
         </div>
-        <button className="size-8 flex items-center justify-center grow-0">
+        <button type="button" aria-label="Mở" className="size-8 flex items-center justify-center grow-0">
           <ForwardIcon size={20} className="text-text-positive-weak" />
         </button>
       </div>

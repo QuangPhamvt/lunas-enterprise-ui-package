@@ -27,6 +27,7 @@ export const UITableSummaryBar = memo(() => {
           const isClickable = !!onSummaryItemClick;
 
           return (
+            // biome-ignore lint/a11y/noStaticElementInteractions: role/tabIndex/onKeyDown are applied together whenever the card is clickable
             <div
               key={item.label}
               className={cn(

@@ -7,7 +7,7 @@ export type FileIconProps = Omit<SVGProps<SVGSVGElement>, 'width' | 'height'> & 
 
 export function FileAddIcon({ size = 28, ...props }: FileIconProps) {
   return (
-    <svg width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <svg aria-hidden="true" width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <path
         d="M18.0625 1V1.5H18.793L19.3135 2.02051L19.667 1.66699L21 3L20.6465 3.35352L21.9795 4.68652L22.333 4.33301L23.667 5.66699L23.3135 6.02051L24.6465 7.35352L25 7L26.333 8.33301L25.9795 8.68652L26.5 9.20703V9.9375H27V11.8125H26.5V13.6875H27V15.5625H26.5V17.4375H27V19.3125H26.5V21.1875H27V23.0625H26.5V24C26.5 24.3399 26.4325 24.663 26.3105 24.957L26.7715 25.1475C26.4674 25.8812 25.8811 26.4674 25.1475 26.7715L24.957 26.3105C24.663 26.4325 24.3399 26.5 24 26.5H23V27H21V26.5H19V27H17V26.5H15V27H13V26.5H11V27H9V26.5H7V27H5V26.5H4C3.6601 26.5 3.33704 26.4325 3.04297 26.3105L2.85156 26.7715C2.11815 26.4672 1.53149 25.881 1.22754 25.1475L1.68945 24.957C1.59804 24.7366 1.53744 24.4998 1.5127 24.252L1.5 24V23H1V21H1.5V19H1V17H1.5V15H1V13H1.5V11H1V9H1.5V7H1V5H1.5V4C1.5 3.6601 1.5675 3.33704 1.68945 3.04297L1.22754 2.85156C1.53163 2.11826 2.11826 1.53163 2.85156 1.22754L3.04297 1.68945C3.33704 1.5675 3.6601 1.5 4 1.5H4.9375V1H6.8125V1.5H8.6875V1H10.5625V1.5H12.4375V1H14.3125V1.5H16.1875V1H18.0625Z"
         stroke="#0D1726"
@@ -28,7 +28,7 @@ export function FileAddIcon({ size = 28, ...props }: FileIconProps) {
 export function AudioFileIcon({ size = 28, ...props }: FileIconProps) {
   const uid = useId();
   return (
-    <svg width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <svg aria-hidden="true" width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <path d="M1 4C1 2.34315 2.34315 1 4 1H19L27 9V24C27 25.6569 25.6569 27 24 27H4C2.34315 27 1 25.6569 1 24V4Z" fill="#6B4FC2" />
       <path d="M7 12H8V16H7V12Z" fill="white" />
       <path d="M9 10H10V18H9V10Z" fill="white" />
@@ -58,7 +58,7 @@ export function AudioFileIcon({ size = 28, ...props }: FileIconProps) {
 export function CsvFileIcon({ size = 28, ...props }: FileIconProps) {
   const uid = useId();
   return (
-    <svg width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <svg aria-hidden="true" width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <path d="M1 4C1 2.34315 2.34315 1 4 1H19L27 9V24C27 25.6569 25.6569 27 24 27H4C2.34315 27 1 25.6569 1 24V4Z" fill="#40A313" />
       <path
         d="M10.9739 19.572C11.0406 19.572 11.0966 19.596 11.1419 19.644L11.6179 20.152C11.3833 20.4507 11.0913 20.6773 10.7419 20.832C10.3953 20.9867 9.98194 21.064 9.50194 21.064C9.06728 21.064 8.67661 20.9907 8.32994 20.844C7.98328 20.6947 7.68861 20.488 7.44594 20.224C7.20327 19.96 7.01661 19.6467 6.88594 19.284C6.75527 18.9213 6.68994 18.5253 6.68994 18.096C6.68994 17.808 6.72061 17.5347 6.78194 17.276C6.84594 17.0147 6.93794 16.7747 7.05794 16.556C7.17794 16.3373 7.32194 16.14 7.48994 15.964C7.66061 15.788 7.85261 15.6387 8.06594 15.516C8.27927 15.3907 8.51127 15.296 8.76194 15.232C9.01527 15.1653 9.28461 15.132 9.56994 15.132C9.78327 15.132 9.98461 15.1507 10.1739 15.188C10.3659 15.2253 10.5446 15.2773 10.7099 15.344C10.8753 15.4107 11.0273 15.492 11.1659 15.588C11.3073 15.6813 11.4339 15.784 11.5459 15.896L11.1419 16.448C11.1179 16.4827 11.0873 16.5133 11.0499 16.54C11.0126 16.5667 10.9619 16.58 10.8979 16.58C10.8339 16.58 10.7686 16.5573 10.7019 16.512C10.6379 16.4667 10.5579 16.416 10.4619 16.36C10.3686 16.304 10.2499 16.2533 10.1059 16.208C9.96461 16.1627 9.78461 16.14 9.56594 16.14C9.32328 16.14 9.10061 16.184 8.89794 16.272C8.69527 16.36 8.52061 16.488 8.37394 16.656C8.22994 16.8213 8.11794 17.0253 8.03794 17.268C7.95794 17.5107 7.91794 17.7867 7.91794 18.096C7.91794 18.408 7.96061 18.6867 8.04594 18.932C8.13394 19.1747 8.25261 19.38 8.40194 19.548C8.55394 19.716 8.72994 19.844 8.92994 19.932C9.13261 20.0173 9.34861 20.06 9.57794 20.06C9.71394 20.06 9.83661 20.0533 9.94594 20.04C10.0579 20.0267 10.1606 20.004 10.2539 19.972C10.3499 19.94 10.4393 19.8987 10.5219 19.848C10.6073 19.7973 10.6926 19.7333 10.7779 19.656C10.8073 19.632 10.8379 19.612 10.8699 19.596C10.9019 19.58 10.9366 19.572 10.9739 19.572Z"
@@ -87,7 +87,7 @@ export function CsvFileIcon({ size = 28, ...props }: FileIconProps) {
 export function Ebl1Icon({ size = 28, ...props }: FileIconProps) {
   const uid = useId();
   return (
-    <svg width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <svg aria-hidden="true" width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <path d="M1 4C1 2.34315 2.34315 1 4 1H19L27 9V24C27 25.6569 25.6569 27 24 27H4C2.34315 27 1 25.6569 1 24V4Z" fill="#13A4C2" />
       <path d="M7 6C7 5.44772 7.44772 5 8 5C8.55228 5 9 5.44772 9 6C9 6.55228 8.55228 7 8 7C7.44772 7 7 6.55228 7 6Z" fill="white" />
       <path d="M7 10C7 9.44772 7.44772 9 8 9H9C9.55228 9 10 9.44772 10 10C10 10.5523 9.55228 11 9 11H8C7.44772 11 7 10.5523 7 10Z" fill="white" />
@@ -123,7 +123,7 @@ export function Ebl1Icon({ size = 28, ...props }: FileIconProps) {
 export function Ebl2Icon({ size = 28, ...props }: FileIconProps) {
   const uid = useId();
   return (
-    <svg width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <svg aria-hidden="true" width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <path d="M1 4C1 2.34315 2.34315 1 4 1H19L27 9V24C27 25.6569 25.6569 27 24 27H4C2.34315 27 1 25.6569 1 24V4Z" fill="#13A4C2" />
       <path d="M6 19L9 16" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
       <path d="M22 19L19 16" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -144,7 +144,7 @@ export function Ebl2Icon({ size = 28, ...props }: FileIconProps) {
 export function Ebl3Icon({ size = 28, ...props }: FileIconProps) {
   const uid = useId();
   return (
-    <svg width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <svg aria-hidden="true" width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <path d="M1 4C1 2.34315 2.34315 1 4 1H19L27 9V24C27 25.6569 25.6569 27 24 27H4C2.34315 27 1 25.6569 1 24V4Z" fill="#DA770B" />
       <rect x="4.75" y="7.75" width="18.5" height="12.5" rx="1.25" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
       <path
@@ -180,7 +180,7 @@ export function Ebl3Icon({ size = 28, ...props }: FileIconProps) {
 export function EblIcon({ size = 28, ...props }: FileIconProps) {
   const uid = useId();
   return (
-    <svg width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <svg aria-hidden="true" width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <path d="M1 4C1 2.34315 2.34315 1 4 1H19L27 9V24C27 25.6569 25.6569 27 24 27H4C2.34315 27 1 25.6569 1 24V4Z" fill="#13A4C2" />
       <path d="M21 9H27L20.9011 11.033C19.5328 11.4891 18.1463 10.3909 18.2769 8.95452L19 1V7C19 8.10457 19.8954 9 21 9Z" fill="black" fillOpacity="0.2" />
       <path d="M27 9L19 1V7C19 8.10457 19.8954 9 21 9H27Z" fill={`url(#${uid})`} />
@@ -209,7 +209,7 @@ export function EblIcon({ size = 28, ...props }: FileIconProps) {
 export function ExcelFileIcon({ size = 28, ...props }: FileIconProps) {
   const uid = useId();
   return (
-    <svg width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <svg aria-hidden="true" width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <path d="M1 4C1 2.34315 2.34315 1 4 1H19L27 9V24C27 25.6569 25.6569 27 24 27H4C2.34315 27 1 25.6569 1 24V4Z" fill="#138643" />
       <path
         d="M18.0879 19H16.288C16.168 19 16.0699 18.97 15.9939 18.91C15.9219 18.85 15.8639 18.78 15.82 18.7L13.9359 15.496C13.9159 15.54 13.8959 15.584 13.8759 15.628C13.8599 15.668 13.8399 15.706 13.8159 15.742L12.0279 18.7C11.9759 18.776 11.9139 18.846 11.8419 18.91C11.7739 18.97 11.6859 19 11.5779 19H9.89795L12.7479 14.518L10.0059 10.294H11.8059C11.9259 10.294 12.0139 10.31 12.0699 10.342C12.1259 10.374 12.1759 10.426 12.2199 10.498L14.0919 13.576C14.1119 13.528 14.1339 13.48 14.1579 13.432C14.1819 13.38 14.2099 13.328 14.2419 13.276L15.9219 10.528C15.9699 10.448 16.0219 10.39 16.0779 10.354C16.1379 10.314 16.2099 10.294 16.2939 10.294H18.016L15.2499 14.44L18.0879 19Z"
@@ -229,7 +229,7 @@ export function ExcelFileIcon({ size = 28, ...props }: FileIconProps) {
 
 export function ExternalLinkFileIcon({ size = 28, ...props }: FileIconProps) {
   return (
-    <svg width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <svg aria-hidden="true" width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <circle cx="14" cy="14" r="14" fill="#5B6572" />
       <path
         fillRule="evenodd"
@@ -244,7 +244,7 @@ export function ExternalLinkFileIcon({ size = 28, ...props }: FileIconProps) {
 export function GenericFileIcon({ size = 28, ...props }: FileIconProps) {
   const uid = useId();
   return (
-    <svg width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <svg aria-hidden="true" width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <path d="M1 4C1 2.34315 2.34315 1 4 1H19L27 9V24C27 25.6569 25.6569 27 24 27H4C2.34315 27 1 25.6569 1 24V4Z" fill="#DA770B" />
       <path d="M8 5C7.44772 5 7 5.44772 7 6V10C7 10.5523 7.44772 11 8 11H14C14.5523 11 15 10.5523 15 10V6C15 5.44772 14.5523 5 14 5H8Z" fill="white" />
       <path d="M8 13C7.44772 13 7 13.4477 7 14C7 14.5523 7.44772 15 8 15H20C20.5523 15 21 14.5523 21 14C21 13.4477 20.5523 13 20 13H8Z" fill="white" />
@@ -264,7 +264,7 @@ export function GenericFileIcon({ size = 28, ...props }: FileIconProps) {
 
 export function GithubFileIcon({ size = 28, ...props }: FileIconProps) {
   return (
-    <svg width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <svg aria-hidden="true" width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <path
         d="M14.0364 0C6.32375 0 0.0727539 6.251 0.0727539 13.9636C0.0727539 20.132 4.07255 25.3666 9.62215 27.2146C10.3208 27.3406 10.5728 26.9108 10.5728 26.5412C10.5728 26.2094 10.5616 25.3302 10.5574 24.1668C6.67235 25.0096 5.85195 22.2936 5.85195 22.2936C5.21915 20.6808 4.30215 20.251 4.30215 20.251C3.03515 19.3844 4.39875 19.404 4.39875 19.404C5.80155 19.502 6.53655 20.8432 6.53655 20.8432C7.78255 22.9768 9.80695 22.3608 10.5994 22.0038C10.7268 21.1008 11.0908 20.4848 11.4884 20.1362C8.38875 19.7848 5.12955 18.5864 5.12955 13.2342C5.12955 11.7124 5.67415 10.4636 6.56315 9.4892C6.42175 9.135 5.93875 7.714 6.70175 5.7932C6.70175 5.7932 7.87355 5.4166 10.5406 7.2226C11.6578 6.9132 12.8492 6.7578 14.035 6.7522C15.2236 6.7578 16.4164 6.9132 17.5294 7.2226C20.1978 5.4152 21.3682 5.7932 21.3682 5.7932C22.1312 7.714 21.6524 9.135 21.5068 9.4892C22.4028 10.4636 22.9404 11.711 22.9404 13.2342C22.9404 18.6004 19.6784 19.7792 16.5676 20.125C17.0646 20.5562 17.5126 21.4074 17.5126 22.7094C17.5126 24.577 17.4958 26.0834 17.4958 26.5412C17.4958 26.915 17.745 27.349 18.4576 27.2118C24.0044 25.361 28 20.1306 28 13.9636C28 6.251 21.749 0 14.0364 0Z"
         fill="#0F1824"
@@ -277,7 +277,7 @@ export function GithubFileIcon({ size = 28, ...props }: FileIconProps) {
 export function GoogleDocsIcon({ size = 28, ...props }: FileIconProps) {
   const uid = useId();
   return (
-    <svg width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <svg aria-hidden="true" width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <mask id={uid} style={{ maskType: 'luminance' }} maskUnits="userSpaceOnUse" x="0" y="0" width="28" height="28">
         <circle cx="14" cy="14" r="14" fill="white" />
       </mask>
@@ -301,7 +301,7 @@ export function GoogleDocsIcon({ size = 28, ...props }: FileIconProps) {
 export function GoogleDriveIcon({ size = 28, ...props }: FileIconProps) {
   const uid = useId();
   return (
-    <svg width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <svg aria-hidden="true" width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <mask id={uid} style={{ maskType: 'luminance' }} maskUnits="userSpaceOnUse" x="0" y="0" width="28" height="28">
         <circle cx="14" cy="14" r="14" fill="white" />
       </mask>
@@ -336,7 +336,7 @@ export function GoogleDriveIcon({ size = 28, ...props }: FileIconProps) {
 export function GoogleFormsIcon({ size = 28, ...props }: FileIconProps) {
   const uid = useId();
   return (
-    <svg width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <svg aria-hidden="true" width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <mask id={uid} style={{ maskType: 'luminance' }} maskUnits="userSpaceOnUse" x="0" y="0" width="28" height="28">
         <circle cx="14" cy="14" r="14" fill="white" />
       </mask>
@@ -371,7 +371,7 @@ export function GoogleFormsIcon({ size = 28, ...props }: FileIconProps) {
 export function GoogleSheetsIcon({ size = 28, ...props }: FileIconProps) {
   const uid = useId();
   return (
-    <svg width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <svg aria-hidden="true" width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <mask id={uid} style={{ maskType: 'luminance' }} maskUnits="userSpaceOnUse" x="0" y="0" width="28" height="28">
         <circle cx="14" cy="14" r="14" fill="white" />
       </mask>
@@ -397,7 +397,7 @@ export function GoogleSheetsIcon({ size = 28, ...props }: FileIconProps) {
 export function GoogleSitesIcon({ size = 28, ...props }: FileIconProps) {
   const uid = useId();
   return (
-    <svg width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <svg aria-hidden="true" width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <mask id={uid} style={{ maskType: 'luminance' }} maskUnits="userSpaceOnUse" x="0" y="0" width="28" height="28">
         <circle cx="14" cy="14" r="14" fill="white" />
       </mask>
@@ -425,7 +425,7 @@ export function GoogleSitesIcon({ size = 28, ...props }: FileIconProps) {
 export function GoogleSlidesIcon({ size = 28, ...props }: FileIconProps) {
   const uid = useId();
   return (
-    <svg width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <svg aria-hidden="true" width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <mask id={uid} style={{ maskType: 'luminance' }} maskUnits="userSpaceOnUse" x="0" y="0" width="28" height="28">
         <circle cx="14" cy="14" r="14" fill="white" />
       </mask>
@@ -451,7 +451,7 @@ export function GoogleSlidesIcon({ size = 28, ...props }: FileIconProps) {
 export function ImageFileIcon({ size = 28, ...props }: FileIconProps) {
   const uid = useId();
   return (
-    <svg width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <svg aria-hidden="true" width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <path d="M1 4C1 2.34315 2.34315 1 4 1H19L27 9V24C27 25.6569 25.6569 27 24 27H4C2.34315 27 1 25.6569 1 24V4Z" fill="#13A4C2" />
       <path d="M10 9.5C10 10.8807 8.88071 12 7.5 12C6.11929 12 5 10.8807 5 9.5C5 8.11929 6.11929 7 7.5 7C8.88071 7 10 8.11929 10 9.5Z" fill="white" />
       <path
@@ -477,7 +477,7 @@ export function ImageFileIcon({ size = 28, ...props }: FileIconProps) {
 export function PdfFileIcon({ size = 28, ...props }: FileIconProps) {
   const uid = useId();
   return (
-    <svg width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <svg aria-hidden="true" width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <path d="M1 4C1 2.34315 2.34315 1 4 1H19L27 9V24C27 25.6569 25.6569 27 24 27H4C2.34315 27 1 25.6569 1 24V4Z" fill="#DF0C0C" />
       <path
         d="M20.699 15.7175C19.6533 14.6391 16.7978 15.0784 16.114 15.1583C15.1086 14.1997 14.4248 13.0414 14.1835 12.642C14.5455 11.5636 14.7868 10.4852 14.827 9.32692C14.827 8.3284 14.4248 7.25 13.2987 7.25C12.8965 7.25 12.5345 7.48964 12.3334 7.80917C11.8508 8.64793 12.0519 10.3254 12.8161 12.0429C12.3736 13.2811 11.9714 14.4793 10.8453 16.5962C9.67894 17.0754 7.22556 18.1938 7.02446 19.392C6.94402 19.7515 7.06468 20.1109 7.34622 20.3905C7.62775 20.6302 7.98973 20.75 8.3517 20.75C9.83982 20.75 11.2877 18.713 12.2932 16.9956C13.1378 16.716 14.465 16.3166 15.7923 16.0769C17.3608 17.4349 18.7283 17.6346 19.4522 17.6346C20.4175 17.6346 20.7795 17.2352 20.9001 16.8757C21.1012 16.4763 20.9806 16.037 20.699 15.7175ZM19.6936 16.3965C19.6533 16.676 19.2914 16.9556 18.6479 16.7959C17.8837 16.5962 17.2 16.2367 16.5967 15.7574C17.1195 15.6775 18.2859 15.5577 19.1305 15.7175C19.4522 15.7973 19.774 15.997 19.6936 16.3965ZM12.9769 8.16864C13.0574 8.04882 13.178 7.96893 13.2987 7.96893C13.6607 7.96893 13.7411 8.40828 13.7411 8.76775C13.7009 9.60651 13.54 10.4453 13.2585 11.2441C12.6552 9.64645 12.7758 8.52811 12.9769 8.16864ZM12.8965 15.9172C13.2182 15.2781 13.6607 14.1598 13.8215 13.6805C14.1835 14.2796 14.7868 14.9985 15.1086 15.318C15.1086 15.358 13.8618 15.5976 12.8965 15.9172ZM10.5235 17.5148C9.5985 19.0325 8.63324 19.9911 8.11039 19.9911C8.02995 19.9911 7.94951 19.9512 7.86907 19.9112C7.74841 19.8314 7.70819 19.7115 7.74841 19.5518C7.86907 18.9926 8.91477 18.2337 10.5235 17.5148Z"
@@ -498,7 +498,7 @@ export function PdfFileIcon({ size = 28, ...props }: FileIconProps) {
 export function PptFileIcon({ size = 28, ...props }: FileIconProps) {
   const uid = useId();
   return (
-    <svg width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <svg aria-hidden="true" width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <path d="M1 4C1 2.34315 2.34315 1 4 1H19L27 9V24C27 25.6569 25.6569 27 24 27H4C2.34315 27 1 25.6569 1 24V4Z" fill="#CC5933" />
       <path
         d="M14.0904 14.626C14.6544 14.626 15.0664 14.49 15.3264 14.218C15.5904 13.946 15.7224 13.574 15.7224 13.102C15.7224 12.886 15.6884 12.69 15.6204 12.514C15.5564 12.334 15.4564 12.182 15.3204 12.058C15.1884 11.93 15.0204 11.832 14.8164 11.764C14.6124 11.696 14.3704 11.662 14.0904 11.662H12.9504V14.626H14.0904ZM14.0904 10.294C14.6864 10.294 15.2004 10.364 15.6324 10.504C16.0684 10.644 16.4264 10.84 16.7064 11.092C16.9864 11.34 17.1924 11.636 17.3244 11.98C17.4604 12.324 17.5284 12.698 17.5284 13.102C17.5284 13.53 17.4584 13.922 17.3184 14.278C17.1784 14.634 16.9664 14.94 16.6824 15.196C16.3984 15.452 16.0404 15.652 15.6084 15.796C15.1764 15.936 14.6704 16.006 14.0904 16.006H12.9504V19H11.1504V10.294H14.0904Z"
@@ -519,7 +519,7 @@ export function PptFileIcon({ size = 28, ...props }: FileIconProps) {
 export function UnknownFileIcon({ size = 28, ...props }: FileIconProps) {
   const uid = useId();
   return (
-    <svg width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <svg aria-hidden="true" width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <path d="M1 4C1 2.34315 2.34315 1 4 1H19L27 9V24C27 25.6569 25.6569 27 24 27H4C2.34315 27 1 25.6569 1 24V4Z" fill="#788391" fillOpacity="0.8" />
       <path
         d="M11 10.0843C11.176 9.93474 11.368 9.79515 11.576 9.66553C11.784 9.53592 12.008 9.42126 12.248 9.32155C12.4933 9.22184 12.7573 9.14457 13.04 9.08973C13.328 9.02991 13.6373 9 13.968 9C14.4107 9 14.816 9.05982 15.184 9.17947C15.5573 9.29413 15.8773 9.46114 16.144 9.68049C16.416 9.89486 16.6267 10.1566 16.776 10.4657C16.9253 10.7698 17 11.1113 17 11.4901C17 11.869 16.9413 12.1981 16.824 12.4772C16.7067 12.7514 16.5573 12.9907 16.376 13.1951C16.1947 13.3995 15.9973 13.579 15.784 13.7335C15.5707 13.8831 15.368 14.0252 15.176 14.1598C14.9893 14.2894 14.8267 14.4215 14.688 14.5561C14.5547 14.6857 14.4747 14.8303 14.448 14.9898L14.28 16.1115H13.112L12.992 14.8776C12.9653 14.6433 13.0053 14.4414 13.112 14.2719C13.2187 14.1024 13.36 13.9429 13.536 13.7933C13.7173 13.6438 13.9147 13.5017 14.128 13.3671C14.3467 13.2275 14.5493 13.073 14.736 12.9035C14.9227 12.734 15.08 12.5445 15.208 12.3351C15.336 12.1258 15.4 11.874 15.4 11.5799C15.4 11.3855 15.36 11.211 15.28 11.0564C15.2 10.8969 15.088 10.7623 14.944 10.6526C14.8 10.5429 14.632 10.4582 14.44 10.3984C14.248 10.3385 14.04 10.3086 13.816 10.3086C13.5013 10.3086 13.2347 10.3435 13.016 10.4133C12.7973 10.4831 12.6107 10.5604 12.456 10.6451C12.3013 10.7249 12.1733 10.7997 12.072 10.8695C11.9707 10.9343 11.8853 10.9667 11.816 10.9667C11.6507 10.9667 11.528 10.8994 11.448 10.7648L11 10.0843ZM12.536 18.9606C12.536 18.816 12.5627 18.6814 12.616 18.5568C12.6747 18.4271 12.752 18.315 12.848 18.2203C12.9493 18.1255 13.0667 18.0508 13.2 17.9959C13.3387 17.9411 13.4853 17.9137 13.64 17.9137C13.7947 17.9137 13.9387 17.9411 14.072 17.9959C14.2107 18.0508 14.3307 18.1255 14.432 18.2203C14.5333 18.315 14.6133 18.4271 14.672 18.5568C14.7307 18.6814 14.76 18.816 14.76 18.9606C14.76 19.1101 14.7307 19.2472 14.672 19.3719C14.6133 19.4965 14.5333 19.6062 14.432 19.7009C14.3307 19.7956 14.2107 19.8679 14.072 19.9177C13.9387 19.9726 13.7947 20 13.64 20C13.4853 20 13.3387 19.9726 13.2 19.9177C13.0667 19.8679 12.9493 19.7956 12.848 19.7009C12.752 19.6062 12.6747 19.4965 12.616 19.3719C12.5627 19.2472 12.536 19.1101 12.536 18.9606Z"
@@ -555,7 +555,7 @@ export function UnknownFileIcon({ size = 28, ...props }: FileIconProps) {
 export function VideoFileIcon({ size = 28, ...props }: FileIconProps) {
   const uid = useId();
   return (
-    <svg width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <svg aria-hidden="true" width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <path d="M1 4C1 2.34315 2.34315 1 4 1H19L27 9V24C27 25.6569 25.6569 27 24 27H4C2.34315 27 1 25.6569 1 24V4Z" fill="#326EC7" />
       <path d="M19 14L11 18V10L19 14Z" fill="white" />
       <path d="M6 4H10V5H6C5.44772 5 5 5.44772 5 6V10H4V6C4 4.89543 4.89543 4 6 4Z" fill="white" />
@@ -577,7 +577,7 @@ export function VideoFileIcon({ size = 28, ...props }: FileIconProps) {
 
 export function VimeoFileIcon({ size = 28, ...props }: FileIconProps) {
   return (
-    <svg width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <svg aria-hidden="true" width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <circle cx="14" cy="14" r="14" fill="#63D2FA" />
       <path
         d="M6.6875 11.5625C7.90299 10.5923 9.63121 8.46196 10.9791 8.46196C12.3255 8.46196 12.6561 10.052 12.8398 11.4942C13.0259 12.9364 13.5548 16.0913 14.2665 16.0913C14.9799 16.0913 16.6041 13.3004 16.5115 12.2222C16.4205 11.144 15.244 11.3057 14.5973 11.6153C15.1921 9.45897 16.5652 8.31247 18.321 8.31247C20.0776 8.31247 20.5009 9.55312 20.5009 11.0766C20.5009 13.3955 15.8006 20.5 12.9608 20.5C11.2042 20.5 10.7687 17.9114 10.4129 16.6301C10.0561 15.3504 9.35578 11.9923 8.53683 11.7769C8.21911 11.7241 7.32215 12.4367 7.32215 12.4367L6.6875 11.5625Z"
@@ -590,7 +590,7 @@ export function VimeoFileIcon({ size = 28, ...props }: FileIconProps) {
 export function WordFileIcon({ size = 28, ...props }: FileIconProps) {
   const uid = useId();
   return (
-    <svg width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <svg aria-hidden="true" width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <path d="M1 4C1 2.34315 2.34315 1 4 1H19L27 9V24C27 25.6569 25.6569 27 24 27H4C2.34315 27 1 25.6569 1 24V4Z" fill="#1A59B3" />
       <path
         d="M20.2782 10.294L17.5782 19H15.9522L14.1702 13.306C14.1422 13.226 14.1142 13.138 14.0862 13.042C14.0582 12.946 14.0322 12.844 14.0082 12.736C13.9842 12.844 13.9582 12.946 13.9302 13.042C13.9022 13.138 13.8742 13.226 13.8462 13.306L12.0462 19H10.4142L7.72021 10.294H9.23221C9.38821 10.294 9.51821 10.33 9.62221 10.402C9.73021 10.474 9.80021 10.57 9.83221 10.69L11.1822 15.598C11.2142 15.734 11.2462 15.882 11.2782 16.042C11.3142 16.198 11.3482 16.364 11.3802 16.54C11.4162 16.36 11.4542 16.192 11.4942 16.036C11.5342 15.88 11.5782 15.734 11.6262 15.598L13.1982 10.69C13.2302 10.59 13.2982 10.5 13.4022 10.42C13.5102 10.336 13.6402 10.294 13.7922 10.294H14.3202C14.4762 10.294 14.6022 10.332 14.6982 10.408C14.7982 10.48 14.8722 10.574 14.9202 10.69L16.4862 15.598C16.5342 15.726 16.5782 15.866 16.6182 16.018C16.6582 16.166 16.6962 16.324 16.7322 16.492C16.7642 16.324 16.7942 16.166 16.8222 16.018C16.8542 15.866 16.8862 15.726 16.9182 15.598L18.2682 10.69C18.2962 10.586 18.3642 10.494 18.4722 10.414C18.5802 10.334 18.7102 10.294 18.8622 10.294H20.2782Z"
@@ -610,7 +610,7 @@ export function WordFileIcon({ size = 28, ...props }: FileIconProps) {
 
 export function YoutubeFileIcon({ size = 28, ...props }: FileIconProps) {
   return (
-    <svg width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <svg aria-hidden="true" width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <path
         d="M26.4563 7.74227C26.1568 6.62291 25.277 5.74326 24.1577 5.44362C22.1309 4.89999 14 4.89999 14 4.89999C14 4.89999 5.86911 4.89999 3.84227 5.44362C2.72292 5.74326 1.84327 6.62291 1.54363 7.74227C1 9.7691 1 14.0004 1 14.0004C1 14.0004 1 18.2317 1.54363 20.2586C1.84327 21.3779 2.72292 22.2576 3.84227 22.5572C5.86911 23.1008 14 23.1008 14 23.1008C14 23.1008 22.1309 23.1008 24.1577 22.5572C25.277 22.2576 26.1568 21.3779 26.4563 20.2586C27 18.2317 27 14.0004 27 14.0004C27 14.0004 26.9978 9.7691 26.4563 7.74227Z"
         fill="#FF0000"
@@ -623,7 +623,7 @@ export function YoutubeFileIcon({ size = 28, ...props }: FileIconProps) {
 export function ZipFileIcon({ size = 28, ...props }: FileIconProps) {
   const uid = useId();
   return (
-    <svg width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <svg aria-hidden="true" width={size} height={size} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <path d="M1 4C1 2.34315 2.34315 1 4 1H19L27 9V24C27 25.6569 25.6569 27 24 27H4C2.34315 27 1 25.6569 1 24V4Z" fill="#40A313" />
       <path d="M7 2C7 1.44772 7.44772 1 8 1H9C9.55228 1 10 1.44772 10 2C10 2.55228 9.55228 3 9 3H8C7.44772 3 7 2.55228 7 2Z" fill="white" />
       <path d="M7 6C7 5.44772 7.44772 5 8 5H9C9.55228 5 10 5.44772 10 6C10 6.55228 9.55228 7 9 7H8C7.44772 7 7 6.55228 7 6Z" fill="white" />

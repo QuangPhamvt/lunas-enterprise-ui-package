@@ -46,6 +46,8 @@ export const UITableToggleButton: React.FC<{
   return (
     <Tooltip>
       <TooltipTrigger asChild>
+        {/* biome-ignore lint/a11y/noStaticElementInteractions: only stops the click reaching the row; the Switch inside is the keyboard-accessible control */}
+        {/* biome-ignore lint/a11y/useKeyWithClickEvents: only stops the click reaching the row; the Switch inside is the keyboard-accessible control */}
         <span onClick={handleClick}>
           <Switch checked={checked} disabled={disabled} onCheckedChange={handleCheckedChange} />
         </span>

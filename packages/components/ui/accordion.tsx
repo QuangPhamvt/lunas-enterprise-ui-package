@@ -4,7 +4,7 @@ import { ChevronDownIcon } from 'lucide-react';
 
 import { cn } from '@customafk/react-toolkit/utils';
 
-import * as AccordionPrimitive from '@radix-ui/react-accordion';
+import { Accordion as AccordionPrimitive } from 'radix-ui';
 
 /**
  * Root container for an accordion; wraps one or more `AccordionItem` elements and controls

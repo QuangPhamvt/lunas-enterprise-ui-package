@@ -1,6 +1,6 @@
 import { cn } from '@customafk/react-toolkit/utils';
 
-import { Slot } from '@radix-ui/react-slot';
+import { Slot as SlotPrimitive } from 'radix-ui';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { Separator } from '@/components/ui/separator';
 
@@ -68,7 +68,7 @@ function Item({
   asChild = false,
   ...props
 }: React.ComponentProps<'div'> & VariantProps<typeof itemVariants> & { asChild?: boolean }) {
-  const Comp = asChild ? Slot : 'div';
+  const Comp = asChild ? SlotPrimitive.Slot : 'div';
   return <Comp data-slot="item" data-variant={variant} data-size={size} className={cn(itemVariants({ variant, size, className }))} {...props} />;
 }
 

@@ -19,7 +19,7 @@
     },
     "rules": {
       "recommended": true,
-      "a11y": "off",
+      "a11y": { "recommended": true },
       "security": "on",
       "performance": {
         "recommended": true,

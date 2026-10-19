@@ -21,438 +21,125 @@
   "engines": {
     "node": ">= 22.0.0"
   },
+  "types": "./dist/index.d.mts",
   "exports": {
-    ".": {
-      "require": "./dist/index.cjs",
-      "import": "./dist/index.mjs"
-    },
+    ".": "./dist/index.mjs",
+    "./cards/grid-product-card": "./dist/cards/grid-product-card.mjs",
+    "./cards/product-card": "./dist/cards/product-card.mjs",
+    "./cards/simple-card": "./dist/cards/simple-card.mjs",
+    "./data-display/clamped-text": "./dist/data-display/clamped-text.mjs",
+    "./data-display/country": "./dist/data-display/country.mjs",
+    "./data-display/data-list": "./dist/data-display/data-list.mjs",
+    "./data-display/date": "./dist/data-display/date.mjs",
+    "./data-display/date-tooltip": "./dist/data-display/date-tooltip.mjs",
+    "./data-display/empty": "./dist/data-display/empty.mjs",
+    "./data-display/name": "./dist/data-display/name.mjs",
+    "./data-display/phone-number": "./dist/data-display/phone-number.mjs",
+    "./data-display/role-badge": "./dist/data-display/role-badge.mjs",
+    "./data-display/statistic": "./dist/data-display/statistic.mjs",
+    "./data-display/user": "./dist/data-display/user.mjs",
+    "./dialogs/confirm-dialog": "./dist/dialogs/confirm-dialog.mjs",
+    "./dialogs/detail-dialog": "./dist/dialogs/detail-dialog/index.mjs",
+    "./dialogs/detail-dialog/components/sidebar": "./dist/dialogs/detail-dialog/components/sidebar.mjs",
+    "./dialogs/error-dialog": "./dist/dialogs/error-dialog.mjs",
+    "./dialogs/loading-dialog": "./dist/dialogs/loading-dialog.mjs",
+    "./dialogs/side-panel": "./dist/dialogs/side-panel.mjs",
+    "./features/charts": "./dist/features/charts/index.mjs",
+    "./features/descriptions": "./dist/features/descriptions/index.mjs",
+    "./features/file-icons": "./dist/features/file-icons/index.mjs",
+    "./features/logo": "./dist/features/logo/index.mjs",
+    "./features/notification-center": "./dist/features/notification-center/index.mjs",
+    "./features/search-modal": "./dist/features/search-modal/index.mjs",
+    "./features/tables": "./dist/features/tables/index.mjs",
+    "./features/tanstack-form": "./dist/features/tanstack-form/index.mjs",
+    "./features/text-editor": "./dist/features/text-editor/index.mjs",
+    "./layouts/cms-layout": "./dist/layouts/cms-layout/index.mjs",
+    "./layouts/flex": "./dist/layouts/flex.mjs",
+    "./layouts/grid": "./dist/layouts/grid.mjs",
+    "./layouts/payment-layout": "./dist/layouts/payment-layout/index.mjs",
+    "./layouts/ui-grid": "./dist/layouts/ui-grid.mjs",
+    "./pages/FeatureDeveloping": "./dist/pages/FeatureDeveloping.mjs",
+    "./pages/FeatureFixing": "./dist/pages/FeatureFixing.mjs",
+    "./pages/LoginPage": "./dist/pages/LoginPage/index.mjs",
+    "./pages/NotAuthorized": "./dist/pages/NotAuthorized.mjs",
+    "./pages/NotFound": "./dist/pages/NotFound.mjs",
+    "./pages/RegisterPage": "./dist/pages/RegisterPage.mjs",
+    "./pages/VerifyEmailPage": "./dist/pages/VerifyEmailPage.mjs",
+    "./systems/google": "./dist/systems/google.mjs",
+    "./typography/paragraph": "./dist/typography/paragraph.mjs",
+    "./typography/title": "./dist/typography/title.mjs",
+    "./ui/alert": "./dist/ui/alert.mjs",
+    "./ui/alert-dialog": "./dist/ui/alert-dialog.mjs",
+    "./ui/aspect-ratio": "./dist/ui/aspect-ratio.mjs",
+    "./ui/avatar": "./dist/ui/avatar.mjs",
+    "./ui/badge": "./dist/ui/badge.mjs",
+    "./ui/breadcrumb": "./dist/ui/breadcrumb.mjs",
+    "./ui/button": "./dist/ui/button.mjs",
+    "./ui/button-group": "./dist/ui/button-group.mjs",
+    "./ui/buttons/add-new": "./dist/ui/buttons/add-new.mjs",
+    "./ui/buttons/edit": "./dist/ui/buttons/edit.mjs",
+    "./ui/buttons/refresh": "./dist/ui/buttons/refresh.mjs",
+    "./ui/buttons/trash": "./dist/ui/buttons/trash.mjs",
+    "./ui/buttons/upload-image": "./dist/ui/buttons/upload-image.mjs",
+    "./ui/calendar": "./dist/ui/calendar.mjs",
+    "./ui/card": "./dist/ui/card.mjs",
+    "./ui/carousel": "./dist/ui/carousel.mjs",
+    "./ui/chart": "./dist/ui/chart.mjs",
+    "./ui/checkbox": "./dist/ui/checkbox.mjs",
+    "./ui/collapsible": "./dist/ui/collapsible.mjs",
+    "./ui/combobox": "./dist/ui/combobox.mjs",
+    "./ui/command": "./dist/ui/command.mjs",
+    "./ui/context-menu": "./dist/ui/context-menu.mjs",
+    "./ui/dialog": "./dist/ui/dialog.mjs",
+    "./ui/drawer": "./dist/ui/drawer.mjs",
+    "./ui/dropdown-menu": "./dist/ui/dropdown-menu.mjs",
+    "./ui/empty": "./dist/ui/empty.mjs",
+    "./ui/field": "./dist/ui/field.mjs",
+    "./ui/file-uploader": "./dist/ui/file-uploader.mjs",
+    "./ui/form": "./dist/ui/form.mjs",
+    "./ui/hover-card": "./dist/ui/hover-card.mjs",
+    "./ui/image": "./dist/ui/image.mjs",
+    "./ui/input": "./dist/ui/input.mjs",
+    "./ui/input-otp": "./dist/ui/input-otp.mjs",
+    "./ui/inputs/search-input": "./dist/ui/inputs/search-input.mjs",
+    "./ui/item": "./dist/ui/item.mjs",
+    "./ui/label": "./dist/ui/label.mjs",
+    "./ui/menubar": "./dist/ui/menubar.mjs",
+    "./ui/multi-select": "./dist/ui/multi-select.mjs",
+    "./ui/navigation-menu": "./dist/ui/navigation-menu.mjs",
+    "./ui/pagination": "./dist/ui/pagination.mjs",
+    "./ui/popover": "./dist/ui/popover.mjs",
+    "./ui/progress": "./dist/ui/progress.mjs",
+    "./ui/radio-group": "./dist/ui/radio-group.mjs",
+    "./ui/resizable": "./dist/ui/resizable.mjs",
+    "./ui/scroll-area": "./dist/ui/scroll-area.mjs",
+    "./ui/select": "./dist/ui/select.mjs",
+    "./ui/separator": "./dist/ui/separator.mjs",
+    "./ui/sheet": "./dist/ui/sheet.mjs",
+    "./ui/skeleton": "./dist/ui/skeleton.mjs",
+    "./ui/slider": "./dist/ui/slider.mjs",
+    "./ui/sonner": "./dist/ui/sonner.mjs",
+    "./ui/spinner": "./dist/ui/spinner.mjs",
+    "./ui/status": "./dist/ui/status.mjs",
+    "./ui/switch": "./dist/ui/switch.mjs",
+    "./ui/table": "./dist/ui/table.mjs",
+    "./ui/tabs": "./dist/ui/tabs.mjs",
+    "./ui/textarea": "./dist/ui/textarea.mjs",
+    "./ui/timeline": "./dist/ui/timeline.mjs",
+    "./ui/toggle": "./dist/ui/toggle.mjs",
+    "./ui/toggle-group": "./dist/ui/toggle-group.mjs",
+    "./ui/tooltip": "./dist/ui/tooltip.mjs",
+    "./package.json": "./package.json",
     "./styles/base": "./styles/base.css",
     "./styles/loader": "./styles/loader.css",
+    "./styles/spacing": "./styles/spacing.css",
     "./styles/theme": "./styles/theme.css",
     "./styles/typography": "./styles/typography.css",
-    "./styles/text-editor": "./styles/text-editor.css",
-    "./cards/grid-product-card": {
-      "require": "./dist/cards/grid-product-card.cjs",
-      "import": "./dist/cards/grid-product-card.mjs"
-    },
-    "./cards/product-card": {
-      "require": "./dist/cards/product-card.cjs",
-      "import": "./dist/cards/product-card.mjs"
-    },
-    "./cards/simple-card": {
-      "require": "./dist/cards/simple-card.cjs",
-      "import": "./dist/cards/simple-card.mjs"
-    },
-    "./data-display/clamped-text": {
-      "require": "./dist/data-display/clamped-text.cjs",
-      "import": "./dist/data-display/clamped-text.mjs"
-    },
-    "./data-display/country": {
-      "require": "./dist/data-display/country.cjs",
-      "import": "./dist/data-display/country.mjs"
-    },
-    "./data-display/data-list": {
-      "require": "./dist/data-display/data-list.cjs",
-      "import": "./dist/data-display/data-list.mjs"
-    },
-    "./data-display/date": {
-      "require": "./dist/data-display/date.cjs",
-      "import": "./dist/data-display/date.mjs"
-    },
-    "./data-display/date-tooltip": {
-      "require": "./dist/data-display/date-tooltip.cjs",
-      "import": "./dist/data-display/date-tooltip.mjs"
-    },
-    "./data-display/empty": {
-      "require": "./dist/data-display/empty.cjs",
-      "import": "./dist/data-display/empty.mjs"
-    },
-    "./data-display/name": {
-      "require": "./dist/data-display/name.cjs",
-      "import": "./dist/data-display/name.mjs"
-    },
-    "./data-display/phone-number": {
-      "require": "./dist/data-display/phone-number.cjs",
-      "import": "./dist/data-display/phone-number.mjs"
-    },
-    "./data-display/role-badge": {
-      "require": "./dist/data-display/role-badge.cjs",
-      "import": "./dist/data-display/role-badge.mjs"
-    },
-    "./data-display/statistic": {
-      "require": "./dist/data-display/statistic.cjs",
-      "import": "./dist/data-display/statistic.mjs"
-    },
-    "./data-display/user": {
-      "require": "./dist/data-display/user.cjs",
-      "import": "./dist/data-display/user.mjs"
-    },
-    "./dialogs/confirm-dialog": {
-      "require": "./dist/dialogs/confirm-dialog.cjs",
-      "import": "./dist/dialogs/confirm-dialog.mjs"
-    },
-    "./dialogs/detail-dialog": {
-      "require": "./dist/dialogs/detail-dialog/index.cjs",
-      "import": "./dist/dialogs/detail-dialog/index.mjs"
-    },
-    "./dialogs/detail-dialog/components/sidebar": {
-      "require": "./dist/dialogs/detail-dialog/components/sidebar.cjs",
-      "import": "./dist/dialogs/detail-dialog/components/sidebar.mjs"
-    },
-    "./dialogs/error-dialog": {
-      "require": "./dist/dialogs/error-dialog.cjs",
-      "import": "./dist/dialogs/error-dialog.mjs"
-    },
-    "./dialogs/loading-dialog": {
-      "require": "./dist/dialogs/loading-dialog.cjs",
-      "import": "./dist/dialogs/loading-dialog.mjs"
-    },
-    "./dialogs/side-panel": {
-      "require": "./dist/dialogs/side-panel.cjs",
-      "import": "./dist/dialogs/side-panel.mjs"
-    },
-    "./features/charts": {
-      "require": "./dist/features/charts/index.cjs",
-      "import": "./dist/features/charts/index.mjs"
-    },
-    "./features/descriptions": {
-      "require": "./dist/features/descriptions/index.cjs",
-      "import": "./dist/features/descriptions/index.mjs"
-    },
-    "./features/file-icons": {
-      "require": "./dist/features/file-icons/index.cjs",
-      "import": "./dist/features/file-icons/index.mjs"
-    },
-    "./features/logo": {
-      "require": "./dist/features/logo/index.cjs",
-      "import": "./dist/features/logo/index.mjs"
-    },
-    "./features/notification-center": {
-      "require": "./dist/features/notification-center/index.cjs",
-      "import": "./dist/features/notification-center/index.mjs"
-    },
-    "./features/search-modal": {
-      "require": "./dist/features/search-modal/index.cjs",
-      "import": "./dist/features/search-modal/index.mjs"
-    },
-    "./features/tables": {
-      "require": "./dist/features/tables/index.cjs",
-      "import": "./dist/features/tables/index.mjs"
-    },
-    "./features/tanstack-form": {
-      "require": "./dist/features/tanstack-form/index.cjs",
-      "import": "./dist/features/tanstack-form/index.mjs"
-    },
-    "./features/text-editor": {
-      "require": "./dist/features/text-editor/index.cjs",
-      "import": "./dist/features/text-editor/index.mjs"
-    },
-    "./layouts/cms-layout": {
-      "require": "./dist/layouts/cms-layout/index.cjs",
-      "import": "./dist/layouts/cms-layout/index.mjs"
-    },
-    "./layouts/flex": {
-      "require": "./dist/layouts/flex.cjs",
-      "import": "./dist/layouts/flex.mjs"
-    },
-    "./layouts/grid": {
-      "require": "./dist/layouts/grid.cjs",
-      "import": "./dist/layouts/grid.mjs"
-    },
-    "./layouts/ui-grid": {
-      "require": "./dist/layouts/ui-grid.cjs",
-      "import": "./dist/layouts/ui-grid.mjs"
-    },
-    "./layouts/payment-layout": {
-      "require": "./dist/layouts/payment-layout/index.cjs",
-      "import": "./dist/layouts/payment-layout/index.mjs"
-    },
-    "./pages/FeatureDeveloping": {
-      "require": "./dist/pages/FeatureDeveloping.cjs",
-      "import": "./dist/pages/FeatureDeveloping.mjs"
-    },
-    "./pages/FeatureFixing": {
-      "require": "./dist/pages/FeatureFixing.cjs",
-      "import": "./dist/pages/FeatureFixing.mjs"
-    },
-    "./pages/LoginPage": {
-      "require": "./dist/pages/LoginPage/index.cjs",
-      "import": "./dist/pages/LoginPage/index.mjs"
-    },
-    "./pages/NotAuthorized": {
-      "require": "./dist/pages/NotAuthorized.cjs",
-      "import": "./dist/pages/NotAuthorized.mjs"
-    },
-    "./pages/NotFound": {
-      "require": "./dist/pages/NotFound.cjs",
-      "import": "./dist/pages/NotFound.mjs"
-    },
-    "./pages/RegisterPage": {
-      "require": "./dist/pages/RegisterPage.cjs",
-      "import": "./dist/pages/RegisterPage.mjs"
-    },
-    "./pages/VerifyEmailPage": {
-      "require": "./dist/pages/VerifyEmailPage.cjs",
-      "import": "./dist/pages/VerifyEmailPage.mjs"
-    },
-    "./systems/google": {
-      "require": "./dist/systems/google.cjs",
-      "import": "./dist/systems/google.mjs"
-    },
-    "./typography/paragraph": {
-      "require": "./dist/typography/paragraph.cjs",
-      "import": "./dist/typography/paragraph.mjs"
-    },
-    "./typography/title": {
-      "require": "./dist/typography/title.cjs",
-      "import": "./dist/typography/title.mjs"
-    },
-    "./ui/alert": {
-      "require": "./dist/ui/alert.cjs",
-      "import": "./dist/ui/alert.mjs"
-    },
-    "./ui/alert-dialog": {
-      "require": "./dist/ui/alert-dialog.cjs",
-      "import": "./dist/ui/alert-dialog.mjs"
-    },
-    "./ui/aspect-ratio": {
-      "require": "./dist/ui/aspect-ratio.cjs",
-      "import": "./dist/ui/aspect-ratio.mjs"
-    },
-    "./ui/avatar": {
-      "require": "./dist/ui/avatar.cjs",
-      "import": "./dist/ui/avatar.mjs"
-    },
-    "./ui/badge": {
-      "require": "./dist/ui/badge.cjs",
-      "import": "./dist/ui/badge.mjs"
-    },
-    "./ui/breadcrumb": {
-      "require": "./dist/ui/breadcrumb.cjs",
-      "import": "./dist/ui/breadcrumb.mjs"
-    },
-    "./ui/button": {
-      "require": "./dist/ui/button.cjs",
-      "import": "./dist/ui/button.mjs"
-    },
-    "./ui/button-group": {
-      "require": "./dist/ui/button-group.cjs",
-      "import": "./dist/ui/button-group.mjs"
-    },
-    "./ui/buttons/add-new": {
-      "require": "./dist/ui/buttons/add-new.cjs",
-      "import": "./dist/ui/buttons/add-new.mjs"
-    },
-    "./ui/buttons/edit": {
-      "require": "./dist/ui/buttons/edit.cjs",
-      "import": "./dist/ui/buttons/edit.mjs"
-    },
-    "./ui/buttons/refresh": {
-      "require": "./dist/ui/buttons/refresh.cjs",
-      "import": "./dist/ui/buttons/refresh.mjs"
-    },
-    "./ui/buttons/trash": {
-      "require": "./dist/ui/buttons/trash.cjs",
-      "import": "./dist/ui/buttons/trash.mjs"
-    },
-    "./ui/buttons/upload-image": {
-      "require": "./dist/ui/buttons/upload-image.cjs",
-      "import": "./dist/ui/buttons/upload-image.mjs"
-    },
-    "./ui/calendar": {
-      "require": "./dist/ui/calendar.cjs",
-      "import": "./dist/ui/calendar.mjs"
-    },
-    "./ui/card": {
-      "require": "./dist/ui/card.cjs",
-      "import": "./dist/ui/card.mjs"
-    },
-    "./ui/carousel": {
-      "require": "./dist/ui/carousel.cjs",
-      "import": "./dist/ui/carousel.mjs"
-    },
-    "./ui/chart": {
-      "require": "./dist/ui/chart.cjs",
-      "import": "./dist/ui/chart.mjs"
-    },
-    "./ui/checkbox": {
-      "require": "./dist/ui/checkbox.cjs",
-      "import": "./dist/ui/checkbox.mjs"
-    },
-    "./ui/collapsible": {
-      "require": "./dist/ui/collapsible.cjs",
-      "import": "./dist/ui/collapsible.mjs"
-    },
-    "./ui/combobox": {
-      "require": "./dist/ui/combobox.cjs",
-      "import": "./dist/ui/combobox.mjs"
-    },
-    "./ui/command": {
-      "require": "./dist/ui/command.cjs",
-      "import": "./dist/ui/command.mjs"
-    },
-    "./ui/context-menu": {
-      "require": "./dist/ui/context-menu.cjs",
-      "import": "./dist/ui/context-menu.mjs"
-    },
-    "./ui/dialog": {
-      "require": "./dist/ui/dialog.cjs",
-      "import": "./dist/ui/dialog.mjs"
-    },
-    "./ui/drawer": {
-      "require": "./dist/ui/drawer.cjs",
-      "import": "./dist/ui/drawer.mjs"
-    },
-    "./ui/dropdown-menu": {
-      "require": "./dist/ui/dropdown-menu.cjs",
-      "import": "./dist/ui/dropdown-menu.mjs"
-    },
-    "./ui/empty": {
-      "require": "./dist/ui/empty.cjs",
-      "import": "./dist/ui/empty.mjs"
-    },
-    "./ui/field": {
-      "require": "./dist/ui/field.cjs",
-      "import": "./dist/ui/field.mjs"
-    },
-    "./ui/file-uploader": {
-      "require": "./dist/ui/file-uploader.cjs",
-      "import": "./dist/ui/file-uploader.mjs"
-    },
-    "./ui/form": {
-      "require": "./dist/ui/form.cjs",
-      "import": "./dist/ui/form.mjs"
-    },
-    "./ui/hover-card": {
-      "require": "./dist/ui/hover-card.cjs",
-      "import": "./dist/ui/hover-card.mjs"
-    },
-    "./ui/image": {
-      "require": "./dist/ui/image.cjs",
-      "import": "./dist/ui/image.mjs"
-    },
-    "./ui/input": {
-      "require": "./dist/ui/input.cjs",
-      "import": "./dist/ui/input.mjs"
-    },
-    "./ui/input-otp": {
-      "require": "./dist/ui/input-otp.cjs",
-      "import": "./dist/ui/input-otp.mjs"
-    },
-    "./ui/inputs/search-input": {
-      "require": "./dist/ui/inputs/search-input.cjs",
-      "import": "./dist/ui/inputs/search-input.mjs"
-    },
-    "./ui/item": {
-      "require": "./dist/ui/item.cjs",
-      "import": "./dist/ui/item.mjs"
-    },
-    "./ui/label": {
-      "require": "./dist/ui/label.cjs",
-      "import": "./dist/ui/label.mjs"
-    },
-    "./ui/menubar": {
-      "require": "./dist/ui/menubar.cjs",
-      "import": "./dist/ui/menubar.mjs"
-    },
-    "./ui/multi-select": {
-      "require": "./dist/ui/multi-select.cjs",
-      "import": "./dist/ui/multi-select.mjs"
-    },
-    "./ui/navigation-menu": {
-      "require": "./dist/ui/navigation-menu.cjs",
-      "import": "./dist/ui/navigation-menu.mjs"
-    },
-    "./ui/pagination": {
-      "require": "./dist/ui/pagination.cjs",
-      "import": "./dist/ui/pagination.mjs"
-    },
-    "./ui/popover": {
-      "require": "./dist/ui/popover.cjs",
-      "import": "./dist/ui/popover.mjs"
-    },
-    "./ui/progress": {
-      "require": "./dist/ui/progress.cjs",
-      "import": "./dist/ui/progress.mjs"
-    },
-    "./ui/radio-group": {
-      "require": "./dist/ui/radio-group.cjs",
-      "import": "./dist/ui/radio-group.mjs"
-    },
-    "./ui/resizable": {
-      "require": "./dist/ui/resizable.cjs",
-      "import": "./dist/ui/resizable.mjs"
-    },
-    "./ui/scroll-area": {
-      "require": "./dist/ui/scroll-area.cjs",
-      "import": "./dist/ui/scroll-area.mjs"
-    },
-    "./ui/select": {
-      "require": "./dist/ui/select.cjs",
-      "import": "./dist/ui/select.mjs"
-    },
-    "./ui/separator": {
-      "require": "./dist/ui/separator.cjs",
-      "import": "./dist/ui/separator.mjs"
-    },
-    "./ui/sheet": {
-      "require": "./dist/ui/sheet.cjs",
-      "import": "./dist/ui/sheet.mjs"
-    },
-    "./ui/skeleton": {
-      "require": "./dist/ui/skeleton.cjs",
-      "import": "./dist/ui/skeleton.mjs"
-    },
-    "./ui/slider": {
-      "require": "./dist/ui/slider.cjs",
-      "import": "./dist/ui/slider.mjs"
-    },
-    "./ui/sonner": {
-      "require": "./dist/ui/sonner.cjs",
-      "import": "./dist/ui/sonner.mjs"
-    },
-    "./ui/spinner": {
-      "require": "./dist/ui/spinner.cjs",
-      "import": "./dist/ui/spinner.mjs"
-    },
-    "./ui/status": {
-      "require": "./dist/ui/status.cjs",
-      "import": "./dist/ui/status.mjs"
-    },
-    "./ui/switch": {
-      "require": "./dist/ui/switch.cjs",
-      "import": "./dist/ui/switch.mjs"
-    },
-    "./ui/table": {
-      "require": "./dist/ui/table.cjs",
-      "import": "./dist/ui/table.mjs"
-    },
-    "./ui/tabs": {
-      "require": "./dist/ui/tabs.cjs",
-      "import": "./dist/ui/tabs.mjs"
-    },
-    "./ui/textarea": {
-      "require": "./dist/ui/textarea.cjs",
-      "import": "./dist/ui/textarea.mjs"
-    },
-    "./ui/timeline": {
-      "require": "./dist/ui/timeline.cjs",
-      "import": "./dist/ui/timeline.mjs"
-    },
-    "./ui/toggle": {
-      "require": "./dist/ui/toggle.cjs",
-      "import": "./dist/ui/toggle.mjs"
-    },
-    "./ui/toggle-group": {
-      "require": "./dist/ui/toggle-group.cjs",
-      "import": "./dist/ui/toggle-group.mjs"
-    },
-    "./ui/tooltip": {
-      "require": "./dist/ui/tooltip.cjs",
-      "import": "./dist/ui/tooltip.mjs"
-    },
-    "./package.json": "./package.json"
+    "./styles/text-editor": "./styles/text-editor.css"
   },
+  "sideEffects": [
+    "**/*.css"
+  ],
   "publishConfig": {
     "access": "public"
   },
@@ -478,14 +165,11 @@
     "@customafk/react-toolkit": "0.0.19",
     "@hookform/error-message": "^2.0.0",
     "@react-oauth/google": "^0.12.0",
-    "@tailwindcss/vite": "^4.1.0",
     "@tanstack/react-form": "^1.29.0",
     "@tanstack/react-table": "^8.21.0",
-    "@tanstack/react-virtual": "^3.13.12",
     "@tiptap/extension-bubble-menu": "^3.26.0",
     "@tiptap/extension-character-count": "^3.26.0",
     "@tiptap/extension-code-block-lowlight": "^3.26.0",
-    "@tiptap/extension-color": "^3.26.0",
     "@tiptap/extension-highlight": "^3.26.0",
     "@tiptap/extension-image": "^3.26.0",
     "@tiptap/extension-link": "^3.26.0",
@@ -508,7 +192,6 @@
     "input-otp": "^1.4.0",
     "lowlight": "^3.3.0",
     "lucide-react": "^0.545.0",
-    "nanoid": "^5.1.6",
     "next-themes": "^0.4.6",
     "radix-ui": "^1.6.2",
     "react": "^19.2.0",
@@ -520,11 +203,99 @@
     "react-resizable-panels": "^3.0.0",
     "recharts": "^3.9.1",
     "sonner": "^2.0.5",
-    "tailwind-merge": "^3.3.0",
     "tailwindcss": "^4.1.0",
     "tw-animate-css": "^1.3.0",
     "vaul": "^1.1.2",
     "zod": "^4.1.3"
+  },
+  "peerDependenciesMeta": {
+    "@hookform/error-message": {
+      "optional": true
+    },
+    "@react-oauth/google": {
+      "optional": true
+    },
+    "@tiptap/extension-bubble-menu": {
+      "optional": true
+    },
+    "@tiptap/extension-character-count": {
+      "optional": true
+    },
+    "@tiptap/extension-code-block-lowlight": {
+      "optional": true
+    },
+    "@tiptap/extension-highlight": {
+      "optional": true
+    },
+    "@tiptap/extension-image": {
+      "optional": true
+    },
+    "@tiptap/extension-link": {
+      "optional": true
+    },
+    "@tiptap/extension-list-keymap": {
+      "optional": true
+    },
+    "@tiptap/extension-placeholder": {
+      "optional": true
+    },
+    "@tiptap/extension-table": {
+      "optional": true
+    },
+    "@tiptap/extension-task-item": {
+      "optional": true
+    },
+    "@tiptap/extension-task-list": {
+      "optional": true
+    },
+    "@tiptap/extension-text-align": {
+      "optional": true
+    },
+    "@tiptap/extension-text-style": {
+      "optional": true
+    },
+    "@tiptap/extension-underline": {
+      "optional": true
+    },
+    "@tiptap/react": {
+      "optional": true
+    },
+    "@tiptap/starter-kit": {
+      "optional": true
+    },
+    "@tiptap/suggestion": {
+      "optional": true
+    },
+    "dompurify": {
+      "optional": true
+    },
+    "embla-carousel-react": {
+      "optional": true
+    },
+    "input-otp": {
+      "optional": true
+    },
+    "lowlight": {
+      "optional": true
+    },
+    "next-themes": {
+      "optional": true
+    },
+    "react-country-flag": {
+      "optional": true
+    },
+    "react-dropzone": {
+      "optional": true
+    },
+    "react-hook-form": {
+      "optional": true
+    },
+    "recharts": {
+      "optional": true
+    },
+    "zod": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@babel/core": "^7.29.7",
@@ -537,6 +308,7 @@
     "@storybook/addon-themes": "^10.1.0",
     "@storybook/addon-vitest": "^10.4.6",
     "@storybook/react-vite": "^10.1.0",
+    "@tailwindcss/vite": "^4.1.0",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
@@ -559,8 +331,5 @@
     "unplugin-lightningcss": "^0.4.2",
     "vite": "^8.0.16",
     "vitest": "^4.1.8"
-  },
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.cts"
+  }
 }

@@ -39,13 +39,15 @@ export const NotificationList: React.FC<NotificationListProps> = ({
   }
 
   return (
-    <NotificationRowGroup data-slot="notification-list">
-      {notifications.map((notification, index) => (
-        <div key={notification.uuid}>
-          <NotificationItem notification={notification} onMarkAsRead={onMarkAsRead} onClick={onItemClick} />
-          {index < notifications.length - 1 && <NotificationRowSeparator />}
-        </div>
-      ))}
+    <div data-slot="notification-list" className="flex flex-col">
+      <NotificationRowGroup>
+        {notifications.map((notification, index) => (
+          <li key={notification.uuid}>
+            <NotificationItem notification={notification} onMarkAsRead={onMarkAsRead} onClick={onItemClick} />
+            {index < notifications.length - 1 && <NotificationRowSeparator />}
+          </li>
+        ))}
+      </NotificationRowGroup>
       {!!isLoading && (
         <div className="flex items-center justify-center py-4 text-text-positive-muted">
           <Loader2Icon className="size-4 animate-spin" />
@@ -56,6 +58,6 @@ export const NotificationList: React.FC<NotificationListProps> = ({
           Xem thêm
         </Button>
       )}
-    </NotificationRowGroup>
+    </div>
   );
 };
