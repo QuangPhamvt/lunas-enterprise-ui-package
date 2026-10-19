@@ -119,7 +119,10 @@ function getPurifier(): ReturnType<typeof DOMPurify> {
   return purifier;
 }
 
-/** No-op on the server — DOMPurify needs a DOM, and SSR content gets sanitized again on hydration anyway. */
+/**
+ * No-op on the server — DOMPurify needs a DOM, and SSR content gets sanitized again on hydration
+ * anyway.
+ */
 function sanitizeHtml(html: string, config: SanitizeConfig): string {
   if (typeof window === 'undefined') return html;
   return getPurifier().sanitize(html, config);
@@ -131,34 +134,104 @@ function imageAltFromFile(file: File): string {
 }
 
 /** Props for `TextEditor`. */
-export interface TextEditorProps extends TextEditorVariantProps {
+/** Props for `TextEditor`. */
+export interface TextEditorProps {
+  /** Controlled HTML content. Sanitized before it reaches the editor. */
   value?: string;
+  /** Initial HTML content for an uncontrolled editor. */
   defaultValue?: string;
+  /** Receives the sanitized HTML, debounced while typing and flushed on blur/unmount. */
   onChange?: (html: string) => void;
+  /**
+   * Text shown while the document is empty.
+   * @default 'Start writing...'
+   */
   placeholder?: string;
+  /**
+   * Render the content without editing (and without toolbar or bubble menu).
+   * @default false
+   */
   readOnly?: boolean;
+  /**
+   * Show the formatting toolbar above the content.
+   * @default true
+   */
   showToolbar?: boolean;
+  /**
+   * Frame style: `outline` (bordered) or `ghost` (borderless).
+   * @default 'outline'
+   */
+  variant?: TextEditorVariantProps['variant'];
+  /**
+   * Font size and minimum content height.
+   * @default 'md'
+   */
+  size?: TextEditorVariantProps['size'];
+  /** Class names for the outer frame. */
   className?: string;
+  /** Class names for the toolbar. */
   toolbarClassName?: string;
+  /** Class names for the editable content area. */
   editorClassName?: string;
-  // Character count
+  /**
+   * Hard limit on characters — typing stops at the limit. Also shows the count footer as `n / max`.
+   */
   maxLength?: number;
+  /** Show a footer with the word and character count (always shown when `maxLength` is set). */
   showCharacterCount?: boolean;
+  /** Receives the character and word count whenever the content changes. */
   onCharacterCount?: (stats: { characters: number; words: number }) => void;
-  // Feature flags
+  /** Allow links (toolbar button, link dialog, paste-to-link). */
   enableLink?: boolean;
+  /** Show a floating bold/italic/underline/strike menu over selected text. */
   enableBubbleMenu?: boolean;
+  /** Allow checklists (task lists, nestable). */
   enableTaskList?: boolean;
+  /** Allow multi-color text highlighting. */
   enableHighlight?: boolean;
+  /** Allow text color. */
   enableColor?: boolean;
+  /** Allow images (needs `onImageUpload` for files; pasting an image URL always works). */
   enableImage?: boolean;
+  /** Allow resizable tables. */
   enableTable?: boolean;
-  /** Enables the `/` slash-command menu for quickly inserting blocks (headings, lists, table, image, etc.). */
+  /**
+   * Enables the `/` slash-command menu for quickly inserting blocks (headings, lists, table, image,
+   * etc.).
+   */
   enableSlashCommand?: boolean;
-  /** Called when the user picks/drops/pastes an image file. Return the URL to embed. Without it, only pasting an image URL as text works. */
+  /**
+   * Called when the user picks/drops/pastes an image file. Return the URL to embed. Without it,
+   * only pasting an image URL as text works.
+   */
   onImageUpload?: (file: File) => Promise<string>;
 }
 
+/**
+ * Rich-text (WYSIWYG) editor built on Tiptap that reads and writes sanitized HTML. Headings, lists,
+ * quotes, code blocks with syntax highlighting, alignment and underline ship by default; links,
+ * task lists, highlight, color, images, tables, the bubble menu and the `/` command menu are opt-in
+ * via `enable*` props. Output is filtered through DOMPurify with an allowlist scoped to the enabled features.
+ *
+ * Requires the optional `@tiptap/*`, `@tiptap/extensions`, `lowlight`, `highlight.js` and
+ * `dompurify` peers, plus `@customafk/lunas-ui/styles/text-editor`.
+ *
+ * @example
+ * ```tsx
+ * import { TextEditor } from '@customafk/lunas-ui/features/text-editor';
+ *
+ * <TextEditor
+ *   value={html}
+ *   onChange={setHtml}
+ *   maxLength={5000}
+ *   enableImage
+ *   enableTable
+ *   enableSlashCommand
+ *   onImageUpload={file => uploadMedia(file).then(media => media.url)}
+ * />
+ * ```
+ * @see https://tiptap.dev/docs/editor/getting-started/overview
+ */
 function TextEditor({
   value,
   defaultValue,

@@ -16,6 +16,22 @@ import { Field, FieldContent, FieldDescription, FieldError, FieldGroup, FieldLab
  */
 const TextEditor = lazy(() => import('@/components/features/text-editor').then(m => ({ default: m.TextEditor })));
 
+/**
+ * A TanStack Form-connected rich-text field: label, description, tooltip and validation error
+ * around a lazily loaded `TextEditor`. Stores the editor's sanitized HTML.
+ *
+ * @example
+ * ```tsx
+ * const form = useTanStackForm({ defaultValues: { content: null as string | null } });
+ *
+ * <form.AppField
+ *   name="content"
+ *   children={({ TextEditorField }) => (
+ *     <TextEditorField label="Nội dung" maxLength={5000} enableImage onImageUpload={uploadImage} />
+ *   )}
+ * />
+ * ```
+ */
 export const TextEditorField: React.FC<Props> = memo(
   ({
     label,

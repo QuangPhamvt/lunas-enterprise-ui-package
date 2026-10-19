@@ -9,9 +9,13 @@ import { type ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, Char
 import { Bar, BarChart, CartesianGrid, ReferenceLine, XAxis, YAxis } from 'recharts';
 import type { BaseChartProps } from '../types';
 
+/** One category with a value on each side of the axis. */
 export type MirroredBarRow = {
+  /** Category label shown on the shared axis. */
   category: string;
+  /** Value drawn to the left. */
   left: number;
+  /** Value drawn to the right. */
   right: number;
 };
 

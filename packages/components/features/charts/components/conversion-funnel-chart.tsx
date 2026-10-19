@@ -10,9 +10,11 @@ import { Funnel, FunnelChart, LabelList } from 'recharts';
 import type { BaseChartProps, NamedValue } from '../types';
 import { formatCompactNumber, formatPercent, getChartColor } from '../utils';
 
+/** One funnel stage: its `name` and `value`, plus optional config key and color. */
 export type FunnelStage = NamedValue & {
   /** Config key; derived from `name` when omitted. */
   key?: string;
+  /** Color; defaults to the next `--chart-N` palette color. */
   color?: string;
 };
 

@@ -80,6 +80,22 @@ public component: add it to `entry`, build, and add a Storybook story.
 - Error containers (`role="alert"`) stay in the DOM after errors clear; assert `.not.toHaveTextContent(msg)` rather than `.not.toBeInTheDocument()`
 - Run before committing: `npm run test:storybook`, or invoke `/storybook-test`
 
+## JSDoc standard
+
+Every public export and every prop this library declares must have JSDoc — `npm run docs:check`
+enforces it (plus the lazy-wrapper sync). Conventions:
+
+- Summary sentence first; JSDoc in English, user-facing strings in Vietnamese.
+- Top-level components get an `@example` in a ```` ```tsx ```` fence showing the real import path;
+  compound sub-parts (`DialogContent`, `UITableCell`, …) get a one-line summary and rely on the
+  root's example.
+- Props: one `/** … */` per prop, `@default` matching the destructuring default. Declare variant
+  props explicitly (`size?: VariantProps<typeof xVariants>['size']`) instead of spreading a bare
+  `VariantProps<…>`, which carries no docs.
+- Form field examples use `form.AppField name="…" children={({ TextField }) => …}` — never
+  `form.Field`.
+- `@see` links to the upstream docs (Radix, Tiptap, recharts, TanStack) for wrapped primitives.
+
 ## Coding conventions
 
 - Named exports only — no default exports unless the file already uses one

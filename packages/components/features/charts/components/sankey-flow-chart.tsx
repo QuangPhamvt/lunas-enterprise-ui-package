@@ -11,24 +11,29 @@ import { Rectangle, Sankey } from 'recharts';
 import type { BaseChartProps } from '../types';
 import { getChartColor } from '../utils';
 
+/** A node (stage, channel, …) in a Sankey diagram. */
 export type SankeyFlowNode = {
+  /** Unique node name — also how links refer to it. */
   name: string;
+  /** Node color; defaults to the next `--chart-N` palette color. */
   color?: string;
 };
 
+/** A weighted flow from one node to another. */
 export type SankeyFlowLink = {
   /** Node name, matching an entry in `nodes`. */
   source: string;
   /** Node name, matching an entry in `nodes`. */
   target: string;
+  /** Flow amount; sets the link's thickness. */
   value: number;
 };
 
 /** Props for `SankeyFlowChart`. */
 export type SankeyFlowChartProps = BaseChartProps & {
-  /** Flow nodes; `links` refer to them by index. */
+  /** Flow nodes; `links` refer to them by `name`. */
   nodes: Array<SankeyFlowNode | string>;
-  /** Weighted flows between `nodes`, by index. */
+  /** Weighted flows between `nodes`, referenced by node name. */
   links: SankeyFlowLink[];
   /**
    * Formats values in the tooltip and on the value axis.

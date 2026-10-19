@@ -11,6 +11,10 @@ import { useUITableInnerTableContext } from '../../hooks/use-context';
 import type { TUITableCell } from '../../types';
 import { tableCellInnerVariants, tableCellVariants } from '../table.variants';
 
+/**
+ * One `<td>` — renders the column's `cell` and applies its pinning offset and width constraints.
+ * Rendered by `UITableContainer`; use it directly only when building a custom table layout.
+ */
 export const UITableCell = memo<TUITableCell>(
   ({ isPinned = false, isFirstCell = false, isLastCell = false, colId, position = 'start', indent = 0, column, getContext, className, ...props }) => {
     const { table, tableRef } = useUITableInnerTableContext();

@@ -16,13 +16,39 @@
  * @example
  * ```tsx
  * import {
- *   UITableProvider,
- *   UITableWrapper,
- *   UITableToolbar,
- *   UITableToolbarSearch,
- *   UITableToolbarActions,
+ *   type TUITableColumn,
+ *   UITableContainer,
+ *   UITableDateDisplay,
  *   UITableFilter,
+ *   UITableProvider,
+ *   UITableToolbar,
+ *   UITableToolbarActions,
+ *   UITableWrapper,
  * } from '@customafk/lunas-ui/features/tables';
+ *
+ * const columns: TUITableColumn<Order>[] = [
+ *   { accessorKey: 'code', header: 'Mã đơn' },
+ *   { accessorKey: 'createdAt', header: 'Ngày tạo', cell: ({ row }) => <UITableDateDisplay date={row.original.createdAt} /> },
+ * ];
+ *
+ * <UITableProvider
+ *   title="Đơn hàng"
+ *   columns={columns}
+ *   data={orders}
+ *   keyOfClickRow="uuid"
+ *   isLoading={isFetching}
+ *   totalRows={total}
+ *   fetchMoreData={fetchNextPage}
+ *   filterDefinitions={filterDefinitions}
+ *   onFilterChange={setFilters}
+ * >
+ *   <UITableWrapper>
+ *     <UITableToolbar>
+ *       <UITableToolbarActions onRefresh={refetch} />
+ *     </UITableToolbar>
+ *     <UITableContainer sidePanels={[<UITableFilter key="filter" />]} />
+ *   </UITableWrapper>
+ * </UITableProvider>
  * ```
  */
 import type { ComponentProps, ComponentType } from 'react';

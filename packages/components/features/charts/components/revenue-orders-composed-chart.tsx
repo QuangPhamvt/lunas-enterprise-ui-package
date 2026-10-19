@@ -10,9 +10,13 @@ import { Bar, CartesianGrid, ComposedChart, Line, XAxis, YAxis } from 'recharts'
 import type { BaseChartProps } from '../types';
 import { formatCurrency, toDateLabel } from '../utils';
 
+/** Revenue and order count for one time bucket. */
 export type RevenueOrdersPoint = {
+  /** Bucket date — a `Date` or an ISO date string. */
   date: string | Date;
+  /** Revenue for the bucket (area series). */
   revenue: number;
+  /** Number of orders in the bucket (bar series). */
   orders: number;
 };
 

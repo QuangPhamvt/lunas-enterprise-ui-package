@@ -10,9 +10,11 @@ import { Label, Pie, PieChart } from 'recharts';
 import type { BaseChartProps, NamedValue } from '../types';
 import { formatCompactNumber, getChartColor } from '../utils';
 
+/** One donut slice: its `name` and `value`, plus optional config key and color. */
 export type DonutChartSegment = NamedValue & {
   /** Config key; derived from `name` when omitted. */
   key?: string;
+  /** Color; defaults to the next `--chart-N` palette color. */
   color?: string;
 };
 

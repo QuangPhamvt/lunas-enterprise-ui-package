@@ -17,6 +17,10 @@ import {
 import type { TUITableHeadCellOption } from '../../types';
 import { tableHeadCellOptionTriggerVariants } from '../table.variants';
 
+/**
+ * Column options menu in a header cell — pin the column left or right, or unpin it. Rendered by
+ * `UITableContainer`; use it directly only when building a custom table layout.
+ */
 export const UITableHeadCellOption = memo<TUITableHeadCellOption>(({ isPinned, onLeftPin, onRightPin, onUnpin, className }) => {
   const handleLeftPin = useCallback(() => {
     onLeftPin?.('left');

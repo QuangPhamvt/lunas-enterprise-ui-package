@@ -12,6 +12,10 @@ import { UITableHeadCell } from './head-cell';
 import { UITableHeadCellExpand } from './head-cell-expand';
 import { UITableHeadCellSelect } from './head-cell-select';
 
+/**
+ * Header `<tr>` — renders one `UITableHeadCell` per visible column, plus select/expand cells.
+ * Rendered by `UITableContainer`; use it directly only when building a custom table layout.
+ */
 export const UITableHeadRow = memo<TUITableHeadRow>(({ headerGroup, className, ...props }) => {
   const { isAllRowsSelected, isAllRowsExpanded, columnPinningState, leftPinnedHeaders, rightPinnedHeaders, onToggleAllRowsSelected, onToggleAllRowsExpanded } =
     useUITableHeadRowContext();

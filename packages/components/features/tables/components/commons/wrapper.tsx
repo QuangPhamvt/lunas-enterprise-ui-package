@@ -25,6 +25,10 @@ function getSlotKey(child: ReactNode): TSlotKey | undefined {
   return (child.type as { tableWrapperSlot?: TSlotKey })?.tableWrapperSlot;
 }
 
+/**
+ * Outer frame of a table: lays out the toolbar, summary bar and `UITableContainer` slots in order.
+ * Wrap everything inside `UITableProvider` with it.
+ */
 export const UITableWrapper = memo<TUITableWrapper>(({ className, children, style, ...props }) => {
   const slotted = new Map<TSlotKey, ReactNode>();
   const rest: ReactNode[] = [];

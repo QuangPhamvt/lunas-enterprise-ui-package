@@ -151,6 +151,7 @@
     "typecheck": "tsc --noEmit",
     "docs:sync-lazy": "node scripts/sync-lazy-docs.mjs",
     "docs:check-lazy": "node scripts/sync-lazy-docs.mjs --check",
+    "docs:check": "node scripts/check-jsdoc.mjs && node scripts/sync-lazy-docs.mjs --check",
     "lint": "npx @biomejs/biome check",
     "lint:fix": "npx @biomejs/biome lint --write ./packages",
     "format": "npx @biomejs/biome format",

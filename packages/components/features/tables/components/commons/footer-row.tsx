@@ -11,6 +11,10 @@ import type { ColumnAggregation } from '../../types';
 import { computeAggregation, extractNumericValues } from '../../utils/aggregation';
 import { tableFooterCellVariants, tableFooterRowVariants } from '../table.variants';
 
+/**
+ * `<tfoot>` row showing each column's `meta.aggregation` over all and selected rows. Rendered by
+ * `UITableContainer`; use it directly only when building a custom table layout.
+ */
 export const UITableFooterRow = memo(() => {
   const { table } = useUITableContext();
   const { rowSelectionState } = useUITableBodyContext();

@@ -18,5 +18,5 @@ export const textEditorVariants = cva(['flex flex-col overflow-hidden rounded-md
   },
 });
 
-/** Props for `TextEditorVariant`. */
+/** Variant props of `TextEditor` (its `cva` style options). */
 export type TextEditorVariantProps = VariantProps<typeof textEditorVariants>;

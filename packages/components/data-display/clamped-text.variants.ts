@@ -20,4 +20,5 @@ export const clampedTextVariants = cva('line-clamp-2 text-start', {
   },
 });
 
+/** Variant props of `ClampedText` (its `cva` style options). */
 export type ClampedTextVariants = VariantProps<typeof clampedTextVariants>;

@@ -443,7 +443,35 @@ const LazySimpleArrayField = lazy(() =>
   import('./components/atoms/simple-array-field').then(m => ({ default: m.SimpleArrayField as ComponentType<SimpleArrayFieldProps<unknown>> }))
 );
 
-/** Kept as its own generic wrapper (instead of `lazyField`) so callers can still write `<SimpleArrayField<Row> />`. */
+// Kept as its own generic wrapper (instead of `lazyField`) so callers can still write `<SimpleArrayField<Row> />`.
+/**
+ * Array field wrapper that manages rows (add / remove) while letting you
+ * freely compose any fields inside each row.
+ *
+ * @example
+ * ```tsx
+ * const { AppForm, AppField } = useTanStackForm({ defaultValues: { items: [] } });
+ *
+ * <AppForm>
+ *   <AppField name="items">
+ *     {({ SimpleArrayField }) => (
+ *       <SimpleArrayField defaultRow={{ name: null, qty: null }}>
+ *         {(i) => (
+ *           <div className="flex gap-2">
+ *             <AppField name={`items[${i}].name`}>
+ *               {({ SimpleTextField }) => <SimpleTextField label="Name" />}
+ *             </AppField>
+ *             <AppField name={`items[${i}].qty`}>
+ *               {({ SimpleNumberField }) => <SimpleNumberField label="Qty" />}
+ *             </AppField>
+ *           </div>
+ *         )}
+ *       </SimpleArrayField>
+ *     )}
+ *   </AppField>
+ * </AppForm>
+ * ```
+ */
 function SimpleArrayField<T>(props: SimpleArrayFieldProps<T>) {
   const Impl = LazySimpleArrayField as ComponentType<SimpleArrayFieldProps<T>>;
   return (
@@ -777,66 +805,7 @@ const FieldSeparator = lazyField<ComponentProps<typeof FieldSeparatorType>>(() =
  */
 const FieldError = lazyField<ComponentProps<typeof FieldErrorType>>(() => import('./components/ui/field').then(m => ({ default: m.FieldError })));
 
-/**
- * Factory result from {@link createFormHook} pre-wired with all Lunas UI field and form components.
- *
- * ### `useTanStackForm`
- * Pre-configured TanStack Form hook that returns a type-safe form instance bound to all Lunas UI
- * field and form components.
- *
- * @example
- * import { useTanStackForm } from '@customafk/lunas-ui/features/tanstack-form';
- *
- * const form = useTanStackForm({
- *   defaultValues: { name: '', email: '' },
- *   onSubmit: async ({ value }) => console.log(value),
- * });
- *
- * return (
- *   <form.Provider>
- *     <form.AppForm>
- *       <form.AppField name="name" children={(field) => <field.TextField label="Name" />} />
- *       <form.Subscribe selector={(s) => s.canSubmit}>
- *         {(canSubmit) => <form.TanStackActionSubmit disabled={!canSubmit} />}
- *       </form.Subscribe>
- *     </form.AppForm>
- *   </form.Provider>
- * );
- *
- * ### `withTanStackForm`
- * Higher-order component that wraps a sub-form component with access to the parent
- * `useTanStackForm` form context, enabling isolated field groups that still participate in the
- * top-level form state.
- *
- * @example
- * import { withTanStackForm } from '@customafk/lunas-ui/features/tanstack-form';
- *
- * const AddressFields = withTanStackForm(
- *   { street: '', city: '' } as const,
- *   ({ form }) => (
- *     <>
- *       <form.AppField name="street" children={(f) => <f.TextField label="Street" />} />
- *       <form.AppField name="city" children={(f) => <f.TextField label="City" />} />
- *     </>
- *   ),
- * );
- *
- * ### `withTanStackFieldGroup`
- * Higher-order component that creates a reusable field-group component sharing the enclosing
- * `useTanStackForm` context without requiring additional form providers.
- *
- * @example
- * import { withTanStackFieldGroup } from '@customafk/lunas-ui/features/tanstack-form';
- *
- * const ContactGroup = withTanStackFieldGroup(({ form }) => (
- *   <form.AppField name="phone" children={(f) => <f.TextField label="Phone" />} />
- * ));
- */
-const {
-  useAppForm: useTanStackForm,
-  withForm: withTanStackForm,
-  withFieldGroup: withTanStackFieldGroup,
-} = createFormHook({
+const formHook = createFormHook({
   fieldContext,
   formContext,
 
@@ -891,6 +860,85 @@ const {
     ArrayHeaderRow,
   },
 });
+
+/**
+ * TanStack Form's `useAppForm`, pre-wired with every Lunas UI field and form component: render
+ * fields through `form.AppField` (its `children` receives `TextField`, `SelectField`, …) and form
+ * chrome through `form.AppForm` (`TanStackContainerForm`, `TanStackActionSubmit`, …). Accepts the
+ * usual `useForm` options — `defaultValues`, `validators` (Standard Schema such as zod works),
+ * `onSubmit`.
+ *
+ * @example
+ * ```tsx
+ * import { useTanStackForm } from '@customafk/lunas-ui/features/tanstack-form';
+ * import { z } from 'zod';
+ *
+ * const schema = z.object({ name: z.string().min(1), email: z.email() });
+ *
+ * const form = useTanStackForm({
+ *   defaultValues: { name: '', email: '' },
+ *   validators: { onChange: schema },
+ *   onSubmit: async ({ value }) => save(value),
+ * });
+ *
+ * <form.AppForm>
+ *   <form.TanStackContainerForm>
+ *     <form.AppField name="name" children={({ TextField }) => <TextField label="Họ tên" required />} />
+ *     <form.AppField name="email" children={({ EmailField }) => <EmailField label="Email" required />} />
+ *     <form.TanStackActionsForm />
+ *   </form.TanStackContainerForm>
+ * </form.AppForm>
+ * ```
+ * @see https://tanstack.com/form/latest/docs/framework/react/guides/form-composition
+ */
+const useTanStackForm = formHook.useAppForm;
+
+/**
+ * Splits part of a large `useTanStackForm` form into its own component while keeping full type
+ * inference. `defaultValues` only drives typing; `render` must be a named function so the Hooks
+ * lint rules recognize it as a component.
+ *
+ * @example
+ * ```tsx
+ * const ShippingSection = withTanStackForm({
+ *   defaultValues: { address: '', province: null as string | null },
+ *   props: { title: 'Giao hàng' },
+ *   render: function Render({ form, title }) {
+ *     return (
+ *       <form.TanStackSectionForm title={title}>
+ *         <form.AppField name="address" children={({ TextField }) => <TextField label="Địa chỉ" />} />
+ *       </form.TanStackSectionForm>
+ *     );
+ *   },
+ * });
+ *
+ * <ShippingSection form={form} title="Địa chỉ giao hàng" />
+ * ```
+ */
+const withTanStackForm = formHook.withForm;
+
+/**
+ * Defines a reusable group of fields (e.g. password + confirmation) that can be mounted on any
+ * form whose values contain a matching sub-object. Groups cannot declare validators themselves.
+ *
+ * @example
+ * ```tsx
+ * const PasswordFields = withTanStackFieldGroup({
+ *   defaultValues: { password: '', confirmPassword: '' },
+ *   render: function Render({ group }) {
+ *     return (
+ *       <>
+ *         <group.AppField name="password" children={({ PasswordField }) => <PasswordField label="Mật khẩu" />} />
+ *         <group.AppField name="confirmPassword" children={({ PasswordField }) => <PasswordField label="Nhập lại mật khẩu" />} />
+ *       </>
+ *     );
+ *   },
+ * });
+ *
+ * <PasswordFields form={form} fields="account" />
+ * ```
+ */
+const withTanStackFieldGroup = formHook.withFieldGroup;
 
 export {
   // Array helpers
